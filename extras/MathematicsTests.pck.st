@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 22 September 2018 at 7:03:22 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 17 April 2019 at 11:35:26 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 109!
+!provides: 'MathematicsTests' 1 110!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -1049,23 +1049,23 @@ testDirectSum
 	self testAbelianGroupHomomorphism: (G projection: 2 atRandom).
 	self testAbelianGroupHomomorphism: (G embedding: 2 atRandom)! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/22/2017 08:21:55'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:42'!
 testIntegerTuples
 	| M |
 	M _ ZZ ^ (1 to: 10) atRandom.
 	self testAbelianGroup: M asAbelianGroup.
-	self testAbelianGroupHomomorphism: (M projection: (1 to: M rank) atRandom) asAbelianGroupHomomorphism! !
+	self testAbelianGroupHomomorphism: (M projection: (1 to: M rank) atRandom) asAbelianGroupMap! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:26:09'!
 testIntegers
 	self testAbelianGroup: ZZ asAbelianGroup! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/22/2016 22:52:08'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:48'!
 testModularIntegers
 	| R |
 	R _ ZZ / (2 to: 10) atRandom.
 	self testAbelianGroup: R asAbelianGroup.
-	self testAbelianGroupHomomorphism: R projection asAbelianGroupHomomorphism! !
+	self testAbelianGroupHomomorphism: R projection asAbelianGroupMap! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 1/22/2017 08:21:59'!
 testAffineHull
@@ -1087,7 +1087,7 @@ testAffineHullEmpty
 	self assert: H dimension = -1.
 	self assert: H size = 0! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2018 19:15:38'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 21:14:39'!
 testAffineMapCollinearity
 	"Affine maps preserve collinearity."
 	| A f p1 fp1 p2 fp2 p3 fp3 |
@@ -1120,7 +1120,7 @@ testAffineMapEvaluating
 	f _ AffineMap from: V to: V evaluating: [:p| p*2 - (1,0,0)].
 	self assert: (f value: (1,2,3)) = (1,4,6)! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2018 19:19:44'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 21:14:52'!
 testAffineMapInverse
 	| A f |
 	A _ QQ^3.
@@ -1659,7 +1659,7 @@ testReduced
 	self assert: X isReduced not.
 	self assert: X reduced = (A subscheme: {x*y. x*z})! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/4/2018 00:40:00'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 9/28/2018 06:52:14'!
 testRingHomomorphismSpec
 	| A B x y phi |
 	A _ QQ polynomialsIn: #(x y z).
@@ -1669,7 +1669,7 @@ testRingHomomorphismSpec
 	phi _ A to: B evaluating: [:f| f value: {x-y. x. y}].
 	self assert: phi spec domain = B spec.
 	self assert: phi spec codomain = A spec.
-	self assert: phi spec asRingHomomorphism = phi! !
+	self assert: phi spec asRingMap = phi! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 2/8/2017 07:14:15'!
 testSingularCubics
@@ -3134,12 +3134,12 @@ testUnion
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
 	self assert: (G – G transposed) = G symmetric! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/31/2018 19:30:38'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 22:02:46'!
 smallGroupAtRandom
 	^ {[SymmetricGroup new: 3].
 	[AlternatingGroup new: 3].
 	[PermutationGroup klein].
-	[MatrixGroup klein].
+	[LinearGroup klein].
 	[Group quaternions]} atRandom value! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 2/1/2018 23:02:45'!
@@ -3371,20 +3371,6 @@ testPermutationGroupHomomorphism
 	self assert: im size = 5. "of order 5"
 	self assert: im isCyclic! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:02'!
-testQuotientGroup
-	| G N Q pi h |
-	G _ Group integersMod: 6.
-	N _ G span: {3 % 6}.
-	Q _ G / N.
-	self assert: Q size = 3.
-	self testGroup: Q.
-	pi _ Q projection.
-	self assert: (Q includes: (pi value: G atRandom)).
-	h _ Q atRandom.
-	self assert: (pi value: (pi section value: h)) = h.
-	self testGroupHomomorphism: pi! !
-
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:36'!
 testSymmetricOrder
 	| G |
@@ -3482,7 +3468,7 @@ testGeneralLinearAtRandom
 	self assert: (G atRandomBits: 100) isInvertible.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:03'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:54:15'!
 testOrthogonalAtRandom
 	| V G |
 	V _ QQ ^ 3.
@@ -3490,12 +3476,12 @@ testOrthogonalAtRandom
 	self assert: (G atRandomBits: 100) isOrthogonal.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 4/10/2018 15:47:24'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 22:03:03'!
 testRotationsBy90Degrees
 	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
 	| V G |
 	V _ QQ ^ 2.
-	G _ (LinearGroup on: V) generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
+	G _ LinearGroup on: V generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
 	self assert: G size = 4.
 	self assert: G isCyclic.
 	self flag: #todo.
@@ -4528,9 +4514,9 @@ newSmallFreeModuleOver: scalars
 newSmallVectorSpace
 	^ self newSmallFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom} atRandom! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 3/2/2017 04:50:24'!
+!ModuleTest methodsFor: 'private' stamp: 'len 9/27/2018 04:44:48'!
 newVectorSpace
-	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom} atRandom! !
+	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom. QQ polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 4/1/2018 05:29:28'!
 testAdjointMap
@@ -4646,9 +4632,9 @@ testFirstIsomorphismTheoremOverCyclotomicField
 testFirstIsomorphismTheoremOverGaloisField
 	self testFirstIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:37:43'!
-testFirstIsomorphismTheoremOverPID
-	self testFirstIsomorphismTheorem: self newFreeModuleOverPID! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:37'!
+testFirstIsomorphismTheoremOverPolynomials
+	self testFirstIsomorphismTheorem: QQ polynomials ^ 2! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:36:38'!
 testFirstIsomorphismTheoremOverQ
@@ -4657,6 +4643,10 @@ testFirstIsomorphismTheoremOverQ
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:41:40'!
 testFirstIsomorphismTheoremOverQuadraticField
 	self testFirstIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:16'!
+testFirstIsomorphismTheoremOverZ
+	self testFirstIsomorphismTheorem: ZZ^3! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 1/21/2018 21:47:53'!
 testFreeModule: M
@@ -4679,10 +4669,10 @@ testFreeModuleDiscriminant
 	self assert: (M span: {(1,2,3)}) discriminant = 14.
 	self assert: (M span: {(1,2,3). (1,1,1)}) discriminant = 6! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 1/14/2018 19:48:42'!
+!ModuleTest methodsFor: 'other' stamp: 'len 10/2/2018 01:49:17'!
 testFreeZModule
 	| A x0 x y0 y |
-	A _ FormalSumsModule on: #(a b c) over: ZZ.
+	A _ SumsModule on: #(a b c) over: ZZ.
 	x0 _ (-2,-1,3).
 	x _ A elementAt: x0.
 	y0 _ (1,1,1).
@@ -4691,6 +4681,14 @@ testFreeZModule
 	self assert: x*2-y = (A elementAt: x0*2-y0).
 	self assert: (x-y-(x-y)) isZero.
 	self assert: (A coordinatesOf: x) = x0! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 9/27/2018 05:02:38'!
+testGrassmannRelation
+	| V S T |
+	V _ self newVectorSpace.
+	S _ (V grassmannian: V dimension atRandom) atRandomBits: 20.
+	T _ (V grassmannian: V dimension atRandom) atRandomBits: 20.
+	self assert: S dimension + T dimension = ((S + T) dimension + (S • T) dimension)! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:57'!
 testGrassmannian
@@ -4888,7 +4886,7 @@ testLinearMapImage
 	w _ f value: v.
 	self assert: (image includes: w)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 11:50:45'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 21:18:05'!
 testLinearMapInverse
 	| V f |
 	V _ QQ ^ 3.
@@ -4922,6 +4920,16 @@ testLinearMapLeftInverse
 	[f _ (V hom: W) atRandomBits: 1000. f rank = 3] whileFalse.
 	self assert: (f leftInverse ” f) = V id! !
 
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 04:58:30'!
+testLinearMapRetraction
+	| V W f r |
+	V _ QQ^3.
+	W _ QQ^4.
+	[f _ (V hom: W) atRandomBits: 100. f isInjective] whileFalse.
+	r _ f retraction.
+	self assert: r isSurjective.
+	self assert: r ” f = V id! !
+
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 11:50:57'!
 testLinearMapRightInverse
 	| V W f |
@@ -4929,6 +4937,16 @@ testLinearMapRightInverse
 	W _ QQ ^ 3.
 	[f _ (V hom: W) atRandomBits: 1000. f rank = 3] whileFalse.
 	self assert: (f ” f rightInverse) = W id! !
+
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 04:59:31'!
+testLinearMapSection
+	| V W f s |
+	V _ QQ^4.
+	W _ QQ^3.
+	[f _ (V hom: W) atRandomBits: 100. f isSurjective] whileFalse.
+	s _ f section.
+	self assert: s isInjective.
+	self assert: f ” s = W id! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 11/2/2016 04:01'!
 testLinearMapZ2
@@ -5134,14 +5152,9 @@ testSecondIsomorphismTheoremOverCyclotomicField
 testSecondIsomorphismTheoremOverGaloisField
 	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:38:38'!
-testSecondIsomorphismTheoremOverPID
-	self testSecondIsomorphismTheorem: self newFreeModuleOverPID
-	
-"	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	T _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	self assert: (S+T)/T ~ (S/(S • T))
-"! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:47'!
+testSecondIsomorphismTheoremOverPolynomials
+	self testSecondIsomorphismTheorem: QQ polynomials ^ 2! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:46'!
 testSecondIsomorphismTheoremOverQ
@@ -5150,6 +5163,10 @@ testSecondIsomorphismTheoremOverQ
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:41'!
 testSecondIsomorphismTheoremOverQuadraticField
 	self testSecondIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:13'!
+testSecondIsomorphismTheoremOverZ
+	self testSecondIsomorphismTheorem: ZZ^3! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 4/5/2018 03:23:40'!
 testSubmoduleInclusion
@@ -5329,19 +5346,19 @@ testTensorProductOfLinearForms
 	w _ V atRandomBits: 10.
 	self assert: (t value: t domain !! {v. w}) = (t codomain !! {f value: v. g value: w})! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 6/3/2018 22:56:49'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 10/1/2018 05:46:27'!
 testTensorProductRelations
 	| V W T v v1 v2 w w1 w2 c |
 	V _ self newVectorSpace.
 	W _ self newFreeModuleOver: V scalars.
 	T _ V ’ W.
-	v _ V atRandomBits: 100.
-	v1 _ V atRandomBits: 100.
-	v2 _ V atRandomBits: 100.
-	w _ W atRandomBits: 100.
-	w1 _ W atRandomBits: 100.
-	w2 _ W atRandomBits: 100.
-	c _ V scalars atRandomBits: 100.
+	v _ V atRandomBits: 40.
+	v1 _ V atRandomBits: 40.
+	v2 _ V atRandomBits: 40.
+	w _ W atRandomBits: 40.
+	w1 _ W atRandomBits: 40.
+	w2 _ W atRandomBits: 40.
+	c _ V scalars atRandomBits: 40.
 	self assert: (T !! {v1. w}) + (T !! {v2. w}) = (T !! {v1 + v2. w}).
 	self assert: (T !! {v. w1}) + (T !! {v. w2}) = (T !! {v. w1 + w2}).
 	self assert: (T !! {v. w})*c = (T !! {v*c. w}).
@@ -5363,9 +5380,9 @@ testThirdIsomorphismTheoremOverCyclotomicField
 testThirdIsomorphismTheoremOverGaloisField
 	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:39:03'!
-testThirdIsomorphismTheoremOverPID
-	self testThirdIsomorphismTheorem: self newFreeModuleOverPID! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:57'!
+testThirdIsomorphismTheoremOverPolynomials
+	self testThirdIsomorphismTheorem: QQ polynomials ^ 2! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:45'!
 testThirdIsomorphismTheoremOverQ
@@ -5374,6 +5391,10 @@ testThirdIsomorphismTheoremOverQ
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
 testThirdIsomorphismTheoremOverQuadraticField
 	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:20'!
+testThirdIsomorphismTheoremOverZ
+	self testThirdIsomorphismTheorem: ZZ^3! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:03'!
 testTuplesQ
@@ -5701,6 +5722,24 @@ testMinimalPolynomial3
 	x _ QQ polynomials x.
 	alpha _ 1 + 5 squareRoot / 2.
 	self assert: alpha minimalPolynomial = (x^2 - x - 1)! !
+
+!NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 15:45:38'!
+testNormAndTrace
+	| F a b |
+"	x _ QQ polynomials x.
+	F _ QQ extension: x^4 - (x^2*420) + 40000."
+	F _ QQ extensionDegree: (2 to: 4) atRandom.
+	a _ F atRandomBits: 100.
+	b _ F atRandomBits: 100.
+	self assert: (a + b) trace = (a trace + b trace).
+	self assert: (a * b) norm = (a norm * b norm)! !
+
+!NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 15:44:55'!
+testNormOfAlgebraicInteger
+	| F a |
+	F _ QQ extensionDegree: (2 to: 4) atRandom.
+	a _ F integers atRandomBits: 100.
+	self assert: a norm isInteger! !
 
 !NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:42:44'!
 testNormTraceAndMinimalPolynomial
@@ -6260,6 +6299,16 @@ testHeight
 	x _ QQ polynomials x.
 	self assert: (x * 2 - 5) height =  5.
 	self assert: (x * 5 - 2) height =  5! !
+
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 9/22/2018 23:41:08'!
+testInclusionInFractionField
+	| R F |
+	R _ QQ polynomials.
+	F _ R fractions.
+	self assert: R <= F.
+	self assert: F >= R.
+	self deny: R >= F.
+	self deny: F <= R! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 15:49:59'!
 testIntegerFactorization
@@ -7077,6 +7126,13 @@ testRingHomomorphism: phi
 !RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:27'!
 testZZ
 	self testRing: ZZ! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/1/2018 05:41:38'!
+testZZIdeals
+	self assert: (ZZ * 3 includes: 6).
+	self deny: (ZZ * 3 includes: 7).
+	self assert: (ZZ * 0) isTrivial.
+	self assert: (ZZ * 1) isOne! !
 
 !RingTest methodsFor: 'general' stamp: 'len 5/15/2018 19:17:51'!
 testZZPrimeNotMaximalIdeal
