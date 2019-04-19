@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:47:50 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 5:01:36 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 455!
+!provides: 'Mathematics' 1 457!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -3640,7 +3640,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: '<historical>' prior: 0!
+!Domain commentStamp: 'len 4/19/2019 04:59:23' prior: 0!
 'Objects' of some category (such as Groups, Rings, Modules, Schemes, etc) connected by the corresponding Morphisms. In many practical situations, domains can be seen as sets of elements, and their morphisms as some kind of Functions.
 
 Domains with an underlying set can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
@@ -3649,11 +3649,11 @@ Domains can be derived from other domains, for example by taking products or cop
 
 Domains can have subobjects: groups have subgroups, vector spaces have subspaces, rings have subrings and ideals, schemes have subschemes, etc. In general, there is an #ambient overobject, and there is a protocol for inclusion testing with #<, #<=, #>=, #> and membership testing witih #includes: and #contains:.
 
-Given two domains A and B in the same category, the set Hom(A,B) of morphisms between them is obtained by sending the message 'A hom: B' (see HomSet). The #hom: message is the Hom(A,-) functor. The identity morphism is returned by the message #id. And a morphism from A to B can be constructed by sending 'A to: B evaluating: [:x| ...]'.
+Given two domains A and B in the same category, the set Hom(A,B) of morphisms between them is obtained by sending the message 'A => B' (see HomSet). The #=> message is the Hom(A,-) functor. The identity morphism is returned by the message #id. And a morphism from A to B can be constructed by sending 'A to: B evaluating: [:x| ...]'.
 
 Domains often come equipped with cannonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and implement #embed: (the embedding implemented as a message) and #embedding (which returns the embedding morphism as an instance of some subclass of Morphism). Quotient objects have canonical projections (epimorphisms) and implement #project: and #projection. N-ary products and coproducts implement #projection: for the i-th projection map (and coproducts also implement #embedding: for the i-th coprojection).
 
-More generally, canonical morphisms that are uniquely determined by their domain and codomain can be retrieved by sending the message #. This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ  R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes reimplement the messages #to: and #from: to answer canonical morphisms when such morphisms are known, and call super otherwise.
+More generally, canonical morphisms that are uniquely determined by their domain and codomain can be retrieved by sending the message #->. This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes reimplement the messages #to: and #from: to answer canonical morphisms when such morphisms are known, and call super otherwise.
 
 There's also a very simple coercion mechanism that allows to convert elements from one domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any ring R can be performed simply as 'R !! n'. Subclasses must sometimes reimplement the message #!! to convert the argument when possible, and call super otherwise.
 
@@ -4415,19 +4415,19 @@ Structure:
  coefficients	Sequence -- the coefficients of the power series
 !
 
-!Morphism commentStamp: '<historical>' prior: 0!
+!Morphism commentStamp: 'len 4/19/2019 05:00:43' prior: 0!
 Abstract superclass for Functions and other morphisms. See subclasses, and Domain and HomSet.
 
 Examples (three equivalent ways to construct a vector space homomorphism):
 	QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)].
-	(QQ^3 hom: QQ^3) evaluating: [:v| (v x - v y, v x, v z)].
+	QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)].
 	(QQ^3) endomorphisms evaluating: [:v| (v x - v y, v x, v z)].
 
 References:
 	https://en.wikipedia.org/wiki/Morphism
 !
 
-!Function commentStamp: '<historical>' prior: 0!
+!Function commentStamp: 'len 4/19/2019 05:00:14' prior: 0!
 Maps from a set (domain) to another set (codomain). Evaluated at elements of the domain (>>#value:) they produce elements of the codomain. See Domain and HomSet.
 
 Example:
@@ -4438,7 +4438,7 @@ A Function is a morphism of sets. If the function preserves some mathematical st
 Example (three equivalent ways to construct homomorphisms):
 	"These constructions are similar to the explicit construction above, but they return not arbitrary functions but homomorphisms of the corresponding category (in this case linear maps, i.e. morphisms of vector spaces):"
 	QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)].
-	(QQ^3 hom: QQ^3) evaluating: [:v| (v x - v y, v x, v z)].
+	QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)].
 	(QQ^3) endomorphisms evaluating: [:v| (v x - v y, v x, v z)].
 
 In general, functions are defined by specifying a domain, a codomain, and an expression that can be evaluated at elements of the domain and produces elements of the codomain. One such expression can be a Smalltalk block, another Function, or more generally any Smalltalk object that admits evaluation (#value:), such as polynomials:
@@ -12443,16 +12443,6 @@ example2
 		polynomial: (RR polynomialsIn: #(x y z) :: generate: [:x :y :z| x^2 - ((y^2)*(z^2))]);
 		radius: 5.0! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 2/28/2017 09:01:41'!
- aCodomain
-	"Answer the canonical morphism from the receiver to aCodomain.
-	If the argument is a morphism, answer the composition with the canonical morphism to its domain. See also Morphism>>."
-	(aCodomain isKindOf: Morphism)
-		ifTrue: [^ self  aCodomain domain ifNotNil: [:aMorphism| aCodomain ” aMorphism]].
-	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
-"	self propertyAt: #canonicalMaps ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]]."
-	^ aCodomain from: self! !
-
 !Domain methodsFor: 'elements' stamp: 'len 5/19/2018 18:05:53'!
 !! anObject
 	"Coerce anObject to an element of the receiver. Subclasses should extend."
@@ -12475,6 +12465,16 @@ example2
 , aDomain
 	"Answer the cartesian set product of the receiver with the argument."
 	^ CartesianProduct components: {self. aDomain}! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:51:14'!
+-> aCodomain
+	"Answer the canonical morphism from the receiver to aCodomain.
+	If the argument is a morphism, answer the composition with the canonical morphism to its domain. See also Morphism>>->."
+	(aCodomain isKindOf: Morphism)
+		ifTrue: [^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain ” aMorphism]].
+	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
+"	self propertyAt: #canonicalMaps ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]]."
+	^ aCodomain from: self! !
 
 !Domain methodsFor: 'operations' stamp: 'len 12/30/2017 16:37:29'!
 / anEquivalenceRelation
@@ -12697,15 +12697,15 @@ elements: aCollection
 endomorphisms
 	^ self => self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/22/2018 17:06:56'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:52:40'!
 from: aDomain
 	"Answer the canonical morphism from aDomain to the receiver."
 	self = aDomain ifTrue: [^ self id].
 	self >= aDomain ifTrue: [^ aDomain id restrictedTo: self].
 	self isQuotient
-		ifTrue: [aDomain  self base ifNotNil: [:aMorphism| ^ self projection ” aMorphism]].
+		ifTrue: [aDomain -> self base ifNotNil: [:aMorphism| ^ self projection ” aMorphism]].
 	self isCoproduct
-		ifTrue: [(1 to: self arity) do: [:i| aDomain  (self at: i) ifNotNil: [:aMorphism| ^ (self embedding: i) ” aMorphism]]].
+		ifTrue: [(1 to: self arity) do: [:i| aDomain -> (self at: i) ifNotNil: [:aMorphism| ^ (self embedding: i) ” aMorphism]]].
 	^ nil! !
 
 !Domain methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
@@ -12980,12 +12980,12 @@ species
 sum: aBlock
 	^ self elements sum: aBlock! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/22/2018 17:08:17'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:52:49'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
 	self = aCodomain ifTrue: [^ self id].
 	self <= aCodomain ifTrue: [^ aCodomain id restrictedTo: self].
-	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i)  aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]].
+	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i) -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
@@ -17783,9 +17783,9 @@ embed: aGroupElement
 embedding
 	^ (Function from: self group to: self evaluating: [:g| self embed: g]) name: 'i' "should be a group homomorphism in Hom(Grp,Ab)?"! !
 
-!GroupRing methodsFor: 'morphisms' stamp: 'len 12/20/2016 11:44:43'!
+!GroupRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:53:10'!
 from: aDomain
-	aDomain  self group ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
+	aDomain -> self group ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
 	^ super from: aDomain! !
 
 !GroupRing methodsFor: 'accessing' stamp: 'len 10/11/2016 14:14'!
@@ -17903,9 +17903,9 @@ embedding
 fractions
 	^ self integers fractions! !
 
-!LocalizationRing methodsFor: 'morphisms' stamp: 'len 12/20/2016 11:48:03'!
+!LocalizationRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:53:15'!
 from: aDomain
-	aDomain  self integers ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
+	aDomain -> self integers ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
 	^ super from: aDomain! !
 
 !LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:38'!
@@ -18966,10 +18966,10 @@ example2
 	This is less efficient because internally it performs a factorization."
 	^ ZZ/(5^3)! !
 
-!PrimeRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:10:32'!
+!PrimeRing class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:57'!
 example3
 	"The canonical ring homomorphism from a prime ring Z/(p^n)Z to Z/pZ:"
-	^ ZZ/(5^3)  (ZZ/5)! !
+	^ ZZ/(5^3) -> (ZZ/5)! !
 
 !PrimeRing class methodsFor: 'instance creation' stamp: 'len 5/21/2018 16:28:00'!
 new: p to: n
@@ -19168,10 +19168,10 @@ embedding
 	^ self propertyAt: #embedding ifAbsentPut: [(self scalars to: self evaluating: [:x| self embed: x]) name: 'i']
 "	^ self projection ” self base embedding"! !
 
-!AffineRing methodsFor: 'morphisms' stamp: 'len 9/16/2018 16:59:10'!
+!AffineRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:52:20'!
 from: aDomain
 	aDomain = self scalars ifTrue: [^ self embedding].
-	aDomain  self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
+	aDomain -> self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
 	^ super from: aDomain! !
 
 !AffineRing methodsFor: 'operations' stamp: 'len 10/27/2016 18:44'!
@@ -19447,7 +19447,7 @@ teichmuller
 	self characteristic - 2 timesRepeat: [answer add: (answer last * w)].
 	^ answer! !
 
-!GaloisRing methodsFor: 'morphisms' stamp: 'len 9/22/2018 18:54:31'!
+!GaloisRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:53:03'!
 to: aCodomain
 	aCodomain isGaloisRing ifFalse: [^ super to: aCodomain].
 	"The subrings of GR(p^n,m) correspond to the positive divisors of m. If aCodomain is a suitable overring, answer an embedding of the receiver into the overring."
@@ -19455,7 +19455,7 @@ to: aCodomain
 		ifTrue: [^ self into: aCodomain evaluating: [:x| aCodomain project: (x representative ^ (self p ^ (aCodomain degree / self degree)))]].
 	"Given GR(p^n,r), there's a projection to GR(p^m,r) for all m<=n, with kernel <p^m>. This accounts for all ideals."
 	(self p = aCodomain p and: [self degree = aCodomain degree])
-		ifTrue: [self scalars  aCodomain scalars ifNotNil: [:aMorphism| ^ self to: aCodomain evaluating: [:x| aCodomain project: (x representative apply: aMorphism)]]].
+		ifTrue: [self scalars -> aCodomain scalars ifNotNil: [:aMorphism| ^ self to: aCodomain evaluating: [:x| aCodomain project: (x representative apply: aMorphism)]]].
 	^ super to: aCodomain! !
 
 !GaloisRing methodsFor: 'operations' stamp: 'len 5/21/2018 06:53:52'!
@@ -20689,12 +20689,12 @@ fractions
 		[self scalars isField ifFalse: [^ DomainError signal: 'scalars are not a field'].
 		RationalFunctionField on: self]! !
 
-!PolynomialRing methodsFor: 'morphisms' stamp: 'len 5/21/2018 19:18:00'!
+!PolynomialRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:56:46'!
 from: aDomain
 	aDomain = self scalars ifTrue: [^ self embedding].
-	aDomain  self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
+	aDomain -> self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
 	((aDomain isKindOf: PolynomialRing) and: [aDomain rank = self rank])
-		ifTrue: [aDomain scalars  self scalars ifNotNil: [:aMorphism| ^ aDomain to: self evaluating: [:f| f apply: aMorphism]]].
+		ifTrue: [aDomain scalars -> self scalars ifNotNil: [:aMorphism| ^ aDomain to: self evaluating: [:f| f apply: aMorphism]]].
 	^ super from: aDomain! !
 
 !PolynomialRing methodsFor: 'accessing' stamp: 'len 10/2/2016 10:34'!
@@ -26698,10 +26698,10 @@ embed: anElement
 embedding
 	^ Function from: self scalars to: self evaluating: [:each| self embed: each]! !
 
-!ProjectiveLine methodsFor: 'morphisms' stamp: 'len 9/15/2018 17:48:24'!
+!ProjectiveLine methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:55:28'!
 from: aDomain
 	aDomain = self scalars ifTrue: [^ self embedding].
-	aDomain  self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
+	aDomain -> self scalars ifNotNil: [:aMorphism| ^ self embedding ” aMorphism].
 	^ super from: aDomain! !
 
 !ProjectiveLine methodsFor: 'accessing' stamp: 'len 12/4/2016 22:26:45'!
@@ -27940,10 +27940,10 @@ parent
 	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal].
 	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
 
-!RingElement methodsFor: 'as yet unclassified' stamp: 'len 9/29/2018 08:24:15'!
+!RingElement methodsFor: 'as yet unclassified' stamp: 'len 4/19/2019 04:55:37'!
 adapt: anObject andSend: selector
-	self parent  anObject parent ifNotNil: [:aMorphism| ^ (aMorphism value: self) perform: selector with: anObject].
-	anObject parent  self parent ifNotNil: [:aMorphism| ^ self perform: selector with: (aMorphism value: anObject)].
+	self parent -> anObject parent ifNotNil: [:aMorphism| ^ (aMorphism value: self) perform: selector with: anObject].
+	anObject parent -> self parent ifNotNil: [:aMorphism| ^ self perform: selector with: (aMorphism value: anObject)].
 	^ DomainError signal! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 23:38:18'!
@@ -29140,10 +29140,10 @@ is: aSymbol
 isAffineLinear
 	^ self degree < 2! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:28'!
+!Polynomial methodsFor: 'testing' stamp: 'len 4/19/2019 04:54:44'!
 isBasicIrreducible
 	(self scalars isKindOf: PrimeRing) ifFalse: [DomainError signal].
-	^ (self apply: self scalars  self scalars primeSubfield) isIrreducible! !
+	^ (self apply: self scalars -> self scalars primeSubfield) isIrreducible! !
 
 !Polynomial methodsFor: 'testing' stamp: 'len 2/17/2017 08:07:02'!
 isBinomial
@@ -31204,10 +31204,10 @@ taylorSeriesOf: aFunction at: x0
 				n _ n + 1.
 				value])! !
 
-!Morphism methodsFor: 'operations' stamp: 'len 12/20/2016 11:52:01'!
- aCodomain
-	"Answer the composition with the canonical morphism from the codomain of the receiver to aCodomain. See also Domain>>."
-	^ self codomain  aCodomain ifNotNil: [:aMorphism| aMorphism ” self]! !
+!Morphism methodsFor: 'operations' stamp: 'len 4/19/2019 04:50:46'!
+-> aCodomain
+	"Answer the composition with the canonical morphism from the codomain of the receiver to aCodomain. See also Domain>>->."
+	^ self codomain -> aCodomain ifNotNil: [:aMorphism| aMorphism ” self]! !
 
 !Morphism methodsFor: 'operations' stamp: 'len 11/6/2016 08:59'!
 | aCodomain
@@ -31369,20 +31369,20 @@ example21Embedding
 	"Finally we compose them to get an embedding from the rational numbers Q to the field of univariate rational functions Q(x), that sends a number to a constant rational function."
 	^ psi ” phi! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2018 02:22:26'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:53:56'!
 example22EasierEmbedding
 	"Another way to construct the canonical embedding from Q to the rational functions over Q."
-	^ QQ  QQ polynomials fractions! !
+	^ QQ -> QQ polynomials fractions! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 3/3/2017 17:28:56'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:09'!
 example3CanonicalMorphism
-	"Canonical morphisms can be retrieved through the message #.
+	"Canonical morphisms can be retrieved through the message #->.
 	For example, Z (the ring of integers) is the initial object in
 	the category of commutative rings with unit, i.e. there's
 	a canonical morphism from Z to any commutative ring:"
-	^ ZZ  (QQ polynomialsIn: #(x y z))! !
+	^ ZZ -> (QQ polynomialsIn: #(x y z))! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 3/3/2017 17:29:23'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:26'!
 example4CanonicalMorphism
 	"The quotient map from a polynomial ring R to a quotient by
 	one of its ideals R/I is another example of canonical morphism."
@@ -31390,11 +31390,11 @@ example4CanonicalMorphism
 	R _ QQ polynomials.
 	x _ R x.
 	I _ R * (x squared + 1).
-	^ R  (R / I)! !
+	^ R -> (R / I)! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 3/3/2017 17:29:41'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:38'!
 example5CanonicalMorphism
-	"The message # can be sent to a Morphism with a Domain as
+	"The message #-> can be sent to a Morphism with a Domain as
 	argument, or to a Domain with a Morphism as argument.
 	This yields canonical constructions.
 	For example, given an arbitrary ring homomorphism,
@@ -31404,7 +31404,7 @@ example5CanonicalMorphism
 	phi _ R frobenius. "the Frobenius endomorphism"
 	x _ R x.
 	I _ R * (x squared + 1).
-	^ phi  (R / I)! !
+	^ phi -> (R / I)! !
 
 !Morphism class methodsFor: 'examples' stamp: 'len 9/25/2018 17:14:40'!
 example6GLAsMatrixGroupAction
@@ -32030,11 +32030,11 @@ spec
 species
 	^ RingMap! !
 
-!RingMap class methodsFor: 'examples' stamp: 'len 5/22/2018 22:10:52'!
+!RingMap class methodsFor: 'examples' stamp: 'len 4/19/2019 04:55:46'!
 example1
 	"The ring of rational integers is the initial object in the category of rings.
 	There's always a unique ring homomorphism from the integers to any given ring:"
-	^ ZZ  (ZZ/6) polynomials! !
+	^ ZZ -> (ZZ/6) polynomials! !
 
 !PolynomialRingMap methodsFor: 'as yet unclassified' stamp: 'len 2/12/2017 13:04:30'!
 imageContains: aPolynomial

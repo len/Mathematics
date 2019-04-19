@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:47:54 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:57:34 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 111!
+!provides: 'MathematicsTests' 1 112!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -4585,15 +4585,15 @@ testAnnihilatorZ2
 	self assert: S0 dimension = S codimension.
 	S0 basis do: [:f| self assert: (f value: v) isZero]! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 11/2/2016 08:20'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/19/2019 04:53:50'!
 testCanonicalMorphisms
 	| V W |
 	V _ QQ^3.
 	W _ V span: {(1,2,3)}.
-	self assert: (V null  W) isZero. "canonical morphism from initial object"
-	self assert: (V  W null) isZero. "canonical morphism to terminal object"
-	self assert: ((W  W null) value: (1,2,3)) isZero.
-	self assert: (W  V value: (2,4,6)) = (2,4,6). "canonical morphism to overobject"! !
+	self assert: (V null -> W) isZero. "canonical morphism from initial object"
+	self assert: (V -> W null) isZero. "canonical morphism to terminal object"
+	self assert: ((W -> W null) value: (1,2,3)) isZero.
+	self assert: (W -> V value: (2,4,6)) = (2,4,6). "canonical morphism to overobject"! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 4/3/2018 06:45:23'!
 testDirectSum
@@ -6794,14 +6794,14 @@ newRing
 	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
 	^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom! !
 
-!RingTest methodsFor: 'general' stamp: 'len 11/2/2016 08:18'!
+!RingTest methodsFor: 'general' stamp: 'len 4/19/2019 04:55:55'!
 testCanonicalMorphisms
 	| R x Q |
 	R _ QQ polynomials.
 	x _ R x.
 	Q _ R / (x^2 + 1).
-	self assert: (ZZ  R value: 4) = (R embed: 4). "canonical morphism from initial object"
-	self assert: (R  Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
+	self assert: (ZZ -> R value: 4) = (R embed: 4). "canonical morphism from initial object"
+	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/3/2018 06:28:51'!
 testFiniteRing
@@ -6866,7 +6866,7 @@ testGaloisRing
 	self assert: R isEuclidean.
 	self testRing: R! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 9/22/2018 19:02:42'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:55:59'!
 testGaloisRingCanonicalEmbeddingIntoOverring
 	"Canonical homomorphism from GR(p^n,m) to GR(p^n,m*k)."
 	| p n m k A B phi |
@@ -6876,10 +6876,10 @@ testGaloisRingCanonicalEmbeddingIntoOverring
 	k _ 3 atRandom.
 	A _ GaloisRing new: p to: n to: m.
 	B _ GaloisRing new: p to: n to: m * k.
-	phi _ A  B.
+	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 9/22/2018 19:02:50'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:07'!
 testGaloisRingCanonicalHomomorphismToPrimeSubfield
 	"Canonical homomorphism from GR(p^n,m) to Z/<p>."
 	| p n m A B phi |
@@ -6888,10 +6888,10 @@ testGaloisRingCanonicalHomomorphismToPrimeSubfield
 	m _ 3 atRandom.
 	A _ GaloisRing new: p to: n to: m.
 	B _ ZZ/p.
-	phi _ A  B.
+	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 9/22/2018 19:02:55'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:13'!
 testGaloisRingCanonicalProjectionOntoResidueField
 	"Canonical homomorphism from GR(p^n,m) to GF(p,m)."
 	| p n m A B phi |
@@ -6900,7 +6900,7 @@ testGaloisRingCanonicalProjectionOntoResidueField
 	m _ 3 atRandom.
 	A _ GaloisRing new: p to: n to: m.
 	B _ GaloisField new: p to: m.
-	phi _ A  B.
+	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:53:54'!
@@ -7032,7 +7032,7 @@ testPrimeRing
 	self assert: R maximalIdeal = (R*3).
 	self testRing: R! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 9/22/2018 19:03:08'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:17'!
 testPrimeRingCanonicalProjections
 	"Canonical homomorphism from ZZ/<p^n> to ZZ/<p^m> with 1 <= m <= n."
 	| p n m A B phi a b |
@@ -7041,7 +7041,7 @@ testPrimeRingCanonicalProjections
 	A _ ZZ/(p^n).
 	m _ n atRandom.
 	B _ ZZ/(p^m).
-	phi _ A  B.
+	phi _ A -> B.
 	a _ A atRandom.
 	b _ phi value: a.
 	self assert: (B includes: b).
