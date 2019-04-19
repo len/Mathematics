@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 5:01:36 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 6:41:55 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 457!
+!provides: 'Mathematics' 1 458!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -3640,7 +3640,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: 'len 4/19/2019 04:59:23' prior: 0!
+!Domain commentStamp: 'len 4/19/2019 06:09:38' prior: 0!
 'Objects' of some category (such as Groups, Rings, Modules, Schemes, etc) connected by the corresponding Morphisms. In many practical situations, domains can be seen as sets of elements, and their morphisms as some kind of Functions.
 
 Domains with an underlying set can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
@@ -3653,7 +3653,7 @@ Given two domains A and B in the same category, the set Hom(A,B) of morphisms be
 
 Domains often come equipped with cannonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and implement #embed: (the embedding implemented as a message) and #embedding (which returns the embedding morphism as an instance of some subclass of Morphism). Quotient objects have canonical projections (epimorphisms) and implement #project: and #projection. N-ary products and coproducts implement #projection: for the i-th projection map (and coproducts also implement #embedding: for the i-th coprojection).
 
-More generally, canonical morphisms that are uniquely determined by their domain and codomain can be retrieved by sending the message #->. This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes reimplement the messages #to: and #from: to answer canonical morphisms when such morphisms are known, and call super otherwise.
+More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) that are uniquely determined by their domain and codomain can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes reimplement the messages #to: and #from: to answer canonical morphisms when such morphisms are known, and call super otherwise.
 
 There's also a very simple coercion mechanism that allows to convert elements from one domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any ring R can be performed simply as 'R !! n'. Subclasses must sometimes reimplement the message #!! to convert the argument when possible, and call super otherwise.
 
@@ -5072,6 +5072,11 @@ adaptToCollection: rcvr andSend: selector
 	the results of each element combined with me in that expression."
 
 	^ rcvr collect: [:element | element perform: selector with: self]! !
+
+!Object methodsFor: '*mathematics' stamp: 'len 4/19/2019 06:23:43'!
+isElement
+	"Answer true if the receiver is an element of a Domain, i.e. if it understands the message #parent and answers its parent Domain."
+	^ false! !
 
 !Object methodsFor: '*mathematics' stamp: 'len 5/19/2018 17:53:50'!
 isEvaluable
@@ -12466,15 +12471,20 @@ example2
 	"Answer the cartesian set product of the receiver with the argument."
 	^ CartesianProduct components: {self. aDomain}! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:51:14'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:21:13'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
-	If the argument is a morphism, answer the composition with the canonical morphism to its domain. See also Morphism>>->."
+	If the argument is a morphism, answer the composition with a canonical morphism to its domain. See also Morphism>>->."
 	(aCodomain isKindOf: Morphism)
 		ifTrue: [^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain ” aMorphism]].
 	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
-"	self propertyAt: #canonicalMaps ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]]."
 	^ aCodomain from: self! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:20:35'!
+->> aCodomain
+	"Answer the canonical projection from the receiver onto aCodomain."
+	(self onto: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
+	^ aCodomain onfrom: self! !
 
 !Domain methodsFor: 'operations' stamp: 'len 12/30/2017 16:37:29'!
 / anEquivalenceRelation
@@ -12513,6 +12523,12 @@ example2
 > aDomain
 	"Answer true if aDomain is a proper subobject of the receiver (strict inclusion)."
 	^ aDomain < self! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:20:22'!
+>-> aCodomain
+	"Answer the canonical embedding from the receiver into aCodomain."
+	(self into: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
+	^ aCodomain infrom: self! !
 
 !Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:50'!
 >= aDomain
@@ -12697,7 +12713,7 @@ elements: aCollection
 endomorphisms
 	^ self => self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:52:40'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:18:58'!
 from: aDomain
 	"Answer the canonical morphism from aDomain to the receiver."
 	self = aDomain ifTrue: [^ self id].
@@ -12706,6 +12722,8 @@ from: aDomain
 		ifTrue: [aDomain -> self base ifNotNil: [:aMorphism| ^ self projection ” aMorphism]].
 	self isCoproduct
 		ifTrue: [(1 to: self arity) do: [:i| aDomain -> (self at: i) ifNotNil: [:aMorphism| ^ (self embedding: i) ” aMorphism]]].
+	(self infrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
+	(self onfrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ nil! !
 
 !Domain methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
@@ -12768,6 +12786,20 @@ includesAllOf: aCollection
 inclusion
 	"Answer the inclusion monomorphism from the receiver into its ambient object."
 	^ self ambient id restrictedTo: self! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:19:33'!
+infrom: aDomain
+	"Answer the canonical embedding from aDomain into the receiver."
+	self = aDomain ifTrue: [^ self id].
+	^ nil! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:18:49'!
+into: aCodomain
+	"Answer the canonical embedding from the receiver into aCodomain."
+	self = aCodomain ifTrue: [^ self id].
+"	self <= aCodomain ifTrue: [^ aCodomain id restrictedTo: self].
+	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i) -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]]."
+	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:31'!
 into: aCodomain evaluating: aBlock
@@ -12910,6 +12942,18 @@ null
 	"The null object in the category of sets is the empty set."
 	^ self propertyAt: #null ifAbsent: [self class newFrom: (Set new: 0)]! !
 
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:19:20'!
+onfrom: aDomain
+	"Answer the canonical projection from aDomain onto the receiver."
+	self = aDomain ifTrue: [^ self id].
+	^ nil! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:18:35'!
+onto: aCodomain
+	"Answer the canonical projection from the receiver onto aCodomain."
+	self = aCodomain ifTrue: [^ self id].
+	^ nil! !
+
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:05'!
 onto: aCodomain evaluating: aBlock
 	"Answer a projection (a surjective morphism) onto the specified codomain (in the same category), evaluating as the given block."
@@ -12980,12 +13024,14 @@ species
 sum: aBlock
 	^ self elements sum: aBlock! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:52:49'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:19:04'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
 	self = aCodomain ifTrue: [^ self id].
 	self <= aCodomain ifTrue: [^ aCodomain id restrictedTo: self].
 	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i) -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]].
+	(self into: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
+	(self onto: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
@@ -18926,6 +18972,13 @@ nilradical
 	A finite ring is a Galois ring iff its nilradical is of the form <p> for some prime p. This is also the unique maximal ideal."
 	^ self maximalIdeal! !
 
+!PrimeRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:01:14'!
+onto: aCodomain
+	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
+	((aCodomain isKindOf: PrimeRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
+		ifTrue: [^ self onto: aCodomain evaluating: [:x| aCodomain project: x representative]].
+	^ super onto: aCodomain! !
+
 !PrimeRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:18:30'!
 p
 	^ self propertyAt: #p ifAbsentPut: [self modulusFactors anyOne]! !
@@ -18942,13 +18995,6 @@ primeSubfield
 !PrimeRing methodsFor: 'printing' stamp: 'len 5/21/2018 04:31:00'!
 printOn: aStream
 	aStream print: self base; nextPut: $/; print: self p; nextPutAll: self exponent printString super; print: self base! !
-
-!PrimeRing methodsFor: 'morphisms' stamp: 'len 9/22/2018 18:56:49'!
-to: aCodomain
-	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
-	((aCodomain isKindOf: PrimeRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
-		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain project: x representative]].
-	^ super to: aCodomain! !
 
 !PrimeRing methodsFor: 'operations' stamp: 'len 5/21/2018 06:56:18'!
 zeroDivisors
@@ -19865,6 +19911,13 @@ idealClass
 includes: anObject
 	^ anObject isInteger! !
 
+!RationalIntegerRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 05:59:19'!
+into: aCodomain
+	"Answer an injective morphism from the receiver into aCodomain."
+	aCodomain isRing
+		ifTrue: [^ self into: aCodomain evaluating: [:x| aCodomain one * x]].
+	^ super into: aCodomain! !
+
 !RationalIntegerRing methodsFor: 'testing' stamp: 'len 3/27/2018 19:46:01'!
 isDedekindDomain
 	"A Dedekind domain is an integral domain in which every non-zero proper ideal factors into a product of prime ideals."
@@ -19944,13 +19997,6 @@ radical
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:58'!
 size
 	^ Aleph new! !
-
-!RationalIntegerRing methodsFor: 'morphisms' stamp: 'len 11/1/2016 19:20'!
-to: aCodomain
-	"Answer the canonical morphism from the receiver to aCodomain."
-	aCodomain isRing
-		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain one * x]].
-	^ super to: aCodomain! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 12/23/2016 10:19:17'!
 units
@@ -27912,6 +27958,11 @@ schlafliMatrix
 simpleReflections
 	^ generators! !
 
+!Element methodsFor: 'as yet unclassified' stamp: 'len 4/19/2019 06:23:55'!
+isElement
+	"Answer true if the receiver is an element of a Domain, i.e. if it understands the message #parent and answers its parent Domain."
+	^ true! !
+
 !Element methodsFor: 'as yet unclassified' stamp: 'len 9/24/2018 02:08:20'!
 parent
 	^ self subclassResponsibility! !
@@ -31204,7 +31255,7 @@ taylorSeriesOf: aFunction at: x0
 				n _ n + 1.
 				value])! !
 
-!Morphism methodsFor: 'operations' stamp: 'len 4/19/2019 04:50:46'!
+!Morphism methodsFor: 'operations' stamp: 'len 4/19/2019 06:21:31'!
 -> aCodomain
 	"Answer the composition with the canonical morphism from the codomain of the receiver to aCodomain. See also Domain>>->."
 	^ self codomain -> aCodomain ifNotNil: [:aMorphism| aMorphism ” self]! !
