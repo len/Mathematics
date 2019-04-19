@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 17 April 2019 at 11:35:31 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:47:50 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 454!
+!provides: 'Mathematics' 1 455!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -12504,6 +12504,11 @@ example2
 	aDomain propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ self = aCollectionOrDomain].
 	^ super = aDomain! !
 
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:34:10'!
+=> aCodomain
+	"Answer the morphisms that go from the receiver A to the argument B: Hom(A,B)."
+	^ HomSet from: self to: aCodomain! !
+
 !Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:49'!
 > aDomain
 	"Answer true if aDomain is a proper subobject of the receiver (strict inclusion)."
@@ -12688,9 +12693,9 @@ elements
 elements: aCollection
 	self propertyAt: #elements put: aCollection! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 11/2/2016 03:57'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:36:41'!
 endomorphisms
-	^ self hom: self! !
+	^ self => self! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/22/2018 17:06:56'!
 from: aDomain
@@ -12734,11 +12739,6 @@ hasProperty: aSymbol
 !Domain methodsFor: 'comparing' stamp: 'len 4/23/2016 00:41'!
 hash
 	^ self isFinite ifTrue: [self size hash] ifFalse: [super hash]! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 11/1/2016 19:16'!
-hom: aCodomain
-	"Answer the morphisms that go from the receiver A to the argument B: Hom(A,B)."
-	^ HomSet from: self to: aCodomain! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 2/28/2017 09:05:10'!
 id
@@ -13154,11 +13154,11 @@ printOn: aStream
 		ifTrue: [aStream nextPutAll: 'End'; nextPut: $(; print: self domain; nextPut: $)]
 		ifFalse: [aStream nextPutAll: 'Hom'; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
 
-!HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:43:10'!
+!HomSet class methodsFor: 'examples' stamp: 'len 4/19/2019 04:37:29'!
 example1
 	"The object Hom(N,Z), the functions from the natural numbers to the integers.
 	This is the space of sequences. (See class Sequence)."
-	^ NN hom: ZZ! !
+	^ NN => ZZ! !
 
 !HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:42:46'!
 example2
@@ -13858,9 +13858,9 @@ multiplicationTable2
 operation
 	^ self propertyAt: #operation ifAbsentPut: [((self, self) to: self evaluatingWithArguments: [:x :y| x * y]) name: '*']! !
 
-!Magma methodsFor: 'accessing-private' stamp: 'len 5/23/2018 22:18:15'!
+!Magma methodsFor: 'accessing-private' stamp: 'len 4/19/2019 04:40:12'!
 operation: aFunction
-	self propertyAt: #operation put: ((self, self) hom: self) !! aFunction! !
+	self propertyAt: #operation put: (self, self) => self !! aFunction! !
 
 !Loop methodsFor: 'accessing' stamp: 'len 12/28/2016 11:26:22'!
 identity
@@ -14320,9 +14320,9 @@ innerAutomorphisms
 inverseMap
 	^ self propertyAt: #inverseMap ifAbsentPut: [self defaultInverseMap]! !
 
-!Group methodsFor: 'accessing-private' stamp: 'len 5/23/2018 22:37:53'!
+!Group methodsFor: 'accessing-private' stamp: 'len 4/19/2019 04:37:16'!
 inverseMap: aFunction
-	self propertyAt: #inverseMap put: (self hom: self) !! aFunction! !
+	self propertyAt: #inverseMap put: self endomorphisms !! aFunction! !
 
 !Group methodsFor: 'testing' stamp: 'len 8/31/2016 08:48'!
 isAdditive
@@ -14839,9 +14839,9 @@ buildProjection
 defaultInverseMap
 	^ self endomorphisms !! self base inverseMap! !
 
-!QuotientGroup methodsFor: 'private' stamp: 'len 5/23/2018 22:32:40'!
+!QuotientGroup methodsFor: 'private' stamp: 'len 4/19/2019 04:44:52'!
 defaultOperation
-	^ ((self, self) hom: self) !! self base operation! !
+	^ (self, self) => self !! self base operation! !
 
 !QuotientGroup methodsFor: 'enumerating' stamp: 'len 12/22/2016 21:17:54'!
 do: aBlock
@@ -21265,6 +21265,12 @@ p: aPrime
 	^ (self generators allSatisfy: [:each| anObject includes: each])
 		and: [anObject generators allSatisfy: [:each| self includes: each]]! !
 
+!Module methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:35:04'!
+=> aModule
+	"Answer Hom(A,B), the R-module of morphisms that go from the receiver A to the argument B."
+	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
+	^ HomModule from: self to: aModule! !
+
 !Module methodsFor: 'operations' stamp: 'len 1/15/2018 18:54:24'!
 ÷ aModuleOrIdeal
 	"For the receiver N and the argument P two submodules of an R-module M, answer the quotient N : P defined by {a in R | aP is contained in N}.
@@ -21297,9 +21303,9 @@ asAbelianGroup
 characteristic
 	^ self scalars characteristic! !
 
-!Module methodsFor: 'operations' stamp: 'len 1/13/2018 21:28:26'!
+!Module methodsFor: 'operations' stamp: 'len 4/19/2019 04:40:19'!
 dual
-	^ self hom: self scalars asSelfModule! !
+	^ self => self scalars asSelfModule! !
 
 !Module methodsFor: 'accessing-private' stamp: 'len 1/15/2018 20:13:05'!
 generators: aCollection
@@ -21308,12 +21314,6 @@ generators: aCollection
 !Module methodsFor: 'comparing' stamp: 'len 1/13/2018 22:42:28'!
 hash
 	^ self scalars hash! !
-
-!Module methodsFor: 'morphisms' stamp: 'len 10/2/2018 01:37:22'!
-hom: aModule
-	"Answer Hom(A,B), the R-module of morphisms that go from the receiver A to the argument B."
-	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
-	^ HomModule from: self to: aModule! !
 
 !Module methodsFor: 'testing' stamp: 'len 10/2/2018 00:44:24'!
 isFree
@@ -22701,6 +22701,12 @@ mod: aSubmodule
 	self flag: #fix.
 	^ self generators allSatisfy: [:each| anObject includes: each] "or better test echelonized matrices are equal"! !
 
+!FreeModule methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:34:25'!
+=> aModule
+	"Answer Hom(A,B), the R-module of morphisms that go from the receiver A to the argument B."
+	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
+	^ HomFreeModule from: self to: aModule! !
+
 !FreeModule methodsFor: 'operations' stamp: 'len 7/14/2016 23:23'!
 \/ aModule
 	"Join."
@@ -22937,12 +22943,6 @@ grassmannian: r
 !FreeModule methodsFor: 'comparing' stamp: 'len 7/14/2016 23:22'!
 hash
 	^ self scalars hash + self rank hashMultiply! !
-
-!FreeModule methodsFor: 'morphisms' stamp: 'len 10/4/2018 00:25:15'!
-hom: aModule
-	"Answer Hom(A,B), the R-module of morphisms that go from the receiver A to the argument B."
-	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
-	^ HomFreeModule from: self to: aModule! !
 
 !FreeModule methodsFor: 'operations' stamp: 'len 10/27/2016 19:46'!
 hull: aCollection
@@ -23501,11 +23501,11 @@ z
 zero
 	^ self !! self asMatrixModule zero! !
 
-!HomFreeModule class methodsFor: 'examples' stamp: 'len 4/3/2018 19:27:52'!
+!HomFreeModule class methodsFor: 'examples' stamp: 'len 4/19/2019 04:37:23'!
 example1
 	"The vector space of linear transformations
 	from 3-tuples to 2-tuples, over the rational numbers."
-	^ QQ^3 hom: QQ^2! !
+	^ QQ^3 => QQ^2! !
 
 !HomFreeModule class methodsFor: 'examples' stamp: 'len 4/3/2018 19:27:44'!
 example2
@@ -27419,7 +27419,7 @@ vertices
 apply: aSimplicialMap
 	^ self species faces: (self facets collect: aSimplicialMap)! !
 
-!SimplicialComplex methodsFor: 'homology' stamp: 'len 1/10/2018 20:58:16'!
+!SimplicialComplex methodsFor: 'homology' stamp: 'len 4/19/2019 04:45:04'!
 boundaryMap: k over: aRing
 	"The k-th boundary map or differential d(k) goes from C(k) to C(k-1).
 	Its image is the group of (k-1)-boundaries B(k-1), a subgroup of C(k-1).
@@ -27430,7 +27430,7 @@ boundaryMap: k over: aRing
 	| domain codomain |
 	domain _ self chains: k over: aRing.
 	codomain _ self chains: k-1 over: aRing.
-	k = 0 ifTrue: [^ (domain hom: codomain) zero].
+	k = 0 ifTrue: [^ (domain => codomain) zero].
 	^ domain to: codomain evaluating: [:x|
 		| answer |
 		answer _ codomain zero.
@@ -31326,10 +31326,10 @@ leftInverse
 name
 	^ String streamContents: [:aStream| super printOn: aStream]! !
 
-!Morphism methodsFor: 'accessing' stamp: 'len 11/2/2016 04:01'!
+!Morphism methodsFor: 'accessing' stamp: 'len 4/19/2019 04:44:44'!
 parent
 	"A morphism f:A->B belongs to Hom(A,B)."
-	^ self domain hom: self codomain! !
+	^ self domain => self codomain! !
 
 !Morphism methodsFor: 'printing' stamp: 'len 11/16/2016 18:08'!
 printOn: aStream
@@ -31663,11 +31663,11 @@ example2Morphism1
 	by sending the message #to:evaluating: to the vector space."
 	^ QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 11/2/2016 08:35'!
+!Function class methodsFor: 'examples' stamp: 'len 4/19/2019 04:36:53'!
 example2Morphism2
 	"Here's another way to define the same morphism,
 	by creating Hom(Q^3, Q^3) and sending the message #evaluating: to it."
-	^ (QQ^3 hom: QQ^3) evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ QQ^3 => QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
 
 !Function class methodsFor: 'examples' stamp: 'len 10/29/2016 07:38'!
 example2Morphism3
@@ -32412,7 +32412,7 @@ nullity
 	"Answer the dimension of the kernel of the receiver."
 	^ matrix width - self rank! !
 
-!LinearMap methodsFor: 'printing' stamp: 'len 9/22/2018 23:26:08'!
+!LinearMap methodsFor: 'printing' stamp: 'len 4/19/2019 04:38:08'!
 printOn: aStream
 	| A B f |
 	self isIdentity ifTrue: [aStream nextPutAll: 'id'. ^ self].
@@ -32432,7 +32432,7 @@ printOn: aStream
 	B _ A polynomialsIn: self codomain names.
 	f _ B zero.
 	matrix rows
-		withIndexDo: [:each :i| f _ (B x: i) * ((self domain hom: self domain scalars asSelfModule) elementAt: each) asPolynomial + f].
+		withIndexDo: [:each :i| f _ (B x: i) * (self domain => self domain scalars asSelfModule elementAt: each) asPolynomial + f].
 	aStream print: f! !
 
 !LinearMap methodsFor: 'operations' stamp: 'len 1/8/2016 06:35'!

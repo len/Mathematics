@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 17 April 2019 at 11:35:26 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:47:54 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 110!
+!provides: 'MathematicsTests' 1 111!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -1100,16 +1100,16 @@ testAffineMapCollinearity
 	fp1 _ f value: p1. fp2 _ f value: p2. fp3 _ f value: p3.
 	self assert: (A hull: {fp1.fp2.fp3}) isLine! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2018 19:19:03'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 4/19/2019 04:35:51'!
 testAffineMapComposition
 	| X Y Z f g x |
 	X _ QQ^3.
 	Y _ QQ^5.
 	Z _ QQ^4.
-	f _ ((X hom: Y) atRandomBits: 1000) + (Y atRandomBits: 100).
-	g _ ((Y hom: Z) atRandomBits: 1000) + (Z atRandomBits: 100).
+	f _ (X => Y atRandomBits: 1000) + (Y atRandomBits: 100).
+	g _ (Y => Z atRandomBits: 1000) + (Z atRandomBits: 100).
 	x _ X atRandomBits: 1000.
-"	self assert: ((X hom: Z) includes: g ” f)."
+"	self assert: (X => Z includes: g ” f)."
 	self assert: (g ” f value: x) = (g value: (f value: x)).
 	self should: [f ” g] raise: DomainError! !
 
@@ -1622,7 +1622,7 @@ testRationalMapImage
 	f _ A to: A evaluatingWithArguments: [:x :y| {x+1. y+2}].
 	self assert: (X apply: f) = X2! !
 
-!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 5/23/2018 22:13:31'!
+!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 4/19/2019 04:36:32'!
 testRationalMapLinearMapConversion
 	| A2 A3 V2 V3 f f2 p f3 |
 	A2 _ AffineSpace new: 2 over: QQ.
@@ -1630,13 +1630,13 @@ testRationalMapLinearMapConversion
 	V2 _ QQ^2.
 	V3 _ QQ^3.
 
-	f _ V2 hom: V3 :: atRandomBits: 100.
-	f2 _ (A2 hom: A3) !! f.
+	f _ V2 => V3 atRandomBits: 100.
+	f2 _ A2 => A3 !! f.
 
 	p _ V2 atRandomBits: 100.
 	self assert: (f value: p) = (f2 value: p).
 
-	f3 _ (V2 hom: V3) !! f2.
+	f3 _ V2 => V3 !! f2.
 	self assert: f = f3! !
 
 !AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 5/22/2018 22:36:45'!
@@ -4426,6 +4426,13 @@ testSmithNormalForm4
 	A _ M rows: { (2,3,4). (5,6,7). (8,9,10) }.
 	self assert: A SNF = #(1 3 0) "this fails, but Cohen defines SNF only for nonsingular matrices"! !
 
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/17/2019 19:16:13'!
+testSmithNormalForm5
+	"Example from youtube video: 'Derek Holt: Algorithms for finitely presented groups' @ 25:49."
+	| A |
+	A _ ZZ matrix: #((1 2 0 -2) (0 2 2 0) (-1 -4 4 2)).
+	self assert: A SNF = #(1 2 6 0)! !
+
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
 testTransposed
 	| A |
@@ -4460,7 +4467,7 @@ testIndexOf
 newFreeModule
 	^ self newFreeModuleOver: {ZZ. QQ. ZZ / (10 atRandom + 1)} atRandom! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 9/16/2018 23:30:19'!
+!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:40:58'!
 newFreeModuleOver: scalars
 	| M N |
 "	M _ 2 atRandom = 1 ifTrue: [scalars ^ (5 atRandom - 1)] ifFalse: [scalars ^ (5 atRandom - 1 @ (5 atRandom - 1))]."
@@ -4470,7 +4477,7 @@ newFreeModuleOver: scalars
 		[3 atRandom = 1 ifTrue: [^ M endomorphisms].
 		N _ self newFreeModuleOver: scalars.
 		N rank < 5 ifFalse: [^ M  N].
-		2 atRandom = 1 ifTrue: [^ M hom: N].
+		2 atRandom = 1 ifTrue: [^ M => N].
 		2 atRandom = 1 ifTrue: [^ M ’ N].
 		^ M  N].
 	3 atRandom = 1 ifTrue: [^ M dual].
@@ -4480,13 +4487,13 @@ newFreeModuleOver: scalars
 newFreeModuleOverPID
 	^ self newFreeModuleOver: {QQ. ZZ/2. ZZ. QQ polynomials} atRandom! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 5/19/2018 17:38:26'!
+!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:41:09'!
 newLinearMap
 	| K V W |
 	K _ {QQ. ZZ / #(2 3 5 7) atRandom} atRandom.
 	V _ self newFreeModuleOver: K.
 	W _ self newFreeModuleOver: K.
-	^ (V hom: W) !! (self newMatrix: W rank @ V rank over: K)! !
+	^ V => W !! (self newMatrix: W rank @ V rank over: K)! !
 
 !ModuleTest methodsFor: 'private' stamp: 'len 3/2/2017 04:43:47'!
 newMatrix: dim over: aRing
@@ -4495,7 +4502,7 @@ newMatrix: dim over: aRing
 	samples _ {aRing zero. aRing one. aRing one negated}.
 	^ aRing matrix: dim evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 9/16/2018 23:30:24'!
+!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:41:17'!
 newSmallFreeModuleOver: scalars
 	| M N |
 	M _ 2 atRandom = 1 ifTrue: [scalars ^ 3 atRandom] ifFalse: [scalars ^ (3 atRandom @ 3 atRandom)].
@@ -4504,7 +4511,7 @@ newSmallFreeModuleOver: scalars
 		[3 atRandom = 1 ifTrue: [^ M endomorphisms].
 		N _ self newFreeModuleOver: scalars.
 		N rank < 4 ifFalse: [^ M  N].
-		2 atRandom = 1 ifTrue: [^ M hom: N].
+		2 atRandom = 1 ifTrue: [^ M => N].
 		2 atRandom = 1 ifTrue: [^ M ’ N].
 		^ M  N].
 	3 atRandom = 1 ifTrue: [^ M dual].
@@ -4518,30 +4525,30 @@ newSmallVectorSpace
 newVectorSpace
 	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom. QQ polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/1/2018 05:29:28'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/19/2019 04:41:25'!
 testAdjointMap
 	| V W f a |
 	V _ QQ ^ (1 to: 3) atRandom.
 	W _ QQ ^ (1 to: 5) atRandom.
-	f _ (V hom: W) atRandomBits: 100.
+	f _ V => W atRandomBits: 100.
 	a _ f adjoint.
 	self assert: a kernel = f image annihilator.
 	self assert: a image = f kernel annihilator.
 	self assert: f isSurjective = a isInjective.
 	self assert: f isInjective = a isSurjective! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/2/2018 17:37:50'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/19/2019 04:41:47'!
 testAdjointProperties
 	| V W U f g a |
 	V _ QQ ^ (1 to: 4) atRandom.
 	W _ QQ ^ (1 to: 4) atRandom.
-	f _ (V hom: W) atRandomBits: 100.
-	g _ (V hom: W) atRandomBits: 100.
+	f _ V => W atRandomBits: 100.
+	g _ V => W atRandomBits: 100.
 	a _ QQ atRandomBits: 10.
 	self assert: (f + g) adjoint = (f adjoint + g adjoint).
 	self assert: (f * a) adjoint = (f adjoint * a).
 	U _ QQ ^ (1 to: 4) atRandom.
-	f _ (U hom: V) atRandomBits: 100.
+	f _ U => V atRandomBits: 100.
 	self assert: (g ” f) adjoint = (f adjoint ” g adjoint)! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:57'!
@@ -4606,21 +4613,21 @@ testDiscriminant
 	self assert: (M span: {(1,2,3)}) discriminant = 14.
 	self assert: (M span: {(1,2,3). (1,1,1)}) discriminant = 6 ! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 1/16/2018 17:49:34'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:41:54'!
 testFirstIsomorphismTheorem2
 	| V S T f |
 	V _ QQ ^ 5.
 	S _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
 	T _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
-	f _ S hom: T :: atRandomBits: 50.
+	f _ S => T atRandomBits: 50.
 	self assert: f domain / f kernel ~ f image! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:36:17'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:42:03'!
 testFirstIsomorphismTheorem: M
 	| S T f phi |
 	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
 	T _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	f _ S hom: T :: atRandomBits: 50.
+	f _ S => T atRandomBits: 50.
 	phi _ S / f kernel to: f image evaluating: [:x| f value: x representative].
 	self assert: phi isIsomorphism! !
 
@@ -4834,39 +4841,39 @@ testLinearMap: f
 	x _ f domain scalars atRandomBits: 20.
 	self assert: (f value: a1 * x + a2) = (b1 * x + b2)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/7/2017 07:25:22'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:10'!
 testLinearMapAdjoint
 	| V W f fAdjoint phi |
 	V _ self newFreeModuleOver: QQ.
 	W _ self newFreeModuleOver: QQ.
-	f _ V hom: W :: atRandomBits: 50.
+	f _ V => W atRandomBits: 50.
 	fAdjoint _ f adjoint.
 	self assert: fAdjoint domain = f codomain dual.
 	self assert: fAdjoint codomain = f domain dual.
 	phi _ W dual atRandomBits: 20.
 	self assert: (fAdjoint value: phi) = (phi ” f)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 12:05:24'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:39'!
 testLinearMapComposition
 	| X Y Z f g x |
 	X _ QQ ^ 3.
 	Y _ QQ ^ 5.
 	Z _ QQ ^ 4.
-	f _ (X hom: Y) atRandomBits: 1000.
-	g _ (Y hom: Z) atRandomBits: 1000.
+	f _ X => Y atRandomBits: 1000.
+	g _ Y => Z atRandomBits: 1000.
 	x _ X atRandomBits: 1000.
-	self assert: ((X hom: Z) includes: g ” f).
+	self assert: (X => Z includes: g ” f).
 	self assert: (g ” f value: x) = (g value: (f value: x)).
 	self should: [f ” g] raise: DomainError! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 11:50:35'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:55'!
 testLinearMapCompositionError
 	| X Y Z f g |
 	X _ QQ ^ 3.
 	Y _ QQ ^ 5.
 	Z _ QQ ^ 4.
-	f _ (X hom: Y) atRandomBits: 1000.
-	g _ (Y hom: Z) atRandomBits: 1000.
+	f _ X => Y atRandomBits: 1000.
+	g _ Y => Z atRandomBits: 1000.
 	self should: [f ” g] raise: DomainError! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:52:54'!
@@ -4912,38 +4919,38 @@ testLinearMapKernelZ2
 	self assert: kernel dimension = 2.
 	self assert: (kernel includes: (0,1,1) % 2)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 11:50:51'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:21'!
 testLinearMapLeftInverse
 	| V W f |
 	V _ QQ ^ 3.
 	W _ QQ ^ 5.
-	[f _ (V hom: W) atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: (f leftInverse ” f) = V id! !
+	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
+	self assert: f leftInverse ” f = V id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 04:58:30'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:33'!
 testLinearMapRetraction
 	| V W f r |
 	V _ QQ^3.
 	W _ QQ^4.
-	[f _ (V hom: W) atRandomBits: 100. f isInjective] whileFalse.
+	[f _ V => W atRandomBits: 100. f isInjective] whileFalse.
 	r _ f retraction.
 	self assert: r isSurjective.
 	self assert: r ” f = V id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 12/20/2016 11:50:57'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:50'!
 testLinearMapRightInverse
 	| V W f |
 	V _ QQ ^ 5.
 	W _ QQ ^ 3.
-	[f _ (V hom: W) atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: (f ” f rightInverse) = W id! !
+	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
+	self assert: f ” f rightInverse = W id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 04:59:31'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:44:03'!
 testLinearMapSection
 	| V W f s |
 	V _ QQ^4.
 	W _ QQ^3.
-	[f _ (V hom: W) atRandomBits: 100. f isSurjective] whileFalse.
+	[f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
 	s _ f section.
 	self assert: s isInjective.
 	self assert: f ” s = W id! !
@@ -5276,14 +5283,14 @@ testSubspaceSumRandom
 	self assert: S <= U.
 	self assert: T <= U! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 9/16/2018 23:30:36'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/19/2019 04:44:23'!
 testTensorHomAdjunction
 	| V W U A B |
 	V _ self newSmallVectorSpace.
 	W _ self newSmallFreeModuleOver: V scalars.
 	U _ self newSmallFreeModuleOver: V scalars.
-	A _ V’W hom: U.
-	B _ V hom: (W hom: U).
+	A _ V’W => U.
+	B _ V => (W => U).
 	self assert: A ~ B.
 "	phi _ A to: B evaluating: [:f| B evaluating: [:v| (W to: U) evaluating: [:w| f value: v’w]]].
 	self testLinearMap: phi.
@@ -5311,13 +5318,13 @@ testTensorProductDimension
 	V2 _ QQ ^ 5 atRandom.
 	self assert: (V1 ’ V2) dimension = (V1 dimension * V2 dimension)! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 9/16/2018 23:30:43'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/19/2019 04:44:36'!
 testTensorProductDualHomIsomorphism
 	| V W A B |
 	V _ self newVectorSpace.
 	W _ self newFreeModuleOver: V scalars.
 	A _ V dual ’ W.
-	B _ V hom: W.
+	B _ V => W.
 	self assert: A ~ B
 "	phi _ A to: B evaluating: [:t| B evaluating: [:v| t second * (t first value: v)]].
 	self testLinearMap: phi.
