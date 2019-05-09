@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 8:42:49 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 10:07:13 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 460!
+!provides: 'Mathematics' 1 461!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -1220,6 +1220,16 @@ GaloisRing subclass: #GaloisField
 	category: 'Mathematics-Fields-Finite'!
 !classDefinition: 'GaloisField class' category: #'Mathematics-Fields-Finite'!
 GaloisField class
+	instanceVariableNames: ''!
+
+!classDefinition: #QuasiGaloisRing category: #'Mathematics-Rings-Finite'!
+AlgebraicExtension subclass: #QuasiGaloisRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Rings-Finite'!
+!classDefinition: 'QuasiGaloisRing class' category: #'Mathematics-Rings-Finite'!
+QuasiGaloisRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #FunctionField category: #'Mathematics-Fields'!
@@ -4199,7 +4209,7 @@ See also PolynomialRing and PolynomialIdeal.!
 See also AlgebraicElement.!
 
 !GaloisRing commentStamp: '<historical>' prior: 0!
-The Galois ring GR(p^n,m) is a Galois extension of degree m of the ring Z/(p^n)Z of characteristic p^n. This is the unique (up to isomorphism) extension of degree m of the ring Z/(p^n)Z of integers modulo p^n (see PrimeRing). When n=1 they are fields (see GaloisField).
+The Galois ring GR(p^n,m) is a Galois extension of degree m of the prime power ring Z/(p^n)Z of characteristic p^n. This is the unique (up to isomorphism) extension of degree m of the ring Z/(p^n)Z of integers modulo p^n (see PrimeRing). When n=1 they are fields (see GaloisField).
 
 Galois rings GR(p^n,m) are local rings with maximal ideal <p>, and <p> is also the set of zero-divisors.
 
@@ -4209,6 +4219,10 @@ More generally, any finite local ring can be constructed as a finitely-generated
 
 !GaloisField commentStamp: '<historical>' prior: 0!
 Finite nonprime fields, i.e. fields GF(p^r) with r>1. These are finite algebraic extensions of prime fields. See also PrimeField.!
+
+!QuasiGaloisRing commentStamp: 'len 5/9/2019 10:06:24' prior: 0!
+The Quasi-Galois ring A(p^r,n) is an extension of degree n of Galois field GF(p^r) isomorphic to GF(p^r)[x]/<x^n>. See also GaloisRing.
+!
 
 !FunctionField commentStamp: '<historical>' prior: 0!
 Algebraic function fields, i.e. finite (and thus algebraic) field extensions of a rational function field. Function fields can also be viewed as vector spaces over the coefficients field.
@@ -20023,6 +20037,10 @@ polynomial: aPolynomial
 	"Answer a new algebraic field extension K(f) where f is the given polynomial in K[x]. The polynomial must be irreducible, otherwise there would be zero divisors."
 	^ self new polynomial: aPolynomial! !
 
+!GaloisRing methodsFor: 'accessing' stamp: 'len 5/9/2019 09:25:41'!
+exponent
+	^ self scalars exponent! !
+
 !GaloisRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:53:46'!
 idealsDo: aBlock
 	| a |
@@ -20109,10 +20127,10 @@ teichmuller
 	self characteristic - 2 timesRepeat: [answer add: (answer last * w)].
 	^ answer! !
 
-!GaloisRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:53:03'!
+!GaloisRing methodsFor: 'morphisms' stamp: 'len 5/9/2019 09:13:37'!
 to: aCodomain
 	aCodomain isGaloisRing ifFalse: [^ super to: aCodomain].
-	"The subrings of GR(p^n,m) correspond to the positive divisors of m. If aCodomain is a suitable overring, answer an embedding of the receiver into the overring."
+	"The subrings of GR(p^n,r) correspond to the positive divisors of r. If aCodomain is a suitable overring, answer an embedding of the receiver into the overring."
 	(self characteristic = aCodomain characteristic and: [self degree | aCodomain degree])
 		ifTrue: [^ self into: aCodomain evaluating: [:x| aCodomain project: (x representative ^ (self p ^ (aCodomain degree / self degree)))]].
 	"Given GR(p^n,r), there's a projection to GR(p^m,r) for all m<=n, with kernel <p^m>. This accounts for all ideals."
@@ -20208,6 +20226,31 @@ new: p to: n
 	F _ PrimeField new: p.
 	n = 1 ifTrue: [^ F].
 	^ self polynomial: (F polynomials findIrreducibleOfDegree: n)! !
+
+!QuasiGaloisRing methodsFor: 'testing' stamp: 'len 5/9/2019 09:48:43'!
+isFinite
+	^ true! !
+
+!QuasiGaloisRing methodsFor: 'testing' stamp: 'len 5/9/2019 09:54:52'!
+isIntegralDomain
+	^ false! !
+
+!QuasiGaloisRing methodsFor: 'testing' stamp: 'len 5/9/2019 09:48:39'!
+isLocal
+	^ true! !
+
+!QuasiGaloisRing methodsFor: 'printing' stamp: 'len 5/9/2019 09:53:57'!
+printOn: aStream
+	aStream nextPutAll: 'A('; print: self scalars p; nextPutAll: self scalars degree printString super; nextPut: $,; print: self degree; nextPut: $)! !
+
+!QuasiGaloisRing class methodsFor: 'instance creation' stamp: 'len 5/9/2019 09:52:23'!
+new: p to: r to: n
+	"Answer Quasi-Galois ring of characteristic p and order p^(r*n)."
+	| F f |
+	F _ GaloisField new: p to: r.
+	n = 1 ifTrue: [^ F].
+	f _ F polynomials xTo: n.
+	^ self polynomial: f! !
 
 !FunctionField methodsFor: 'as yet unclassified' stamp: 'len 1/5/2017 19:50:45'!
 genus

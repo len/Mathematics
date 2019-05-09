@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 4:49:27 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 10:07:16 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 113!
+!provides: 'MathematicsTests' 1 114!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -7153,6 +7153,19 @@ testProductRing
 	P _ R × S.
 	self testRing: P.
 	self testRingHomomorphism: (P projection: 2 atRandom)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 10:00:45'!
+testQuasiGaloisRing1
+	| p r n A |
+	p _ #(2 3) atRandom.
+	r _ 3 atRandom.
+	n _ 3 atRandom.
+	A _ QuasiGaloisRing new: p to: r to: n.
+	self assert: A characteristic = p.
+	self assert: A size = (p^(r*n)).
+	self assert: A isCommutative.
+	self assert: A isLocal.
+	self assert: A isFinite! !
 
 !RingTest methodsFor: 'quotients' stamp: 'len 10/6/2016 20:32'!
 testQuotientRing
