@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 4:46:07 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 8:42:49 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 459!
+!provides: 'Mathematics' 1 460!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -2404,7 +2404,7 @@ Coset class
 
 !classDefinition: #OppositeGroupElement category: #'Mathematics-Groups'!
 GroupElement subclass: #OppositeGroupElement
-	instanceVariableNames: 'oppositeInverse'
+	instanceVariableNames: 'opposite'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Mathematics-Groups'!
@@ -15063,32 +15063,32 @@ new: anInteger
 on: aCollection
 	^ self new symbols: aCollection! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:21:36'!
+!OppositeGroup methodsFor: 'coercion' stamp: 'len 5/9/2019 08:05:51'!
 !! anElement
-	(opposite includes: anElement) ifTrue: [^ OppositeGroupElement oppositeInverse: anElement inverse].
+	(opposite includes: anElement) ifTrue: [^ OppositeGroupElement opposite: anElement inverse].
 	^ super !! anElement! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:22:26'!
+!OppositeGroup methodsFor: 'accessing' stamp: 'len 5/8/2019 14:22:26'!
 generators
 	^ opposite generators collect: [:each| self !! each]! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:22:12'!
+!OppositeGroup methodsFor: 'accessing' stamp: 'len 5/8/2019 14:22:12'!
 identity
 	^ self !! opposite identity! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 13:41:23'!
+!OppositeGroup methodsFor: 'operations' stamp: 'len 5/8/2019 13:41:23'!
 opposite
 	^ opposite! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 13:41:37'!
+!OppositeGroup methodsFor: 'private' stamp: 'len 5/8/2019 13:41:37'!
 opposite: aGroup
 	opposite _ aGroup! !
 
-!OppositeGroup methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 13:52:38'!
+!OppositeGroup methodsFor: 'printing' stamp: 'len 5/8/2019 13:52:38'!
 printOn: aStream
 	aStream print: opposite; nextPutAll: 'op' super! !
 
-!OppositeGroup class methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 13:54:20'!
+!OppositeGroup class methodsFor: 'instance creation' stamp: 'len 5/8/2019 13:54:20'!
 opposite: aGroup
 	^ self new opposite: aGroup! !
 
@@ -18935,36 +18935,36 @@ printOn: aStream
 	self integers printIndeterminatesOn: aStream.
 	aStream nextPutAll: '))'! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:44:48'!
+!OppositeRing methodsFor: 'elements' stamp: 'len 5/8/2019 14:44:48'!
 !! anElement
 	(opposite includes: anElement) ifTrue: [^ OppositeRingElement opposite: anElement inverse].
 	^ super !! anElement! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:52:11'!
+!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:52:11'!
 generators
 	^ opposite generators collect: [:each| self !! each]! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:51:55'!
+!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:55'!
 one
 	^ self !! opposite one! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:43:21'!
+!OppositeRing methodsFor: 'operations' stamp: 'len 5/8/2019 14:43:21'!
 opposite
 	^ opposite! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:43:31'!
+!OppositeRing methodsFor: 'private' stamp: 'len 5/8/2019 14:43:31'!
 opposite: aRing
 	opposite _ aRing! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:52:19'!
+!OppositeRing methodsFor: 'printing' stamp: 'len 5/8/2019 14:52:19'!
 printOn: aStream
 	aStream print: opposite; nextPutAll: 'op' super! !
 
-!OppositeRing methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:51:59'!
+!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:59'!
 zero
 	^ self !! opposite zero! !
 
-!OppositeRing class methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:44:25'!
+!OppositeRing class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:25'!
 opposite: aRing
 	^ self new opposite: aRing! !
 
@@ -32364,37 +32364,37 @@ subgroup: aSubgroup
 on: aSubgroup representative: anObject
 	^ self new subgroup: aSubgroup; representative: anObject! !
 
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:12:51'!
+!OppositeGroupElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:06:35'!
+= anElement
+	^ self class = anElement class and: [opposite = anElement opposite]! !
+
+!OppositeGroupElement methodsFor: 'operations' stamp: 'len 5/9/2019 08:05:01'!
 � anElement
-	^ self class oppositeInverse: anElement oppositeInverse � oppositeInverse! !
+	^ self class opposite: anElement opposite � opposite! !
 
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:13:20'!
+!OppositeGroupElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:06:41'!
+hash
+	^ opposite hash! !
+
+!OppositeGroupElement methodsFor: 'operations' stamp: 'len 5/9/2019 08:05:10'!
 inverse
-	^ self class oppositeInverse: oppositeInverse inverse! !
+	^ self class opposite: opposite inverse! !
 
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:13:27'!
+!OppositeGroupElement methodsFor: 'accessing' stamp: 'len 5/9/2019 08:04:46'!
 opposite
-	^ oppositeInverse inverse! !
+	^ opposite! !
 
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:14:01'!
-oppositeInverse
-	^ oppositeInverse! !
-
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:14:09'!
-oppositeInverse: anElement
-	oppositeInverse _ anElement! !
-
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:13:46'!
+!OppositeGroupElement methodsFor: 'accessing' stamp: 'len 5/9/2019 08:05:19'!
 parent
-	^ oppositeInverse parent opposite! !
+	^ opposite parent opposite! !
 
-!OppositeGroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:13:40'!
+!OppositeGroupElement methodsFor: 'printing' stamp: 'len 5/9/2019 08:05:24'!
 printOn: aStream
-	oppositeInverse printOn: aStream! !
+	opposite printOn: aStream! !
 
-!OppositeGroupElement class methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:12:13'!
-oppositeInverse: anElement
-	^ self new oppositeInverse: anElement! !
+!OppositeGroupElement class methodsFor: 'instance creation' stamp: 'len 5/9/2019 08:05:39'!
+opposite: anElement
+	^ self new opposite: anElement! !
 
 !SemidirectProductElement methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:19:05'!
 � aSemidirectProduct
@@ -32622,35 +32622,43 @@ squared
 zero
 	^ self parent zero! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:41:57'!
+!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:41:57'!
 * anElement
 	^ self class opposite: anElement opposite * opposite! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:42:18'!
+!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:18'!
 + anElement
 	^ self class opposite: opposite + anElement opposite! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:42:29'!
+!OppositeRingElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:04:24'!
+= anElement
+	^ self class = anElement class and: [opposite = anElement opposite]! !
+
+!OppositeRingElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:03:56'!
+hash
+	^ opposite hash! !
+
+!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:29'!
 negated
 	^ self class opposite: opposite negated! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:43:41'!
+!OppositeRingElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
 opposite
 	^ opposite! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:43:50'!
+!OppositeRingElement methodsFor: 'private' stamp: 'len 5/8/2019 14:43:50'!
 opposite: anElement
 	opposite _ anElement! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:41:34'!
+!OppositeRingElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:41:34'!
 parent
 	^ opposite parent opposite! !
 
-!OppositeRingElement methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:42:55'!
+!OppositeRingElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
 printOn: aStream
 	opposite printOn: aStream! !
 
-!OppositeRingElement class methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:44:01'!
+!OppositeRingElement class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:01'!
 opposite: anElement
 	^ self new opposite: anElement! !
 
