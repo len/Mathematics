@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 19 April 2019 at 4:57:34 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 4:49:27 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 112!
+!provides: 'MathematicsTests' 1 113!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -1041,13 +1041,38 @@ testAbelianGroupHomomorphism: phi
 	self assert: (phi value: G identity) = H identity.
 	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b))! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:22:20'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:32:35'!
+testAbelianGroupWithTorsion
+	| G |
+	G _ FPAbelianGroup invariants: #(0 0 2 3).
+	self assert: G rank = 2.
+	self assert: G invariants = #(0 0 2 3).
+	self assert: G torsion invariants = #(2 3).
+	self assert: G isTorsion not.
+	self assert: G isFree not.
+	self assert: G torsion isTorsion.
+	self assert: G torsion isFree not! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/23/2019 02:19:56'!
 testDirectSum
 	| G |
 	G _ ZZ asAbelianGroup ê (ZZ / (2 to: 10) atRandom) asAbelianGroup.
 	self testAbelianGroup: G.
 	self testAbelianGroupHomomorphism: (G projection: 2 atRandom).
-	self testAbelianGroupHomomorphism: (G embedding: 2 atRandom)! !
+	self testAbelianGroupHomomorphism: (G coprojection: 2 atRandom)! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:32:31'!
+testFreeAbelianGroup
+	| G |
+	G _ FPAbelianGroup invariants: #(0 0).
+	self assert: G rank = 2.
+	self assert: G invariants = #(0 0).
+	self assert: G torsion invariants = #().
+	self assert: G torsion isTrivial.
+	self assert: G isTorsion not.
+	self assert: G isFree.
+	self assert: G torsion isTorsion.
+	self assert: G torsion isFree "because it's trivial"! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:42'!
 testIntegerTuples
@@ -1100,7 +1125,7 @@ testAffineMapCollinearity
 	fp1 _ f value: p1. fp2 _ f value: p2. fp3 _ f value: p3.
 	self assert: (A hull: {fp1.fp2.fp3}) isLine! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 4/19/2019 04:35:51'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:29:09'!
 testAffineMapComposition
 	| X Y Z f g x |
 	X _ QQ^3.
@@ -1109,9 +1134,9 @@ testAffineMapComposition
 	f _ (X => Y atRandomBits: 1000) + (Y atRandomBits: 100).
 	g _ (Y => Z atRandomBits: 1000) + (Z atRandomBits: 100).
 	x _ X atRandomBits: 1000.
-"	self assert: (X => Z includes: g î f)."
-	self assert: (g î f value: x) = (g value: (f value: x)).
-	self should: [f î g] raise: DomainError! !
+"	self assert: (X => Z includes: g ∑ f)."
+	self assert: (g ∑ f value: x) = (g value: (f value: x)).
+	self should: [f ∑ g] raise: DomainError! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2018 19:19:18'!
 testAffineMapEvaluating
@@ -1120,13 +1145,13 @@ testAffineMapEvaluating
 	f _ AffineMap from: V to: V evaluating: [:p| p*2 - (1,0,0)].
 	self assert: (f value: (1,2,3)) = (1,4,6)! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 21:14:52'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:29:23'!
 testAffineMapInverse
 	| A f |
 	A _ QQ^3.
 	f _ (A automorphisms atRandomBits: 1000) + (A atRandomBits: 100).
-	self assert: (f î f inverse) isIdentity.
-	self assert: (f inverse î f) isIdentity! !
+	self assert: (f ∑ f inverse) isIdentity.
+	self assert: (f inverse ∑ f) isIdentity! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 12/14/2017 22:51:49'!
 testAffineSubspaceParallelism
@@ -1387,18 +1412,6 @@ testNotFinite
 	X _ A / {y*y - (x*x) - 3} :: spec.
 	self assert: X isFinite not! !
 
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 9/16/2018 23:29:50'!
-testProductRingHomogeneousTuplesBug
-	"This tests a bug that makes Tuple>>~ not an equivalence relation (transitivity is broken)."
-	| A p1 p2 c1 c2 |
-	A _ ZZ/2 ◊ (ZZ/2).
-	p1 _ A tuple: {A !! {1. 1}. A !! {1. 1}}.
-	p2 _ A tuple: {A !! {0. 1}. A !! {0. 1}}.
-	self assert: p1 ~ p2.
-	c1 _ A^2 count: [:each| each isZero not and: [each ~ p1]].
-	c2 _ A^2 count: [:each| each isZero not and: [each ~ p2]].
-	self assert: c1 = c2! !
-
 !AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 1/12/2017 14:44:51'!
 testProjectiveClosure
 	"From Magma Handbook example Scheme_projective-closure (H118E23)."
@@ -1586,7 +1599,7 @@ testRationalMap2
 	X _ A3 subscheme: {x^3*z - (x*y^2*(3/4)) - (x*y*z*(3/2)) + (y^3) + (z^2*(1/4))}.
 	self assert: f image = X! !
 
-!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 12/26/2016 09:15:15'!
+!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 5/5/2019 18:29:43'!
 testRationalMapAffineExample
 	"From lecture notes MIT 18.782 Introduction to Arithmetic Geometry, Lecture #15, Fall 2013, 10/29/2013, Example 15.19."
 	| A2 x y X A1 phi phi2 phiInv |
@@ -1599,7 +1612,7 @@ testRationalMapAffineExample
 	phi2 _ X to: A1 evaluatingWithArguments: [:x0 :y0| {1 - x0 / y0}].
 	self assert: phi = phi2.
 	phiInv _ A1 to: X evaluatingWithArguments: [:t| {1 - (t^2) / (1 + (t^2)). t*2 / (1 + (t^2))}].
-	self assert: (phi î phiInv) isIdentity.
+	self assert: (phi ∑ phiInv) isIdentity.
 	self assert: phi isRegular not.
 	self assert: phi isDominant.
 "	self assert: phi isSurjective."
@@ -3162,18 +3175,18 @@ testActionStabilizerOf
 	self assert: (H action stabilizerOf: 1) asSet = {id. g3} asSet.
 	self assert: (H action stabilizerOf: 7) asSet = {id. g1. g2} asSet! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:12'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:02'!
 testAlternatingIsSymmetricCommutator
 	| S A |
-	S _ Group symmetric: (1 to: 3).
-	A _ Group alternating: (1 to: 3).
+	S _ SymmetricGroup new: 3.
+	A _ AlternatingGroup new: 3.
 	self assert: A = S commutator.
 	self assert: (S indexOf: A) = 2! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:12'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:49'!
 testAlternatingOrder
 	| A |
-	A _ Group alternating: (1 to: 3).
+	A _ AlternatingGroup new: 3.
 	self assert: A order = (3 factorial / 2)! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 2/1/2018 23:07:09'!
@@ -3190,12 +3203,12 @@ testBigOrder2
 	This is the Mathieu group on 12 points, the second smallest of the 26 sporadic simple groups, with order 95040."
 	self assert: PermutationGroup M12 order = 95040! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 10:55'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:52:42'!
 testCauchyFrobeniusLemma
 	"Also called Brunside's lemma, Burnside counting theorem, or orbit-counting theorem."
 	| X G phi sum |
 	X _ 1 to: 3.
-	G _ Group alternating: X.
+	G _ AlternatingGroup on: X.
 	phi _ GroupAction from: (G, X) to: X evaluatingWithArguments: [:f :x| f value: x].
 	sum _ G elements sum: [:g| (phi fixedPointsOf: g) size].
 	self assert: phi orbits size * G order = sum! !
@@ -3217,34 +3230,32 @@ testD3
 	self assert: D commutator = A.
 	self assert: D center isTrivial! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 09:58'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:13:09'!
 testDirectProduct
 	| S A G g |
 	S _ self smallGroupAtRandom.
 	A _ self smallGroupAtRandom.
 	G _ S ◊ A.
 	g _ G atRandom.
-	self assert: (G operation value: {g. G inverseMap value: g}) = G identity.
+	self assert: g ∑ g inverse = G identity.
 	self testGroup: G.
 	self testGroupHomomorphism: (G projection: 1).
 	self testGroupHomomorphism: (G projection: 2)! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:02'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:14:45'!
 testGroup: G
-	| op inv e a b c |
+	| e a b c |
 	e _ G identity.
-	op _ G operation.
-	inv _ G inverseMap.
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	c _ G atRandomBits: 100.
-	self assert: (op value: {e. a}) = a.
-	self assert: (op value: {a. e}) = a.
-	self assert: (op value: {a. inv value: a}) = e.
-	self assert: (op value: {inv value: a. a}) = e.
-	self assert: (op value: {op value: {a. b}. c}) = (op value: {a. op value: {b. c}})! !
+	self assert: e ∑ a = a.
+	self assert: a ∑ e = a.
+	self assert: a ∑ a inverse = e.
+	self assert: a inverse ∑ a = e.
+	self assert: (a ∑ b) ∑ c = (a ∑ (b ∑ c))! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/30/2018 21:35:25'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:43:04'!
 testGroupAction: phi
 	| G X e g h x |
 	G _ phi group.
@@ -3254,9 +3265,9 @@ testGroupAction: phi
 	h _ G atRandomBits: 100.
 	x _ X atRandomBits: 100.
 	self assert: (phi value: {e. x}) = x.
-	self assert: (phi value: {g. phi value: {h. x}}) = (phi value: {G operation value: {g. h}. x})! !
+	self assert: (phi value: {g. phi value: {h. x}}) = (phi value: {g ∑ h. x})! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/7/2016 06:41'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:43:49'!
 testGroupHomomorphism: phi
 	| G H a b |
 	G _ phi domain.
@@ -3264,9 +3275,9 @@ testGroupHomomorphism: phi
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	self assert: (phi value: G identity) = H identity.
-	self assert: (phi value: (G operation value: {a. b})) = (H operation value: {phi value: a. phi value: b})! !
+	self assert: (phi value: a ∑ b) = ((phi value: a) ∑ (phi value: b))! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 12:41:03'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:02:40'!
 testGroupRing
 	| G R a b c xa xb xc |
 	G _ self smallGroupAtRandom.
@@ -3277,8 +3288,8 @@ testGroupRing
 	xa _ R embed: a.
 	xb _ R embed: b.
 	xc _ R embed: c.
-	self assert: xa*xb = (R embed: a*b).
-	self assert: xa*2 + xb*xc - (xa*xc) - (xb*xc) = (R embed: a*c).
+	self assert: xa*xb = (R embed: a∑b).
+	self assert: xa*2 + xb*xc - (xa*xc) - (xb*xc) = (R embed: a∑c).
 	self assert: (xa + xb) * (xa - xb) = (xa^2 - (xb^2) + (xb*xa) - (xa*xb))! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 3/7/2017 07:24:24'!
@@ -3307,16 +3318,16 @@ testHessian
 	self assert: H elements size = 216.
 	self testGroup: H! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:35'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:16'!
 testIsSolvable
 	| G |
-	G _ Group symmetric: (1 to: 3).
+	G _ SymmetricGroup new: 3.
 	self assert: G isSolvable! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:35'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:52:58'!
 testIsSolvableNot
 	| G |
-	G _ Group alternating: (1 to: 5).
+	G _ AlternatingGroup new: 5.
 	self assert: G isSolvable not! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:03'!
@@ -3346,11 +3357,11 @@ testModularIntegersUnits
 	self assert: U size = (Sequence phi value: m).
 "	self testGroup: U"! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 10:55'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:53:11'!
 testOrbitStabilizerTheorem
 	| X G phi p |
 	X _ 1 to: 4.
-	G _ Group alternating: X.
+	G _ AlternatingGroup on: X.
 	phi _ GroupAction from: (G, X) to: X evaluatingWithArguments: [:f :x| f value: x].
 	p _ X atRandom.
 	self assert: (phi stabilizerOf: p) order * (phi orbitOf: p) size = G order! !
@@ -3371,10 +3382,10 @@ testPermutationGroupHomomorphism
 	self assert: im size = 5. "of order 5"
 	self assert: im isCyclic! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2016 02:36'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:29'!
 testSymmetricOrder
 	| G |
-	G _ Group symmetric: (1 to: 4).
+	G _ SymmetricGroup new: 4.
 	self assert: G order = 4 factorial! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/14/2016 08:35'!
@@ -3446,7 +3457,7 @@ testLatticeDual2
 	self assert: L determinant = (1 / R determinant).
 	self assert: (R matrix * L matrix transposed) isIdentity! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2018 18:27:04'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:58:30'!
 testLeech
 	| L |
 	L _ Lattice leech.
@@ -3454,8 +3465,8 @@ testLeech
 	self assert: ((a allSatisfy: [:x| x isInteger]) or: [a allSatisfy: [:x| x isInteger not and: [(x*2) isInteger]]]).
 	self assert: (a sum isInteger and: [a sum even])."
 	self assert: L determinant = 1.
-	self assert: L kissingNumber = 196560.
-	self assert: L minimalNorm = 4.
+"	self assert: L kissingNumber = 196560."
+"	self assert: L minimalNorm = 4."
 	self assert: L isIntegral.
 	self assert: L isUnimodular.
 	self assert: L isEven! !
@@ -3611,30 +3622,30 @@ testFreeAlgebra
 	self assert: f * A one = f.
 	self assert: A one * f = f! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 11:48:35'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:31:51'!
 testFunctionComposition
 	| f g a |
 	f _ Function from: ZZ to: ZZ evaluating: [:x| x * 2].
 	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
 	a _ 1000 atRandom.
-	self assert: (f î g value: a) = (f value: (g value: a)).
-	self assert: (g î f value: a) = (g value: (f value: a))! !
+	self assert: (f ∑ g value: a) = (f value: (g value: a)).
+	self assert: (g ∑ f value: a) = (g value: (f value: a))! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 11:48:47'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:31:56'!
 testFunctionComposition2
 	| f g a |
 	f _ Function from: ZZ to: QQ evaluating: [:x| x / 2].
 	g _ Function from: QQ to: ZZ evaluating: [:x| x numerator].
 	a _ 1000 atRandom.
-	self assert: (f î g value: a) = (f value: (g value: a)).
-	self assert: (g î f value: a) = (g value: (f value: a))! !
+	self assert: (f ∑ g value: a) = (f value: (g value: a)).
+	self assert: (g ∑ f value: a) = (g value: (f value: a))! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 11:48:53'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:32:02'!
 testFunctionComposition3
 	| f g |
 	f _ Function from: ZZ to: QQ evaluating: [:x| x / 2].
 	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
-	self should: [g î f] raise: DomainError! !
+	self should: [g ∑ f] raise: DomainError! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2018 22:38:43'!
 testFunctionNewFrom
@@ -3951,7 +3962,7 @@ testAdjugateProperties
 	self assert: (A^5) adjugate = (A adjugate ^ 5).
 	self assert: A transposed adjugate = A adjugate transposed! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 20:23:05'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 20:23:05'!
 testBacklash
 	"Example from Sage documentation. Non-singular and square."
 	| A B X |
@@ -3961,7 +3972,7 @@ testBacklash
 	self assert: X = (QQ matrix: 3@2 coefficients: {-1/7. -11/7. 4/7. 23/7. 0. 0}).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/7/2017 08:48:20'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/7/2017 08:48:20'!
 testBacklashNoSolution
 	"Example from Sage documentation."
 	| A v |
@@ -3969,7 +3980,7 @@ testBacklashNoSolution
 	v _ (1,1).
 	self assert: (A \ v) isNil! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 18:13:12'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:13:12'!
 testBacklashNonSquare
 	"Example from Sage documentation."
 	| A B X |
@@ -3979,7 +3990,7 @@ testBacklashNonSquare
 	self assert: X = (QQ matrix: 4@2 coefficients: (-3/2, (1/2), -1, 0, 0, 0, 0, 0)).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/9/2017 08:31:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/9/2017 08:31:55'!
 testBacklashNonSquare2
 	| A B X |
 	A _ QQ matrix: 2@4 coefficients: #(0 0 -1 1 0 -2 2 1).
@@ -3987,7 +3998,7 @@ testBacklashNonSquare2
 	X _ A \ B.
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 18:38:35'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:38:35'!
 testBacklashSingular
 	"Example from Sage documentation."
 	| A B X |
@@ -3997,7 +4008,7 @@ testBacklashSingular
 	self assert: X = (QQ matrix: 3@2 coefficients: (6, -6, 0, 0, 0, 0)).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 18:29:12'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:29:12'!
 testBacklashTuple
 	"Example from Sage documentation."
 	| A v x |
@@ -4007,7 +4018,22 @@ testBacklashTuple
 	self assert: x = (-13/12,(23/12),(-7/12)).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 18:30:12'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:12:57'!
+testBacklashTuple2OverQ
+	"Example from GAP manual."
+	| A |
+	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
+! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:14:51'!
+testBacklashTuple2OverZ
+	"Example from GAP manual."
+	| A |
+	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	self assert: A transposed \ (95,115,182) = (2285, -5854, 4888, -1299, 0)! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:30:12'!
 testBacklashTupleNonSquare
 	"Example from Sage documentation."
 	| A v x |
@@ -4017,7 +4043,7 @@ testBacklashTupleNonSquare
 	self assert: x = (-1/2, 0, 0).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/5/2017 18:32:09'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:32:09'!
 testBacklashTupleOverZ
 	"Example from Sage documentation."
 	| A v x |
@@ -4027,7 +4053,7 @@ testBacklashTupleOverZ
 	self assert: x = (ZZ tuple: #(-1 0 0)).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/19/2018 20:41:45'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 3/19/2018 20:41:45'!
 testBacklashTupleOverZBug
 	| A b x |
 	A _ ZZ matrix: 3@3 coefficients: #(1 0 0 0 1 0 0 0 10).
@@ -4051,21 +4077,21 @@ testCayleyHamiltorTheoremInZ
 	A _ M atRandomBits: 100.
 	self assert: (A characteristicPolynomial value: A) isZero! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/25/2016 00:51'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/25/2016 00:51'!
 testCharacteristicMatrixAndPolynomialOverQ
 	| n A |
 	n _ 5 atRandom.
 	A _ QQ ^ (n@n) :: atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/25/2016 06:34'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/25/2016 06:34'!
 testCharacteristicMatrixAndPolynomialOverZ
 	| n A |
 	n _ 5 atRandom.
 	A _ ZZ ^ (n@n) :: atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:05'!
 testCharacteristicPolynomial
 	| M A B |
 	M _ QQ ^ (5@5).
@@ -4074,7 +4100,7 @@ testCharacteristicPolynomial
 	B _ M atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/4/2018 00:29:48'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
 testCokernelMatrix
 	"From Sage."
 	| A B |
@@ -4082,14 +4108,14 @@ testCokernelMatrix
 	B _ QQ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
 	self assert: A cokernelMatrix "echelon" = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:05'!
 testDeterminant
 	| M m |
 	M _ QQ ^ (2@2).
 	m _ M rows: { (2,1). (-1,0) }.
 	self assert: m determinant = 1! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:47'!
 testDeterminant2
 	| M vandermonde |
 	M _ QQ ^ (3@3).
@@ -4099,7 +4125,7 @@ testDeterminant2
 	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
 	self assert: vandermonde determinant = 16! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:47'!
 testDeterminant3
 	| M A B |
 	M _ QQ ^ (3@3).
@@ -4119,6 +4145,15 @@ testDomainError
 	B _ QQ ^ (4@4) :: identity.
 	self should: [A + B] raise: DomainError.
 	self should: [A * B] raise: DomainError! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:00:17'!
+testEchelonOverFiniteField
+	"From Magma Handbook example H26E10."
+	| K w A |
+	K _ GaloisField new: 8.
+	w _ K x.
+	A _ K matrix: 4@3 coefficients: {1. w. w^5. 0. w^3. w^4. w. 1. w^6. w^3. 1. w^4}.
+	self assert: A echelon = (K matrix: 4@3 coefficients: {1. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 0})! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:33:10'!
 testFundamentalSubspacesDefinitions
@@ -4147,14 +4182,14 @@ testFundamentalSubspacesDimensions
 	self assert: A coimage dimension = r.
 	self assert: A cokernel dimension = (m - r)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 12/4/2017 09:25:54'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 12/4/2017 09:25:54'!
 testHNFvsCHNF
 	| M A |
 	M _ ZZ ^ (4@4).
 	A _ M atRandomBits: 50.
 	self assert: A HNF = A antitransposed CHNF antitransposed! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 23:53'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/15/2016 23:53'!
 testHermiteNormalForm
 	"Example from wikipedia."
 	| M A H |
@@ -4163,7 +4198,7 @@ testHermiteNormalForm
 	H _ M rows: { (3,0,1,1). (0,1,0,0). (0,0,19,1). (0,0,0,3) }.
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 23:54'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/15/2016 23:54'!
 testHermiteNormalForm2
 	| M A H |
 	M _ ZZ ^ (3@3).
@@ -4171,7 +4206,7 @@ testHermiteNormalForm2
 	H _ M rows: { (3,0,30). (0,12,0). (0,0,60) }.
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 23:54'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/15/2016 23:54'!
 testHermiteNormalForm3
 	"Example from wikipedia"
 	| M A H |
@@ -4180,7 +4215,7 @@ testHermiteNormalForm3
 	H _ M rows: { (1,0,50,-11). (0,3,28,-2). (0,0,61,-13) }.
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/4/2018 20:49:16'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 4/4/2018 20:49:16'!
 testHermiteNormalForm4
 	"Example from Sage"
 	| A B |
@@ -4188,6 +4223,66 @@ testHermiteNormalForm4
 	B _ ZZ matrix: {(1,2,3,4). (0,4,8,12). (0,0,0,0)}.
 	self assert: A HNF = B.
 	self assert: A echelon = B "the echelon form of integers matrices is the hermite normal form"! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:06:02'!
+testHermiteNormalForm5
+	"From Magma Handbook example H26E10."
+	| A H |
+	A _ ZZ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
+	H _ ZZ matrix: #((1 1 1 6 -164) (0 3 0 16 -348) (0 0 2 13 -200) (0 0 0 19 -316)).
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:41:15'!
+testHermiteNormalForm6
+	"From MuPAD."
+	| A H |
+	A _ ZZ matrix: #(
+		(25 -300 1050 -1400 630)
+		(-300 4800 -18900 26880 -12600)
+		(1050 -18900 79380 -117600 56700)
+		(-1400 26880 -117600 179200 -88200)
+		(630 -12600 56700 -88200 44100)).
+	H _ ZZ matrix: #(
+		(5 0 -210 -280 630)
+		(0 60 0 0 0)
+		(0 0 420 0 0)
+		(0 0 0 840 0)
+		(0 0 0 0 2520)).
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:32:35'!
+testHermiteNormalForm7
+	"Example from GAP manual."
+	| A H |
+	A _ ZZ matrix: #((1 15 28) (4 5 6) (7 8 9)).
+	H _ ZZ matrix: #((1 0 1) (0 1 1) (0 0 3)).
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/5/2019 07:25:25'!
+testHermiteNormalForm8
+	"Example from Pernet-Stein 'Fast computation of Hermite normal forms of random integer matrices'."
+	| A H |
+	A _ ZZ matrix: #((-5 8 -3 -9 5 5) (-2 8 -2 -2 8 5) (7 -5 -8 4 3 -4) (1 -1 6 0 8 -3)).
+	H _ ZZ matrix: #((1 0 3 237 -299 90) (0 1 1 103 -130 40) (0 0 4 352 -450 135) (0 0 0 486 -627 188)).
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/5/2019 07:31:17'!
+testHermiteNormalForm9
+	"Example from Pernet-Stein 'Fast computation of Hermite normal forms of random integer matrices'."
+	| A H |
+	A _ ZZ matrix: #((-1 2 5 65 2) (4 -1 -3 1 -2) (-1 -2 1 -1 1)).
+	H _ ZZ matrix: #((1 0 17 259 7) (0 1 31 453 13) (0 0 40 582 17)).
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:25:16'!
+testHermiteNormalFormOverPolynomials
+	"From MuPAD."
+	| R x A H |
+	R _ QQ polynomials.
+	x _ R x.
+	A _ R matrix: 2 coefficients: {x^2 + 3. (x*2 - 1)^2. (x + 2)^2. x^2*3 + 5}.
+	H _ R matrix: 2 coefficients: {1. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. 0. x^4 + (x^2*13) - (x*12) - 11}.
+	self assert: A HNF = H! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
 testInverse
@@ -4207,7 +4302,7 @@ testInverse2
 	A _ f companion.
 	self assert: (A * A inverse) isIdentity! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/3/2017 16:36:34'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:36:34'!
 testIsEchelonForm
 	| A E |
 	A _ self newRandomMatrix: 6 atRandom @ 6 atRandom over: QQ.
@@ -4215,7 +4310,7 @@ testIsEchelonForm
 	self assert: E isEchelonForm.
 	self assert: E isReducedEchelonForm! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/3/2017 16:33:51'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:33:51'!
 testIsHermiteNormalForm
 	"Example from wikipedia."
 	| M A H |
@@ -4225,7 +4320,7 @@ testIsHermiteNormalForm
 	self assert: A isHermiteNormalForm not.
 	self assert: H isHermiteNormalForm! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/3/2017 16:35:49'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:35:49'!
 testIsHermiteNormalForm2
 	| M |
 	M _ ZZ ^ (4@4) rows: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33)}.
@@ -4236,7 +4331,7 @@ testIsHermiteNormalForm2
 	M _ ZZ ^ (5@4) rows: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33). (0,0,0,1)}.
 	self assert: M isHermiteNormalForm not! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/25/2018 19:34:46'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/25/2018 19:34:46'!
 testJordanNormalForm
 	| M A jordan B |
 "	<timeout: 2>"
@@ -4251,7 +4346,7 @@ testJordanNormalForm
 	B _ QQ ^ (2@2) scalar: 4 :: at: 1@2 put: 1; yourself.
 	self assert: (jordan includes: B)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 11/4/2016 10:26'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 11/4/2016 10:26'!
 testKernel
 	| A S |
 	A _ QQ ^ (4@6) rows: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
@@ -4264,6 +4359,24 @@ testKernelImageTheorem
 	n _ 6 atRandom.
 	A _ self newRandomMatrix: n@n over: QQ.
 	self assert: A kernel dimension + A image dimension = n! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:01:40'!
+testKernelInteger
+	"Example from GAP manual."
+	| A K |
+	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transposed.
+	K _ ZZ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
+	self assert: A kernelMatrix = K! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:05:14'!
+testKernelRational
+	"Example from GAP manual."
+	| A K |
+	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transposed.
+	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
+	self assert: A kernelMatrix = K! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
 testKroneckerProduct
@@ -4280,7 +4393,14 @@ testLeftInverse
 	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
 	self assert: (A leftInverse * A) isIdentity! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:06'!
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 10:08:10'!
+testLeftRightIdentity
+	| A |
+	A _ ZZ^(5 atRandom @ 5 atRandom) atRandomBits: 100.
+	self assert: A leftIdentity * A = A.
+	self assert: A * A rightIdentity = A! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:06'!
 testMinimalPolynomial
 	| M m f |
 	M _ QQ ^ (5@5).
@@ -4302,7 +4422,7 @@ testMinors
 	A _ ZZ ^ (2@3) elementAt: (1 to: 6).
 	self assert: (A minors: 2) asArray = #(-3 -6 -3)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/3/2018 01:25:38'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/3/2018 01:25:38'!
 testPermanent
 	"Example from https://en.wikipedia.org/wiki/Permanent_(mathematics)"
 	| A |
@@ -4331,7 +4451,7 @@ testQRDecomposition2
 	R _ RR matrix: 3@3 coefficients: #(14 21 -14 0 175 -70 0 0 35).
 	self assert: A QR = {Q. R}! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
 testRank
 	| M vandermonde |
 	M _ QQ ^ (3@3).
@@ -4341,7 +4461,7 @@ testRank
 	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
 	self assert: vandermonde rank = 3! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
 testRank2
 	| M m |
 	M _ QQ ^ (3@3).
@@ -4352,14 +4472,14 @@ testRank2
 	m _ M rows: {(1,1,1). (2,2,2). (5,5,5)}.
 	self assert: m rank = 1! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:11:33'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 3/1/2017 17:11:33'!
 testRankNullityTheorem
 	| n A |
 	n _ 6 atRandom.
 	A _ self newRandomMatrix: n@n over: QQ.
 	self assert: A rank + A nullity = n! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/3/2017 06:11:28'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 06:11:28'!
 testReducerPivots
 	| A |
 	A _ ZZ ^ (3@3) rows: {(0,-1,-1). (0,-20,1). (0,1,2)}.
@@ -4394,44 +4514,86 @@ testSimilarity2
 	self assert: A ~ (P inverse * A * P).
 	self deny: A ~ B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 18:29:35'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:41:26'!
 testSmithNormalForm
-	| M A |
-	M _ ZZ ^ (3@3).
-	A _ M rows: { (2,4,4). (-6,6,12). (10,-4,-16) }.
+	| A |
+	A _ ZZ^(3@3) rows: { (2,4,4). (-6,6,12). (10,-4,-16) }.
 	self assert: A SNF = #(2 6 12)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 18:29:48'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:41:53'!
 testSmithNormalForm2
-	| M A |
-	M _ ZZ ^ (3@3).
+	| A |
 	"Reduced Laplacian matrix of K_4:"
-	A _ M rows: { (3,-1,-1). (-1,3,-1). (-1,-1,3) }.
+	A _ ZZ^(3@3) rows: { (3,-1,-1). (-1,3,-1). (-1,-1,3) }.
 	self assert: A SNF = #(1 4 4)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 18:29:58'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:42:08'!
 testSmithNormalForm3
 	"Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
-	| M A |
-	M _ ZZ ^ (3@3).
-	A _ M rows: { (1,4,9). (16,25,36). (49,64,81) }.
+	| A |
+	A _ ZZ^(3@3) rows: { (1,4,9). (16,25,36). (49,64,81) }.
 	self assert: A SNF = #(1 3 72)! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 18:30:22'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:42:30'!
 testSmithNormalForm4
 	"Smith form of a 3x3 matrix of rank 2.
 	Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
-	| M A |
-	M _ ZZ ^ (3@3).
-	A _ M rows: { (2,3,4). (5,6,7). (8,9,10) }.
-	self assert: A SNF = #(1 3 0) "this fails, but Cohen defines SNF only for nonsingular matrices"! !
+	| A |
+	A _ ZZ^(3@3) rows: { (2,3,4). (5,6,7). (8,9,10) }.
+	self assert: A SNF2 = #(1 3 0) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/17/2019 19:16:13'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 4/21/2019 14:03:00'!
 testSmithNormalForm5
 	"Example from youtube video: 'Derek Holt: Algorithms for finitely presented groups' @ 25:49."
 	| A |
 	A _ ZZ matrix: #((1 2 0 -2) (0 2 2 0) (-1 -4 4 2)).
-	self assert: A SNF = #(1 2 6 0)! !
+	self assert: A SNF2 = #(1 2 6 0)! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:45:20'!
+testSmithNormalForm6
+	"From Magma Handbook example H26E10."
+	| A |
+	A _ ZZ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
+	self assert: A SNF2 = #(1 1 1 2)! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:33:55'!
+testSmithNormalForm7
+	"From GAP manual."
+	| A |
+	A _ ZZ matrix: #((1 15 28) (4 5 6) (7 8 9)).
+	self assert: A SNF = #(1 1 3)
+! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 14:46:04'!
+testSmithNormalForm8
+	| A |
+	A _ ZZ matrix: #((2 1 -3) (3 -2 -1) (1 -3 2)).
+	self assert: A SNF2 = #(1 7 0)! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 14:49:06'!
+testSmithNormalForm9
+	| A |
+	A _ ZZ matrix: #((1 2 3 4 5 6 7) (1 0 1 0 1 0 1) (2 4 5 6 1 1 1) (1 4 2 5 2 0 0) (0 0 1 1 2 2 3)).
+	"actually it should be:	self assert: A SNF = #(1 1 1 1 2)"
+	self assert: A SNF2 = #(1 1 1 1 2 0 0)! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:44:09'!
+testSmithNormalFormDiagonal
+	| A |
+	A _ ZZ matrix: #((2 0 0) (0 1 0) (0 0 0)).
+	self assert: A SNF2 = #(1 2 0).
+	A _ ZZ matrix: #((5 0 0) (0 2 0) (0 0 0)).
+	self assert: A SNF2 = #(1 10 0)! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/4/2019 15:50:41'!
+testSmithNormalFormOverPolynomials
+	"Example from Sage documentation."
+	| R x M A |
+	R _ QQ polynomials.
+	x _ R x.
+	M _ R^(2@2).
+	A _ M !! 1 * x - (M !! #(3 -4 1 -1)).
+	self assert: A SNF = {R one. x^2 - (x*2) + 1}! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
 testTransposed
@@ -4537,7 +4699,7 @@ testAdjointMap
 	self assert: f isSurjective = a isInjective.
 	self assert: f isInjective = a isSurjective! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/19/2019 04:41:47'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/5/2019 18:32:28'!
 testAdjointProperties
 	| V W U f g a |
 	V _ QQ ^ (1 to: 4) atRandom.
@@ -4549,7 +4711,7 @@ testAdjointProperties
 	self assert: (f * a) adjoint = (f adjoint * a).
 	U _ QQ ^ (1 to: 4) atRandom.
 	f _ U => V atRandomBits: 100.
-	self assert: (g î f) adjoint = (f adjoint î g adjoint)! !
+	self assert: (g ∑ f) adjoint = (f adjoint ∑ g adjoint)! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:57'!
 testAnnihilator
@@ -4595,7 +4757,7 @@ testCanonicalMorphisms
 	self assert: ((W -> W null) value: (1,2,3)) isZero.
 	self assert: (W -> V value: (2,4,6)) = (2,4,6). "canonical morphism to overobject"! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/3/2018 06:45:23'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/23/2019 02:20:30'!
 testDirectSum
 	| M N S |
 	M _ self newFreeModule.
@@ -4603,9 +4765,9 @@ testDirectSum
 	S _ M ê N.
 	self testFreeModule: S.
 	self testLinearMap: (S ambient projection: 2 atRandom).
-	self testLinearMap: (S ambient embedding: 2 atRandom)! !
+	self testLinearMap: (S ambient coprojection: 2 atRandom)! !
 
-!ModuleTest methodsFor: 'basis' stamp: 'len 9/16/2018 23:30:32'!
+!ModuleTest methodsFor: 'other' stamp: 'len 9/16/2018 23:30:32'!
 testDiscriminant
 	| M |
 	M _ ZZ^3.
@@ -4676,10 +4838,10 @@ testFreeModuleDiscriminant
 	self assert: (M span: {(1,2,3)}) discriminant = 14.
 	self assert: (M span: {(1,2,3). (1,1,1)}) discriminant = 6! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 10/2/2018 01:49:17'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/4/2019 03:49:33'!
 testFreeZModule
 	| A x0 x y0 y |
-	A _ SumsModule on: #(a b c) over: ZZ.
+	A _ ZZ freeModuleIn: #(a b c).
 	x0 _ (-2,-1,3).
 	x _ A elementAt: x0.
 	y0 _ (1,1,1).
@@ -4719,73 +4881,6 @@ testInclusions
 	self assert: S < (CC^3).
 	self deny: S < (ZZ^3).
 	self deny: S > (ZZ^3)! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 1/25/2018 22:38:13'!
-testLinearBasisChange
-	| V B1 B2 C v |
-	V _ QQ^3.
-	B1 _ LinearBasis on: V elements: {(1,2,3). (1,1,1)}.
-	B2 _ LinearBasis on: V elements: {(2,2,2). (2,3,4)}.
-	C _ B1 changeTo: B2.
-	v _ B1 elementAt: (3,7).
-	self assert: C * (3,7) = (B2 coordinatesOf: v)! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/12/2017 18:06:24'!
-testLinearBasisCoordinatesOf
-	| V basis c |
-	V _ QQ ^ 3.
-	basis _ LinearBasis on: V elements: {(-1,0,0). (0,0,2)}.
-	c _ basis coordinatesOf: (1,0,4).
-	self assert: c = (-1,2)! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/12/2017 18:06:32'!
-testLinearBasisCoordinatesOf2
-	| V basis c |
-	V _ QQ ^ 3.
-	basis _ LinearBasis on: V elements: {(-1,0,0). (0,0,2)}.
-	c _ basis coordinatesOf: (1,1,4).
-	self assert: c isNil! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/12/2017 21:14:13'!
-testLinearBasisCoordinatesOf3
-	| V B |
-	V _ QQ^3.
-	B _ LinearBasis on: V elements: {(1,1,1). (1,2,3)}.
-	self assert: (B coordinatesOf: (1,1,1)) = (1,0).
-	self assert: (B coordinatesOf: (1,2,3)) = (0,1).
-	self assert: (B coordinatesOf: (0,1,2)) = (-1,1).
-! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/12/2017 18:06:38'!
-testLinearBasisDual
-	| V basis B Bdual I |
-	V _ QQ ^ 3.
-	basis _ LinearBasis on: V elements: {(-1,0,0). (0,1,2). (0,1,1)}.
-	B _ basis matrix.
-	Bdual _ basis dual matrix.
-	I _ B identity.
-	self assert: B determinant = (1 / Bdual determinant).
-	self assert: B transposed * Bdual = I! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/15/2017 18:51:14'!
-testLinearBasisDual2
-	| V B Bdual |
-	V _ QQ ^ 3.
-	B _ LinearBasis on: V elements: {(-1,0,0). (0,1,2). (0,1,1)}.
-	Bdual _ B dual.
-	self assert: B size = Bdual size.
-	1 to: B size do: [:i|
-		1 to: Bdual size do: [:j|
-			self assert: ((Bdual at: j) value: (B at: i)) = (i = j ifTrue: [1] ifFalse: [0])]]! !
-
-!ModuleTest methodsFor: 'basis' stamp: 'len 12/12/2017 21:14:43'!
-testLinearBasisGenerates
-	| V B |
-	V _ QQ^3.
-	B _ LinearBasis on: V elements: {(1,1,1). (1,2,3)}.
-	self assert: (B generates: (1,1,1)).
-	self assert: (B generates: (0,1,2)).
-	self deny: (B generates: (2,2,3))! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 1/14/2018 22:24:08'!
 testLinearForm1
@@ -4841,7 +4936,7 @@ testLinearMap: f
 	x _ f domain scalars atRandomBits: 20.
 	self assert: (f value: a1 * x + a2) = (b1 * x + b2)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:10'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:36'!
 testLinearMapAdjoint
 	| V W f fAdjoint phi |
 	V _ self newFreeModuleOver: QQ.
@@ -4851,9 +4946,9 @@ testLinearMapAdjoint
 	self assert: fAdjoint domain = f codomain dual.
 	self assert: fAdjoint codomain = f domain dual.
 	phi _ W dual atRandomBits: 20.
-	self assert: (fAdjoint value: phi) = (phi î f)! !
+	self assert: (fAdjoint value: phi) = (phi ∑ f)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:39'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:47'!
 testLinearMapComposition
 	| X Y Z f g x |
 	X _ QQ ^ 3.
@@ -4862,11 +4957,11 @@ testLinearMapComposition
 	f _ X => Y atRandomBits: 1000.
 	g _ Y => Z atRandomBits: 1000.
 	x _ X atRandomBits: 1000.
-	self assert: (X => Z includes: g î f).
-	self assert: (g î f value: x) = (g value: (f value: x)).
-	self should: [f î g] raise: DomainError! !
+	self assert: (X => Z includes: g ∑ f).
+	self assert: (g ∑ f value: x) = (g value: (f value: x)).
+	self should: [f ∑ g] raise: DomainError! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:42:55'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:52'!
 testLinearMapCompositionError
 	| X Y Z f g |
 	X _ QQ ^ 3.
@@ -4874,7 +4969,7 @@ testLinearMapCompositionError
 	Z _ QQ ^ 4.
 	f _ X => Y atRandomBits: 1000.
 	g _ Y => Z atRandomBits: 1000.
-	self should: [f î g] raise: DomainError! !
+	self should: [f ∑ g] raise: DomainError! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:52:54'!
 testLinearMapFiber
@@ -4893,13 +4988,13 @@ testLinearMapImage
 	w _ f value: v.
 	self assert: (image includes: w)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 9/27/2018 21:18:05'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:02'!
 testLinearMapInverse
 	| V f |
 	V _ QQ ^ 3.
 	f _ V automorphisms atRandomBits: 1000.
-	self assert: (f î f inverse) isIdentity.
-	self assert: (f inverse î f) isIdentity! !
+	self assert: (f ∑ f inverse) isIdentity.
+	self assert: (f inverse ∑ f) isIdentity! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:53:46'!
 testLinearMapKernel
@@ -4919,15 +5014,15 @@ testLinearMapKernelZ2
 	self assert: kernel dimension = 2.
 	self assert: (kernel includes: (0,1,1) % 2)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:21'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:09'!
 testLinearMapLeftInverse
 	| V W f |
 	V _ QQ ^ 3.
 	W _ QQ ^ 5.
 	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: f leftInverse î f = V id! !
+	self assert: f leftInverse ∑ f = V id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:33'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:13'!
 testLinearMapRetraction
 	| V W f r |
 	V _ QQ^3.
@@ -4935,17 +5030,17 @@ testLinearMapRetraction
 	[f _ V => W atRandomBits: 100. f isInjective] whileFalse.
 	r _ f retraction.
 	self assert: r isSurjective.
-	self assert: r î f = V id! !
+	self assert: r ∑ f = V id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:43:50'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:18'!
 testLinearMapRightInverse
 	| V W f |
 	V _ QQ ^ 5.
 	W _ QQ ^ 3.
 	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: f î f rightInverse = W id! !
+	self assert: f ∑ f rightInverse = W id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/19/2019 04:44:03'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:22'!
 testLinearMapSection
 	| V W f s |
 	V _ QQ^4.
@@ -4953,7 +5048,7 @@ testLinearMapSection
 	[f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
 	s _ f section.
 	self assert: s isInjective.
-	self assert: f î s = W id! !
+	self assert: f ∑ s = W id! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 11/2/2016 04:01'!
 testLinearMapZ2
@@ -5002,22 +5097,6 @@ testOrthogonalProjection
 	self assert: p kernel = S perp.
 	self assert: p image = S.
 	self assert: (S apply: p) = S! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/12/2017 18:06:47'!
-testOrthogonalization
-	| V B |
-	V _ QQ ^ 3.
-	B _ LinearBasis on: V elements: {(1, 1, 0). (1, 0, 0)}.
-	self assert: B orthogonalized isOrthogonal.
-	self assert: B extended orthogonalized isOrthogonal! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/12/2017 18:06:52'!
-testOrthonormalization
-	| V B |
-	V _ QQ ^ 3.
-	B _ LinearBasis on: V elements: {(1, 1, 0). (1, 0, 0)}.
-	self assert: B orthonormalized isOrthonormal.
-	self assert: B extended orthonormalized isOrthonormal! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 3/13/2018 18:38:37'!
 testPIDCoordinatesOfBug
@@ -5120,7 +5199,7 @@ testQuotientModuleIsFinite
 	W _ V null.
 	self assert: (V/W) isFinite not! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 3/2/2017 04:49:31'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/2/2019 10:12:41'!
 testQuotientSpace
 	| M S Q |
 	M _ self newVectorSpace.
@@ -6891,6 +6970,18 @@ testGaloisRingCanonicalHomomorphismToPrimeSubfield
 	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/8/2019 19:26:56'!
+testGaloisRingCanonicalHomomorphismToPrimeSubfieldBug
+	"Canonical homomorphism from GR(2^2,2) to Z/<2>."
+	| p n m A B phi |
+	p _ 2.
+	n _ 2.
+	m _ 2.
+	A _ GaloisRing new: p to: n to: m.
+	B _ ZZ/p.
+	phi _ A -> B.
+	self testRingHomomorphism: phi! !
+
 !RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:13'!
 testGaloisRingCanonicalProjectionOntoResidueField
 	"Canonical homomorphism from GR(p^n,m) to GF(p,m)."
@@ -6937,7 +7028,7 @@ testLocalizationMaximalIdeal
 	Z2 _ ZZ localizationAt: 2.
 	self assert: Z2 maximalIdeal = (Z2 * 2)! !
 
-!RingTest methodsFor: 'localizations' stamp: 'len 5/25/2018 18:18:07'!
+!RingTest methodsFor: 'localizations' stamp: 'len 4/22/2019 05:02:06'!
 testLocalizationOfZAt2
 	| L |
 	L _ ZZ localizationAt: 2.
@@ -6947,7 +7038,7 @@ testLocalizationOfZAt2
 	self assert: (L includes: 3).
 	self assert: (L atRandomBits: 10) denominator odd.
 	self testRing: L.
-	self testRingHomomorphism: L embedding! !
+	self testRingHomomorphism: L injection! !
 
 !RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:34'!
 testMatrixRing
@@ -6960,24 +7051,24 @@ testModularIntegers
 	self testRing: Zm.
 	self testRingHomomorphism: Zm projection! !
 
-!RingTest methodsFor: 'polynomials' stamp: 'len 10/7/2016 06:13'!
+!RingTest methodsFor: 'polynomials' stamp: 'len 4/22/2019 04:50:26'!
 testMultivariatePolynomialRing
 	| R |
 	R _ ZZ polynomialsIn: #(x y z).
 	self testRing: R.
-	self testRingHomomorphism: R embedding! !
+	self testRingHomomorphism: R injection! !
 
 !RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
 testNilradical
 	self assert: ZZ nilradical = (ZZ*0).
 	self assert: (ZZ/12) nilradical = (ZZ/12*6)! !
 
-!RingTest methodsFor: 'polynomials' stamp: 'len 10/7/2016 06:14'!
+!RingTest methodsFor: 'polynomials' stamp: 'len 4/22/2019 04:50:30'!
 testPolynomialRing
 	| R |
 	R _ ZZ polynomials.
 	self testRing: R.
-	self testRingHomomorphism: R embedding! !
+	self testRingHomomorphism: R injection! !
 
 !RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:18:02'!
 testPolynomialRingPrimeNotMaximalIdeal
@@ -7461,7 +7552,7 @@ testSimplexJoin
 	self assert: A*B ~ (Simplex new: 2+1+3+1-1)
 ! !
 
-!SimplicialComplexTest methodsFor: 'as yet unclassified' stamp: 'len 1/10/2018 21:35:56'!
+!SimplicialComplexTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:34:13'!
 testSimplicalChainsBoundaryMap
 	| X d1 d2 |
 	X _ SimplicialComplex sphere: 2.
@@ -7469,7 +7560,7 @@ testSimplicalChainsBoundaryMap
 	d1 _ X boundaryMap: 1 over: QQ.
 	self assert: d2 isZero not.
 	self assert: d1 isZero not.
-	self assert: (d1 î d2) isZero! !
+	self assert: (d1 ∑ d2) isZero! !
 
 !SimplicialComplexTest methodsFor: 'as yet unclassified' stamp: 'len 2/19/2017 10:00:52'!
 testSimplicialComplexExample
@@ -7533,13 +7624,13 @@ testBitTupleBug
 	self assert: ((1,1,0) % 2 :: sum = Z2 zero).
 	self assert: ((1,1,1) % 2 :: sum = Z2 one)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/12/2016 08:48'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 4/29/2019 10:22:42'!
 testBitTupleOperations
 	| n a b |
 	n _ 120 atRandom.
 	a _ ZZ^n atRandomBits: n*2.
 	b _ ZZ^n atRandomBits: n*2.
-	#(+ - convolution: dot: hadamard:) do: [:op|
+	#(+ - ∑ convolution: hadamard:) do: [:op|
 		self testTuple: a with: b operation: op modulo: 2].
 	#(negated reversed copy sum product) do: [:op|
 		self testTuple: a operation: op modulo: 2]! !
@@ -7552,10 +7643,10 @@ testBitTupleReversed
 	self assert: (v reversed at: i) = (v at: v size - i + 1).
 	self assert: v reversed reversed = v! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 11:36'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 04:24:02'!
 testBitTupleSum
-	self assert: (BitTuple fromInteger: 2r1011101) sum representative = 1.
-	self assert: (BitTuple fromInteger: 2r10000100100010) sum representative = 0! !
+	self assert: (BitTuple newFrom: 2r1011101) sum representative = 1.
+	self assert: (BitTuple newFrom: 2r10000100100010) sum representative = 0! !
 
 !TupleTest methodsFor: 'as yet unclassified' stamp: 'len 4/11/2018 15:54:46'!
 testHomogeneousTuples
@@ -7606,13 +7697,13 @@ testModTupleConvolution
 	b _ (2,3,4).
 	self assert: (a % 7 convolution: b % 7) = ((a convolution: b) % 7)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/12/2016 08:48'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 4/29/2019 10:22:49'!
 testModTupleOperations
 	| a b modulus |
 	modulus _ 10 atRandom + 1.
 	a _ ZZ^5 atRandomBits: 30.
 	b _ ZZ^5 atRandomBits: 30.
-	#(+ - convolution: dot: hadamard:) do: [:op|
+	#(+ - ∑ convolution: hadamard:) do: [:op|
 		self testTuple: a with: b operation: op modulo: modulus].
 	#(negated reversed copy sum product) do: [:op|
 		self testTuple: a operation: op modulo: modulus].! !
@@ -7755,6 +7846,14 @@ testKatsura4
 !GroebnerBasisBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/12/2018 17:03:54'!
 testModularCyclic3
 	((PrimeField new: 32003) polynomialsIn: 3) cyclicIdeal groebnerBasis! !
+
+!GroebnerBasisBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 05:10:15'!
+testModularCyclic4
+	((PrimeField new: 32003) polynomialsIn: 4) cyclicIdeal groebnerBasis! !
+
+!GroebnerBasisBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 05:09:43'!
+testModularCyclic5
+	((PrimeField new: 32003) polynomialsIn: 5) cyclicIdeal groebnerBasis! !
 
 !GroebnerBasisBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/12/2018 17:15:14'!
 testModularKatsura2
