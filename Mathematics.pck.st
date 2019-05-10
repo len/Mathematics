@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 8:33:39 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 10:24:23 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 464!
+!provides: 'Mathematics' 1 465!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -2402,6 +2402,16 @@ Element subclass: #GroupElement
 GroupElement class
 	instanceVariableNames: ''!
 
+!classDefinition: #Word category: #'Mathematics-Monoids'!
+GroupElement subclass: #Word
+	instanceVariableNames: 'syllables'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Monoids'!
+!classDefinition: 'Word class' category: #'Mathematics-Monoids'!
+Word class
+	instanceVariableNames: ''!
+
 !classDefinition: #Coset category: #'Mathematics-Groups'!
 GroupElement subclass: #Coset
 	instanceVariableNames: 'representative relations'
@@ -2712,6 +2722,16 @@ Tuple subclass: #MultivariateTuple
 MultivariateTuple class
 	instanceVariableNames: ''!
 
+!classDefinition: #Monomial category: #'Mathematics-Monomials'!
+Element subclass: #Monomial
+	instanceVariableNames: 'exponents parent degree'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Monomials'!
+!classDefinition: 'Monomial class' category: #'Mathematics-Monomials'!
+Monomial class
+	instanceVariableNames: ''!
+
 !classDefinition: #RandomGenerator category: #'Mathematics-Kernel-Support'!
 Object subclass: #RandomGenerator
 	instanceVariableNames: 'domain bits random'
@@ -2730,26 +2750,6 @@ RandomGenerator subclass: #GroupRandomGenerator
 	category: 'Mathematics-Groups'!
 !classDefinition: 'GroupRandomGenerator class' category: #'Mathematics-Groups'!
 GroupRandomGenerator class
-	instanceVariableNames: ''!
-
-!classDefinition: #Word category: #'Mathematics-Monoids'!
-Object subclass: #Word
-	instanceVariableNames: 'syllables'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'Word class' category: #'Mathematics-Monoids'!
-Word class
-	instanceVariableNames: ''!
-
-!classDefinition: #GroupPresentation category: #'Mathematics-Groups'!
-Object subclass: #GroupPresentation
-	instanceVariableNames: 'generators relators'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'GroupPresentation class' category: #'Mathematics-Groups'!
-GroupPresentation class
 	instanceVariableNames: ''!
 
 !classDefinition: #SubgroupSeries category: #'Mathematics-Groups'!
@@ -3020,16 +3020,6 @@ Object subclass: #ChainMap
 	category: 'Mathematics-Modules-Complexes'!
 !classDefinition: 'ChainMap class' category: #'Mathematics-Modules-Complexes'!
 ChainMap class
-	instanceVariableNames: ''!
-
-!classDefinition: #Monomial category: #'Mathematics-Monomials'!
-Object subclass: #Monomial
-	instanceVariableNames: 'exponents parent degree'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Monomials'!
-!classDefinition: 'Monomial class' category: #'Mathematics-Monomials'!
-Monomial class
 	instanceVariableNames: ''!
 
 !classDefinition: #MonomialOrdering category: #'Mathematics-Monomials-Orderings'!
@@ -3500,6 +3490,16 @@ Object subclass: #GramSchmidt
 	category: 'Mathematics-Etc'!
 !classDefinition: 'GramSchmidt class' category: #'Mathematics-Etc'!
 GramSchmidt class
+	instanceVariableNames: ''!
+
+!classDefinition: #GroupPresentation category: #'Mathematics-Etc'!
+Object subclass: #GroupPresentation
+	instanceVariableNames: 'generators relators'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc'!
+!classDefinition: 'GroupPresentation class' category: #'Mathematics-Etc'!
+GroupPresentation class
 	instanceVariableNames: ''!
 
 !classDefinition: #JordanReduction category: #'Mathematics-Etc'!
@@ -4753,6 +4753,11 @@ Following conventions, a point [a:b:1] is printed '(a,b)', and the point at infi
 
 See also EllipticCurve.!
 
+!Word commentStamp: '<historical>' prior: 0!
+A word is a noncommutative formal product on a finite ordered list of symbols. They are elements of a FreeMonoid.
+
+See also Monomial for the commutative analog, and Sum for the additive analog.!
+
 !Coset commentStamp: 'len 10/10/2018 06:26:47' prior: 0!
 Right cosets of a subgroup H of a group G: {Hg : g in G}.!
 
@@ -4873,13 +4878,13 @@ Example:
 	(1,2,3,4) % 3
 !
 
+!Monomial commentStamp: '<historical>' prior: 0!
+(Commutative) power products of one or many variables. They form a monoid (see FreeAbelianMonoid). Their formal linear combinations over a ring are Polynomials (see also PolynomialRing).
+
+See also Word for the noncommutative analog, and Sum for the additive analog.!
+
 !GroupRandomGenerator commentStamp: '<historical>' prior: 0!
 Product Replacement Algorithm for generating random elements in a group from a set of generators. Essentially, it performs a random walk on a Cayley graph.!
-
-!Word commentStamp: '<historical>' prior: 0!
-A word is a noncommutative formal product on a finite ordered list of symbols. They are elements of a FreeMonoid.
-
-See also Monomial for the commutative analog, and Sum for the additive analog.!
 
 !SchreierTree commentStamp: '<historical>' prior: 0!
 Given a finite group G with a generating set S, and an action of G on X, a Schreier tree with root x for S is a representation of the orbit of x: it's a tree rooted at x with the elements of x^G as its vertices, and its edges describing the elements of S needed to get from x to each vertex, i.e. each edge {i,j} in the tree with i closer to the root than j is labeled by a generator s in S moving i to j.
@@ -4968,11 +4973,6 @@ Chain complexes form a cateogory with chain maps as morphisms. See ChainMap.!
 A chain map between two chain complexes defined by differentials d(k):C(k)->C(k-1) and d'(k):C'(k)->C'(k-1) is a sequence of homomorphisms f(k):C(k)->C'(k) that commute with the differentials in the two complexes: d'(k) o f(k) = f(k-1) o d(k). They send cycles to cycles and boundaries to boundaries, and this descends to a map in homology f(k)* : H(k) -> H'(k).
 
 Chain maps are morphisms in the category of chain complexes. See ChainComplex.!
-
-!Monomial commentStamp: '<historical>' prior: 0!
-(Commutative) power products of one or many variables. They form a monoid (see FreeAbelianMonoid). Their formal linear combinations over a ring are Polynomials (see also PolynomialRing).
-
-See also Word for the noncommutative analog, and Sum for the additive analog.!
 
 !MonomialOrdering commentStamp: '<historical>' prior: 0!
 A monomial ordering is a total order on the set of all monomials in n indeterminates, satisfying the properties:
@@ -15055,10 +15055,6 @@ isCommutative
 isFinitelyGenerated
 	^ true! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 3/3/2016 07:13'!
-presentation
-	^ GroupPresentation free: self generators! !
-
 !FreeGroup methodsFor: 'printing' stamp: 'len 4/21/2016 00:15'!
 printOn: aStream
 	aStream nextPutAll: 'F('; print: symbols; nextPut: $)! !
@@ -15676,15 +15672,6 @@ isInfiniteCyclic
 !FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 2/27/2017 16:54:24'!
 isTrivial
 	^ self generators size = 0! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 5/5/2019 16:52:01'!
-presentation
-	| commutators |
-	commutators _ OrderedCollection new.
-	self generators do: [:x|
-		self generators do: [:y|
-			commutators add: x * y * x reciprocal * y reciprocal]].
-	^ GroupPresentation generators: self basis relators: commutators! !
 
 !FreeAbelianGroup2 methodsFor: 'printing' stamp: 'len 2/27/2017 16:47:54'!
 printOn: aStream
@@ -16634,20 +16621,25 @@ span: aCollection
 species
 	^ LinearGroup! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 9/26/2018 22:03:51'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:33:08'!
 C3
 	"Cyclic matrix group of order 3."
-	^ LinearGroup generators: {Matrix rows: {(0,1) % 5. (-1,-1) % 5}}! !
+	^ (ZZ/5 ^ 2) automorphisms span: #((0 1 -1 -1))! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 9/26/2018 22:04:06'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:34:09'!
 C4
 	"Cyclic matrix group of order 4."
-	^ LinearGroup generators: {Matrix rows: {(0,-1) % 7. (1,0) % 7}}! !
+	^ (ZZ/7 ^ 2) automorphisms span: #((0 -1 1 0))! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 9/25/2018 17:29:34'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:33:29'!
+D8
+	"Dihedral group of order 8."
+	^ (ZZ/3 ^ 2) automorphisms span: #((0 1 2 0) (1 0 0 2))! !
+
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:34:27'!
 GL
 	"The general linear group of 3x3 invertible matrices with rational coefficients."
-	^ GeneralLinearGroup on: QQ^3! !
+	^ (QQ^3) automorphisms! !
 
 !LinearGroup class methodsFor: 'instance creation' stamp: 'len 9/25/2018 17:21:17'!
 generators: aCollection
@@ -16655,13 +16647,10 @@ generators: aCollection
 	aMatrix _ aCollection anyOne.
 	^ self on: aMatrix scalars ^ aMatrix height generators: aCollection! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 9/26/2018 22:04:00'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:35:56'!
 klein
-	"The Klein four-group (or Vierergruppe) as a matrix group."
-	| a b |
-	a _ Matrix rows: {(1,0). (0,-1)}.
-	b _ a negated.
-	^ LinearGroup generators: {a. b}! !
+	"The Klein four-group (or Vierergruppe) as a linear group."
+	^ (ZZ^2) automorphisms span: #((1 0 0 -1) (-1 0 0 1))! !
 
 !LinearGroup class methodsFor: 'instance creation' stamp: 'len 9/26/2018 23:06:05'!
 new: anInteger over: aRing
@@ -17352,15 +17341,16 @@ gramMatrix
 isHyperbolic
 	^ (self gramMatrix spectrum count: [:each| each negative]) = 1! !
 
-!CoxeterGroup methodsFor: 'as yet unclassified' stamp: 'len 7/20/2016 23:49'!
+!CoxeterGroup methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 09:57:34'!
 presentation
-	| generators relators |
+	self notYetImplemented
+"	| generators relators |
 	generators _ diagram values collect: [:each| Word x: each].
 	relators _ OrderedCollection new.
 	diagram edgesAndLabelsDo: [:each :label|
 		label isInfinity
 			ifFalse: [relators add: (Word x: each key) * (Word x: each value) ^ (label ifNil: [3])]].
-	^ GroupPresentation generators: generators relators: relators! !
+	^ GroupPresentation generators: generators relators: relators"! !
 
 !CoxeterGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/18/2016 01:25'!
 diagram: aGraph
@@ -28244,15 +28234,16 @@ matrix
 matrix: aMatrix
 	matrix _ aMatrix! !
 
-!CoxeterSystem methodsFor: 'as yet unclassified' stamp: 'len 7/20/2016 23:50'!
+!CoxeterSystem methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 09:57:21'!
 presentation
-	| generators relators |
+	self notYetImplemented
+"	| generators relators |
 	generators _ self diagram values collect: [:each| Word x: each].
 	relators _ OrderedCollection new.
 	self diagram edgesAndLabelsDo: [:each :label|
 		label isInfinity
 			ifFalse: [relators add: (Word x: each key) * (Word x: each value) ^ (label ifNil: [3])]].
-	^ GroupPresentation generators: generators relators: relators! !
+	^ GroupPresentation generators: generators relators: relators"! !
 
 !CoxeterSystem methodsFor: 'as yet unclassified' stamp: 'len 4/18/2016 03:17'!
 reflections
@@ -28450,6 +28441,11 @@ parent
 	See #hom: for the external Hom functor."
 	^ self codomain => aCodomain to: self domain => aCodomain evaluating: [:f| f · self]! !
 
+!Morphism methodsFor: 'operations' stamp: 'len 5/10/2019 10:16:14'!
+^ anObject
+	anObject isInteger ifFalse: [^ self conjugatedBy: anObject].
+	^ self ·· anObject! !
+
 !Morphism methodsFor: 'operations' stamp: 'len 11/6/2016 08:59'!
 | aCodomain
 	"See also Domain>>|."
@@ -28461,14 +28457,13 @@ parent
 	Given the argument f:X -> Y and the receiver g:Y -> Z, answer g·f:X -> Z."
 	^ self subclassResponsibility! !
 
-!Morphism methodsFor: 'operations' stamp: 'len 5/6/2019 02:48:43'!
+!Morphism methodsFor: 'operations' stamp: 'len 5/10/2019 10:10:50'!
 ·· anInteger
 	"Answer the receiver composed with itself anInteger times."
 	anInteger = 1 ifTrue: [^ self].
 	anInteger = 0 ifTrue: [^ self identity].
-	anInteger > 1
-		ifTrue: [^ (self · self ·· (anInteger // 2)) · (self ·· (anInteger \\ 2))].
-	^ (self ·· anInteger negated) inverse! !
+	anInteger < 0 ifTrue: [^ self inverse ·· anInteger negated].
+	^ (self · self ·· (anInteger // 2)) · (self ·· (anInteger \\ 2))! !
 
 !Morphism methodsFor: 'printing' stamp: 'len 8/8/2016 05:52'!
 arrowPrintOn: aStream
@@ -28493,6 +28488,10 @@ coimage
 !Morphism methodsFor: 'accessing' stamp: 'len 8/8/2016 06:42'!
 cokernel
 	^ self codomain / self image! !
+
+!Morphism methodsFor: 'operations' stamp: 'len 5/10/2019 10:14:22'!
+conjugatedBy: aMorphism
+	^ aMorphism inverse · self · aMorphism! !
 
 !Morphism methodsFor: 'accessing' stamp: 'len 11/16/2016 08:35'!
 domain
@@ -30386,12 +30385,6 @@ fromHalf: aFreeModule matrix: aMatrix
 >> anInteger
 	^ self shift: anInteger! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:56:47'!
-^ anObject
-	^ anObject isEvaluable
-		ifTrue: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) ^ (anObject value: each)]]
-		ifFalse: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) ^ anObject]]! !
-
 !Sequence methodsFor: 'converting' stamp: 'len 12/2/2016 09:57:05'!
 asStream
 	^ ReadStream on: self! !
@@ -31549,10 +31542,6 @@ from: aSimplicialComplex to: anotherSimplicialComplex mapping: aBlock
 = aPermutation
 	^ self class = aPermutation class and: [map = aPermutation map]! !
 
-!Permutation methodsFor: 'operations' stamp: 'len 5/6/2019 02:49:00'!
-^ anInteger
-	^ self ·· anInteger! !
-
 !Permutation methodsFor: 'operations' stamp: 'len 5/5/2019 18:19:58'!
 · aPermutation
 	"Answer the product (function composition) of the receiver with the argument.
@@ -31599,10 +31588,6 @@ codomain
 !Permutation methodsFor: 'operations' stamp: 'len 2/8/2018 08:43:35'!
 commutator: aPermutation
 	^ self inverse * aPermutation inverse * self * aPermutation! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 2/8/2018 08:43:40'!
-conjugateBy: aPermutation
-	^ aPermutation inverse * self * aPermutation! !
 
 !Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 08:49:33'!
 cycles
@@ -32382,22 +32367,231 @@ printOn: aStream
 / anElement
 	^ self · anElement inverse! !
 
+!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:16:32'!
+^ anObject
+	anObject isInteger ifFalse: [^ self conjugatedBy: anObject].
+	^ self ·· anObject! !
+
 !GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 02:50:01'!
 · anElement
 	^ self subclassResponsibility! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 02:49:42'!
+!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:10:45'!
 ·· anInteger
 	"Answer the receiver composed with itself anInteger times."
 	anInteger = 1 ifTrue: [^ self].
 	anInteger = 0 ifTrue: [^ self identity].
-	anInteger > 1
-		ifTrue: [^ (self · self ·· (anInteger // 2)) · (self ·· (anInteger \\ 2))].
-	^ (self ·· anInteger negated) inverse! !
+	anInteger < 0 ifTrue: [^ self inverse ·· anInteger negated].
+	^ (self · self ·· (anInteger // 2)) · (self ·· (anInteger \\ 2))! !
+
+!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:07:17'!
+conjugatedBy: anElement
+	^ anElement inverse · self · anElement! !
+
+!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:11:51'!
+identity
+	^ self parent identity! !
 
 !GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 02:49:53'!
 inverse
 	^ self subclassResponsibility! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:36:08'!
+* aWord
+	^ self · aWord! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:17:37'!
+/ aWord
+	^ self * aWord inverse! !
+
+!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:32:27'!
+< aWord
+	^ (self >= aWord) not! !
+
+!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:32:46'!
+<= aWord
+	self == aWord ifTrue: [^ true].
+	^ (self > aWord) not! !
+
+!Word methodsFor: 'comparing' stamp: 'len 3/3/2016 05:23'!
+= aWord
+	^ syllables = aWord syllables! !
+
+!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:33:57'!
+> aWord
+	^ (self compare: aWord) > 0! !
+
+!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:34:13'!
+>= aWord
+	self == aWord ifTrue: [^ true].
+	^ (self compare: aWord) >= 0! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:54'!
+· aWord
+	| x y |
+	self isEmpty ifTrue: [^ aWord].
+	aWord isEmpty ifTrue: [^ self].
+	syllables last key = aWord syllables first key
+		ifFalse: [^ self class syllables: syllables, aWord syllables].
+	x _ syllables as: OrderedCollection.
+	y _ aWord syllables as: OrderedCollection.
+	[x notEmpty and: [y notEmpty and: [x last key = y first key]]]
+		whileTrue:
+			[| xn y1 exponent |
+			xn _ x removeLast.
+			y1 _ y removeFirst.
+			(exponent _ xn value + y1 value) = 0
+				ifFalse: [^ self class syllables: (x, {Association key: xn key value: exponent}, y) asArray]].
+	^ self class syllables: (x, y) asArray! !
+
+!Word methodsFor: 'comparing' stamp: 'len 1/10/2018 11:40:04'!
+compare: aWord
+	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument.
+	This is the noncommutative graded-lexicographical ordering."
+	| result stream1 stream2 a1 a2 r1 r2 r x1 x2 |
+	(result _ (self length - aWord length) sign) = 0 ifFalse: [^ result].
+	self isEmpty ifTrue: [^ 0].
+	stream1 _ syllables readStream.
+	stream2 _ aWord syllables readStream.
+	r1 _ 0.
+	r2 _ 0.
+	[r1 > 0 ifFalse: [a1 _ stream1 next. x1 _ a1 key. r1 _ a1 value].
+	r2 > 0 ifFalse: [a2 _ stream2 next. x2 _ a2 key. r2 _ a2 value].
+	r _ r1 min: r2.
+	x1 < x2 ifTrue: [^ -1].
+	x1 = x2 ifFalse: [^ 1].
+	r1 _ r1 - r.
+	r2 _ r2 - r.
+	stream1 atEnd and: [stream2 atEnd]] whileFalse.
+	^ 0! !
+
+!Word methodsFor: 'copying' stamp: 'len 2/27/2017 08:06:48'!
+copyWithout: anObject
+	^ self class syllables: (self syllables select: [:each| each key ~= anObject])! !
+
+!Word methodsFor: 'enumerating' stamp: 'len 3/3/2016 05:23'!
+do: aBinaryBlock
+	syllables do: [:each| aBinaryBlock value: each key value: each value]! !
+
+!Word methodsFor: 'comparing' stamp: 'len 3/3/2016 05:23'!
+hash
+	^ syllables hash! !
+
+!Word methodsFor: 'accessing' stamp: 'len 5/10/2019 10:11:36'!
+identity
+	^ self class empty! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:39'!
+inverse
+	^ self class syllables: (syllables collect: [:each| Association key: each key value: each value negated]) reversed! !
+
+!Word methodsFor: 'testing' stamp: 'len 3/3/2016 05:23'!
+isEmpty
+	^ syllables isEmpty! !
+
+!Word methodsFor: 'testing' stamp: 'len 1/10/2018 16:54:56'!
+isStandard
+	"Answer true if the receiver is a standard word, i.e. if the symbols appear in ascending order."
+	syllables size < 2 ifTrue: [^ true].
+	1 to: syllables size - 1 do: [:i|
+		(syllables at: i) key < (syllables at: i+1) key
+			ifFalse: [^ false]].
+	^ true! !
+
+!Word methodsFor: 'accessing' stamp: 'len 1/10/2018 11:28:25'!
+length
+	syllables isEmpty ifTrue: [^ 0].
+	^ syllables sum: [:each| each value abs]! !
+
+!Word methodsFor: 'printing' stamp: 'len 7/2/2016 16:29'!
+printExponent: anInteger on: aStream
+	| exponent |
+	(exponent _ anInteger printString) = '1'
+		ifTrue: [^ self].
+	aStream isText
+		ifTrue:
+			[aStream nextPutAll: exponent super.
+			^ self].
+	aStream nextPut: $^.
+	exponent size = 1
+		ifTrue: [aStream nextPutAll: exponent]
+		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
+
+!Word methodsFor: 'printing' stamp: 'len 2/27/2017 08:23:57'!
+printIndeterminate: indeterminate on: aStream
+	indeterminate isInteger
+		ifFalse:
+			[indeterminate class = self class
+				ifTrue: [aStream nextPut: $(; print: indeterminate; nextPut: $)]
+				ifFalse: [(aStream isText and: [indeterminate isString])
+					ifTrue: [aStream nextPutAll: indeterminate asText]
+					ifFalse: [aStream print: indeterminate]]. ^ self].
+	aStream isText
+		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
+		ifFalse: [aStream nextPutAll: '{x', indeterminate printString, '}']! !
+
+!Word methodsFor: 'printing' stamp: 'len 1/10/2018 12:23:21'!
+printOn: aStream
+	self isEmpty ifTrue: [aStream nextPut: Character epsilon. ^ self].
+	self do: [:i :exp|
+		exp = 0
+			ifFalse:
+				[self printIndeterminate: i on: aStream.
+				self printExponent: exp on: aStream]]! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:47'!
+reciprocal
+	^ self inverse! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 3/3/2016 05:23'!
+reversed
+	^ self class syllables: syllables reversed! !
+
+!Word methodsFor: 'arithmetic' stamp: 'len 7/8/2016 05:50'!
+squared
+	^ self * self! !
+
+!Word methodsFor: 'accessing' stamp: 'len 3/3/2016 05:24'!
+syllables
+	^ syllables! !
+
+!Word methodsFor: 'accessing-private' stamp: 'len 3/3/2016 05:21'!
+syllables: anArray
+	syllables _ anArray! !
+
+!Word methodsFor: 'accessing' stamp: 'len 6/29/2016 23:23'!
+value
+	^ syllables product: [:each| each key ^ each value]! !
+
+!Word methodsFor: 'accessing' stamp: 'len 2/26/2017 10:34:37'!
+value: anObject
+	| answer next |
+	syllables do: [:each|
+		next _ (anObject at: each key) ^ each value.
+		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
+	^ answer! !
+
+!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:31'!
+empty
+	^ self syllables: #()! !
+
+!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:31'!
+new
+	^ self shouldNotImplement! !
+
+!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:30'!
+syllables: anArray
+	^ self basicNew syllables: anArray! !
+
+!Word class methodsFor: 'instance creation' stamp: 'len 2/12/2016 07:30'!
+x: i
+	^ self x: i to: 1! !
+
+!Word class methodsFor: 'instance creation' stamp: 'len 3/3/2016 05:24'!
+x: i to: k
+	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
+	k = 0 ifTrue: [^ self empty].
+	^ self syllables: {i -> k}! !
 
 !Coset methodsFor: 'comparing' stamp: 'len 5/9/2019 11:21:41'!
 = aCoset
@@ -33134,11 +33328,9 @@ contains: anObject
 gcd: aResidueClass
 	^ parent project: (representative gcd: aResidueClass representative)! !
 
-!Residue methodsFor: 'comparing' stamp: 'len 9/15/2018 16:18:01'!
+!Residue methodsFor: 'comparing' stamp: 'len 5/10/2019 08:56:24'!
 hash
-	^ parent hash
-"could we instead assume the representative is unique?:
-	^ representative hash"! !
+	^ parent hash! !
 
 !Residue methodsFor: 'testing' stamp: 'len 9/15/2018 16:07:16'!
 includes: anObject
@@ -37586,6 +37778,299 @@ parent
 termAt: aModuleMonomial
 	^ (self at: aModuleMonomial position) termAt: aModuleMonomial monomial! !
 
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:41'!
+* aMonomial
+	| b bn c |
+	b _ aMonomial exponents.
+	bn _ aMonomial exponents size.
+	exponents size = bn ifFalse: [^ self error: 'not same size'].
+	c _ Array new: bn.
+	1 to: bn do: [:i| c at: i put: (exponents at: i) + (b at: i)].
+	^ self parent exponents: c! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:45'!
+/ aMonomial
+	"Answer the exact division of the receiver by the argument."
+	| b bn c |
+	b _ aMonomial exponents.
+	bn _ aMonomial exponents size.
+	exponents size = bn ifFalse: [^ self error: 'not same size'].
+	c _ Array new: bn.
+	1 to: bn do: [:i| c at: i put: (exponents at: i) - (b at: i)].
+	^ self parent exponents: c! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:54'!
+< aMonomial
+	^ (self >= aMonomial) not! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:09'!
+<= aMonomial
+	self == aMonomial ifTrue: [^ true].
+	^ (self > aMonomial) not! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 19:44:36'!
+= aMonomial
+	| b |
+	self == aMonomial ifTrue: [^ true].
+	aMonomial isInteger ifTrue: [^ self degree = aMonomial].
+"	^ exponents = aMonomial exponents"
+	b _ aMonomial exponents.
+	exponents size = b size ifFalse: [^ false].
+	1 to: exponents size do: [:i| (exponents at: i) = (b at: i) ifFalse: [^ false]].
+	^ true! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 08:36:58'!
+> aMonomial
+	^ (self compare: aMonomial) > 0! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 11:19:23'!
+>= aMonomial
+	self == aMonomial ifTrue: [^ true].
+	^ (self compare: aMonomial) >= 0! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:48'!
+^ anInteger
+	^ self parent exponents: exponents * anInteger! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 5/11/2018 06:54:29'!
+| aMonomial
+	"Answer true if the receiver divides the argument."
+"	self degree > aMonomial degree ifTrue: [^ false]. <- this doesn't seem to help"
+	1 to: exponents size do: [:i|
+		(exponents at: i) > (aMonomial at: i) ifTrue: [^ false]].
+	^ true! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 11/21/2016 15:56:16'!
+at: anIndeterminate
+	^ exponents at: anIndeterminate! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:03'!
+bitSize
+	^ exponents inject: 0 into: [:x :each| x + each bitSize]! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:12:42'!
+compare: aMonomial
+	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument."
+	^ self ordering compare: self with: aMonomial! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:52'!
+complete: anInteger in: anIndeterminate
+	"Answer a copy of the receiver of degree anInteger completing with a power of the indeterminate anotherInteger."
+	| n |
+	(n _ self degree) = anInteger ifTrue: [^ self].
+	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger - n + (self at: anIndeterminate); yourself)! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:35:56'!
+copyWith: anIndeterminate to: anInteger
+	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger; yourself)! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:36:00'!
+copyWithout: anIndeterminate
+	"Answer a copy of the receiver with the given indeterminate removed."
+	^ self parent exponents: (exponents copy at: anIndeterminate put: 0; yourself)! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 5/12/2018 20:02:01'!
+degree
+	"Answer the total degree of the receiver."
+	^ degree ifNil: [degree _ exponents isEmpty ifTrue: [0] ifFalse: [exponents sum]]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 3/17/2016 00:25'!
+degreeIn: anIndeterminate
+	"Answer the degree of the receiver in the given indeterminate, i.e. the power to which the indeterminate appears in the receiver."
+
+	^ self at: anIndeterminate! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:03'!
+dehomogenizedIn: anIndeterminate
+	| newExponents |
+	newExponents _ Array new: exponents size.
+	newExponents replaceFrom: 1 to: anIndeterminate - 1 with: exponents startingAt: 1.
+	newExponents replaceFrom: anIndeterminate to: exponents size - 1 with: exponents startingAt: anIndeterminate + 1.
+	newExponents at: exponents size put: 0.
+	^ self parent exponents: newExponents! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:05'!
+exponents
+	^ exponents! !
+
+!Monomial methodsFor: 'private' stamp: 'len 3/16/2016 20:04'!
+exponents: anArray
+	exponents _ anArray! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:07'!
+gcd: aMonomial
+	"Answer the greatest common divisor of the receiver and the argument."
+	exponents size <= aMonomial exponents size ifFalse: [^ aMonomial gcd: self].
+	^ self parent exponents: (exponents withIndexCollect: [:each :i| each min: (aMonomial at: i)])! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 12/5/2015 22:34'!
+has: anIndeterminate
+	^ (self at: anIndeterminate) ~= 0! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/30/2016 21:59:33'!
+hash
+	| answer |
+	answer _ self lastIndeterminate.
+	1 to: exponents size do: [:i|
+		| e |
+		(e _ exponents at: i) = 0
+			ifFalse: [answer _ answer hashMultiply + e hash]].
+	^ answer! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:47'!
+indeterminates
+	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent). This is called the 'support' of a monomial."
+	^ (1 to: exponents size) select: [:i| (exponents at: i) ~= 0]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 02:50'!
+isIdentity
+	^ exponents allSatisfy: [:each| each = 0]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:38:05'!
+isPurePower
+	"Answer true if the receiver is a power of a single indeterminate."
+	| count |
+	count _ 0.
+	exponents do: [:each| each == 0 ifFalse: [count _ count + 1]. count > 1 ifTrue: [^ false]].
+	^ count = 1! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:39:08'!
+isSquareFree
+	^ exponents allSatisfy: [:each| each == 0 or: [each == 1]]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 05:03'!
+isUnivariateIn: anIndeterminate
+	^ exponents isEmpty or: [(self at: anIndeterminate) = self degree]! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 6/6/2016 07:00'!
+lastIndeterminate
+	"Answer the leading indeterminate of the receiver (the last indeterminate effectively present)."
+	^ exponents findLast: [:one| one ~= 0]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:11'!
+lcm: aMonomial
+	"Answer the least common multiple of the receiver and the argument."
+	exponents size >= aMonomial exponents size ifFalse: [^ aMonomial lcm: self].
+	^ self parent exponents: (exponents withIndexCollect: [:each :i| each max: (aMonomial at: i)])! !
+
+!Monomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:18:46'!
+orderedBy: aMonomialOrdering
+	^ (self parent orderedBy: aMonomialOrdering) !! self! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 11/20/2016 11:56:47'!
+ordering
+	^ parent ordering! !
+
+!Monomial methodsFor: 'private' stamp: 'len 1/23/2017 11:35:28'!
+parent
+	^ parent! !
+
+!Monomial methodsFor: 'private' stamp: 'len 2/26/2017 10:37:42'!
+parent: aFreeAbelianMonoid
+	parent _ aFreeAbelianMonoid! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:23'!
+permutedBy: aPermutation
+	"Permute the variables of the receiver. The argument can be an Array (permutation in 'image format'). For example given a monomial in x,z,y, #(1 2 3) doesn't change anything, #(2 1 3) exchanges variables x and y."
+	| answer |
+	answer _ self parent identity.
+	exponents withIndexDo: [:exp :i|
+		exp = 0 ifFalse: [answer _ answer * (self parent x: (aPermutation at: i) to: exp)]].
+	^ answer! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 11/21/2016 11:07:43'!
+postCopy
+	exponents _ exponents copy.
+	degree _ nil! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:48'!
+printExponent: anInteger on: aStream
+	| exponent |
+	(exponent _ anInteger printString) = '1'
+		ifTrue: [^ self].
+	aStream isText
+		ifTrue:
+			[aStream nextPutAll: exponent super.
+			^ self].
+	aStream nextPut: $^.
+	exponent size = 1
+		ifTrue: [aStream nextPutAll: exponent]
+		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:49'!
+printIndeterminate: indeterminate on: aStream
+	indeterminate isInteger
+		ifFalse: [aStream nextPutAll: indeterminate displayStringOrText. ^ self].
+	aStream isText
+		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
+		ifFalse:[aStream nextPutAll: '{x', indeterminate printString, '}']! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 2/27/2017 07:41:34'!
+printOn: aStream
+	self degree = 0 ifTrue: [aStream print: 1. ^ self].
+	(self ordering indeterminates select: [:i| (self at: i) ~= 0])
+		do: [:i|
+			| x |
+			x _ self parent names ifNil: [i] ifNotNil: [:names| names at: i ifAbsent: [i]].
+			self printIndeterminate: x on: aStream.
+			self printExponent: (self at: i) on: aStream]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:28'!
+root: anInteger
+	^ self parent exponents: exponents / anInteger! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:31'!
+root: anInteger in: anIndeterminate
+	^ self parent exponents: (exponents copy at: anIndeterminate put: (self at: anIndeterminate) / anInteger; yourself)! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 2/9/2017 03:20:49'!
+substitute: aBlock
+	"Answer the receiver after substituting indeterminates by aBlock."
+	| answer |
+	answer _ self parent identity.
+	exponents withIndexDo: [:exp :i|
+		exp = 0 ifFalse: [answer _ answer * (self parent x: (aBlock value: i) to: exp)]].
+	^ answer! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:35'!
+support
+	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent)."
+	^ self indeterminates! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/21/2017 20:16:54'!
+value: anObject
+	| answer next |
+	1 to: exponents size do: [:i|
+		next _ (anObject at: i) ^ (exponents at: i).
+		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
+	^ answer! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 6/6/2016 04:45'!
+without: anIndeterminate
+	^ (self has: anIndeterminate) ifFalse: [self] ifTrue: [self copyWithout: anIndeterminate]! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 12:01:21'!
+exponents: anArray
+	^ self basicNew exponents: anArray! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:58:05'!
+new
+	^ self shouldNotImplement! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 11:25:52'!
+new: anInteger
+	^ self exponents: ((Array new: anInteger) atAllPut: 0; yourself)! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:53'!
+new: anInteger x: i
+	"Answer a new instance of the receiver with only one indeterminate: the argument i."
+	^ self new: anInteger x: i to: 1! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:37'!
+new: anInteger x: i to: k
+	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
+	^ self exponents: ((Array new: anInteger) atAllPut: 0; at: i put: k; yourself)! !
+
 !RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 22:03'!
 bits: anInteger
 	anInteger >= 1 ifFalse: [^ self error: 'bitsize must be >= 1'].
@@ -37651,268 +38136,6 @@ next
 	h _ random nextBoolean ifTrue: [g · (state at: i)] ifFalse: [(state at: i) · g].
 	state size < 10 ifTrue: [state add: h] ifFalse: [state at: i put: h].
 	^ h! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:36:08'!
-* aWord
-	^ self · aWord! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:17:37'!
-/ aWord
-	^ self * aWord inverse! !
-
-!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:32:27'!
-< aWord
-	^ (self >= aWord) not! !
-
-!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:32:46'!
-<= aWord
-	self == aWord ifTrue: [^ true].
-	^ (self > aWord) not! !
-
-!Word methodsFor: 'comparing' stamp: 'len 3/3/2016 05:23'!
-= aWord
-	^ syllables = aWord syllables! !
-
-!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:33:57'!
-> aWord
-	^ (self compare: aWord) > 0! !
-
-!Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:34:13'!
->= aWord
-	self == aWord ifTrue: [^ true].
-	^ (self compare: aWord) >= 0! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:17:49'!
-^ anInteger
-	anInteger = 1 ifTrue: [^ self].
-	anInteger = 0 ifTrue: [^ self class empty].
-	anInteger < 0 ifTrue: [^ self inverse ^ anInteger negated].
-	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:54'!
-· aWord
-	| x y |
-	self isEmpty ifTrue: [^ aWord].
-	aWord isEmpty ifTrue: [^ self].
-	syllables last key = aWord syllables first key
-		ifFalse: [^ self class syllables: syllables, aWord syllables].
-	x _ syllables as: OrderedCollection.
-	y _ aWord syllables as: OrderedCollection.
-	[x notEmpty and: [y notEmpty and: [x last key = y first key]]]
-		whileTrue:
-			[| xn y1 exponent |
-			xn _ x removeLast.
-			y1 _ y removeFirst.
-			(exponent _ xn value + y1 value) = 0
-				ifFalse: [^ self class syllables: (x, {Association key: xn key value: exponent}, y) asArray]].
-	^ self class syllables: (x, y) asArray! !
-
-!Word methodsFor: 'comparing' stamp: 'len 1/10/2018 11:40:04'!
-compare: aWord
-	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument.
-	This is the noncommutative graded-lexicographical ordering."
-	| result stream1 stream2 a1 a2 r1 r2 r x1 x2 |
-	(result _ (self length - aWord length) sign) = 0 ifFalse: [^ result].
-	self isEmpty ifTrue: [^ 0].
-	stream1 _ syllables readStream.
-	stream2 _ aWord syllables readStream.
-	r1 _ 0.
-	r2 _ 0.
-	[r1 > 0 ifFalse: [a1 _ stream1 next. x1 _ a1 key. r1 _ a1 value].
-	r2 > 0 ifFalse: [a2 _ stream2 next. x2 _ a2 key. r2 _ a2 value].
-	r _ r1 min: r2.
-	x1 < x2 ifTrue: [^ -1].
-	x1 = x2 ifFalse: [^ 1].
-	r1 _ r1 - r.
-	r2 _ r2 - r.
-	stream1 atEnd and: [stream2 atEnd]] whileFalse.
-	^ 0! !
-
-!Word methodsFor: 'copying' stamp: 'len 2/27/2017 08:06:48'!
-copyWithout: anObject
-	^ self class syllables: (self syllables select: [:each| each key ~= anObject])! !
-
-!Word methodsFor: 'enumerating' stamp: 'len 3/3/2016 05:23'!
-do: aBinaryBlock
-	syllables do: [:each| aBinaryBlock value: each key value: each value]! !
-
-!Word methodsFor: 'comparing' stamp: 'len 3/3/2016 05:23'!
-hash
-	^ syllables hash! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:39'!
-inverse
-	^ self class syllables: (syllables collect: [:each| Association key: each key value: each value negated]) reversed! !
-
-!Word methodsFor: 'testing' stamp: 'len 3/3/2016 05:23'!
-isEmpty
-	^ syllables isEmpty! !
-
-!Word methodsFor: 'testing' stamp: 'len 1/10/2018 16:54:56'!
-isStandard
-	"Answer true if the receiver is a standard word, i.e. if the symbols appear in ascending order."
-	syllables size < 2 ifTrue: [^ true].
-	1 to: syllables size - 1 do: [:i|
-		(syllables at: i) key < (syllables at: i+1) key
-			ifFalse: [^ false]].
-	^ true! !
-
-!Word methodsFor: 'accessing' stamp: 'len 1/10/2018 11:28:25'!
-length
-	syllables isEmpty ifTrue: [^ 0].
-	^ syllables sum: [:each| each value abs]! !
-
-!Word methodsFor: 'printing' stamp: 'len 7/2/2016 16:29'!
-printExponent: anInteger on: aStream
-	| exponent |
-	(exponent _ anInteger printString) = '1'
-		ifTrue: [^ self].
-	aStream isText
-		ifTrue:
-			[aStream nextPutAll: exponent super.
-			^ self].
-	aStream nextPut: $^.
-	exponent size = 1
-		ifTrue: [aStream nextPutAll: exponent]
-		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
-
-!Word methodsFor: 'printing' stamp: 'len 2/27/2017 08:23:57'!
-printIndeterminate: indeterminate on: aStream
-	indeterminate isInteger
-		ifFalse:
-			[indeterminate class = self class
-				ifTrue: [aStream nextPut: $(; print: indeterminate; nextPut: $)]
-				ifFalse: [(aStream isText and: [indeterminate isString])
-					ifTrue: [aStream nextPutAll: indeterminate asText]
-					ifFalse: [aStream print: indeterminate]]. ^ self].
-	aStream isText
-		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
-		ifFalse: [aStream nextPutAll: '{x', indeterminate printString, '}']! !
-
-!Word methodsFor: 'printing' stamp: 'len 1/10/2018 12:23:21'!
-printOn: aStream
-	self isEmpty ifTrue: [aStream nextPut: Character epsilon. ^ self].
-	self do: [:i :exp|
-		exp = 0
-			ifFalse:
-				[self printIndeterminate: i on: aStream.
-				self printExponent: exp on: aStream]]! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:47'!
-reciprocal
-	^ self inverse! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 3/3/2016 05:23'!
-reversed
-	^ self class syllables: syllables reversed! !
-
-!Word methodsFor: 'arithmetic' stamp: 'len 7/8/2016 05:50'!
-squared
-	^ self * self! !
-
-!Word methodsFor: 'accessing' stamp: 'len 3/3/2016 05:24'!
-syllables
-	^ syllables! !
-
-!Word methodsFor: 'accessing-private' stamp: 'len 3/3/2016 05:21'!
-syllables: anArray
-	syllables _ anArray! !
-
-!Word methodsFor: 'accessing' stamp: 'len 6/29/2016 23:23'!
-value
-	^ syllables product: [:each| each key ^ each value]! !
-
-!Word methodsFor: 'accessing' stamp: 'len 2/26/2017 10:34:37'!
-value: anObject
-	| answer next |
-	syllables do: [:each|
-		next _ (anObject at: each key) ^ each value.
-		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
-	^ answer! !
-
-!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:31'!
-empty
-	^ self syllables: #()! !
-
-!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:31'!
-new
-	^ self shouldNotImplement! !
-
-!Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:30'!
-syllables: anArray
-	^ self basicNew syllables: anArray! !
-
-!Word class methodsFor: 'instance creation' stamp: 'len 2/12/2016 07:30'!
-x: i
-	^ self x: i to: 1! !
-
-!Word class methodsFor: 'instance creation' stamp: 'len 3/3/2016 05:24'!
-x: i to: k
-	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
-	k = 0 ifTrue: [^ self empty].
-	^ self syllables: {i -> k}! !
-
-!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:14'!
-* aPresentation
-	"Answer the free product of the receiver with the argument."
-	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators)! !
-
-!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:13'!
-× aPresentation
-	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators, (self commutatorWith: aPresentation))! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 2/12/2016 07:49'!
-deficiency
-	^ generators size - relators size! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
-generators
-	^ generators! !
-
-!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
-generators: aCollection
-	generators _ aCollection! !
-
-!GroupPresentation methodsFor: 'printing' stamp: 'len 2/12/2016 07:34'!
-printOn: aStream
-	aStream nextPut: $<.
-	generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
-	aStream nextPutAll: ' | '.
-	relators isEmpty ifTrue: [aStream nextPut: Character emptySet].
-	relators do: [:each| aStream print: each; nextPutAll: '=1'] separatedBy: [aStream nextPut: $,].
-	aStream nextPut: $>! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
-relators
-	^ relators! !
-
-!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
-relators: aCollection
-	relators _ aCollection! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
-C: n
-	"Answer the cyclic group of order n."
-	| x |
-	x _ Word x: 1.
-	^ self generators: {x} relators: {x^n}! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
-D: n
-	"Answer the dihedral group of order n."
-	| x1 x2 |
-	x1 _ Word x: 1.
-	x2 _ Word x: 2.
-	^ self generators: {x1. x2} relators: {x1^n. x2^2. (x1*x2)^2}! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 11/27/2015 21:46'!
-free: aCollection
-	"Answer the free group on aCollection."
-	^ self generators: aCollection relators: #()! !
-
-!GroupPresentation class methodsFor: 'instance creation' stamp: 'len 11/27/2015 21:45'!
-generators: aCollection relators: anotherCollection
-	^ self new generators: aCollection; relators: anotherCollection! !
 
 !SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:35'!
 add: aSubgroup
@@ -40868,299 +41091,6 @@ differentials: anArray
 !ExactSequence methodsFor: 'testing' stamp: 'len 4/27/2019 11:11:16'!
 isExact
 	^ true! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:41'!
-* aMonomial
-	| b bn c |
-	b _ aMonomial exponents.
-	bn _ aMonomial exponents size.
-	exponents size = bn ifFalse: [^ self error: 'not same size'].
-	c _ Array new: bn.
-	1 to: bn do: [:i| c at: i put: (exponents at: i) + (b at: i)].
-	^ self parent exponents: c! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:45'!
-/ aMonomial
-	"Answer the exact division of the receiver by the argument."
-	| b bn c |
-	b _ aMonomial exponents.
-	bn _ aMonomial exponents size.
-	exponents size = bn ifFalse: [^ self error: 'not same size'].
-	c _ Array new: bn.
-	1 to: bn do: [:i| c at: i put: (exponents at: i) - (b at: i)].
-	^ self parent exponents: c! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:54'!
-< aMonomial
-	^ (self >= aMonomial) not! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:09'!
-<= aMonomial
-	self == aMonomial ifTrue: [^ true].
-	^ (self > aMonomial) not! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 19:44:36'!
-= aMonomial
-	| b |
-	self == aMonomial ifTrue: [^ true].
-	aMonomial isInteger ifTrue: [^ self degree = aMonomial].
-"	^ exponents = aMonomial exponents"
-	b _ aMonomial exponents.
-	exponents size = b size ifFalse: [^ false].
-	1 to: exponents size do: [:i| (exponents at: i) = (b at: i) ifFalse: [^ false]].
-	^ true! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 08:36:58'!
-> aMonomial
-	^ (self compare: aMonomial) > 0! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 11:19:23'!
->= aMonomial
-	self == aMonomial ifTrue: [^ true].
-	^ (self compare: aMonomial) >= 0! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:48'!
-^ anInteger
-	^ self parent exponents: exponents * anInteger! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 5/11/2018 06:54:29'!
-| aMonomial
-	"Answer true if the receiver divides the argument."
-"	self degree > aMonomial degree ifTrue: [^ false]. <- this doesn't seem to help"
-	1 to: exponents size do: [:i|
-		(exponents at: i) > (aMonomial at: i) ifTrue: [^ false]].
-	^ true! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 11/21/2016 15:56:16'!
-at: anIndeterminate
-	^ exponents at: anIndeterminate! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:03'!
-bitSize
-	^ exponents inject: 0 into: [:x :each| x + each bitSize]! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:12:42'!
-compare: aMonomial
-	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument."
-	^ self ordering compare: self with: aMonomial! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:52'!
-complete: anInteger in: anIndeterminate
-	"Answer a copy of the receiver of degree anInteger completing with a power of the indeterminate anotherInteger."
-	| n |
-	(n _ self degree) = anInteger ifTrue: [^ self].
-	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger - n + (self at: anIndeterminate); yourself)! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:35:56'!
-copyWith: anIndeterminate to: anInteger
-	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger; yourself)! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:36:00'!
-copyWithout: anIndeterminate
-	"Answer a copy of the receiver with the given indeterminate removed."
-	^ self parent exponents: (exponents copy at: anIndeterminate put: 0; yourself)! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 5/12/2018 20:02:01'!
-degree
-	"Answer the total degree of the receiver."
-	^ degree ifNil: [degree _ exponents isEmpty ifTrue: [0] ifFalse: [exponents sum]]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 3/17/2016 00:25'!
-degreeIn: anIndeterminate
-	"Answer the degree of the receiver in the given indeterminate, i.e. the power to which the indeterminate appears in the receiver."
-
-	^ self at: anIndeterminate! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:03'!
-dehomogenizedIn: anIndeterminate
-	| newExponents |
-	newExponents _ Array new: exponents size.
-	newExponents replaceFrom: 1 to: anIndeterminate - 1 with: exponents startingAt: 1.
-	newExponents replaceFrom: anIndeterminate to: exponents size - 1 with: exponents startingAt: anIndeterminate + 1.
-	newExponents at: exponents size put: 0.
-	^ self parent exponents: newExponents! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:05'!
-exponents
-	^ exponents! !
-
-!Monomial methodsFor: 'private' stamp: 'len 3/16/2016 20:04'!
-exponents: anArray
-	exponents _ anArray! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:07'!
-gcd: aMonomial
-	"Answer the greatest common divisor of the receiver and the argument."
-	exponents size <= aMonomial exponents size ifFalse: [^ aMonomial gcd: self].
-	^ self parent exponents: (exponents withIndexCollect: [:each :i| each min: (aMonomial at: i)])! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 12/5/2015 22:34'!
-has: anIndeterminate
-	^ (self at: anIndeterminate) ~= 0! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/30/2016 21:59:33'!
-hash
-	| answer |
-	answer _ self lastIndeterminate.
-	1 to: exponents size do: [:i|
-		| e |
-		(e _ exponents at: i) = 0
-			ifFalse: [answer _ answer hashMultiply + e hash]].
-	^ answer! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:47'!
-indeterminates
-	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent). This is called the 'support' of a monomial."
-	^ (1 to: exponents size) select: [:i| (exponents at: i) ~= 0]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 02:50'!
-isIdentity
-	^ exponents allSatisfy: [:each| each = 0]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:38:05'!
-isPurePower
-	"Answer true if the receiver is a power of a single indeterminate."
-	| count |
-	count _ 0.
-	exponents do: [:each| each == 0 ifFalse: [count _ count + 1]. count > 1 ifTrue: [^ false]].
-	^ count = 1! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:39:08'!
-isSquareFree
-	^ exponents allSatisfy: [:each| each == 0 or: [each == 1]]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 05:03'!
-isUnivariateIn: anIndeterminate
-	^ exponents isEmpty or: [(self at: anIndeterminate) = self degree]! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 6/6/2016 07:00'!
-lastIndeterminate
-	"Answer the leading indeterminate of the receiver (the last indeterminate effectively present)."
-	^ exponents findLast: [:one| one ~= 0]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:11'!
-lcm: aMonomial
-	"Answer the least common multiple of the receiver and the argument."
-	exponents size >= aMonomial exponents size ifFalse: [^ aMonomial lcm: self].
-	^ self parent exponents: (exponents withIndexCollect: [:each :i| each max: (aMonomial at: i)])! !
-
-!Monomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:18:46'!
-orderedBy: aMonomialOrdering
-	^ (self parent orderedBy: aMonomialOrdering) !! self! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 11/20/2016 11:56:47'!
-ordering
-	^ parent ordering! !
-
-!Monomial methodsFor: 'private' stamp: 'len 1/23/2017 11:35:28'!
-parent
-	^ parent! !
-
-!Monomial methodsFor: 'private' stamp: 'len 2/26/2017 10:37:42'!
-parent: aFreeAbelianMonoid
-	parent _ aFreeAbelianMonoid! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:23'!
-permutedBy: aPermutation
-	"Permute the variables of the receiver. The argument can be an Array (permutation in 'image format'). For example given a monomial in x,z,y, #(1 2 3) doesn't change anything, #(2 1 3) exchanges variables x and y."
-	| answer |
-	answer _ self parent identity.
-	exponents withIndexDo: [:exp :i|
-		exp = 0 ifFalse: [answer _ answer * (self parent x: (aPermutation at: i) to: exp)]].
-	^ answer! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 11/21/2016 11:07:43'!
-postCopy
-	exponents _ exponents copy.
-	degree _ nil! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:48'!
-printExponent: anInteger on: aStream
-	| exponent |
-	(exponent _ anInteger printString) = '1'
-		ifTrue: [^ self].
-	aStream isText
-		ifTrue:
-			[aStream nextPutAll: exponent super.
-			^ self].
-	aStream nextPut: $^.
-	exponent size = 1
-		ifTrue: [aStream nextPutAll: exponent]
-		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:49'!
-printIndeterminate: indeterminate on: aStream
-	indeterminate isInteger
-		ifFalse: [aStream nextPutAll: indeterminate displayStringOrText. ^ self].
-	aStream isText
-		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
-		ifFalse:[aStream nextPutAll: '{x', indeterminate printString, '}']! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 2/27/2017 07:41:34'!
-printOn: aStream
-	self degree = 0 ifTrue: [aStream print: 1. ^ self].
-	(self ordering indeterminates select: [:i| (self at: i) ~= 0])
-		do: [:i|
-			| x |
-			x _ self parent names ifNil: [i] ifNotNil: [:names| names at: i ifAbsent: [i]].
-			self printIndeterminate: x on: aStream.
-			self printExponent: (self at: i) on: aStream]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:28'!
-root: anInteger
-	^ self parent exponents: exponents / anInteger! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:31'!
-root: anInteger in: anIndeterminate
-	^ self parent exponents: (exponents copy at: anIndeterminate put: (self at: anIndeterminate) / anInteger; yourself)! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 2/9/2017 03:20:49'!
-substitute: aBlock
-	"Answer the receiver after substituting indeterminates by aBlock."
-	| answer |
-	answer _ self parent identity.
-	exponents withIndexDo: [:exp :i|
-		exp = 0 ifFalse: [answer _ answer * (self parent x: (aBlock value: i) to: exp)]].
-	^ answer! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:35'!
-support
-	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent)."
-	^ self indeterminates! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/21/2017 20:16:54'!
-value: anObject
-	| answer next |
-	1 to: exponents size do: [:i|
-		next _ (anObject at: i) ^ (exponents at: i).
-		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
-	^ answer! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 6/6/2016 04:45'!
-without: anIndeterminate
-	^ (self has: anIndeterminate) ifFalse: [self] ifTrue: [self copyWithout: anIndeterminate]! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 12:01:21'!
-exponents: anArray
-	^ self basicNew exponents: anArray! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:58:05'!
-new
-	^ self shouldNotImplement! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 11:25:52'!
-new: anInteger
-	^ self exponents: ((Array new: anInteger) atAllPut: 0; yourself)! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:53'!
-new: anInteger x: i
-	"Answer a new instance of the receiver with only one indeterminate: the argument i."
-	^ self new: anInteger x: i to: 1! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:37'!
-new: anInteger x: i to: k
-	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
-	^ self exponents: ((Array new: anInteger) atAllPut: 0; at: i put: k; yourself)! !
 
 !MonomialOrdering methodsFor: 'operations' stamp: 'len 1/28/2017 10:12:58'!
 , aMonomialOrdering
@@ -44216,6 +44146,68 @@ example
 	V _ QQ ^ 3.
 	basis _ LinearBasis on: V elements: {(1, 1, 0). (0, 1, 1). (1, 0, 1)}.
 	^ (GramSchmidt basis: basis) orthogonalBasis! !
+
+!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:14'!
+* aPresentation
+	"Answer the free product of the receiver with the argument."
+	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators)! !
+
+!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:13'!
+× aPresentation
+	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators, (self commutatorWith: aPresentation))! !
+
+!GroupPresentation methodsFor: 'accessing' stamp: 'len 2/12/2016 07:49'!
+deficiency
+	^ generators size - relators size! !
+
+!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
+generators
+	^ generators! !
+
+!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
+generators: aCollection
+	generators _ aCollection! !
+
+!GroupPresentation methodsFor: 'printing' stamp: 'len 2/12/2016 07:34'!
+printOn: aStream
+	aStream nextPut: $<.
+	generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
+	aStream nextPutAll: ' | '.
+	relators isEmpty ifTrue: [aStream nextPut: Character emptySet].
+	relators do: [:each| aStream print: each; nextPutAll: '=1'] separatedBy: [aStream nextPut: $,].
+	aStream nextPut: $>! !
+
+!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
+relators
+	^ relators! !
+
+!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
+relators: aCollection
+	relators _ aCollection! !
+
+!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
+C: n
+	"Answer the cyclic group of order n."
+	| x |
+	x _ Word x: 1.
+	^ self generators: {x} relators: {x^n}! !
+
+!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
+D: n
+	"Answer the dihedral group of order n."
+	| x1 x2 |
+	x1 _ Word x: 1.
+	x2 _ Word x: 2.
+	^ self generators: {x1. x2} relators: {x1^n. x2^2. (x1*x2)^2}! !
+
+!GroupPresentation class methodsFor: 'examples' stamp: 'len 11/27/2015 21:46'!
+free: aCollection
+	"Answer the free group on aCollection."
+	^ self generators: aCollection relators: #()! !
+
+!GroupPresentation class methodsFor: 'instance creation' stamp: 'len 11/27/2015 21:45'!
+generators: aCollection relators: anotherCollection
+	^ self new generators: aCollection; relators: anotherCollection! !
 
 !JordanReduction methodsFor: 'as yet unclassified' stamp: 'len 11/12/2016 07:39'!
 block: eigenvalue size: n
