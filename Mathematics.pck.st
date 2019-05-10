@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 7:39:10 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 8:33:39 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 463!
+!provides: 'Mathematics' 1 464!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -6681,12 +6681,12 @@ phi
 	x _ QQ polynomials x.
 	^ self minimalPolynomial: x^2 - x - 1 bounds: (RealInterval open: 1.0 open: 2.0)! !
 
-!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/29/2018 17:31:59'!
+!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/10/2019 08:31:05'!
 polynomial: aPolynomial bounds: aRealInterval
 	"Answer an instance of the receiver representing the unique zero of aPolynomial in the given interval."
 	| approximation |
 	approximation _ aRealInterval midpoint.
-	^ self minimalPolynomial: (aPolynomial factors argmin: [:f| (f value: approximation) abs]) bounds: aRealInterval! !
+	^ self minimalPolynomial: (aPolynomial factors detectMin: [:f| (f value: approximation) abs]) bounds: aRealInterval! !
 
 !RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/12/2018 17:51:01'!
 sqrt2
@@ -7825,7 +7825,7 @@ printOn: aStream
 	elements do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $}! !
 
-!StandardBasis methodsFor: 'operations' stamp: 'len 1/26/2017 08:16:32'!
+!StandardBasis methodsFor: 'operations' stamp: 'len 5/10/2019 08:31:13'!
 reduce1: aPolynomial 
 	"Answer Mora's normal form of aPolynomial with respect to the receiver)."
 	| h L M |
@@ -7834,7 +7834,7 @@ reduce1: aPolynomial
 	([h isZero or: [(M _ L select: [:g| g leadingMonomial | h leadingMonomial]) isEmpty]])
 		whileFalse:
 			[| g |
-			g _ M argmin: [:each| each ecart].
+			g _ M detectMin: [:each| each ecart].
 			g ecart > h ecart ifTrue: [L add: h].
 			h _ h - (g * (h leadingMonomial / g leadingMonomial) * (h leadingCoefficient / g leadingCoefficient))].
 	^ h! !
@@ -29094,6 +29094,10 @@ inverse
 		from: self codomain to: self domain
 		evaluating: [:each| self domain detect: [:one| (self value: one) = each]]! !
 
+!GroupMap methodsFor: 'testing' stamp: 'len 5/10/2019 07:40:55'!
+isGroupHomomorphism
+	^ true! !
+
 !GroupMap methodsFor: 'testing' stamp: 'len 11/7/2015 16:46'!
 isInjective
 	^ self kernel isTrivial! !
@@ -29194,6 +29198,10 @@ domain
 domain: anAbelianGroup
 	domain _ anAbelianGroup! !
 
+!AbelianGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 07:41:48'!
+isAbelianGroupHomomorphism
+	^ true! !
+
 !AbelianGroupMap methodsFor: 'as yet unclassified' stamp: 'len 4/22/2019 14:42:02'!
 matrix
 	^ matrix! !
@@ -29270,6 +29278,10 @@ isInjective
 isLocal
 	"A ring homomorphism called 'local' if it is a homomorphism of local rings and carries the maximal ideal to the maximal ideal."
 	^ self domain isLocal and: [self codomain isLocal and: [(self domain maximalIdeal apply: self) <= self codomain maximalIdeal]]! !
+
+!RingMap methodsFor: 'testing' stamp: 'len 5/10/2019 07:41:10'!
+isRingHomomorphism
+	^ true! !
 
 !RingMap methodsFor: 'testing' stamp: 'len 10/5/2016 10:27'!
 isZero
@@ -29389,6 +29401,10 @@ isIdempotent
 isIdentity
 	self isEndomorphism ifFalse: [^ false].
 	^ (self domain generators ifNil: [self domain]) allSatisfy: [:each| (self value: each) = each]! !
+
+!ModuleMap methodsFor: 'testing' stamp: 'len 5/10/2019 07:41:27'!
+isModuleHomomorphism
+	^ true! !
 
 !ModuleMap methodsFor: 'testing' stamp: 'len 1/13/2018 21:54:27'!
 isProjection
@@ -33079,12 +33095,10 @@ numerator: aPolynomial denominator: anotherPolynomial
 	"Answer the exact division of the receiver by the argument."
 	^ parent project: representative /// aResidueClass representative! !
 
-!Residue methodsFor: 'comparing' stamp: 'len 9/15/2018 16:16:45'!
+!Residue methodsFor: 'comparing' stamp: 'len 5/10/2019 07:48:30'!
 = anObject
 	(self class = anObject class and: [parent = anObject parent])
 		ifTrue: [^ self contains: anObject representative].
-	"could we instead assume the representative is unique?:
-		ifTrue: [^ representative = anObject representative]."
 	^ self = (parent !! anObject)! !
 
 !Residue methodsFor: 'converting' stamp: 'len 11/30/2016 19:15:50'!
@@ -38494,10 +38508,10 @@ phi
 	x _ QQ polynomials x.
 	^ self minimalPolynomial: x^2 - x - 1 approximation: 2.0 radius: 1! !
 
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/30/2018 05:36:20'!
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/10/2019 08:30:32'!
 polynomial: aPolynomial approximation: aComplex radius: aNumber
 	| minimalPolynomial |
-	minimalPolynomial _ aPolynomial factors argmin: [:f| (f value: aComplex) abs].
+	minimalPolynomial _ aPolynomial factors detectMin: [:f| (f value: aComplex) abs].
 	minimalPolynomial degree = 1 ifTrue: [^ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient].
 	^ self minimalPolynomial: minimalPolynomial approximation: aComplex radius: aNumber! !
 
@@ -40266,7 +40280,7 @@ matrix: aMatrix
 	matrix _ ColumnMatrix newFrom: aMatrix.
 	self run! !
 
-!HermiteColumnReduction methodsFor: 'as yet unclassified' stamp: 'len 3/3/2017 11:51:34'!
+!HermiteColumnReduction methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 08:30:42'!
 reduceStep: k row: i
 	| j0 b |
 	"2. Row finished?"
@@ -40274,7 +40288,7 @@ reduceStep: k row: i
 		detect: [:j| (matrix at: i@j) ~= 0]
 		ifNone: [(matrix at: i@k) < 0 ifTrue: [matrix multiplyColumn: k by: -1]. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
-	j0 _ ((j0 to: k) select: [:j| (matrix at: i@j) ~= 0]) argmin: [:j| (matrix at: i@j) abs].
+	j0 _ ((j0 to: k) select: [:j| (matrix at: i@j) ~= 0]) detectMin: [:j| (matrix at: i@j) abs].
 	j0 < k ifTrue: [matrix swapColumn: j0 with: k].
 	(matrix at: i@k) < 0 ifTrue: [matrix multiplyColumn: k by: -1].
 	b _ matrix at: i@k.
@@ -40485,7 +40499,7 @@ reduceStep
 				[self multiplyRow: i by: pivot.
 				self addRow: row by: value negated toRow: i]]! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/5/2019 10:16:11'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 5/10/2019 08:30:50'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -40494,7 +40508,7 @@ reduceStep: k column: j
 		detect: [:i| (matrix at: i@j) ~= 0]
 		ifNone: [(matrix at: k@j) < 0 ifTrue: [self multiplyRow: k by: -1]. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
-	i0 _ ((i0 to: k by: -1) select: [:i| (matrix at: i@j) ~= 0]) argmin: [:i| (matrix at: i@j) abs].
+	i0 _ ((i0 to: k by: -1) select: [:i| (matrix at: i@j) ~= 0]) detectMin: [:i| (matrix at: i@j) abs].
 	i0 > k ifTrue: [self swapRow: i0 with: k].
 	(matrix at: k@j) < 0 ifTrue: [self multiplyRow: k by: -1].
 	b _ matrix at: k@j.
@@ -42122,11 +42136,11 @@ initialize
 	super initialize.
 	tolerance _ 0.1! !
 
-!NumericalComplexRootIsolator methodsFor: 'accessing' stamp: 'len 5/7/2018 17:33:29'!
+!NumericalComplexRootIsolator methodsFor: 'accessing' stamp: 'len 5/10/2019 08:30:57'!
 rootNear: aComplex
 "	[self roots do: [:each| (each approximation - aComplex) abs < epsilon ifTrue: [^ each]].
 	self roots do: [:each| each refine]] repeat"
-	^ self roots argmin: [:each| (each approximation - aComplex) abs]! !
+	^ self roots detectMin: [:each| (each approximation - aComplex) abs]! !
 
 !NumericalComplexRootIsolator methodsFor: 'private' stamp: 'len 5/7/2018 17:35:32'!
 roots
