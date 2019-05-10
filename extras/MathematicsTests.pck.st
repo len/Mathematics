@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 9 May 2019 at 10:07:16 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 4:37:29 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 114!
+!provides: 'MathematicsTests' 1 115!
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -1293,7 +1293,7 @@ testFinite
 	X _ A / {x*x - 1. y*y - (x*x) - 3} :: spec.
 	self assert: X isFinite! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 3/7/2017 07:21:16'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/10/2019 04:30:34'!
 testIntersection
 	| A x y V V2 W |
 	A _ QQ polynomialsIn: #(x y).
@@ -1301,7 +1301,7 @@ testIntersection
 	y _ A y.
 	V _ A / {y} :: spec.
 	V2 _ A / {x*x - 1} :: spec.
-	W _ V • V2.
+	W _ V /\ V2.
 	self assert: (W satisfies: (1, 0)).
 	self assert: (W satisfies: (0, 1)) not! !
 
@@ -1326,7 +1326,7 @@ testLocalAndGlobalDimension
 	self assert: (X !! (1,0,0)) localRing dimension = 2. "dimension of X at (1,0,0)"
 	self assert: (X !! (0,0,1)) localRing dimension = 1. "dimension of X at (0,0,1)"! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/17/2018 18:48:59'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/10/2019 04:30:38'!
 testMorphismsOfProjectiveVarieties
 	"'A Singular Introduction To Commutative Algebra', Example A.6.8 (morphisms of projective varieties)."
 	| P A x y z X f1 f2 f3 I J Y phi Z |
@@ -1340,7 +1340,7 @@ testMorphismsOfProjectiveVarieties
 	J _ A * {f1. f2. f3}.
 	self assert: (I + J) dimension = 0.
 	Y _ P subscheme: J.
-	self assert: (X • Y) isEmpty.
+	self assert: (X /\ Y) isEmpty.
 	phi _ X to: P representatives: {f1. f2. f3}.
 	"The image is a curve of degree 6:"
 	Z _ phi image.
@@ -1750,13 +1750,13 @@ testSpecZ
 	self assert: ZZ spec isInitial not.
 	self assert: ZZ spec isTerminal! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/15/2018 17:54:19'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/10/2019 04:30:49'!
 testSpecZSubschemes
 	self assert: ZZ spec >= (ZZ / 2) spec.
 	self assert: (ZZ / 10) spec >= (ZZ / 5) spec.
 	self deny: (ZZ / 10) spec >= (ZZ / 3) spec.
-	self assert: (ZZ / 10) spec • (ZZ / 15) spec = (ZZ / 5) spec.
-	self assert: (ZZ / 10) spec – (ZZ / 15) spec = (ZZ / 30) spec! !
+	self assert: (ZZ / 10) spec /\ (ZZ / 15) spec = (ZZ / 5) spec.
+	self assert: (ZZ / 10) spec \/ (ZZ / 15) spec = (ZZ / 30) spec! !
 
 !AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 5/10/2018 18:17:19'!
 testSturmfelsExample1
@@ -1783,7 +1783,7 @@ testSturmfelsExample1
 	self assert: C1 projectiveClosure degree = 13.
 	self assert: C1 isReduced "equivalent to C1 ideal = C1 ideal radical"! !
 
-!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 2/6/2017 05:24:15'!
+!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 5/10/2019 04:31:01'!
 testSturmfelsExample2
 	"Bernd Sturmfels, 'Ideals, Varieties and Macaulay 2', 2. Intersecting Our Curve With a Surface."
 	| R x y z C S theirunion ourpoints |
@@ -1794,11 +1794,11 @@ testSturmfelsExample2
 	C _ (R / {x^4 - (y^5). x^3 - (y^7)}) spec.
 	C _ C \ (R / R x) spec. "this is C1 from example1"
 	S _ (R / (x^5 + (y^5) + (z^5) - 1)) spec.
-	theirunion _ C – S.
+	theirunion _ C \/ S.
 	"In this case, the union's ideal coincides with the product of the ideals:"
 	self assert: theirunion ideal = (C ideal * S ideal).
 	"The intersection of the curve and the surface (whose defining ideal is the sum of the respective ideals):"
-	ourpoints _ C • S.
+	ourpoints _ C /\ S.
 	"We get a finite set of points:"
 	self assert: ourpoints dimension = 0.
 	"The number of points is 65:"
@@ -2423,7 +2423,7 @@ testIdealColon
 	J _ R * {I atRandomBits: 10. I atRandomBits: 10}. "J <= I"
 	self assert: I ÷ J = R asIdeal! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 2/23/2017 08:28:33'!
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:13'!
 testIdealColon2
 	"Example from Cox IVA 205p."
 	| R x y z I J Q |
@@ -2434,7 +2434,7 @@ testIdealColon2
 	I _ R * {x*z - (y^2). x^3 - (y*z)}.
 	J _ R * {x. y}.
 	Q _ I ÷ J.
-	self assert: Q = (I ÷ (R * x) • (I ÷ (R * y))).
+	self assert: Q = (I ÷ (R * x) /\ (I ÷ (R * y))).
 	self assert: Q = (R * {x*z - (y^2). x^3 - (y*z). x^2*y - (z^2)})! !
 
 !CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 2/12/2017 12:50:41'!
@@ -2490,7 +2490,7 @@ testIdealHomogenization
 	J _ Qx * {f1 homogenized. f2 homogenized}.
 	self deny: (J includes: f3 homogenized)! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 12/8/2016 20:27:42'!
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:24'!
 testIdealIntersection
 	"Example from Cox IVA 194 p."
 	| Qxy x y I J K |
@@ -2500,13 +2500,13 @@ testIdealIntersection
 	I _ Qxy * {x^2 * y}.
 	J _ Qxy * {x * (y^2)}.
 	K _ Qxy * {x^2*(y^2)}.
-	self assert: I • J = K! !
+	self assert: I /\ J = K! !
 
 !CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 2/23/2017 09:09:12'!
 testIdealIntersectionRandom
 	self testIdealIntersectionRandom: (QQ polynomialsIn: #(x y))! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 2/23/2017 09:09:22'!
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:29'!
 testIdealIntersectionRandom: aRing
 	| R f1 f2 g I J K |
 	R _ aRing.
@@ -2516,7 +2516,7 @@ testIdealIntersectionRandom: aRing
 	I _ R * {f1. g}.
 	J _ R * {f2. g}.
 	K _ R * {g}.
-	self assert: I • J >= K! !
+	self assert: I /\ J >= K! !
 
 !CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 8/26/2016 19:31'!
 testIdealIsPrime
@@ -2737,7 +2737,7 @@ testKrullDimensionOverZZ
 	Q _ R / I.
 	self assert: Q dimension = 3! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 4/30/2018 19:02:57'!
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:36'!
 testLocalIdeals
 	"Magma handbook, example H104E4."
 	| R I J A M |
@@ -2754,7 +2754,7 @@ testLocalIdeals
 		z^2}]).
 	self assert: I * J = A. "hangs here"
 	M _ R * (R generate: [:x :y :z| {x + y. y^2. z}]).
-	self assert: I • J = M.
+	self assert: I /\ J = M.
 	self deny: A = M.
 	self assert: A <= M! !
 
@@ -2949,13 +2949,13 @@ testChromaticPolynomialPath
 	n _ 4 atRandom + 1.
 	self assert: (Graph P: n) chromaticPolynomial = (x-1^(n-1)*x)! !
 
-!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 12/8/2016 20:34:11'!
+!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 04:31:47'!
 testComplement
 	| G H |
 	G _ Graph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e}; yourself.
 	H _ G complement.
-	self assert: (G – H) isComplete.
-	self assert: (G • H) isEdgeless.
+	self assert: (G \/ H) isComplete.
+	self assert: (G /\ H) isEdgeless.
 	self assert: H complement = G! !
 
 !GraphTest methodsFor: 'as yet unclassified' stamp: 'len 11/16/2016 10:08'!
@@ -2993,12 +2993,12 @@ testImplicit
 	self assert: G values asSet = #(1 2 4 8) asSet.
 	self assert: G edges size = 6! !
 
-!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 12/8/2016 20:27:53'!
+!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 04:31:55'!
 testIntersection
 	| G H I |
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
 	H _ Digraph unordered addEdges: {#A -> #B. #b -> #c. #d -> #e. #X -> #X. #b -> #a}; yourself.
-	I _ G • H.
+	I _ G /\ H.
 	self assert: I numberOfEdges = 2.
 	self assert: (I hasEdge: #b -> #c).
 	self assert: (I hasEdge: #d -> #e)! !
@@ -3141,11 +3141,11 @@ testUndirectedEdgeContraction
 	self assert: (G / (1->2)) edges size = 4.
 	self assert: (G / (1->2) / ((1->2)->3)) edges size = 3! !
 
-!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 12/8/2016 20:34:14'!
+!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 04:36:25'!
 testUnion
 	| G |
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
-	self assert: (G – G transposed) = G symmetric! !
+	self assert: (G \/ G transposed) = G symmetric! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 22:02:46'!
 smallGroupAtRandom
@@ -4723,7 +4723,7 @@ testAnnihilator
 	self assert: S0 dimension = S codimension.
 	S0 basis do: [:f| self assert: (f value: v) isZero]! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 12/8/2016 20:28:03'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:00'!
 testAnnihilatorProperties
 	| V S T |
 	V _ QQ ^ 5.
@@ -4732,7 +4732,7 @@ testAnnihilatorProperties
 	T _ V span: T basis. "hack, otherwise T ambient = S"
 	self assert: T <= S.
 	self assert: T annihilator >= S annihilator. "reverses inclusions"
-	self assert: (S + T) annihilator = (S annihilator • T annihilator).
+	self assert: (S + T) annihilator = (S annihilator /\ T annihilator).
 	self assert: S dimension + S annihilator dimension = V dimension.
 	self assert: V annihilator isTrivial.
 "	self assert: S annihilator annihilator = S dual dual"! !
@@ -4851,13 +4851,13 @@ testFreeZModule
 	self assert: (x-y-(x-y)) isZero.
 	self assert: (A coordinatesOf: x) = x0! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 9/27/2018 05:02:38'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:04'!
 testGrassmannRelation
 	| V S T |
 	V _ self newVectorSpace.
 	S _ (V grassmannian: V dimension atRandom) atRandomBits: 20.
 	T _ (V grassmannian: V dimension atRandom) atRandomBits: 20.
-	self assert: S dimension + T dimension = ((S + T) dimension + (S • T) dimension)! !
+	self assert: S dimension + T dimension = ((S + T) dimension + (S /\ T) dimension)! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:57'!
 testGrassmannian
@@ -5117,7 +5117,7 @@ testPerp
 	p _ S orthogonalProjection.
 	self assert: p kernel = perp! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 12/8/2016 20:28:10'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:12'!
 testPerpProperties
 	| V S T |
 	V _ QQ ^ 3.
@@ -5125,7 +5125,7 @@ testPerpProperties
 	T _ V span: {(1, -1, -3)}. "subspace of S"
 	self assert: S + S perp = V.
 	self assert: T + T perp = V.
-	self assert: (S • S perp) isTrivial.
+	self assert: (S /\ S perp) isTrivial.
 	self assert: S <= S perp perp.
 	self assert: S perp < T perp "because S > T"! !
 
@@ -5218,14 +5218,14 @@ testQuotientSpace2
 	self assert: x isZero.
 "	self assert: (M lifting value: x) = (0,0,0)"! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:23'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/10/2019 04:32:20'!
 testSecondIsomorphismTheorem: M
 	| S T |
 	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
 	T _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
 	self assert: S+T <= M.
-	self assert: S • T <= M.
-	self assert: (S+T)/T ~ (S/(S • T))
+	self assert: S /\ T <= M.
+	self assert: (S+T)/T ~ (S/(S /\ T))
 "	f _ S -> T :: atRandomBits: 10.
 	phi _ S / f kernel -> f image evaluating: [:x| f value: x representative].
 	self assert: phi isIsomorphism"! !
@@ -5269,18 +5269,18 @@ testSubmoduleInclusion
 	self assert: (S > P) not.
 	self assert: (P < S) not! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 5/19/2018 03:57:01'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:34'!
 testSubmoduleIntersection
 	| V S T T2 |
 	V _ ZZ ^ 3.
 	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S • S ambient = S. "intersection with the ambient vector space Q^3"
-	self assert: S • V asLattice = S. "intersection with over lattice Z^3"
-	self assert: S • S = S.
+	self assert: S /\ S ambient = S. "intersection with the ambient vector space Q^3"
+	self assert: S /\ V asLattice = S. "intersection with over lattice Z^3"
+	self assert: S /\ S = S.
 	T _ V span: {(3,1,-1)}.
-	self assert: S • T = T.
+	self assert: S /\ T = T.
 	T2 _ V span: {(3,1,-1). (0,1,0)}.
-	self assert: S • T2 = T! !
+	self assert: S /\ T2 = T! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:32:42'!
 testSubmoduleSum
@@ -5311,17 +5311,17 @@ testSubspaceInclusion
 	self assert: (S > P) not.
 	self assert: (P < S) not! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 3/7/2017 07:25:52'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:46'!
 testSubspaceIntersection
 	| V S T T2 |
 	V _ QQ ^ 3.
 	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S • V = S.
-	self assert: S • S = S.
+	self assert: S /\ V = S.
+	self assert: S /\ S = S.
 	T _ V span: {(3,1,-1)}.
-	self assert: S • T = T.
+	self assert: S /\ T = T.
 	T2 _ V span: {(3,1,-1). (0,1,0)}.
-	self assert: S • T2 = T! !
+	self assert: S /\ T2 = T! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:02'!
 testSubspaceOfSubspace
@@ -6958,33 +6958,22 @@ testGaloisRingCanonicalEmbeddingIntoOverring
 	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:07'!
-testGaloisRingCanonicalHomomorphismToPrimeSubfield
-	"Canonical homomorphism from GR(p^n,m) to Z/<p>."
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 11:56:09'!
+testGaloisRingCanonicalHomomorphismFromPrimeSubfield
+	"Canonical homomorphism from Z/<p> to GR(p^n,m)."
 	| p n m A B phi |
 	p _ #(2 3 5) atRandom.
 	n _ 3 atRandom.
 	m _ 3 atRandom.
-	A _ GaloisRing new: p to: n to: m.
-	B _ ZZ/p.
+	A _ ZZ/p.
+	B _ GaloisRing new: p to: n to: m.
 	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/8/2019 19:26:56'!
-testGaloisRingCanonicalHomomorphismToPrimeSubfieldBug
-	"Canonical homomorphism from GR(2^2,2) to Z/<2>."
-	| p n m A B phi |
-	p _ 2.
-	n _ 2.
-	m _ 2.
-	A _ GaloisRing new: p to: n to: m.
-	B _ ZZ/p.
-	phi _ A -> B.
-	self testRingHomomorphism: phi! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:13'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 11:50:11'!
 testGaloisRingCanonicalProjectionOntoResidueField
-	"Canonical homomorphism from GR(p^n,m) to GF(p,m)."
+	"Canonical homomorphism from GR(p^n,m) to GF(p,m).
+	This send 'a' in Z/(p^n)Z[x]/f to 'a mod p' in Z/pZ[x]/(f mod p) where f mod p means reducing the coefficients mod p."
 	| p n m A B phi |
 	p _ #(2 3 5) atRandom.
 	n _ 3 atRandom.
