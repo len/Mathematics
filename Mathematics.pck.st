@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 10:24:23 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 7:05:56 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 465!
+!provides: 'Mathematics' 1 466!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -412,16 +412,6 @@ Domain subclass: #HomSet
 HomSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupHomSet category: #'Mathematics-Groups-Abelian'!
-HomSet subclass: #AbelianGroupHomSet
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroupHomSet class' category: #'Mathematics-Groups-Abelian'!
-AbelianGroupHomSet class
-	instanceVariableNames: ''!
-
 !classDefinition: #PointSet category: #'Mathematics-Schemes'!
 HomSet subclass: #PointSet
 	instanceVariableNames: ''
@@ -430,6 +420,16 @@ HomSet subclass: #PointSet
 	category: 'Mathematics-Schemes'!
 !classDefinition: 'PointSet class' category: #'Mathematics-Schemes'!
 PointSet class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroupHomSet category: #'Mathematics-Etc-Groups-Abelian'!
+HomSet subclass: #AbelianGroupHomSet
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupHomSet class' category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroupHomSet class
 	instanceVariableNames: ''!
 
 !classDefinition: #ComplexBox category: #'Mathematics-Kernel-Support'!
@@ -524,7 +524,7 @@ Monoid class
 
 !classDefinition: #FreeMonoid category: #'Mathematics-Monoids'!
 Monoid subclass: #FreeMonoid
-	instanceVariableNames: 'symbols'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Mathematics-Monoids'!
@@ -552,14 +552,14 @@ Group subclass: #DirectProductGroup
 DirectProductGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeGroup category: #'Mathematics-Groups'!
-Group subclass: #FreeGroup
-	instanceVariableNames: 'symbols'
+!classDefinition: #FPGroup category: #'Mathematics-Groups'!
+Group subclass: #FPGroup
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Mathematics-Groups'!
-!classDefinition: 'FreeGroup class' category: #'Mathematics-Groups'!
-FreeGroup class
+!classDefinition: 'FPGroup class' category: #'Mathematics-Groups'!
+FPGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #OppositeGroup category: #'Mathematics-Groups'!
@@ -590,116 +590,6 @@ Group subclass: #SemidirectProductGroup
 	category: 'Mathematics-Groups'!
 !classDefinition: 'SemidirectProductGroup class' category: #'Mathematics-Groups'!
 SemidirectProductGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #AbelianGroup category: #'Mathematics-Groups-Abelian'!
-Group subclass: #AbelianGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroup class' category: #'Mathematics-Groups-Abelian'!
-AbelianGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #AbelianGroup2 category: #'Mathematics-Groups-Abelian'!
-Group subclass: #AbelianGroup2
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroup2 class' category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 class
-	instanceVariableNames: ''!
-
-!classDefinition: #DirectSumGroup category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 subclass: #DirectSumGroup
-	instanceVariableNames: 'components'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'DirectSumGroup class' category: #'Mathematics-Groups-Abelian'!
-DirectSumGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #FiniteAbelianGroup category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 subclass: #FiniteAbelianGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'FiniteAbelianGroup class' category: #'Mathematics-Groups-Abelian'!
-FiniteAbelianGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #FiniteCyclicGroup category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 subclass: #FiniteCyclicGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'FiniteCyclicGroup class' category: #'Mathematics-Groups-Abelian'!
-FiniteCyclicGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #FreeAbelianGroup2 category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 subclass: #FreeAbelianGroup2
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'FreeAbelianGroup2 class' category: #'Mathematics-Groups-Abelian'!
-FreeAbelianGroup2 class
-	instanceVariableNames: ''!
-
-!classDefinition: #InfiniteCyclicGroup category: #'Mathematics-Groups-Abelian'!
-AbelianGroup2 subclass: #InfiniteCyclicGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'InfiniteCyclicGroup class' category: #'Mathematics-Groups-Abelian'!
-InfiniteCyclicGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #EllipticCurveGroup category: #'Mathematics-Elliptic Curves'!
-AbelianGroup2 subclass: #EllipticCurveGroup
-	instanceVariableNames: 'curve scalars'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'EllipticCurveGroup class' category: #'Mathematics-Elliptic Curves'!
-EllipticCurveGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #AbelianGroup3 category: #'Mathematics-Groups-Abelian'!
-Group subclass: #AbelianGroup3
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroup3 class' category: #'Mathematics-Groups-Abelian'!
-AbelianGroup3 class
-	instanceVariableNames: ''!
-
-!classDefinition: #FreeAbelianGroup3 category: #'Mathematics-Groups-Abelian'!
-AbelianGroup3 subclass: #FreeAbelianGroup3
-	instanceVariableNames: 'rank ordering'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'FreeAbelianGroup3 class' category: #'Mathematics-Groups-Abelian'!
-FreeAbelianGroup3 class
-	instanceVariableNames: ''!
-
-!classDefinition: #FPAbelianGroup category: #'Mathematics-Groups-Abelian'!
-Group subclass: #FPAbelianGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'FPAbelianGroup class' category: #'Mathematics-Groups-Abelian'!
-FPAbelianGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #PermutationGroup category: #'Mathematics-Groups-Permutations'!
@@ -970,6 +860,116 @@ Group subclass: #CoxeterGroup
 	category: 'Mathematics-Etc-Lie'!
 !classDefinition: 'CoxeterGroup class' category: #'Mathematics-Etc-Lie'!
 CoxeterGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroup category: #'Mathematics-Etc-Groups-Abelian'!
+Group subclass: #AbelianGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroup2 category: #'Mathematics-Etc-Groups-Abelian'!
+Group subclass: #AbelianGroup2
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup2 class' category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 class
+	instanceVariableNames: ''!
+
+!classDefinition: #EllipticCurveGroup category: #'Mathematics-Elliptic Curves'!
+AbelianGroup2 subclass: #EllipticCurveGroup
+	instanceVariableNames: 'curve scalars'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Elliptic Curves'!
+!classDefinition: 'EllipticCurveGroup class' category: #'Mathematics-Elliptic Curves'!
+EllipticCurveGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #DirectSumGroup category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 subclass: #DirectSumGroup
+	instanceVariableNames: 'components'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'DirectSumGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+DirectSumGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #FiniteAbelianGroup category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 subclass: #FiniteAbelianGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'FiniteAbelianGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+FiniteAbelianGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #FiniteCyclicGroup category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 subclass: #FiniteCyclicGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'FiniteCyclicGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+FiniteCyclicGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #FreeAbelianGroup2 category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 subclass: #FreeAbelianGroup2
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'FreeAbelianGroup2 class' category: #'Mathematics-Etc-Groups-Abelian'!
+FreeAbelianGroup2 class
+	instanceVariableNames: ''!
+
+!classDefinition: #InfiniteCyclicGroup category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup2 subclass: #InfiniteCyclicGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'InfiniteCyclicGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+InfiniteCyclicGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroup3 category: #'Mathematics-Etc-Groups-Abelian'!
+Group subclass: #AbelianGroup3
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup3 class' category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup3 class
+	instanceVariableNames: ''!
+
+!classDefinition: #FreeAbelianGroup3 category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroup3 subclass: #FreeAbelianGroup3
+	instanceVariableNames: 'rank ordering'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'FreeAbelianGroup3 class' category: #'Mathematics-Etc-Groups-Abelian'!
+FreeAbelianGroup3 class
+	instanceVariableNames: ''!
+
+!classDefinition: #FPAbelianGroup category: #'Mathematics-Etc-Groups-Abelian'!
+Group subclass: #FPAbelianGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'FPAbelianGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+FPAbelianGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #FreeAbelianMonoid category: #'Mathematics-Monomials'!
@@ -1592,36 +1592,6 @@ FreeModule subclass: #TensorProductModule
 TensorProductModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #Algebra category: #'Mathematics-Algebras'!
-FreeModule subclass: #Algebra
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Algebras'!
-!classDefinition: 'Algebra class' category: #'Mathematics-Algebras'!
-Algebra class
-	instanceVariableNames: ''!
-
-!classDefinition: #FreeAlgebra category: #'Mathematics-Algebras'!
-Algebra subclass: #FreeAlgebra
-	instanceVariableNames: 'scalars words'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Algebras'!
-!classDefinition: 'FreeAlgebra class' category: #'Mathematics-Algebras'!
-FreeAlgebra class
-	instanceVariableNames: ''!
-
-!classDefinition: #MatrixAlgebra category: #'Mathematics-Algebras'!
-Algebra subclass: #MatrixAlgebra
-	instanceVariableNames: 'degree scalars'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Algebras'!
-!classDefinition: 'MatrixAlgebra class' category: #'Mathematics-Algebras'!
-MatrixAlgebra class
-	instanceVariableNames: ''!
-
 !classDefinition: #PolynomialFiltrationModule category: #'Mathematics-Polynomials'!
 FreeModule subclass: #PolynomialFiltrationModule
 	instanceVariableNames: 'polynomials degree'
@@ -1660,6 +1630,36 @@ FreeModule subclass: #ExteriorPower
 	category: 'Mathematics-Etc'!
 !classDefinition: 'ExteriorPower class' category: #'Mathematics-Etc'!
 ExteriorPower class
+	instanceVariableNames: ''!
+
+!classDefinition: #Algebra category: #'Mathematics-Etc-Algebras'!
+FreeModule subclass: #Algebra
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Algebras'!
+!classDefinition: 'Algebra class' category: #'Mathematics-Etc-Algebras'!
+Algebra class
+	instanceVariableNames: ''!
+
+!classDefinition: #FreeAlgebra category: #'Mathematics-Etc-Algebras'!
+Algebra subclass: #FreeAlgebra
+	instanceVariableNames: 'scalars words'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Algebras'!
+!classDefinition: 'FreeAlgebra class' category: #'Mathematics-Etc-Algebras'!
+FreeAlgebra class
+	instanceVariableNames: ''!
+
+!classDefinition: #MatrixAlgebra category: #'Mathematics-Etc-Algebras'!
+Algebra subclass: #MatrixAlgebra
+	instanceVariableNames: 'degree scalars'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Algebras'!
+!classDefinition: 'MatrixAlgebra class' category: #'Mathematics-Etc-Algebras'!
+MatrixAlgebra class
 	instanceVariableNames: ''!
 
 !classDefinition: #MultivariateModule category: #'Mathematics-Modules-Multivariate'!
@@ -2092,6 +2092,16 @@ GroupMap subclass: #Conjugation
 Conjugation class
 	instanceVariableNames: ''!
 
+!classDefinition: #FPGroupMap category: #'Mathematics-Groups'!
+GroupMap subclass: #FPGroupMap
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Groups'!
+!classDefinition: 'FPGroupMap class' category: #'Mathematics-Groups'!
+FPGroupMap class
+	instanceVariableNames: ''!
+
 !classDefinition: #GroupRepresentation category: #'Mathematics-Groups'!
 GroupMap subclass: #GroupRepresentation
 	instanceVariableNames: ''
@@ -2102,16 +2112,6 @@ GroupMap subclass: #GroupRepresentation
 GroupRepresentation class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupMap category: #'Mathematics-Groups-Abelian'!
-GroupMap subclass: #AbelianGroupMap
-	instanceVariableNames: 'domain codomain matrix'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroupMap class' category: #'Mathematics-Groups-Abelian'!
-AbelianGroupMap class
-	instanceVariableNames: ''!
-
 !classDefinition: #DirichletCharacter category: #'Mathematics-Modular Forms'!
 GroupMap subclass: #DirichletCharacter
 	instanceVariableNames: ''
@@ -2120,6 +2120,16 @@ GroupMap subclass: #DirichletCharacter
 	category: 'Mathematics-Modular Forms'!
 !classDefinition: 'DirichletCharacter class' category: #'Mathematics-Modular Forms'!
 DirichletCharacter class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroupMap category: #'Mathematics-Etc-Groups-Abelian'!
+GroupMap subclass: #AbelianGroupMap
+	instanceVariableNames: 'domain codomain matrix'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupMap class' category: #'Mathematics-Etc-Groups-Abelian'!
+AbelianGroupMap class
 	instanceVariableNames: ''!
 
 !classDefinition: #RingMap category: #'Mathematics-Rings'!
@@ -2162,13 +2172,13 @@ ModuleMap subclass: #LinearMap
 LinearMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #AlgebraMap category: #'Mathematics-Algebras'!
+!classDefinition: #AlgebraMap category: #'Mathematics-Etc-Algebras'!
 ModuleMap subclass: #AlgebraMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algebras'!
-!classDefinition: 'AlgebraMap class' category: #'Mathematics-Algebras'!
+	category: 'Mathematics-Etc-Algebras'!
+!classDefinition: 'AlgebraMap class' category: #'Mathematics-Etc-Algebras'!
 AlgebraMap class
 	instanceVariableNames: ''!
 
@@ -2404,7 +2414,7 @@ GroupElement class
 
 !classDefinition: #Word category: #'Mathematics-Monoids'!
 GroupElement subclass: #Word
-	instanceVariableNames: 'syllables'
+	instanceVariableNames: 'syllables parent'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Mathematics-Monoids'!
@@ -2442,13 +2452,13 @@ GroupElement subclass: #SemidirectProductElement
 SemidirectProductElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupElement category: #'Mathematics-Groups-Abelian'!
+!classDefinition: #AbelianGroupElement category: #'Mathematics-Etc-Groups-Abelian'!
 GroupElement subclass: #AbelianGroupElement
 	instanceVariableNames: 'parent coordinates'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Abelian'!
-!classDefinition: 'AbelianGroupElement class' category: #'Mathematics-Groups-Abelian'!
+	category: 'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupElement class' category: #'Mathematics-Etc-Groups-Abelian'!
 AbelianGroupElement class
 	instanceVariableNames: ''!
 
@@ -2642,16 +2652,6 @@ Sum subclass: #Tensor
 Tensor class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreePolynomial category: #'Mathematics-Algebras'!
-Sum subclass: #FreePolynomial
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Algebras'!
-!classDefinition: 'FreePolynomial class' category: #'Mathematics-Algebras'!
-FreePolynomial class
-	instanceVariableNames: ''!
-
 !classDefinition: #Divisor category: #'Mathematics-Schemes-Divisors'!
 Sum subclass: #Divisor
 	instanceVariableNames: ''
@@ -2670,6 +2670,16 @@ Sum subclass: #SimplicialChain
 	category: 'Mathematics-Etc'!
 !classDefinition: 'SimplicialChain class' category: #'Mathematics-Etc'!
 SimplicialChain class
+	instanceVariableNames: ''!
+
+!classDefinition: #FreePolynomial category: #'Mathematics-Etc-Algebras'!
+Sum subclass: #FreePolynomial
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Etc-Algebras'!
+!classDefinition: 'FreePolynomial class' category: #'Mathematics-Etc-Algebras'!
+FreePolynomial class
 	instanceVariableNames: ''!
 
 !classDefinition: #Tuple category: #'Mathematics-Modules-Tuples'!
@@ -3917,8 +3927,8 @@ References:
 !DirectProductGroup commentStamp: '<historical>' prior: 0!
 Direct products of groups. Elements are tuples, and multiplication and addition are defined component wise.!
 
-!FreeGroup commentStamp: '<historical>' prior: 0!
-Free groups on a given set of symbols. Their elements are (noncommutative) words on the set of symbols (see Word).!
+!FPGroup commentStamp: '<historical>' prior: 0!
+Finitely presented groups given by generators and relations. Their elements are (noncommutative) words. See Word.!
 
 !OppositeGroup commentStamp: 'len 5/8/2019 14:55:05' prior: 0!
 The opposite group G^op of a group G is a group constructed from the original group G inverting the order of the group operation. This way, it is possible to define a left action as a special case of a right action.
@@ -3935,29 +3945,6 @@ References:
 
 !SemidirectProductGroup commentStamp: '<historical>' prior: 0!
 Semidirect products of groups.!
-
-!AbelianGroup2 commentStamp: '<historical>' prior: 0!
-Abelian groups can be viewed as Z-modules. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
-
-!DirectSumGroup commentStamp: '<historical>' prior: 0!
-Direct sums of abelian groups.
-
-Direct sums are equipped with projection homomorphisms to the i-th component (>>projection:) and coprojections or embeddings from the i-th component (>>embedding:).!
-
-!FiniteCyclicGroup commentStamp: 'len 1/17/2019 02:53:42' prior: 0!
-Modular integers Z/nZ considered as an abelian group.!
-
-!FreeAbelianGroup2 commentStamp: '<historical>' prior: 0!
-Abelian groups with a basis. They can be viewed also as free Z-modules. They are isomorphic to Z^n (this is, they are torsion-free).!
-
-!InfiniteCyclicGroup commentStamp: '<historical>' prior: 0!
-The rational integers Z considered as an abelian group.!
-
-!EllipticCurveGroup commentStamp: '<historical>' prior: 0!
-Abelian groups E(K) consisting of the K-rational points of an elliptic curve E.!
-
-!FPAbelianGroup commentStamp: '<historical>' prior: 0!
-Finitely presented abelian groups. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
 
 !PermutationGroup commentStamp: 'len 5/22/2018 21:46:15' prior: 0!
 Permutation groups, i.e. subgroups of the symmetric group Sym(X) of permutations on the elements of a set X (see SymmetricGroup).
@@ -4052,8 +4039,31 @@ They are the kernel of the quotient projection SL(2,Z) -> SL(2,Z/nZ) for some po
 !ModularGroup commentStamp: '<historical>' prior: 0!
 The special linear group SL(2,Z).!
 
+!AbelianGroup2 commentStamp: '<historical>' prior: 0!
+Abelian groups can be viewed as Z-modules. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
+
+!EllipticCurveGroup commentStamp: '<historical>' prior: 0!
+Abelian groups E(K) consisting of the K-rational points of an elliptic curve E.!
+
+!DirectSumGroup commentStamp: '<historical>' prior: 0!
+Direct sums of abelian groups.
+
+Direct sums are equipped with projection homomorphisms to the i-th component (>>projection:) and coprojections or embeddings from the i-th component (>>embedding:).!
+
+!FiniteCyclicGroup commentStamp: 'len 1/17/2019 02:53:42' prior: 0!
+Modular integers Z/nZ considered as an abelian group.!
+
+!FreeAbelianGroup2 commentStamp: '<historical>' prior: 0!
+Abelian groups with a basis. They can be viewed also as free Z-modules. They are isomorphic to Z^n (this is, they are torsion-free).!
+
+!InfiniteCyclicGroup commentStamp: '<historical>' prior: 0!
+The rational integers Z considered as an abelian group.!
+
+!FPAbelianGroup commentStamp: '<historical>' prior: 0!
+Finitely presented abelian groups. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
+
 !FreeAbelianMonoid commentStamp: '<historical>' prior: 0!
-(Commutative) monoids of monomials in n indeterminates. Elements are instances of Monomial.
+Commutative monoids of monomials in n indeterminates. Elements are instances of Monomial.
 
 The number of indeterminates is called the rank. The indeterminates are referred by index (positive integer numbers), and can be given names that are used when printing.
 
@@ -4382,11 +4392,6 @@ Tensor product over R of a list of free R-modules. This is a free R-module with 
 
 See Tensor.!
 
-!FreeAlgebra commentStamp: '<historical>' prior: 0!
-(Associative) algebras of noncommutative polynomials in a finite set of indeterminates. Their elements are FreePolynomials.
-
-This is the noncommutative analogue of a polynomial ring.!
-
 !PolynomialFiltrationModule commentStamp: '<historical>' prior: 0!
 Submodules of univariate polynomials of degree <= n for a fixed n, in the ring of univariate polynomials R[x]. They define a filtration (see PolynomialRing>>filtrationAt:).!
 
@@ -4397,6 +4402,11 @@ Submodules of homogeneous polynomials of a given fixed degree, in a multivariate
 TODO:
 - elements: k-vectors (ExteriorProduct or ExteriorVector?)
 - ExteriorAlgebra as a graded algebra, direct sum of /\^i(V) for i in [1..n]!
+
+!FreeAlgebra commentStamp: '<historical>' prior: 0!
+(Associative) algebras of noncommutative polynomials in a finite set of indeterminates. Their elements are FreePolynomials.
+
+This is the noncommutative analogue of a polynomial ring.!
 
 !MultivariateModule commentStamp: '<historical>' prior: 0!
 R-modules where R is a multivariate ring such as a polynomial ring or an affine ring.!
@@ -4601,6 +4611,9 @@ Group homomorphisms. See Group.!
 !Conjugation commentStamp: '<historical>' prior: 0!
 Group homomorphisms defined as conjugation by a given element. These are the inner automorphisms.!
 
+!FPGroupMap commentStamp: 'len 5/10/2019 19:03:44' prior: 0!
+Gruop homomorphisms from a finitely presented group to an arbitrary group. They are defined by images of generators. See FPGroup.!
+
 !GroupRepresentation commentStamp: '<historical>' prior: 0!
 Given a group and an object X, a group representation is a group homomorphism from G to the automorphisms group Aut(X). X is called the representation space. Informally speaking, a representation allows us to view a group as symmetries of an object.
 
@@ -4754,7 +4767,7 @@ Following conventions, a point [a:b:1] is printed '(a,b)', and the point at infi
 See also EllipticCurve.!
 
 !Word commentStamp: '<historical>' prior: 0!
-A word is a noncommutative formal product on a finite ordered list of symbols. They are elements of a FreeMonoid.
+A word is a noncommutative formal product on a finite ordered list of indeterminates. They are elements of a FreeMonoid.
 
 See also Monomial for the commutative analog, and Sum for the additive analog.!
 
@@ -4832,16 +4845,16 @@ Elements of tensor product modules (see TensorProductModule).
 
 Tensors are represented as sparse formal sums of formal products of basis elements.!
 
-!FreePolynomial commentStamp: '<historical>' prior: 0!
-Polynomials in a finite set of non-commuting indeterminates. They are elements of a free associative algebra (FreeAlgebra).
-
-A free polynomial is a formal linear combination of Words, that in turn are formal (noncommutative) products of arbitrary objects (indeterminates).!
-
 !Divisor commentStamp: '<historical>' prior: 0!
 Weil divisors, i.e. formal sums (with integer coefficients) of prime divisors (integral closed subschemes of codimension 1) of an integral locally Noetherian scheme.!
 
 !SimplicialChain commentStamp: '<historical>' prior: 0!
 A simplicial k-chain is a formal linear combination of k-simplices.!
+
+!FreePolynomial commentStamp: '<historical>' prior: 0!
+Polynomials in a finite set of non-commuting indeterminates. They are elements of a free associative algebra (FreeAlgebra).
+
+A free polynomial is a formal linear combination of Words, that in turn are formal (noncommutative) products of arbitrary objects (indeterminates).!
 
 !Tuple commentStamp: '<historical>' prior: 0!
 n-tuples with coefficients in some ring R, i.e. finite ordered lists of n elements of R indexed by integers 1 to n. They are the elements of the R-module R^n.
@@ -4879,7 +4892,7 @@ Example:
 !
 
 !Monomial commentStamp: '<historical>' prior: 0!
-(Commutative) power products of one or many variables. They form a monoid (see FreeAbelianMonoid). Their formal linear combinations over a ring are Polynomials (see also PolynomialRing).
+Commutative power products of one or many indeterminates. They form a monoid (see FreeAbelianMonoid). Their formal linear combinations over a ring are Polynomials (see also PolynomialRing).
 
 See also Word for the noncommutative analog, and Sum for the additive analog.!
 
@@ -11492,13 +11505,13 @@ yMin: min yMax: max
 yToMorphic: y
 	^yMax - y / (yMax - yMin ) * extent y! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 4/21/2016 05:28'!
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/10/2019 17:06:42'!
 example
 	"
 	FunctionPlotMorph example
 	"
 	| sin |
-	sin _ Function evaluating: [:x| x sin].
+	sin _ Function from: RR to: RR evaluating: [:x| x sin].
 	^ FunctionPlotMorph new evaluationPoints: (0.0 to: Float pi * 2 count: 100); function: sin; color: (Color red alpha: 0.5)! !
 
 !FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 4/21/2016 05:30'!
@@ -12764,7 +12777,7 @@ example2
 		polynomial: (RR polynomialsIn: #(x y z) :: generate: [:x :y :z| x^2 - ((y^2)*(z^2))]);
 		radius: 5.0! !
 
-!Domain methodsFor: 'coercion' stamp: 'len 5/9/2019 12:16:33'!
+!Domain methodsFor: 'coercion' stamp: 'len 5/10/2019 18:59:40'!
 !! anObject
 	"Coerce anObject to an element of the receiver. Subclasses should extend."
 	(self includes: anObject) ifTrue: [^ anObject].
@@ -12773,7 +12786,7 @@ example2
 	anObject isElement ifTrue:
 		[(self coerce: anObject from: anObject parent) ifNotNil: [:anElement| ^ anElement].
 		(anObject parent coerce: anObject to: self) ifNotNil: [:anElement| ^ anElement].
-		anObject parent -> self ifNotNil: [:aMorphism| aMorphism value: anObject]].
+		anObject parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anObject]].
 	^ DomainError signal: 'coercion failed'! !
 
 !Domain methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
@@ -13080,15 +13093,12 @@ embedding
 endomorphisms
 	^ self => self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/7/2019 16:43:47'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:59:01'!
 from: aDomain
 	"Answer the canonical morphism from aDomain to the receiver."
 	self = aDomain ifTrue: [^ self id].
-"	self >= aDomain ifTrue: [^ aDomain id restrictedTo: self]."
 	self isQuotient
 		ifTrue: [aDomain -> self base ifNotNil: [:aMorphism| ^ self projection · aMorphism]].
-"	self isCoproduct
-		ifTrue: [(1 to: self arity) do: [:i| aDomain -> (self at: i) ifNotNil: [:aMorphism| ^ (self coprojection: i) · aMorphism]]]."
 	(self infrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	(self onfrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ nil! !
@@ -13158,18 +13168,18 @@ includesAllOf: aCollection
 	aCollection do: [:each| (self includes: each) ifFalse: [^ false]].
 	^ true! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:19:33'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:16'!
 infrom: aDomain
 	"Answer the canonical embedding from aDomain into the receiver."
 	self = aDomain ifTrue: [^ self id].
+	self propertyAt: #inputMonomorphisms ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aMorphism| ^ aMorphism]].
 	^ nil! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:18:49'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:57:40'!
 into: aCodomain
 	"Answer the canonical embedding from the receiver into aCodomain."
 	self = aCodomain ifTrue: [^ self id].
-"	self <= aCodomain ifTrue: [^ aCodomain id restrictedTo: self].
-	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i) -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]]."
+	self propertyAt: #outputMonomorphisms ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:31'!
@@ -13312,16 +13322,18 @@ null
 	"The null object in the category of sets is the empty set."
 	^ self propertyAt: #null ifAbsent: [self class newFrom: (Set new: 0)]! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:19:20'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:32'!
 onfrom: aDomain
 	"Answer the canonical projection from aDomain onto the receiver."
 	self = aDomain ifTrue: [^ self id].
+	self propertyAt: #inputEpimorphisms ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aMorphism| ^ aMorphism]].
 	^ nil! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:18:35'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:57:11'!
 onto: aCodomain
 	"Answer the canonical projection from the receiver onto aCodomain."
 	self = aCodomain ifTrue: [^ self id].
+	self propertyAt: #outputEpimorphisms ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:05'!
@@ -13394,12 +13406,10 @@ species
 sum: aBlock
 	^ self elements sum: aBlock! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/7/2019 16:43:34'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:44'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
 	self = aCodomain ifTrue: [^ self id].
-"	self <= aCodomain ifTrue: [^ aCodomain id restrictedTo: self]."
-"	self isProduct ifTrue: [(1 to: self arity) do: [:i| (self at: i) -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism ” (self projection: i)]]]."
 	(self into: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	(self onto: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ nil! !
@@ -13595,11 +13605,6 @@ example3
 from: aDomain to: anotherDomain
 	^ self new domain: aDomain; codomain: anotherDomain! !
 
-!AbelianGroupHomSet methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 07:59:53'!
-asAbelianGroup
-	"Answer an abelian group that is isomorphic to this Hom-Set, equipped with coercion maps."
-	^ self notYetImplemented! !
-
 !PointSet methodsFor: 'enumerating' stamp: 'len 11/7/2016 16:25'!
 do: aBlock
 	self codomain pointsOver: self scalars do: aBlock! !
@@ -13611,6 +13616,11 @@ scalars
 !PointSet methodsFor: 'accessing' stamp: 'len 12/28/2016 11:24:20'!
 size
 	^ self propertyAt: #size ifAbsentPut: [self codomain pointsCountOver: self scalars]! !
+
+!AbelianGroupHomSet methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 07:59:53'!
+asAbelianGroup
+	"Answer an abelian group that is isomorphic to this Hom-Set, equipped with coercion maps."
+	^ self notYetImplemented! !
 
 !ComplexBox methodsFor: 'accessing' stamp: 'len 1/16/2016 05:56'!
 area
@@ -14311,80 +14321,67 @@ identity: anElement
 isMonoid
 	^ true! !
 
-!FreeMonoid methodsFor: 'random' stamp: 'len 4/19/2016 20:31'!
+!FreeMonoid methodsFor: 'random' stamp: 'len 5/10/2019 18:32:23'!
 atRandom: aRandom bits: bitSize
 	| answer n |
 	answer _ self identity.
-	n _ symbols size.
+	n _ self rank.
 	bitSize // n highBit
 		timesRepeat:
 			[((n + 1) atRandom: aRandom) = 1
-				ifFalse: [answer _ (Word x: (symbols atRandom: aRandom)) * answer]].
+				ifFalse: [answer _ (self x: (self rank atRandom: aRandom)) * answer]].
 	^ answer! !
 
-!FreeMonoid methodsFor: 'testing' stamp: 'len 1/10/2018 21:48:12'!
+!FreeMonoid methodsFor: 'testing' stamp: 'len 5/10/2019 18:32:59'!
 contains: aWord
-	aWord do: [:i :exp| ((symbols includes: i) and: [exp >= 0]) ifFalse: [^ false]].
+	aWord do: [:i :exp| (self rank <= i and: [exp >= 0]) ifFalse: [^ false]].
 	^ true! !
 
-!FreeMonoid methodsFor: 'accessing' stamp: 'len 2/13/2016 20:18'!
+!FreeMonoid methodsFor: 'accessing' stamp: 'len 5/10/2019 18:31:38'!
 generators
-	^ symbols collect: [:each| Word x: each]! !
+	^ self propertyAt: #generators ifAbsentPut: ((1 to: self rank) collect: [:each| self x: each])! !
 
-!FreeMonoid methodsFor: 'accessing' stamp: 'len 2/13/2016 20:36'!
+!FreeMonoid methodsFor: 'accessing' stamp: 'len 5/10/2019 15:18:19'!
 identity
-	^ Word empty! !
+	^ Word empty parent: self! !
 
-!FreeMonoid methodsFor: 'testing' stamp: 'len 1/10/2018 21:48:33'!
+!FreeMonoid methodsFor: 'testing' stamp: 'len 5/10/2019 15:17:39'!
 includes: aWord
-	^ (aWord isKindOf: Word) and: [self contains: aWord]! !
+	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
 
-!FreeMonoid methodsFor: 'testing' stamp: 'len 7/2/2016 16:55'!
+!FreeMonoid methodsFor: 'testing' stamp: 'len 5/10/2019 15:15:33'!
 isCommutative
-	^ symbols size <= 1! !
+	^ self rank <= 1! !
 
-!FreeMonoid methodsFor: 'printing' stamp: 'len 4/23/2016 05:46'!
+!FreeMonoid methodsFor: 'printing' stamp: 'len 5/10/2019 15:29:41'!
 printOn: aStream
 	aStream nextPut: ${.
-	symbols do: [:i| aStream print: (Word x: i)] separatedBy: [aStream nextPut: $,].
+	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	aStream nextPutAll: '}*'! !
 
-!FreeMonoid methodsFor: 'morphisms' stamp: 'len 5/8/2019 04:48:07'!
-projection: anObject
-	"Answer the 'string projection' that removes all occurrences of a letter from a string."
-	^ self to: (self copyWithout: anObject) evaluating: [:w| w copyWithout: anObject]! !
-
-!FreeMonoid methodsFor: 'accessing' stamp: 'len 2/14/2016 20:58'!
+!FreeMonoid methodsFor: 'accessing' stamp: 'len 5/10/2019 18:31:21'!
 rank
-	^ symbols size! !
+	^ self propertyAt: #rank! !
+
+!FreeMonoid methodsFor: 'private' stamp: 'len 5/10/2019 18:31:10'!
+rank: anInteger
+	self propertyAt: #rank put: anInteger! !
 
 !FreeMonoid methodsFor: 'accessing' stamp: 'len 2/26/2017 09:29:34'!
 size
 	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [1]! !
 
-!FreeMonoid methodsFor: 'accessing' stamp: 'len 2/14/2016 21:10'!
-symbols
-	^ symbols! !
+!FreeMonoid methodsFor: 'elements' stamp: 'len 5/10/2019 15:19:05'!
+x: anObject
+	^ self x: anObject to: 1! !
 
-!FreeMonoid methodsFor: 'accessing-private' stamp: 'len 2/14/2016 21:11'!
-symbols: aCollection
-	symbols _ aCollection! !
+!FreeMonoid methodsFor: 'elements' stamp: 'len 5/10/2019 17:15:50'!
+x: anInteger to: anotherInteger
+	^ (Word x: anInteger to: anotherInteger) parent: self! !
 
-!FreeMonoid methodsFor: 'elements' stamp: 'len 2/26/2017 09:33:33'!
-x: anIndeterminate
-	^ self x: anIndeterminate to: 1! !
-
-!FreeMonoid methodsFor: 'elements' stamp: 'len 2/26/2017 09:34:06'!
-x: anIndeterminate to: exponent
-	^ Word x: anIndeterminate to: exponent! !
-
-!FreeMonoid class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:25'!
+!FreeMonoid class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:33:19'!
 new: anInteger
-	^ self on: (1 to: anInteger)! !
-
-!FreeMonoid class methodsFor: 'instance creation' stamp: 'len 2/14/2016 21:10'!
-on: aCollection
-	^ self new symbols: aCollection! !
+	^ self new rank: anInteger! !
 
 !Group methodsFor: 'operations' stamp: 'len 5/9/2019 11:24:34'!
 * anElementOrGroup
@@ -15020,68 +15017,137 @@ size
 components: anArray
 	^ self new components: anArray! !
 
-!FreeGroup methodsFor: 'comparing' stamp: 'len 7/27/2016 08:02'!
-~ aFreeGroup
-	"Answer true if the receiver is isomorphic to the argument."
-	^ ((aFreeGroup isKindOf: FreeGroup) and: [self rank = aFreeGroup rank]) or: [super ~ aFreeGroup]! !
+!FPGroup methodsFor: 'operations' stamp: 'len 5/10/2019 18:49:09'!
+/ anObject
+	| newRelations answer |
+	newRelations _ Set new addAll: self relations; yourself.
+	(self includes: anObject)
+		ifTrue: [newRelations add: anObject]
+		ifFalse:
+			[anObject isCollection
+				ifTrue: [newRelations addAll: anObject]
+				ifFalse: [^ self notYetImplemented "subgroup?"]].
+	answer _ self class new: self rank relations: newRelations.
+	answer addEpimorphism: (self onto: answer mapping: [:i| answer x: i]).
+	^ answer! !
 
-!FreeGroup methodsFor: 'random' stamp: 'len 4/19/2016 20:42'!
+!FPGroup methodsFor: 'comparing' stamp: 'len 5/10/2019 18:44:24'!
+= anObject
+	^ (anObject isKindOf: FPGroup) and: [self rank = anObject rank and: [self relations = anObject relations]]! !
+
+!FPGroup methodsFor: 'comparing' stamp: 'len 5/10/2019 11:27:54'!
+~ aGroup
+	"Answer true if the receiver is isomorphic to the argument."
+	((aGroup isKindOf: FPGroup) and: [self isFree and: [aGroup isFree and: [self rank = aGroup rank]]])
+		ifTrue: [^ true].		
+	^ super ~ aGroup! !
+
+!FPGroup methodsFor: 'random' stamp: 'len 5/10/2019 18:32:05'!
 atRandom: aRandom bits: bitSize
 	| answer |
 	answer _ self identity.
-	bitSize // symbols size highBit
+	bitSize // self rank highBit
 		timesRepeat:
-			[answer _ (Word x: (symbols atRandom: aRandom) to: (#(-1 1) atRandom: aRandom)) * answer].
+			[answer _ (self x: (self rank atRandom: aRandom) to: (#(-1 1) atRandom: aRandom)) * answer].
 	^ answer! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 2/14/2016 21:13'!
+!FPGroup methodsFor: 'accessing' stamp: 'len 5/10/2019 18:47:38'!
 generators
-	^ symbols collect: [:each| Word x: each]! !
+	^ self propertyAt: #generators ifAbsentPut: [(1 to: self rank) collect: [:i| self x: i]]! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 2/13/2016 17:27'!
+!FPGroup methodsFor: 'comparing' stamp: 'len 5/10/2019 18:44:48'!
+hash
+	^ self rank hash! !
+
+!FPGroup methodsFor: 'accessing' stamp: 'len 5/10/2019 14:52:34'!
 identity
-	^ Word empty! !
+	^ Word empty parent: self! !
 
-!FreeGroup methodsFor: 'testing' stamp: 'len 2/13/2016 20:16'!
+!FPGroup methodsFor: 'testing' stamp: 'len 5/10/2019 14:37:34'!
 includes: aWord
-	aWord do: [:i :exp| (symbols includes: i) ifFalse: [^ false]].
-	^ true! !
+	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
 
-!FreeGroup methodsFor: 'testing' stamp: 'len 7/2/2016 16:56'!
+!FPGroup methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:42:34'!
+into: aGroup mapping: aBlock
+	^ self to: aGroup mapping: aBlock! !
+
+!FPGroup methodsFor: 'testing' stamp: 'len 5/10/2019 11:34:57'!
 isCommutative
-	^ symbols size <= 1! !
+	self isFree ifTrue: [^ self rank <= 1].
+	^ super isCommutative! !
 
-!FreeGroup methodsFor: 'testing' stamp: 'len 2/13/2016 17:31'!
-isFinitelyGenerated
-	^ true! !
+!FPGroup methodsFor: 'testing' stamp: 'len 5/10/2019 11:28:10'!
+isFree
+	^ self relations isEmpty! !
 
-!FreeGroup methodsFor: 'printing' stamp: 'len 4/21/2016 00:15'!
+!FPGroup methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:42:30'!
+onto: aGroup mapping: aBlock
+	^ self to: aGroup mapping: aBlock! !
+
+!FPGroup methodsFor: 'printing' stamp: 'len 5/10/2019 11:36:53'!
 printOn: aStream
-	aStream nextPutAll: 'F('; print: symbols; nextPut: $)! !
+"	self isFree ifTrue: [aStream nextPutAll: 'F('; print: symbols; nextPut: $). ^ self]."
+	aStream nextPut: $<.
+	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
+	self isFree ifFalse:
+		[aStream nextPutAll: ' | '.
+		self relations do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,]].
+	aStream nextPut: $>! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 2/14/2016 20:59'!
+!FPGroup methodsFor: 'accessing' stamp: 'len 5/10/2019 18:32:14'!
 rank
-	^ symbols size! !
+	^ self propertyAt: #rank! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 4/22/2016 21:50'!
+!FPGroup methodsFor: 'private' stamp: 'len 5/10/2019 18:35:32'!
+rank: anInteger
+	self propertyAt: #rank put: anInteger! !
+
+!FPGroup methodsFor: 'accessing' stamp: 'len 5/10/2019 11:33:24'!
+relations
+	^ self propertyAt: #relations ifAbsent: [#()]! !
+
+!FPGroup methodsFor: 'private' stamp: 'len 5/10/2019 11:35:56'!
+relations: aCollection
+	self propertyAt: #relations put: aCollection! !
+
+!FPGroup methodsFor: 'accessing' stamp: 'len 5/10/2019 11:34:18'!
 size
-	^ symbols size > 0 ifTrue: [Aleph new] ifFalse: [1]! !
+	self isFree ifTrue: [self rank > 0 ifTrue: [Aleph new] ifFalse: [1]].
+	^ super size! !
 
-!FreeGroup methodsFor: 'accessing' stamp: 'len 2/14/2016 21:09'!
-symbols
-	^ symbols! !
+!FPGroup methodsFor: 'operations' stamp: 'len 5/10/2019 19:01:24'!
+span: aCollection
+	| answer |
+	answer _ self class new: aCollection size.
+	self notYetImplemented. "missing relations"
+	answer addMonomorphism: (answer into: self mapping: [:i| aCollection at: i]).
+	^ answer! !
 
-!FreeGroup methodsFor: 'accessing-private' stamp: 'len 2/14/2016 21:09'!
-symbols: aCollection
-	symbols _ aCollection! !
+!FPGroup methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:41:07'!
+to: aGroup evaluating: aBlock
+	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
+	^ FPGroupMap from: self to: aGroup evaluating: aBlock! !
 
-!FreeGroup class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:24'!
+!FPGroup methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:41:35'!
+to: aGroup mapping: aBlock
+	aGroup isGroup ifFalse: [^ super to: aGroup mapping: aBlock].
+	^ FPGroupMap from: self to: aGroup mapping: aBlock! !
+
+!FPGroup methodsFor: 'elements' stamp: 'len 5/10/2019 16:28:46'!
+x: anObject
+	^ self x: anObject to: 1! !
+
+!FPGroup methodsFor: 'elements' stamp: 'len 5/10/2019 17:14:56'!
+x: anInteger to: anotherInteger
+	^ (Word x: anInteger to: anotherInteger) parent: self! !
+
+!FPGroup class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:34:35'!
 new: anInteger
-	^ self on: (1 to: anInteger)! !
+	^ self new rank: anInteger! !
 
-!FreeGroup class methodsFor: 'instance creation' stamp: 'len 2/14/2016 21:09'!
-on: aCollection
-	^ self new symbols: aCollection! !
+!FPGroup class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:50:06'!
+new: anInteger relations: aCollection
+	^ self new rank: anInteger; relations: aCollection! !
 
 !OppositeGroup methodsFor: 'coercion' stamp: 'len 5/9/2019 08:05:51'!
 !! anElement
@@ -15278,765 +15344,6 @@ size
 !SemidirectProductGroup class methodsFor: 'instance creation' stamp: 'len 2/12/2016 06:16'!
 left: aGroup right: anotherGroup action: anAction
 	^ self new left: aGroup; right: anotherGroup; action: anAction! !
-
-!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 13:17:04'!
-!! anObject
-	(anObject isSequenceable and: [anObject size = self orders size])
-		ifTrue: [^ AbelianGroupElement coordinates: (self orders with: anObject collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]]) in: self].
-	^ super !! anObject! !
-
-!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:32'!
-= anObject
-	^ (anObject isKindOf: AbelianGroup) and: [self orders = anObject orders]! !
-
-!AbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:02:12'!
- anAbelianGroup
-	^ self class orders: self orders, anAbelianGroup orders! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:21:12'!
-generators
-	^ self propertyAt: #generators ifAbsentPut: [(1 to: self orders size) collect: [:i| self x: i]]! !
-
-!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:39'!
-hash
-	^ self orders hash! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:59:00'!
-identity
-	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| 0]) in: self! !
-
-!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 12:55:58'!
-isCommutative
-	^ true! !
-
-!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 14:03:59'!
-isTrivial
-	^ self size = 1! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:55:47'!
-names
-	"Answer the generator names to use when printing elements."
-	^ self propertyAt: #names ifAbsent: [self orders size = 1 ifTrue: [#(x)]]! !
-
-!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 12:55:03'!
-names: anArray
-	"Set generator names to use when printing elements."
-	self propertyAt: #names put: anArray! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:53:17'!
-orders
-	^ self propertyAt: #orders! !
-
-!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 13:17:18'!
-orders: anArray
-	self propertyAt: #orders put: anArray asArray! !
-
-!AbelianGroup methodsFor: 'printing' stamp: 'len 5/6/2019 13:04:11'!
-printOn: aStream
-	| first |
-	self isTrivial ifTrue: [aStream nextPutAll: '{0}'. ^ self].
-	first _ true.
-	(RunArray newFrom: self orders) runsAndValuesDo: [:exponent :modulus|
-		first ifFalse: [aStream nextPut: Character oplus].
-		modulus = 0
-			ifTrue: [aStream print: ZZ]
-			ifFalse:
-				[aStream print: ZZ; nextPutAll: modulus printString sub].
-"			ifFalse:
-				[exponent > 1 ifTrue: [aStream nextPut: $(].
-				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
-				exponent > 1 ifTrue: [aStream nextPut: $)]]."
-		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
-		first _ false]! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:01:31'!
-size
-	(self orders anySatisfy: [:any| any = 0]) ifTrue: [^ Aleph new].
-	^ self orders inject: 1 into: [:result :each| result * each]! !
-
-!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 12:58:35'!
-x: i
-	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| each = i ifTrue: [1] ifFalse: [0]]) in: self! !
-
-!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:23:49'!
-new: anInteger
-	"Answer the free abelian group of the given order n, isomorphic to Z^n."
-	^ self orders: ((1 to: anInteger) collect: [:each| 0])! !
-
-!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:04:58'!
-orders: anArray
-	^ self new orders: anArray! !
-
-!AbelianGroup2 methodsFor: 'operations' stamp: 'len 12/30/2017 16:34:42'!
-× anAbelianGroup
-	anAbelianGroup isAbelianGroup ifTrue: [^ self  anAbelianGroup].
-	^ super × anAbelianGroup! !
-
-!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/20/2017 22:13:11'!
- anAbelianGroup
-	"Answer the direct sum of the receiver and the argument."
-	(anAbelianGroup isKindOf: AbelianGroup) ifFalse: [^ DomainError signal: 'argument is not an abelian group'].
-	^ DirectSumGroup components: {self. anAbelianGroup}! !
-
-!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/27/2017 17:42:32'!
-centralizerOf: aCollection
-	^ self! !
-
-!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/27/2017 17:02:52'!
-commutator: aSubgroup
-	"Answer the commutator group [G,H] of the receiver G with the argument H.
-	Since the receiver is commutative, this is the trivial group."
-	^ self null! !
-
-!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 05:59:47'!
-identity
-	^ self propertyAt: #identity ifAbsentPut: [self == self ambient ifTrue: [self generators anyOne * 0] ifFalse: [self ambient identity]]! !
-
-!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 00:57:58'!
-invariants
-	"Answer the list of invariant factors of the receiver."
-	^ self matrix SNF! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:31:37'!
-isAbelianGroup
-	^ true! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:24'!
-isFree
-	^ false! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/16/2016 13:50:51'!
-isInitial
-	"In the category of abelian groups the trivial group is the zero object (both initial and terminal)."
-	^ self isTrivial! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:27:33'!
-isTerminal
-	"In the category of abelian groups the trivial group is the zero object (both initial and terminal)."
-	^ self isTrivial! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/18/2016 11:15:30'!
-isTorsion
-	"Answer true if the receiver is a torsion (or periodic) group, i.e. if all its elements have finite order."
-	^ self torsion = self! !
-
-!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:27:40'!
-isTorsionFree
-	^ self torsion isTrivial! !
-
-!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/28/2016 11:29:54'!
-rank
-	^ self propertyAt: #rank! !
-
-!AbelianGroup2 methodsFor: 'private' stamp: 'len 12/16/2016 12:37:21'!
-species
-	"Any subgroup of an abelian group is also abelian."
-	^ AbelianGroup! !
-
-!AbelianGroup2 methodsFor: 'morphisms' stamp: 'len 12/22/2016 22:02:15'!
-to: aCodomain
-	(aCodomain isAbelianGroup and: [self isTrivial or: [aCodomain isTrivial]])
-		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain identity]].
-	^ super to: aCodomain! !
-
-!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/28/2016 11:30:01'!
-torsion
-	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
-	^ self propertyAt: #torsion! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 4/19/2019 07:14:41'!
-ambient
-	^ self propertyAt: #ambient ifAbsentPut: [(components allSatisfy: [:each| each isAmbient]) ifTrue: [self] ifFalse: [self class components: (components collect: [:each| each ambient])]]! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:41'!
-arity
-	^ components size! !
-
-!DirectSumGroup methodsFor: 'converting' stamp: 'len 10/9/2016 10:43'!
-asCartesianProduct
-	^ CartesianProduct components: components! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:41'!
-at: anInteger
-	^ components at: anInteger! !
-
-!DirectSumGroup methodsFor: 'random' stamp: 'len 10/10/2016 09:35'!
-atRandom: aRandom
-	^ components collect: [:each| each atRandom: aRandom]! !
-
-!DirectSumGroup methodsFor: 'random' stamp: 'len 10/10/2016 09:35'!
-atRandom: aRandom bits: bitSize
-	| n |
-	n _ bitSize / self arity.
-	^ components collect: [:each| each atRandom: aRandom bits: n]! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/3/2018 05:41:38'!
-basis
-	"Assuming the receiver is free, answer a basis."
-	^ self propertyAt: #basis ifAbsentPut:
-		[| answer |
-		answer _ OrderedCollection new: self rank.
-		components withIndexDo: [:each :i|
-			each basis do: [:e| answer add: (self embed: e at: i)]].
-		answer]! !
-
-!DirectSumGroup methodsFor: 'private' stamp: 'len 10/9/2016 10:43'!
-components
-	^ components! !
-
-!DirectSumGroup methodsFor: 'private' stamp: 'len 11/5/2016 10:15'!
-components: anArray
-	components _ anArray! !
-
-!DirectSumGroup methodsFor: 'testing' stamp: 'len 12/16/2016 12:42:09'!
-contains: anElement
-	components with: anElement do: [:V :x| (V contains: x) ifFalse: [^ false]].
-	^ true! !
-
-!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 4/23/2019 02:16:27'!
-coprojection: i
-	^ ((self at: i) to: self evaluating: [:x| self embed: x at: i]) name: 'i', i printText sub! !
-
-!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 9/30/2018 05:40:27'!
-embed: anElement at: i
-	^ components withIndexCollect: [:each :k| k = i ifTrue: [anElement] ifFalse: [each identity]]! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 12/17/2016 22:23:22'!
-identity
-	^ components collect: [:each| each identity]! !
-
-!DirectSumGroup methodsFor: 'testing' stamp: 'len 5/22/2018 16:54:30'!
-includes: anObject
-	anObject isSequenceable ifFalse: [^ false].
-	anObject size = components size ifFalse: [^ false].
-	components with: anObject do: [:V :x| (V includes: x) ifFalse: [^ false]].
-	^ true! !
-
-!DirectSumGroup methodsFor: 'testing' stamp: 'len 10/9/2016 10:45'!
-isCoproduct
-	^ true! !
-
-!DirectSumGroup methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:46'!
-isFree
-	^ components allSatisfy: [:each| each isFree]! !
-
-!DirectSumGroup methodsFor: 'testing' stamp: 'len 12/14/2016 22:10:19'!
-isProduct
-	^ true! !
-
-!DirectSumGroup methodsFor: 'printing' stamp: 'len 10/10/2016 08:44'!
-printOn: aStream
-	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character oplus]! !
-
-!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:38'!
-projection: i
-	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 00:44:27'!
-rank
-	^ self propertyAt: #rank ifAbsentPut: [components sum: [:each| each rank]]! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:42'!
-size
-	^ components product: [:each| each size]! !
-
-!DirectSumGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:41:52'!
-torsion
-	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
-	^ self class components: (components collect: [:each| each torsion])! !
-
-!DirectSumGroup class methodsFor: 'instance creation' stamp: 'len 10/10/2016 08:40'!
-components: anArray
-	^ self new components: anArray! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:42:12'!
-elementaryDivisors
-	^ self propertyAt: #elementaryDivisors! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:44:57'!
-elementaryDivisors: anArray
-	self propertyAt: #elementaryDivisors put: anArray! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:43:57'!
-exponent
-	"Answer the exponent of the receiver, i.e. the maximum order of an element."
-	^ self elementaryDivisors first! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:46:59'!
-isTrivial
-	^ self elementaryDivisors isEmpty! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:46:49'!
-printOn: aStream
-	self isTrivial ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
-	self elementaryDivisors do: [:each| aStream print: ZZ; nextPutAll: each printString sub] separatedBy: [aStream nextPut: Character oplus]! !
-
-!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:43:13'!
-size
-	self isTrivial ifTrue: [^ 1].
-	^ self elementaryDivisors product! !
-
-!FiniteAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:47:16'!
-elementaryDivisors: anArray
-	^ self new elementaryDivisors: anArray! !
-
-!FiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/29/2018 17:53:08'!
-asRing
-	^ self propertyAt: #ring ifAbsentPut: [ZZ / self size]! !
-
-!FiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:21'!
-atRandom: aRandom
-	^ self asRing atRandom: aRandom! !
-
-!FiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:05'!
-atRandom: aRandom bits: bitSize
-	^ self asRing atRandom: aRandom bits: bitSize! !
-
-!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 07:59:59'!
-generators
-	^ {self asRing one}! !
-
-!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:58:25'!
-identity
-	^ self asRing zero! !
-
-!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:38:58'!
-includes: anObject
-	^ self asRing includes: anObject! !
-
-!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:29:15'!
-isCyclic
-	^ true! !
-
-!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:50:25'!
-isPrimaryCyclic
-	^ self asRing modulusFactors asSet size = 1! !
-
-!FiniteCyclicGroup methodsFor: 'printing' stamp: 'len 9/29/2018 17:53:35'!
-printOn: aStream
-	self asRing printOn: aStream! !
-
-!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 00:43:10'!
-rank
-	^ 0! !
-
-!FiniteCyclicGroup methodsFor: 'private' stamp: 'len 9/29/2018 17:51:49'!
-setOrder: anInteger
-	self propertyAt: #size put: anInteger! !
-
-!FiniteCyclicGroup methodsFor: 'private' stamp: 'len 9/29/2018 18:36:48'!
-setRing: aModularIntegerRing
-	self propertyAt: #ring put: aModularIntegerRing.
-	self setOrder: aModularIntegerRing modulus! !
-
-!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 17:51:11'!
-size
-	^ self propertyAt: #size! !
-
-!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:40:25'!
-torsion
-	^ self! !
-
-!FiniteCyclicGroup class methodsFor: 'instance creation' stamp: 'len 9/29/2018 17:52:09'!
-new: anInteger
-	^ self new setOrder: anInteger! !
-
-!FiniteCyclicGroup class methodsFor: 'instance creation' stamp: 'len 9/29/2018 18:36:01'!
-on: aModularIntegerRing
-	^ self new setRing: aModularIntegerRing! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/28/2018 06:41:10'!
-ambient
-	^ self! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 01:03:16'!
-basis
-	^ self propertyAt: #basis! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 01:03:31'!
-generators
-	^ self basis! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 1/17/2019 03:42:40'!
-identity
-	^ self propertyAt: #identity ifAbsentPut: [self isTrivial ifTrue: [ZZ tuple: #()] ifFalse: [self basis anyOne * 0]]! !
-
-!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:04'!
-isFree
-	^ true! !
-
-!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 2/24/2016 04:09'!
-isInfiniteCyclic
-	^ self basis size = 1! !
-
-!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 2/27/2017 16:54:24'!
-isTrivial
-	^ self generators size = 0! !
-
-!FreeAbelianGroup2 methodsFor: 'printing' stamp: 'len 2/27/2017 16:47:54'!
-printOn: aStream
-	self isTrivial ifTrue: [^ super printOn: aStream].
-	aStream nextPut: Character ZZ.
-	self rank > 0 ifTrue: [aStream nextPutAll: self rank printString super].! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 2/27/2017 16:47:39'!
-rank
-	^ self generators size! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/7/2017 21:04:23'!
-size
-	^ self rank = 0 ifTrue: [1] ifFalse: [Aleph new: 0]! !
-
-!FreeAbelianGroup2 methodsFor: 'private' stamp: 'len 12/16/2016 12:37:29'!
-species
-	"Any subgroup of a free abelian group is also free."
-	^ FreeAbelianGroup! !
-
-!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/29/2018 18:42:21'!
-torsion
-	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
-	^ self null! !
-
-!FreeAbelianGroup2 class methodsFor: 'instance creation' stamp: 'len 1/10/2018 20:05:57'!
-new: anInteger
-	^ self new generators: (ZZ^anInteger) generators! !
-
-!InfiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/30/2018 00:42:29'!
-asModule
-	^ ZZ asSelfModule! !
-
-!InfiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/29/2018 18:26:57'!
-asRing
-	^ ZZ! !
-
-!InfiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:41'!
-atRandom: aRandom
-	^ self asRing atRandom: aRandom! !
-
-!InfiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:39:56'!
-atRandom: aRandom bits: bitSize
-	^ self asRing atRandom: aRandom bits: bitSize! !
-
-!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:57:34'!
-basis
-	^ #(1)! !
-
-!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:57:50'!
-generators
-	^ self basis! !
-
-!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:58:05'!
-identity
-	^ 0! !
-
-!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:38:37'!
-includes: anObject
-	^ anObject isInteger! !
-
-!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:28:48'!
-isCyclic
-	^ true! !
-
-!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/30/2018 08:00:40'!
-isFree
-	^ true! !
-
-!InfiniteCyclicGroup methodsFor: 'printing' stamp: 'len 9/29/2018 18:28:32'!
-printOn: aStream
-	self asRing printOn: aStream! !
-
-!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:40:36'!
-rank
-	^ 1! !
-
-!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:28:38'!
-size
-	^ self asRing size! !
-
-!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 9/28/2018 06:40:54'!
-ambient
-	^ self! !
-
-!EllipticCurveGroup methodsFor: 'random' stamp: 'len 8/27/2018 22:24:49'!
-atRandom: aRandom
-	^ curve pointAtRandom: aRandom! !
-
-!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 11/10/2016 08:06'!
-curve
-	^ curve! !
-
-!EllipticCurveGroup methodsFor: 'accessing-private' stamp: 'len 11/10/2016 08:11'!
-curve: anEllipticCurve
-	curve _ anEllipticCurve! !
-
-!EllipticCurveGroup methodsFor: 'enumerating' stamp: 'len 11/10/2016 08:10'!
-do: aBlock
-	self curve pointsOver: self scalars do: aBlock! !
-
-!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 12/14/2016 22:09:37'!
-identity
-	"This is the point at infinity."
-	^ curve pointAt: (scalars tuple: {scalars zero. scalars one. scalars zero})! !
-
-!EllipticCurveGroup methodsFor: 'printing' stamp: 'len 11/10/2016 08:13'!
-printOn: aStream
-	aStream nextPutAll: 'E('; print: self scalars; nextPut: $)! !
-
-!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 11/10/2016 08:06'!
-scalars
-	^ scalars! !
-
-!EllipticCurveGroup methodsFor: 'accessing-private' stamp: 'len 11/10/2016 08:11'!
-scalars: aField
-	scalars _ aField! !
-
-!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 4/2/2017 10:31:48'!
-torsion
-	"Answer the torsion subgroup of the receiver."
-	"Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 7.5.5."
-"	| E b2 b4 b6 b8 discriminant |
-	E _ self curve equation.
-	b2 _ E b2.
-	b4 _ E b4.
-	b6 _ E b6.
-	b8 _ E b8.
-	discriminant _ E discriminant.
-	points add: self identity.
-	..."
-	self notYetImplemented! !
-
-!EllipticCurveGroup class methodsFor: 'instance creation' stamp: 'len 11/10/2016 08:11'!
-on: anEllipticCurve over: aField
-	^ self new curve: anEllipticCurve; scalars: aField! !
-
-!AbelianGroup3 methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 08:56:56'!
-isCommutative
-	^ true! !
-
-!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:05:25'!
-!! anObject
-	anObject isSequenceable ifTrue: [^ self exponents: anObject asArray].
-	^ super !! anObject! !
-
-!FreeAbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/6/2019 12:49:30'!
-= anObject
-	^ (anObject isKindOf: FreeAbelianGroup3) and: [anObject rank = rank]! !
-
-!FreeAbelianGroup3 methodsFor: 'random' stamp: 'len 5/6/2019 08:55:49'!
-atRandom: aRandom bits: bitSize
-	^ self exponents: (ZZ ^ self rank atRandom: aRandom bits: bitSize) asArray! !
-
-!FreeAbelianGroup3 methodsFor: 'enumerating' stamp: 'len 5/6/2019 08:55:32'!
-do: aBlock
-	ZZ ^ self rank do: [:each| aBlock value: (self exponents: each asArray)]! !
-
-!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 08:56:11'!
-exponents: anArray
-	anArray size = rank ifFalse: [self error: 'exponents size doesn''t match rank'].
-	^ (Monomial exponents: anArray) parent: self! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:18'!
-generators
-	^ (1 to: rank) collect: [:i| self x: i]! !
-
-!FreeAbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/6/2019 08:56:24'!
-hash
-	^ self rank + self class hash! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:28'!
-identity
-	^ (Monomial new: rank) parent: self! !
-
-!FreeAbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 08:56:37'!
-includes: aMonomial
-	^ (aMonomial isKindOf: Monomial) and: [aMonomial lastIndeterminate <= rank]! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:45'!
-indeterminates
-	^ 1 to: rank! !
-
-!FreeAbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 08:58:11'!
-isUnivariate
-	^ self rank = 1! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:58:01'!
-names
-	"Answer the indeterminate names to use when printing monomials."
-	^ self propertyAt: #names ifAbsent: [self isUnivariate ifTrue: [#(x)]]! !
-
-!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 08:58:06'!
-names: anArray
-	"Set indeterminate names to use when printing monomials."
-	self propertyAt: #names put: anArray! !
-
-!FreeAbelianGroup3 methodsFor: 'converting' stamp: 'len 5/6/2019 08:58:17'!
-orderedBy: aMonomialOrdering
-	^ self copy ordering: aMonomialOrdering! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:58:22'!
-ordering
-	^ ordering! !
-
-!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 08:58:30'!
-ordering: aMonomialOrdering
-	ordering _ aMonomialOrdering isSymbol
-		ifTrue: [MonomialOrdering perform: (aMonomialOrdering,':') asSymbol with: (1 to: self rank)]
-		ifFalse: [aMonomialOrdering]! !
-
-!FreeAbelianGroup3 methodsFor: 'printing' stamp: 'len 5/6/2019 09:01:18'!
-printOn: aStream
-	aStream nextPut: $<.
-	self indeterminates
-		do: [:i| aStream print: (self x: i)]
-		separatedBy: [aStream nextPut: $,].
-	aStream nextPutAll: '>'! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 09:02:39'!
-rank
-	^ rank! !
-
-!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 09:02:43'!
-rank: anInteger
-	rank _ anInteger! !
-
-!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 09:02:54'!
-size
-	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [1]! !
-
-!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:03:44'!
-x: anInteger
-	^ self x: anInteger to: 1! !
-
-!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:03:49'!
-x: anInteger to: exponent
-	^ (Monomial new: rank x: anInteger to: exponent) parent: self! !
-
-!FreeAbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:08:54'!
-new: anInteger
-	^ self new: anInteger ordering: #grevlex! !
-
-!FreeAbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:09:01'!
-new: anInteger ordering: aMonomialOrdering
-	^ self new rank: anInteger; ordering: aMonomialOrdering! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:56:53'!
-* anInteger
-	^ self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:43:22'!
-+ anAbelianGroup
-	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
-	^ self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:00'!
-/ aCollectionOrElement
-	"Answer the quotient of the receiver by the given relations."
-	self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:40'!
-/\ anAbelianGroup
-	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
-	^ self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'morphisms' stamp: 'len 4/21/2019 13:32:42'!
-=> anAbelianGroup
-	(anAbelianGroup isKindOf: FPAbelianGroup) ifFalse: [^ super => anAbelianGroup].
-	^ AbelianGroupHomSet from: self to: anAbelianGroup! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 05:22:30'!
- anAbelianGroup
-	"Answer the direct sum of the receiver and the argument as abelian group."
-	^ self class invariants: (self invariants, anAbelianGroup invariants) sort! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 09:46:11'!
-’ anAbelianGroup
-	^ self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 07:40:30'!
-ambient
-	^ self embedding codomain! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 09:28:30'!
-identity
-	^ AbelianGroupElement new parent: self; coordinates: (self invariants collect: [:each| 0])! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 04:47:31'!
-invariants
-	^ self propertyAt: #invariants! !
-
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:47:48'!
-invariants: anArray
-	self propertyAt: #invariants put: anArray! !
-
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 07:44:13'!
-isCyclic
-	^ self invariants size = 1! !
-
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 07:50:31'!
-isFree
-	^ self invariants allSatisfy: [:each| each = 0]! !
-
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 05:23:03'!
-isTorsion
-	^ self invariants noneSatisfy: [:each| each = 0]! !
-
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 09:25:53'!
-isTrivial
-	^ self invariants isEmpty! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 04:44:43'!
-names
-	"Answer the indeterminate names to use when printing words."
-	^ self propertyAt: #names ifAbsent: []! !
-
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:43:16'!
-names: anArray
-	"Set indeterminate names to use when printing words."
-	self propertyAt: #names put: anArray! !
-
-!FPAbelianGroup methodsFor: 'printing' stamp: 'len 4/21/2019 09:27:55'!
-printOn: aStream
-	| first |
-	self isTrivial ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
-	first _ true.
-	(RunArray newFrom: self invariants) runsAndValuesDo: [:exponent :modulus|
-		first ifFalse: [aStream nextPut: Character oplus].
-		modulus = 0
-			ifTrue: [aStream print: ZZ]
-			ifFalse:
-				[aStream print: ZZ; nextPutAll: modulus printString sub].
-"			ifFalse:
-				[exponent > 1 ifTrue: [aStream nextPut: $(].
-				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
-				exponent > 1 ifTrue: [aStream nextPut: $)]]."
-		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
-		first _ false]! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 07:37:14'!
-rank
-	"Answer the torsion-free rank of the receiver."
-	^ self invariants count: [:each| each = 0]! !
-
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:57'!
-span: aCollection
-	"Answer the subgroup spanned by the elements in aCollection."
-	^ self notYetImplemented! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 05:24:08'!
-torsion
-	^ self class invariants: (self invariants select: [:each| each ~= 0])! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 08:11:53'!
-x: anInteger
-	^ AbelianGroupElement new parent: self; coordinates: ((1 to: self invariants size) collect: [:each| each = anInteger ifTrue: [1] ifFalse: [0]])! !
-
-!FPAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 05:16:23'!
-invariants: anArray
-	^ self new invariants: anArray! !
-
-!FPAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 05:16:09'!
-new: anInteger
-	^ self invariants: ((1 to: anInteger) collect: [:each| 0])! !
 
 !PermutationGroup methodsFor: 'comparing' stamp: 'len 12/13/2016 07:35:29'!
 = anObject
@@ -17369,6 +16676,765 @@ matrix: aMatrix
 			m = 3 ifTrue: [graph addEdgeFrom: i to: j label: nil].
 			m > 3 ifTrue: [graph addEdgeFrom: i to: j label: m]]].
 	^ self diagram: graph! !
+
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 13:17:04'!
+!! anObject
+	(anObject isSequenceable and: [anObject size = self orders size])
+		ifTrue: [^ AbelianGroupElement coordinates: (self orders with: anObject collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]]) in: self].
+	^ super !! anObject! !
+
+!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:32'!
+= anObject
+	^ (anObject isKindOf: AbelianGroup) and: [self orders = anObject orders]! !
+
+!AbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:02:12'!
+ anAbelianGroup
+	^ self class orders: self orders, anAbelianGroup orders! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:21:12'!
+generators
+	^ self propertyAt: #generators ifAbsentPut: [(1 to: self orders size) collect: [:i| self x: i]]! !
+
+!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:39'!
+hash
+	^ self orders hash! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:59:00'!
+identity
+	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| 0]) in: self! !
+
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 12:55:58'!
+isCommutative
+	^ true! !
+
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 14:03:59'!
+isTrivial
+	^ self size = 1! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:55:47'!
+names
+	"Answer the generator names to use when printing elements."
+	^ self propertyAt: #names ifAbsent: [self orders size = 1 ifTrue: [#(x)]]! !
+
+!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 12:55:03'!
+names: anArray
+	"Set generator names to use when printing elements."
+	self propertyAt: #names put: anArray! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:53:17'!
+orders
+	^ self propertyAt: #orders! !
+
+!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 13:17:18'!
+orders: anArray
+	self propertyAt: #orders put: anArray asArray! !
+
+!AbelianGroup methodsFor: 'printing' stamp: 'len 5/6/2019 13:04:11'!
+printOn: aStream
+	| first |
+	self isTrivial ifTrue: [aStream nextPutAll: '{0}'. ^ self].
+	first _ true.
+	(RunArray newFrom: self orders) runsAndValuesDo: [:exponent :modulus|
+		first ifFalse: [aStream nextPut: Character oplus].
+		modulus = 0
+			ifTrue: [aStream print: ZZ]
+			ifFalse:
+				[aStream print: ZZ; nextPutAll: modulus printString sub].
+"			ifFalse:
+				[exponent > 1 ifTrue: [aStream nextPut: $(].
+				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
+				exponent > 1 ifTrue: [aStream nextPut: $)]]."
+		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
+		first _ false]! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:01:31'!
+size
+	(self orders anySatisfy: [:any| any = 0]) ifTrue: [^ Aleph new].
+	^ self orders inject: 1 into: [:result :each| result * each]! !
+
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 12:58:35'!
+x: i
+	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| each = i ifTrue: [1] ifFalse: [0]]) in: self! !
+
+!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:23:49'!
+new: anInteger
+	"Answer the free abelian group of the given order n, isomorphic to Z^n."
+	^ self orders: ((1 to: anInteger) collect: [:each| 0])! !
+
+!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:04:58'!
+orders: anArray
+	^ self new orders: anArray! !
+
+!AbelianGroup2 methodsFor: 'operations' stamp: 'len 12/30/2017 16:34:42'!
+× anAbelianGroup
+	anAbelianGroup isAbelianGroup ifTrue: [^ self  anAbelianGroup].
+	^ super × anAbelianGroup! !
+
+!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/20/2017 22:13:11'!
+ anAbelianGroup
+	"Answer the direct sum of the receiver and the argument."
+	(anAbelianGroup isKindOf: AbelianGroup) ifFalse: [^ DomainError signal: 'argument is not an abelian group'].
+	^ DirectSumGroup components: {self. anAbelianGroup}! !
+
+!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/27/2017 17:42:32'!
+centralizerOf: aCollection
+	^ self! !
+
+!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/27/2017 17:02:52'!
+commutator: aSubgroup
+	"Answer the commutator group [G,H] of the receiver G with the argument H.
+	Since the receiver is commutative, this is the trivial group."
+	^ self null! !
+
+!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 05:59:47'!
+identity
+	^ self propertyAt: #identity ifAbsentPut: [self == self ambient ifTrue: [self generators anyOne * 0] ifFalse: [self ambient identity]]! !
+
+!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 00:57:58'!
+invariants
+	"Answer the list of invariant factors of the receiver."
+	^ self matrix SNF! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:31:37'!
+isAbelianGroup
+	^ true! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:24'!
+isFree
+	^ false! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/16/2016 13:50:51'!
+isInitial
+	"In the category of abelian groups the trivial group is the zero object (both initial and terminal)."
+	^ self isTrivial! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:27:33'!
+isTerminal
+	"In the category of abelian groups the trivial group is the zero object (both initial and terminal)."
+	^ self isTrivial! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/18/2016 11:15:30'!
+isTorsion
+	"Answer true if the receiver is a torsion (or periodic) group, i.e. if all its elements have finite order."
+	^ self torsion = self! !
+
+!AbelianGroup2 methodsFor: 'testing' stamp: 'len 12/14/2016 21:27:40'!
+isTorsionFree
+	^ self torsion isTrivial! !
+
+!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/28/2016 11:29:54'!
+rank
+	^ self propertyAt: #rank! !
+
+!AbelianGroup2 methodsFor: 'private' stamp: 'len 12/16/2016 12:37:21'!
+species
+	"Any subgroup of an abelian group is also abelian."
+	^ AbelianGroup! !
+
+!AbelianGroup2 methodsFor: 'morphisms' stamp: 'len 12/22/2016 22:02:15'!
+to: aCodomain
+	(aCodomain isAbelianGroup and: [self isTrivial or: [aCodomain isTrivial]])
+		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain identity]].
+	^ super to: aCodomain! !
+
+!AbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/28/2016 11:30:01'!
+torsion
+	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
+	^ self propertyAt: #torsion! !
+
+!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 9/28/2018 06:40:54'!
+ambient
+	^ self! !
+
+!EllipticCurveGroup methodsFor: 'random' stamp: 'len 8/27/2018 22:24:49'!
+atRandom: aRandom
+	^ curve pointAtRandom: aRandom! !
+
+!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 11/10/2016 08:06'!
+curve
+	^ curve! !
+
+!EllipticCurveGroup methodsFor: 'accessing-private' stamp: 'len 11/10/2016 08:11'!
+curve: anEllipticCurve
+	curve _ anEllipticCurve! !
+
+!EllipticCurveGroup methodsFor: 'enumerating' stamp: 'len 11/10/2016 08:10'!
+do: aBlock
+	self curve pointsOver: self scalars do: aBlock! !
+
+!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 12/14/2016 22:09:37'!
+identity
+	"This is the point at infinity."
+	^ curve pointAt: (scalars tuple: {scalars zero. scalars one. scalars zero})! !
+
+!EllipticCurveGroup methodsFor: 'printing' stamp: 'len 11/10/2016 08:13'!
+printOn: aStream
+	aStream nextPutAll: 'E('; print: self scalars; nextPut: $)! !
+
+!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 11/10/2016 08:06'!
+scalars
+	^ scalars! !
+
+!EllipticCurveGroup methodsFor: 'accessing-private' stamp: 'len 11/10/2016 08:11'!
+scalars: aField
+	scalars _ aField! !
+
+!EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 4/2/2017 10:31:48'!
+torsion
+	"Answer the torsion subgroup of the receiver."
+	"Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 7.5.5."
+"	| E b2 b4 b6 b8 discriminant |
+	E _ self curve equation.
+	b2 _ E b2.
+	b4 _ E b4.
+	b6 _ E b6.
+	b8 _ E b8.
+	discriminant _ E discriminant.
+	points add: self identity.
+	..."
+	self notYetImplemented! !
+
+!EllipticCurveGroup class methodsFor: 'instance creation' stamp: 'len 11/10/2016 08:11'!
+on: anEllipticCurve over: aField
+	^ self new curve: anEllipticCurve; scalars: aField! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 4/19/2019 07:14:41'!
+ambient
+	^ self propertyAt: #ambient ifAbsentPut: [(components allSatisfy: [:each| each isAmbient]) ifTrue: [self] ifFalse: [self class components: (components collect: [:each| each ambient])]]! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:41'!
+arity
+	^ components size! !
+
+!DirectSumGroup methodsFor: 'converting' stamp: 'len 10/9/2016 10:43'!
+asCartesianProduct
+	^ CartesianProduct components: components! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:41'!
+at: anInteger
+	^ components at: anInteger! !
+
+!DirectSumGroup methodsFor: 'random' stamp: 'len 10/10/2016 09:35'!
+atRandom: aRandom
+	^ components collect: [:each| each atRandom: aRandom]! !
+
+!DirectSumGroup methodsFor: 'random' stamp: 'len 10/10/2016 09:35'!
+atRandom: aRandom bits: bitSize
+	| n |
+	n _ bitSize / self arity.
+	^ components collect: [:each| each atRandom: aRandom bits: n]! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/3/2018 05:41:38'!
+basis
+	"Assuming the receiver is free, answer a basis."
+	^ self propertyAt: #basis ifAbsentPut:
+		[| answer |
+		answer _ OrderedCollection new: self rank.
+		components withIndexDo: [:each :i|
+			each basis do: [:e| answer add: (self embed: e at: i)]].
+		answer]! !
+
+!DirectSumGroup methodsFor: 'private' stamp: 'len 10/9/2016 10:43'!
+components
+	^ components! !
+
+!DirectSumGroup methodsFor: 'private' stamp: 'len 11/5/2016 10:15'!
+components: anArray
+	components _ anArray! !
+
+!DirectSumGroup methodsFor: 'testing' stamp: 'len 12/16/2016 12:42:09'!
+contains: anElement
+	components with: anElement do: [:V :x| (V contains: x) ifFalse: [^ false]].
+	^ true! !
+
+!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 4/23/2019 02:16:27'!
+coprojection: i
+	^ ((self at: i) to: self evaluating: [:x| self embed: x at: i]) name: 'i', i printText sub! !
+
+!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 9/30/2018 05:40:27'!
+embed: anElement at: i
+	^ components withIndexCollect: [:each :k| k = i ifTrue: [anElement] ifFalse: [each identity]]! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 12/17/2016 22:23:22'!
+identity
+	^ components collect: [:each| each identity]! !
+
+!DirectSumGroup methodsFor: 'testing' stamp: 'len 5/22/2018 16:54:30'!
+includes: anObject
+	anObject isSequenceable ifFalse: [^ false].
+	anObject size = components size ifFalse: [^ false].
+	components with: anObject do: [:V :x| (V includes: x) ifFalse: [^ false]].
+	^ true! !
+
+!DirectSumGroup methodsFor: 'testing' stamp: 'len 10/9/2016 10:45'!
+isCoproduct
+	^ true! !
+
+!DirectSumGroup methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:46'!
+isFree
+	^ components allSatisfy: [:each| each isFree]! !
+
+!DirectSumGroup methodsFor: 'testing' stamp: 'len 12/14/2016 22:10:19'!
+isProduct
+	^ true! !
+
+!DirectSumGroup methodsFor: 'printing' stamp: 'len 10/10/2016 08:44'!
+printOn: aStream
+	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character oplus]! !
+
+!DirectSumGroup methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:38'!
+projection: i
+	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 00:44:27'!
+rank
+	^ self propertyAt: #rank ifAbsentPut: [components sum: [:each| each rank]]! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 10/9/2016 10:42'!
+size
+	^ components product: [:each| each size]! !
+
+!DirectSumGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:41:52'!
+torsion
+	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
+	^ self class components: (components collect: [:each| each torsion])! !
+
+!DirectSumGroup class methodsFor: 'instance creation' stamp: 'len 10/10/2016 08:40'!
+components: anArray
+	^ self new components: anArray! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:42:12'!
+elementaryDivisors
+	^ self propertyAt: #elementaryDivisors! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:44:57'!
+elementaryDivisors: anArray
+	self propertyAt: #elementaryDivisors put: anArray! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:43:57'!
+exponent
+	"Answer the exponent of the receiver, i.e. the maximum order of an element."
+	^ self elementaryDivisors first! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:46:59'!
+isTrivial
+	^ self elementaryDivisors isEmpty! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:46:49'!
+printOn: aStream
+	self isTrivial ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
+	self elementaryDivisors do: [:each| aStream print: ZZ; nextPutAll: each printString sub] separatedBy: [aStream nextPut: Character oplus]! !
+
+!FiniteAbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:43:13'!
+size
+	self isTrivial ifTrue: [^ 1].
+	^ self elementaryDivisors product! !
+
+!FiniteAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:47:16'!
+elementaryDivisors: anArray
+	^ self new elementaryDivisors: anArray! !
+
+!FiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/29/2018 17:53:08'!
+asRing
+	^ self propertyAt: #ring ifAbsentPut: [ZZ / self size]! !
+
+!FiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:21'!
+atRandom: aRandom
+	^ self asRing atRandom: aRandom! !
+
+!FiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:05'!
+atRandom: aRandom bits: bitSize
+	^ self asRing atRandom: aRandom bits: bitSize! !
+
+!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 07:59:59'!
+generators
+	^ {self asRing one}! !
+
+!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:58:25'!
+identity
+	^ self asRing zero! !
+
+!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:38:58'!
+includes: anObject
+	^ self asRing includes: anObject! !
+
+!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:29:15'!
+isCyclic
+	^ true! !
+
+!FiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:50:25'!
+isPrimaryCyclic
+	^ self asRing modulusFactors asSet size = 1! !
+
+!FiniteCyclicGroup methodsFor: 'printing' stamp: 'len 9/29/2018 17:53:35'!
+printOn: aStream
+	self asRing printOn: aStream! !
+
+!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 00:43:10'!
+rank
+	^ 0! !
+
+!FiniteCyclicGroup methodsFor: 'private' stamp: 'len 9/29/2018 17:51:49'!
+setOrder: anInteger
+	self propertyAt: #size put: anInteger! !
+
+!FiniteCyclicGroup methodsFor: 'private' stamp: 'len 9/29/2018 18:36:48'!
+setRing: aModularIntegerRing
+	self propertyAt: #ring put: aModularIntegerRing.
+	self setOrder: aModularIntegerRing modulus! !
+
+!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 17:51:11'!
+size
+	^ self propertyAt: #size! !
+
+!FiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:40:25'!
+torsion
+	^ self! !
+
+!FiniteCyclicGroup class methodsFor: 'instance creation' stamp: 'len 9/29/2018 17:52:09'!
+new: anInteger
+	^ self new setOrder: anInteger! !
+
+!FiniteCyclicGroup class methodsFor: 'instance creation' stamp: 'len 9/29/2018 18:36:01'!
+on: aModularIntegerRing
+	^ self new setRing: aModularIntegerRing! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/28/2018 06:41:10'!
+ambient
+	^ self! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 01:03:16'!
+basis
+	^ self propertyAt: #basis! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 01:03:31'!
+generators
+	^ self basis! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 1/17/2019 03:42:40'!
+identity
+	^ self propertyAt: #identity ifAbsentPut: [self isTrivial ifTrue: [ZZ tuple: #()] ifFalse: [self basis anyOne * 0]]! !
+
+!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 9/30/2018 05:33:04'!
+isFree
+	^ true! !
+
+!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 2/24/2016 04:09'!
+isInfiniteCyclic
+	^ self basis size = 1! !
+
+!FreeAbelianGroup2 methodsFor: 'testing' stamp: 'len 2/27/2017 16:54:24'!
+isTrivial
+	^ self generators size = 0! !
+
+!FreeAbelianGroup2 methodsFor: 'printing' stamp: 'len 2/27/2017 16:47:54'!
+printOn: aStream
+	self isTrivial ifTrue: [^ super printOn: aStream].
+	aStream nextPut: Character ZZ.
+	self rank > 0 ifTrue: [aStream nextPutAll: self rank printString super].! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 2/27/2017 16:47:39'!
+rank
+	^ self generators size! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 12/7/2017 21:04:23'!
+size
+	^ self rank = 0 ifTrue: [1] ifFalse: [Aleph new: 0]! !
+
+!FreeAbelianGroup2 methodsFor: 'private' stamp: 'len 12/16/2016 12:37:29'!
+species
+	"Any subgroup of a free abelian group is also free."
+	^ FreeAbelianGroup! !
+
+!FreeAbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/29/2018 18:42:21'!
+torsion
+	"Answer the torsion subgroup of the receiver consisting of all elements that have finite order (the torsion elements)."
+	^ self null! !
+
+!FreeAbelianGroup2 class methodsFor: 'instance creation' stamp: 'len 1/10/2018 20:05:57'!
+new: anInteger
+	^ self new generators: (ZZ^anInteger) generators! !
+
+!InfiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/30/2018 00:42:29'!
+asModule
+	^ ZZ asSelfModule! !
+
+!InfiniteCyclicGroup methodsFor: 'converting' stamp: 'len 9/29/2018 18:26:57'!
+asRing
+	^ ZZ! !
+
+!InfiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:40:41'!
+atRandom: aRandom
+	^ self asRing atRandom: aRandom! !
+
+!InfiniteCyclicGroup methodsFor: 'random' stamp: 'len 10/2/2018 01:39:56'!
+atRandom: aRandom bits: bitSize
+	^ self asRing atRandom: aRandom bits: bitSize! !
+
+!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:57:34'!
+basis
+	^ #(1)! !
+
+!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:57:50'!
+generators
+	^ self basis! !
+
+!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/30/2018 05:58:05'!
+identity
+	^ 0! !
+
+!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:38:37'!
+includes: anObject
+	^ anObject isInteger! !
+
+!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/29/2018 18:28:48'!
+isCyclic
+	^ true! !
+
+!InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/30/2018 08:00:40'!
+isFree
+	^ true! !
+
+!InfiniteCyclicGroup methodsFor: 'printing' stamp: 'len 9/29/2018 18:28:32'!
+printOn: aStream
+	self asRing printOn: aStream! !
+
+!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:40:36'!
+rank
+	^ 1! !
+
+!InfiniteCyclicGroup methodsFor: 'accessing' stamp: 'len 9/29/2018 18:28:38'!
+size
+	^ self asRing size! !
+
+!AbelianGroup3 methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 08:56:56'!
+isCommutative
+	^ true! !
+
+!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:05:25'!
+!! anObject
+	anObject isSequenceable ifTrue: [^ self exponents: anObject asArray].
+	^ super !! anObject! !
+
+!FreeAbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/6/2019 12:49:30'!
+= anObject
+	^ (anObject isKindOf: FreeAbelianGroup3) and: [anObject rank = rank]! !
+
+!FreeAbelianGroup3 methodsFor: 'random' stamp: 'len 5/6/2019 08:55:49'!
+atRandom: aRandom bits: bitSize
+	^ self exponents: (ZZ ^ self rank atRandom: aRandom bits: bitSize) asArray! !
+
+!FreeAbelianGroup3 methodsFor: 'enumerating' stamp: 'len 5/6/2019 08:55:32'!
+do: aBlock
+	ZZ ^ self rank do: [:each| aBlock value: (self exponents: each asArray)]! !
+
+!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 08:56:11'!
+exponents: anArray
+	anArray size = rank ifFalse: [self error: 'exponents size doesn''t match rank'].
+	^ (Monomial exponents: anArray) parent: self! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:18'!
+generators
+	^ (1 to: rank) collect: [:i| self x: i]! !
+
+!FreeAbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/6/2019 08:56:24'!
+hash
+	^ self rank + self class hash! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:28'!
+identity
+	^ (Monomial new: rank) parent: self! !
+
+!FreeAbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 08:56:37'!
+includes: aMonomial
+	^ (aMonomial isKindOf: Monomial) and: [aMonomial lastIndeterminate <= rank]! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:56:45'!
+indeterminates
+	^ 1 to: rank! !
+
+!FreeAbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 08:58:11'!
+isUnivariate
+	^ self rank = 1! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:58:01'!
+names
+	"Answer the indeterminate names to use when printing monomials."
+	^ self propertyAt: #names ifAbsent: [self isUnivariate ifTrue: [#(x)]]! !
+
+!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 08:58:06'!
+names: anArray
+	"Set indeterminate names to use when printing monomials."
+	self propertyAt: #names put: anArray! !
+
+!FreeAbelianGroup3 methodsFor: 'converting' stamp: 'len 5/6/2019 08:58:17'!
+orderedBy: aMonomialOrdering
+	^ self copy ordering: aMonomialOrdering! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 08:58:22'!
+ordering
+	^ ordering! !
+
+!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 08:58:30'!
+ordering: aMonomialOrdering
+	ordering _ aMonomialOrdering isSymbol
+		ifTrue: [MonomialOrdering perform: (aMonomialOrdering,':') asSymbol with: (1 to: self rank)]
+		ifFalse: [aMonomialOrdering]! !
+
+!FreeAbelianGroup3 methodsFor: 'printing' stamp: 'len 5/6/2019 09:01:18'!
+printOn: aStream
+	aStream nextPut: $<.
+	self indeterminates
+		do: [:i| aStream print: (self x: i)]
+		separatedBy: [aStream nextPut: $,].
+	aStream nextPutAll: '>'! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 09:02:39'!
+rank
+	^ rank! !
+
+!FreeAbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 09:02:43'!
+rank: anInteger
+	rank _ anInteger! !
+
+!FreeAbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 09:02:54'!
+size
+	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [1]! !
+
+!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:03:44'!
+x: anInteger
+	^ self x: anInteger to: 1! !
+
+!FreeAbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 09:03:49'!
+x: anInteger to: exponent
+	^ (Monomial new: rank x: anInteger to: exponent) parent: self! !
+
+!FreeAbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:08:54'!
+new: anInteger
+	^ self new: anInteger ordering: #grevlex! !
+
+!FreeAbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:09:01'!
+new: anInteger ordering: aMonomialOrdering
+	^ self new rank: anInteger; ordering: aMonomialOrdering! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:56:53'!
+* anInteger
+	^ self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:43:22'!
++ anAbelianGroup
+	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
+	^ self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:00'!
+/ aCollectionOrElement
+	"Answer the quotient of the receiver by the given relations."
+	self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:40'!
+/\ anAbelianGroup
+	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
+	^ self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'morphisms' stamp: 'len 4/21/2019 13:32:42'!
+=> anAbelianGroup
+	(anAbelianGroup isKindOf: FPAbelianGroup) ifFalse: [^ super => anAbelianGroup].
+	^ AbelianGroupHomSet from: self to: anAbelianGroup! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 05:22:30'!
+ anAbelianGroup
+	"Answer the direct sum of the receiver and the argument as abelian group."
+	^ self class invariants: (self invariants, anAbelianGroup invariants) sort! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 09:46:11'!
+’ anAbelianGroup
+	^ self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 07:40:30'!
+ambient
+	^ self embedding codomain! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 09:28:30'!
+identity
+	^ AbelianGroupElement new parent: self; coordinates: (self invariants collect: [:each| 0])! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 04:47:31'!
+invariants
+	^ self propertyAt: #invariants! !
+
+!FPAbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:47:48'!
+invariants: anArray
+	self propertyAt: #invariants put: anArray! !
+
+!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 07:44:13'!
+isCyclic
+	^ self invariants size = 1! !
+
+!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 07:50:31'!
+isFree
+	^ self invariants allSatisfy: [:each| each = 0]! !
+
+!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 05:23:03'!
+isTorsion
+	^ self invariants noneSatisfy: [:each| each = 0]! !
+
+!FPAbelianGroup methodsFor: 'testing' stamp: 'len 4/21/2019 09:25:53'!
+isTrivial
+	^ self invariants isEmpty! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 04:44:43'!
+names
+	"Answer the indeterminate names to use when printing words."
+	^ self propertyAt: #names ifAbsent: []! !
+
+!FPAbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:43:16'!
+names: anArray
+	"Set indeterminate names to use when printing words."
+	self propertyAt: #names put: anArray! !
+
+!FPAbelianGroup methodsFor: 'printing' stamp: 'len 4/21/2019 09:27:55'!
+printOn: aStream
+	| first |
+	self isTrivial ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
+	first _ true.
+	(RunArray newFrom: self invariants) runsAndValuesDo: [:exponent :modulus|
+		first ifFalse: [aStream nextPut: Character oplus].
+		modulus = 0
+			ifTrue: [aStream print: ZZ]
+			ifFalse:
+				[aStream print: ZZ; nextPutAll: modulus printString sub].
+"			ifFalse:
+				[exponent > 1 ifTrue: [aStream nextPut: $(].
+				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
+				exponent > 1 ifTrue: [aStream nextPut: $)]]."
+		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
+		first _ false]! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 07:37:14'!
+rank
+	"Answer the torsion-free rank of the receiver."
+	^ self invariants count: [:each| each = 0]! !
+
+!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:57'!
+span: aCollection
+	"Answer the subgroup spanned by the elements in aCollection."
+	^ self notYetImplemented! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 05:24:08'!
+torsion
+	^ self class invariants: (self invariants select: [:each| each ~= 0])! !
+
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 4/21/2019 08:11:53'!
+x: anInteger
+	^ AbelianGroupElement new parent: self; coordinates: ((1 to: self invariants size) collect: [:each| each = anInteger ifTrue: [1] ifFalse: [0]])! !
+
+!FPAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 05:16:23'!
+invariants: anArray
+	^ self new invariants: anArray! !
+
+!FPAbelianGroup class methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 05:16:09'!
+new: anInteger
+	^ self invariants: ((1 to: anInteger) collect: [:each| 0])! !
 
 !FreeAbelianMonoid methodsFor: 'elements' stamp: 'len 12/22/2016 22:41:30'!
 !! aMonomial
@@ -24995,6 +25061,132 @@ type
 components: anArray
 	^ self new components: anArray! !
 
+!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 10/2/2018 16:59:06'!
+basis
+	^ self propertyAt: #basis ifAbsentPut: [(1 to: degree + 1) collect: [:i| polynomials xTo: i-1]]! !
+
+!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 4/12/2016 08:08'!
+coordinatesOf: aPolynomial
+	| coefficients |
+	coefficients _ aPolynomial coefficients.
+	^ coefficients, ((1 to: self dimension - coefficients size) collect: [:each| self scalars zero])! !
+
+!PolynomialFiltrationModule methodsFor: 'accessing' stamp: 'len 7/10/2016 07:39'!
+degree
+	^ degree! !
+
+!PolynomialFiltrationModule methodsFor: 'accessing-private' stamp: 'len 4/6/2016 07:07'!
+degree: anInteger
+	degree _ anInteger! !
+
+!PolynomialFiltrationModule methodsFor: 'morphisms' stamp: 'len 10/4/2016 12:14'!
+differential
+	^ self to: self evaluating: [:f| f derivative]! !
+
+!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 7/10/2016 07:39'!
+elementAt: aTuple
+	^ polynomials coefficients: aTuple! !
+
+!PolynomialFiltrationModule methodsFor: 'testing' stamp: 'len 12/13/2017 21:50:16'!
+includes: anObject
+	^ (polynomials includes: anObject) and: [anObject degree <= degree]! !
+
+!PolynomialFiltrationModule methodsFor: 'morphisms' stamp: 'len 6/19/2016 04:18'!
+integral: a to: b
+	^ self dual evaluating: [:f| f integral: a to: b]! !
+
+!PolynomialFiltrationModule methodsFor: 'accessing-private' stamp: 'len 4/6/2016 07:07'!
+polynomials: aPolynomials
+	polynomials _ aPolynomials! !
+
+!PolynomialFiltrationModule methodsFor: 'printing' stamp: 'len 6/7/2016 21:44'!
+printOn: aStream
+	aStream print: polynomials; nextPutAll: ('<', (degree+1) printString) sub! !
+
+!PolynomialFiltrationModule methodsFor: 'accessing' stamp: 'len 4/6/2016 07:04'!
+scalars
+	^ polynomials scalars! !
+
+!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 10/2/2018 17:00:37'!
+basis
+	^ self propertyAt: #basis ifAbsentPut: [self monomialBasis collect: [:each| polynomials monomial: each]]! !
+
+!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 9/3/2018 21:34:50'!
+coordinatesOf: aPolynomial
+	^ self scalars tuple: (self monomialBasis collect: [:each| aPolynomial coefficientAt: each])! !
+
+!PolynomialGradingModule methodsFor: 'as yet unclassified' stamp: 'len 9/3/2018 21:19:14'!
+degree: anInteger
+	degree _ anInteger! !
+
+!PolynomialGradingModule methodsFor: 'testing' stamp: 'len 12/13/2017 21:51:11'!
+includes: anObject
+	^ (polynomials includes: anObject) and: [anObject isHomogeneous and: [anObject degree = degree]]! !
+
+!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 9/3/2018 21:33:51'!
+monomialBasis
+	^ self propertyAt: #monomialBasis ifAbsentPut: [polynomials monomials allMonomialsOfDegree: degree]! !
+
+!PolynomialGradingModule methodsFor: 'accessing' stamp: 'len 6/24/2016 05:51'!
+ordering
+	^ polynomials ordering! !
+
+!PolynomialGradingModule methodsFor: 'as yet unclassified' stamp: 'len 9/3/2018 21:19:03'!
+polynomials: aPolynomialRing
+	polynomials _ aPolynomialRing! !
+
+!PolynomialGradingModule methodsFor: 'printing' stamp: 'len 7/6/2016 08:39'!
+printOn: aStream
+	aStream print: polynomials; nextPutAll: degree printString sub! !
+
+!PolynomialGradingModule methodsFor: 'accessing' stamp: 'len 1/19/2017 09:21:59'!
+scalars
+	^ polynomials scalars! !
+
+!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/7/2016 12:09:24'!
+printOn: aStream
+	aStream nextPut: $M; nextPutAll: weight printString sub; nextPut: $(; print: group; nextPut: $)! !
+
+!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/8/2016 11:57:53'!
+scalars
+	^ CC! !
+
+!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:25'!
+weight
+	^ weight! !
+
+!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:33'!
+weight: anInteger
+	weight _ anInteger! !
+
+!ModularFormSpace class methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:18'!
+new: anInteger
+	^ self new weight: anInteger! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
+degree
+	^ degree! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
+degree: anInteger
+	degree _ anInteger! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:52'!
+printOn: aStream
+	aStream nextPutAll: '/\'; nextPutAll: (aStream isText ifTrue: [self degree printString super] ifFalse: ['^', self degree printString]); nextPut: $(; print: self space; nextPut: $)! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:54'!
+rank
+	^ self space rank choose: self degree! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
+space
+	^ space! !
+
+!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
+space: aFreeModule
+	space _ aFreeModule! !
+
 !Algebra methodsFor: 'as yet unclassified' stamp: 'len 10/10/2018 06:38:23'!
 multiplication
 	^ ((self, self) to: self evaluatingWithArguments: [:x :y| x * y]) name: '*'! !
@@ -25164,132 +25356,6 @@ scalars
 !MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:37:00'!
 scalars: aRing
 	scalars _ aRing! !
-
-!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 10/2/2018 16:59:06'!
-basis
-	^ self propertyAt: #basis ifAbsentPut: [(1 to: degree + 1) collect: [:i| polynomials xTo: i-1]]! !
-
-!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 4/12/2016 08:08'!
-coordinatesOf: aPolynomial
-	| coefficients |
-	coefficients _ aPolynomial coefficients.
-	^ coefficients, ((1 to: self dimension - coefficients size) collect: [:each| self scalars zero])! !
-
-!PolynomialFiltrationModule methodsFor: 'accessing' stamp: 'len 7/10/2016 07:39'!
-degree
-	^ degree! !
-
-!PolynomialFiltrationModule methodsFor: 'accessing-private' stamp: 'len 4/6/2016 07:07'!
-degree: anInteger
-	degree _ anInteger! !
-
-!PolynomialFiltrationModule methodsFor: 'morphisms' stamp: 'len 10/4/2016 12:14'!
-differential
-	^ self to: self evaluating: [:f| f derivative]! !
-
-!PolynomialFiltrationModule methodsFor: 'basis' stamp: 'len 7/10/2016 07:39'!
-elementAt: aTuple
-	^ polynomials coefficients: aTuple! !
-
-!PolynomialFiltrationModule methodsFor: 'testing' stamp: 'len 12/13/2017 21:50:16'!
-includes: anObject
-	^ (polynomials includes: anObject) and: [anObject degree <= degree]! !
-
-!PolynomialFiltrationModule methodsFor: 'morphisms' stamp: 'len 6/19/2016 04:18'!
-integral: a to: b
-	^ self dual evaluating: [:f| f integral: a to: b]! !
-
-!PolynomialFiltrationModule methodsFor: 'accessing-private' stamp: 'len 4/6/2016 07:07'!
-polynomials: aPolynomials
-	polynomials _ aPolynomials! !
-
-!PolynomialFiltrationModule methodsFor: 'printing' stamp: 'len 6/7/2016 21:44'!
-printOn: aStream
-	aStream print: polynomials; nextPutAll: ('<', (degree+1) printString) sub! !
-
-!PolynomialFiltrationModule methodsFor: 'accessing' stamp: 'len 4/6/2016 07:04'!
-scalars
-	^ polynomials scalars! !
-
-!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 10/2/2018 17:00:37'!
-basis
-	^ self propertyAt: #basis ifAbsentPut: [self monomialBasis collect: [:each| polynomials monomial: each]]! !
-
-!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 9/3/2018 21:34:50'!
-coordinatesOf: aPolynomial
-	^ self scalars tuple: (self monomialBasis collect: [:each| aPolynomial coefficientAt: each])! !
-
-!PolynomialGradingModule methodsFor: 'as yet unclassified' stamp: 'len 9/3/2018 21:19:14'!
-degree: anInteger
-	degree _ anInteger! !
-
-!PolynomialGradingModule methodsFor: 'testing' stamp: 'len 12/13/2017 21:51:11'!
-includes: anObject
-	^ (polynomials includes: anObject) and: [anObject isHomogeneous and: [anObject degree = degree]]! !
-
-!PolynomialGradingModule methodsFor: 'basis' stamp: 'len 9/3/2018 21:33:51'!
-monomialBasis
-	^ self propertyAt: #monomialBasis ifAbsentPut: [polynomials monomials allMonomialsOfDegree: degree]! !
-
-!PolynomialGradingModule methodsFor: 'accessing' stamp: 'len 6/24/2016 05:51'!
-ordering
-	^ polynomials ordering! !
-
-!PolynomialGradingModule methodsFor: 'as yet unclassified' stamp: 'len 9/3/2018 21:19:03'!
-polynomials: aPolynomialRing
-	polynomials _ aPolynomialRing! !
-
-!PolynomialGradingModule methodsFor: 'printing' stamp: 'len 7/6/2016 08:39'!
-printOn: aStream
-	aStream print: polynomials; nextPutAll: degree printString sub! !
-
-!PolynomialGradingModule methodsFor: 'accessing' stamp: 'len 1/19/2017 09:21:59'!
-scalars
-	^ polynomials scalars! !
-
-!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/7/2016 12:09:24'!
-printOn: aStream
-	aStream nextPut: $M; nextPutAll: weight printString sub; nextPut: $(; print: group; nextPut: $)! !
-
-!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/8/2016 11:57:53'!
-scalars
-	^ CC! !
-
-!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:25'!
-weight
-	^ weight! !
-
-!ModularFormSpace methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:33'!
-weight: anInteger
-	weight _ anInteger! !
-
-!ModularFormSpace class methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 20:49:18'!
-new: anInteger
-	^ self new weight: anInteger! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
-degree
-	^ degree! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
-degree: anInteger
-	degree _ anInteger! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:52'!
-printOn: aStream
-	aStream nextPutAll: '/\'; nextPutAll: (aStream isText ifTrue: [self degree printString super] ifFalse: ['^', self degree printString]); nextPut: $(; print: self space; nextPut: $)! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:54'!
-rank
-	^ self space rank choose: self degree! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
-space
-	^ space! !
-
-!ExteriorPower methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 23:50'!
-space: aFreeModule
-	space _ aFreeModule! !
 
 !MultivariateModule methodsFor: 'as yet unclassified' stamp: 'len 12/29/2017 07:28:27'!
 basis
@@ -28489,6 +28555,10 @@ coimage
 cokernel
 	^ self codomain / self image! !
 
+!Morphism methodsFor: 'operations' stamp: 'len 5/10/2019 10:58:19'!
+commutator: aMorphism
+	^ self inverse · aMorphism inverse · self · aMorphism! !
+
 !Morphism methodsFor: 'operations' stamp: 'len 5/10/2019 10:14:22'!
 conjugatedBy: aMorphism
 	^ aMorphism inverse · self · aMorphism! !
@@ -28869,10 +28939,6 @@ value: anObject
 valueWithArguments: anArray
 	^ self value: (self domain scalars tuple: anArray)! !
 
-!Function class methodsFor: 'instance creation' stamp: 'len 10/10/2016 13:59'!
-evaluating: anExpression
-	^ self new expression: anExpression! !
-
 !Function class methodsFor: 'examples' stamp: 'len 10/29/2016 07:39'!
 example1Function
 	"The function 'x^2 + 1' with domain the ring of rational integers
@@ -29164,6 +29230,30 @@ value: anElement
 by: anElement in: aGroup
 	^ self new domain: aGroup; codomain: aGroup; element: anElement! !
 
+!FPGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 18:36:52'!
+map
+	^ self propertyAt: #map! !
+
+!FPGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 18:36:35'!
+map: anArray
+	self propertyAt: #map put: anArray! !
+
+!FPGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 18:38:36'!
+value: aWord
+	| answer map |
+	answer _ self codomain identity.
+	map _ self map.
+	aWord do: [:i :exponent| answer _ answer · ((map at: i) ^ exponent)].
+	^ answer! !
+
+!FPGroupMap class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:36:07'!
+from: aFPGroup to: aGroup evaluating: aBlock
+	^ self from: aFPGroup to: aGroup mapping: [:i| aBlock value: (aFPGroup x: i)]! !
+
+!FPGroupMap class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:42:52'!
+from: aFPGroup to: aGroup mapping: aBlock
+	^ self new domain: aFPGroup; codomain: aGroup; map: ((1 to: aFPGroup rank) collect: [:i| aBlock value: i])! !
+
 !GroupRepresentation methodsFor: 'accessing' stamp: 'len 10/17/2016 10:54'!
 action
 	"Answer the associated group action on the representation space."
@@ -29180,6 +29270,34 @@ character
 space
 	"Answer the representation space."
 	^ self codomain space! !
+
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 15:19:25'!
+conductor
+	| factors p e answer |
+	(self modulus = 1 or: [self isTrivial]) ifTrue: [^ 1].
+	(factors _ self modulus factors) asSet size > 1
+		ifTrue: [^ self decomposition product: [:each| each conductor]].
+	p _ factors anyOne.
+	e _ factors size.
+	answer _ p ^ ((self size valuation: p) + 1).
+"	p = 2 and: [e > 2 and: [ ..."
+	^ answer! !
+
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:05'!
+even
+	^ (self value: -1 % self modulus) = self codomain one! !
+
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:30'!
+isPrimitive
+	^ self conductor = self modulus! !
+
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:21:35'!
+modulus
+	^ self domain modulus! !
+
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:01'!
+odd
+	^ (self value: -1 % self modulus) = self codomain one negated! !
 
 !AbelianGroupMap methodsFor: 'as yet unclassified' stamp: 'len 4/22/2019 14:41:57'!
 codomain
@@ -29220,34 +29338,6 @@ value: anElement
 !AbelianGroupMap class methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:08:15'!
 from: anAbelianGroup to: anotherAbelianGroup matrix: aMatrix
 	^ self new domain: anAbelianGroup; codomain: anotherAbelianGroup; matrix: aMatrix! !
-
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 15:19:25'!
-conductor
-	| factors p e answer |
-	(self modulus = 1 or: [self isTrivial]) ifTrue: [^ 1].
-	(factors _ self modulus factors) asSet size > 1
-		ifTrue: [^ self decomposition product: [:each| each conductor]].
-	p _ factors anyOne.
-	e _ factors size.
-	answer _ p ^ ((self size valuation: p) + 1).
-"	p = 2 and: [e > 2 and: [ ..."
-	^ answer! !
-
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:05'!
-even
-	^ (self value: -1 % self modulus) = self codomain one! !
-
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:30'!
-isPrimitive
-	^ self conductor = self modulus! !
-
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:21:35'!
-modulus
-	^ self domain modulus! !
-
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 12:28:01'!
-odd
-	^ (self value: -1 % self modulus) = self codomain one negated! !
 
 !RingMap methodsFor: 'comparing' stamp: 'len 5/15/2018 18:12:05'!
 = aRingMap
@@ -31585,10 +31675,6 @@ changesDo: aBlock
 codomain
 	^ self domain! !
 
-!Permutation methodsFor: 'operations' stamp: 'len 2/8/2018 08:43:35'!
-commutator: aPermutation
-	^ self inverse * aPermutation inverse * self * aPermutation! !
-
 !Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 08:49:33'!
 cycles
 	"Answer the cycles of the receiver."
@@ -32363,20 +32449,20 @@ printOn: aStream
 	self components do: [:each| each printInsidesOn: aStream] separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $]! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:40:22'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/6/2019 03:40:22'!
 / anElement
 	^ self · anElement inverse! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:16:32'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:16:32'!
 ^ anObject
 	anObject isInteger ifFalse: [^ self conjugatedBy: anObject].
 	^ self ·· anObject! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 02:50:01'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/6/2019 02:50:01'!
 · anElement
 	^ self subclassResponsibility! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:10:45'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:10:45'!
 ·· anInteger
 	"Answer the receiver composed with itself anInteger times."
 	anInteger = 1 ifTrue: [^ self].
@@ -32384,25 +32470,29 @@ printOn: aStream
 	anInteger < 0 ifTrue: [^ self inverse ·· anInteger negated].
 	^ (self · self ·· (anInteger // 2)) · (self ·· (anInteger \\ 2))! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:07:17'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:57:13'!
+commutator: anElement
+	^ self inverse · anElement inverse · self · anElement! !
+
+!GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:07:17'!
 conjugatedBy: anElement
 	^ anElement inverse · self · anElement! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 10:11:51'!
+!GroupElement methodsFor: 'accessing' stamp: 'len 5/10/2019 10:11:51'!
 identity
 	^ self parent identity! !
 
-!GroupElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 02:49:53'!
+!GroupElement methodsFor: 'operations' stamp: 'len 5/6/2019 02:49:53'!
 inverse
 	^ self subclassResponsibility! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:36:08'!
+!Word methodsFor: 'operations' stamp: 'len 5/5/2019 18:36:08'!
 * aWord
 	^ self · aWord! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:17:37'!
+!Word methodsFor: 'operations' stamp: 'len 5/10/2019 16:12:09'!
 / aWord
-	^ self * aWord inverse! !
+	^ self · aWord inverse! !
 
 !Word methodsFor: 'comparing' stamp: 'len 1/9/2018 21:32:27'!
 < aWord
@@ -32426,13 +32516,14 @@ inverse
 	self == aWord ifTrue: [^ true].
 	^ (self compare: aWord) >= 0! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:54'!
+!Word methodsFor: 'operations' stamp: 'len 5/10/2019 16:13:17'!
 · aWord
 	| x y |
 	self isEmpty ifTrue: [^ aWord].
 	aWord isEmpty ifTrue: [^ self].
+	parent = aWord parent ifFalse: [DomainError signal: 'words with different parents'].
 	syllables last key = aWord syllables first key
-		ifFalse: [^ self class syllables: syllables, aWord syllables].
+		ifFalse: [^ (self class syllables: syllables, aWord syllables) parent: parent].
 	x _ syllables as: OrderedCollection.
 	y _ aWord syllables as: OrderedCollection.
 	[x notEmpty and: [y notEmpty and: [x last key = y first key]]]
@@ -32441,8 +32532,8 @@ inverse
 			xn _ x removeLast.
 			y1 _ y removeFirst.
 			(exponent _ xn value + y1 value) = 0
-				ifFalse: [^ self class syllables: (x, {Association key: xn key value: exponent}, y) asArray]].
-	^ self class syllables: (x, y) asArray! !
+				ifFalse: [^ (self class syllables: (x, {Association key: xn key value: exponent}, y) asArray) parent: parent]].
+	^ (self class syllables: (x, y) asArray) parent: parent! !
 
 !Word methodsFor: 'comparing' stamp: 'len 1/10/2018 11:40:04'!
 compare: aWord
@@ -32465,11 +32556,11 @@ compare: aWord
 	stream1 atEnd and: [stream2 atEnd]] whileFalse.
 	^ 0! !
 
-!Word methodsFor: 'copying' stamp: 'len 2/27/2017 08:06:48'!
-copyWithout: anObject
-	^ self class syllables: (self syllables select: [:each| each key ~= anObject])! !
+!Word methodsFor: 'copying' stamp: 'len 5/10/2019 17:16:33'!
+copyWithout: anInteger
+	^ self class syllables: (self syllables select: [:each| each key ~= anInteger])! !
 
-!Word methodsFor: 'enumerating' stamp: 'len 3/3/2016 05:23'!
+!Word methodsFor: 'enumerating' stamp: 'len 5/10/2019 18:29:24'!
 do: aBinaryBlock
 	syllables do: [:each| aBinaryBlock value: each key value: each value]! !
 
@@ -32481,9 +32572,9 @@ hash
 identity
 	^ self class empty! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:39'!
+!Word methodsFor: 'operations' stamp: 'len 5/10/2019 16:13:38'!
 inverse
-	^ self class syllables: (syllables collect: [:each| Association key: each key value: each value negated]) reversed! !
+	^ (self class syllables: (syllables collect: [:each| Association key: each key value: each value negated]) reversed) parent: parent! !
 
 !Word methodsFor: 'testing' stamp: 'len 3/3/2016 05:23'!
 isEmpty
@@ -32503,6 +32594,14 @@ length
 	syllables isEmpty ifTrue: [^ 0].
 	^ syllables sum: [:each| each value abs]! !
 
+!Word methodsFor: 'accessing' stamp: 'len 5/10/2019 14:41:44'!
+parent
+	^ parent! !
+
+!Word methodsFor: 'private' stamp: 'len 5/10/2019 14:41:37'!
+parent: aDomain
+	parent _ aDomain! !
+
 !Word methodsFor: 'printing' stamp: 'len 7/2/2016 16:29'!
 printExponent: anInteger on: aStream
 	| exponent |
@@ -32517,59 +32616,47 @@ printExponent: anInteger on: aStream
 		ifTrue: [aStream nextPutAll: exponent]
 		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
 
-!Word methodsFor: 'printing' stamp: 'len 2/27/2017 08:23:57'!
-printIndeterminate: indeterminate on: aStream
-	indeterminate isInteger
+!Word methodsFor: 'printing' stamp: 'len 5/10/2019 16:02:44'!
+printLetter: letter on: aStream
+	letter isInteger
 		ifFalse:
-			[indeterminate class = self class
-				ifTrue: [aStream nextPut: $(; print: indeterminate; nextPut: $)]
-				ifFalse: [(aStream isText and: [indeterminate isString])
-					ifTrue: [aStream nextPutAll: indeterminate asText]
-					ifFalse: [aStream print: indeterminate]]. ^ self].
+			[letter class = self class
+				ifTrue: [aStream nextPut: $(; print: letter; nextPut: $)]
+				ifFalse: [(aStream isText and: [letter isString])
+					ifTrue: [aStream nextPutAll: letter asText]
+					ifFalse: [aStream print: letter]]. ^ self].
 	aStream isText
-		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
-		ifFalse: [aStream nextPutAll: '{x', indeterminate printString, '}']! !
+		ifTrue: [aStream nextPut: $x; nextPutAll: letter printString sub]
+		ifFalse: [aStream nextPutAll: '{x', letter printString, '}']! !
 
-!Word methodsFor: 'printing' stamp: 'len 1/10/2018 12:23:21'!
+!Word methodsFor: 'printing' stamp: 'len 5/10/2019 16:09:32'!
 printOn: aStream
 	self isEmpty ifTrue: [aStream nextPut: Character epsilon. ^ self].
-	self do: [:i :exp|
+	self do: [:each :exp|
 		exp = 0
 			ifFalse:
-				[self printIndeterminate: i on: aStream.
+				[self printLetter: each on: aStream.
 				self printExponent: exp on: aStream]]! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:47'!
+!Word methodsFor: 'operations' stamp: 'len 5/5/2019 18:35:47'!
 reciprocal
 	^ self inverse! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 3/3/2016 05:23'!
+!Word methodsFor: 'operations' stamp: 'len 5/10/2019 16:13:47'!
 reversed
-	^ self class syllables: syllables reversed! !
+	^ (self class syllables: syllables reversed) parent: parent! !
 
-!Word methodsFor: 'arithmetic' stamp: 'len 7/8/2016 05:50'!
+!Word methodsFor: 'operations' stamp: 'len 5/10/2019 16:13:53'!
 squared
-	^ self * self! !
+	^ self · self! !
 
 !Word methodsFor: 'accessing' stamp: 'len 3/3/2016 05:24'!
 syllables
 	^ syllables! !
 
-!Word methodsFor: 'accessing-private' stamp: 'len 3/3/2016 05:21'!
+!Word methodsFor: 'private' stamp: 'len 3/3/2016 05:21'!
 syllables: anArray
 	syllables _ anArray! !
-
-!Word methodsFor: 'accessing' stamp: 'len 6/29/2016 23:23'!
-value
-	^ syllables product: [:each| each key ^ each value]! !
-
-!Word methodsFor: 'accessing' stamp: 'len 2/26/2017 10:34:37'!
-value: anObject
-	| answer next |
-	syllables do: [:each|
-		next _ (anObject at: each key) ^ each value.
-		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
-	^ answer! !
 
 !Word class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:31'!
 empty
@@ -36481,68 +36568,6 @@ asSimpleTensor
 printLiteral: anArray on: aStream
 	(1 to: anArray size) do: [:i| aStream nextPutAll: ((parent at: i) names at: (anArray at: i))] separatedBy: [aStream nextPut: Character otimes]! !
 
-!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 1/10/2018 21:49:36'!
-* anObject
-	((self scalars includes: anObject) or: [anObject isInteger])
-		ifTrue: [^ super * anObject].
-	(self parent includes: anObject)
-		ifTrue: [^ self convolution: anObject].
-	(self parent words includes: anObject)
-		ifTrue: [^ self multipliedByMonomial: anObject].
-	^ DomainError signal! !
-
-!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 2/25/2017 07:53:00'!
-^ anInteger
-	"Answer the receiver raised to the power anInteger."
-	(anInteger isInteger and: [anInteger >= 0])
-		ifFalse: [^ DomainError signal: 'undefinted'].
-	anInteger = 0 ifTrue: [^ self one].
-	anInteger = 1 ifTrue: [^ self].
-	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 3/3/2016 05:27'!
-degree
-	"Answer the total degree of the receiver."
-	self isZero ifTrue: [^ Infinity negative].
-	^ self monomials max: [:each| each length]! !
-
-!FreePolynomial methodsFor: 'testing' stamp: 'len 1/10/2018 16:57:08'!
-isStandard
-	"Answer true if the receiver is a standard polynomial, i.e. all its monomials are standard words."
-	self monomialsDo: [:each| each isStandard ifFalse: [^ false]].
-	^ true! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 13:29:49'!
-leadingCoefficient
-	^ self at: self leadingMonomial! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 13:29:36'!
-leadingMonomial
-	^ self monomials asSortedCollection first! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 16:56:38'!
-monomials
-	^ Iterator on: self performing: #monomialsDo:! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 16:56:11'!
-monomialsDo: aBlock
-	self keysDo: aBlock! !
-
-!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 1/10/2018 20:18:46'!
-multipliedByMonomial: aWord
-	| newCoefficients |
-	newCoefficients _ Dictionary new: self size.
-	self associationsDo: [:each| newCoefficients at: each key * aWord put: each value].
-	^ self parent coefficients: newCoefficients! !
-
-!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 20:07:45'!
-one
-	^ self parent one! !
-
-!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 3/2/2016 05:35'!
-squared
-	^ self * self! !
-
 !Divisor methodsFor: 'comparing' stamp: 'len 1/11/2017 16:34:02'!
 <= aDivisor
 	^ (aDivisor - self) isEffective! !
@@ -36618,6 +36643,68 @@ dimension
 !SimplicialChain methodsFor: 'testing' stamp: 'len 2/23/2016 03:33'!
 isCycle
 	^ self boundary isZero! !
+
+!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 1/10/2018 21:49:36'!
+* anObject
+	((self scalars includes: anObject) or: [anObject isInteger])
+		ifTrue: [^ super * anObject].
+	(self parent includes: anObject)
+		ifTrue: [^ self convolution: anObject].
+	(self parent words includes: anObject)
+		ifTrue: [^ self multipliedByMonomial: anObject].
+	^ DomainError signal! !
+
+!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 2/25/2017 07:53:00'!
+^ anInteger
+	"Answer the receiver raised to the power anInteger."
+	(anInteger isInteger and: [anInteger >= 0])
+		ifFalse: [^ DomainError signal: 'undefinted'].
+	anInteger = 0 ifTrue: [^ self one].
+	anInteger = 1 ifTrue: [^ self].
+	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 3/3/2016 05:27'!
+degree
+	"Answer the total degree of the receiver."
+	self isZero ifTrue: [^ Infinity negative].
+	^ self monomials max: [:each| each length]! !
+
+!FreePolynomial methodsFor: 'testing' stamp: 'len 1/10/2018 16:57:08'!
+isStandard
+	"Answer true if the receiver is a standard polynomial, i.e. all its monomials are standard words."
+	self monomialsDo: [:each| each isStandard ifFalse: [^ false]].
+	^ true! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 13:29:49'!
+leadingCoefficient
+	^ self at: self leadingMonomial! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 13:29:36'!
+leadingMonomial
+	^ self monomials asSortedCollection first! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 16:56:38'!
+monomials
+	^ Iterator on: self performing: #monomialsDo:! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 16:56:11'!
+monomialsDo: aBlock
+	self keysDo: aBlock! !
+
+!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 1/10/2018 20:18:46'!
+multipliedByMonomial: aWord
+	| newCoefficients |
+	newCoefficients _ Dictionary new: self size.
+	self associationsDo: [:each| newCoefficients at: each key * aWord put: each value].
+	^ self parent coefficients: newCoefficients! !
+
+!FreePolynomial methodsFor: 'accessing' stamp: 'len 1/10/2018 20:07:45'!
+one
+	^ self parent one! !
+
+!FreePolynomial methodsFor: 'arithmetic' stamp: 'len 3/2/2016 05:35'!
+squared
+	^ self * self! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 5/7/2019 17:26:48'!
 % anInteger
