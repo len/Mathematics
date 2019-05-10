@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 4:37:26 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 7:39:10 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 462!
+!provides: 'Mathematics' 1 463!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -28671,12 +28671,12 @@ example6GLAsMatrixGroupAction
 		to: (self codomain, aFunction codomain)
 		evaluating: [:each| {self value: (each at: 1). aFunction value: (each at: 2)}]! !
 
-!Function methodsFor: 'comparing' stamp: 'len 2/12/2016 05:36'!
+!Function methodsFor: 'comparing' stamp: 'len 5/10/2019 07:24:00'!
 = aFunction
 	self == aFunction ifTrue: [^ true].
 	(self domain = aFunction domain and: [self codomain = aFunction codomain])
 		ifFalse: [^ false].
-	self domain isFinite ifFalse: [^ self error: 'unable to check equality'].
+	self domain isFinite ifFalse: [^ self error: 'infinite domain'].
 	self domain do: [:each| (self value: each) = (aFunction value: each) ifFalse: [^ false]].
 	^ true! !
 
@@ -28733,6 +28733,14 @@ hash
 image
 	^ self propertyAt: #image ifAbsent: [self domain apply: self]! !
 
+!Function methodsFor: 'testing' stamp: 'len 5/10/2019 07:30:02'!
+isAbelianGroupHomomorphism
+	(self domain isAbelianGroup and: [self codomain isAbelianGroup]) ifFalse: [^ false].
+	self domain isFinite ifFalse: [^ self error: 'infinite domain'].
+	^ self domain allSatisfy: [:x|
+		self domain allSatisfy: [:y|
+			(self value: x) + (self value: y) = (self value: x + y)]]! !
+
 !Function methodsFor: 'testing' stamp: 'len 4/16/2016 18:53'!
 isBiyective
 	^ self isInjective and: [self isSurjective]! !
@@ -28745,6 +28753,14 @@ isEpimorphism
 isEvaluable
 	^ true! !
 
+!Function methodsFor: 'testing' stamp: 'len 5/10/2019 07:29:16'!
+isGroupHomomorphism
+	(self domain isGroup and: [self codomain isGroup]) ifFalse: [^ false].
+	self domain isFinite ifFalse: [^ self error: 'infinite domain'].
+	^ self domain allSatisfy: [:x|
+		self domain allSatisfy: [:y|
+			(self value: x)·(self value: y) = (self value: x·y)]]! !
+
 !Function methodsFor: 'testing' stamp: 'len 12/28/2016 11:10:18'!
 isIdentity
 	^ self propertyAt: #isIdentity ifAbsentPut: [self = self domain id]! !
@@ -28753,9 +28769,30 @@ isIdentity
 isInjective
 	^ self hasLeftInverse! !
 
+!Function methodsFor: 'testing' stamp: 'len 5/10/2019 07:38:30'!
+isModuleHomomorphism
+	(self domain isModule and: [self codomain isModule]) ifFalse: [^ false].
+	self domain scalars = self codomain scalars ifFalse: [^ false].
+	self domain isFinite ifFalse: [^ self error: 'infinite domain'].
+	^ self domain allSatisfy: [:x|
+		self domain allSatisfy: [:y|
+			| z |
+			(z _ self value: x) + (self value: y) = (self value: x + y) and:
+				[self domain scalars allSatisfy: [:r| z * r = (self value: x * r)]]]]! !
+
 !Function methodsFor: 'testing' stamp: 'len 4/16/2016 19:16'!
 isMonomorphism
 	^ self isInjective! !
+
+!Function methodsFor: 'testing' stamp: 'len 5/10/2019 07:34:08'!
+isRingHomomorphism
+	(self domain isRing and: [self codomain isRing]) ifFalse: [^ false].
+	self domain isFinite ifFalse: [^ self error: 'infinite domain'].
+	(self value: self domain one) = self codomain one ifFalse: [^ false].
+	^ self domain allSatisfy: [:x|
+		self domain allSatisfy: [:y|
+			(self value: x) + (self value: y) = (self value: x + y) and:
+				[(self value: x) * (self value: y) = (self value: x * y)]]]! !
 
 !Function methodsFor: 'testing' stamp: 'len 2/9/2016 04:25'!
 isSurjective
