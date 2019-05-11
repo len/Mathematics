@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 11 May 2019 at 3:09:09 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 11 May 2019 at 8:38:31 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 467!
+!provides: 'Mathematics' 1 468!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -620,16 +620,6 @@ PermutationGroup subclass: #SymmetricGroup
 	category: 'Mathematics-Groups-Permutations'!
 !classDefinition: 'SymmetricGroup class' category: #'Mathematics-Groups-Permutations'!
 SymmetricGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #StandardSymmetricGroup category: #'Mathematics-Etc'!
-SymmetricGroup subclass: #StandardSymmetricGroup
-	instanceVariableNames: 'degree'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'StandardSymmetricGroup class' category: #'Mathematics-Etc'!
-StandardSymmetricGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #LinearGroup category: #'Mathematics-Groups-Linear'!
@@ -2332,16 +2322,6 @@ Morphism subclass: #Permutation
 Permutation class
 	instanceVariableNames: ''!
 
-!classDefinition: #StandardPermutation category: #'Mathematics-Etc'!
-Permutation subclass: #StandardPermutation
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'StandardPermutation class' category: #'Mathematics-Etc'!
-StandardPermutation class
-	instanceVariableNames: ''!
-
 !classDefinition: #RationalPoint category: #'Mathematics-Schemes'!
 Morphism subclass: #RationalPoint
 	instanceVariableNames: 'codomain'
@@ -2732,6 +2712,36 @@ Tuple subclass: #MultivariateTuple
 MultivariateTuple class
 	instanceVariableNames: ''!
 
+!classDefinition: #Matrix category: #'Mathematics-Modules-Matrices'!
+ModuleElement subclass: #Matrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Modules-Matrices'!
+!classDefinition: 'Matrix class' category: #'Mathematics-Modules-Matrices'!
+Matrix class
+	instanceVariableNames: ''!
+
+!classDefinition: #ColumnMatrix category: #'Mathematics-Modules-Matrices'!
+Matrix subclass: #ColumnMatrix
+	instanceVariableNames: 'columns'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Modules-Matrices'!
+!classDefinition: 'ColumnMatrix class' category: #'Mathematics-Modules-Matrices'!
+ColumnMatrix class
+	instanceVariableNames: ''!
+
+!classDefinition: #RowMatrix category: #'Mathematics-Modules-Matrices'!
+Matrix subclass: #RowMatrix
+	instanceVariableNames: 'rows'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Mathematics-Modules-Matrices'!
+!classDefinition: 'RowMatrix class' category: #'Mathematics-Modules-Matrices'!
+RowMatrix class
+	instanceVariableNames: ''!
+
 !classDefinition: #Monomial category: #'Mathematics-Monomials'!
 Element subclass: #Monomial
 	instanceVariableNames: 'exponents parent degree'
@@ -2830,36 +2840,6 @@ Object subclass: #LLL
 	category: 'Mathematics-Modules-Lattices'!
 !classDefinition: 'LLL class' category: #'Mathematics-Modules-Lattices'!
 LLL class
-	instanceVariableNames: ''!
-
-!classDefinition: #Matrix category: #'Mathematics-Modules-Matrices'!
-Object subclass: #Matrix
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'Matrix class' category: #'Mathematics-Modules-Matrices'!
-Matrix class
-	instanceVariableNames: ''!
-
-!classDefinition: #ColumnMatrix category: #'Mathematics-Modules-Matrices'!
-Matrix subclass: #ColumnMatrix
-	instanceVariableNames: 'columns'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'ColumnMatrix class' category: #'Mathematics-Modules-Matrices'!
-ColumnMatrix class
-	instanceVariableNames: ''!
-
-!classDefinition: #RowMatrix category: #'Mathematics-Modules-Matrices'!
-Matrix subclass: #RowMatrix
-	instanceVariableNames: 'rows'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'RowMatrix class' category: #'Mathematics-Modules-Matrices'!
-RowMatrix class
 	instanceVariableNames: ''!
 
 !classDefinition: #ExtendedSmithReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
@@ -3830,7 +3810,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: '<historical>' prior: 0!
+!Domain commentStamp: 'len 5/11/2019 04:18:53' prior: 0!
 Domains are the objects of category theory (such as Groups, Rings, Modules, Schemes, etc) connected by the corresponding Morphisms. In many practical situations, domains can be seen as sets of elements, and their morphisms as structure-preserving Functions.
 
 Domains with an underlying set can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
@@ -3843,9 +3823,9 @@ Given two domains A and B in the same category, the set Hom(A,B) of morphisms be
 
 Domains often come equipped with canonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and quotient objects have canonical projections (epimorphisms). N-ary products and coproducts have coordinate projection maps from their components, and coproducts also have coprojection maps onto their components.
 
-More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) that are uniquely determined by their domain and codomain can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: (respectively #into: and #infrom:, #onto: and #onfrom:) to answer canonical morphisms when such morphisms are known.
+More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) that are uniquely determined by their domain and codomain can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms when such morphisms are known.
 
-There's also a very simple coercion mechanism that allows the convertion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any ring R can be performed simply as 'R !! n'. Subclasses can extend the message #!! to convert the argument when possible.
+There's also a very simple coercion mechanism that allows the convertion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any unital ring 'R' can be performed simply as 'R !! n'. Although available canonical morphisms will be used automatically for coercion, subclasses can also extend the message #!! for convenience.
 
 References:
 	https://ncatlab.org/nlab/show/category+theory
@@ -3956,10 +3936,6 @@ The alternating group Alt(X) of even permutations on the elements of a set X (wh
 
 !SymmetricGroup commentStamp: 'len 5/22/2018 21:46:32' prior: 0!
 The symmetric group Sym(X) of permutations on the elements of a set X (which we call 'space'). This is the ambient of all PermutationGroups.!
-
-!StandardSymmetricGroup commentStamp: '<historical>' prior: 0!
-The symmetric group Sym(n) of permutations on the elements of a set [1..n] (which we call 'space').
-!
 
 !LinearGroup commentStamp: 'len 9/27/2018 21:46:03' prior: 0!
 Groups of automorphisms of a free R-module over a commutative ring R. They are subgroups of the general linear group GL(V).!
@@ -4566,7 +4542,7 @@ References:
 	https://en.wikipedia.org/wiki/Morphism
 !
 
-!Function commentStamp: 'len 4/19/2019 05:00:14' prior: 0!
+!Function commentStamp: 'len 5/11/2019 04:25:34' prior: 0!
 Maps from a set (domain) to another set (codomain). Evaluated at elements of the domain (>>#value:) they produce elements of the codomain. See Domain and HomSet.
 
 Example:
@@ -4738,9 +4714,6 @@ Morphisms of simplicial complexes. See SimplicialComplex.!
 !Permutation commentStamp: '<historical>' prior: 0!
 Permutations are bijective functions on a set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
 
-!StandardPermutation commentStamp: '<historical>' prior: 0!
-Permutations are bijective functions on a set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
-
 !RationalPoint commentStamp: '<historical>' prior: 0!
 Abstract superclass for K-rational points on a scheme X, seen as morphisms Spec(K) -> X.
 
@@ -4803,8 +4776,8 @@ Residue classes of polynomials modulo an ideal. They are elements of a quotient 
 !AlgebraicElement commentStamp: '<historical>' prior: 0!
 Elements of finite algebraic field (or ring) extensions. See AlgebraicExtension.!
 
-!Polynomial commentStamp: '<historical>' prior: 0!
-Polynomials in one or many indeterminates, with coefficients in a commutative ring. See PolynomialRing.
+!Polynomial commentStamp: 'len 5/11/2019 08:20:21' prior: 0!
+Polynomials in one or many indeterminates, with coefficients in a commutative ring. These are elements of a PolynomialRing.
 
 This is an abstract class. See subclasses MultivariatePolynomial and UnivariatePolynomial for concrete implementations.
 
@@ -4891,6 +4864,15 @@ Example:
 	(1,2,3,4) % 3
 !
 
+!Matrix commentStamp: 'len 4/4/2018 01:27:42' prior: 0!
+Matrices with coefficients in a commutative ring.!
+
+!ColumnMatrix commentStamp: '<historical>' prior: 0!
+My instances are matrices with coefficients over some commutative ring, represented as a list of column tuples. Column operations are fast on these matrices.!
+
+!RowMatrix commentStamp: '<historical>' prior: 0!
+Matrices with coefficients over some commutative ring, represented as a list of row tuples. Row operations are fast on these matrices.!
+
 !Monomial commentStamp: '<historical>' prior: 0!
 Commutative power products of one or many indeterminates. They form a monoid (see FreeAbelianMonoid). Their formal linear combinations over a ring are Polynomials (see also PolynomialRing).
 
@@ -4916,15 +4898,6 @@ Output: an almost H-reduced basis of the lattice.
 
 The algorithm takes at most O(d^6 ln^3(B)), where the input vectors bi all satisfy |bi|^2 <= B. In practice however, this upper bound is quite pessimistic.
 !
-
-!Matrix commentStamp: 'len 4/4/2018 01:27:42' prior: 0!
-Matrices with coefficients in a commutative ring.!
-
-!ColumnMatrix commentStamp: '<historical>' prior: 0!
-My instances are matrices with coefficients over some commutative ring, represented as a list of column tuples. Column operations are fast on these matrices.!
-
-!RowMatrix commentStamp: '<historical>' prior: 0!
-Matrices with coefficients over some commutative ring, represented as a list of row tuples. Row operations are fast on these matrices.!
 
 !HermiteColumnReduction commentStamp: '<historical>' prior: 0!
 This is the Hermite column reduction algorithm. Given a matrix with coefficients in the rational integers Z, it reduces the matrix to its column-style Hermite normal form.
@@ -13462,11 +13435,6 @@ example5GL
 	its elements are linear maps, not matrices."
 	^ (QQ ^ 3) automorphisms! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 9/25/2018 17:14:19'!
-example5GLAsMatrixGroup
-	"The matrix group GL(3,Q) of 3x3 matrices with rational coefficients."
-	^ GeneralLinearGroup new: 3 over: QQ! !
-
 !Domain class methodsFor: 'instance creation' stamp: 'len 4/23/2016 03:40'!
 newFrom: anObject
 	^ self new elements: anObject! !
@@ -14784,10 +14752,6 @@ perfectCore
 	self derivedSeriesDo: [:each| answer _ each].
 	^ answer! !
 
-!Group methodsFor: 'accessing' stamp: 'len 12/28/2016 11:27:16'!
-presentation
-	^ self propertyAt: #presentation! !
-
 !Group methodsFor: 'printing' stamp: 'len 12/28/2016 12:27:40'!
 printOn: aStream
 	| generators |
@@ -15027,9 +14991,11 @@ isFree
 onto: aGroup mapping: aBlock
 	^ self to: aGroup mapping: aBlock! !
 
-!FPGroup methodsFor: 'printing' stamp: 'len 5/10/2019 11:36:53'!
+!FPGroup methodsFor: 'printing' stamp: 'len 5/11/2019 07:43:30'!
 printOn: aStream
 "	self isFree ifTrue: [aStream nextPutAll: 'F('; print: symbols; nextPut: $). ^ self]."
+	self generators isEmpty
+		ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
 	aStream nextPut: $<.
 	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	self isFree ifFalse:
@@ -15685,83 +15651,6 @@ new: anInteger
 !SymmetricGroup class methodsFor: 'instance creation' stamp: 'len 2/1/2018 22:24:13'!
 on: aCollection
 	^ self new space: aCollection! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 5/22/2018 16:55:44'!
-!! anObject
-	"Coerce anObject to an element of the receiver (a permutation)."
-	anObject isSequenceable
-		ifFalse: [^ super !! anObject].
-	(anObject allSatisfy: [:each| each isInteger and: [each between: 1 and: degree]])
-		ifTrue: [^ self mapping: anObject asArray].
-	(anObject allSatisfy: [:each| each isSequenceable]) "cycles"
-		ifTrue: [^ self cycles: anObject].
-	^ super !! anObject! !
-
-!StandardSymmetricGroup methodsFor: 'random' stamp: 'len 2/1/2018 23:15:12'!
-atRandom: aRandom
-	^ self mapping: ((1 to: degree) asArray shuffledBy: aRandom)! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 5/18/2018 18:53:47'!
-cycle: anArray
-	^ StandardPermutation new: self degree cycle: anArray! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 2/1/2018 22:22:44'!
-cycles: anArray
-	^ StandardPermutation new: self degree cycles: anArray! !
-
-!StandardSymmetricGroup methodsFor: 'accessing' stamp: 'len 2/1/2018 22:23:12'!
-degree
-	^ degree! !
-
-!StandardSymmetricGroup methodsFor: 'private' stamp: 'len 2/1/2018 22:23:33'!
-degree: anInteger
-	degree _ anInteger! !
-
-!StandardSymmetricGroup methodsFor: 'enumerating' stamp: 'len 2/1/2018 23:11:17'!
-do: aBlock
-	(1 to: degree) asArray permutationsDo: [:each| aBlock value: (self mapping: each copy)]! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 2/1/2018 22:22:47'!
-evaluating: aBlock
-	^ StandardPermutation new: self degree evaluating: aBlock! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 2/1/2018 23:09:38'!
-identity
-	^ self propertyAt: #identity ifAbsentPut: [StandardPermutation new: degree]! !
-
-!StandardSymmetricGroup methodsFor: 'testing' stamp: 'len 2/1/2018 22:27:07'!
-includes: anObject
-	^ (anObject isKindOf: StandardPermutation) and: [anObject degree = self degree]! !
-
-!StandardSymmetricGroup methodsFor: 'testing' stamp: 'len 2/1/2018 23:13:53'!
-isStandard
-	"Answer true if the domain of the receiver is an interval [1..n]."
-	^ true! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 2/1/2018 23:30:42'!
-mapping: anArray
-	^ StandardPermutation map: anArray! !
-
-!StandardSymmetricGroup methodsFor: 'printing' stamp: 'len 2/1/2018 23:31:38'!
-printOn: aStream
-	aStream nextPutAll: 'S', degree printText sub! !
-
-!StandardSymmetricGroup methodsFor: 'accessing' stamp: 'len 2/1/2018 23:18:03'!
-space
-	^ 1 to: degree! !
-
-!StandardSymmetricGroup methodsFor: 'elements' stamp: 'len 2/1/2018 22:59:10'!
-transposing: anInteger with: anotherInteger
-	"Answer the tranposition of anInteger with anotherInteger."
-	^ StandardPermutation new: degree transposing: anInteger with: anotherInteger! !
-
-!StandardSymmetricGroup class methodsFor: 'instance creation' stamp: 'len 2/1/2018 22:25:17'!
-new: n
-	^ self new degree: n! !
-
-!StandardSymmetricGroup class methodsFor: 'instance creation' stamp: 'len 2/1/2018 22:24:25'!
-on: aCollection
-	^ self shouldNotImplement! !
 
 !LinearGroup methodsFor: 'accessing' stamp: 'len 9/27/2018 20:58:08'!
 action
@@ -28688,11 +28577,11 @@ example5CanonicalMorphism
 	I _ R * (x squared + 1).
 	^ phi -> (R / I)! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 9/25/2018 17:14:40'!
-example6GLAsMatrixGroupAction
+!Morphism class methodsFor: 'examples' stamp: 'len 5/11/2019 04:29:00'!
+example6GLAsGroupAction
 	"The action of the group GL(3,Q) on the Q-vector space of 3-tuples.
-	The action is matrix multiplication by a tuple."
-	^ (GeneralLinearGroup new: 3 over: QQ) action! !
+	The action is evaluation of a linear map at a tuple."
+	^ (QQ^3) automorphisms action! !
 
 !Function methodsFor: 'operations' stamp: 'len 12/30/2017 19:52:42'!
 , aFunction
@@ -28915,17 +28804,23 @@ example2Morphism1
 	by sending the message #to:evaluating: to the vector space."
 	^ QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 4/19/2019 04:36:53'!
+!Function class methodsFor: 'examples' stamp: 'len 5/11/2019 04:32:05'!
 example2Morphism2
 	"Here's another way to define the same morphism,
 	by creating Hom(Q^3, Q^3) and sending the message #evaluating: to it."
-	^ QQ^3 => QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 10/29/2016 07:38'!
+!Function class methodsFor: 'examples' stamp: 'len 5/11/2019 04:31:56'!
+example2Morphism22
+	"Or equivalently, creating Hom(Q^3, Q^3) and sending coercing
+	a Smalltalk block into an element of the Hom vector space."
+	^ QQ^3 => (QQ^3) !! [:v| (v x - v y, v x, v z)]! !
+
+!Function class methodsFor: 'examples' stamp: 'len 5/11/2019 04:32:50'!
 example2Morphism3
-	"And yet a third way. Here Hom(Q^3, Q^3) is created
+	"And yet another way. Here Hom(Q^3, Q^3) is created
 	by sending the message #endomorphisms to the vector space."
-	^ (QQ^3) endomorphisms evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ (QQ^3) endomorphisms !! [:v| (v x - v y, v x, v z)]! !
 
 !Function class methodsFor: 'examples' stamp: 'len 12/2/2016 11:08:54'!
 example3Frobenius1
@@ -31821,142 +31716,6 @@ value: anObject
 in: aSymmetricGroup map: anArray
 	^ self new parent: aSymmetricGroup; map: anArray! !
 
-!StandardPermutation methodsFor: 'arithmetic' stamp: 'len 1/31/2018 21:24:21'!
-* aPermutation
-	"Answer the product (function composition) of the receiver with the argument.
-	This is the group operation."
-	| otherMap newMap |
-	(map size = aPermutation map size)
-		ifFalse: [^ DomainError signal: 'permutation of different degree'].
-	otherMap _ aPermutation map.
-	newMap _ map class new: map size.
-	1 to: map size do: [:i| newMap at: i put: (map at: (otherMap at: i))].
-	^ self species map: newMap! !
-
-!StandardPermutation methodsFor: 'comparing' stamp: 'len 1/31/2018 17:09:17'!
-= aPermutation
-	^ self class = aPermutation class and: [map = aPermutation map]! !
-
-!StandardPermutation methodsFor: 'converting' stamp: 'len 2/8/2018 09:01:25'!
-asArray
-	^ map! !
-
-!StandardPermutation methodsFor: 'accessing' stamp: 'len 1/31/2018 17:18:52'!
-at: anInteger
-	^ map at: anInteger ifAbsent: [anInteger]! !
-
-!StandardPermutation methodsFor: 'accessing' stamp: 'len 1/31/2018 17:19:35'!
-at: anInteger put: anotherInteger
-	^ map at: anInteger put: anotherInteger! !
-
-!StandardPermutation methodsFor: 'enumerating' stamp: 'len 1/31/2018 17:11:35'!
-changesDo: aBlock
-	1 to: map size do: [:i| (map at: i) = i ifFalse: [aBlock value: i]]! !
-
-!StandardPermutation methodsFor: 'accessing' stamp: 'len 1/31/2018 17:11:58'!
-degree
-	^ map size! !
-
-!StandardPermutation methodsFor: 'accessing' stamp: 'len 1/31/2018 21:17:02'!
-domain
-	^ 1 to: map size! !
-
-!StandardPermutation methodsFor: 'comparing' stamp: 'len 1/31/2018 17:10:28'!
-hash
-	| answer |
-	answer _ 0.
-	1 to: map size do: [:i| | value |
-		(value _ map at: i) = i ifFalse: [answer _ answer bitXor: i hash hashMultiply + value hash]].
-	^ answer! !
-
-!StandardPermutation methodsFor: 'arithmetic' stamp: 'len 1/31/2018 21:17:28'!
-identity
-	"Answer the identity permutation."
-	^ self species new: self degree! !
-
-!StandardPermutation methodsFor: 'arithmetic' stamp: 'len 1/31/2018 21:25:00'!
-inverse
-	"Answer the compositive inverse of the receiver."
-	| values |
-	values _ map class new: map size.
-	1 to: map size do: [:i| values at: (map at: i) put: i].
-	^ self species map: values! !
-
-!StandardPermutation methodsFor: 'accessing-private' stamp: 'len 5/6/98 04:50'!
-map
-	^ map! !
-
-!StandardPermutation methodsFor: 'accessing-private' stamp: 'len 1/30/2018 21:50:33'!
-map: aCollection
-	map _ aCollection! !
-
-!StandardPermutation methodsFor: 'accessing-private' stamp: 'len 4/30/2019 12:06:45'!
-parent
-	^ parent! !
-
-!StandardPermutation methodsFor: 'accessing-private' stamp: 'len 4/30/2019 12:06:35'!
-parent: aSymmetricGroup
-	parent _ aSymmetricGroup! !
-
-!StandardPermutation methodsFor: 'private' stamp: 'len 2/1/2018 23:01:21'!
-species
-	^ StandardPermutation! !
-
-!StandardPermutation methodsFor: 'accessing' stamp: 'len 2/1/2018 22:56:57'!
-transpositions
-	"Answer the decomposition of the receiver in product of transpositions."
-	| answer last value |
-	answer _ OrderedCollection new.
-	self changesDo: [:each|	
-		last _ each.
-		answer reverseDo: [:one| last _ one at: last].
-		(value _ self at: each) = last
-			ifFalse: [answer addFirst: (self species new: self degree transposing: last with: value)]].
-	^ answer! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 4/30/2019 12:06:14'!
-in: aSymmetricGroup map: anArray
-	^ self basicNew parent: aSymmetricGroup; map: anArray! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:16:31'!
-map: anArray
-	^ self basicNew map: anArray! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:22:28'!
-new
-	^ self shouldNotImplement! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:07:25'!
-new: anInteger
-	^ self map: (1 to: anInteger) asArray! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:06:55'!
-new: n cycle: aCollection
-	| answer first last |
-	answer _ self new: n.
-	aCollection do: [:each|
-		first isNil
-			ifTrue: [first _ each]
-			ifFalse: [answer at: last put: each].
-		last _ each].
-	answer at: last put: first.
-	^ answer! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 12/20/2016 11:58:42'!
-new: n cycles: anArray
-	^ anArray inject: (self new: n) into: [:answer :each| answer * (self new: n cycle: each)]! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:07:46'!
-new: anInteger evaluating: aBlock
-	^ self map: ((1 to: anInteger) collect: aBlock)! !
-
-!StandardPermutation class methodsFor: 'instance creation' stamp: 'len 1/31/2018 21:09:39'!
-new: n transposing: a with: b
-	^ (self new: n)
-		at: a put: b;
-		at: b put: a;
-		yourself! !
-
 !RationalPoint methodsFor: 'accessing' stamp: 'len 2/9/2017 09:54:09'!
 ambient
 	^ self codomain ambient! !
@@ -32831,23 +32590,23 @@ printOn: aStream
 coordinates: anArray in: anAbelianGroup
 	^ self new coordinates: anArray; parent: anAbelianGroup! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:09:23'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:23'!
 * aRingElement
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:08:47'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:08:47'!
 + aRingElement
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:08:59'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:08:59'!
 - aRingElement
 	^ self + aRingElement negated! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:10:03'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:10:03'!
 / aRingElement
 	^ self * aRingElement reciprocal! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 22:51:23'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 22:51:23'!
 ^ anInteger
 	"Answer the receiver raised to the power anInteger."
 	anInteger = 1 ifTrue: [^ self].
@@ -32855,15 +32614,29 @@ coordinates: anArray in: anAbelianGroup
 	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal].
 	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:05'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/5/2019 18:35:05'!
 · aRingElement
 	^ self * aRingElement! !
 
-!RingElement methodsFor: 'as yet unclassified' stamp: 'len 4/19/2019 04:55:37'!
+!RingElement methodsFor: 'converting' stamp: 'len 5/11/2019 07:57:02'!
 adapt: anObject andSend: selector
 	self parent -> anObject parent ifNotNil: [:aMorphism| ^ (aMorphism value: self) perform: selector with: anObject].
 	anObject parent -> self parent ifNotNil: [:aMorphism| ^ self perform: selector with: (aMorphism value: anObject)].
-	^ DomainError signal! !
+	^ DomainError signal: 'coercion failed'! !
+
+!RingElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:29:13'!
+adaptToFraction: rcvr andSend: selector
+	(#(* + - /) includes: selector)
+		ifTrue: [^ self parent !! rcvr perform: selector with: self].
+	^ super adaptToFraction: rcvr andSend: selector! !
+
+!RingElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:27:06'!
+adaptToInteger: rcvr andSend: selector
+	selector = #* ifTrue: [^ self * rcvr].
+	selector = #+ ifTrue: [^ self one * rcvr + self].
+	selector = #- ifTrue: [^ self one * rcvr - self].
+	selector = #/ ifTrue: [^ self one * rcvr / self].
+	^ super adaptToInteger: rcvr andSend: selector! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 23:38:18'!
 associatedUnit
@@ -32873,13 +32646,13 @@ associatedUnit
 denominator
 	^ self one! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 22:49:00'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 22:49:00'!
 gcd: aRingElement
 	"Answer the greatest common divisor of the receiver and the argument.
 	The result is unique (normalized)."
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 5/5/2019 18:35:19'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/5/2019 18:35:19'!
 inverse
 	^ self reciprocal! !
 
@@ -32918,13 +32691,13 @@ isZero
 isZeroDivisor
 	^ self parent isZeroDivisor: self! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 22:49:19'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 22:49:19'!
 lcm: aRingElement
 	"Answer the greatest common divisor of the receiver and the argument.
 	The result is unique (normalized)."
 	^ (self / (self gcd: aRingElement) * aRingElement) normalized! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:09:14'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:14'!
 negated
 	^ self subclassResponsibility! !
 
@@ -32940,11 +32713,11 @@ numerator
 one
 	^ self parent one! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 02:09:09'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:09'!
 reciprocal
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 22:53:02'!
+!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 22:53:02'!
 squared
 	^ self * self! !
 
@@ -33166,11 +32939,6 @@ numerator: anObject denominator: anotherObject
 reducedNumerator: anObject denominator: anotherObject
 	^ self new setNumerator: anObject denominator: anotherObject! !
 
-!RationalFunction methodsFor: 'converting' stamp: 'len 10/17/2016 09:33'!
-adaptToNumber: rcvr andSend: selector
-	"If I am involved in arithmetic with an Number, convert it to a RationalFunction."
-	^ (self one * rcvr) perform: selector with: self! !
-
 !RationalFunction methodsFor: 'roots and poles' stamp: 'len 3/24/2018 20:30:55'!
 allPoles
 	^ denominator allRoots! !
@@ -33253,7 +33021,7 @@ printOn: aStream
 		ifTrue: [aStream nextPut: $(; print: denominator; nextPut: $)]
 		ifFalse: [aStream print: denominator]! !
 
-!RationalFunction methodsFor: 'arithmetic' stamp: 'len 4/7/2018 00:59:49'!
+!RationalFunction methodsFor: 'operations' stamp: 'len 4/7/2018 00:59:49'!
 reciprocal 
 	"Answer the multiplicative inverse of the receiver."
 
@@ -33288,7 +33056,7 @@ rootsIn: aRing
 scalars
 	^ numerator scalars! !
 
-!RationalFunction methodsFor: 'as yet unclassified' stamp: 'len 9/15/2018 20:36:44'!
+!RationalFunction methodsFor: 'private' stamp: 'len 9/15/2018 20:36:44'!
 setNumerator: f denominator: g
 "	g parent isLocal ifFalse: [self halt]."
 	super setNumerator: f denominator: g! !
@@ -33343,10 +33111,6 @@ numerator: aPolynomial denominator: anotherPolynomial
 	(self class = anObject class and: [parent = anObject parent])
 		ifTrue: [^ self contains: anObject representative].
 	^ self = (parent !! anObject)! !
-
-!Residue methodsFor: 'converting' stamp: 'len 11/30/2016 19:15:50'!
-adaptToInteger: rcvr andSend: selector
-	^ parent project: (rcvr perform: selector with: representative)! !
 
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
 bitSize
@@ -33788,16 +33552,6 @@ trace
 	anObject isBlock ifTrue: [^ [:x| self value: (anObject value: x)]].
 	^ self value: anObject! !
 
-!Polynomial methodsFor: 'converting' stamp: 'len 1/23/2017 11:38:48'!
-adaptToComplex: rcvr andSend: selector
-	"If I am involved in arithmetic with a number, convert it to a Polynomial."
-	^ (self parent constant: rcvr) perform: selector with: self! !
-
-!Polynomial methodsFor: 'converting' stamp: 'len 1/23/2017 11:38:55'!
-adaptToNumber: rcvr andSend: selector
-	"If I am involved in arithmetic with a Number, convert it to a Polynomial."
-	^ (self parent constant: rcvr) perform: selector with: self! !
-
 !Polynomial methodsFor: 'converting' stamp: 'len 1/23/2017 11:39:20'!
 asBilinearForm
 	(self degree = 2 and: [self isHomogeneous]) ifFalse: [^ self error: 'not homogeneous of degree 2'].
@@ -33854,19 +33608,19 @@ asUnivariateIn: anIndeterminate
 	anIndeterminate = self parent rank ifFalse: [self error: 'bad indeterminate'].
 	^ self asUnivariate! !
 
-!Polynomial methodsFor: 'accessing indeterminates' stamp: 'len 1/23/2017 11:40:53'!
+!Polynomial methodsFor: 'accessing-indeterminates' stamp: 'len 1/23/2017 11:40:53'!
 classIndeterminate
 	"Answer the 'class' of the polynomial, i.e. the index of the last indeterminate present in the receiver."
 	self flag: #fix. "same as leadingIndeterminate?"
 	self parent rank to: 1 by: -1 do: [:i| (self has: i) ifTrue: [^ i]].
 	^ 0! !
 
-!Polynomial methodsFor: 'accessing coefficients' stamp: 'len 1/23/2017 11:40:57'!
+!Polynomial methodsFor: 'accessing-coefficients' stamp: 'len 1/23/2017 11:40:57'!
 coefficientAtDegree: anInteger
 	"Answer the coefficient of the degree given by the argument. For univiariate polynomials."
 	^ self coefficientAt: (self parent monomials x: self leadingIndeterminate to: anInteger)! !
 
-!Polynomial methodsFor: 'accessing coefficients' stamp: 'len 12/21/2017 22:02:18'!
+!Polynomial methodsFor: 'accessing-coefficients' stamp: 'len 12/21/2017 22:02:18'!
 coefficients
 	"Answer the collection of non-zero coefficients of this polynomial (with repetitions)."
 	^ Iterator on: self performing: #coefficientsDo:! !
@@ -33890,13 +33644,13 @@ content
 	self coefficients do: [:each| answer _ answer gcd: each].
 	^ answer! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 1/24/2017 12:04:29'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 1/24/2017 12:04:29'!
 degree
 	"Answer the total degree of the receiver, i.e. the maximum of the degree of its monomials."
 	self isZero ifTrue: [^ Infinity negative].
 	^ self monomials max: [:each| each degree]! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 3/2/2016 23:47'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 3/2/2016 23:47'!
 degreeIn: anIndeterminate
 	"Answer the degree of the receiver in the given indeterminate."
 	self isZero ifTrue: [^ Infinity negative].
@@ -33912,7 +33666,7 @@ denominator
 	"Considering the receiver as an element of the fraction ring, answer the denominator."
 	^ self one! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 2/6/2017 06:40:57'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 2/6/2017 06:40:57'!
 density
 	"Answer a measure of the density/sparsity of the receiver."
 	self isZero ifTrue: [^ 0].
@@ -33948,7 +33702,7 @@ divisionBy: aPolynomial
 		ifFalse: [^ self pseudoDivisionBy: aPolynomial].
 	^ PolynomialDivision divide: self by: aPolynomial! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 1/25/2017 07:32:35'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 1/25/2017 07:32:35'!
 ecart
 	^ self degree - self leadingMonomial degree! !
 
@@ -33982,7 +33736,7 @@ exactlyDividedBy: aPolynomial
 		ifFalse: [^ (PolynomialPseudoDivision divide: self by: aPolynomial) exactQuotient].
 	^ (PolynomialDivision divide: self by: aPolynomial) exactQuotient! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 2/7/2017 03:38:56'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 2/7/2017 03:38:56'!
 formAt: anInteger
 	"Answer the homogeneous component of degree anInteger (an anInteger-form)."
 	| answer |
@@ -34020,7 +33774,7 @@ gcd: aPolynomial
 gradient
 	^ self parent indeterminates collect: [:each| self derivativeIn: each]! !
 
-!Polynomial methodsFor: 'accessing indeterminates' stamp: 'len 3/1/2016 16:31'!
+!Polynomial methodsFor: 'accessing-indeterminates' stamp: 'len 3/1/2016 16:31'!
 has: anIndeterminate
 	"Answer true if anIndeterminate is effectively present in the receiver."
 	^ self monomials anySatisfy: [:any| any has: anIndeterminate]! !
@@ -34052,13 +33806,13 @@ homogenizedIn: anIndeterminate
 	degree _ self degree.
 	^ self monomialsApply: [:each| each complete: degree in: anIndeterminate]! !
 
-!Polynomial methodsFor: 'accessing coefficients' stamp: 'len 4/4/2018 21:34:43'!
+!Polynomial methodsFor: 'accessing-coefficients' stamp: 'len 4/4/2018 21:34:43'!
 independentCoefficient
 	"Answer the coefficient of the constant monomial of the receiver."
 
 	^ self at: self parent monomials identity! !
 
-!Polynomial methodsFor: 'accessing indeterminates' stamp: 'len 2/18/2017 19:52:08'!
+!Polynomial methodsFor: 'accessing-indeterminates' stamp: 'len 2/18/2017 19:52:08'!
 indeterminates
 	"Answer the indeterminates effectively present in this polynomial."
 	^ self parent indeterminates select: [:each| self has: each]! !
@@ -34185,7 +33939,7 @@ lcm: aPolynomial
 
 	^ ((self exactlyDividedBy: (self gcd: aPolynomial)) * aPolynomial) normalized! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 2/7/2017 03:56:52'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 2/7/2017 03:56:52'!
 leadingForm
 	"Answer the homogeneous component of the lowest degree.
 	This makes sense for a local ordering."
@@ -34194,7 +33948,7 @@ leadingForm
 		 ifTrue: [self]
 		 ifFalse: [self formAt: self order]! !
 
-!Polynomial methodsFor: 'accessing indeterminates' stamp: 'len 2/3/2017 07:16:12'!
+!Polynomial methodsFor: 'accessing-indeterminates' stamp: 'len 2/3/2017 07:16:12'!
 leadingIndeterminate
 	"Answer the main (or leading) indeterminate of the receiver (according to a monomial ordering)."
 	| indeterminates |
@@ -34202,7 +33956,7 @@ leadingIndeterminate
 	indeterminates reverseDo: [:i| (self has: i) ifTrue: [^ i]].
 	^ indeterminates first! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 3/1/2016 22:11'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 3/1/2016 22:11'!
 leadingTerm
 	"Answer the first term of the receiver."
 
@@ -34220,7 +33974,7 @@ lift
 	"If the coefficients ring is a quotient R/I, nswer a representative of the receiver over R. See >>%."
 	^ self apply: self scalars lifting! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 2/10/2017 20:28:17'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 2/10/2017 20:28:17'!
 linearForm
 	^ self formAt: 1! !
 
@@ -34228,7 +33982,7 @@ linearForm
 monic
 	^ self / self leadingCoefficient! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 2/18/2017 19:53:44'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 2/18/2017 19:53:44'!
 monomials
 	"Answer the collection of monomials effectively present in this polynomial (with non-zero coefficient). This is called the 'support' of a polynomial."
 	^ Iterator on: self performing: #monomialsDo:! !
@@ -34264,11 +34018,7 @@ numerator
 	"Considering the receiver as an element of the fraction ring, answer the numerator."
 	^ self! !
 
-!Polynomial methodsFor: 'constants' stamp: 'len 1/23/2017 11:42:59'!
-one
-	^ self parent one! !
-
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 2/3/2017 06:51:05'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 2/3/2017 06:51:05'!
 order
 	"Answer the minimum degree of the monomials present in the receiver."
 
@@ -34279,20 +34029,20 @@ orderedBy: aMonomialOrdering
 	"Answer a copy of the receiver with a different monomial ordering."
 	^ (self parent orderedBy: aMonomialOrdering) !! self! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 2/3/2017 07:17:54'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 2/3/2017 07:17:54'!
 ordering
 	"Answer the monomial ordering of the receiver."
 	^ self parent ordering! !
 
-!Polynomial methodsFor: 'accessing-private' stamp: 'len 10/6/2016 15:34'!
+!Polynomial methodsFor: 'accessing' stamp: 'len 10/6/2016 15:34'!
 parent
 	^ parent! !
 
-!Polynomial methodsFor: 'accessing-private' stamp: 'len 10/6/2016 15:35'!
+!Polynomial methodsFor: 'private' stamp: 'len 10/6/2016 15:35'!
 parent: aPolynomialRing
 	parent _ aPolynomialRing! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 12/24/2017 20:10:34'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 12/24/2017 20:10:34'!
 parts
 	^ Iterator on: self performing: #partsDo:! !
 
@@ -34560,20 +34310,20 @@ substitute: aBlock
 	"Answer the receiver after substituting indeterminates by aBlock."
 	^ self monomialsApply: [:each| each substitute: aBlock]! !
 
-!Polynomial methodsFor: 'accessing monomials' stamp: 'len 2/18/2017 19:54:05'!
+!Polynomial methodsFor: 'accessing-monomials' stamp: 'len 2/18/2017 19:54:05'!
 support
 	"Answer the collection of monomials effectively present in this polynomial (with non-zero coefficient)."
 	^ self monomials! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 3/1/2016 22:08'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 3/1/2016 22:08'!
 tail
 	^ self - self leadingTerm! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 12/21/2017 18:25:51'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 12/21/2017 18:25:51'!
 termAt: aMonomial
 	^ self parent coefficient: (self at: aMonomial) monomial: aMonomial! !
 
-!Polynomial methodsFor: 'accessing terms' stamp: 'len 11/29/2016 11:49:38'!
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 11/29/2016 11:49:38'!
 terms
 	^ Iterator on: self performing: #termsDo:! !
 
@@ -34601,10 +34351,6 @@ value: anObject
 valueWithArguments: anArray
 	^ self value: anArray! !
 
-!Polynomial methodsFor: 'constants' stamp: 'len 1/23/2017 11:43:57'!
-zero
-	^ self parent zero! !
-
 !Polynomial class methodsFor: 'instance creation' stamp: 'len 2/6/2017 05:43:55'!
 new
 	^ self shouldNotImplement! !
@@ -34625,7 +34371,7 @@ new
 	aPolynomial class = self class ifTrue: [^ parts = aPolynomial parts].
 	^ super = aPolynomial! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/24/2017 19:51:06'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/24/2017 19:51:06'!
 addedWithPolynomial: aPolynomial
 	| newAssociations |
 	newAssociations _ OrderedCollection new: parts size + aPolynomial parts size.
@@ -34645,11 +34391,11 @@ apply: aMorphism
 			ifFalse: [newAssociations add: (each copy value: newValue)]].
 	^ (aMorphism isBlock ifTrue: [parent] ifFalse: [parent over: aMorphism codomain]) parts: newAssociations! !
 
-!MultivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 12/21/2017 17:44:27'!
+!MultivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 12/21/2017 17:44:27'!
 at: aMonomial
 	^ self at: aMonomial ifAbsent: [self scalars zero]! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/22/2017 17:47:53'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:47:53'!
 at: aMonomial add: aNumber
 	parts isEmpty ifTrue: [aNumber isZero ifFalse: [parts add: aMonomial -> aNumber]. ^ self].
 	parts
@@ -34661,11 +34407,11 @@ at: aMonomial add: aNumber
 				ifFalse: [association value: newValue "associations at: index put: aMonomial -> newValue"]]
 		ifNone: [:low :high| aNumber isZero ifFalse: [parts add: aMonomial -> aNumber beforeIndex: high]]! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/22/2017 17:51:33'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:51:33'!
 at: aMonomial ifAbsent: exceptionBlock
 	^ parts findBinary: [:each| (each key compare: aMonomial) negated] do: [:each| each value] ifNone: [:high :low| exceptionBlock value]! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/21/2017 17:44:14'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/21/2017 17:44:14'!
 at: key ifPresent: presentBlock
 	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
 
@@ -34673,7 +34419,7 @@ at: key ifPresent: presentBlock
 	v _ self at: key ifAbsent: [ ^ nil ].
 	^ presentBlock value: v! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/22/2017 17:49:08'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:49:08'!
 at: aMonomial put: aNumber
 	parts isEmpty ifTrue: [aNumber isZero ifFalse: [parts add: aMonomial -> aNumber]. ^ self].
 	parts
@@ -34704,12 +34450,12 @@ coefficientsDo: aBlock
 copy
 	^ parent parts: (parts collect: [:each| each copy])! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/22/2017 17:48:20'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:48:20'!
 dividedByMonomial: aMonomial
 	"The monomial ordering is preserved by this operation."
 	^ parent parts: (parts collect: [:each| each key / aMonomial -> each value])! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2018 16:36:16'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 5/9/2018 16:36:16'!
 dividedByScalar: aNumber
 	^ parent parts: (parts collect: [:each| each copy value: each value / aNumber])! !
 
@@ -34728,12 +34474,12 @@ hash
 isZero
 	^ parts isEmpty! !
 
-!MultivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 12/22/2017 17:48:48'!
+!MultivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 12/22/2017 17:48:48'!
 leadingCoefficient
 	^ parts isEmpty ifTrue: [self scalars zero] ifFalse: [parts last value]
 	"^ self isZero ifTrue: [self scalars zero] ifFalse: [self at: self leadingMonomial]"! !
 
-!MultivariatePolynomial methodsFor: 'accessing monomials' stamp: 'len 12/22/2017 17:51:10'!
+!MultivariatePolynomial methodsFor: 'accessing-monomials' stamp: 'len 12/22/2017 17:51:10'!
 leadingMonomial
 	^ parts isEmpty ifFalse: [parts last key]
 "
@@ -34741,7 +34487,7 @@ leadingMonomial
 	self monomialsDo: [:each| (answer isNil or: [each > answer]) ifTrue: [answer _ each]].
 	^ answer"! !
 
-!MultivariatePolynomial methodsFor: 'accessing terms' stamp: 'len 5/9/2018 15:41:18'!
+!MultivariatePolynomial methodsFor: 'accessing-terms' stamp: 'len 5/9/2018 15:41:18'!
 leadingTerm
 	"Answer the first term of the receiver."
 
@@ -34767,12 +34513,12 @@ monomialsDo: aBlock
 	"Iterate over the support of the receiver, i.e. the monomials with non-zero coefficient."
 	parts do: [:each| aBlock value: each key]! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/22/2017 17:46:56'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:46:56'!
 multipliedByMonomial: aMonomial
 	"The monomial ordering is preserved by this operation."
 	^ parent parts: (parts collect: [:each| each key * aMonomial -> each value])! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/24/2017 20:01:32'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/24/2017 20:01:32'!
 multipliedByPolynomial: aPolynomial
 	| dictionary newAssociations |
 	dictionary _ Dictionary new: parts size + aPolynomial parts size.
@@ -34785,7 +34531,7 @@ multipliedByPolynomial: aPolynomial
 	newAssociations sort.
 	^ self parent parts: newAssociations! !
 
-!MultivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2018 16:35:03'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 5/9/2018 16:35:03'!
 multipliedByScalar: aNumber
 	| newAssociations |
 	aNumber isZero ifTrue: [^ parent zero].
@@ -34812,11 +34558,11 @@ over: aRing
 			ifFalse: [newParts add: (each copy value: newValue)]].
 	^ (self parent over: aRing) parts: newParts! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/22/2017 17:52:34'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:52:34'!
 parts
 	^ parts! !
 
-!MultivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 12/22/2017 17:52:46'!
+!MultivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 17:52:46'!
 parts: aCollection
 	parts _ aCollection! !
 
@@ -34996,11 +34742,11 @@ apply: aMorphism
 		ifTrue: [^ self parent coefficients: (self coefficients collect: aMorphism)].
 	^ (self parent over: aMorphism codomain) coefficients: (self coefficients apply: aMorphism)! !
 
-!UnivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 12/22/2017 17:55:54'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 12/22/2017 17:55:54'!
 at: aMonomial
 	^ self atDegree: aMonomial degree! !
 
-!UnivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 12/22/2017 17:55:35'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 12/22/2017 17:55:35'!
 atDegree: i
 	^ coefficients at: i+1 ifAbsent: [self scalars zero]! !
 
@@ -35036,7 +34782,7 @@ coefficientAtDegree: i
 coefficients
 	^ coefficients! !
 
-!UnivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 3/29/2016 20:37'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 3/29/2016 20:37'!
 coefficients: aTuple
 	coefficients _ aTuple.
 	self normalize! !
@@ -35061,7 +34807,7 @@ companion
 copy
 	^ self parent coefficients: self coefficients copy! !
 
-!UnivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 3/24/2016 03:50'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 3/24/2016 03:50'!
 degree
 	coefficients isEmpty ifTrue: [^ Infinity negative].
 	^ coefficients size - 1! !
@@ -35115,11 +34861,11 @@ distinctDegreeFactorization
 	answer isEmpty ifTrue: [answer at: 1 put: f].
 	^ answer! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 11/28/2016 10:07:03'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 11/28/2016 10:07:03'!
 dividedByMonomial: aMonomial
 	^ self shift: aMonomial degree negated! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/22/2017 18:11:57'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 12/22/2017 18:11:57'!
 dividedByScalar: aNumber
 	^ self parent coefficients: self coefficients / aNumber! !
 
@@ -35179,7 +34925,7 @@ even
 	"Decompose the receiver in the form f(x^2)x + g(x^2) and answer g(x)."
 	^ self parent coefficients: ((1 to: self coefficients size by: 2) collect: [:each| coefficients at: each])! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:38:52'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 4/24/2018 19:38:52'!
 exactlyDividedBy2: aPolynomial
 	"Answer the exact division of the receiver by the argument.
 	Apply the Schonhage-Jabelean algorithm, for polynomials of degree at most 2n and n with coefficients in a field. When necesary conditions don't hold, do the ordinary division.
@@ -35228,7 +34974,7 @@ exactlyDividedBy2: aPolynomial
 
 	^ self parent coefficients: q! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 00:52:18'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 4/24/2018 00:52:18'!
 exactlyDividedBy: aPolynomial
 	"Answer the exact division of the receiver by the argument."
 
@@ -35397,7 +35143,7 @@ henselLift: factors to: k
 		self assert: (s*g + (t*h) - 1) isZero].
 	^ (g lift henselLift: gFactors to: k), (h lift henselLift: hFactors to: k)! !
 
-!UnivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 3/23/2016 00:01'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 3/23/2016 00:01'!
 independentCoefficient
 	^ self coefficientAtDegree: 0! !
 
@@ -35526,11 +35272,11 @@ landauMignotteBound
 	h _ d // 2.
 	^ (d - 1 choose: h) * self norm2 + (d - 1 choose: h - 1)! !
 
-!UnivariatePolynomial methodsFor: 'accessing coefficients' stamp: 'len 3/23/2016 00:01'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 3/23/2016 00:01'!
 leadingCoefficient
 	^ self coefficientAtDegree: self degree! !
 
-!UnivariatePolynomial methodsFor: 'accessing monomials' stamp: 'len 2/6/2017 05:53:46'!
+!UnivariatePolynomial methodsFor: 'accessing-monomials' stamp: 'len 2/6/2017 05:53:46'!
 leadingMonomial
 	| answer |
 	self monomialsDo: [:each| (answer isNil or: [each > answer]) ifTrue: [answer _ each]].
@@ -35585,15 +35331,15 @@ multiplicityAt: aRoot fourier: fourier
 			[((fourier add: fourier last derivative) value: aRoot) isZero ifFalse: [^ count]. count _ count + 1].
 	^ count! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 11/28/2016 10:05:30'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 11/28/2016 10:05:30'!
 multipliedByMonomial: aMonomial
 	^ self shift: aMonomial degree! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/24/2017 19:33:52'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 12/24/2017 19:33:52'!
 multipliedByPolynomial: aPolynomial
 	^ self parent coefficients: (self coefficients convolution: aPolynomial coefficients)! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/24/2017 19:32:53'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 12/24/2017 19:32:53'!
 multipliedByScalar: aNumber
 	^ self parent coefficients: self coefficients * aNumber! !
 
@@ -35602,7 +35348,7 @@ negated
 	"Answer the additive inverse of the receiver."
 	^ self parent coefficients: self coefficients negated! !
 
-!UnivariatePolynomial methodsFor: 'accessing-private' stamp: 'len 11/22/2016 08:48:49'!
+!UnivariatePolynomial methodsFor: 'private' stamp: 'len 11/22/2016 08:48:49'!
 normalize
 	| n |
 	(n _ coefficients lastNonZero) < coefficients size
@@ -36152,17 +35898,44 @@ taylorSeriesOf: aFunction at: x0
 				n _ n + 1.
 				value])! !
 
-!ModuleElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:41:55'!
+!ModuleElement methodsFor: 'operations' stamp: 'len 5/11/2019 07:58:54'!
+* aNumber
+	^ self subclassResponsibility! !
+
+!ModuleElement methodsFor: 'operations' stamp: 'len 5/11/2019 07:58:35'!
++ anElement
+	^ self subclassResponsibility! !
+
+!ModuleElement methodsFor: 'operations' stamp: 'len 5/6/2019 03:41:55'!
 - anElement
 	^ self + anElement negated! !
 
-!ModuleElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:42:39'!
+!ModuleElement methodsFor: 'operations' stamp: 'len 5/6/2019 03:42:39'!
 / aNumber
 	^ self * aNumber reciprocal! !
 
-!ModuleElement methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:43:47'!
+!ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:31:05'!
+adaptToFraction: rcvr andSend: selector
+	selector = #* ifTrue: [^ self * rcvr].
+	^ super adaptToNumber: rcvr andSend: selector! !
+
+!ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 07:47:44'!
+adaptToInteger: rcvr andSend: selector
+	selector = #* ifTrue: [^ self * rcvr].
+	^ super adaptToInteger: rcvr andSend: selector! !
+
+!ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:03:08'!
+adaptToRealAlgebraic: rcvr andSend: selector
+	(selector = #* and: [self scalars includes: rcvr]) ifTrue: [^ self * rcvr].
+	^ super adaptToNumber: rcvr andSend: selector! !
+
+!ModuleElement methodsFor: 'testing' stamp: 'len 5/6/2019 03:43:47'!
 isZero
 	^ self = self parent zero! !
+
+!ModuleElement methodsFor: 'operations' stamp: 'len 5/11/2019 07:58:41'!
+negated
+	^ self subclassResponsibility! !
 
 !Sum methodsFor: 'operations' stamp: 'len 11/18/2016 09:51:39'!
 * aNumber
@@ -36757,15 +36530,6 @@ squared
 adaptToCollection: aCollection andSend: selector
 	self size = aCollection size ifFalse: [^ self error: 'sizes don''t match'].
 	^ aCollection withIndexCollect: [:each :index| each perform: selector with: (self at: index)]! !
-
-!Tuple methodsFor: 'converting' stamp: 'len 3/29/2016 18:53'!
-adaptToNumber: aNumber andSend: selector
-	selector == #* ifTrue:[^ self collect: [:each| aNumber * each]].
-	^ super adaptToNumber: aNumber andSend: selector! !
-
-!Tuple methodsFor: 'converting' stamp: 'len 4/8/2016 22:34'!
-adaptToRealAlgebraic: aNumber andSend: selector
-	^ self adaptToNumber: aNumber andSend: selector! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 1/16/2018 22:03:55'!
 add: aTuple by: aNumber
@@ -37827,1068 +37591,6 @@ parent
 termAt: aModuleMonomial
 	^ (self at: aModuleMonomial position) termAt: aModuleMonomial monomial! !
 
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:41'!
-* aMonomial
-	| b bn c |
-	b _ aMonomial exponents.
-	bn _ aMonomial exponents size.
-	exponents size = bn ifFalse: [^ self error: 'not same size'].
-	c _ Array new: bn.
-	1 to: bn do: [:i| c at: i put: (exponents at: i) + (b at: i)].
-	^ self parent exponents: c! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:45'!
-/ aMonomial
-	"Answer the exact division of the receiver by the argument."
-	| b bn c |
-	b _ aMonomial exponents.
-	bn _ aMonomial exponents size.
-	exponents size = bn ifFalse: [^ self error: 'not same size'].
-	c _ Array new: bn.
-	1 to: bn do: [:i| c at: i put: (exponents at: i) - (b at: i)].
-	^ self parent exponents: c! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:54'!
-< aMonomial
-	^ (self >= aMonomial) not! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:09'!
-<= aMonomial
-	self == aMonomial ifTrue: [^ true].
-	^ (self > aMonomial) not! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 19:44:36'!
-= aMonomial
-	| b |
-	self == aMonomial ifTrue: [^ true].
-	aMonomial isInteger ifTrue: [^ self degree = aMonomial].
-"	^ exponents = aMonomial exponents"
-	b _ aMonomial exponents.
-	exponents size = b size ifFalse: [^ false].
-	1 to: exponents size do: [:i| (exponents at: i) = (b at: i) ifFalse: [^ false]].
-	^ true! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 08:36:58'!
-> aMonomial
-	^ (self compare: aMonomial) > 0! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 11:19:23'!
->= aMonomial
-	self == aMonomial ifTrue: [^ true].
-	^ (self compare: aMonomial) >= 0! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:48'!
-^ anInteger
-	^ self parent exponents: exponents * anInteger! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 5/11/2018 06:54:29'!
-| aMonomial
-	"Answer true if the receiver divides the argument."
-"	self degree > aMonomial degree ifTrue: [^ false]. <- this doesn't seem to help"
-	1 to: exponents size do: [:i|
-		(exponents at: i) > (aMonomial at: i) ifTrue: [^ false]].
-	^ true! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 11/21/2016 15:56:16'!
-at: anIndeterminate
-	^ exponents at: anIndeterminate! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:03'!
-bitSize
-	^ exponents inject: 0 into: [:x :each| x + each bitSize]! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:12:42'!
-compare: aMonomial
-	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument."
-	^ self ordering compare: self with: aMonomial! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:52'!
-complete: anInteger in: anIndeterminate
-	"Answer a copy of the receiver of degree anInteger completing with a power of the indeterminate anotherInteger."
-	| n |
-	(n _ self degree) = anInteger ifTrue: [^ self].
-	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger - n + (self at: anIndeterminate); yourself)! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:35:56'!
-copyWith: anIndeterminate to: anInteger
-	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger; yourself)! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:36:00'!
-copyWithout: anIndeterminate
-	"Answer a copy of the receiver with the given indeterminate removed."
-	^ self parent exponents: (exponents copy at: anIndeterminate put: 0; yourself)! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 5/12/2018 20:02:01'!
-degree
-	"Answer the total degree of the receiver."
-	^ degree ifNil: [degree _ exponents isEmpty ifTrue: [0] ifFalse: [exponents sum]]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 3/17/2016 00:25'!
-degreeIn: anIndeterminate
-	"Answer the degree of the receiver in the given indeterminate, i.e. the power to which the indeterminate appears in the receiver."
-
-	^ self at: anIndeterminate! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:03'!
-dehomogenizedIn: anIndeterminate
-	| newExponents |
-	newExponents _ Array new: exponents size.
-	newExponents replaceFrom: 1 to: anIndeterminate - 1 with: exponents startingAt: 1.
-	newExponents replaceFrom: anIndeterminate to: exponents size - 1 with: exponents startingAt: anIndeterminate + 1.
-	newExponents at: exponents size put: 0.
-	^ self parent exponents: newExponents! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:05'!
-exponents
-	^ exponents! !
-
-!Monomial methodsFor: 'private' stamp: 'len 3/16/2016 20:04'!
-exponents: anArray
-	exponents _ anArray! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:07'!
-gcd: aMonomial
-	"Answer the greatest common divisor of the receiver and the argument."
-	exponents size <= aMonomial exponents size ifFalse: [^ aMonomial gcd: self].
-	^ self parent exponents: (exponents withIndexCollect: [:each :i| each min: (aMonomial at: i)])! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 12/5/2015 22:34'!
-has: anIndeterminate
-	^ (self at: anIndeterminate) ~= 0! !
-
-!Monomial methodsFor: 'comparing' stamp: 'len 11/30/2016 21:59:33'!
-hash
-	| answer |
-	answer _ self lastIndeterminate.
-	1 to: exponents size do: [:i|
-		| e |
-		(e _ exponents at: i) = 0
-			ifFalse: [answer _ answer hashMultiply + e hash]].
-	^ answer! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:47'!
-indeterminates
-	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent). This is called the 'support' of a monomial."
-	^ (1 to: exponents size) select: [:i| (exponents at: i) ~= 0]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 02:50'!
-isIdentity
-	^ exponents allSatisfy: [:each| each = 0]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:38:05'!
-isPurePower
-	"Answer true if the receiver is a power of a single indeterminate."
-	| count |
-	count _ 0.
-	exponents do: [:each| each == 0 ifFalse: [count _ count + 1]. count > 1 ifTrue: [^ false]].
-	^ count = 1! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:39:08'!
-isSquareFree
-	^ exponents allSatisfy: [:each| each == 0 or: [each == 1]]! !
-
-!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 05:03'!
-isUnivariateIn: anIndeterminate
-	^ exponents isEmpty or: [(self at: anIndeterminate) = self degree]! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 6/6/2016 07:00'!
-lastIndeterminate
-	"Answer the leading indeterminate of the receiver (the last indeterminate effectively present)."
-	^ exponents findLast: [:one| one ~= 0]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:11'!
-lcm: aMonomial
-	"Answer the least common multiple of the receiver and the argument."
-	exponents size >= aMonomial exponents size ifFalse: [^ aMonomial lcm: self].
-	^ self parent exponents: (exponents withIndexCollect: [:each :i| each max: (aMonomial at: i)])! !
-
-!Monomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:18:46'!
-orderedBy: aMonomialOrdering
-	^ (self parent orderedBy: aMonomialOrdering) !! self! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 11/20/2016 11:56:47'!
-ordering
-	^ parent ordering! !
-
-!Monomial methodsFor: 'private' stamp: 'len 1/23/2017 11:35:28'!
-parent
-	^ parent! !
-
-!Monomial methodsFor: 'private' stamp: 'len 2/26/2017 10:37:42'!
-parent: aFreeAbelianMonoid
-	parent _ aFreeAbelianMonoid! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:23'!
-permutedBy: aPermutation
-	"Permute the variables of the receiver. The argument can be an Array (permutation in 'image format'). For example given a monomial in x,z,y, #(1 2 3) doesn't change anything, #(2 1 3) exchanges variables x and y."
-	| answer |
-	answer _ self parent identity.
-	exponents withIndexDo: [:exp :i|
-		exp = 0 ifFalse: [answer _ answer * (self parent x: (aPermutation at: i) to: exp)]].
-	^ answer! !
-
-!Monomial methodsFor: 'copying' stamp: 'len 11/21/2016 11:07:43'!
-postCopy
-	exponents _ exponents copy.
-	degree _ nil! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:48'!
-printExponent: anInteger on: aStream
-	| exponent |
-	(exponent _ anInteger printString) = '1'
-		ifTrue: [^ self].
-	aStream isText
-		ifTrue:
-			[aStream nextPutAll: exponent super.
-			^ self].
-	aStream nextPut: $^.
-	exponent size = 1
-		ifTrue: [aStream nextPutAll: exponent]
-		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:49'!
-printIndeterminate: indeterminate on: aStream
-	indeterminate isInteger
-		ifFalse: [aStream nextPutAll: indeterminate displayStringOrText. ^ self].
-	aStream isText
-		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
-		ifFalse:[aStream nextPutAll: '{x', indeterminate printString, '}']! !
-
-!Monomial methodsFor: 'printing' stamp: 'len 2/27/2017 07:41:34'!
-printOn: aStream
-	self degree = 0 ifTrue: [aStream print: 1. ^ self].
-	(self ordering indeterminates select: [:i| (self at: i) ~= 0])
-		do: [:i|
-			| x |
-			x _ self parent names ifNil: [i] ifNotNil: [:names| names at: i ifAbsent: [i]].
-			self printIndeterminate: x on: aStream.
-			self printExponent: (self at: i) on: aStream]! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:28'!
-root: anInteger
-	^ self parent exponents: exponents / anInteger! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:31'!
-root: anInteger in: anIndeterminate
-	^ self parent exponents: (exponents copy at: anIndeterminate put: (self at: anIndeterminate) / anInteger; yourself)! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 2/9/2017 03:20:49'!
-substitute: aBlock
-	"Answer the receiver after substituting indeterminates by aBlock."
-	| answer |
-	answer _ self parent identity.
-	exponents withIndexDo: [:exp :i|
-		exp = 0 ifFalse: [answer _ answer * (self parent x: (aBlock value: i) to: exp)]].
-	^ answer! !
-
-!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:35'!
-support
-	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent)."
-	^ self indeterminates! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 1/21/2017 20:16:54'!
-value: anObject
-	| answer next |
-	1 to: exponents size do: [:i|
-		next _ (anObject at: i) ^ (exponents at: i).
-		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
-	^ answer! !
-
-!Monomial methodsFor: 'operations' stamp: 'len 6/6/2016 04:45'!
-without: anIndeterminate
-	^ (self has: anIndeterminate) ifFalse: [self] ifTrue: [self copyWithout: anIndeterminate]! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 12:01:21'!
-exponents: anArray
-	^ self basicNew exponents: anArray! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:58:05'!
-new
-	^ self shouldNotImplement! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 11:25:52'!
-new: anInteger
-	^ self exponents: ((Array new: anInteger) atAllPut: 0; yourself)! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:53'!
-new: anInteger x: i
-	"Answer a new instance of the receiver with only one indeterminate: the argument i."
-	^ self new: anInteger x: i to: 1! !
-
-!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:37'!
-new: anInteger x: i to: k
-	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
-	^ self exponents: ((Array new: anInteger) atAllPut: 0; at: i put: k; yourself)! !
-
-!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 22:03'!
-bits: anInteger
-	anInteger >= 1 ifFalse: [^ self error: 'bitsize must be >= 1'].
-	bits _ anInteger! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 11/30/2016 14:44:24'!
-distinct: n
-	"Answer n distinct elements choosen at random."
-	| answer |
-	answer _ Set new: n.
-	[answer size < n] whileTrue: [answer add: self next].
-	^ answer! !
-
-!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 04:04'!
-domain
-	^ domain! !
-
-!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 22:04'!
-domain: aDomain
-	domain _ aDomain.
-	bits _ Infinity positive! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 4/19/2016 22:04'!
-next
-	^ domain atRandom: random bits: bits! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 2/17/2016 01:25'!
-next: n
-	^ (1 to: n) collect: [:each| self next]! !
-
-!RandomGenerator methodsFor: 'printing' stamp: 'len 5/6/2016 02:32'!
-printOn: aStream
-	aStream nextPutAll: 'Random('; print: domain; nextPut: $)! !
-
-!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 21:47'!
-random: aRandom
-	random _ aRandom! !
-
-!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
-on: aDomain
-	| random |
-	random _ Random new.
-	80 timesRepeat: [random next].
-	^ self on: aDomain random: random! !
-
-!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
-on: aDomain random: aRandom
-	^ self new domain: aDomain; random: aRandom! !
-
-!GroupRandomGenerator methodsFor: 'accessing' stamp: 'len 2/17/2016 01:23'!
-generators: aCollection
-	state _ aCollection asOrderedCollection.
-	60 - (state size min: 10) timesRepeat: [self next] "initial precomputation takes about 60 multiplications / inversions in the group"! !
-
-!GroupRandomGenerator methodsFor: 'generating' stamp: 'len 5/5/2019 18:12:33'!
-next
-	"Product Replacement Algorithm. After the initial precomputation, every new random element takes one multiplication and 1/2 inversion in the group."
-	| g h i |
-	state isNil ifTrue: [self generators: self domain generators].
-	g _ state atRandom: random.
-	[(state at: (i _ state size atRandom: random)) == g and: [state size > 1 "otherwise fails with cyclic groups"]] whileTrue.
-	(2 atRandom: random) = 1 ifTrue: [g _ g inverse].
-	h _ random nextBoolean ifTrue: [g · (state at: i)] ifFalse: [(state at: i) · g].
-	state size < 10 ifTrue: [state add: h] ifFalse: [state at: i put: h].
-	^ h! !
-
-!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:35'!
-add: aSubgroup
-	^ self subgroups add: aSubgroup! !
-
-!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:34'!
-at: anInteger
-	^ self subgroups at: anInteger! !
-
-!SubgroupSeries methodsFor: 'enumerating' stamp: 'len 5/1/98 17:35'!
-do: aBlock
-	self subgroups do: aBlock! !
-
-!SubgroupSeries methodsFor: 'initialization' stamp: 'len 5/1/98 17:32'!
-initialize
-	self subgroups: OrderedCollection new! !
-
-!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/1/98 17:52'!
-isAbelian
-	"Answer true if the receiver is an abelian tower of subgroups."
-	self isNormal ifFalse: [^ false].
-	2 to: self size do: [ :each | ((self at: each - 1) / (self at: each)) isAbelian ifFalse: [^ false]].
-	^ true! !
-
-!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/3/98 01:07'!
-isCyclic
-	"Answer true if the receiver is a cyclic tower of subgroups."
-	self isNormal ifFalse: [^ false].
-	2 to: self size do: [ :each | ((self at: each - 1) / (self at: each)) isCyclic ifFalse: [^ false]].
-	^ true! !
-
-!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/1/98 17:47'!
-isNormal
-	"Answer true if the receiver is a normal tower of subgroups."
-	2 to: self size do: [ :each | ((self at: each) isNormalIn: (self at: each - 1)) ifFalse: [^ false]].
-	^ true! !
-
-!SubgroupSeries methodsFor: 'accessing' stamp: 'len 2/8/2016 03:55'!
-objects
-	^ subgroups! !
-
-!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/4/2016 06:25'!
-size
-	^ subgroups size! !
-
-!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:33'!
-subgroups
-	^ subgroups! !
-
-!SubgroupSeries methodsFor: 'accessing-private' stamp: 'len 5/1/98 17:33'!
-subgroups: aCollection
-	subgroups _ aCollection! !
-
-!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 07:31'!
-action: aGroupAction
-	action _ aGroupAction! !
-
-!SchreierSims methodsFor: 'accessing' stamp: 'len 6/30/2016 09:02'!
-base
-	"A base of a group G acting on X is a finite sequence of distinct points B={x1,..,xn} such that the stabilizer of B is {id}, i.e. the only element that fixes all xi is the identity."
-	base ifNil: [self run].
-	^ base! !
-
-!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/1/2016 05:46'!
-buildBSGS
-	base _ OrderedCollection new.
-	strongGeneratingSet _ OrderedCollection new.
-	self buildPartialBSGS.
-	base size to: 1 by: -1 do: [:i| self schreierSimsStep: i]! !
-
-!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/1/2016 00:39'!
-buildPartialBSGS
-	| id |
-	id _ action group identity.
-	generators do: [:each| each = id ifFalse: [strongGeneratingSet add: each]].
-	strongGeneratingSet copy do: [:s|
-		(base allSatisfy: [:b| (s value: b) = b])
-			ifTrue: [base add: (action space detect: [:one| action isFixedPoint: one])].
-			s squared = id ifFalse: [base add: s inverse]]! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:18'!
-elementFromImage: anArray
-	| image g |
-	image _ anArray copy.
-	g _ action group identity.
-	trees withIndexDo: [:each :i|
-		g _ (each trace: (image at: i)) · g.
-		i to: base size do: [:j| image at: j put: (action value: {each traceInverse: (image at: i). image at: j})]].
-	^ g! !
-
-!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 16:32'!
-generators: aCollection
-	generators _ aCollection asArray! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:02'!
-imageOf: anElement
-	^ base collect: [:each| action value: {anElement. each}]! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:13'!
-includes: anElement
-	"Answer true if the group includes anElement."
-	^ (self strip: anElement) = action group identity! !
-
-!SchreierSims methodsFor: 'accessing' stamp: 'len 6/30/2016 10:13'!
-order
-	"Answer the order of the group."
-	order ifNil: [self run].
-	^ order! !
-
-!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/19/2016 08:37'!
-run
-	| G |
-	G _ action group.
-	order _ 1.
-	base _ OrderedCollection new.
-	strongGeneratingSet _ OrderedCollection new.
-	trees _ OrderedCollection new.
-	G action space do: [:b| | tree |
-		G isTrivial ifTrue: [^ order].
-		tree _ SchreierTree root: b generators: G generators action: G action.
-		trees add: tree.
-		order _ order * tree orbit size.
-		G _ tree stabilizer].
-	self error: 'what?'.
-	^ order! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:34'!
-strip: anElement
-	| g |
-	g _ anElement.
-	trees withIndexDo: [:each :i| | b b2 |
-		b _ each root.
-		b2 _ action value: {g. b}.
-		(each orbits includes: b2)
-			ifFalse: [^ {g. i}].
-		g _ g · (each traceInverse: b2)].
-	^ {g. trees size + 1}! !
-
-!SchreierSims methodsFor: 'accessing' stamp: 'len 6/25/2016 20:06'!
-strongGeneratingSet
-	strongGeneratingSet ifNil: [self run].
-	^ strongGeneratingSet! !
-
-!SchreierTree methodsFor: 'accessing' stamp: 'len 6/24/2016 03:07'!
-orbit
-	^ orbit! !
-
-!SchreierTree methodsFor: 'initialization' stamp: 'len 11/30/2016 14:45:01'!
-root: aPoint generators: anArray action: aGroupAction
-	| queue |
-	root _ aPoint.
-	generators _ anArray.
-	action _ aGroupAction.
-	v _ Dictionary new. "Schreier vector"
-	w _ Dictionary new. "backward pointers"
-	inverses _ Dictionary new. "inverses of the Schreier generators from v"
-	orbit _ Set with: aPoint.
-	v at: aPoint put: nil. "-1"
-	w at: aPoint put: nil. "-1"
-	queue _ OrderedCollection with: aPoint.
-	[| a |
-	a _ queue removeFirst.
-	1 to: generators size do: [:i|
-		| x g |
-		g _ generators at: i.
-		x _ action value: {g. a}.
-		(orbit includes: x)
-			ifFalse:
-				[orbit add: x.
-				queue add: x.
-				v at: x put: g.
-				w at: x put: a]].
-	queue isEmpty] whileFalse! !
-
-!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:19'!
-stabilizer
-	"Answer the stabilizer of the root."
-	| stabilizerGenerators id |
-	stabilizerGenerators _ Set new.
-	id _ action group identity.
-	self orbit do: [:i|
-		generators do: [:s|
-			| g |
-			g _ (self traceInverse: (s value: i)) · s · (self trace: i).
-			g = id ifFalse: [stabilizerGenerators add: g]]].
-	^ action group span: stabilizerGenerators! !
-
-!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:27'!
-trace: aPoint
-	"Trace the Schreier spanning tree (v,w) for the orbit containing aPoint.
-	Answer the transversal u(aPoint), i.e. an element such that root^u(aPoint) = aPoint.
-	This is the representative function, and in particular u(root^h) is a representative of the coset G_root * h, where G_root is the stabilizer at the root of this Schreier tree.
-	For an element g in G, there's an h in G_root g = h * u(root^g), and h = h * u(root^h)^-1."
-	| alpha u |
-	u _ action group identity.
-	alpha _ aPoint.
-	[(v at: alpha) notNil]
-		whileTrue:
-			[u _ u · (v at: alpha).
-			alpha _ w at: alpha].
-	^ u! !
-
-!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:35'!
-traceInverse: aPoint
-	"Calculate inverses of coset representatives. See 'The Schreier-Sims Algorithm' pp 18. Assumes we're using a (strong) generating set that is closed under inversion. This makes backward pointers unnecesary."
-	| alpha u |
-	u _ action group identity.
-	alpha _ aPoint.
-	[(v at: alpha) notNil]
-		whileTrue:
-			[u _ (inverses at: alpha ifAbsentPut: [(v at: alpha) inverse]) · u.
-			alpha _ w at: alpha].
-	^ u! !
-
-!SchreierTree methodsFor: 'private' stamp: 'len 11/14/2016 08:26'!
-verify
-	^ self stabilizer generators allSatisfy: [:each| (each value: root) = root]! !
-
-!SchreierTree class methodsFor: 'instance creation' stamp: 'len 6/24/2016 03:07'!
-root: aPoint generators: anArray action: aGroupAction
-	^ self new root: aPoint generators: anArray action: aGroupAction! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:02:11'!
-* aNumber
-	| isolator x r |
-	aNumber class = self class
-		ifFalse: [^ aNumber adaptToAlgebraic: self andSend: #*].
-	aNumber isZero ifTrue: [^ aNumber].
-	self isZero ifTrue: [^ self].
-	isolator _ ComplexRootIsolator on: (minimalPolynomial zeroProduct: aNumber minimalPolynomial) squareFree.
-	[x _ approximation * aNumber approximation.
-	r _ self absoluteError * aNumber approximation norm2 + (approximation norm2 * aNumber absoluteError).
-	isolator atMostOneRootAround: x radius: r]
-		whileFalse:
-			[self refineWith: aNumber].
-	^ self class polynomial: isolator polynomial approximation: x radius: r! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:02:35'!
-+ aNumber
-	| isolator x r |
-	aNumber class = self class
-		ifFalse: [^ aNumber adaptToAlgebraic: self andSend: #+].
-	aNumber isZero ifTrue: [^ self].
-	self isZero ifTrue: [^ aNumber].
-	isolator _ ComplexRootIsolator on: (minimalPolynomial zeroAddition: aNumber minimalPolynomial) squareFree.
-	[x _ approximation + aNumber approximation.
-	r _ self absoluteError + aNumber absoluteError.
-	isolator atMostOneRootAround: x radius: r]
-		whileFalse:
-			[self refineWith: aNumber].
-	^ self class polynomial: isolator polynomial approximation: x radius: r! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/12/2016 03:38'!
-- anObject
-	^ self + anObject negated! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/12/2016 03:38'!
-/ anObject
-	^ self * anObject reciprocal! !
-
-!ComplexAlgebraicNumber methodsFor: 'comparing' stamp: 'len 4/28/2018 16:48:28'!
-= anObject
-	self == anObject ifTrue: [^ true].
-	anObject isNumber ifFalse: [^ false].
-	anObject class = self class
-		ifFalse: [^ anObject adaptToAlgebraic: self andSend: #=].
-	^ minimalPolynomial = anObject minimalPolynomial and: [self bounds intersects: anObject bounds]! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 6/5/2016 19:35'!
-absoluteError
-	^ radius! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:41'!
-adaptToFloat: rcvr andSend: selector
-	^ rcvr perform: selector with: self asFloat! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:42'!
-adaptToFraction: rcvr andSend: selector
-	^ (self class fromRational: rcvr) perform: selector with: self! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:42'!
-adaptToInteger: rcvr andSend: selector
-	^ (self class fromRational: rcvr) perform: selector with: self! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 3/24/2018 21:01:14'!
-approximation
-	"Answre a rational or float current approximation of the receiver."
-	^ approximation! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing-private' stamp: 'len 1/15/2016 02:07'!
-approximation: aNumber radius: anotherNumber
-	approximation _ aNumber.
-	radius _ anotherNumber! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:59'!
-asComplexFloat
-	"Answer a Float approximation of the receiver."
-	self refineTo: 0.000001.
-	^ approximation asFloat! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 6/4/2016 22:16'!
-asFloat
-	"Answer a Float approximation of the receiver."
-	self refineTo: 0.000001.
-	^ self approximation asFloat! !
-
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 4/28/2018 07:09:28'!
-asRational
-	"Convert the receiver to Fraction or Integer."
-	| alpha |
-	radius = 0 ifTrue: [^ approximation]. "could be float!!"
-	minimalPolynomial degree < 2
-		ifTrue:
-			[alpha _ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient.
-			approximation _ alpha. radius _ 0.
-			^ alpha].
-	(minimalPolynomial rootsIn: QQ)
-		do: [:each|
-			(each - approximation) abs < radius
-				ifTrue: [approximation _ each. radius _ 0. ^ each]].
-	self error: 'the number is irrational'! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 6/5/2016 20:59'!
-bounds
-	"Answer a disk in the complex plane where the receiver is located, isolated from all other roots of its minimal polynomial."
-	^ ComplexDisk center: approximation radius: radius! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/30/2018 04:52:43'!
-conjugates
-	"The conjugates of an algebraic number with minimal polynomial of degree n are all its n-th roots."
-	^ (minimalPolynomial rootsIn: CC) "copyWithout: self"! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/2/2018 16:37:43'!
-degree
-	^ minimalPolynomial degree! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/29/2018 18:46:05'!
-denominator
-	"The denominator of an algebraic number is the smallest positive integer that multiplied by the algebraic number is an algebraic integer."
-	^ minimalPolynomial coefficients inject: 1 into: [:result :each| result lcm: each denominator]! !
-
-!ComplexAlgebraicNumber methodsFor: 'comparing' stamp: 'len 4/29/2018 20:09:45'!
-hash
-	^ minimalPolynomial hash! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/2/2018 16:33:35'!
-height
-	^ self minimalPolynomial height! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/13/2016 04:01'!
-i
-	^ self * self class i! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 1/13/2016 03:33'!
-isAlgebraic
-	^ true! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 5/2/2018 17:16:29'!
-isAlgebraicInteger
-	"An algebraic number is an 'algebraic integer' if it's the root of a monic polynomial in Z[x], in particular if it's minimal polynomial has integer coefficients."
-	^ minimalPolynomial isMonic "<- defining the minimal polynomial as integer primitive"
-
-"alternatively, defining the minimal polynomial as monic:
-	^ minimalPolynomial coefficients allSatisfy: [:each| each isInteger]
-"! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/29/2018 23:49:18'!
-isImaginary
-	^ approximation real abs < radius! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 1/13/2016 03:33'!
-isNumber
-	^ true! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/28/2018 07:05:26'!
-isRational
-	minimalPolynomial degree < 2 ifTrue: [^ true].
-	radius = 0 ifTrue: [^ true].
-	(minimalPolynomial rootsIn: QQ)
-		do: [:each|
-			(each - approximation) abs < radius
-				ifTrue: [approximation _ each. radius _ 0. ^ true]].
-	^ false! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/29/2018 23:49:23'!
-isReal
-	^ approximation imaginary abs < radius "and: [((RealRootIsolator on: minimalPolynomial) numberOfRootsBetween: approximation real - radius and: approximation real + radius) > 0]"! !
-
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/28/2018 07:10:14'!
-isZero
-	^ approximation abs < radius and: [(minimalPolynomial value: 0) = 0]! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/28/2018 07:07:34'!
-minimalPolynomial
-	^ minimalPolynomial! !
-
-!ComplexAlgebraicNumber methodsFor: 'accessing-private' stamp: 'len 5/2/2018 17:14:52'!
-minimalPolynomial: aPolynomial
-	minimalPolynomial _ aPolynomial integerPrimitive "<- or should it be monic?"! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/28/2018 07:10:56'!
-negated
-	"Answer the additive inverse of the receiver."
-	^ self class
-		minimalPolynomial: minimalPolynomial zeroNegation
-		approximation: approximation negated
-		radius: radius! !
-
-!ComplexAlgebraicNumber methodsFor: 'operations' stamp: 'len 4/30/2018 04:46:52'!
-norm
-	^ minimalPolynomial independentCoefficient / minimalPolynomial leadingCoefficient * (minimalPolynomial degree even ifTrue: [1] ifFalse: [-1])
-
-"alternatively:
-	^ self conjugates product"! !
-
-!ComplexAlgebraicNumber methodsFor: 'constants' stamp: 'len 6/4/2016 21:18'!
-one
-	^ 1! !
-
-!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 1/11/2016 06:44'!
-printOn: aStream
-	self printOn: aStream base: 10! !
-
-!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 00:27:26'!
-printOn: aStream base: base
-	| real imaginary isImaginary |
-	minimalPolynomial degree = 2 ifTrue: [^ self printQuadraticOn: aStream base: base].
-	self refineTo: self printPrecision.
-	real _ approximation real asFloat roundTo: self printPrecision.
-	imaginary _ approximation imaginary asFloat roundTo: self printPrecision.
-	(isImaginary _ self isImaginary)
-		ifFalse: [real printOn: aStream base: base].
-	self isReal
-		ifFalse:
-			[isImaginary ifFalse: [aStream nextPutAll: (0 <= imaginary ifTrue: [' + '] ifFalse: [imaginary _ imaginary negated. ' - '])].
-			imaginary printOn: aStream base: base.
-			aStream nextPutAll: 'i' italic].
-	aStream nextPutAll: '..'! !
-
-!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 1/11/2018 21:07:33'!
-printPrecision
-"	self absoluteError < 1 ifTrue: [^ self absoluteError asFloat].
-	^ 0.001"
-	^ 0.00001! !
-
-!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 05:14:01'!
-printQuadraticOn: aStream base: base
-	| a b c discriminant z y x1 x2 sign |
-	a _ minimalPolynomial atDegree: 2.
-	b _ minimalPolynomial atDegree: 1.
-	c _ minimalPolynomial atDegree: 0.
-	discriminant _ b squared - (4*a*c).
-	z _ discriminant squareFree.
-	y _ (discriminant / z) sqrt.
-	x1 _ b negated + (discriminant negative ifTrue: [discriminant negated sqrt i] ifFalse: [discriminant sqrt]) / (2*a).
-	x2 _ b negated - (discriminant negative ifTrue: [discriminant negated sqrt i] ifFalse: [discriminant sqrt]) / (2*a).
-	(x1 - approximation) abs <= radius
-		ifTrue: [sign _ ' + ']
-		ifFalse: [(x2 - approximation) abs <= radius ifTrue: [sign _ ' - '. y _ y negated] ifFalse: [self halt]].
-	b = 0 ifFalse:
-		[b/(-2*a) printOn: aStream base: base.
-		aStream nextPutAll: sign.
-		y _ y abs].
-	y negative ifTrue: [aStream nextPut: $-. y _ y abs].
-	y/(2*a) = 1 ifFalse: [y/(2*a) printOn: aStream base: base].
-	z abs = 1 ifFalse:
-		[aStream nextPut: $—.
-		z abs printOn: aStream base: base].
-	z negative ifTrue: [aStream nextPutAll: 'i' italic]! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:03:02'!
-reciprocal
-	"Answer the multiplicative inverse of the receiver."
-	| isolator x r |
-	self isZero ifTrue: [^ ZeroDivide signal].
-	isolator _ ComplexRootIsolator on: minimalPolynomial zeroReciprocal.
-	[x _ approximation reciprocal.
-	r _ self absoluteError / approximation norm2 * x norm2.
-	isolator atMostOneRootAround: x radius: r]
-		whileFalse:
-			[self refine].
-	^ self class minimalPolynomial: isolator polynomial approximation: x radius: r! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 5/2/2018 16:47:24'!
-refine
-	| P Q P2 Q2 m x v c dx y v1 m1 |
-	radius _ radius / 2.0.
-	P _ minimalPolynomial. "should it be monic?"
-	Q _ P.
-	P2 _ P derivative.
-	Q2 _ P2.
-	x _ approximation.
-	v _ Q value: x.
-	m _ v norm2.
-	c _ 0. dx _ v / (Q2 value: x).
-	[dx abs >= radius]
-		whileTrue:
-			[y _ x - dx.
-			v1 _ Q value: y.
-			m1 _ v1 norm2.
-			m1 < m
-				ifTrue: [x _ y. v _ v1. m _ m1. c _ 0. dx _ v / (Q2 value: x)]
-				ifFalse: [c _ c + 1. dx _ dx / 4. c > 20 ifTrue: [self error: 'failed']]].
-	"Polish root:"
-	2 timesRepeat: [x _ x - ((P value: x) / (P2 value: x))].
-	approximation _ x! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 12/5/2017 20:05:25'!
-refineTo: aNumber
-	"Refine the receiver up to get an approximation error < aNumber."
-	[self absoluteError > aNumber] whileTrue: [self refine]! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 3/24/2018 21:00:20'!
-refineWith: aComplexAlgebraicNumber
-	"Refine the rational interval approximation of either the receiver or the argument, depending on which is less precise at the moment."
-	self relativeError > aComplexAlgebraicNumber relativeError
-		ifTrue: [self refine]
-		ifFalse: [aComplexAlgebraicNumber refine]! !
-
-!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 4/29/2018 20:17:35'!
-relativeError
-	"Answer the relative error in the current rational approximation."
-	self isZero ifTrue: [^ 0].
-	^ self absoluteError / self approximation abs! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:03:28'!
-squareRoot
-	| isolator x r |
-	self isZero ifTrue: [^ self].
-	isolator _ ComplexRootIsolator on: minimalPolynomial zeroSquareRoot squareFree.
-	[x _ approximation sqrt.
-	r _ self absoluteError sqrt.
-	isolator atMostOneRootAround: x radius: r]
-		whileFalse:
-			[self refine].
-	^ self class polynomial: isolator polynomial approximation: x radius: r! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 5/4/2018 19:10:55'!
-squared
-	| x odd even |
-	x _ minimalPolynomial parent x.
-	odd _ minimalPolynomial odd.
-	even _ minimalPolynomial even.
-	^ self class
-		polynomial: odd squared * x - even squared
-		approximation: approximation squared
-		radius: radius * approximation norm2 * 2! !
-
-!ComplexAlgebraicNumber methodsFor: 'operations' stamp: 'len 4/30/2018 06:59:18'!
-trace
-	"Answer the absolute trace of the receiver."
-	^ (minimalPolynomial atDegree: minimalPolynomial degree - 1) negated
-
-"alternatively:
-	^ self conjugates sum"! !
-
-!ComplexAlgebraicNumber methodsFor: 'constants' stamp: 'len 6/4/2016 21:18'!
-zero
-	^ 0! !
-
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 1/15/2016 02:04'!
-approximation: approximateValue radius: approximationError maxDegree: n
-	"Answer an algebraic number with the given approximate value, approximation error, with minimal polynomial of degree at most n."
-	^ self notYetImplemented! !
-
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/30/2018 05:38:36'!
-fromRational: anIntegerOrFraction
-	"Answer an instance of the receiver representing the rational number anIntegerOrFraction."
-	| q x |
-	q _ anIntegerOrFraction asFraction.
-	x _ QQ polynomials x.
-	^ self
-		minimalPolynomial: x * q denominator - q numerator
- 		approximation: anIntegerOrFraction
-		radius: 0! !
-
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 01:34:40'!
-i
-	| x |
-	x _ QQ polynomials x.
-	^ self minimalPolynomial: x^2 + 1 approximation: 1 i radius: 0! !
-
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 1/15/2016 02:05'!
-minimalPolynomial: aPolynomial approximation: aComplex radius: aNumber
-	^ self new
-		minimalPolynomial: aPolynomial;
-		approximation: aComplex radius: aNumber! !
-
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 05:26:21'!
-phi
-	"Answer the Phidias number or Golden Ratio."
-	| x |
-	x _ QQ polynomials x.
-	^ self minimalPolynomial: x^2 - x - 1 approximation: 2.0 radius: 1! !
-
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/10/2019 08:30:32'!
-polynomial: aPolynomial approximation: aComplex radius: aNumber
-	| minimalPolynomial |
-	minimalPolynomial _ aPolynomial factors detectMin: [:f| (f value: aComplex) abs].
-	minimalPolynomial degree = 1 ifTrue: [^ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient].
-	^ self minimalPolynomial: minimalPolynomial approximation: aComplex radius: aNumber! !
-
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 7/15/2016 18:31'!
-sqrt2
-	"Answer an instance of the receiver representing the square root of 2."
-
-	^ self
-		minimalPolynomial: QQ polynomials x squared - 2
- 		approximation: 1.5
-		radius: 0.1! !
-
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 11/10/2016 10:31'!
-sqrt: anIntegerOrFraction
-	"Answer a square root of the rational argument."
-	^ self
-		minimalPolynomial: QQ polynomials x squared - anIntegerOrFraction
- 		approximation: (anIntegerOrFraction negative ifTrue: [anIntegerOrFraction negated sqrt i] ifFalse: [anIntegerOrFraction sqrt]) radius: 0.00001! !
-
-!LLL methodsFor: 'initialization' stamp: 'len 12/26/2015 21:06'!
-basis: aCollection
-	| d |
-	basis _ Array withAll: aCollection.
-	d _ basis size.
-	delta _ 3/4 "(4/3 + 0.0000000001)^((d-1)/2)"! !
-
-!LLL methodsFor: 'private' stamp: 'len 4/29/2019 10:20:51'!
-computeMu
-	| n bi oj |
-	n _ basis size.
-	mu _ ZZ matrix: n@n evaluating: [:i :j|
-		bi _ basis at: i.
-		oj _ orthogonalBasis at: j.
-		(bi · oj) / (oj · oj)]! !
-
-!LLL methodsFor: 'private' stamp: 'len 4/29/2019 10:21:03'!
-computeOrthogonalBasis
-	| k vi vj vectors |
-	vectors _ Array withAll: basis.
-	k _ vectors size.
-	1 to: k do: [ :i |
-		vi _ vectors at: i.
-		i+1 to: k do: [ :j |
-			vj _ vectors at: j.
-			vj _ vj - (vi * ((vj · vi) / (vi · vi))).
-			vectors at: j put: vj ] ].
-	orthogonalBasis _ vectors! !
-
-!LLL methodsFor: 'private' stamp: 'len 12/26/2015 21:00'!
-computeReducedBasis
-	| k mukj bj bk a b |
-	self computeOrthogonalBasis; computeMu.
-	k _ 1.
-	[k < basis size] whileTrue:
-		[k-1 to: 0 by: -1 do: [ :j |
-			mukj _ mu at: k+1 @ (j+1).
-			bj _ basis at: j+1.
-			bk _ basis at: k+1.
-			mukj abs > (1/2) ifTrue:
-				[basis at: k+1 put: bk - (bj * mukj rounded).
-				self update: k+1]].
-		a _ (orthogonalBasis at: k+1) norm2.
-		b _ (orthogonalBasis at: k) norm2.
-		a >= ((delta - (mu at: k+1 @ k) squared) * b)
-			ifTrue: [k _ k + 1]
-			ifFalse:
-				[basis swap: k+1 with: k.
-				self update: k+1.
-				k _ k-1 max: 1]].
-	^ basis! !
-
-!LLL methodsFor: 'accessing' stamp: 'len 12/23/2015 03:01'!
-reducedBasis
-	orthogonalBasis notNil ifFalse: [self computeReducedBasis].
-	^ basis! !
-
-!LLL methodsFor: 'private' stamp: 'len 2/23/2016 07:33'!
-update: k
-	self flag: #fix. "don't need to recompute all"
-	self computeOrthogonalBasis; computeMu! !
-
-!LLL class methodsFor: 'instance creation' stamp: 'len 12/23/2015 03:04'!
-basis: aCollection
-	^ self new basis: aCollection! !
-
-!LLL class methodsFor: 'examples' stamp: 'len 10/28/2016 18:21'!
-example
-	| b1 b2 b3 lll |
-	b1 _ (1, 1, 1).
-	b2 _ (-1, 0, 2).
-	b3 _ (3, 5, 6).
-	lll _ self basis: { b1. b2. b3 }.
-	^ lll reducedBasis! !
-
-!LLL class methodsFor: 'examples' stamp: 'len 10/29/2016 08:33'!
-example2
-	"Find polynomial x^2 - x - 1 that has the golden ratio phi as root."
-	| r b1 b2 b3 lll |
-	r _ 1.618034.
-	b1 _ (1, 0, 0, (10000 * r squared)).
-	b2 _ (0, 1, 0, (10000 * r)).
-	b3 _ (0, 0, 1, 10000).
-	lll _ self basis: { b1. b2. b3 }.
-	^ lll reducedBasis! !
-
 !Matrix methodsFor: 'operations' stamp: 'len 4/29/2019 10:24:54'!
 * anObject
 	anObject isMatrix ifTrue: [^ self · anObject].
@@ -39142,11 +37844,6 @@ SNFviaHNF
 	[H _ H HNF.
 	H isDiagonal] whileFalse: [H _ H transposed].
 	^ H diagonal asArray sorted: [:a :b| a isZero not and: [a | b]]! !
-
-!Matrix methodsFor: 'converting' stamp: 'len 2/10/2016 21:38'!
-adaptToNumber: aNumber andSend: selector
-	selector == #* ifFalse: [^ super adaptToNumber: aNumber andSend: selector].
-	^ self collect: [:each| aNumber * each]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 11/5/2016 03:13'!
 adjoint
@@ -40478,6 +39175,1068 @@ newFrom: aMatrix
 !RowMatrix class methodsFor: 'instance creation' stamp: 'len 7/15/2016 05:12'!
 rows: anArray
 	^ self basicNew rows: anArray! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:41'!
+* aMonomial
+	| b bn c |
+	b _ aMonomial exponents.
+	bn _ aMonomial exponents size.
+	exponents size = bn ifFalse: [^ self error: 'not same size'].
+	c _ Array new: bn.
+	1 to: bn do: [:i| c at: i put: (exponents at: i) + (b at: i)].
+	^ self parent exponents: c! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:45'!
+/ aMonomial
+	"Answer the exact division of the receiver by the argument."
+	| b bn c |
+	b _ aMonomial exponents.
+	bn _ aMonomial exponents size.
+	exponents size = bn ifFalse: [^ self error: 'not same size'].
+	c _ Array new: bn.
+	1 to: bn do: [:i| c at: i put: (exponents at: i) - (b at: i)].
+	^ self parent exponents: c! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:54'!
+< aMonomial
+	^ (self >= aMonomial) not! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/20/2016 16:44:09'!
+<= aMonomial
+	self == aMonomial ifTrue: [^ true].
+	^ (self > aMonomial) not! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 19:44:36'!
+= aMonomial
+	| b |
+	self == aMonomial ifTrue: [^ true].
+	aMonomial isInteger ifTrue: [^ self degree = aMonomial].
+"	^ exponents = aMonomial exponents"
+	b _ aMonomial exponents.
+	exponents size = b size ifFalse: [^ false].
+	1 to: exponents size do: [:i| (exponents at: i) = (b at: i) ifFalse: [^ false]].
+	^ true! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 08:36:58'!
+> aMonomial
+	^ (self compare: aMonomial) > 0! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/21/2016 11:19:23'!
+>= aMonomial
+	self == aMonomial ifTrue: [^ true].
+	^ (self compare: aMonomial) >= 0! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:48'!
+^ anInteger
+	^ self parent exponents: exponents * anInteger! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 5/11/2018 06:54:29'!
+| aMonomial
+	"Answer true if the receiver divides the argument."
+"	self degree > aMonomial degree ifTrue: [^ false]. <- this doesn't seem to help"
+	1 to: exponents size do: [:i|
+		(exponents at: i) > (aMonomial at: i) ifTrue: [^ false]].
+	^ true! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 11/21/2016 15:56:16'!
+at: anIndeterminate
+	^ exponents at: anIndeterminate! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:03'!
+bitSize
+	^ exponents inject: 0 into: [:x :each| x + each bitSize]! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:12:42'!
+compare: aMonomial
+	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument."
+	^ self ordering compare: self with: aMonomial! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:35:52'!
+complete: anInteger in: anIndeterminate
+	"Answer a copy of the receiver of degree anInteger completing with a power of the indeterminate anotherInteger."
+	| n |
+	(n _ self degree) = anInteger ifTrue: [^ self].
+	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger - n + (self at: anIndeterminate); yourself)! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:35:56'!
+copyWith: anIndeterminate to: anInteger
+	^ self parent exponents: (exponents copy at: anIndeterminate put: anInteger; yourself)! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 1/23/2017 11:36:00'!
+copyWithout: anIndeterminate
+	"Answer a copy of the receiver with the given indeterminate removed."
+	^ self parent exponents: (exponents copy at: anIndeterminate put: 0; yourself)! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 5/12/2018 20:02:01'!
+degree
+	"Answer the total degree of the receiver."
+	^ degree ifNil: [degree _ exponents isEmpty ifTrue: [0] ifFalse: [exponents sum]]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 3/17/2016 00:25'!
+degreeIn: anIndeterminate
+	"Answer the degree of the receiver in the given indeterminate, i.e. the power to which the indeterminate appears in the receiver."
+
+	^ self at: anIndeterminate! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:03'!
+dehomogenizedIn: anIndeterminate
+	| newExponents |
+	newExponents _ Array new: exponents size.
+	newExponents replaceFrom: 1 to: anIndeterminate - 1 with: exponents startingAt: 1.
+	newExponents replaceFrom: anIndeterminate to: exponents size - 1 with: exponents startingAt: anIndeterminate + 1.
+	newExponents at: exponents size put: 0.
+	^ self parent exponents: newExponents! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 3/16/2016 20:05'!
+exponents
+	^ exponents! !
+
+!Monomial methodsFor: 'private' stamp: 'len 3/16/2016 20:04'!
+exponents: anArray
+	exponents _ anArray! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:07'!
+gcd: aMonomial
+	"Answer the greatest common divisor of the receiver and the argument."
+	exponents size <= aMonomial exponents size ifFalse: [^ aMonomial gcd: self].
+	^ self parent exponents: (exponents withIndexCollect: [:each :i| each min: (aMonomial at: i)])! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 12/5/2015 22:34'!
+has: anIndeterminate
+	^ (self at: anIndeterminate) ~= 0! !
+
+!Monomial methodsFor: 'comparing' stamp: 'len 11/30/2016 21:59:33'!
+hash
+	| answer |
+	answer _ self lastIndeterminate.
+	1 to: exponents size do: [:i|
+		| e |
+		(e _ exponents at: i) = 0
+			ifFalse: [answer _ answer hashMultiply + e hash]].
+	^ answer! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:47'!
+indeterminates
+	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent). This is called the 'support' of a monomial."
+	^ (1 to: exponents size) select: [:i| (exponents at: i) ~= 0]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 02:50'!
+isIdentity
+	^ exponents allSatisfy: [:each| each = 0]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:38:05'!
+isPurePower
+	"Answer true if the receiver is a power of a single indeterminate."
+	| count |
+	count _ 0.
+	exponents do: [:each| each == 0 ifFalse: [count _ count + 1]. count > 1 ifTrue: [^ false]].
+	^ count = 1! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 2/14/2017 10:39:08'!
+isSquareFree
+	^ exponents allSatisfy: [:each| each == 0 or: [each == 1]]! !
+
+!Monomial methodsFor: 'testing' stamp: 'len 6/6/2016 05:03'!
+isUnivariateIn: anIndeterminate
+	^ exponents isEmpty or: [(self at: anIndeterminate) = self degree]! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 6/6/2016 07:00'!
+lastIndeterminate
+	"Answer the leading indeterminate of the receiver (the last indeterminate effectively present)."
+	^ exponents findLast: [:one| one ~= 0]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:11'!
+lcm: aMonomial
+	"Answer the least common multiple of the receiver and the argument."
+	exponents size >= aMonomial exponents size ifFalse: [^ aMonomial lcm: self].
+	^ self parent exponents: (exponents withIndexCollect: [:each :i| each max: (aMonomial at: i)])! !
+
+!Monomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:18:46'!
+orderedBy: aMonomialOrdering
+	^ (self parent orderedBy: aMonomialOrdering) !! self! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 11/20/2016 11:56:47'!
+ordering
+	^ parent ordering! !
+
+!Monomial methodsFor: 'private' stamp: 'len 1/23/2017 11:35:28'!
+parent
+	^ parent! !
+
+!Monomial methodsFor: 'private' stamp: 'len 2/26/2017 10:37:42'!
+parent: aFreeAbelianMonoid
+	parent _ aFreeAbelianMonoid! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:23'!
+permutedBy: aPermutation
+	"Permute the variables of the receiver. The argument can be an Array (permutation in 'image format'). For example given a monomial in x,z,y, #(1 2 3) doesn't change anything, #(2 1 3) exchanges variables x and y."
+	| answer |
+	answer _ self parent identity.
+	exponents withIndexDo: [:exp :i|
+		exp = 0 ifFalse: [answer _ answer * (self parent x: (aPermutation at: i) to: exp)]].
+	^ answer! !
+
+!Monomial methodsFor: 'copying' stamp: 'len 11/21/2016 11:07:43'!
+postCopy
+	exponents _ exponents copy.
+	degree _ nil! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:48'!
+printExponent: anInteger on: aStream
+	| exponent |
+	(exponent _ anInteger printString) = '1'
+		ifTrue: [^ self].
+	aStream isText
+		ifTrue:
+			[aStream nextPutAll: exponent super.
+			^ self].
+	aStream nextPut: $^.
+	exponent size = 1
+		ifTrue: [aStream nextPutAll: exponent]
+		ifFalse: [aStream nextPut: ${; nextPutAll: exponent; nextPut: $}]! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 6/7/2016 21:49'!
+printIndeterminate: indeterminate on: aStream
+	indeterminate isInteger
+		ifFalse: [aStream nextPutAll: indeterminate displayStringOrText. ^ self].
+	aStream isText
+		ifTrue: [aStream nextPut: $x; nextPutAll: indeterminate printString sub]
+		ifFalse:[aStream nextPutAll: '{x', indeterminate printString, '}']! !
+
+!Monomial methodsFor: 'printing' stamp: 'len 2/27/2017 07:41:34'!
+printOn: aStream
+	self degree = 0 ifTrue: [aStream print: 1. ^ self].
+	(self ordering indeterminates select: [:i| (self at: i) ~= 0])
+		do: [:i|
+			| x |
+			x _ self parent names ifNil: [i] ifNotNil: [:names| names at: i ifAbsent: [i]].
+			self printIndeterminate: x on: aStream.
+			self printExponent: (self at: i) on: aStream]! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:28'!
+root: anInteger
+	^ self parent exponents: exponents / anInteger! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/23/2017 11:36:31'!
+root: anInteger in: anIndeterminate
+	^ self parent exponents: (exponents copy at: anIndeterminate put: (self at: anIndeterminate) / anInteger; yourself)! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 2/9/2017 03:20:49'!
+substitute: aBlock
+	"Answer the receiver after substituting indeterminates by aBlock."
+	| answer |
+	answer _ self parent identity.
+	exponents withIndexDo: [:exp :i|
+		exp = 0 ifFalse: [answer _ answer * (self parent x: (aBlock value: i) to: exp)]].
+	^ answer! !
+
+!Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:35'!
+support
+	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent)."
+	^ self indeterminates! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 1/21/2017 20:16:54'!
+value: anObject
+	| answer next |
+	1 to: exponents size do: [:i|
+		next _ (anObject at: i) ^ (exponents at: i).
+		answer _ answer ifNil: [next] ifNotNil: [next * answer]].
+	^ answer! !
+
+!Monomial methodsFor: 'operations' stamp: 'len 6/6/2016 04:45'!
+without: anIndeterminate
+	^ (self has: anIndeterminate) ifFalse: [self] ifTrue: [self copyWithout: anIndeterminate]! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 12:01:21'!
+exponents: anArray
+	^ self basicNew exponents: anArray! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:58:05'!
+new
+	^ self shouldNotImplement! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/20/2016 11:25:52'!
+new: anInteger
+	^ self exponents: ((Array new: anInteger) atAllPut: 0; yourself)! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:53'!
+new: anInteger x: i
+	"Answer a new instance of the receiver with only one indeterminate: the argument i."
+	^ self new: anInteger x: i to: 1! !
+
+!Monomial class methodsFor: 'instance creation' stamp: 'len 11/24/2016 10:54:37'!
+new: anInteger x: i to: k
+	"Answer a new instance of the receiver with only one indeterminate, xi, raised to n."
+	^ self exponents: ((Array new: anInteger) atAllPut: 0; at: i put: k; yourself)! !
+
+!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 22:03'!
+bits: anInteger
+	anInteger >= 1 ifFalse: [^ self error: 'bitsize must be >= 1'].
+	bits _ anInteger! !
+
+!RandomGenerator methodsFor: 'generating' stamp: 'len 11/30/2016 14:44:24'!
+distinct: n
+	"Answer n distinct elements choosen at random."
+	| answer |
+	answer _ Set new: n.
+	[answer size < n] whileTrue: [answer add: self next].
+	^ answer! !
+
+!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 04:04'!
+domain
+	^ domain! !
+
+!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 22:04'!
+domain: aDomain
+	domain _ aDomain.
+	bits _ Infinity positive! !
+
+!RandomGenerator methodsFor: 'generating' stamp: 'len 4/19/2016 22:04'!
+next
+	^ domain atRandom: random bits: bits! !
+
+!RandomGenerator methodsFor: 'generating' stamp: 'len 2/17/2016 01:25'!
+next: n
+	^ (1 to: n) collect: [:each| self next]! !
+
+!RandomGenerator methodsFor: 'printing' stamp: 'len 5/6/2016 02:32'!
+printOn: aStream
+	aStream nextPutAll: 'Random('; print: domain; nextPut: $)! !
+
+!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 21:47'!
+random: aRandom
+	random _ aRandom! !
+
+!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
+on: aDomain
+	| random |
+	random _ Random new.
+	80 timesRepeat: [random next].
+	^ self on: aDomain random: random! !
+
+!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
+on: aDomain random: aRandom
+	^ self new domain: aDomain; random: aRandom! !
+
+!GroupRandomGenerator methodsFor: 'accessing' stamp: 'len 2/17/2016 01:23'!
+generators: aCollection
+	state _ aCollection asOrderedCollection.
+	60 - (state size min: 10) timesRepeat: [self next] "initial precomputation takes about 60 multiplications / inversions in the group"! !
+
+!GroupRandomGenerator methodsFor: 'generating' stamp: 'len 5/5/2019 18:12:33'!
+next
+	"Product Replacement Algorithm. After the initial precomputation, every new random element takes one multiplication and 1/2 inversion in the group."
+	| g h i |
+	state isNil ifTrue: [self generators: self domain generators].
+	g _ state atRandom: random.
+	[(state at: (i _ state size atRandom: random)) == g and: [state size > 1 "otherwise fails with cyclic groups"]] whileTrue.
+	(2 atRandom: random) = 1 ifTrue: [g _ g inverse].
+	h _ random nextBoolean ifTrue: [g · (state at: i)] ifFalse: [(state at: i) · g].
+	state size < 10 ifTrue: [state add: h] ifFalse: [state at: i put: h].
+	^ h! !
+
+!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:35'!
+add: aSubgroup
+	^ self subgroups add: aSubgroup! !
+
+!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:34'!
+at: anInteger
+	^ self subgroups at: anInteger! !
+
+!SubgroupSeries methodsFor: 'enumerating' stamp: 'len 5/1/98 17:35'!
+do: aBlock
+	self subgroups do: aBlock! !
+
+!SubgroupSeries methodsFor: 'initialization' stamp: 'len 5/1/98 17:32'!
+initialize
+	self subgroups: OrderedCollection new! !
+
+!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/1/98 17:52'!
+isAbelian
+	"Answer true if the receiver is an abelian tower of subgroups."
+	self isNormal ifFalse: [^ false].
+	2 to: self size do: [ :each | ((self at: each - 1) / (self at: each)) isAbelian ifFalse: [^ false]].
+	^ true! !
+
+!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/3/98 01:07'!
+isCyclic
+	"Answer true if the receiver is a cyclic tower of subgroups."
+	self isNormal ifFalse: [^ false].
+	2 to: self size do: [ :each | ((self at: each - 1) / (self at: each)) isCyclic ifFalse: [^ false]].
+	^ true! !
+
+!SubgroupSeries methodsFor: 'testing' stamp: 'len 5/1/98 17:47'!
+isNormal
+	"Answer true if the receiver is a normal tower of subgroups."
+	2 to: self size do: [ :each | ((self at: each) isNormalIn: (self at: each - 1)) ifFalse: [^ false]].
+	^ true! !
+
+!SubgroupSeries methodsFor: 'accessing' stamp: 'len 2/8/2016 03:55'!
+objects
+	^ subgroups! !
+
+!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/4/2016 06:25'!
+size
+	^ subgroups size! !
+
+!SubgroupSeries methodsFor: 'accessing' stamp: 'len 5/1/98 17:33'!
+subgroups
+	^ subgroups! !
+
+!SubgroupSeries methodsFor: 'accessing-private' stamp: 'len 5/1/98 17:33'!
+subgroups: aCollection
+	subgroups _ aCollection! !
+
+!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 07:31'!
+action: aGroupAction
+	action _ aGroupAction! !
+
+!SchreierSims methodsFor: 'accessing' stamp: 'len 6/30/2016 09:02'!
+base
+	"A base of a group G acting on X is a finite sequence of distinct points B={x1,..,xn} such that the stabilizer of B is {id}, i.e. the only element that fixes all xi is the identity."
+	base ifNil: [self run].
+	^ base! !
+
+!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/1/2016 05:46'!
+buildBSGS
+	base _ OrderedCollection new.
+	strongGeneratingSet _ OrderedCollection new.
+	self buildPartialBSGS.
+	base size to: 1 by: -1 do: [:i| self schreierSimsStep: i]! !
+
+!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/1/2016 00:39'!
+buildPartialBSGS
+	| id |
+	id _ action group identity.
+	generators do: [:each| each = id ifFalse: [strongGeneratingSet add: each]].
+	strongGeneratingSet copy do: [:s|
+		(base allSatisfy: [:b| (s value: b) = b])
+			ifTrue: [base add: (action space detect: [:one| action isFixedPoint: one])].
+			s squared = id ifFalse: [base add: s inverse]]! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:18'!
+elementFromImage: anArray
+	| image g |
+	image _ anArray copy.
+	g _ action group identity.
+	trees withIndexDo: [:each :i|
+		g _ (each trace: (image at: i)) · g.
+		i to: base size do: [:j| image at: j put: (action value: {each traceInverse: (image at: i). image at: j})]].
+	^ g! !
+
+!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 16:32'!
+generators: aCollection
+	generators _ aCollection asArray! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:02'!
+imageOf: anElement
+	^ base collect: [:each| action value: {anElement. each}]! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:13'!
+includes: anElement
+	"Answer true if the group includes anElement."
+	^ (self strip: anElement) = action group identity! !
+
+!SchreierSims methodsFor: 'accessing' stamp: 'len 6/30/2016 10:13'!
+order
+	"Answer the order of the group."
+	order ifNil: [self run].
+	^ order! !
+
+!SchreierSims methodsFor: 'computing-private' stamp: 'len 7/19/2016 08:37'!
+run
+	| G |
+	G _ action group.
+	order _ 1.
+	base _ OrderedCollection new.
+	strongGeneratingSet _ OrderedCollection new.
+	trees _ OrderedCollection new.
+	G action space do: [:b| | tree |
+		G isTrivial ifTrue: [^ order].
+		tree _ SchreierTree root: b generators: G generators action: G action.
+		trees add: tree.
+		order _ order * tree orbit size.
+		G _ tree stabilizer].
+	self error: 'what?'.
+	^ order! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:34'!
+strip: anElement
+	| g |
+	g _ anElement.
+	trees withIndexDo: [:each :i| | b b2 |
+		b _ each root.
+		b2 _ action value: {g. b}.
+		(each orbits includes: b2)
+			ifFalse: [^ {g. i}].
+		g _ g · (each traceInverse: b2)].
+	^ {g. trees size + 1}! !
+
+!SchreierSims methodsFor: 'accessing' stamp: 'len 6/25/2016 20:06'!
+strongGeneratingSet
+	strongGeneratingSet ifNil: [self run].
+	^ strongGeneratingSet! !
+
+!SchreierTree methodsFor: 'accessing' stamp: 'len 6/24/2016 03:07'!
+orbit
+	^ orbit! !
+
+!SchreierTree methodsFor: 'initialization' stamp: 'len 11/30/2016 14:45:01'!
+root: aPoint generators: anArray action: aGroupAction
+	| queue |
+	root _ aPoint.
+	generators _ anArray.
+	action _ aGroupAction.
+	v _ Dictionary new. "Schreier vector"
+	w _ Dictionary new. "backward pointers"
+	inverses _ Dictionary new. "inverses of the Schreier generators from v"
+	orbit _ Set with: aPoint.
+	v at: aPoint put: nil. "-1"
+	w at: aPoint put: nil. "-1"
+	queue _ OrderedCollection with: aPoint.
+	[| a |
+	a _ queue removeFirst.
+	1 to: generators size do: [:i|
+		| x g |
+		g _ generators at: i.
+		x _ action value: {g. a}.
+		(orbit includes: x)
+			ifFalse:
+				[orbit add: x.
+				queue add: x.
+				v at: x put: g.
+				w at: x put: a]].
+	queue isEmpty] whileFalse! !
+
+!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:19'!
+stabilizer
+	"Answer the stabilizer of the root."
+	| stabilizerGenerators id |
+	stabilizerGenerators _ Set new.
+	id _ action group identity.
+	self orbit do: [:i|
+		generators do: [:s|
+			| g |
+			g _ (self traceInverse: (s value: i)) · s · (self trace: i).
+			g = id ifFalse: [stabilizerGenerators add: g]]].
+	^ action group span: stabilizerGenerators! !
+
+!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:27'!
+trace: aPoint
+	"Trace the Schreier spanning tree (v,w) for the orbit containing aPoint.
+	Answer the transversal u(aPoint), i.e. an element such that root^u(aPoint) = aPoint.
+	This is the representative function, and in particular u(root^h) is a representative of the coset G_root * h, where G_root is the stabilizer at the root of this Schreier tree.
+	For an element g in G, there's an h in G_root g = h * u(root^g), and h = h * u(root^h)^-1."
+	| alpha u |
+	u _ action group identity.
+	alpha _ aPoint.
+	[(v at: alpha) notNil]
+		whileTrue:
+			[u _ u · (v at: alpha).
+			alpha _ w at: alpha].
+	^ u! !
+
+!SchreierTree methodsFor: 'accessing' stamp: 'len 5/8/2019 19:32:35'!
+traceInverse: aPoint
+	"Calculate inverses of coset representatives. See 'The Schreier-Sims Algorithm' pp 18. Assumes we're using a (strong) generating set that is closed under inversion. This makes backward pointers unnecesary."
+	| alpha u |
+	u _ action group identity.
+	alpha _ aPoint.
+	[(v at: alpha) notNil]
+		whileTrue:
+			[u _ (inverses at: alpha ifAbsentPut: [(v at: alpha) inverse]) · u.
+			alpha _ w at: alpha].
+	^ u! !
+
+!SchreierTree methodsFor: 'private' stamp: 'len 11/14/2016 08:26'!
+verify
+	^ self stabilizer generators allSatisfy: [:each| (each value: root) = root]! !
+
+!SchreierTree class methodsFor: 'instance creation' stamp: 'len 6/24/2016 03:07'!
+root: aPoint generators: anArray action: aGroupAction
+	^ self new root: aPoint generators: anArray action: aGroupAction! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:02:11'!
+* aNumber
+	| isolator x r |
+	aNumber class = self class
+		ifFalse: [^ aNumber adaptToAlgebraic: self andSend: #*].
+	aNumber isZero ifTrue: [^ aNumber].
+	self isZero ifTrue: [^ self].
+	isolator _ ComplexRootIsolator on: (minimalPolynomial zeroProduct: aNumber minimalPolynomial) squareFree.
+	[x _ approximation * aNumber approximation.
+	r _ self absoluteError * aNumber approximation norm2 + (approximation norm2 * aNumber absoluteError).
+	isolator atMostOneRootAround: x radius: r]
+		whileFalse:
+			[self refineWith: aNumber].
+	^ self class polynomial: isolator polynomial approximation: x radius: r! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:02:35'!
++ aNumber
+	| isolator x r |
+	aNumber class = self class
+		ifFalse: [^ aNumber adaptToAlgebraic: self andSend: #+].
+	aNumber isZero ifTrue: [^ self].
+	self isZero ifTrue: [^ aNumber].
+	isolator _ ComplexRootIsolator on: (minimalPolynomial zeroAddition: aNumber minimalPolynomial) squareFree.
+	[x _ approximation + aNumber approximation.
+	r _ self absoluteError + aNumber absoluteError.
+	isolator atMostOneRootAround: x radius: r]
+		whileFalse:
+			[self refineWith: aNumber].
+	^ self class polynomial: isolator polynomial approximation: x radius: r! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/12/2016 03:38'!
+- anObject
+	^ self + anObject negated! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/12/2016 03:38'!
+/ anObject
+	^ self * anObject reciprocal! !
+
+!ComplexAlgebraicNumber methodsFor: 'comparing' stamp: 'len 4/28/2018 16:48:28'!
+= anObject
+	self == anObject ifTrue: [^ true].
+	anObject isNumber ifFalse: [^ false].
+	anObject class = self class
+		ifFalse: [^ anObject adaptToAlgebraic: self andSend: #=].
+	^ minimalPolynomial = anObject minimalPolynomial and: [self bounds intersects: anObject bounds]! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 6/5/2016 19:35'!
+absoluteError
+	^ radius! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:41'!
+adaptToFloat: rcvr andSend: selector
+	^ rcvr perform: selector with: self asFloat! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:42'!
+adaptToFraction: rcvr andSend: selector
+	^ (self class fromRational: rcvr) perform: selector with: self! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:42'!
+adaptToInteger: rcvr andSend: selector
+	^ (self class fromRational: rcvr) perform: selector with: self! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 3/24/2018 21:01:14'!
+approximation
+	"Answre a rational or float current approximation of the receiver."
+	^ approximation! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing-private' stamp: 'len 1/15/2016 02:07'!
+approximation: aNumber radius: anotherNumber
+	approximation _ aNumber.
+	radius _ anotherNumber! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 1/13/2016 03:59'!
+asComplexFloat
+	"Answer a Float approximation of the receiver."
+	self refineTo: 0.000001.
+	^ approximation asFloat! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 6/4/2016 22:16'!
+asFloat
+	"Answer a Float approximation of the receiver."
+	self refineTo: 0.000001.
+	^ self approximation asFloat! !
+
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 4/28/2018 07:09:28'!
+asRational
+	"Convert the receiver to Fraction or Integer."
+	| alpha |
+	radius = 0 ifTrue: [^ approximation]. "could be float!!"
+	minimalPolynomial degree < 2
+		ifTrue:
+			[alpha _ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient.
+			approximation _ alpha. radius _ 0.
+			^ alpha].
+	(minimalPolynomial rootsIn: QQ)
+		do: [:each|
+			(each - approximation) abs < radius
+				ifTrue: [approximation _ each. radius _ 0. ^ each]].
+	self error: 'the number is irrational'! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 6/5/2016 20:59'!
+bounds
+	"Answer a disk in the complex plane where the receiver is located, isolated from all other roots of its minimal polynomial."
+	^ ComplexDisk center: approximation radius: radius! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/30/2018 04:52:43'!
+conjugates
+	"The conjugates of an algebraic number with minimal polynomial of degree n are all its n-th roots."
+	^ (minimalPolynomial rootsIn: CC) "copyWithout: self"! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/2/2018 16:37:43'!
+degree
+	^ minimalPolynomial degree! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/29/2018 18:46:05'!
+denominator
+	"The denominator of an algebraic number is the smallest positive integer that multiplied by the algebraic number is an algebraic integer."
+	^ minimalPolynomial coefficients inject: 1 into: [:result :each| result lcm: each denominator]! !
+
+!ComplexAlgebraicNumber methodsFor: 'comparing' stamp: 'len 4/29/2018 20:09:45'!
+hash
+	^ minimalPolynomial hash! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/2/2018 16:33:35'!
+height
+	^ self minimalPolynomial height! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/13/2016 04:01'!
+i
+	^ self * self class i! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 1/13/2016 03:33'!
+isAlgebraic
+	^ true! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 5/2/2018 17:16:29'!
+isAlgebraicInteger
+	"An algebraic number is an 'algebraic integer' if it's the root of a monic polynomial in Z[x], in particular if it's minimal polynomial has integer coefficients."
+	^ minimalPolynomial isMonic "<- defining the minimal polynomial as integer primitive"
+
+"alternatively, defining the minimal polynomial as monic:
+	^ minimalPolynomial coefficients allSatisfy: [:each| each isInteger]
+"! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/29/2018 23:49:18'!
+isImaginary
+	^ approximation real abs < radius! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 1/13/2016 03:33'!
+isNumber
+	^ true! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/28/2018 07:05:26'!
+isRational
+	minimalPolynomial degree < 2 ifTrue: [^ true].
+	radius = 0 ifTrue: [^ true].
+	(minimalPolynomial rootsIn: QQ)
+		do: [:each|
+			(each - approximation) abs < radius
+				ifTrue: [approximation _ each. radius _ 0. ^ true]].
+	^ false! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/29/2018 23:49:23'!
+isReal
+	^ approximation imaginary abs < radius "and: [((RealRootIsolator on: minimalPolynomial) numberOfRootsBetween: approximation real - radius and: approximation real + radius) > 0]"! !
+
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/28/2018 07:10:14'!
+isZero
+	^ approximation abs < radius and: [(minimalPolynomial value: 0) = 0]! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/28/2018 07:07:34'!
+minimalPolynomial
+	^ minimalPolynomial! !
+
+!ComplexAlgebraicNumber methodsFor: 'accessing-private' stamp: 'len 5/2/2018 17:14:52'!
+minimalPolynomial: aPolynomial
+	minimalPolynomial _ aPolynomial integerPrimitive "<- or should it be monic?"! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/28/2018 07:10:56'!
+negated
+	"Answer the additive inverse of the receiver."
+	^ self class
+		minimalPolynomial: minimalPolynomial zeroNegation
+		approximation: approximation negated
+		radius: radius! !
+
+!ComplexAlgebraicNumber methodsFor: 'operations' stamp: 'len 4/30/2018 04:46:52'!
+norm
+	^ minimalPolynomial independentCoefficient / minimalPolynomial leadingCoefficient * (minimalPolynomial degree even ifTrue: [1] ifFalse: [-1])
+
+"alternatively:
+	^ self conjugates product"! !
+
+!ComplexAlgebraicNumber methodsFor: 'constants' stamp: 'len 6/4/2016 21:18'!
+one
+	^ 1! !
+
+!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 1/11/2016 06:44'!
+printOn: aStream
+	self printOn: aStream base: 10! !
+
+!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 00:27:26'!
+printOn: aStream base: base
+	| real imaginary isImaginary |
+	minimalPolynomial degree = 2 ifTrue: [^ self printQuadraticOn: aStream base: base].
+	self refineTo: self printPrecision.
+	real _ approximation real asFloat roundTo: self printPrecision.
+	imaginary _ approximation imaginary asFloat roundTo: self printPrecision.
+	(isImaginary _ self isImaginary)
+		ifFalse: [real printOn: aStream base: base].
+	self isReal
+		ifFalse:
+			[isImaginary ifFalse: [aStream nextPutAll: (0 <= imaginary ifTrue: [' + '] ifFalse: [imaginary _ imaginary negated. ' - '])].
+			imaginary printOn: aStream base: base.
+			aStream nextPutAll: 'i' italic].
+	aStream nextPutAll: '..'! !
+
+!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 1/11/2018 21:07:33'!
+printPrecision
+"	self absoluteError < 1 ifTrue: [^ self absoluteError asFloat].
+	^ 0.001"
+	^ 0.00001! !
+
+!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 05:14:01'!
+printQuadraticOn: aStream base: base
+	| a b c discriminant z y x1 x2 sign |
+	a _ minimalPolynomial atDegree: 2.
+	b _ minimalPolynomial atDegree: 1.
+	c _ minimalPolynomial atDegree: 0.
+	discriminant _ b squared - (4*a*c).
+	z _ discriminant squareFree.
+	y _ (discriminant / z) sqrt.
+	x1 _ b negated + (discriminant negative ifTrue: [discriminant negated sqrt i] ifFalse: [discriminant sqrt]) / (2*a).
+	x2 _ b negated - (discriminant negative ifTrue: [discriminant negated sqrt i] ifFalse: [discriminant sqrt]) / (2*a).
+	(x1 - approximation) abs <= radius
+		ifTrue: [sign _ ' + ']
+		ifFalse: [(x2 - approximation) abs <= radius ifTrue: [sign _ ' - '. y _ y negated] ifFalse: [self halt]].
+	b = 0 ifFalse:
+		[b/(-2*a) printOn: aStream base: base.
+		aStream nextPutAll: sign.
+		y _ y abs].
+	y negative ifTrue: [aStream nextPut: $-. y _ y abs].
+	y/(2*a) = 1 ifFalse: [y/(2*a) printOn: aStream base: base].
+	z abs = 1 ifFalse:
+		[aStream nextPut: $—.
+		z abs printOn: aStream base: base].
+	z negative ifTrue: [aStream nextPutAll: 'i' italic]! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:03:02'!
+reciprocal
+	"Answer the multiplicative inverse of the receiver."
+	| isolator x r |
+	self isZero ifTrue: [^ ZeroDivide signal].
+	isolator _ ComplexRootIsolator on: minimalPolynomial zeroReciprocal.
+	[x _ approximation reciprocal.
+	r _ self absoluteError / approximation norm2 * x norm2.
+	isolator atMostOneRootAround: x radius: r]
+		whileFalse:
+			[self refine].
+	^ self class minimalPolynomial: isolator polynomial approximation: x radius: r! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 5/2/2018 16:47:24'!
+refine
+	| P Q P2 Q2 m x v c dx y v1 m1 |
+	radius _ radius / 2.0.
+	P _ minimalPolynomial. "should it be monic?"
+	Q _ P.
+	P2 _ P derivative.
+	Q2 _ P2.
+	x _ approximation.
+	v _ Q value: x.
+	m _ v norm2.
+	c _ 0. dx _ v / (Q2 value: x).
+	[dx abs >= radius]
+		whileTrue:
+			[y _ x - dx.
+			v1 _ Q value: y.
+			m1 _ v1 norm2.
+			m1 < m
+				ifTrue: [x _ y. v _ v1. m _ m1. c _ 0. dx _ v / (Q2 value: x)]
+				ifFalse: [c _ c + 1. dx _ dx / 4. c > 20 ifTrue: [self error: 'failed']]].
+	"Polish root:"
+	2 timesRepeat: [x _ x - ((P value: x) / (P2 value: x))].
+	approximation _ x! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 12/5/2017 20:05:25'!
+refineTo: aNumber
+	"Refine the receiver up to get an approximation error < aNumber."
+	[self absoluteError > aNumber] whileTrue: [self refine]! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 3/24/2018 21:00:20'!
+refineWith: aComplexAlgebraicNumber
+	"Refine the rational interval approximation of either the receiver or the argument, depending on which is less precise at the moment."
+	self relativeError > aComplexAlgebraicNumber relativeError
+		ifTrue: [self refine]
+		ifFalse: [aComplexAlgebraicNumber refine]! !
+
+!ComplexAlgebraicNumber methodsFor: 'approximating' stamp: 'len 4/29/2018 20:17:35'!
+relativeError
+	"Answer the relative error in the current rational approximation."
+	self isZero ifTrue: [^ 0].
+	^ self absoluteError / self approximation abs! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:03:28'!
+squareRoot
+	| isolator x r |
+	self isZero ifTrue: [^ self].
+	isolator _ ComplexRootIsolator on: minimalPolynomial zeroSquareRoot squareFree.
+	[x _ approximation sqrt.
+	r _ self absoluteError sqrt.
+	isolator atMostOneRootAround: x radius: r]
+		whileFalse:
+			[self refine].
+	^ self class polynomial: isolator polynomial approximation: x radius: r! !
+
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 5/4/2018 19:10:55'!
+squared
+	| x odd even |
+	x _ minimalPolynomial parent x.
+	odd _ minimalPolynomial odd.
+	even _ minimalPolynomial even.
+	^ self class
+		polynomial: odd squared * x - even squared
+		approximation: approximation squared
+		radius: radius * approximation norm2 * 2! !
+
+!ComplexAlgebraicNumber methodsFor: 'operations' stamp: 'len 4/30/2018 06:59:18'!
+trace
+	"Answer the absolute trace of the receiver."
+	^ (minimalPolynomial atDegree: minimalPolynomial degree - 1) negated
+
+"alternatively:
+	^ self conjugates sum"! !
+
+!ComplexAlgebraicNumber methodsFor: 'constants' stamp: 'len 6/4/2016 21:18'!
+zero
+	^ 0! !
+
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 1/15/2016 02:04'!
+approximation: approximateValue radius: approximationError maxDegree: n
+	"Answer an algebraic number with the given approximate value, approximation error, with minimal polynomial of degree at most n."
+	^ self notYetImplemented! !
+
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/30/2018 05:38:36'!
+fromRational: anIntegerOrFraction
+	"Answer an instance of the receiver representing the rational number anIntegerOrFraction."
+	| q x |
+	q _ anIntegerOrFraction asFraction.
+	x _ QQ polynomials x.
+	^ self
+		minimalPolynomial: x * q denominator - q numerator
+ 		approximation: anIntegerOrFraction
+		radius: 0! !
+
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 01:34:40'!
+i
+	| x |
+	x _ QQ polynomials x.
+	^ self minimalPolynomial: x^2 + 1 approximation: 1 i radius: 0! !
+
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 1/15/2016 02:05'!
+minimalPolynomial: aPolynomial approximation: aComplex radius: aNumber
+	^ self new
+		minimalPolynomial: aPolynomial;
+		approximation: aComplex radius: aNumber! !
+
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 05:26:21'!
+phi
+	"Answer the Phidias number or Golden Ratio."
+	| x |
+	x _ QQ polynomials x.
+	^ self minimalPolynomial: x^2 - x - 1 approximation: 2.0 radius: 1! !
+
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/10/2019 08:30:32'!
+polynomial: aPolynomial approximation: aComplex radius: aNumber
+	| minimalPolynomial |
+	minimalPolynomial _ aPolynomial factors detectMin: [:f| (f value: aComplex) abs].
+	minimalPolynomial degree = 1 ifTrue: [^ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient].
+	^ self minimalPolynomial: minimalPolynomial approximation: aComplex radius: aNumber! !
+
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 7/15/2016 18:31'!
+sqrt2
+	"Answer an instance of the receiver representing the square root of 2."
+
+	^ self
+		minimalPolynomial: QQ polynomials x squared - 2
+ 		approximation: 1.5
+		radius: 0.1! !
+
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 11/10/2016 10:31'!
+sqrt: anIntegerOrFraction
+	"Answer a square root of the rational argument."
+	^ self
+		minimalPolynomial: QQ polynomials x squared - anIntegerOrFraction
+ 		approximation: (anIntegerOrFraction negative ifTrue: [anIntegerOrFraction negated sqrt i] ifFalse: [anIntegerOrFraction sqrt]) radius: 0.00001! !
+
+!LLL methodsFor: 'initialization' stamp: 'len 12/26/2015 21:06'!
+basis: aCollection
+	| d |
+	basis _ Array withAll: aCollection.
+	d _ basis size.
+	delta _ 3/4 "(4/3 + 0.0000000001)^((d-1)/2)"! !
+
+!LLL methodsFor: 'private' stamp: 'len 4/29/2019 10:20:51'!
+computeMu
+	| n bi oj |
+	n _ basis size.
+	mu _ ZZ matrix: n@n evaluating: [:i :j|
+		bi _ basis at: i.
+		oj _ orthogonalBasis at: j.
+		(bi · oj) / (oj · oj)]! !
+
+!LLL methodsFor: 'private' stamp: 'len 4/29/2019 10:21:03'!
+computeOrthogonalBasis
+	| k vi vj vectors |
+	vectors _ Array withAll: basis.
+	k _ vectors size.
+	1 to: k do: [ :i |
+		vi _ vectors at: i.
+		i+1 to: k do: [ :j |
+			vj _ vectors at: j.
+			vj _ vj - (vi * ((vj · vi) / (vi · vi))).
+			vectors at: j put: vj ] ].
+	orthogonalBasis _ vectors! !
+
+!LLL methodsFor: 'private' stamp: 'len 12/26/2015 21:00'!
+computeReducedBasis
+	| k mukj bj bk a b |
+	self computeOrthogonalBasis; computeMu.
+	k _ 1.
+	[k < basis size] whileTrue:
+		[k-1 to: 0 by: -1 do: [ :j |
+			mukj _ mu at: k+1 @ (j+1).
+			bj _ basis at: j+1.
+			bk _ basis at: k+1.
+			mukj abs > (1/2) ifTrue:
+				[basis at: k+1 put: bk - (bj * mukj rounded).
+				self update: k+1]].
+		a _ (orthogonalBasis at: k+1) norm2.
+		b _ (orthogonalBasis at: k) norm2.
+		a >= ((delta - (mu at: k+1 @ k) squared) * b)
+			ifTrue: [k _ k + 1]
+			ifFalse:
+				[basis swap: k+1 with: k.
+				self update: k+1.
+				k _ k-1 max: 1]].
+	^ basis! !
+
+!LLL methodsFor: 'accessing' stamp: 'len 12/23/2015 03:01'!
+reducedBasis
+	orthogonalBasis notNil ifFalse: [self computeReducedBasis].
+	^ basis! !
+
+!LLL methodsFor: 'private' stamp: 'len 2/23/2016 07:33'!
+update: k
+	self flag: #fix. "don't need to recompute all"
+	self computeOrthogonalBasis; computeMu! !
+
+!LLL class methodsFor: 'instance creation' stamp: 'len 12/23/2015 03:04'!
+basis: aCollection
+	^ self new basis: aCollection! !
+
+!LLL class methodsFor: 'examples' stamp: 'len 10/28/2016 18:21'!
+example
+	| b1 b2 b3 lll |
+	b1 _ (1, 1, 1).
+	b2 _ (-1, 0, 2).
+	b3 _ (3, 5, 6).
+	lll _ self basis: { b1. b2. b3 }.
+	^ lll reducedBasis! !
+
+!LLL class methodsFor: 'examples' stamp: 'len 10/29/2016 08:33'!
+example2
+	"Find polynomial x^2 - x - 1 that has the golden ratio phi as root."
+	| r b1 b2 b3 lll |
+	r _ 1.618034.
+	b1 _ (1, 0, 0, (10000 * r squared)).
+	b2 _ (0, 1, 0, (10000 * r)).
+	b3 _ (0, 0, 1, 10000).
+	lll _ self basis: { b1. b2. b3 }.
+	^ lll reducedBasis! !
 
 !ExtendedSmithReduction methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 12:43:36'!
 matrix
