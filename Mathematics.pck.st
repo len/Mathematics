@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 7:05:56 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 11 May 2019 at 3:09:09 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 466!
+!provides: 'Mathematics' 1 467!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -12777,16 +12777,13 @@ example2
 		polynomial: (RR polynomialsIn: #(x y z) :: generate: [:x :y :z| x^2 - ((y^2)*(z^2))]);
 		radius: 5.0! !
 
-!Domain methodsFor: 'coercion' stamp: 'len 5/10/2019 18:59:40'!
+!Domain methodsFor: 'elements' stamp: 'len 5/11/2019 02:24:49'!
 !! anObject
 	"Coerce anObject to an element of the receiver. Subclasses should extend."
 	(self includes: anObject) ifTrue: [^ anObject].
 "	(self isQuotient and: [self base includes: anObject]) ifTrue: [^ self project: anObject]."
 	self isAmbient ifFalse: [| element | element _ self ambient !! anObject. (self contains: element) ifTrue: [^ element]].
-	anObject isElement ifTrue:
-		[(self coerce: anObject from: anObject parent) ifNotNil: [:anElement| ^ anElement].
-		(anObject parent coerce: anObject to: self) ifNotNil: [:anElement| ^ anElement].
-		anObject parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anObject]].
+	anObject isElement ifTrue: [anObject parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anObject]].
 	^ DomainError signal: 'coercion failed'! !
 
 !Domain methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
@@ -12804,20 +12801,25 @@ example2
 	"Answer the cartesian set product of the receiver with the argument."
 	^ CartesianProduct components: {self. aDomain}! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/5/2019 18:29:58'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 03:03:46'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
 	If the argument is a morphism, answer the composition with a canonical morphism to its domain. See also Morphism>>->."
-	(aCodomain isKindOf: Morphism)
-		ifTrue: [^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain � aMorphism]].
+	(aCodomain isKindOf: Morphism) ifTrue:
+		[self = aCodomain domain ifTrue: [^ aCodomain].
+		^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain � aMorphism]].
+	self propertyAt: #outputMaps ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
+	aCodomain propertyAt: #inputMaps ifPresent: [:aDictionary| aDictionary at: self ifPresent: [:aMorphism| ^ aMorphism]].
 	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ aCodomain from: self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:20:35'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:08:41'!
 ->> aCodomain
 	"Answer the canonical projection from the receiver onto aCodomain."
-	(self onto: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
-	^ aCodomain onfrom: self! !
+	| answer |
+	answer _ self -> aCodomain ifNil: [^ nil].
+	self assert: answer isSurjective.
+	^ answer! !
 
 !Domain methodsFor: 'operations' stamp: 'len 5/3/2019 15:29:39'!
 / anEquivalenceRelation
@@ -12866,11 +12868,13 @@ example2
 	"Answer true if aDomain is a proper subobject of the receiver (strict inclusion)."
 	^ aDomain < self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:20:22'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:08:49'!
 >-> aCodomain
 	"Answer the canonical embedding from the receiver into aCodomain."
-	(self into: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
-	^ aCodomain infrom: self! !
+	| answer |
+	answer _ self -> aCodomain ifNil: [^ nil].
+	self assert: answer isInjective.
+	^ answer! !
 
 !Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:50'!
 >= aDomain
@@ -12911,32 +12915,12 @@ example2
 	"The coproduct in the category of sets is the disjoint union."
 	^ self species newFrom: ((self elements collect: [:each| {each. 0}]) \/ (aDomain elements collect: [:each| {each. 1}]))! !
 
-!Domain methodsFor: 'coercion' stamp: 'len 5/7/2019 08:32:08'!
-addCoercionFrom: aDomain evaluating: aBlock
-	(self propertyAt: #inputCoercions ifAbsentPut: [Dictionary new]) at: aDomain put: aBlock! !
-
-!Domain methodsFor: 'coercion' stamp: 'len 5/7/2019 08:31:56'!
-addCoercionTo: aDomain evaluating: aBlock
-	(self propertyAt: #outputCoercions ifAbsentPut: [Dictionary new]) at: aDomain put: aBlock! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/21/2019 09:36:04'!
-addEpimorphism: aMorphism
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:02:02'!
+addMap: aMorphism
 	aMorphism domain = self
-		ifTrue: [^ (self propertyAt: #outputEpimorphisms ifAbsentPut: [Dictionary new]) at: aMorphism codomain put: aMorphism].
+		ifTrue: [^ (self propertyAt: #outputMaps ifAbsentPut: [Dictionary new]) at: aMorphism codomain put: aMorphism].
 	aMorphism codomain = self
-		ifTrue: [^ (self propertyAt: #inputEpimorphisms ifAbsentPut: [Dictionary new]) at: aMorphism domain put: aMorphism].
-	^ DomainError signal! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/21/2019 09:38:21'!
-addIsomorphism: aMorphism
-	^ self addEpimorphism: aMorphism; addMonomorphism: aMorphism! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/21/2019 09:36:37'!
-addMonomorphism: aMorphism
-	aMorphism domain = self
-		ifTrue: [^ (self propertyAt: #outputMonomorphisms ifAbsentPut: [Dictionary new]) at: aMorphism codomain put: aMorphism].
-	aMorphism codomain = self
-		ifTrue: [^ (self propertyAt: #inputMonomorphisms ifAbsentPut: [Dictionary new]) at: aMorphism domain put: aMorphism].
+		ifTrue: [^ (self propertyAt: #inputMaps ifAbsentPut: [Dictionary new]) at: aMorphism domain put: aMorphism].
 	^ DomainError signal! !
 
 !Domain methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:22'!
@@ -13000,16 +12984,6 @@ atRandomBits: bitSize
 automorphisms
 	self flag: #fix. "this shouldn't be here for all subclasses to inherit, maybe Domain should be abstract, and we could consider Collections as finite sets and implement these things in Collection; same with #to:evaluating:, etc."
 	^ SymmetricGroup on: self! !
-
-!Domain methodsFor: 'coercion' stamp: 'len 5/9/2019 12:16:03'!
-coerce: anElement from: aDomain
-	self propertyAt: #inputCoercions ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aBlock| ^ aBlock value: anElement]].
-	^ nil! !
-
-!Domain methodsFor: 'coercion' stamp: 'len 5/9/2019 12:15:57'!
-coerce: anElement to: aDomain
-	self propertyAt: #outputCoercions ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aBlock| ^ aBlock value: anElement]].
-	^ nil! !
 
 !Domain methodsFor: 'enumerating' stamp: 'len 10/27/2016 14:40'!
 collect: aBlock
@@ -13093,14 +13067,10 @@ embedding
 endomorphisms
 	^ self => self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:59:01'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:34:36'!
 from: aDomain
 	"Answer the canonical morphism from aDomain to the receiver."
 	self = aDomain ifTrue: [^ self id].
-	self isQuotient
-		ifTrue: [aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism]].
-	(self infrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
-	(self onfrom: aDomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	^ nil! !
 
 !Domain methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
@@ -13167,20 +13137,6 @@ includesAllOf: aCollection
 	"Answer whether all the elements of aCollection are in the receiver."
 	aCollection do: [:each| (self includes: each) ifFalse: [^ false]].
 	^ true! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:16'!
-infrom: aDomain
-	"Answer the canonical embedding from aDomain into the receiver."
-	self = aDomain ifTrue: [^ self id].
-	self propertyAt: #inputMonomorphisms ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aMorphism| ^ aMorphism]].
-	^ nil! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:57:40'!
-into: aCodomain
-	"Answer the canonical embedding from the receiver into aCodomain."
-	self = aCodomain ifTrue: [^ self id].
-	self propertyAt: #outputMonomorphisms ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
-	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:31'!
 into: aCodomain evaluating: aBlock
@@ -13322,20 +13278,6 @@ null
 	"The null object in the category of sets is the empty set."
 	^ self propertyAt: #null ifAbsent: [self class newFrom: (Set new: 0)]! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:32'!
-onfrom: aDomain
-	"Answer the canonical projection from aDomain onto the receiver."
-	self = aDomain ifTrue: [^ self id].
-	self propertyAt: #inputEpimorphisms ifPresent: [:aDictionary| aDictionary at: aDomain ifPresent: [:aMorphism| ^ aMorphism]].
-	^ nil! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:57:11'!
-onto: aCodomain
-	"Answer the canonical projection from the receiver onto aCodomain."
-	self = aCodomain ifTrue: [^ self id].
-	self propertyAt: #outputEpimorphisms ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
-	^ nil! !
-
 !Domain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:05'!
 onto: aCodomain evaluating: aBlock
 	"Answer a projection (a surjective morphism) onto the specified codomain (in the same category), evaluating as the given block."
@@ -13406,12 +13348,12 @@ species
 sum: aBlock
 	^ self elements sum: aBlock! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:58:44'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:55:50'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
 	self = aCodomain ifTrue: [^ self id].
-	(self into: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
-	(self onto: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
+"	self ambient = aCodomain ifTrue: [^ self addMap: self | aCodomain id]."
+	self isAmbient ifFalse: [self ambient -> aCodomain ifNotNil: [:aMorphism| ^ self | aMorphism]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
@@ -14887,9 +14829,10 @@ span: aCollection
 species
 	^ Group! !
 
-!Group methodsFor: 'morphisms' stamp: 'len 11/2/2016 03:44'!
+!Group methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:38:18'!
 to: aCodomain
-	(self isTrivial and: [aCodomain isGroup]) ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain identity]].
+	(self isTrivial and: [aCodomain isGroup])
+		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain identity]].
 	^ super to: aCodomain! !
 
 !Group methodsFor: 'morphisms' stamp: 'len 1/11/2018 18:20:36'!
@@ -15017,7 +14960,7 @@ size
 components: anArray
 	^ self new components: anArray! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 5/10/2019 18:49:09'!
+!FPGroup methodsFor: 'operations' stamp: 'len 5/11/2019 02:02:50'!
 / anObject
 	| newRelations answer |
 	newRelations _ Set new addAll: self relations; yourself.
@@ -15028,7 +14971,7 @@ components: anArray
 				ifTrue: [newRelations addAll: anObject]
 				ifFalse: [^ self notYetImplemented "subgroup?"]].
 	answer _ self class new: self rank relations: newRelations.
-	answer addEpimorphism: (self onto: answer mapping: [:i| answer x: i]).
+	answer addMap: (self onto: answer mapping: [:i| answer x: i]).
 	^ answer! !
 
 !FPGroup methodsFor: 'comparing' stamp: 'len 5/10/2019 18:44:24'!
@@ -15115,12 +15058,12 @@ size
 	self isFree ifTrue: [self rank > 0 ifTrue: [Aleph new] ifFalse: [1]].
 	^ super size! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 5/10/2019 19:01:24'!
+!FPGroup methodsFor: 'operations' stamp: 'len 5/11/2019 02:02:26'!
 span: aCollection
 	| answer |
 	answer _ self class new: aCollection size.
 	self notYetImplemented. "missing relations"
-	answer addMonomorphism: (answer into: self mapping: [:i| aCollection at: i]).
+	answer addMap: (answer into: self mapping: [:i| aCollection at: i]).
 	^ answer! !
 
 !FPGroup methodsFor: 'morphisms' stamp: 'len 5/10/2019 18:41:07'!
@@ -15149,7 +15092,7 @@ new: anInteger
 new: anInteger relations: aCollection
 	^ self new rank: anInteger; relations: aCollection! !
 
-!OppositeGroup methodsFor: 'coercion' stamp: 'len 5/9/2019 08:05:51'!
+!OppositeGroup methodsFor: 'elements' stamp: 'len 5/9/2019 08:05:51'!
 !! anElement
 	(opposite includes: anElement) ifTrue: [^ OppositeGroupElement opposite: anElement inverse].
 	^ super !! anElement! !
@@ -15208,6 +15151,12 @@ do: aBlock
 	visited _ Set new.
 	self base do: [:each| | x |
 		visited add: (x _ self project: each) ifAbsent: [aBlock value: x]]! !
+
+!QuotientGroup methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:35:56'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self projection].
+	aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism].
+	^ super from: aDomain! !
 
 !QuotientGroup methodsFor: 'accessing' stamp: 'len 12/22/2016 21:16:13'!
 identity
@@ -15395,10 +15344,6 @@ copyEmpty
 !PermutationGroup methodsFor: 'accessing' stamp: 'len 2/16/2016 05:48'!
 degree
 	^ self space size! !
-
-!PermutationGroup methodsFor: 'as yet unclassified' stamp: 'len 4/23/2019 02:13:02'!
-embedding
-	^ self into: self ambient evaluating: [:each| each]! !
 
 !PermutationGroup methodsFor: 'private' stamp: 'len 2/1/2018 23:22:51'!
 generators: aCollection
@@ -17826,6 +17771,12 @@ do: aBlock
 		x _ self project: each.
 		visited add: x ifAbsent: [aBlock value: x]]! !
 
+!QuotientSet methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:36:13'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self projection].
+	aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism].
+	^ super from: aDomain! !
+
 !QuotientSet methodsFor: 'testing' stamp: 'len 8/10/2016 01:01'!
 isQuotient
 	^ true! !
@@ -18015,11 +17966,11 @@ fractions
 freeAlgebra
 	^ FreeAlgebra over: self! !
 
-!Ring methodsFor: 'operations' stamp: 'len 12/20/2017 22:42:12'!
+!Ring methodsFor: 'operations' stamp: 'len 5/11/2019 02:42:50'!
 freeAlgebraIn: anIntegerOrCollection
 	"Answer the free algebra in the given indeterminates over the receiver."
 	anIntegerOrCollection isInteger ifTrue: [^ FreeAlgebra new: anIntegerOrCollection over: self].
-	^ FreeAlgebra on: anIntegerOrCollection over: self! !
+	^ (FreeAlgebra new: anIntegerOrCollection size over: self) names: anIntegerOrCollection! !
 
 !Ring methodsFor: 'operations' stamp: 'len 5/4/2019 03:38:05'!
 freeModuleIn: aCollection
@@ -18333,15 +18284,12 @@ polynomialsIn: anIntegerOrCollection
 	"Answer the ring of multivariate polynomials over the receiver in the given indeterminates."
 	^ self polynomialsIn: anIntegerOrCollection ordering: #grevlex! !
 
-!Ring methodsFor: 'operations' stamp: 'len 2/27/2017 07:40:37'!
+!Ring methodsFor: 'operations' stamp: 'len 5/11/2019 02:41:23'!
 polynomialsIn: anIntegerOrCollection ordering: aMonomialOrdering
 	"Answer the ring of multivariate polynomials over the receiver over the given indeterminates."
-	| answer |
 	anIntegerOrCollection isInteger
 		ifTrue: [^ PolynomialRing new: anIntegerOrCollection over: self ordering: aMonomialOrdering].
-	answer _ PolynomialRing new: anIntegerOrCollection size over: self ordering: aMonomialOrdering.
-	answer names: anIntegerOrCollection.
-	^ answer! !
+	^ (PolynomialRing new: anIntegerOrCollection size over: self ordering: aMonomialOrdering) names: anIntegerOrCollection! !
 
 !Ring methodsFor: 'enumerating' stamp: 'len 9/22/2018 19:00:02'!
 primeIdealsDo: aBlock
@@ -19261,6 +19209,12 @@ do: aBlock
 elementClass
 	^ Residue! !
 
+!QuotientRing methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:36:08'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self projection].
+	aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism].
+	^ super from: aDomain! !
+
 !QuotientRing methodsFor: 'accessing' stamp: 'len 10/10/2016 16:29'!
 generators
 	^ (self base generators ifNil: [^ nil]) apply: self projection! !
@@ -19658,13 +19612,6 @@ nilradical
 	A finite ring is a Galois ring iff its nilradical is of the form <p> for some prime p. This is also the unique maximal ideal."
 	^ self maximalIdeal! !
 
-!PrimeRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 06:01:14'!
-onto: aCodomain
-	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
-	((aCodomain isKindOf: PrimeRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
-		ifTrue: [^ self onto: aCodomain evaluating: [:x| aCodomain project: x representative]].
-	^ super onto: aCodomain! !
-
 !PrimeRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:18:30'!
 p
 	^ self propertyAt: #p ifAbsentPut: [self modulusFactors anyOne]! !
@@ -19681,6 +19628,13 @@ primeSubfield
 !PrimeRing methodsFor: 'printing' stamp: 'len 5/21/2018 04:31:00'!
 printOn: aStream
 	aStream print: self base; nextPut: $/; print: self p; nextPutAll: self exponent printString super; print: self base! !
+
+!PrimeRing methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:11:31'!
+to: aCodomain
+	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
+	((aCodomain isKindOf: PrimeRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
+		ifTrue: [^ self onto: aCodomain evaluating: [:x| aCodomain project: x representative]].
+	^ super to: aCodomain! !
 
 !PrimeRing methodsFor: 'operations' stamp: 'len 5/21/2018 06:56:18'!
 zeroDivisors
@@ -19999,16 +19953,17 @@ y
 z
 	^ self x: 3! !
 
-!AlgebraicExtension methodsFor: 'converting' stamp: 'len 5/7/2019 16:41:08'!
+!AlgebraicExtension methodsFor: 'converting' stamp: 'len 5/11/2019 02:21:44'!
 asModule
 	^ self propertyAt: #asModule ifAbsentPut:
 		[| M |
 		M _ self scalars ^ self degree.
-		self
-			addCoercionTo: M evaluating:
-				[:a| self scalars tuple: self degree evaluating: [:i| a representative 	coefficientAtDegree: i-1]];
-			addCoercionFrom: M evaluating:
-				[:v| (1 to: v size) sum: [:i| self x ^ (i-1) * (v at: i)]].
+		self addMap:
+			(self to: M evaluating:
+				[:a| self scalars tuple: self degree evaluating: [:i| a representative 	coefficientAtDegree: i-1]]);
+			addMap:
+			(M to: self evaluating:
+				[:v| (1 to: v size) sum: [:i| self x ^ (i-1) * (v at: i)]]).
 		M]
 
 "	^ AlgebraicExtensionAsModule on: self"
@@ -20636,13 +20591,6 @@ idealClass
 includes: anObject
 	^ anObject isInteger! !
 
-!RationalIntegerRing methodsFor: 'morphisms' stamp: 'len 4/19/2019 05:59:19'!
-into: aCodomain
-	"Answer an injective morphism from the receiver into aCodomain."
-	aCodomain isRing
-		ifTrue: [^ self into: aCodomain evaluating: [:x| aCodomain one * x]].
-	^ super into: aCodomain! !
-
 !RationalIntegerRing methodsFor: 'testing' stamp: 'len 3/27/2018 19:46:01'!
 isDedekindDomain
 	"A Dedekind domain is an integral domain in which every non-zero proper ideal factors into a product of prime ideals."
@@ -20722,6 +20670,12 @@ radical
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:58'!
 size
 	^ Aleph new! !
+
+!RationalIntegerRing methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:51:09'!
+to: aCodomain
+	aCodomain isRing
+		ifTrue: [^ aCodomain addMap: (self into: aCodomain evaluating: [:x| aCodomain one * x])].
+	^ super to: aCodomain! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/2/2019 08:03:10'!
 units
@@ -23183,6 +23137,12 @@ buildProjection
 contains: anAffineSubspace
 	^ anAffineSubspace direction = self relations! !
 
+!QuotientModule methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:36:04'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self projection].
+	aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism].
+	^ super from: aDomain! !
+
 !QuotientModule methodsFor: 'accessing' stamp: 'len 3/13/2018 18:12:23'!
 generators
 	^ self base generators collect: [:each| self project: each]! !
@@ -24083,6 +24043,12 @@ coordinatesOf: anAffineSubspace
 	v _ anAffineSubspace representative.
 	v _ v - (self relations orthogonalProjection value: v).
 	^ self relations perp coordinatesOf: v! !
+
+!QuotientSpace methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:36:17'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self projection].
+	aDomain -> self base ifNotNil: [:aMorphism| ^ self projection � aMorphism].
+	^ super from: aDomain! !
 
 !QuotientSpace methodsFor: 'testing' stamp: 'len 4/28/2019 16:33:05'!
 includes: anObject
@@ -25309,13 +25275,9 @@ z
 zero
 	^ self coefficients: (Dictionary new: 0)! !
 
-!FreeAlgebra class methodsFor: 'instance creation' stamp: 'len 6/30/2016 02:27'!
-new: anInteger over: aRing
-	^ self on: (1 to: anInteger) over: aRing! !
-
-!FreeAlgebra class methodsFor: 'instance creation' stamp: 'len 8/25/2016 08:25'!
-on: aCollection over: aRing
-	^ self words: (FreeMonoid on: aCollection) over: aRing! !
+!FreeAlgebra class methodsFor: 'instance creation' stamp: 'len 5/11/2019 02:43:48'!
+new: aCollection over: aRing
+	^ self words: (FreeMonoid new: aCollection) over: aRing! !
 
 !FreeAlgebra class methodsFor: 'instance creation' stamp: 'len 1/20/2016 13:38'!
 over: aRing
