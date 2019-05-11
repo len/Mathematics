@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 11 May 2019 at 8:38:31 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 11 May 2019 at 8:58:15 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 468!
+!provides: 'Mathematics' 1 469!
 !requires: 'RayTracer' 1 2 nil!
 !classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
 Number subclass: #RealAlgebraicNumber
@@ -23879,11 +23879,11 @@ z
 zero
 	^ self propertyAt: #zero ifAbsentPut: [self scalar: self scalars zero]! !
 
-!FreeHomModule class methodsFor: 'examples' stamp: 'len 4/19/2019 04:37:23'!
+!FreeHomModule class methodsFor: 'examples' stamp: 'len 5/11/2019 08:54:25'!
 example1
 	"The vector space of linear transformations
 	from 3-tuples to 2-tuples, over the rational numbers."
-	^ QQ^3 => QQ^2! !
+	^ QQ^3 => (QQ^2)! !
 
 !FreeHomModule class methodsFor: 'examples' stamp: 'len 4/3/2018 19:27:44'!
 example2
@@ -36923,12 +36923,12 @@ zero
 + aBitTuple
 	^ self class new: (self size max: aBitTuple size) fromInteger: (bits bitXor: aBitTuple asInteger)! !
 
-!BitTuple methodsFor: 'copying' stamp: 'len 5/8/2019 04:15:16'!
+!BitTuple methodsFor: 'copying' stamp: 'len 5/11/2019 08:55:20'!
 , anObject
 	anObject isTuple
 		ifTrue: [^ self class new: self size + anObject size fromInteger: (bits bitXor: (anObject asInteger bitShift: self size))].
 	anObject isArray
-		ifTrue: [self , (self scalars tuple: anObject)].
+		ifTrue: [^ self , (self scalars tuple: anObject)].
 	^ self copyWith: anObject! !
 
 !BitTuple methodsFor: 'operations' stamp: 'len 3/28/2016 06:51'!
