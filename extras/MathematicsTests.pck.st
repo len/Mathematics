@@ -1,6 +1,9 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3059] on 10 May 2019 at 4:37:29 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3744] on 13 May 2019 at 6:22:58 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 115!
+!provides: 'MathematicsTests' 1 117!
+SystemOrganization addCategory: #MathematicsTests!
+
+
 !classDefinition: #AbelianGroupTest category: #MathematicsTests!
 TestCase subclass: #AbelianGroupTest
 	instanceVariableNames: ''
@@ -1210,6 +1213,33 @@ testAffineSpace
 	self assert: A ambient = A.
 	self assert: A coordinateRing spec = A! !
 
+!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 1/12/2017 14:44:51'!
+testProjectiveClosure
+	"From Magma Handbook example Scheme_projective-closure (H118E23)."
+	| A1 u v X PX X2 |
+	A1 _ AffineSpace new: #(u v) over: ZZ/5.
+	u _ A1 coordinateRing x: #u.
+	v _ A1 coordinateRing x: #v.
+	X _ A1 subscheme: u^2 - (v^5).
+	PX _ X projectiveClosure.
+	self assert: (PX patch: 3) = X.
+	X2 _ PX patch: 2.
+	self assert: X2 projectiveClosure = X projectiveClosure! !
+
+!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 11/1/2016 05:31'!
+testProjectiveEmbedding
+	| A1 u v X PX affinePointsEmbedded projectivePoints |
+	A1 _ AffineSpace new: #(u v) over: ZZ/5.
+	u _ A1 coordinateRing x: #u.
+	v _ A1 coordinateRing x: #v.
+	X _ A1 subscheme: u^2 - (v^5).
+	PX _ X projectiveClosure.
+	affinePointsEmbedded _ X points asSet apply: X projectiveEmbedding.
+	projectivePoints _ PX points asSet.
+	self assert: projectivePoints >= affinePointsEmbedded.
+	"the projective scheme has one more point at infinity:"
+	self assert: affinePointsEmbedded size + 1 = projectivePoints size! !
+
 !AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 9/3/2018 21:55:50'!
 testConicCoefficients
 	self assert: (Conic coefficients: (1,2,3,4,5,6)) coefficients = (1,2,3,4,5,6).
@@ -1412,32 +1442,103 @@ testNotFinite
 	X _ A / {y*y - (x*x) - 3} :: spec.
 	self assert: X isFinite not! !
 
-!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 1/12/2017 14:44:51'!
-testProjectiveClosure
-	"From Magma Handbook example Scheme_projective-closure (H118E23)."
-	| A1 u v X PX X2 |
-	A1 _ AffineSpace new: #(u v) over: ZZ/5.
-	u _ A1 coordinateRing x: #u.
-	v _ A1 coordinateRing x: #v.
-	X _ A1 subscheme: u^2 - (v^5).
-	PX _ X projectiveClosure.
-	self assert: (PX patch: 3) = X.
-	X2 _ PX patch: 2.
-	self assert: X2 projectiveClosure = X projectiveClosure! !
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 10/31/2016 11:08'!
+testReduced
+	| A R x y z X |
+	A _ AffineSpace new: 3 over: QQ.
+	R _ A coordinateRing.
+	x _ R x.
+	y _ R y.
+	z _ R z.
+	X _ A subscheme: {x*(y^3). x^2*z}.
+	self assert: X isReduced not.
+	self assert: X reduced = (A subscheme: {x*y. x*z})! !
 
-!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 11/1/2016 05:31'!
-testProjectiveEmbedding
-	| A1 u v X PX affinePointsEmbedded projectivePoints |
-	A1 _ AffineSpace new: #(u v) over: ZZ/5.
-	u _ A1 coordinateRing x: #u.
-	v _ A1 coordinateRing x: #v.
-	X _ A1 subscheme: u^2 - (v^5).
-	PX _ X projectiveClosure.
-	affinePointsEmbedded _ X points asSet apply: X projectiveEmbedding.
-	projectivePoints _ PX points asSet.
-	self assert: projectivePoints >= affinePointsEmbedded.
-	"the projective scheme has one more point at infinity:"
-	self assert: affinePointsEmbedded size + 1 = projectivePoints size! !
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 9/28/2018 06:52:14'!
+testRingHomomorphismSpec
+	| A B x y phi |
+	A _ QQ polynomialsIn: #(x y z).
+	B _ QQ polynomialsIn: #(x y).
+	x _ B x.
+	y _ B y.
+	phi _ A to: B evaluating: [:f| f value: {x-y. x. y}].
+	self assert: phi spec domain = B spec.
+	self assert: phi spec codomain = A spec.
+	self assert: phi spec asRingMap = phi! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 2/8/2017 07:14:15'!
+testSingularCubics
+	| R x y C |
+	R _ QQ polynomialsIn: #(x y z).
+	x _ R x.
+	y _ R y.
+	C _ R / (x^3 - (y^2) homogenizedIn: 3) :: proj.
+	self assert: (C !! (1,1,1)) isSmooth.
+	self assert: (C !! (0,0,1)) isSmooth not.
+	self assert: C isSingular.
+	C _ R / (x^3 + (x^2) - (y^2) homogenizedIn: 3) :: proj.
+	self assert: C isSingular! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:36:55'!
+testSmoothness
+	| R C |
+	R _ QQ polynomialsIn: #(x y).
+	"cuspidal curve:"
+	C _ (R / (R !! [:x :y| y^2 - (x^3)])) spec.
+	self assert: C isSmooth not.
+	self assert: C isSingular.
+	self assert: (C !! (1,1)) isSmooth.
+	self assert: (C !! (0,0)) isSmooth not! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:37:26'!
+testSmoothnessOverCC
+	| P R C |
+	P _ ProjectiveSpace new: 2 over: CC.
+	R _ P coordinateRing.
+	C _ P subscheme: R !! [:x :y :z| x].
+	self assert: C isSingular not.
+	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3)].
+	self assert: C isSingular.
+	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3) + (z^3)].
+	self assert: C isSingular not! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:38:05'!
+testSmoothnessOverFiniteField
+	| P R C |
+	P _ ProjectiveSpace new: 2 over: ZZ/19.
+	R _ P coordinateRing.
+	C _ P subscheme: R !! [:x :y :z| x^3 + (y^3) + (z^3)].
+	self assert: C isSingular not.
+	C _ P subscheme: R !! [:x :y :z| x^4 - (x*(z^3))].
+	self assert: C isSingular.
+	C _ P subscheme: R !! [:x :y :z| x^5 + (y^5*19) + (z^5)].
+	self assert: C isSingular.
+	C _ P subscheme: R !! [:x :y :z| x^5 + (y^5*9) + (z^5)].
+	self assert: C isSingular not! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:38:23'!
+testSmoothnessOverQQ
+	| P C |
+	P _ ProjectiveSpace new: 2 over: QQ.
+	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
+	self assert: C isSingular! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 1/13/2017 20:22:42'!
+testSpecZ
+	self assert: ZZ spec dimension = 1.
+	self assert: ZZ spec isNoetherian.
+	self assert: (ZZ spec includes: ZZ*5).
+	self deny: (ZZ spec includes: ZZ*6).
+	self assert: ZZ spec isInitial not.
+	self assert: ZZ spec isTerminal! !
+
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/10/2019 04:30:49'!
+testSpecZSubschemes
+	self assert: ZZ spec >= (ZZ / 2) spec.
+	self assert: (ZZ / 10) spec >= (ZZ / 5) spec.
+	self deny: (ZZ / 10) spec >= (ZZ / 3) spec.
+	self assert: (ZZ / 10) spec /\ (ZZ / 15) spec = (ZZ / 5) spec.
+	self assert: (ZZ / 10) spec \/ (ZZ / 15) spec = (ZZ / 30) spec! !
 
 !AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 4/8/2018 18:14:45'!
 testProjectiveLineOverFiniteRing
@@ -1660,104 +1761,6 @@ testRationalPointsOverFiniteField
 	self assert: C points size = 9.
 	self assert: (Iterator on: C points performing: #do:) size = 9! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 10/31/2016 11:08'!
-testReduced
-	| A R x y z X |
-	A _ AffineSpace new: 3 over: QQ.
-	R _ A coordinateRing.
-	x _ R x.
-	y _ R y.
-	z _ R z.
-	X _ A subscheme: {x*(y^3). x^2*z}.
-	self assert: X isReduced not.
-	self assert: X reduced = (A subscheme: {x*y. x*z})! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 9/28/2018 06:52:14'!
-testRingHomomorphismSpec
-	| A B x y phi |
-	A _ QQ polynomialsIn: #(x y z).
-	B _ QQ polynomialsIn: #(x y).
-	x _ B x.
-	y _ B y.
-	phi _ A to: B evaluating: [:f| f value: {x-y. x. y}].
-	self assert: phi spec domain = B spec.
-	self assert: phi spec codomain = A spec.
-	self assert: phi spec asRingMap = phi! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 2/8/2017 07:14:15'!
-testSingularCubics
-	| R x y C |
-	R _ QQ polynomialsIn: #(x y z).
-	x _ R x.
-	y _ R y.
-	C _ R / (x^3 - (y^2) homogenizedIn: 3) :: proj.
-	self assert: (C !! (1,1,1)) isSmooth.
-	self assert: (C !! (0,0,1)) isSmooth not.
-	self assert: C isSingular.
-	C _ R / (x^3 + (x^2) - (y^2) homogenizedIn: 3) :: proj.
-	self assert: C isSingular! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:36:55'!
-testSmoothness
-	| R C |
-	R _ QQ polynomialsIn: #(x y).
-	"cuspidal curve:"
-	C _ (R / (R !! [:x :y| y^2 - (x^3)])) spec.
-	self assert: C isSmooth not.
-	self assert: C isSingular.
-	self assert: (C !! (1,1)) isSmooth.
-	self assert: (C !! (0,0)) isSmooth not! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:37:26'!
-testSmoothnessOverCC
-	| P R C |
-	P _ ProjectiveSpace new: 2 over: CC.
-	R _ P coordinateRing.
-	C _ P subscheme: R !! [:x :y :z| x].
-	self assert: C isSingular not.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3)].
-	self assert: C isSingular.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3) + (z^3)].
-	self assert: C isSingular not! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:38:05'!
-testSmoothnessOverFiniteField
-	| P R C |
-	P _ ProjectiveSpace new: 2 over: ZZ/19.
-	R _ P coordinateRing.
-	C _ P subscheme: R !! [:x :y :z| x^3 + (y^3) + (z^3)].
-	self assert: C isSingular not.
-	C _ P subscheme: R !! [:x :y :z| x^4 - (x*(z^3))].
-	self assert: C isSingular.
-	C _ P subscheme: R !! [:x :y :z| x^5 + (y^5*19) + (z^5)].
-	self assert: C isSingular.
-	C _ P subscheme: R !! [:x :y :z| x^5 + (y^5*9) + (z^5)].
-	self assert: C isSingular not! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/22/2018 22:38:23'!
-testSmoothnessOverQQ
-	| P C |
-	P _ ProjectiveSpace new: 2 over: QQ.
-	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
-	self assert: C isSingular! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 1/13/2017 20:22:42'!
-testSpecZ
-	self assert: ZZ spec dimension = 1.
-	self assert: ZZ spec isNoetherian.
-	self assert: (ZZ spec includes: ZZ*5).
-	self deny: (ZZ spec includes: ZZ*6).
-	self assert: ZZ spec isInitial not.
-	self assert: ZZ spec isTerminal! !
-
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/10/2019 04:30:49'!
-testSpecZSubschemes
-	self assert: ZZ spec >= (ZZ / 2) spec.
-	self assert: (ZZ / 10) spec >= (ZZ / 5) spec.
-	self deny: (ZZ / 10) spec >= (ZZ / 3) spec.
-	self assert: (ZZ / 10) spec /\ (ZZ / 15) spec = (ZZ / 5) spec.
-	self assert: (ZZ / 10) spec \/ (ZZ / 15) spec = (ZZ / 30) spec! !
-
 !AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 5/10/2018 18:17:19'!
 testSturmfelsExample1
 	"Bernd Sturmfels, 'Ideals, Varieties and Macaulay 2', 1. A Curve in Affine 3-Space."
@@ -1806,6 +1809,34 @@ testSturmfelsExample2
 	"Each of the points is multiplicity-free:"
 	self assert: ourpoints isReduced. "equivalent to the original: ourpoints reduced projectiveClosure degree = 65."! !
 
+!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 4/10/2018 15:45:55'!
+testTwistedCubic
+	| P R M C |
+	P _ ProjectiveSpace new: 3 over: QQ.
+	R _ P coordinateRing.
+	"R indeterminateNames: #(u v w t)"
+	M _ R matrix: (2@3) coefficients: ((1,2,3,2,3,4) collect: [:i| R x: i]).
+	C _ P subscheme: (M minors: 2).
+	self assert: C dimension = 1.
+	self assert: C isSmooth! !
+
+!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 2/4/2017 07:50:26'!
+testTwistedCubicDegree
+	"Twisted cubic in P^3 with homogeneous coordinates x,y,w,z."
+	| A x y z w X |
+	A _ QQ polynomialsIn: #(x y z w).
+	x _ A x.
+	y _ A y.
+	z _ A z.
+	w _ A x: #w.
+	X _ A / {x^2 - (y*w). x*z - (y^2)} :: proj.
+	"At this point X is still reducible, it is the union of a line x=y=0 and the twisted cubic:"
+	self assert: X degree = 4.
+	"To cut out X, we impose an additional equation x^3 - (z * (w^2)) = 0:"
+	X _ A / {x^2 - (y*w). x*z - (y^2). x^3 - (z*(w^2))} :: proj.
+	"But we get the twisted cubic (in some sense) 'counted with multiplicity 2', so the degree is 6"
+	self assert: X degree = 6! !
+
 !AlgebraicGeometryTest methodsFor: 'tangent cone' stamp: 'len 2/9/2017 10:27:04'!
 testTangentCone
 	"'A Singular Introduction to Commutative Algebra', Example 5.5.13."
@@ -1840,34 +1871,6 @@ testTangentConeAndTangentSpace
 	self assert: o tangentCone = (A subscheme: (x + y) * (x - y)).
 	"the tangent space is the whole plane:"
 	self assert: o tangentSpace = A! !
-
-!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 4/10/2018 15:45:55'!
-testTwistedCubic
-	| P R M C |
-	P _ ProjectiveSpace new: 3 over: QQ.
-	R _ P coordinateRing.
-	"R indeterminateNames: #(u v w t)"
-	M _ R matrix: (2@3) coefficients: ((1,2,3,2,3,4) collect: [:i| R x: i]).
-	C _ P subscheme: (M minors: 2).
-	self assert: C dimension = 1.
-	self assert: C isSmooth! !
-
-!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 2/4/2017 07:50:26'!
-testTwistedCubicDegree
-	"Twisted cubic in P^3 with homogeneous coordinates x,y,w,z."
-	| A x y z w X |
-	A _ QQ polynomialsIn: #(x y z w).
-	x _ A x.
-	y _ A y.
-	z _ A z.
-	w _ A x: #w.
-	X _ A / {x^2 - (y*w). x*z - (y^2)} :: proj.
-	"At this point X is still reducible, it is the union of a line x=y=0 and the twisted cubic:"
-	self assert: X degree = 4.
-	"To cut out X, we impose an additional equation x^3 - (z * (w^2)) = 0:"
-	X _ A / {x^2 - (y*w). x*z - (y^2). x^3 - (z*(w^2))} :: proj.
-	"But we get the twisted cubic (in some sense) 'counted with multiplicity 2', so the degree is 6"
-	self assert: X degree = 6! !
 
 !AlgebraicNumbersTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2018 05:39:40'!
 testArithmetic
@@ -2157,6 +2160,55 @@ testBuchbergerNormalForm
 	h _ G reduceFull: f.
 	self assert: h = (z^2 + (1/2))! !
 
+!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 2/12/2017 06:02:55'!
+testMoraNormalForm
+	"A Singular Introduction to Commutative Algebra, Example 1.7.7."
+	| R f G h |
+	R _ QQ polynomialsIn: #(x y z) ordering: #lgrevlex.
+	f _ R !! [:x :y :z| x^2 + (y^2) + (z^3) + (x^4) + (y^5)].
+	G _ StandardBasis new add: R x; add: R y; yourself.
+	h _ G reduce: f.
+	self assert: h = (R !! [:x :y :z| z^3 + (x^4) + (y^5)])! !
+
+!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 4/24/2018 19:38:02'!
+testMultivariateDivisionExample
+	| P x y z F f |
+	P _ QQ polynomialsIn: #(x y z) ordering: #glex.
+	x _ P x.
+	y _ P y.
+	z _ P z.
+	F _ {x^2 - (y*z). y^2 - (z*x). z^2 - (x*y)}.
+	f _ x^3 + (y^3 * 3).
+	self assert: (f divisionBy: F) remainder = (y^3 * 4)! !
+
+!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:34:34'!
+testMultivariateDivisionExample2
+	| R f f1 f2 |
+	R _ QQ polynomialsIn: #(x y z) ordering: #lex.
+	f _ R !! [:x :y :z| x^5*(y^3)].
+	f1 _ R !! [:x :y :z| x^3*(y^2) - ((y^2)*z)].
+	f2 _ R !! [:x :y :z| x*(y^2) - (y*z)].
+	self assert: (f divisionBy: {f1. f2}) printString = 'x^5y^3 = (x^2y)(x^3y^2 - y^2z) + (xyz + z^2)(xy^2 - yz) + yz^3'! !
+
+!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:37:43'!
+testMultivariateDivisionExample3
+	| R f f1 f2 |
+	R _ QQ polynomialsIn: #(x y z) ordering: #lex.
+	f _ R !! [:x :y :z| x^3*(y^2) + (x*y) + x + 1].
+	f1 _ R !! [:x :y :z| x^3 + 1].
+	f2 _ R !! [:x :y :z| y^2 + 1].
+	self assert: (f divisionBy: {f1. f2}) printString = 'x^3y^2 + xy + x + 1 = (y^2)(x^3 + 1) + (-1)(y^2 + 1) + xy + x + 2'! !
+
+!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:44:11'!
+testMultivariateDivisionExample4
+	| R f f1 f2 |
+	R _ QQ polynomialsIn: #(x y) ordering: #lex.
+	f _ R !! [:x :y| x^2*(y^3) - (x*(y^2)*2)].
+	f1 _ R !! [:x :y| x^2*y - (x*2)].
+	f2 _ R !! [:x :y| y^3 + 4].
+	self assert: (f divisionBy: {f1. f2}) printString = 'x^2y^3 - 2xy^2 = (y^2)(x^2y - 2x) + (0)(y^3 + 4) + 0'.
+	self assert: (f divisionBy: {f2. f1}) printString = 'x^2y^3 - 2xy^2 = (x^2)(y^3 + 4) + (0)(x^2y - 2x) + -4x^2 - 2xy^2'! !
+
 !CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/12/2018 17:05:01'!
 testCyclic7Correctness
 	"Test correctness of the ideal of cyclic 7-roots checking against one generated by Singular."
@@ -2164,6 +2216,14 @@ testCyclic7Correctness
 	txt _ ((QQ polynomialsIn: 7) cyclicIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
 	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
 	self assert: txt = 'x1x2x3x4x5x6x7-1,x1x2x3x4x5x6+x1x2x3x4x5x7+x1x2x3x4x6x7+x1x2x3x5x6x7+x1x2x4x5x6x7+x1x3x4x5x6x7+x2x3x4x5x6x7,x1x2x3x4x5+x2x3x4x5x6+x1x2x3x4x7+x1x2x3x6x7+x1x2x5x6x7+x1x4x5x6x7+x3x4x5x6x7,x1x2x3x4+x2x3x4x5+x3x4x5x6+x1x2x3x7+x1x2x6x7+x1x5x6x7+x4x5x6x7,x1x2x3+x2x3x4+x3x4x5+x4x5x6+x1x2x7+x1x6x7+x5x6x7,x1x2+x2x3+x3x4+x4x5+x5x6+x1x7+x6x7,x1+x2+x3+x4+x5+x6+x7'! !
+
+!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/12/2018 17:14:04'!
+testKatsura7Correctness
+	"Test correctness of Katsura-7 ideal checking against one generated by Singular."
+	| txt |
+	txt _ ((QQ polynomialsIn: 7) katsuraIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
+	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
+	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'! !
 
 !CommutativeAlgebraTest methodsFor: 'algorithms' stamp: 'len 5/12/2018 18:22:29'!
 testExtendedBuchberger
@@ -2437,22 +2497,6 @@ testIdealColon2
 	self assert: Q = (I ÷ (R * x) /\ (I ÷ (R * y))).
 	self assert: Q = (R * {x*z - (y^2). x^3 - (y*z). x^2*y - (z^2)})! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 2/12/2017 12:50:41'!
-testIdealElementOperations
-	"Magma handbook example H103E2."
-	| R x y z I |
-	R _ QQ polynomialsIn: #(x y z) "ordering: #lex".
-	x _ R x. y _ R y. z _ R z.
-	I _ R * {(x + y)^3. (y - z)^2. y^2*z + z}.
-	self assert: (I reduce: (y^2*z + z)) isZero.
-	"I basis reduceFull: x^3 = ..."
-	"I basis reduce: z^4 + (y^2))"
-	self deny: (I includes: x+y).
-	self assert: (I radicalContains: x+y).
-	self assert: (I radicalContains: (x+y)^2).
-	self deny: (I radicalContains: z).
-	self assert: (x^4 + y - z s: x^2 + y - z) = (x^2*y negated + (x^2*z) + y - z)! !
-
 !CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 10/30/2016 15:17'!
 testIdealElimination
 	"Example from Cox IVA 123 p. NOTE: this is a little slow."
@@ -2665,13 +2709,83 @@ testIdealSaturation
 	S _ R * {y. x^5}.
 	self assert: (I saturation: J) = S! !
 
-!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/12/2018 17:14:04'!
-testKatsura7Correctness
-	"Test correctness of Katsura-7 ideal checking against one generated by Singular."
-	| txt |
-	txt _ ((QQ polynomialsIn: 7) katsuraIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
-	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
-	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'! !
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:36'!
+testLocalIdeals
+	"Magma handbook, example H104E4."
+	| R I J A M |
+	self notYetImplemented.
+	R _ QQ polynomialsIn: #(x y z) ordering: #llex.
+	I _ R * (R generate: [:x :y :z| {x*y - z. x^3*(z^2) - (y^2). x*(z^3) - x - y}]).
+	J _ R * (R generate: [:x :y :z| {x*y - z. x^2*z - y. x*(z^3) - x - y}]).
+	A _ R * (R generate: [:x :y :z|
+		{x^2 - (y^2) + (2*(x^3)*z).
+		x*y + (y^2) - (x^3*z).
+		y^3.
+		x*z + (y*z).
+		y*z.
+		z^2}]).
+	self assert: I * J = A. "hangs here"
+	M _ R * (R generate: [:x :y :z| {x + y. y^2. z}]).
+	self assert: I /\ J = M.
+	self deny: A = M.
+	self assert: A <= M! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 10/23/2016 16:37'!
+testPolynomialRingHomomorphismKernel
+	| A B x y phi |
+	A _ QQ polynomialsIn: #(x y z).
+	B _ QQ polynomialsIn: #(x y).
+	x _ B x.
+	y _ B y.
+	phi _ A to: B evaluating: [:f| f value: {x-y. x. y}].
+	self assert: phi kernel = (A * (A x - A y + A z)).
+	self assert: (phi value: (phi kernel atRandomBits: 15)) isZero! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 1/26/2017 09:43:00'!
+testRadicalMembership
+	| R x y z g1 g2 f I |
+	R _ QQ polynomialsIn: #(x y z).
+	x _ R x.
+	y _ R y.
+	z _ R z.
+	g1 _ x^4*(y^2) + (z^2) - (x*(y^3)*z*4) - (y^5*z*2).
+	g2 _ (x + (y^2)) ^ 2.
+	f _ y*z - (x^3).
+	I _ R * {g1. g2}.
+	self assert: (I radicalContains: f)! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 2/19/2017 19:30:49'!
+testSquarefreeMonomialIdealPrimaryDecomposition
+	"Miller, Sturmfels, 'Combinatorial Commutative Algebra', Example 1.8."
+	| R a b c d e I |
+	R _ QQ polynomialsIn: #(a b c d e).
+	a _ R x: 1. b _ R x: 2. c _ R x: 3. d _ R x: 4. e _ R x: 5.
+	I _ R * {a*d. a*e. b*c*d. b*e. c*e. d*e}.
+	self assert: I primaryDecomposition = {R * {d. e}. R * {a. b. e}. R * {a. c. e}. R * {a. b. c. d}} asSet! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 2/12/2017 12:50:41'!
+testIdealElementOperations
+	"Magma handbook example H103E2."
+	| R x y z I |
+	R _ QQ polynomialsIn: #(x y z) "ordering: #lex".
+	x _ R x. y _ R y. z _ R z.
+	I _ R * {(x + y)^3. (y - z)^2. y^2*z + z}.
+	self assert: (I reduce: (y^2*z + z)) isZero.
+	"I basis reduceFull: x^3 = ..."
+	"I basis reduce: z^4 + (y^2))"
+	self deny: (I includes: x+y).
+	self assert: (I radicalContains: x+y).
+	self assert: (I radicalContains: (x+y)^2).
+	self deny: (I radicalContains: z).
+	self assert: (x^4 + y - z s: x^2 + y - z) = (x^2*y negated + (x^2*z) + y - z)! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 8/30/2016 07:01'!
+testZeroIdeal
+	| zero |
+	zero _ ZZ * #(). "the zero ideal {0}"
+	self assert: zero isZero.
+	self assert: (zero includes: 0).
+	self deny: (zero includes: 42)! !
 
 !CommutativeAlgebraTest methodsFor: 'krull dimension' stamp: 'len 10/25/2016 15:02'!
 testKrullDimension
@@ -2736,117 +2850,6 @@ testKrullDimensionOverZZ
 "	I _ R * R zero. "zero ideal"
 	Q _ R / I.
 	self assert: Q dimension = 3! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/10/2019 04:31:36'!
-testLocalIdeals
-	"Magma handbook, example H104E4."
-	| R I J A M |
-	self notYetImplemented.
-	R _ QQ polynomialsIn: #(x y z) ordering: #llex.
-	I _ R * (R generate: [:x :y :z| {x*y - z. x^3*(z^2) - (y^2). x*(z^3) - x - y}]).
-	J _ R * (R generate: [:x :y :z| {x*y - z. x^2*z - y. x*(z^3) - x - y}]).
-	A _ R * (R generate: [:x :y :z|
-		{x^2 - (y^2) + (2*(x^3)*z).
-		x*y + (y^2) - (x^3*z).
-		y^3.
-		x*z + (y*z).
-		y*z.
-		z^2}]).
-	self assert: I * J = A. "hangs here"
-	M _ R * (R generate: [:x :y :z| {x + y. y^2. z}]).
-	self assert: I /\ J = M.
-	self deny: A = M.
-	self assert: A <= M! !
-
-!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 2/12/2017 06:02:55'!
-testMoraNormalForm
-	"A Singular Introduction to Commutative Algebra, Example 1.7.7."
-	| R f G h |
-	R _ QQ polynomialsIn: #(x y z) ordering: #lgrevlex.
-	f _ R !! [:x :y :z| x^2 + (y^2) + (z^3) + (x^4) + (y^5)].
-	G _ StandardBasis new add: R x; add: R y; yourself.
-	h _ G reduce: f.
-	self assert: h = (R !! [:x :y :z| z^3 + (x^4) + (y^5)])! !
-
-!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 4/24/2018 19:38:02'!
-testMultivariateDivisionExample
-	| P x y z F f |
-	P _ QQ polynomialsIn: #(x y z) ordering: #glex.
-	x _ P x.
-	y _ P y.
-	z _ P z.
-	F _ {x^2 - (y*z). y^2 - (z*x). z^2 - (x*y)}.
-	f _ x^3 + (y^3 * 3).
-	self assert: (f divisionBy: F) remainder = (y^3 * 4)! !
-
-!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:34:34'!
-testMultivariateDivisionExample2
-	| R f f1 f2 |
-	R _ QQ polynomialsIn: #(x y z) ordering: #lex.
-	f _ R !! [:x :y :z| x^5*(y^3)].
-	f1 _ R !! [:x :y :z| x^3*(y^2) - ((y^2)*z)].
-	f2 _ R !! [:x :y :z| x*(y^2) - (y*z)].
-	self assert: (f divisionBy: {f1. f2}) printString = 'x^5y^3 = (x^2y)(x^3y^2 - y^2z) + (xyz + z^2)(xy^2 - yz) + yz^3'! !
-
-!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:37:43'!
-testMultivariateDivisionExample3
-	| R f f1 f2 |
-	R _ QQ polynomialsIn: #(x y z) ordering: #lex.
-	f _ R !! [:x :y :z| x^3*(y^2) + (x*y) + x + 1].
-	f1 _ R !! [:x :y :z| x^3 + 1].
-	f2 _ R !! [:x :y :z| y^2 + 1].
-	self assert: (f divisionBy: {f1. f2}) printString = 'x^3y^2 + xy + x + 1 = (y^2)(x^3 + 1) + (-1)(y^2 + 1) + xy + x + 2'! !
-
-!CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/10/2018 07:44:11'!
-testMultivariateDivisionExample4
-	| R f f1 f2 |
-	R _ QQ polynomialsIn: #(x y) ordering: #lex.
-	f _ R !! [:x :y| x^2*(y^3) - (x*(y^2)*2)].
-	f1 _ R !! [:x :y| x^2*y - (x*2)].
-	f2 _ R !! [:x :y| y^3 + 4].
-	self assert: (f divisionBy: {f1. f2}) printString = 'x^2y^3 - 2xy^2 = (y^2)(x^2y - 2x) + (0)(y^3 + 4) + 0'.
-	self assert: (f divisionBy: {f2. f1}) printString = 'x^2y^3 - 2xy^2 = (x^2)(y^3 + 4) + (0)(x^2y - 2x) + -4x^2 - 2xy^2'! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 10/23/2016 16:37'!
-testPolynomialRingHomomorphismKernel
-	| A B x y phi |
-	A _ QQ polynomialsIn: #(x y z).
-	B _ QQ polynomialsIn: #(x y).
-	x _ B x.
-	y _ B y.
-	phi _ A to: B evaluating: [:f| f value: {x-y. x. y}].
-	self assert: phi kernel = (A * (A x - A y + A z)).
-	self assert: (phi value: (phi kernel atRandomBits: 15)) isZero! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 1/26/2017 09:43:00'!
-testRadicalMembership
-	| R x y z g1 g2 f I |
-	R _ QQ polynomialsIn: #(x y z).
-	x _ R x.
-	y _ R y.
-	z _ R z.
-	g1 _ x^4*(y^2) + (z^2) - (x*(y^3)*z*4) - (y^5*z*2).
-	g2 _ (x + (y^2)) ^ 2.
-	f _ y*z - (x^3).
-	I _ R * {g1. g2}.
-	self assert: (I radicalContains: f)! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 2/19/2017 19:30:49'!
-testSquarefreeMonomialIdealPrimaryDecomposition
-	"Miller, Sturmfels, 'Combinatorial Commutative Algebra', Example 1.8."
-	| R a b c d e I |
-	R _ QQ polynomialsIn: #(a b c d e).
-	a _ R x: 1. b _ R x: 2. c _ R x: 3. d _ R x: 4. e _ R x: 5.
-	I _ R * {a*d. a*e. b*c*d. b*e. c*e. d*e}.
-	self assert: I primaryDecomposition = {R * {d. e}. R * {a. b. e}. R * {a. c. e}. R * {a. b. c. d}} asSet! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 8/30/2016 07:01'!
-testZeroIdeal
-	| zero |
-	zero _ ZZ * #(). "the zero ideal {0}"
-	self assert: zero isZero.
-	self assert: (zero includes: 0).
-	self deny: (zero includes: 42)! !
 
 !EllipticCurvesTest methodsFor: 'as yet unclassified' stamp: 'len 11/11/2016 10:14'!
 testBInvariants
@@ -3647,12 +3650,12 @@ testFunctionComposition3
 	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
 	self should: [g · f] raise: DomainError! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2018 22:38:43'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 14:00:48'!
 testFunctionNewFrom
 	| f g |
 	f _ QQ^3 :: endomorphisms atRandomBits: 1000. "f is a LinearMap"
 	g _ f as: Function. "downgrade it to a simple Function, not a LinearMap any more"
-	self assert: (g as: LinearMap) = f! !
+	self assert: (g as: FreeModuleMap) = f! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/11/2016 20:01:51'!
 testFundamentalDiscriminant
@@ -3962,6 +3965,176 @@ testAdjugateProperties
 	self assert: (A^5) adjugate = (A adjugate ^ 5).
 	self assert: A transposed adjugate = A adjugate transposed! !
 
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
+testCayleyHamiltorTheoremInQ
+	| n M A |
+	n _ 6 atRandom.
+	M _ QQ ^ (n@n).
+	A _ M atRandomBits: 100.
+	self assert: (A characteristicPolynomial value: A) isZero! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
+testCayleyHamiltorTheoremInZ
+	| n M A |
+	n _ 6 atRandom.
+	M _ ZZ ^ (n@n).
+	A _ M atRandomBits: 100.
+	self assert: (A characteristicPolynomial value: A) isZero! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
+testDomainError
+	| A B |
+	A _ ZZ ^ (4@4) :: identity.
+	self should: [A / 2] raise: DomainError.
+	B _ QQ ^ (4@4) :: identity.
+	self should: [A + B] raise: DomainError.
+	self should: [A * B] raise: DomainError! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:33:10'!
+testFundamentalSubspacesDefinitions
+	| m n A |
+	m _ 6 atRandom.
+	n _ 6 atRandom.
+	A _ self newRandomMatrix: m@n over: QQ.
+	self assert: A rowSpace = (QQ^n span: A rows). "definition"
+	self assert: A columnSpace = (QQ^m span: A columns). "definition"
+	self assert: A coimage = A transposed image. "definition"
+	self assert: A cokernel = A transposed kernel. "definition"
+	self assert: A image = A columnSpace. "synonyms"
+	self assert: A coimage = A rowSpace. "synonyms"
+! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:30:09'!
+testFundamentalSubspacesDimensions
+	| m n A r |
+	m _ 6 atRandom.
+	n _ 6 atRandom.
+	A _ self newRandomMatrix: m@n over: QQ.
+	r _ A rank.
+	self assert: A image dimension = r.
+	self assert: A kernel dimension = (n - r).
+	self assert: A nullity = (n - r). "definition"
+	self assert: A coimage dimension = r.
+	self assert: A cokernel dimension = (m - r)! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
+testInverse
+	| M A I |
+	M _ QQ ^ (3@3).
+	A _ M rows: { (2,1,1). (-1,0,1). (0,2,1) }.
+	I _ M identity.
+	self assert: A inverse * A = I.
+	self assert: A * A inverse = I! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:06'!
+testInverse2
+	| Qx x f A |
+	Qx _ QQ polynomials.
+	x _ Qx x.
+	f _ x^8 + (x^6) - (3*(x^4)) - (3*(x^3)) + (8*(x^2)) + (2*x) - 5.
+	A _ f companion.
+	self assert: (A * A inverse) isIdentity! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:08:29'!
+testKernelImageTheorem
+	| n A |
+	n _ 6 atRandom.
+	A _ self newRandomMatrix: n@n over: QQ.
+	self assert: A kernel dimension + A image dimension = n! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
+testKroneckerProduct
+	| A B C |
+	A _ ZZ ^ (2@2) elementAt: (1,2,3,4).
+	B _ ZZ ^ (2@2) elementAt: (0,5,6,7).
+	C _ ZZ ^ (4@4) elementAt: (0, 5, 0, 10, 6, 7, 12, 14, 0, 15, 0, 20, 18, 21, 24, 28).
+	self assert: (A kronecker: B) = C! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:23'!
+testLeftInverse
+	| M A |
+	M _ QQ ^ (5@3).
+	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
+	self assert: (A leftInverse * A) isIdentity! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 10:08:10'!
+testLeftRightIdentity
+	| A |
+	A _ ZZ^(5 atRandom @ 5 atRandom) atRandomBits: 100.
+	self assert: A leftIdentity * A = A.
+	self assert: A * A rightIdentity = A! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
+testMinor
+	| M A |
+	M _ ZZ ^ (3@3).
+	A _ M elementAt: #(1 2 3 4 5 6 7 8 9).
+	self assert: (A minor: 2@3) = -6! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
+testMinors
+	| A |
+	A _ ZZ ^ (2@3) elementAt: (1 to: 6).
+	self assert: (A minors: 2) asArray = #(-3 -6 -3)! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/16/2018 20:18:11'!
+testQRDecomposition
+	| n A QR Q R |
+	n _ 3.
+	[A _ QQ ^ (n@n) :: atRandomBits: n*n. A isFullRank] whileFalse.
+	A _ A over: RR.
+	QR _ A QR.
+	Q _ QR first.
+	R _ QR second.
+	self assert: Q * R = A.
+	self assert: Q isOrthogonal.
+	self assert: R isUpperTriangular! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2018 03:58:33'!
+testQRDecomposition2
+	"Example from wikipedia:"
+	| A Q R |
+	A _ RR matrix: 3@3 coefficients: #(12 -51 4 6 167 -68 -4 24 -41).
+	Q _ RR matrix: 3@3 coefficients: {6/7. -69/175. -58/175. 3/7. 158/175. 6/175. -2/7. 6/35. -33/35}.
+	R _ RR matrix: 3@3 coefficients: #(14 21 -14 0 175 -70 0 0 35).
+	self assert: A QR = {Q. R}! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:24'!
+testRightInverse
+	| M A |
+	M _ QQ ^ (3@5).
+	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
+	self assert: (A * A rightInverse) isIdentity! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:19'!
+testSimilarity
+	"Examples from wikipedia article on SNF"
+	| M A B C |
+	M _ QQ ^ (2@2).
+	A _ M rows: {(1,2). (0,1)}.
+	B _ M rows: {(3,-4). (1,-1)}.
+	C _ M rows: {(1,0). (1,2)}.
+	self assert: A ~ B.
+	self deny: A ~ C! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:19'!
+testSimilarity2
+	| n M A B P |
+	n _ 5 atRandom.
+	M _ QQ ^ (n@n).
+	A _ M atRandomBits: 10*n*n.
+	[(P _ M atRandomBits: 10*n*n) isSingular] whileTrue.
+	B _ M atRandomBits: 10*n*n.
+	self assert: A ~ (P inverse * A * P).
+	self deny: A ~ B! !
+
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
+testTransposed
+	| A |
+	A _ ZZ ^ (6 atRandom @ 6 atRandom) :: atRandomBits: 1000.
+	self assert: A columns = A transposed rows.
+	self assert: A transposed transposed = A! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 20:23:05'!
 testBacklash
 	"Example from Sage documentation. Non-singular and square."
@@ -4061,21 +4234,38 @@ testBacklashTupleOverZBug
 	x _ A \ b.
 	self assert: A * x = b! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
-testCayleyHamiltorTheoremInQ
-	| n M A |
-	n _ 6 atRandom.
-	M _ QQ ^ (n@n).
-	A _ M atRandomBits: 100.
-	self assert: (A characteristicPolynomial value: A) isZero! !
+!MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
+testCokernelMatrix
+	"From Sage."
+	| A B |
+	A _ QQ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
+	B _ QQ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
+	self assert: A cokernelMatrix "echelon" = B! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
-testCayleyHamiltorTheoremInZ
-	| n M A |
-	n _ 6 atRandom.
-	M _ ZZ ^ (n@n).
-	A _ M atRandomBits: 100.
-	self assert: (A characteristicPolynomial value: A) isZero! !
+!MatrixTest methodsFor: 'solving' stamp: 'len 11/4/2016 10:26'!
+testKernel
+	| A S |
+	A _ QQ ^ (4@6) rows: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
+	S _ QQ ^ 6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
+	self assert: A kernel = S! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:01:40'!
+testKernelInteger
+	"Example from GAP manual."
+	| A K |
+	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transposed.
+	K _ ZZ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
+	self assert: A kernelMatrix = K! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:05:14'!
+testKernelRational
+	"Example from GAP manual."
+	| A K |
+	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transposed.
+	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
+	self assert: A kernelMatrix = K! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 8/25/2016 00:51'!
 testCharacteristicMatrixAndPolynomialOverQ
@@ -4099,14 +4289,6 @@ testCharacteristicPolynomial
 	self assert: (A characteristicPolynomial value: A) isZero.
 	B _ M atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
-testCokernelMatrix
-	"From Sage."
-	| A B |
-	A _ QQ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
-	B _ QQ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernelMatrix "echelon" = B! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:05'!
 testDeterminant
@@ -4137,14 +4319,49 @@ testDeterminant3
 	B _ M rows: {(1,0,4). (1,1,1). (2,-2,-3)}.
 	self assert: A determinant * B determinant = (A * B) determinant! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:47'!
-testDomainError
-	| A B |
-	A _ ZZ ^ (4@4) :: identity.
-	self should: [A / 2] raise: DomainError.
-	B _ QQ ^ (4@4) :: identity.
-	self should: [A + B] raise: DomainError.
-	self should: [A * B] raise: DomainError! !
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:06'!
+testMinimalPolynomial
+	| M m f |
+	M _ QQ ^ (5@5).
+	m _ M atRandomBits: 100.
+	f _ m minimalPolynomial.
+	self assert: f | m characteristicPolynomial.
+	self assert: (f value: m) isZero! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/3/2018 01:25:38'!
+testPermanent
+	"Example from https://en.wikipedia.org/wiki/Permanent_(mathematics)"
+	| A |
+	A _ ZZ matrix: 4 coefficients: #(1 1 1 1 2 1 0 0 3 0 1 0 4 0 0 1).
+	self assert: A permanent = 10! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
+testRank
+	| M vandermonde |
+	M _ QQ ^ (3@3).
+	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
+	self assert: vandermonde rank = 3.
+	M _ ZZ ^ (3@3).
+	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
+	self assert: vandermonde rank = 3! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
+testRank2
+	| M m |
+	M _ QQ ^ (3@3).
+	m _ M rows: {(1,1,1). (2,2,0). (3,3,1)}.
+	self assert: m rank = 2.
+
+	M _ ZZ ^ (3@3).
+	m _ M rows: {(1,1,1). (2,2,2). (5,5,5)}.
+	self assert: m rank = 1! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 3/1/2017 17:11:33'!
+testRankNullityTheorem
+	| n A |
+	n _ 6 atRandom.
+	A _ self newRandomMatrix: n@n over: QQ.
+	self assert: A rank + A nullity = n! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:00:17'!
 testEchelonOverFiniteField
@@ -4154,33 +4371,6 @@ testEchelonOverFiniteField
 	w _ K x.
 	A _ K matrix: 4@3 coefficients: {1. w. w^5. 0. w^3. w^4. w. 1. w^6. w^3. 1. w^4}.
 	self assert: A echelon = (K matrix: 4@3 coefficients: {1. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 0})! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:33:10'!
-testFundamentalSubspacesDefinitions
-	| m n A |
-	m _ 6 atRandom.
-	n _ 6 atRandom.
-	A _ self newRandomMatrix: m@n over: QQ.
-	self assert: A rowSpace = (QQ^n span: A rows). "definition"
-	self assert: A columnSpace = (QQ^m span: A columns). "definition"
-	self assert: A coimage = A transposed image. "definition"
-	self assert: A cokernel = A transposed kernel. "definition"
-	self assert: A image = A columnSpace. "synonyms"
-	self assert: A coimage = A rowSpace. "synonyms"
-! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:30:09'!
-testFundamentalSubspacesDimensions
-	| m n A r |
-	m _ 6 atRandom.
-	n _ 6 atRandom.
-	A _ self newRandomMatrix: m@n over: QQ.
-	r _ A rank.
-	self assert: A image dimension = r.
-	self assert: A kernel dimension = (n - r).
-	self assert: A nullity = (n - r). "definition"
-	self assert: A coimage dimension = r.
-	self assert: A cokernel dimension = (m - r)! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 12/4/2017 09:25:54'!
 testHNFvsCHNF
@@ -4284,24 +4474,6 @@ testHermiteNormalFormOverPolynomials
 	H _ R matrix: 2 coefficients: {1. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. 0. x^4 + (x^2*13) - (x*12) - 11}.
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
-testInverse
-	| M A I |
-	M _ QQ ^ (3@3).
-	A _ M rows: { (2,1,1). (-1,0,1). (0,2,1) }.
-	I _ M identity.
-	self assert: A inverse * A = I.
-	self assert: A * A inverse = I! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:06'!
-testInverse2
-	| Qx x f A |
-	Qx _ QQ polynomials.
-	x _ Qx x.
-	f _ x^8 + (x^6) - (3*(x^4)) - (3*(x^3)) + (8*(x^2)) + (2*x) - 5.
-	A _ f companion.
-	self assert: (A * A inverse) isIdentity! !
-
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:36:34'!
 testIsEchelonForm
 	| A E |
@@ -4346,173 +4518,11 @@ testJordanNormalForm
 	B _ QQ ^ (2@2) scalar: 4 :: at: 1@2 put: 1; yourself.
 	self assert: (jordan includes: B)! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 11/4/2016 10:26'!
-testKernel
-	| A S |
-	A _ QQ ^ (4@6) rows: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
-	S _ QQ ^ 6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
-	self assert: A kernel = S! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:08:29'!
-testKernelImageTheorem
-	| n A |
-	n _ 6 atRandom.
-	A _ self newRandomMatrix: n@n over: QQ.
-	self assert: A kernel dimension + A image dimension = n! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:01:40'!
-testKernelInteger
-	"Example from GAP manual."
-	| A K |
-	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
-	K _ ZZ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
-	self assert: A kernelMatrix = K! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:05:14'!
-testKernelRational
-	"Example from GAP manual."
-	| A K |
-	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
-	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
-	self assert: A kernelMatrix = K! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
-testKroneckerProduct
-	| A B C |
-	A _ ZZ ^ (2@2) elementAt: (1,2,3,4).
-	B _ ZZ ^ (2@2) elementAt: (0,5,6,7).
-	C _ ZZ ^ (4@4) elementAt: (0, 5, 0, 10, 6, 7, 12, 14, 0, 15, 0, 20, 18, 21, 24, 28).
-	self assert: (A kronecker: B) = C! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:23'!
-testLeftInverse
-	| M A |
-	M _ QQ ^ (5@3).
-	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
-	self assert: (A leftInverse * A) isIdentity! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 10:08:10'!
-testLeftRightIdentity
-	| A |
-	A _ ZZ^(5 atRandom @ 5 atRandom) atRandomBits: 100.
-	self assert: A leftIdentity * A = A.
-	self assert: A * A rightIdentity = A! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:06'!
-testMinimalPolynomial
-	| M m f |
-	M _ QQ ^ (5@5).
-	m _ M atRandomBits: 100.
-	f _ m minimalPolynomial.
-	self assert: f | m characteristicPolynomial.
-	self assert: (f value: m) isZero! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
-testMinor
-	| M A |
-	M _ ZZ ^ (3@3).
-	A _ M elementAt: #(1 2 3 4 5 6 7 8 9).
-	self assert: (A minor: 2@3) = -6! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 10/17/2016 16:45'!
-testMinors
-	| A |
-	A _ ZZ ^ (2@3) elementAt: (1 to: 6).
-	self assert: (A minors: 2) asArray = #(-3 -6 -3)! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/3/2018 01:25:38'!
-testPermanent
-	"Example from https://en.wikipedia.org/wiki/Permanent_(mathematics)"
-	| A |
-	A _ ZZ matrix: 4 coefficients: #(1 1 1 1 2 1 0 0 3 0 1 0 4 0 0 1).
-	self assert: A permanent = 10! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/16/2018 20:18:11'!
-testQRDecomposition
-	| n A QR Q R |
-	n _ 3.
-	[A _ QQ ^ (n@n) :: atRandomBits: n*n. A isFullRank] whileFalse.
-	A _ A over: RR.
-	QR _ A QR.
-	Q _ QR first.
-	R _ QR second.
-	self assert: Q * R = A.
-	self assert: Q isOrthogonal.
-	self assert: R isUpperTriangular! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2018 03:58:33'!
-testQRDecomposition2
-	"Example from wikipedia:"
-	| A Q R |
-	A _ RR matrix: 3@3 coefficients: #(12 -51 4 6 167 -68 -4 24 -41).
-	Q _ RR matrix: 3@3 coefficients: {6/7. -69/175. -58/175. 3/7. 158/175. 6/175. -2/7. 6/35. -33/35}.
-	R _ RR matrix: 3@3 coefficients: #(14 21 -14 0 175 -70 0 0 35).
-	self assert: A QR = {Q. R}! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
-testRank
-	| M vandermonde |
-	M _ QQ ^ (3@3).
-	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
-	self assert: vandermonde rank = 3.
-	M _ ZZ ^ (3@3).
-	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
-	self assert: vandermonde rank = 3! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:48'!
-testRank2
-	| M m |
-	M _ QQ ^ (3@3).
-	m _ M rows: {(1,1,1). (2,2,0). (3,3,1)}.
-	self assert: m rank = 2.
-
-	M _ ZZ ^ (3@3).
-	m _ M rows: {(1,1,1). (2,2,2). (5,5,5)}.
-	self assert: m rank = 1! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 3/1/2017 17:11:33'!
-testRankNullityTheorem
-	| n A |
-	n _ 6 atRandom.
-	A _ self newRandomMatrix: n@n over: QQ.
-	self assert: A rank + A nullity = n! !
-
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 06:11:28'!
 testReducerPivots
 	| A |
 	A _ ZZ ^ (3@3) rows: {(0,-1,-1). (0,-20,1). (0,1,2)}.
 	self assert: A reduction pivots asArray = {1@2. 2@3}! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:24'!
-testRightInverse
-	| M A |
-	M _ QQ ^ (3@5).
-	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
-	self assert: (A * A rightInverse) isIdentity! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:19'!
-testSimilarity
-	"Examples from wikipedia article on SNF"
-	| M A B C |
-	M _ QQ ^ (2@2).
-	A _ M rows: {(1,2). (0,1)}.
-	B _ M rows: {(3,-4). (1,-1)}.
-	C _ M rows: {(1,0). (1,2)}.
-	self assert: A ~ B.
-	self deny: A ~ C! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:19'!
-testSimilarity2
-	| n M A B P |
-	n _ 5 atRandom.
-	M _ QQ ^ (n@n).
-	A _ M atRandomBits: 10*n*n.
-	[(P _ M atRandomBits: 10*n*n) isSingular] whileTrue.
-	B _ M atRandomBits: 10*n*n.
-	self assert: A ~ (P inverse * A * P).
-	self deny: A ~ B! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:41:26'!
 testSmithNormalForm
@@ -4594,13 +4604,6 @@ testSmithNormalFormOverPolynomials
 	M _ R^(2@2).
 	A _ M !! 1 * x - (M !! #(3 -4 1 -1)).
 	self assert: A SNF = {R one. x^2 - (x*2) + 1}! !
-
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:48'!
-testTransposed
-	| A |
-	A _ ZZ ^ (6 atRandom @ 6 atRandom) :: atRandomBits: 1000.
-	self assert: A columns = A transposed rows.
-	self assert: A transposed transposed = A! !
 
 !ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
 testGamma0Index
@@ -4775,48 +4778,6 @@ testDiscriminant
 	self assert: (M span: {(1,2,3)}) discriminant = 14.
 	self assert: (M span: {(1,2,3). (1,1,1)}) discriminant = 6 ! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:41:54'!
-testFirstIsomorphismTheorem2
-	| V S T f |
-	V _ QQ ^ 5.
-	S _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
-	T _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
-	f _ S => T atRandomBits: 50.
-	self assert: f domain / f kernel ~ f image! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:42:03'!
-testFirstIsomorphismTheorem: M
-	| S T f phi |
-	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	T _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	f _ S => T atRandomBits: 50.
-	phi _ S / f kernel to: f image evaluating: [:x| f value: x representative].
-	self assert: phi isIsomorphism! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:39:34'!
-testFirstIsomorphismTheoremOverCyclotomicField
-	self testFirstIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:40:49'!
-testFirstIsomorphismTheoremOverGaloisField
-	self testFirstIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:37'!
-testFirstIsomorphismTheoremOverPolynomials
-	self testFirstIsomorphismTheorem: QQ polynomials ^ 2! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:36:38'!
-testFirstIsomorphismTheoremOverQ
-	self testFirstIsomorphismTheorem: QQ ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:41:40'!
-testFirstIsomorphismTheoremOverQuadraticField
-	self testFirstIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:16'!
-testFirstIsomorphismTheoremOverZ
-	self testFirstIsomorphismTheorem: ZZ^3! !
-
 !ModuleTest methodsFor: 'other' stamp: 'len 1/21/2018 21:47:53'!
 testFreeModule: M
 	| c t v x y |
@@ -4881,6 +4842,386 @@ testInclusions
 	self assert: S < (CC^3).
 	self deny: S < (ZZ^3).
 	self deny: S > (ZZ^3)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:59'!
+testMatricesQ
+	self testFreeModule: (QQ ^ (5 atRandom @ 5 atRandom))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:46'!
+testMatricesZ
+	self testFreeModule: (ZZ ^ (5 atRandom @ 5 atRandom))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:11:58'!
+testMatricesZ2
+	self testFreeModule: ((ZZ / 2) ^ (5 atRandom @ 5 atRandom))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:02'!
+testMatricesZ4
+	self testFreeModule: ((ZZ / 4) ^ (5 atRandom @ 5 atRandom))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:59'!
+testMatrixTraceAsLinearMap
+	| F f |
+	F _ QQ ^ (3@3) :: dual. "linear forms"
+	f _ F evaluating: [:x| x trace].
+	self assert: f = ((F x: 1) + (F x: 5) + (F x: 9))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/18/2018 19:44:40'!
+testOrthogonalProjection
+	| V S p v |
+	V _ QQ ^ 3.
+	S _ V span: {(1, 1, 0). (1, 0, 0)}.
+	p _ S orthogonalProjection.
+	self testProjection: p.
+	v _ (78, 21, 139).
+	self assert: (p value: v) = (p value: (p value: v)). "idempotent at v"
+	self assert: p isIdempotent.
+	self assert: p kernel = S perp.
+	self assert: p image = S.
+	self assert: (S apply: p) = S! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/15/2017 21:04:12'!
+testPerp
+	| V S p perp |
+	V _ QQ ^ 3.
+	S _ V span: {(1, 1, 1). (2, 0, -2)}.
+	perp _ S perp.
+	self assert: perp dimension = 1.
+	self assert: (V innerProduct value: {perp basis first. S basis first}) isZero.
+	self assert: (V innerProduct value: {perp basis first. S basis second}) isZero.
+	p _ S orthogonalProjection.
+	self assert: p kernel = perp! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:12'!
+testPerpProperties
+	| V S T |
+	V _ QQ ^ 3.
+	S _ V span: {(1, 1, 1). (2, 0, -2)}.
+	T _ V span: {(1, -1, -3)}. "subspace of S"
+	self assert: S + S perp = V.
+	self assert: T + T perp = V.
+	self assert: (S /\ S perp) isTrivial.
+	self assert: S <= S perp perp.
+	self assert: S perp < T perp "because S > T"! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:17:38'!
+testPerpZ2
+	| V S perp |
+	V _ (ZZ / 2) ^ 3.
+	S _ V span: {(1,1,1) % 2}.
+	perp _ S perp.
+	self assert: perp dimension = 2.
+	self assert: (V innerProduct value: {S basis first. perp basis first}) isZero.
+	self assert: (V innerProduct value: {S basis first. perp basis second}) isZero! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 10/6/2016 10:36'!
+testQuotientMaps
+	| V S Q pi v s |
+	V _ QQ ^ 5.
+	S _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
+	Q _ V/S.
+	pi _ Q projection.
+	v _ V atRandomBits: 100.
+	s _ pi value: v.
+	self assert: (Q includes: s).
+	self assert: (V includes: (pi section value: s)).
+	self assert: s = (pi value: (pi section value: s))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:29'!
+testQuotientModuleAnnihilator
+	"Example from Sage"
+	| v1 v2 v3 V W |
+	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
+	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
+	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
+	self assert: (V/W) annihilator = (ZZ*16)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:36'!
+testQuotientModuleInvariants
+	"Example from Sage"
+	| v1 v2 v3 V W |
+	v1 _ (1/2,1,1). v2 _ (3/2,2,1). v3 _ (0,0,1).
+	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
+	W _ QQ^3 span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4} over: ZZ.
+	self assert: (V/W) invariants = #(1 4 12)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:42'!
+testQuotientModuleInvariants2
+	"Example from Sage"
+	| V W |
+	V _ ZZ^3.
+	W _ V span: {(1,2,0). (0,1,0). (0,2,0)}.
+	self assert: (V/W) invariants = #(1 1 0) "from example in sage fpg_module.py"! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:39:57'!
+testQuotientModuleIsFinite
+	"Example from Sage"
+	| v1 v2 v3 V W |
+	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
+	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
+	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
+	self assert: (V/W) isFinite.
+	W _ V null.
+	self assert: (V/W) isFinite not! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/2/2019 10:12:41'!
+testQuotientSpace
+	| M S Q |
+	M _ self newVectorSpace.
+	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: M rank * 10.
+	Q _ M/S.
+	self assert: Q rank = (M rank - S rank).
+	self assert: (Q includes: S + (M atRandomBits: M rank * 10)).
+	self assert: (M / M null) rank = M rank.
+	self assert: (M / M) rank = 0! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/19/2018 17:25:25'!
+testQuotientSpace2
+	| M x |
+	M _ QQ^3 / (1,2,3).
+	x _ M projection value: (1,2,3).
+	self assert: x isZero.
+"	self assert: (M lifting value: x) = (0,0,0)"! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 4/5/2018 03:23:40'!
+testSubmoduleInclusion
+	| V S P v w |
+	V _ {ZZ. QQ polynomials. (ZZ/2) polynomials} atRandom ^ 3.
+	[v _ V atRandomBits: 10. v isZero] whileTrue.
+	S _ V span: {v}.
+	[w _ V atRandomBits: 10. S includes: w] whileTrue.
+	P _ V span: {w*(V scalars atRandomBits: 10)-v. w}.
+	self assert: S < P.
+	self assert: P > S.
+	self assert: S ~= P.
+	self assert: P ~= S.
+	self assert: (S > P) not.
+	self assert: (P < S) not! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:34'!
+testSubmoduleIntersection
+	| V S T T2 |
+	V _ ZZ ^ 3.
+	S _ V span: {(1, 1, 1). (2, 0, -2)}.
+	self assert: S /\ S ambient = S. "intersection with the ambient vector space Q^3"
+	self assert: S /\ V asLattice = S. "intersection with over lattice Z^3"
+	self assert: S /\ S = S.
+	T _ V span: {(3,1,-1)}.
+	self assert: S /\ T = T.
+	T2 _ V span: {(3,1,-1). (0,1,0)}.
+	self assert: S /\ T2 = T! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:32:42'!
+testSubmoduleSum
+	| V v w S T P |
+	V _ ZZ ^ 3.
+	[v _ V atRandomBits: 10. v isZero not] whileFalse.
+	[w _ V atRandomBits: 10. w isZero not and: [v ~= w]] whileFalse.
+	S _ V span: {v}.
+	T _ V span: {w}.
+	P _ V span: {v. w}.
+	self assert: S + T = P.
+	self assert: T + S = P.
+	T _ V span: {v - w. v + w}.
+	self assert: S + T = P! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:02'!
+testSubspaceInclusion
+	| V S P v w |
+	V _ QQ ^ 3.
+	[v _ V atRandomBits: 10. v isZero] whileTrue.
+	S _ V span: {v}.
+	[w _ V atRandomBits: 10. S includes: w] whileTrue.
+	P _ V span: {v-w. w}.
+	self assert: S < P.
+	self assert: P > S.
+	self assert: S ~= P.
+	self assert: P ~= S.
+	self assert: (S > P) not.
+	self assert: (P < S) not! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:46'!
+testSubspaceIntersection
+	| V S T T2 |
+	V _ QQ ^ 3.
+	S _ V span: {(1, 1, 1). (2, 0, -2)}.
+	self assert: S /\ V = S.
+	self assert: S /\ S = S.
+	T _ V span: {(3,1,-1)}.
+	self assert: S /\ T = T.
+	T2 _ V span: {(3,1,-1). (0,1,0)}.
+	self assert: S /\ T2 = T! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:02'!
+testSubspaceOfSubspace
+	| V S s T t |
+	V _ QQ ^ 3.
+	S _ (V grassmannian: 2) atRandomBits: 100.
+	T _ (S grassmannian: 1) atRandomBits: 100.
+	self assert: S < V.
+	self assert: T < S.
+	self assert: T < V.
+	[s _ S atRandomBits: 100. T includes: s] whileTrue.
+	[t _ T atRandomBits: 100. t isZero] whileTrue.
+	self assert: (S includes: s).
+	self assert: (S includes: t).
+	self assert: (T includes: t)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:31:03'!
+testSubspaceSum
+	| V v w S T P |
+	V _ QQ ^ 3.
+	[v _ V atRandomBits: 10. v isZero not] whileFalse.
+	[w _ V atRandomBits: 10. w isZero not and: [v ~= w]] whileFalse.
+	S _ V span: {v}.
+	T _ V span: {w}.
+	P _ V span: {v. w}.
+	self assert: S + T = P.
+	self assert: T + S = P.
+	T _ V span: {v - w. v + w}.
+	self assert: S + T = P! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 3/8/2017 10:26:16'!
+testSubspaceSumRandom
+	| V S T U |
+	V _ QQ^5.
+	S _ (V grassmannian: (0 to: V dimension) atRandom) atRandomBits: 100.
+	T _ (V grassmannian: (0 to: V dimension) atRandom) atRandomBits: 100.
+	U _ S + T.
+	self assert: S <= U.
+	self assert: T <= U! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:03'!
+testTuplesQ
+	self testFreeModule: (QQ ^ 5 atRandom)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 9/22/2018 19:02:24'!
+testTuplesRationalFunctionsQ
+	| F |
+	F _ QQ polynomials fractions.
+	self testFreeModule: F ^ 3 atRandom! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:46'!
+testTuplesZ
+	self testFreeModule: (ZZ ^ 5 atRandom)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:06'!
+testTuplesZ2
+	self testFreeModule: ((ZZ / 2) ^ 5 atRandom)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:11'!
+testTuplesZ4
+	self testFreeModule: ((ZZ / 4) ^ 5 atRandom)! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:41:54'!
+testFirstIsomorphismTheorem2
+	| V S T f |
+	V _ QQ ^ 5.
+	S _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
+	T _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
+	f _ S => T atRandomBits: 50.
+	self assert: f domain / f kernel ~ f image! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 4/19/2019 04:42:03'!
+testFirstIsomorphismTheorem: M
+	| S T f phi |
+	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
+	T _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
+	f _ S => T atRandomBits: 50.
+	phi _ S / f kernel to: f image evaluating: [:x| f value: x representative].
+	self assert: phi isIsomorphism! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:39:34'!
+testFirstIsomorphismTheoremOverCyclotomicField
+	self testFirstIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:40:49'!
+testFirstIsomorphismTheoremOverGaloisField
+	self testFirstIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:37'!
+testFirstIsomorphismTheoremOverPolynomials
+	self testFirstIsomorphismTheorem: QQ polynomials ^ 2! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:36:38'!
+testFirstIsomorphismTheoremOverQ
+	self testFirstIsomorphismTheorem: QQ ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:41:40'!
+testFirstIsomorphismTheoremOverQuadraticField
+	self testFirstIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:16'!
+testFirstIsomorphismTheoremOverZ
+	self testFirstIsomorphismTheorem: ZZ^3! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/10/2019 04:32:20'!
+testSecondIsomorphismTheorem: M
+	| S T |
+	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	T _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	self assert: S+T <= M.
+	self assert: S /\ T <= M.
+	self assert: (S+T)/T ~ (S/(S /\ T))
+"	f _ S -> T :: atRandomBits: 10.
+	phi _ S / f kernel -> f image evaluating: [:x| f value: x representative].
+	self assert: phi isIsomorphism"! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:35'!
+testSecondIsomorphismTheoremOverCyclotomicField
+	self testSecondIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:03'!
+testSecondIsomorphismTheoremOverGaloisField
+	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:47'!
+testSecondIsomorphismTheoremOverPolynomials
+	self testSecondIsomorphismTheorem: QQ polynomials ^ 2! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:46'!
+testSecondIsomorphismTheoremOverQ
+	self testSecondIsomorphismTheorem: QQ ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:41'!
+testSecondIsomorphismTheoremOverQuadraticField
+	self testSecondIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:13'!
+testSecondIsomorphismTheoremOverZ
+	self testSecondIsomorphismTheorem: ZZ^3! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:15'!
+testThirdIsomorphismTheorem: M
+	| S T |
+	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	T _ S grassmannian: (0 to: S rank) atRandom :: atRandomBits: 50.
+	self assert: S/T <= (M/T).
+	self assert: (M/T)/(S/T) ~ (M/S)! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:44'!
+testThirdIsomorphismTheoremOverCyclotomicField
+	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:16'!
+testThirdIsomorphismTheoremOverGaloisField
+	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:57'!
+testThirdIsomorphismTheoremOverPolynomials
+	self testThirdIsomorphismTheorem: QQ polynomials ^ 2! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:45'!
+testThirdIsomorphismTheoremOverQ
+	self testThirdIsomorphismTheorem: QQ ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
+testThirdIsomorphismTheoremOverQuadraticField
+	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:20'!
+testThirdIsomorphismTheoremOverZ
+	self testThirdIsomorphismTheorem: ZZ^3! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 1/14/2018 22:24:08'!
 testLinearForm1
@@ -5061,84 +5402,6 @@ testLinearMapZ2
 	v _ kernel atRandom.
 	self assert: (f value: v) isZero! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:59'!
-testMatricesQ
-	self testFreeModule: (QQ ^ (5 atRandom @ 5 atRandom))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:46'!
-testMatricesZ
-	self testFreeModule: (ZZ ^ (5 atRandom @ 5 atRandom))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:11:58'!
-testMatricesZ2
-	self testFreeModule: ((ZZ / 2) ^ (5 atRandom @ 5 atRandom))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:02'!
-testMatricesZ4
-	self testFreeModule: ((ZZ / 4) ^ (5 atRandom @ 5 atRandom))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:59'!
-testMatrixTraceAsLinearMap
-	| F f |
-	F _ QQ ^ (3@3) :: dual. "linear forms"
-	f _ F evaluating: [:x| x trace].
-	self assert: f = ((F x: 1) + (F x: 5) + (F x: 9))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/18/2018 19:44:40'!
-testOrthogonalProjection
-	| V S p v |
-	V _ QQ ^ 3.
-	S _ V span: {(1, 1, 0). (1, 0, 0)}.
-	p _ S orthogonalProjection.
-	self testProjection: p.
-	v _ (78, 21, 139).
-	self assert: (p value: v) = (p value: (p value: v)). "idempotent at v"
-	self assert: p isIdempotent.
-	self assert: p kernel = S perp.
-	self assert: p image = S.
-	self assert: (S apply: p) = S! !
-
-!ModuleTest methodsFor: 'bugs' stamp: 'len 3/13/2018 18:38:37'!
-testPIDCoordinatesOfBug
-	| M S |
-	M _ self newFreeModuleOverPID.
-	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/15/2017 21:04:12'!
-testPerp
-	| V S p perp |
-	V _ QQ ^ 3.
-	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	perp _ S perp.
-	self assert: perp dimension = 1.
-	self assert: (V innerProduct value: {perp basis first. S basis first}) isZero.
-	self assert: (V innerProduct value: {perp basis first. S basis second}) isZero.
-	p _ S orthogonalProjection.
-	self assert: p kernel = perp! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:12'!
-testPerpProperties
-	| V S T |
-	V _ QQ ^ 3.
-	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	T _ V span: {(1, -1, -3)}. "subspace of S"
-	self assert: S + S perp = V.
-	self assert: T + T perp = V.
-	self assert: (S /\ S perp) isTrivial.
-	self assert: S <= S perp perp.
-	self assert: S perp < T perp "because S > T"! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:17:38'!
-testPerpZ2
-	| V S perp |
-	V _ (ZZ / 2) ^ 3.
-	S _ V span: {(1,1,1) % 2}.
-	perp _ S perp.
-	self assert: perp dimension = 2.
-	self assert: (V innerProduct value: {S basis first. perp basis first}) isZero.
-	self assert: (V innerProduct value: {S basis first. perp basis second}) isZero! !
-
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 5/18/2018 19:43:10'!
 testProjection: f
 	| v |
@@ -5149,218 +5412,12 @@ testProjection: f
 	self assert: (f image apply: f) = f image.
 	self assert: (f codomain apply: f) = f image! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 10/6/2016 10:36'!
-testQuotientMaps
-	| V S Q pi v s |
-	V _ QQ ^ 5.
-	S _ V grassmannian: (1 to: V dimension) atRandom :: atRandomBits: 50.
-	Q _ V/S.
-	pi _ Q projection.
-	v _ V atRandomBits: 100.
-	s _ pi value: v.
-	self assert: (Q includes: s).
-	self assert: (V includes: (pi section value: s)).
-	self assert: s = (pi value: (pi section value: s))! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:29'!
-testQuotientModuleAnnihilator
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
-	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
-	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
-	self assert: (V/W) annihilator = (ZZ*16)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:36'!
-testQuotientModuleInvariants
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1/2,1,1). v2 _ (3/2,2,1). v3 _ (0,0,1).
-	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
-	W _ QQ^3 span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4} over: ZZ.
-	self assert: (V/W) invariants = #(1 4 12)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:42'!
-testQuotientModuleInvariants2
-	"Example from Sage"
-	| V W |
-	V _ ZZ^3.
-	W _ V span: {(1,2,0). (0,1,0). (0,2,0)}.
-	self assert: (V/W) invariants = #(1 1 0) "from example in sage fpg_module.py"! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:39:57'!
-testQuotientModuleIsFinite
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
-	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
-	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
-	self assert: (V/W) isFinite.
-	W _ V null.
-	self assert: (V/W) isFinite not! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/2/2019 10:12:41'!
-testQuotientSpace
-	| M S Q |
-	M _ self newVectorSpace.
-	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: M rank * 10.
-	Q _ M/S.
-	self assert: Q rank = (M rank - S rank).
-	self assert: (Q includes: S + (M atRandomBits: M rank * 10)).
-	self assert: (M / M null) rank = M rank.
-	self assert: (M / M) rank = 0! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/19/2018 17:25:25'!
-testQuotientSpace2
-	| M x |
-	M _ QQ^3 / (1,2,3).
-	x _ M projection value: (1,2,3).
-	self assert: x isZero.
-"	self assert: (M lifting value: x) = (0,0,0)"! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/10/2019 04:32:20'!
-testSecondIsomorphismTheorem: M
-	| S T |
-	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	T _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	self assert: S+T <= M.
-	self assert: S /\ T <= M.
-	self assert: (S+T)/T ~ (S/(S /\ T))
-"	f _ S -> T :: atRandomBits: 10.
-	phi _ S / f kernel -> f image evaluating: [:x| f value: x representative].
-	self assert: phi isIsomorphism"! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:35'!
-testSecondIsomorphismTheoremOverCyclotomicField
-	self testSecondIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:03'!
-testSecondIsomorphismTheoremOverGaloisField
-	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:47'!
-testSecondIsomorphismTheoremOverPolynomials
-	self testSecondIsomorphismTheorem: QQ polynomials ^ 2! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:46'!
-testSecondIsomorphismTheoremOverQ
-	self testSecondIsomorphismTheorem: QQ ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:41'!
-testSecondIsomorphismTheoremOverQuadraticField
-	self testSecondIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:13'!
-testSecondIsomorphismTheoremOverZ
-	self testSecondIsomorphismTheorem: ZZ^3! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 4/5/2018 03:23:40'!
-testSubmoduleInclusion
-	| V S P v w |
-	V _ {ZZ. QQ polynomials. (ZZ/2) polynomials} atRandom ^ 3.
-	[v _ V atRandomBits: 10. v isZero] whileTrue.
-	S _ V span: {v}.
-	[w _ V atRandomBits: 10. S includes: w] whileTrue.
-	P _ V span: {w*(V scalars atRandomBits: 10)-v. w}.
-	self assert: S < P.
-	self assert: P > S.
-	self assert: S ~= P.
-	self assert: P ~= S.
-	self assert: (S > P) not.
-	self assert: (P < S) not! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:34'!
-testSubmoduleIntersection
-	| V S T T2 |
-	V _ ZZ ^ 3.
-	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S /\ S ambient = S. "intersection with the ambient vector space Q^3"
-	self assert: S /\ V asLattice = S. "intersection with over lattice Z^3"
-	self assert: S /\ S = S.
-	T _ V span: {(3,1,-1)}.
-	self assert: S /\ T = T.
-	T2 _ V span: {(3,1,-1). (0,1,0)}.
-	self assert: S /\ T2 = T! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:32:42'!
-testSubmoduleSum
-	| V v w S T P |
-	V _ ZZ ^ 3.
-	[v _ V atRandomBits: 10. v isZero not] whileFalse.
-	[w _ V atRandomBits: 10. w isZero not and: [v ~= w]] whileFalse.
-	S _ V span: {v}.
-	T _ V span: {w}.
-	P _ V span: {v. w}.
-	self assert: S + T = P.
-	self assert: T + S = P.
-	T _ V span: {v - w. v + w}.
-	self assert: S + T = P! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:02'!
-testSubspaceInclusion
-	| V S P v w |
-	V _ QQ ^ 3.
-	[v _ V atRandomBits: 10. v isZero] whileTrue.
-	S _ V span: {v}.
-	[w _ V atRandomBits: 10. S includes: w] whileTrue.
-	P _ V span: {v-w. w}.
-	self assert: S < P.
-	self assert: P > S.
-	self assert: S ~= P.
-	self assert: P ~= S.
-	self assert: (S > P) not.
-	self assert: (P < S) not! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:46'!
-testSubspaceIntersection
-	| V S T T2 |
-	V _ QQ ^ 3.
-	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S /\ V = S.
-	self assert: S /\ S = S.
-	T _ V span: {(3,1,-1)}.
-	self assert: S /\ T = T.
-	T2 _ V span: {(3,1,-1). (0,1,0)}.
-	self assert: S /\ T2 = T! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:02'!
-testSubspaceOfSubspace
-	| V S s T t |
-	V _ QQ ^ 3.
-	S _ (V grassmannian: 2) atRandomBits: 100.
-	T _ (S grassmannian: 1) atRandomBits: 100.
-	self assert: S < V.
-	self assert: T < S.
-	self assert: T < V.
-	[s _ S atRandomBits: 100. T includes: s] whileTrue.
-	[t _ T atRandomBits: 100. t isZero] whileTrue.
-	self assert: (S includes: s).
-	self assert: (S includes: t).
-	self assert: (T includes: t)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:31:03'!
-testSubspaceSum
-	| V v w S T P |
-	V _ QQ ^ 3.
-	[v _ V atRandomBits: 10. v isZero not] whileFalse.
-	[w _ V atRandomBits: 10. w isZero not and: [v ~= w]] whileFalse.
-	S _ V span: {v}.
-	T _ V span: {w}.
-	P _ V span: {v. w}.
-	self assert: S + T = P.
-	self assert: T + S = P.
-	T _ V span: {v - w. v + w}.
-	self assert: S + T = P! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 3/8/2017 10:26:16'!
-testSubspaceSumRandom
-	| V S T U |
-	V _ QQ^5.
-	S _ (V grassmannian: (0 to: V dimension) atRandom) atRandomBits: 100.
-	T _ (V grassmannian: (0 to: V dimension) atRandom) atRandomBits: 100.
-	U _ S + T.
-	self assert: S <= U.
-	self assert: T <= U! !
+!ModuleTest methodsFor: 'bugs' stamp: 'len 3/13/2018 18:38:37'!
+testPIDCoordinatesOfBug
+	| M S |
+	M _ self newFreeModuleOverPID.
+	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
+	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
 
 !ModuleTest methodsFor: 'tensor product' stamp: 'len 4/19/2019 04:44:23'!
 testTensorHomAdjunction
@@ -5449,60 +5506,6 @@ testTensorProductRelations
 	self assert: (T !! {v. w1}) + (T !! {v. w2}) = (T !! {v. w1 + w2}).
 	self assert: (T !! {v. w})*c = (T !! {v*c. w}).
 	self assert: (T !! {v. w})*c = (T !! {v. w*c})! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:15'!
-testThirdIsomorphismTheorem: M
-	| S T |
-	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	T _ S grassmannian: (0 to: S rank) atRandom :: atRandomBits: 50.
-	self assert: S/T <= (M/T).
-	self assert: (M/T)/(S/T) ~ (M/S)! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:44'!
-testThirdIsomorphismTheoremOverCyclotomicField
-	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:16'!
-testThirdIsomorphismTheoremOverGaloisField
-	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:57'!
-testThirdIsomorphismTheoremOverPolynomials
-	self testThirdIsomorphismTheorem: QQ polynomials ^ 2! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:45'!
-testThirdIsomorphismTheoremOverQ
-	self testThirdIsomorphismTheorem: QQ ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
-testThirdIsomorphismTheoremOverQuadraticField
-	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:20'!
-testThirdIsomorphismTheoremOverZ
-	self testThirdIsomorphismTheorem: ZZ^3! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 06:03'!
-testTuplesQ
-	self testFreeModule: (QQ ^ 5 atRandom)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 9/22/2018 19:02:24'!
-testTuplesRationalFunctionsQ
-	| F |
-	F _ QQ polynomials fractions.
-	self testFreeModule: F ^ 3 atRandom! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:46'!
-testTuplesZ
-	self testFreeModule: (ZZ ^ 5 atRandom)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:06'!
-testTuplesZ2
-	self testFreeModule: ((ZZ / 2) ^ 5 atRandom)! !
-
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:12:11'!
-testTuplesZ4
-	self testFreeModule: ((ZZ / 4) ^ 5 atRandom)! !
 
 !MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/26/2017 09:25:17'!
 testAntigradedLexOrdering
@@ -6882,6 +6885,83 @@ testCanonicalMorphisms
 	self assert: (ZZ -> R value: 4) = (R embed: 4). "canonical morphism from initial object"
 	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
 
+!RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
+testKrullDimension
+	| R I |
+	self assert: ZZ dimension = 1.
+	self assert: QQ dimension = 0.
+	self assert: (ZZ polynomialsIn: 2) dimension = 3.
+	R _ QQ polynomialsIn: #(x y).
+	I _ R * {R x ^ 2 + (R y ^ 2) - 1}.
+	self assert: (R / I) dimension = 1! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:34'!
+testMatrixRing
+	self testRing: (ZZ ^ (5@5)) asRing! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
+testNilradical
+	self assert: ZZ nilradical = (ZZ*0).
+	self assert: (ZZ/12) nilradical = (ZZ/12*6)! !
+
+!RingTest methodsFor: 'general' stamp: 'len 9/22/2018 19:03:04'!
+testProductRing
+	| R S P |
+	R _ self newRing.
+	S _ self newRing.
+	P _ R × S.
+	self testRing: P.
+	self testRingHomomorphism: (P projection: 2 atRandom)! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:30'!
+testRing: R
+	| one zero a b c |
+	one _ R one.
+	zero _ R zero.
+	a _ R atRandomBits: 100.
+	b _ R atRandomBits: 100.
+	c _ R atRandomBits: 100.
+	self assert: a * one = a.
+	self assert: one * a = a.
+	self assert: zero * a = zero.
+	self assert: a * zero = zero.
+	self assert: zero + a = a.
+	self assert: a + zero = a.
+	self assert: a + b = (b + a). "commutativity of addition"
+	self assert: (a + b + c) = (a + (b + c)). "associativity of addition"
+	self assert: (a * b * c) = (a * (b * c)). "associativity of multiplication"
+	R isCommutative ifTrue: [self assert: a * b = (b * a)]. "commutativity of multiplication"! !
+
+!RingTest methodsFor: 'general' stamp: 'len 3/13/2018 20:15:02'!
+testRingHomomorphism: phi
+	| R S a b |
+	R _ phi domain.
+	S _ phi codomain.
+	a _ R atRandomBits: 10.
+	b _ R atRandomBits: 10.
+	self assert: (phi value: R zero) = S zero.
+	self assert: (phi value: R one) = S one.
+	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
+	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:27'!
+testZZ
+	self testRing: ZZ! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/1/2018 05:41:38'!
+testZZIdeals
+	self assert: (ZZ * 3 includes: 6).
+	self deny: (ZZ * 3 includes: 7).
+	self assert: (ZZ * 0) isTrivial.
+	self assert: (ZZ * 1) isOne! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/15/2018 19:17:51'!
+testZZPrimeNotMaximalIdeal
+	| I |
+	I _ ZZ * 0.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/3/2018 06:28:51'!
 testFiniteRing
 	| R |
@@ -6989,93 +7069,12 @@ testGaloisRingNilradical
 	R _ GaloisRing new: 3 to: 3 to: 2.
 	self assert: R nilradical = (R * 3)! !
 
-!RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
-testKrullDimension
-	| R I |
-	self assert: ZZ dimension = 1.
-	self assert: QQ dimension = 0.
-	self assert: (ZZ polynomialsIn: 2) dimension = 3.
-	R _ QQ polynomialsIn: #(x y).
-	I _ R * {R x ^ 2 + (R y ^ 2) - 1}.
-	self assert: (R / I) dimension = 1! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:19:56'!
-testLocalizationInclusions
-	| Z2 Z3 Z6 |
-	Z2 _ ZZ localizationAt: 2.
-	Z3 _ ZZ localizationAt: 3.
-	Z6 _ ZZ localizationAt: 6.
-	self assert: Z6 >= Z2.
-	self assert: Z6 >= Z3.
-	self deny: Z3 >= Z2.
-	self deny: Z2 >= Z3.
-	self deny: Z2 >= Z6! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:20:02'!
-testLocalizationMaximalIdeal
-	| Z2 |
-	Z2 _ ZZ localizationAt: 2.
-	self assert: Z2 maximalIdeal = (Z2 * 2)! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 4/22/2019 05:02:06'!
-testLocalizationOfZAt2
-	| L |
-	L _ ZZ localizationAt: 2.
-	self assert: (L includes: 1/3).
-	self assert: (L includes: 3/2) not.
-	self assert: (L includes: 2).
-	self assert: (L includes: 3).
-	self assert: (L atRandomBits: 10) denominator odd.
-	self testRing: L.
-	self testRingHomomorphism: L injection! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:34'!
-testMatrixRing
-	self testRing: (ZZ ^ (5@5)) asRing! !
-
 !RingTest methodsFor: 'finite rings' stamp: 'len 12/2/2016 11:14:10'!
 testModularIntegers
 	| Zm |
 	Zm _ ZZ / (10 atRandom + 1).
 	self testRing: Zm.
 	self testRingHomomorphism: Zm projection! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 4/22/2019 04:50:26'!
-testMultivariatePolynomialRing
-	| R |
-	R _ ZZ polynomialsIn: #(x y z).
-	self testRing: R.
-	self testRingHomomorphism: R injection! !
-
-!RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
-testNilradical
-	self assert: ZZ nilradical = (ZZ*0).
-	self assert: (ZZ/12) nilradical = (ZZ/12*6)! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 4/22/2019 04:50:30'!
-testPolynomialRing
-	| R |
-	R _ ZZ polynomials.
-	self testRing: R.
-	self testRingHomomorphism: R injection! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:18:02'!
-testPolynomialRingPrimeNotMaximalIdeal
-	"Z[x]/<x> is isomorphic to Z, which is an integral domain but not a field. So <x> is prime but not maximal."
-	| R I |
-	R _ ZZ polynomials.
-	I _ R * R x.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:19:26'!
-testPolynomialRingPrimeNotMaximalIdeal2
-	"Q[x,y]/<x> is isomorphic to Q[y], which is an integral domain but not a field. So <x> is prime but not maximal."
-	| R I |
-	R _ QQ polynomialsIn: 2.
-	I _ R * R x.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
 testPrimeFieldLogarithm
@@ -7134,15 +7133,6 @@ testPrimeRingNilradical
 	R _ PrimeRing new: 3 to: 3.
 	self assert: R nilradical = (R * 3)! !
 
-!RingTest methodsFor: 'general' stamp: 'len 9/22/2018 19:03:04'!
-testProductRing
-	| R S P |
-	R _ self newRing.
-	S _ self newRing.
-	P _ R × S.
-	self testRing: P.
-	self testRingHomomorphism: (P projection: 2 atRandom)! !
-
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 10:00:45'!
 testQuasiGaloisRing1
 	| p r n A |
@@ -7155,6 +7145,68 @@ testQuasiGaloisRing1
 	self assert: A isCommutative.
 	self assert: A isLocal.
 	self assert: A isFinite! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:19:56'!
+testLocalizationInclusions
+	| Z2 Z3 Z6 |
+	Z2 _ ZZ localizationAt: 2.
+	Z3 _ ZZ localizationAt: 3.
+	Z6 _ ZZ localizationAt: 6.
+	self assert: Z6 >= Z2.
+	self assert: Z6 >= Z3.
+	self deny: Z3 >= Z2.
+	self deny: Z2 >= Z3.
+	self deny: Z2 >= Z6! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:20:02'!
+testLocalizationMaximalIdeal
+	| Z2 |
+	Z2 _ ZZ localizationAt: 2.
+	self assert: Z2 maximalIdeal = (Z2 * 2)! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 5/13/2019 18:12:46'!
+testLocalizationOfZAt2
+	| L |
+	L _ ZZ localizationAt: 2.
+	self assert: (L includes: 1/3).
+	self assert: (L includes: 3/2) not.
+	self assert: (L includes: 2).
+	self assert: (L includes: 3).
+	self assert: (L atRandomBits: 10) denominator odd.
+	self testRing: L.
+	self testRingHomomorphism: ZZ -> L! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/13/2019 18:12:56'!
+testMultivariatePolynomialRing
+	| R |
+	R _ ZZ polynomialsIn: #(x y z).
+	self testRing: R.
+	self testRingHomomorphism: ZZ -> R! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/13/2019 18:13:03'!
+testPolynomialRing
+	| R |
+	R _ ZZ polynomials.
+	self testRing: R.
+	self testRingHomomorphism: ZZ -> R! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:18:02'!
+testPolynomialRingPrimeNotMaximalIdeal
+	"Z[x]/<x> is isomorphic to Z, which is an integral domain but not a field. So <x> is prime but not maximal."
+	| R I |
+	R _ ZZ polynomials.
+	I _ R * R x.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:19:26'!
+testPolynomialRingPrimeNotMaximalIdeal2
+	"Q[x,y]/<x> is isomorphic to Q[y], which is an integral domain but not a field. So <x> is prime but not maximal."
+	| R I |
+	R _ QQ polynomialsIn: 2.
+	I _ R * R x.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
 
 !RingTest methodsFor: 'quotients' stamp: 'len 10/6/2016 20:32'!
 testQuotientRing
@@ -7191,55 +7243,6 @@ testQuotientRingWhichIsAField
 	R _ QQ polynomials.
 	R _ R / (R x^2 + (R x * 2) + 2).
 	self assert: R isField! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:30'!
-testRing: R
-	| one zero a b c |
-	one _ R one.
-	zero _ R zero.
-	a _ R atRandomBits: 100.
-	b _ R atRandomBits: 100.
-	c _ R atRandomBits: 100.
-	self assert: a * one = a.
-	self assert: one * a = a.
-	self assert: zero * a = zero.
-	self assert: a * zero = zero.
-	self assert: zero + a = a.
-	self assert: a + zero = a.
-	self assert: a + b = (b + a). "commutativity of addition"
-	self assert: (a + b + c) = (a + (b + c)). "associativity of addition"
-	self assert: (a * b * c) = (a * (b * c)). "associativity of multiplication"
-	R isCommutative ifTrue: [self assert: a * b = (b * a)]. "commutativity of multiplication"! !
-
-!RingTest methodsFor: 'general' stamp: 'len 3/13/2018 20:15:02'!
-testRingHomomorphism: phi
-	| R S a b |
-	R _ phi domain.
-	S _ phi codomain.
-	a _ R atRandomBits: 10.
-	b _ R atRandomBits: 10.
-	self assert: (phi value: R zero) = S zero.
-	self assert: (phi value: R one) = S one.
-	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
-	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:27'!
-testZZ
-	self testRing: ZZ! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/1/2018 05:41:38'!
-testZZIdeals
-	self assert: (ZZ * 3 includes: 6).
-	self deny: (ZZ * 3 includes: 7).
-	self assert: (ZZ * 0) isTrivial.
-	self assert: (ZZ * 1) isOne! !
-
-!RingTest methodsFor: 'general' stamp: 'len 5/15/2018 19:17:51'!
-testZZPrimeNotMaximalIdeal
-	| I |
-	I _ ZZ * 0.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
 
 !RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
 rootSystem1
