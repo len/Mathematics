@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3744] on 13 May 2019 at 6:22:58 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 2:34:26 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 117!
+!provides: 'MathematicsTests' 1 122!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1022,19 +1022,19 @@ testPermutationCompositionArray	69,100 per second.
 testPermutationCompositionWords	51,900 per second.
 !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:23:00'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 20:38:26'!
 testAbelianGroup: G
-	| zero a b c |
-	zero _ G identity.
+	| one a b c |
+	one _ G identity.
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	c _ G atRandomBits: 100.
-	self assert: zero + a = a.
-	self assert: a + zero = a.
-	self assert: a + b = (b + a). "commutativity"
-	self assert: (a + b + c) = (a + (b + c)). "associativity"! !
+	self assert: one · a = a.
+	self assert: a · one = a.
+	self assert: a · b = (b · a). "commutativity"
+	self assert: (a · b · c) = (a · (b · c)). "associativity"! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:24:08'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 00:06:32'!
 testAbelianGroupHomomorphism: phi
 	| G H a b |
 	G _ phi domain.
@@ -1042,12 +1042,12 @@ testAbelianGroupHomomorphism: phi
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	self assert: (phi value: G identity) = H identity.
-	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b))! !
+	self assert: (phi value: a·b) = ((phi value: a)·(phi value: b))! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:32:35'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 18:54:31'!
 testAbelianGroupWithTorsion
 	| G |
-	G _ FPAbelianGroup invariants: #(0 0 2 3).
+	G _ FPAbelianGroup orders: #(0 0 2 3).
 	self assert: G rank = 2.
 	self assert: G invariants = #(0 0 2 3).
 	self assert: G torsion invariants = #(2 3).
@@ -1064,10 +1064,25 @@ testDirectSum
 	self testAbelianGroupHomomorphism: (G projection: 2 atRandom).
 	self testAbelianGroupHomomorphism: (G coprojection: 2 atRandom)! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 13:32:31'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:20:34'!
+testElementaryDivisors
+	self assert: (FPAbelianGroup orders: #(1 3 5 12)) elementaryDivisors = #(3 60).
+	self assert: (FPAbelianGroup orders: #(2 3)) elementaryDivisors = #(6).
+	self assert: (FPAbelianGroup orders: #(6)) elementaryDivisors = #(6).
+	self assert: (FPAbelianGroup orders: #(2 6)) elementaryDivisors = #(2 6).
+	self assert: (FPAbelianGroup orders: #(3 4 5)) elementaryDivisors = #(60).
+	self assert: (FPAbelianGroup orders: #(0 6)) elementaryDivisors = #(6 0).
+! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:28:34'!
+testFPAbelianGroupOrder
+	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
+	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 18:53:39'!
 testFreeAbelianGroup
 	| G |
-	G _ FPAbelianGroup invariants: #(0 0).
+	G _ FPAbelianGroup orders: #(0 0).
 	self assert: G rank = 2.
 	self assert: G invariants = #(0 0).
 	self assert: G torsion invariants = #().
@@ -1084,9 +1099,19 @@ testIntegerTuples
 	self testAbelianGroup: M asAbelianGroup.
 	self testAbelianGroupHomomorphism: (M projection: (1 to: M rank) atRandom) asAbelianGroupMap! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:26:09'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 20:42:32'!
 testIntegers
-	self testAbelianGroup: ZZ asAbelianGroup! !
+	| G x1 x2 g1 g2 |
+	G _ ZZ asAbelianGroup.
+	self testAbelianGroup: G.
+	x1 _ ZZ atRandomBits: 100.
+	x2 _ ZZ atRandomBits: 100.
+	g1 _ G !! x1.
+	g2 _ G !! x2.
+	self assert: ZZ !! g1 = x1.
+	self assert: ZZ !! G identity = 0.
+	self assert: ZZ !! (g1 · g2) = (x1 + x2).
+	self assert: ZZ !! g1 inverse = x1 negated.! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:48'!
 testModularIntegers
@@ -3650,10 +3675,10 @@ testFunctionComposition3
 	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
 	self should: [g · f] raise: DomainError! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 14:00:48'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:49:41'!
 testFunctionNewFrom
 	| f g |
-	f _ QQ^3 :: endomorphisms atRandomBits: 1000. "f is a LinearMap"
+	f _ (QQ^3) endomorphisms atRandomBits: 1000. "f is a LinearMap"
 	g _ f as: Function. "downgrade it to a simple Function, not a LinearMap any more"
 	self assert: (g as: FreeModuleMap) = f! !
 
@@ -4267,18 +4292,18 @@ testKernelRational
 	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernelMatrix = K! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/25/2016 00:51'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/15/2019 01:50:17'!
 testCharacteristicMatrixAndPolynomialOverQ
 	| n A |
 	n _ 5 atRandom.
-	A _ QQ ^ (n@n) :: atRandomBits: n*5.
+	A _ (QQ ^ (n@n)) atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/25/2016 06:34'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/15/2019 01:50:29'!
 testCharacteristicMatrixAndPolynomialOverZ
 	| n A |
 	n _ 5 atRandom.
-	A _ ZZ ^ (n@n) :: atRandomBits: n*5.
+	A _ (ZZ ^ (n@n)) atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:05'!
@@ -4632,7 +4657,7 @@ testIndexOf
 newFreeModule
 	^ self newFreeModuleOver: {ZZ. QQ. ZZ / (10 atRandom + 1)} atRandom! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:40:58'!
+!ModuleTest methodsFor: 'private' stamp: 'len 5/14/2019 20:46:25'!
 newFreeModuleOver: scalars
 	| M N |
 "	M _ 2 atRandom = 1 ifTrue: [scalars ^ (5 atRandom - 1)] ifFalse: [scalars ^ (5 atRandom - 1 @ (5 atRandom - 1))]."
@@ -4643,7 +4668,7 @@ newFreeModuleOver: scalars
 		N _ self newFreeModuleOver: scalars.
 		N rank < 5 ifFalse: [^ M  N].
 		2 atRandom = 1 ifTrue: [^ M => N].
-		2 atRandom = 1 ifTrue: [^ M ’ N].
+		2 atRandom = 1 ifTrue: [^ M ‘ N].
 		^ M  N].
 	3 atRandom = 1 ifTrue: [^ M dual].
 	^ M! !
@@ -4667,7 +4692,7 @@ newMatrix: dim over: aRing
 	samples _ {aRing zero. aRing one. aRing one negated}.
 	^ aRing matrix: dim evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:41:17'!
+!ModuleTest methodsFor: 'private' stamp: 'len 5/14/2019 20:46:35'!
 newSmallFreeModuleOver: scalars
 	| M N |
 	M _ 2 atRandom = 1 ifTrue: [scalars ^ 3 atRandom] ifFalse: [scalars ^ (3 atRandom @ 3 atRandom)].
@@ -4677,7 +4702,7 @@ newSmallFreeModuleOver: scalars
 		N _ self newFreeModuleOver: scalars.
 		N rank < 4 ifFalse: [^ M  N].
 		2 atRandom = 1 ifTrue: [^ M => N].
-		2 atRandom = 1 ifTrue: [^ M ’ N].
+		2 atRandom = 1 ifTrue: [^ M ‘ N].
 		^ M  N].
 	3 atRandom = 1 ifTrue: [^ M dual].
 	^ M! !
@@ -4983,10 +5008,10 @@ testQuotientSpace2
 	self assert: x isZero.
 "	self assert: (M lifting value: x) = (0,0,0)"! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/5/2018 03:23:40'!
-testSubmoduleInclusion
+!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:51:08'!
+testSubmoduleInclusionOver: aRing
 	| V S P v w |
-	V _ {ZZ. QQ polynomials. (ZZ/2) polynomials} atRandom ^ 3.
+	V _ aRing^3.
 	[v _ V atRandomBits: 10. v isZero] whileTrue.
 	S _ V span: {v}.
 	[w _ V atRandomBits: 10. S includes: w] whileTrue.
@@ -4998,13 +5023,25 @@ testSubmoduleInclusion
 	self assert: (S > P) not.
 	self assert: (P < S) not! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:34'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:52:35'!
+testSubmoduleInclusionOverBinaryPolynomials
+	self testSubmoduleInclusionOver: (ZZ/2) polynomials! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:52:18'!
+testSubmoduleInclusionOverRationalPolynomials
+	self testSubmoduleInclusionOver: QQ polynomials! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:51:56'!
+testSubmoduleInclusionOverZ
+	self testSubmoduleInclusionOver: ZZ! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 19:38:30'!
 testSubmoduleIntersection
 	| V S T T2 |
 	V _ ZZ ^ 3.
 	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S /\ S ambient = S. "intersection with the ambient vector space Q^3"
-	self assert: S /\ V asLattice = S. "intersection with over lattice Z^3"
+	self assert: S /\ S ambientSpace = S. "intersection with the ambient vector space Q^3"
+	self assert: S /\ V = S. "intersection with over lattice Z^3"
 	self assert: S /\ S = S.
 	T _ V span: {(3,1,-1)}.
 	self assert: S /\ T = T.
@@ -5419,82 +5456,82 @@ testPIDCoordinatesOfBug
 	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
 	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/19/2019 04:44:23'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:46:43'!
 testTensorHomAdjunction
 	| V W U A B |
 	V _ self newSmallVectorSpace.
 	W _ self newSmallFreeModuleOver: V scalars.
 	U _ self newSmallFreeModuleOver: V scalars.
-	A _ V’W => U.
+	A _ V‘W => U.
 	B _ V => (W => U).
 	self assert: A ~ B.
 "	phi _ A to: B evaluating: [:f| B evaluating: [:v| (W to: U) evaluating: [:w| f value: v’w]]].
 	self testLinearMap: phi.
 	self assert: phi isIsomorphism"! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 8/26/2016 06:03'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:46:56'!
 testTensorProductAssociativity
 	| V1 V2 V3 |
 	V1 _ QQ ^ 2.
 	V2 _ QQ ^ 3.
 	V3 _ QQ ^ 4.
-	self assert: (V1 ’ V2) ’ V3 ~ (V1 ’ (V2 ’ V3))! !
+	self assert: (V1 ‘ V2) ‘ V3 ~ (V1 ‘ (V2 ‘ V3))! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 8/26/2016 06:03'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:05'!
 testTensorProductCommutativity
 	| V W |
 	V _ QQ ^ 3.
 	W _ QQ ^ 4.
-	self assert: V ’ W ~ (W ’ V)! !
+	self assert: V ‘ W ~ (W ‘ V)! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 12/19/2017 20:09:11'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:13'!
 testTensorProductDimension
 	| V1 V2 |
 	V1 _ QQ ^ 5 atRandom.
 	V2 _ QQ ^ 5 atRandom.
-	self assert: (V1 ’ V2) dimension = (V1 dimension * V2 dimension)! !
+	self assert: (V1 ‘ V2) dimension = (V1 dimension * V2 dimension)! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/19/2019 04:44:36'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:21'!
 testTensorProductDualHomIsomorphism
 	| V W A B |
 	V _ self newVectorSpace.
 	W _ self newFreeModuleOver: V scalars.
-	A _ V dual ’ W.
+	A _ V dual ‘ W.
 	B _ V => W.
 	self assert: A ~ B
 "	phi _ A to: B evaluating: [:t| B evaluating: [:v| t second * (t first value: v)]].
 	self testLinearMap: phi.
 	self assert: phi isIsomorphism"! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 9/16/2018 23:30:50'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:33'!
 testTensorProductDualIsomorphism
 	| V W A B |
 	V _ self newVectorSpace.
 	W _ self newFreeModuleOver: V scalars.
-	A _ V dual ’ W dual.
-	B _ (V ’ W) dual.
+	A _ V dual ‘ W dual.
+	B _ (V ‘ W) dual.
 	self assert: A ~ B
 "	phi _ A to: B evaluating: [:s| B evaluating: [:t| (s first value: t first) * (s second value: t second)]].
 	self testLinearMap: phi.
 	self assert: phi isIsomorphism"! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 9/16/2018 23:30:57'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:39'!
 testTensorProductOfLinearForms
 	| V f g t v w |
 	V _ QQ ^ 3.
 	f _ V dual atRandomBits: 10.
 	g _ V dual atRandomBits: 10.
-	t _ f ’ g.
+	t _ f ‘ g.
 	v _ V atRandomBits: 10.
 	w _ V atRandomBits: 10.
 	self assert: (t value: t domain !! {v. w}) = (t codomain !! {f value: v. g value: w})! !
 
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 10/1/2018 05:46:27'!
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:47'!
 testTensorProductRelations
 	| V W T v v1 v2 w w1 w2 c |
 	V _ self newVectorSpace.
 	W _ self newFreeModuleOver: V scalars.
-	T _ V ’ W.
+	T _ V ‘ W.
 	v _ V atRandomBits: 40.
 	v1 _ V atRandomBits: 40.
 	v2 _ V atRandomBits: 40.
