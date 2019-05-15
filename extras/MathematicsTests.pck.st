@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 6:14:19 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 12:25:29 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 124!
+!provides: 'MathematicsTests' 1 125!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7086,22 +7086,10 @@ testGaloisRingCanonicalEmbeddingIntoOverring
 	phi _ A -> B.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 11:56:09'!
-testGaloisRingCanonicalHomomorphismFromPrimeSubfield
-	"Canonical homomorphism from Z/<p> to GR(p^n,m)."
-	| p n m A B phi |
-	p _ #(2 3 5) atRandom.
-	n _ 3 atRandom.
-	m _ 3 atRandom.
-	A _ ZZ/p.
-	B _ GaloisRing new: p to: n to: m.
-	phi _ A -> B.
-	self testRingHomomorphism: phi! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 11:50:11'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 07:04:02'!
 testGaloisRingCanonicalProjectionOntoResidueField
 	"Canonical homomorphism from GR(p^n,m) to GF(p,m).
-	This send 'a' in Z/(p^n)Z[x]/f to 'a mod p' in Z/pZ[x]/(f mod p) where f mod p means reducing the coefficients mod p."
+	This sends 'a' in Z/(p^n)Z[x]/f to 'a mod p' in Z/pZ[x]/(f mod p) where f mod p means reducing the coefficients mod p."
 	| p n m A B phi |
 	p _ #(2 3 5) atRandom.
 	n _ 3 atRandom.
@@ -7148,10 +7136,10 @@ testPrimeFieldPrimitiveRoot
 	[x = F one] whileFalse: [x _ x*g. i _ i+1].
 	self assert: i = (p-1)! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:58:25'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 06:45:14'!
 testPrimeRing
 	| R |
-	R _ PrimeRing new: 3 to: 3.
+	R _ PrimePowerRing new: 3 to: 3.
 	self assert: R characteristic = (3^3).
 	self assert: R size = (3^3).
 	self assert: R isLocal.
@@ -7175,10 +7163,10 @@ testPrimeRingCanonicalProjections
 	self assert: a representative \\ (p^m) = b representative.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:53:46'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 06:45:14'!
 testPrimeRingNilradical
 	| R |
-	R _ PrimeRing new: 3 to: 3.
+	R _ PrimePowerRing new: 3 to: 3.
 	self assert: R nilradical = (R * 3)! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 10:00:45'!

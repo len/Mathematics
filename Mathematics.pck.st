@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 6:14:24 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 12:25:26 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 492!
+!provides: 'Mathematics' 1 493!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Mathematics-Kernel'!
 SystemOrganization addCategory: #'Mathematics-Kernel-Support'!
@@ -1174,18 +1174,18 @@ QuotientRing subclass: #ModularIntegerRing
 ModularIntegerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #PrimeRing category: #'Mathematics-Rings-Finite'!
-ModularIntegerRing subclass: #PrimeRing
+!classDefinition: #PrimePowerRing category: #'Mathematics-Rings-Finite'!
+ModularIntegerRing subclass: #PrimePowerRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'PrimeRing class' category: #'Mathematics-Rings-Finite'!
-PrimeRing class
+!classDefinition: 'PrimePowerRing class' category: #'Mathematics-Rings-Finite'!
+PrimePowerRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #PrimeField category: #'Mathematics-Fields-Finite'!
-PrimeRing subclass: #PrimeField
+PrimePowerRing subclass: #PrimeField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1227,7 +1227,7 @@ AlgebraicExtension class
 !classDefinition: #GaloisRing category: #'Mathematics-Rings-Finite'!
 AlgebraicExtension subclass: #GaloisRing
 	instanceVariableNames: ''
-	classVariableNames: ''
+	classVariableNames: 'IrreduciblePolynomialsCache'
 	poolDictionaries: ''
 	category: 'Mathematics-Rings-Finite'!
 !classDefinition: 'GaloisRing class' category: #'Mathematics-Rings-Finite'!
@@ -4205,7 +4205,7 @@ References:
 !ModularIntegerRing commentStamp: '<historical>' prior: 0!
 Residue class rings of Z, i.e. rings Z/mZ of residue classes of integers modulo m. Elements are instances of ModularInteger.!
 
-!PrimeRing commentStamp: '<historical>' prior: 0!
+!PrimePowerRing commentStamp: '<historical>' prior: 0!
 Residue class rings Z/(p^n)Z of integers modulo p^n.
 
 These are the simplest examples of Galois rings, GR(p^n,1). They are local rings with maximal ideal <p>, and <p> is also the set of zero-divisors as well as nilpotent elements. Other Galois rings are constructed by finite algebraic extensions (see GaloisRing).
@@ -4238,7 +4238,7 @@ See also PolynomialRing and PolynomialIdeal.!
 See also AlgebraicElement.!
 
 !GaloisRing commentStamp: '<historical>' prior: 0!
-The Galois ring GR(p^n,m) is a Galois extension of degree m of the prime power ring Z/(p^n)Z of characteristic p^n. This is the unique (up to isomorphism) extension of degree m of the ring Z/(p^n)Z of integers modulo p^n (see PrimeRing). When n=1 they are fields (see GaloisField).
+The Galois ring GR(p^n,m) is a Galois extension of degree m of the prime power ring Z/(p^n)Z of characteristic p^n. This is the unique (up to isomorphism) extension of degree m of the ring Z/(p^n)Z of integers modulo p^n (see PrimePowerRing). When n=1 they are fields (see GaloisField).
 
 Galois rings GR(p^n,m) are local rings with maximal ideal <p>, and <p> is also the set of zero-divisors.
 
@@ -5731,7 +5731,7 @@ printOn: aStream
 printOn: aStream
 	aStream print: self base; nextPut: $/; print: self modulus; print: self base! !
 
-!PrimeRing methodsFor: 'printing' stamp: 'len 5/21/2018 04:31:00'!
+!PrimePowerRing methodsFor: 'printing' stamp: 'len 5/21/2018 04:31:00'!
 printOn: aStream
 	aStream print: self base; nextPut: $/; print: self p; nextPutAll: self exponent printString super; print: self base! !
 
@@ -19589,33 +19589,33 @@ modulusFactors
 new: anInteger
 	^ self new modulus: anInteger! !
 
-!PrimeRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:21'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:21'!
 degree
 	"Answer the degree of the receiver as an algebraic extension (as a Galois ring)."
 	^ 1! !
 
-!PrimeRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:19:07'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:19:07'!
 exponent
 	^ self propertyAt: #exponent ifAbsentPut: [self modulusFactors size]! !
 
-!PrimeRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:13:20'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:13:20'!
 maximalIdeal
 	^ self * self p! !
 
-!PrimeRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:18:30'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 5/21/2018 04:18:30'!
 p
 	^ self propertyAt: #p ifAbsentPut: [self modulusFactors anyOne]! !
 
-!PrimeRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:46'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:46'!
 primeSubfield
 	^ self propertyAt: #primeSubfield ifAbsentPut: [PrimeField new: self p]! !
 
-!PrimeRing methodsFor: 'accessing-private' stamp: 'len 9/22/2018 18:56:42'!
+!PrimePowerRing methodsFor: 'accessing-private' stamp: 'len 9/22/2018 18:56:42'!
 p: aPrime to: anInteger
 	self modulus: aPrime^anInteger.
 	self propertyAt: #modulusFactors put: (Bag new add: aPrime withOccurrences: anInteger; yourself)! !
 
-!PrimeRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:56:26'!
+!PrimePowerRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:56:26'!
 idealsDo: aBlock
 	"The ideals of Z/(p^n)Z are {0} and <p^i> for 0 <= i < n-1."
 	| a |
@@ -19625,91 +19625,91 @@ idealsDo: aBlock
 		[aBlock value: self * a.
 		a _ a * self p]! !
 
-!PrimeRing methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:11:31'!
+!PrimePowerRing methodsFor: 'morphisms' stamp: 'len 5/15/2019 06:45:14'!
 to: aCodomain
 	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
-	((aCodomain isKindOf: PrimeRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
+	((aCodomain isKindOf: PrimePowerRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
 		ifTrue: [^ self onto: aCodomain evaluating: [:x| aCodomain project: x representative]].
 	^ super to: aCodomain! !
 
-!PrimeRing methodsFor: 'operations' stamp: 'len 5/21/2018 16:20:06'!
+!PrimePowerRing methodsFor: 'operations' stamp: 'len 5/21/2018 16:20:06'!
 extension: aPolynomial
 	"Answer the Galois overring of the receiver defined by the given irreducible polynomial."
 	aPolynomial scalars = self ifFalse: [DomainError signal: 'polynomial coefficients not from this ring'].
 	aPolynomial parent isUnivariate ifFalse: [DomainError signal: 'not univariate poylnomial'].
 	^ GaloisRing polynomial: aPolynomial! !
 
-!PrimeRing methodsFor: 'operations' stamp: 'len 5/21/2018 15:42:20'!
+!PrimePowerRing methodsFor: 'operations' stamp: 'len 5/21/2018 15:42:20'!
 nilradical
 	"Answer the ideal consisting of all nilpotent elements, i.e. all x such that there exists some n with x^n = 0. It is the intersection of all prime ideals.
 	A finite ring is a Galois ring iff its nilradical is of the form <p> for some prime p. This is also the unique maximal ideal."
 	^ self maximalIdeal! !
 
-!PrimeRing methodsFor: 'operations' stamp: 'len 5/21/2018 06:56:18'!
+!PrimePowerRing methodsFor: 'operations' stamp: 'len 5/21/2018 06:56:18'!
 zeroDivisors
 	"The zero-divisors of a Galois ring Z/<p^k> constitute the unique maximal ideal <p>."
 	^ self maximalIdeal! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/16/2018 23:16:07'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/16/2018 23:16:07'!
 isChainRing
 	"A chain ring is a ring whose ideals form a chain under inclusion.
 	Prime rings, and more generally Galois rings, are chain rings."
 	^ true! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 5/21/2018 17:11:32'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 5/21/2018 17:11:32'!
 isEuclidean
 	"Galois rings are euclidean."
 	^ true! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 5/21/2018 04:26:10'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 5/21/2018 04:26:10'!
 isField
 	^ self exponent = 1! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:56:29'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:56:29'!
 isGaloisRing
 	^ true! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 5/21/2018 04:12:49'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 5/21/2018 04:12:49'!
 isLocal
 	^ true! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:56:32'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:56:32'!
 isNilpotent: anElement
 	"Answer true if anElement^n = 0 for some integer n >= 1."
 	^ self isZeroDivisor: anElement! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:57:35'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:57:35'!
 isPIR
 	"All nontrivial ideals are of the form <p^i>."
 	^ true! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:24:53'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:24:53'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
 	^ (self p | anElement representative) not! !
 
-!PrimeRing methodsFor: 'testing' stamp: 'len 9/16/2018 17:57:54'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/16/2018 17:57:54'!
 isZeroDivisor: anElement
 	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
 	^ self p | anElement representative! !
 
-!PrimeRing class methodsFor: 'examples' stamp: 'len 5/21/2018 16:28:45'!
+!PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/15/2019 06:45:14'!
 example1
 	"The Galois ring Z/<5^3>:"
-	^ PrimeRing new: 5 to: 3! !
+	^ PrimePowerRing new: 5 to: 3! !
 
-!PrimeRing class methodsFor: 'examples' stamp: 'len 5/21/2018 16:30:41'!
+!PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/21/2018 16:30:41'!
 example2
 	"Another way to create the Galois ring Z/<5^3>.
 	This is less efficient because internally it performs a factorization."
 	^ ZZ/(5^3)! !
 
-!PrimeRing class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:57'!
+!PrimePowerRing class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:57'!
 example3
 	"The canonical ring homomorphism from a prime ring Z/(p^n)Z to Z/pZ:"
 	^ ZZ/(5^3) -> (ZZ/5)! !
 
-!PrimeRing class methodsFor: 'instance creation' stamp: 'len 5/21/2018 16:28:00'!
+!PrimePowerRing class methodsFor: 'instance creation' stamp: 'len 5/21/2018 16:28:00'!
 new: p to: n
 	n = 1 ifTrue: [^ PrimeField new: p].
 	^ self new p: p to: n! !
@@ -20211,18 +20211,26 @@ new: q to: m
 	p _ factors anyOne.
 	^ self new: p to: n to: m! !
 
-!GaloisRing class methodsFor: 'instance creation' stamp: 'len 5/21/2018 07:23:30'!
+!GaloisRing class methodsFor: 'instance creation' stamp: 'len 5/15/2019 10:41:24'!
 new: p to: n to: m
 	"Answer the Galois ring of characteristic p^n and order p^(n*m)."
-	| F Fp f |
+	| F f |
 	n = 1 ifTrue: [^ GaloisField new: p to: m].
-	F _ PrimeRing new: p to: n.
+	F _ PrimePowerRing new: p to: n.
 	m = 1 ifTrue: [^ F].
-	Fp _ PrimeField new: p.
-	f _ Fp polynomials findIrreducibleOfDegree: m.
+	f _ self irreduciblePolynomialOfDegree: m mod: p.
 	"Hensel lift to F"
 	f _ f lift apply: F projection.
 	^ self polynomial: f! !
+
+!GaloisRing class methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 10:35:45'!
+initialize
+	super initialize.
+	IrreduciblePolynomialsCache _ WeakValueDictionary new! !
+
+!GaloisRing class methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 10:41:16'!
+irreduciblePolynomialOfDegree: m mod: p
+	^ (IrreduciblePolynomialsCache at: {p. m} ifAbsent: []) ifNil: [IrreduciblePolynomialsCache at: {p. m} put: ((PrimeField new: p) polynomials findIrreducibleOfDegree: m)]! !
 
 !GaloisField methodsFor: 'accessing' stamp: 'len 5/27/2018 04:39:39'!
 universalPolynomial
@@ -20268,13 +20276,11 @@ new: q
 	p _ factors anyOne.
 	^ self new: p to: n! !
 
-!GaloisField class methodsFor: 'instance creation' stamp: 'len 3/28/2018 19:32:17'!
+!GaloisField class methodsFor: 'instance creation' stamp: 'len 5/15/2019 10:42:11'!
 new: p to: n
 	"Answer the Galois field of order q = p^n."
-	| F |
-	F _ PrimeField new: p.
-	n = 1 ifTrue: [^ F].
-	^ self polynomial: (F polynomials findIrreducibleOfDegree: n)! !
+	n = 1 ifTrue: [^ PrimeField new: p].
+	^ self polynomial: (self irreduciblePolynomialOfDegree: n mod: p)! !
 
 !QuasiGaloisRing methodsFor: 'testing' stamp: 'len 5/9/2019 09:48:43'!
 isFinite
@@ -20623,13 +20629,13 @@ to: aCodomain
 	anInteger isPrime ifTrue: [^ PrimeField new: anInteger].
 	^ ModularIntegerRing new: anInteger! !
 
-!RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/21/2018 17:36:15'!
+!RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/15/2019 06:45:14'!
 / anInteger
 	| factors |
 	anInteger isInteger ifFalse: [^ super / anInteger].
 	factors _ anInteger factors.
 	factors asSet size = 1 ifTrue:
-		[^ PrimeRing new: factors anyOne to: factors size].
+		[^ PrimePowerRing new: factors anyOne to: factors size].
 	^ ModularIntegerRing new: anInteger! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 4/17/2018 22:57:08'!
@@ -21264,7 +21270,7 @@ constant: aNumber
 evaluating: aBlock
 	^ self generate: aBlock! !
 
-!PolynomialRing methodsFor: 'elements' stamp: 'len 10/22/2016 18:10'!
+!PolynomialRing methodsFor: 'elements' stamp: 'len 5/15/2019 07:38:21'!
 findIrreducibleOfDegree: n
 	| one x p random |
 	one _ self scalars one.
@@ -21274,7 +21280,8 @@ findIrreducibleOfDegree: n
 		p isIrreducible ifTrue: [^ p]].
 	"self error: 'irreducible polynomial not found'"
 	random _ Random new.
-	[(p _ self atRandom: random maxDegree: n) degree = n and: [p isIrreducible]] whileFalse.
+	[p _ (self atRandom: random maxDegree: n-1) + (x^n).
+	p isIrreducible] whileFalse.
 	^ p! !
 
 !PolynomialRing methodsFor: 'elements' stamp: 'len 12/19/2015 03:38'!
@@ -21655,12 +21662,12 @@ isUFD
 	self scalars isUFD ifTrue: [^ true]. "proof based on Gauss lemma"
 	^ super isUFD! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 9/16/2018 17:29:34'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 5/15/2019 06:45:14'!
 isUnit: aPolynomial
 	"Answer true if the argument is invertible."
 	aPolynomial isConstant ifTrue: [^ self scalars isUnit: aPolynomial leadingCoefficient].
 	self scalars isIntegralDomain ifTrue: [^ false].
-	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimeRing])
+	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimePowerRing])
 		ifTrue:
 			[| M a |
 			M _ self scalars maximalIdeal.
@@ -28484,6 +28491,11 @@ domain
 hash
 	^ self domain hash hashMultiply + self codomain hash! !
 
+!Function methodsFor: 'converting' stamp: 'len 5/15/2019 07:55:04'!
+asBlock
+	| expression |
+	^ (expression _ self expression) isBlock ifTrue: [expression] ifFalse: [[:x| expression value: x]]! !
+
 !Function methodsFor: 'morphic' stamp: 'len 4/24/2016 02:04'!
 plot: aCollection
 	^ FunctionPlotMorph new evaluationPoints: aCollection; function: self! !
@@ -28533,10 +28545,8 @@ restrictedTo: aDomain corestrictedTo: aCodomain
 rightInverse
 	^ self propertyAt: #rightInverse! !
 
-!Function methodsFor: 'operations' stamp: 'len 12/28/2016 11:11:32'!
+!Function methodsFor: 'operations' stamp: 'len 5/15/2019 07:51:40'!
 value: anObject
-"	(self domain includes: anObject) ifFalse: [^ anObject apply: self]."
-	self flag: #fix. "check argument"
 	^ (self propertyAt: #expression) value: anObject! !
 
 !Function methodsFor: 'operations' stamp: 'len 11/5/2016 09:33'!
@@ -28927,6 +28937,10 @@ map: aDictionary
 species
 	^ GroupMap! !
 
+!GroupMap methodsFor: 'private' stamp: 'len 5/15/2019 08:00:38'!
+verify
+	^ super isGroupHomomorphism! !
+
 !GroupMap class methodsFor: 'instance creation' stamp: 'len 2/20/2017 18:42:54'!
 from: aDomain to: anotherDomain map: aDictionary
 	^ self new domain: aDomain; codomain: anotherDomain; map: aDictionary! !
@@ -29130,6 +29144,10 @@ isZero
 species
 	^ RingMap! !
 
+!RingMap methodsFor: 'private' stamp: 'len 5/15/2019 07:24:39'!
+verify
+	^ super isRingHomomorphism! !
+
 !RingMap class methodsFor: 'examples' stamp: 'len 4/19/2019 04:55:46'!
 example1
 	"The ring of rational integers is the initial object in the category of rings.
@@ -29244,6 +29262,10 @@ isZero
 !ModuleMap methodsFor: 'private' stamp: 'len 1/11/2018 18:20:06'!
 species
 	^ ModuleMap! !
+
+!ModuleMap methodsFor: 'private' stamp: 'len 5/15/2019 08:02:02'!
+verify
+	^ super isModuleHomomorphism! !
 
 !FreeModuleMap methodsFor: 'accessing' stamp: 'len 2/8/2016 23:58'!
 automorphism
@@ -34247,9 +34269,9 @@ is: aSymbol
 isAffineLinear
 	^ self degree < 2! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 4/19/2019 04:54:44'!
+!Polynomial methodsFor: 'testing' stamp: 'len 5/15/2019 06:45:14'!
 isBasicIrreducible
-	(self scalars isKindOf: PrimeRing) ifFalse: [DomainError signal].
+	(self scalars isKindOf: PrimePowerRing) ifFalse: [DomainError signal].
 	^ (self apply: self scalars -> self scalars primeSubfield) isIrreducible! !
 
 !Polynomial methodsFor: 'testing' stamp: 'len 2/17/2017 08:07:02'!
@@ -45548,6 +45570,7 @@ StrikeFont installMathFonts
 Digraph initialize!
 Naturals initialize!
 RationalField initialize!
+GaloisRing initialize!
 RationalIntegerRing initialize!
 ComplexField initialize!
 RealField initialize!
