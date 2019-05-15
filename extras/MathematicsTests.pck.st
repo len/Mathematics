@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 2:34:26 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 6:14:19 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 122!
+!provides: 'MathematicsTests' 1 124!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1056,13 +1056,15 @@ testAbelianGroupWithTorsion
 	self assert: G torsion isTorsion.
 	self assert: G torsion isFree not! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/23/2019 02:19:56'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 06:07:13'!
 testDirectSum
-	| G |
-	G _ ZZ asAbelianGroup ê (ZZ / (2 to: 10) atRandom) asAbelianGroup.
-	self testAbelianGroup: G.
-	self testAbelianGroupHomomorphism: (G projection: 2 atRandom).
-	self testAbelianGroupHomomorphism: (G coprojection: 2 atRandom)! !
+	| A B C |
+	A _ ZZ asAbelianGroup.
+	B _ (ZZ / (2 to: 10) atRandom) asAbelianGroup.
+	C _ A ê B.
+	self testAbelianGroup: C.
+	self testAbelianGroupHomomorphism: ((C projections: {A. B}) at: 2 atRandom).
+	self testAbelianGroupHomomorphism: ((C coprojections: {A. B}) at: 2 atRandom)! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:20:34'!
 testElementaryDivisors
@@ -1119,6 +1121,15 @@ testModularIntegers
 	R _ ZZ / (2 to: 10) atRandom.
 	self testAbelianGroup: R asAbelianGroup.
 	self testAbelianGroupHomomorphism: R projection asAbelianGroupMap! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 04:11:04'!
+testOrderOfElements
+	| G g |
+	G _ FPAbelianGroup orders: #(2 3 4 5 0).
+	g _ G !! [:a :b :c :d :e| a*(b^2)*(d^4)].
+	self assert: g order = 30.
+	g _ G !! [:a :b :c :d :e| a*e].
+	self assert: g order = 0! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 1/22/2017 08:21:59'!
 testAffineHull
