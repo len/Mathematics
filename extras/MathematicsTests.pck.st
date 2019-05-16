@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 12:25:29 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 4:20:09 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 125!
+!provides: 'MathematicsTests' 1 126!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -3987,6 +3987,13 @@ testAdjugate2
 	B _ Matrix rows: { (-8,18,-4). (-5,12,-1). (4,-6,2) }.
 	self assert: A adjugate = B! !
 
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 13:09:45'!
+testAdjugateCramerRule
+	| A I |
+	A _ QQ^(3@3) atRandomBits: 50.
+	I _ A identity.
+	self assert: A * A adjugate = (I * A determinant)! !
+
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/5/2018 15:43:37'!
 testAdjugateProperties
 	| M A B I c |
@@ -4303,6 +4310,18 @@ testKernelRational
 	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernelMatrix = K! !
 
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/15/2019 13:04:52'!
+testCauchyDeterminantProductFormula
+	| M A B |
+	M _ QQ ^ (3@3).
+	A _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
+	B _ M rows: {(1,0,4). (1,1,1). (2,-2,-3)}.
+	self assert: A determinant * B determinant = (A * B) determinant.
+	M _ ZZ ^ (3@3).
+	A _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
+	B _ M rows: {(1,0,4). (1,1,1). (2,-2,-3)}.
+	self assert: A determinant * B determinant = (A * B) determinant! !
+
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/15/2019 01:50:17'!
 testCharacteristicMatrixAndPolynomialOverQ
 	| n A |
@@ -4342,18 +4361,6 @@ testDeterminant2
 	M _ ZZ ^ (3@3).
 	vandermonde _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
 	self assert: vandermonde determinant = 16! !
-
-!MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 05:47'!
-testDeterminant3
-	| M A B |
-	M _ QQ ^ (3@3).
-	A _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
-	B _ M rows: {(1,0,4). (1,1,1). (2,-2,-3)}.
-	self assert: A determinant * B determinant = (A * B) determinant.
-	M _ ZZ ^ (3@3).
-	A _ M rows: {(1,1,1). (3,5,7). (9,25,49)}.
-	B _ M rows: {(1,0,4). (1,1,1). (2,-2,-3)}.
-	self assert: A determinant * B determinant = (A * B) determinant! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:06'!
 testMinimalPolynomial
