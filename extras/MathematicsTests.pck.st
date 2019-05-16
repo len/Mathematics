@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 15 May 2019 at 4:20:09 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 16 May 2019 at 9:17:38 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 126!
+!provides: 'MathematicsTests' 1 127!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -3510,12 +3510,12 @@ testLeech
 	self assert: L isUnimodular.
 	self assert: L isEven! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:03'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:40:05'!
 testGeneralLinearAtRandom
 	| V G |
 	V _ QQ ^ 3.
 	G _ V automorphisms.
-	self assert: (G atRandomBits: 100) isInvertible.
+	self assert: (G atRandomBits: 100) isAutomorphism.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
 !LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:54:15'!
@@ -4093,12 +4093,12 @@ testKroneckerProduct
 	C _ ZZ ^ (4@4) elementAt: (0, 5, 0, 10, 6, 7, 12, 14, 0, 15, 0, 20, 18, 21, 24, 28).
 	self assert: (A kronecker: B) = C! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:23'!
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:27:03'!
 testLeftInverse
 	| M A |
 	M _ QQ ^ (5@3).
 	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
-	self assert: (A leftInverse * A) isIdentity! !
+	self assert: (A retraction * A) isIdentity! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 10:08:10'!
 testLeftRightIdentity
@@ -4142,12 +4142,12 @@ testQRDecomposition2
 	R _ RR matrix: 3@3 coefficients: #(14 21 -14 0 175 -70 0 0 35).
 	self assert: A QR = {Q. R}! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:24'!
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:28:52'!
 testRightInverse
 	| M A |
 	M _ QQ ^ (3@5).
 	[A _ M atRandomBits: 1000. A rank = 3] whileFalse.
-	self assert: (A * A rightInverse) isIdentity! !
+	self assert: (A * A section) isIdentity! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 8/24/2016 19:19'!
 testSimilarity
@@ -4214,6 +4214,26 @@ testBacklashNonSquare2
 	X _ A \ B.
 	self assert: A * X = B! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 22:52:22'!
+testBacklashPascal3
+	"Example from Matlab documentation. Non-singular and square."
+	| A u x |
+	A _ ZZ matrix: 3 coefficients: #(1 1 1 1 2 3 1 3 6). "pascal(3)"
+	u _ ZZ tuple: #(3 1 4).
+	x _ A \ u.
+	self assert: x = (ZZ tuple: #(10 -12 5)).
+	self assert: A * x = u! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 22:52:07'!
+testBacklashPascal3Magic3
+	"Example from Matlab documentation. Non-singular and square."
+	| A B X |
+	A _ ZZ matrix: 3 coefficients: #(1 1 1 1 2 3 1 3 6). "pascal(3)"
+	B _ ZZ matrix: 3 coefficients: #(8 1 6 3 5 7 4 9 2). "magic(3)"
+	X _ A \ B.
+	self assert: X = (ZZ matrix: 3 coefficients: #(19 -3 -1 -17 4 13 6 0 -6)).
+	self assert: A * X = B! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:38:35'!
 testBacklashSingular
 	"Example from Sage documentation."
@@ -4242,12 +4262,15 @@ testBacklashTuple2OverQ
 	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
 ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:14:51'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 23:40:42'!
 testBacklashTuple2OverZ
 	"Example from GAP manual."
-	| A |
+	| A b x |
 	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	self assert: A transposed \ (95,115,182) = (2285, -5854, 4888, -1299, 0)! !
+	A _ A transposed.
+	b _ ZZ tuple: #(95 115 182).
+	x _ ZZ tuple: #(2285 -5854 4888 -1299 0).
+	self assert: A \ b = x! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:30:12'!
 testBacklashTupleNonSquare
@@ -4309,6 +4332,24 @@ testKernelRational
 	A _ A transposed.
 	K _ QQ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernelMatrix = K! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 23:54:17'!
+testSlashWithMatrix
+	| A B X  |
+	A _ QQ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
+	B _ QQ matrix: 1@3 coefficients: #(2 19 8).
+	X _ B / A.
+	self assert: X = (QQ matrix: 1@3 coefficients: #(1 2 3)).
+	self assert: X * A = B! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 23:43:56'!
+testSlashWithTuple
+	| A b x  |
+	A _ QQ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
+	b _ (2, 19, 8).
+	x _ b / A.
+	self assert: x = (1, 2, 3).
+	self assert: x * A = b! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/15/2019 13:04:52'!
 testCauchyDeterminantProductFormula
@@ -5410,13 +5451,13 @@ testLinearMapKernelZ2
 	self assert: kernel dimension = 2.
 	self assert: (kernel includes: (0,1,1) % 2)! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:09'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/16/2019 12:27:12'!
 testLinearMapLeftInverse
 	| V W f |
 	V _ QQ ^ 3.
 	W _ QQ ^ 5.
 	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: f leftInverse · f = V id! !
+	self assert: f retraction · f = V id! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:13'!
 testLinearMapRetraction
@@ -5428,13 +5469,13 @@ testLinearMapRetraction
 	self assert: r isSurjective.
 	self assert: r · f = V id! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:18'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/16/2019 12:28:58'!
 testLinearMapRightInverse
 	| V W f |
 	V _ QQ ^ 5.
 	W _ QQ ^ 3.
 	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
-	self assert: f · f rightInverse = W id! !
+	self assert: f · f section = W id! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:22'!
 testLinearMapSection
