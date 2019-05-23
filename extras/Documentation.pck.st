@@ -1,6 +1,9 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #2974] on 23 February 2017 at 9:40:42 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 23 May 2019 at 3:17:42 pm'!
 'Description Please enter a description for this package'!
-!provides: 'Documentation' 1 6!
+!provides: 'Documentation' 1 8!
+SystemOrganization addCategory: #Documentation!
+
+
 !classDefinition: #DocumentationGenerator category: #Documentation!
 Object subclass: #DocumentationGenerator
 	instanceVariableNames: ''
@@ -22,7 +25,7 @@ copy: aString replaceAll: oldSubstring with: newSubstring
 		collect: [:each| (each includesSubString: 'http') ifTrue: [each] ifFalse: [each copyReplaceTokens: oldSubstring with: newSubstring]]
 		andFold: [:a :b| a, Character lf asString, b]! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 2/15/2017 20:31:35'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 22:19:08'!
 escape: aString
 	| output |
 	output _ aString.
@@ -40,12 +43,12 @@ escape: aString
 	output _ output copyReplaceAll: Character oplus asString with: '&oplus;'.
 	output _ output copyReplaceAll: Character infinity asString with: '&infin;'.
 	output _ output copyReplaceAll: Character emptySet asString with: '&empty;'.
-	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
+"	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
 	output _ output copyReplaceAll: Character cap asString with: '&cap;'.
-	output _ output copyReplaceAll: Character circ asString with: 'o'.
+"	output _ output copyReplaceAll: Character circ asString with: 'o'.
 	^ output! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 2/15/2017 20:31:28'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 22:18:57'!
 escapeCode: aString
 	| output |
 	output _ aString.
@@ -59,15 +62,15 @@ escapeCode: aString
 	output _ output copyReplaceAll: Character oplus asString with: '&oplus;'.
 	output _ output copyReplaceAll: Character infinity asString with: '&infin;'.
 	output _ output copyReplaceAll: Character emptySet asString with: '&empty;'.
-	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
+"	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
 	output _ output copyReplaceAll: Character cap asString with: '&cap;'.
-	output _ output copyReplaceAll: Character circ asString with: 'o'.
+"	output _ output copyReplaceAll: Character circ asString with: 'o'.
 	^ output! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 1/5/2017 09:22:21'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2019 15:16:42'!
 generate
 	| classes |
-	classes _ Object withAllSubclasses select: [:each| each class ~= Metaclass and: [(each allSuperclasses includes: Morph) not and: [(each category beginsWith: 'Mathematics-') and: [(self blacklist noneSatisfy: [:one| each category includesSubString: one])]]]].
+	classes _ Object withAllSubclasses select: [:each| each class ~= Metaclass and: [(each allSuperclasses includes: Morph) not and: [(each category beginsWith: 'Domains-') and: [(self blacklist noneSatisfy: [:one| each category includesSubString: one])]]]].
 	self generateForClasses: classes.
 	self generateIndexByClassCategories! !
 
@@ -165,13 +168,13 @@ generateForClasses: classes
 		file _ self path,class name,'.md' :: asFileEntry.
 		file assureExistence; fileContents: output contents]! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 1/5/2017 12:17:33'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2019 15:17:10'!
 generateIndexByClassCategories
 	| categories output file |
-	categories _ Smalltalk organization categories select: [:each| (each beginsWith: 'Mathematics-') and: [self blacklist noneSatisfy: [:one| each includesSubString: one]]].
+	categories _ Smalltalk organization categories select: [:each| (each beginsWith: 'Domains-') and: [self blacklist noneSatisfy: [:one| each includesSubString: one]]].
 	output _ '' writeStream.
 	categories do: [:category|
-		output nextPutAll: '**', (category withoutPrefix: 'Mathematics-'), '**'; lf; lf.
+		output nextPutAll: '**', (category withoutPrefix: 'Domains-'), '**'; lf; lf.
 		(Smalltalk organization listAtCategoryNamed: category) do: [:each|
 			8 timesRepeat: [output nextPutAll: '&nbsp;'].
 			output nextPutAll: '[', each asString, '](', each asString, ')'; space]]

@@ -1,3706 +1,3706 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 16 May 2019 at 9:13:28 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 16 May 2019 at 10:23:44 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Mathematics' 1 495!
+!provides: 'Domains' 1 496!
 !requires: 'RayTracer' 1 2 nil!
-SystemOrganization addCategory: #'Mathematics-Kernel'!
-SystemOrganization addCategory: #'Mathematics-Kernel-Support'!
-SystemOrganization addCategory: #'Mathematics-Sets'!
-SystemOrganization addCategory: #'Mathematics-Monoids'!
-SystemOrganization addCategory: #'Mathematics-Monoids-Orderings'!
-SystemOrganization addCategory: #'Mathematics-Groups'!
-SystemOrganization addCategory: #'Mathematics-Groups-Permutations'!
-SystemOrganization addCategory: #'Mathematics-Groups-Linear'!
-SystemOrganization addCategory: #'Mathematics-Groups-Affine'!
-SystemOrganization addCategory: #'Mathematics-Groups-Algorithms'!
-SystemOrganization addCategory: #'Mathematics-Rings'!
-SystemOrganization addCategory: #'Mathematics-Rings-Finite'!
-SystemOrganization addCategory: #'Mathematics-Fields'!
-SystemOrganization addCategory: #'Mathematics-Fields-Finite'!
-SystemOrganization addCategory: #'Mathematics-Fields-Number Fields'!
-SystemOrganization addCategory: #'Mathematics-Modules'!
-SystemOrganization addCategory: #'Mathematics-Modules-Free'!
-SystemOrganization addCategory: #'Mathematics-Modules-Complexes'!
-SystemOrganization addCategory: #'Mathematics-Modules-Tuples'!
-SystemOrganization addCategory: #'Mathematics-Modules-Matrices'!
-SystemOrganization addCategory: #'Mathematics-Modules-Matrices-Algorithms'!
-SystemOrganization addCategory: #'Mathematics-Modules-Lattices'!
-SystemOrganization addCategory: #'Mathematics-Multilinear'!
-SystemOrganization addCategory: #'Mathematics-Modules-Multivariate'!
-SystemOrganization addCategory: #'Mathematics-Modules-Multivariate-Orderings'!
-SystemOrganization addCategory: #'Mathematics-Polynomials'!
-SystemOrganization addCategory: #'Mathematics-Polynomials-Algorithms'!
-SystemOrganization addCategory: #'Mathematics-Schemes'!
-SystemOrganization addCategory: #'Mathematics-Schemes-Affine'!
-SystemOrganization addCategory: #'Mathematics-Schemes-Projective'!
-SystemOrganization addCategory: #'Mathematics-Schemes-Projective-Product'!
-SystemOrganization addCategory: #'Mathematics-Codes'!
-SystemOrganization addCategory: #'Mathematics-Algorithms'!
-SystemOrganization addCategory: #'Mathematics-Sequences'!
-SystemOrganization addCategory: #'Mathematics-Graphs'!
-SystemOrganization addCategory: #'Mathematics-Graphs-Parts'!
-SystemOrganization addCategory: #'Mathematics-Graphs-Algorithms'!
-SystemOrganization addCategory: #'Mathematics-Graphs-Morphic'!
-SystemOrganization addCategory: #'Mathematics-Tableaux'!
-SystemOrganization addCategory: #'Mathematics-Complexes'!
-SystemOrganization addCategory: #'Mathematics-Elliptic Curves'!
-SystemOrganization addCategory: #'Mathematics-Modular Forms'!
-SystemOrganization addCategory: #'Mathematics-Modular Group'!
-SystemOrganization addCategory: #'Mathematics-Morphic'!
-SystemOrganization addCategory: #'Mathematics-Etc'!
-SystemOrganization addCategory: #'Mathematics-Etc-Lie'!
-SystemOrganization addCategory: #'Mathematics-Etc-Approximate-PAdics'!
-SystemOrganization addCategory: #'Mathematics-Etc-Diagrams'!
-SystemOrganization addCategory: #'Mathematics-Etc-Algebras'!
-SystemOrganization addCategory: #'Mathematics-Etc-Groups-Abelian'!
+SystemOrganization addCategory: #'Domains-Kernel'!
+SystemOrganization addCategory: #'Domains-Kernel-Support'!
+SystemOrganization addCategory: #'Domains-Sets'!
+SystemOrganization addCategory: #'Domains-Monoids'!
+SystemOrganization addCategory: #'Domains-Monoids-Orderings'!
+SystemOrganization addCategory: #'Domains-Groups'!
+SystemOrganization addCategory: #'Domains-Groups-Permutations'!
+SystemOrganization addCategory: #'Domains-Groups-Linear'!
+SystemOrganization addCategory: #'Domains-Groups-Affine'!
+SystemOrganization addCategory: #'Domains-Groups-Algorithms'!
+SystemOrganization addCategory: #'Domains-Rings'!
+SystemOrganization addCategory: #'Domains-Rings-Finite'!
+SystemOrganization addCategory: #'Domains-Fields'!
+SystemOrganization addCategory: #'Domains-Fields-Finite'!
+SystemOrganization addCategory: #'Domains-Fields-Number Fields'!
+SystemOrganization addCategory: #'Domains-Modules'!
+SystemOrganization addCategory: #'Domains-Modules-Free'!
+SystemOrganization addCategory: #'Domains-Modules-Complexes'!
+SystemOrganization addCategory: #'Domains-Modules-Tuples'!
+SystemOrganization addCategory: #'Domains-Modules-Matrices'!
+SystemOrganization addCategory: #'Domains-Modules-Matrices-Algorithms'!
+SystemOrganization addCategory: #'Domains-Modules-Lattices'!
+SystemOrganization addCategory: #'Domains-Multilinear'!
+SystemOrganization addCategory: #'Domains-Modules-Multivariate'!
+SystemOrganization addCategory: #'Domains-Modules-Multivariate-Orderings'!
+SystemOrganization addCategory: #'Domains-Polynomials'!
+SystemOrganization addCategory: #'Domains-Polynomials-Algorithms'!
+SystemOrganization addCategory: #'Domains-Schemes'!
+SystemOrganization addCategory: #'Domains-Schemes-Affine'!
+SystemOrganization addCategory: #'Domains-Schemes-Projective'!
+SystemOrganization addCategory: #'Domains-Schemes-Projective-Product'!
+SystemOrganization addCategory: #'Domains-Codes'!
+SystemOrganization addCategory: #'Domains-Algorithms'!
+SystemOrganization addCategory: #'Domains-Sequences'!
+SystemOrganization addCategory: #'Domains-Graphs'!
+SystemOrganization addCategory: #'Domains-Graphs-Parts'!
+SystemOrganization addCategory: #'Domains-Graphs-Algorithms'!
+SystemOrganization addCategory: #'Domains-Graphs-Morphic'!
+SystemOrganization addCategory: #'Domains-Tableaux'!
+SystemOrganization addCategory: #'Domains-Complexes'!
+SystemOrganization addCategory: #'Domains-Elliptic Curves'!
+SystemOrganization addCategory: #'Domains-Modular Forms'!
+SystemOrganization addCategory: #'Domains-Modular Group'!
+SystemOrganization addCategory: #'Domains-Morphic'!
+SystemOrganization addCategory: #'Domains-Etc'!
+SystemOrganization addCategory: #'Domains-Etc-Lie'!
+SystemOrganization addCategory: #'Domains-Etc-Approximate-PAdics'!
+SystemOrganization addCategory: #'Domains-Etc-Diagrams'!
+SystemOrganization addCategory: #'Domains-Etc-Algebras'!
+SystemOrganization addCategory: #'Domains-Etc-Groups-Abelian'!
 
 
-!classDefinition: #RealAlgebraicNumber category: #'Mathematics-Fields'!
+!classDefinition: #RealAlgebraicNumber category: #'Domains-Fields'!
 Number subclass: #RealAlgebraicNumber
 	instanceVariableNames: 'minimalPolynomial bounds rightSign'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'RealAlgebraicNumber class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'RealAlgebraicNumber class' category: #'Domains-Fields'!
 RealAlgebraicNumber class
 	instanceVariableNames: ''!
 
-!classDefinition: #ContinuedFraction category: #'Mathematics-Sequences'!
+!classDefinition: #ContinuedFraction category: #'Domains-Sequences'!
 Number subclass: #ContinuedFraction
 	instanceVariableNames: 'coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'ContinuedFraction class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'ContinuedFraction class' category: #'Domains-Sequences'!
 ContinuedFraction class
 	instanceVariableNames: ''!
 
-!classDefinition: #DyadicFraction category: #'Mathematics-Etc'!
+!classDefinition: #DyadicFraction category: #'Domains-Etc'!
 Number subclass: #DyadicFraction
 	instanceVariableNames: 'numerator shift'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'DyadicFraction class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'DyadicFraction class' category: #'Domains-Etc'!
 DyadicFraction class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicInteger category: #'Mathematics-Etc-Approximate-PAdics'!
+!classDefinition: #AdicInteger category: #'Domains-Etc-Approximate-PAdics'!
 Number subclass: #AdicInteger
 	instanceVariableNames: 'parent digits'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicInteger class' category: #'Mathematics-Etc-Approximate-PAdics'!
+	category: 'Domains-Etc-Approximate-PAdics'!
+!classDefinition: 'AdicInteger class' category: #'Domains-Etc-Approximate-PAdics'!
 AdicInteger class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicNumber category: #'Mathematics-Etc-Approximate-PAdics'!
+!classDefinition: #AdicNumber category: #'Domains-Etc-Approximate-PAdics'!
 Number subclass: #AdicNumber
 	instanceVariableNames: 'numerator valuation'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicNumber class' category: #'Mathematics-Etc-Approximate-PAdics'!
+	category: 'Domains-Etc-Approximate-PAdics'!
+!classDefinition: 'AdicNumber class' category: #'Domains-Etc-Approximate-PAdics'!
 AdicNumber class
 	instanceVariableNames: ''!
 
-!classDefinition: #MutualAssociation category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #MutualAssociation category: #'Domains-Graphs-Parts'!
 Association subclass: #MutualAssociation
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'MutualAssociation class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'MutualAssociation class' category: #'Domains-Graphs-Parts'!
 MutualAssociation class
 	instanceVariableNames: ''!
 
-!classDefinition: #Aleph category: #'Mathematics-Kernel-Support'!
+!classDefinition: #Aleph category: #'Domains-Kernel-Support'!
 Magnitude subclass: #Aleph
 	instanceVariableNames: 'order'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'Aleph class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'Aleph class' category: #'Domains-Kernel-Support'!
 Aleph class
 	instanceVariableNames: ''!
 
-!classDefinition: #Infinity category: #'Mathematics-Kernel-Support'!
+!classDefinition: #Infinity category: #'Domains-Kernel-Support'!
 Magnitude subclass: #Infinity
 	instanceVariableNames: 'sign'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'Infinity class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'Infinity class' category: #'Domains-Kernel-Support'!
 Infinity class
 	instanceVariableNames: ''!
 
-!classDefinition: #BitArray category: #'Mathematics-Etc'!
+!classDefinition: #BitArray category: #'Domains-Etc'!
 ArrayedCollection subclass: #BitArray
 	instanceVariableNames: 'bytes length'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'BitArray class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'BitArray class' category: #'Domains-Etc'!
 BitArray class
 	instanceVariableNames: ''!
 
-!classDefinition: #LinearBasis category: #'Mathematics-Etc'!
+!classDefinition: #LinearBasis category: #'Domains-Etc'!
 ArrayedCollection subclass: #LinearBasis
 	instanceVariableNames: 'ambient matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'LinearBasis class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'LinearBasis class' category: #'Domains-Etc'!
 LinearBasis class
 	instanceVariableNames: ''!
 
-!classDefinition: #StandardBasis category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #StandardBasis category: #'Domains-Polynomials-Algorithms'!
 SequenceableCollection subclass: #StandardBasis
 	instanceVariableNames: 'elements'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'StandardBasis class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'StandardBasis class' category: #'Domains-Polynomials-Algorithms'!
 StandardBasis class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroebnerBasis category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #GroebnerBasis category: #'Domains-Polynomials-Algorithms'!
 StandardBasis subclass: #GroebnerBasis
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'GroebnerBasis class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'GroebnerBasis class' category: #'Domains-Polynomials-Algorithms'!
 GroebnerBasis class
 	instanceVariableNames: ''!
 
-!classDefinition: #KeyedSet category: #'Mathematics-Kernel-Support'!
+!classDefinition: #KeyedSet category: #'Domains-Kernel-Support'!
 Set subclass: #KeyedSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'KeyedSet class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'KeyedSet class' category: #'Domains-Kernel-Support'!
 KeyedSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #Iterator category: #'Mathematics-Kernel-Support'!
+!classDefinition: #Iterator category: #'Domains-Kernel-Support'!
 Collection subclass: #Iterator
 	instanceVariableNames: 'block'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'Iterator class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'Iterator class' category: #'Domains-Kernel-Support'!
 Iterator class
 	instanceVariableNames: ''!
 
-!classDefinition: #Graph category: #'Mathematics-Graphs'!
+!classDefinition: #Graph category: #'Domains-Graphs'!
 Collection subclass: #Graph
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs'!
-!classDefinition: 'Graph class' category: #'Mathematics-Graphs'!
+	category: 'Domains-Graphs'!
+!classDefinition: 'Graph class' category: #'Domains-Graphs'!
 Graph class
 	instanceVariableNames: ''!
 
-!classDefinition: #Digraph category: #'Mathematics-Graphs'!
+!classDefinition: #Digraph category: #'Domains-Graphs'!
 Graph subclass: #Digraph
 	instanceVariableNames: 'nodes nodeCreator type'
 	classVariableNames: 'InitializationBlocks'
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs'!
-!classDefinition: 'Digraph class' category: #'Mathematics-Graphs'!
+	category: 'Domains-Graphs'!
+!classDefinition: 'Digraph class' category: #'Domains-Graphs'!
 Digraph class
 	instanceVariableNames: ''!
 
-!classDefinition: #RootedDigraph category: #'Mathematics-Graphs'!
+!classDefinition: #RootedDigraph category: #'Domains-Graphs'!
 Digraph subclass: #RootedDigraph
 	instanceVariableNames: 'roots'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs'!
-!classDefinition: 'RootedDigraph class' category: #'Mathematics-Graphs'!
+	category: 'Domains-Graphs'!
+!classDefinition: 'RootedDigraph class' category: #'Domains-Graphs'!
 RootedDigraph class
 	instanceVariableNames: ''!
 
-!classDefinition: #UndirectedGraph category: #'Mathematics-Graphs'!
+!classDefinition: #UndirectedGraph category: #'Domains-Graphs'!
 Graph subclass: #UndirectedGraph
 	instanceVariableNames: 'digraph'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs'!
-!classDefinition: 'UndirectedGraph class' category: #'Mathematics-Graphs'!
+	category: 'Domains-Graphs'!
+!classDefinition: 'UndirectedGraph class' category: #'Domains-Graphs'!
 UndirectedGraph class
 	instanceVariableNames: ''!
 
-!classDefinition: #YoungTableau category: #'Mathematics-Tableaux'!
+!classDefinition: #YoungTableau category: #'Domains-Tableaux'!
 Collection subclass: #YoungTableau
 	instanceVariableNames: 'rows'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Tableaux'!
-!classDefinition: 'YoungTableau class' category: #'Mathematics-Tableaux'!
+	category: 'Domains-Tableaux'!
+!classDefinition: 'YoungTableau class' category: #'Domains-Tableaux'!
 YoungTableau class
 	instanceVariableNames: ''!
 
-!classDefinition: #Simplex category: #'Mathematics-Complexes'!
+!classDefinition: #Simplex category: #'Domains-Complexes'!
 Collection subclass: #Simplex
 	instanceVariableNames: 'vertices'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Complexes'!
-!classDefinition: 'Simplex class' category: #'Mathematics-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'Simplex class' category: #'Domains-Complexes'!
 Simplex class
 	instanceVariableNames: ''!
 
-!classDefinition: #MonomialIndexedTuple category: #'Mathematics-Etc'!
+!classDefinition: #MonomialIndexedTuple category: #'Domains-Etc'!
 Collection subclass: #MonomialIndexedTuple
 	instanceVariableNames: 'scalars associations'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'MonomialIndexedTuple class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'MonomialIndexedTuple class' category: #'Domains-Etc'!
 MonomialIndexedTuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #CompositeGraphMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #CompositeGraphMorph category: #'Domains-Graphs-Morphic'!
 LayoutMorph subclass: #CompositeGraphMorph
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'CompositeGraphMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'CompositeGraphMorph class' category: #'Domains-Graphs-Morphic'!
 CompositeGraphMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #GraphMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #GraphMorph category: #'Domains-Graphs-Morphic'!
 RectangleLikeMorph subclass: #GraphMorph
 	instanceVariableNames: 'graph nodeToMorph edgeToMorph focusNode dimension lastMousePosition components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'GraphMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'GraphMorph class' category: #'Domains-Graphs-Morphic'!
 GraphMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpringGraphMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #SpringGraphMorph category: #'Domains-Graphs-Morphic'!
 GraphMorph subclass: #SpringGraphMorph
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'SpringGraphMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'SpringGraphMorph class' category: #'Domains-Graphs-Morphic'!
 SpringGraphMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #GraphNodeMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #GraphNodeMorph category: #'Domains-Graphs-Morphic'!
 RectangleLikeMorph subclass: #GraphNodeMorph
 	instanceVariableNames: 'node x dx shape label labelMorph'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'GraphNodeMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'GraphNodeMorph class' category: #'Domains-Graphs-Morphic'!
 GraphNodeMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpringNodeMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #SpringNodeMorph category: #'Domains-Graphs-Morphic'!
 GraphNodeMorph subclass: #SpringNodeMorph
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'SpringNodeMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'SpringNodeMorph class' category: #'Domains-Graphs-Morphic'!
 SpringNodeMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #ComplexPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #ComplexPlotMorph
 	instanceVariableNames: 'function image box palette'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ComplexPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ComplexPlotMorph class' category: #'Domains-Morphic'!
 ComplexPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #FunctionPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #FunctionPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #FunctionPlotMorph
 	instanceVariableNames: 'backgroundColor fillColor textColor function xMin xMax yMin yMax evaluationPoints values firstMousePosition lastMousePosition'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'FunctionPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'FunctionPlotMorph class' category: #'Domains-Morphic'!
 FunctionPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #HistogramMorph category: #'Mathematics-Morphic'!
+!classDefinition: #HistogramMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #HistogramMorph
 	instanceVariableNames: 'backgroundColor textColor tallies extraBinsForClampedValues lowBinCenter highBinCenter'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'HistogramMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'HistogramMorph class' category: #'Domains-Morphic'!
 HistogramMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitFunctionPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #ImplicitFunctionPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #ImplicitFunctionPlotMorph
 	instanceVariableNames: 'function image box'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ImplicitFunctionPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ImplicitFunctionPlotMorph class' category: #'Domains-Morphic'!
 ImplicitFunctionPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitSurfacePlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #ImplicitSurfacePlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #ImplicitSurfacePlotMorph
 	instanceVariableNames: 'polynomial rotation scaling surface scene camera image resolutionRatio lastMousePosition'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ImplicitSurfacePlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ImplicitSurfacePlotMorph class' category: #'Domains-Morphic'!
 ImplicitSurfacePlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultiplicationTableMorph category: #'Mathematics-Morphic'!
+!classDefinition: #MultiplicationTableMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #MultiplicationTableMorph
 	instanceVariableNames: 'elements colors operation'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'MultiplicationTableMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'MultiplicationTableMorph class' category: #'Domains-Morphic'!
 MultiplicationTableMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ScalarPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #ScalarPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #ScalarPlotMorph
 	instanceVariableNames: 'function palette xMin xMax yMin yMax form'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ScalarPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ScalarPlotMorph class' category: #'Domains-Morphic'!
 ScalarPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ScatterPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #ScatterPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #ScatterPlotMorph
 	instanceVariableNames: 'points transformation max min positionBlock colorBlock sizeBlock lastMousePosition'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ScatterPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ScatterPlotMorph class' category: #'Domains-Morphic'!
 ScatterPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #UnitDiskPlotMorph category: #'Mathematics-Morphic'!
+!classDefinition: #UnitDiskPlotMorph category: #'Domains-Morphic'!
 RectangleLikeMorph subclass: #UnitDiskPlotMorph
 	instanceVariableNames: 'function image palette inverseMap'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'UnitDiskPlotMorph class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'UnitDiskPlotMorph class' category: #'Domains-Morphic'!
 UnitDiskPlotMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #GraphEdgeMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #GraphEdgeMorph category: #'Domains-Graphs-Morphic'!
 Morph subclass: #GraphEdgeMorph
 	instanceVariableNames: 'color source target width drawArrowHead label labelMorph multiplicity'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'GraphEdgeMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'GraphEdgeMorph class' category: #'Domains-Graphs-Morphic'!
 GraphEdgeMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpringEdgeMorph category: #'Mathematics-Graphs-Morphic'!
+!classDefinition: #SpringEdgeMorph category: #'Domains-Graphs-Morphic'!
 GraphEdgeMorph subclass: #SpringEdgeMorph
 	instanceVariableNames: 'desiredDistance'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Morphic'!
-!classDefinition: 'SpringEdgeMorph class' category: #'Mathematics-Graphs-Morphic'!
+	category: 'Domains-Graphs-Morphic'!
+!classDefinition: 'SpringEdgeMorph class' category: #'Domains-Graphs-Morphic'!
 SpringEdgeMorph class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitSurface category: #'Mathematics-Morphic'!
+!classDefinition: #ImplicitSurface category: #'Domains-Morphic'!
 RayTraceObject subclass: #ImplicitSurface
 	instanceVariableNames: 'polynomial gradient radiusSquared interiorTexture'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ImplicitSurface class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ImplicitSurface class' category: #'Domains-Morphic'!
 ImplicitSurface class
 	instanceVariableNames: ''!
 
-!classDefinition: #Domain category: #'Mathematics-Kernel'!
+!classDefinition: #Domain category: #'Domains-Kernel'!
 Object subclass: #Domain
 	instanceVariableNames: 'properties'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel'!
-!classDefinition: 'Domain class' category: #'Mathematics-Kernel'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'Domain class' category: #'Domains-Kernel'!
 Domain class
 	instanceVariableNames: ''!
 
-!classDefinition: #HomSet category: #'Mathematics-Kernel'!
+!classDefinition: #HomSet category: #'Domains-Kernel'!
 Domain subclass: #HomSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel'!
-!classDefinition: 'HomSet class' category: #'Mathematics-Kernel'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'HomSet class' category: #'Domains-Kernel'!
 HomSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #PointSet category: #'Mathematics-Schemes'!
+!classDefinition: #PointSet category: #'Domains-Schemes'!
 HomSet subclass: #PointSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'PointSet class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'PointSet class' category: #'Domains-Schemes'!
 PointSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupHomSet category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #AbelianGroupHomSet category: #'Domains-Etc-Groups-Abelian'!
 HomSet subclass: #AbelianGroupHomSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroupHomSet class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupHomSet class' category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroupHomSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexBox category: #'Mathematics-Kernel-Support'!
+!classDefinition: #ComplexBox category: #'Domains-Kernel-Support'!
 Domain subclass: #ComplexBox
 	instanceVariableNames: 'real imaginary'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'ComplexBox class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'ComplexBox class' category: #'Domains-Kernel-Support'!
 ComplexBox class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexDisk category: #'Mathematics-Kernel-Support'!
+!classDefinition: #ComplexDisk category: #'Domains-Kernel-Support'!
 Domain subclass: #ComplexDisk
 	instanceVariableNames: 'center radius'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'ComplexDisk class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'ComplexDisk class' category: #'Domains-Kernel-Support'!
 ComplexDisk class
 	instanceVariableNames: ''!
 
-!classDefinition: #RealBox category: #'Mathematics-Kernel-Support'!
+!classDefinition: #RealBox category: #'Domains-Kernel-Support'!
 Domain subclass: #RealBox
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'RealBox class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'RealBox class' category: #'Domains-Kernel-Support'!
 RealBox class
 	instanceVariableNames: ''!
 
-!classDefinition: #RealInterval category: #'Mathematics-Kernel-Support'!
+!classDefinition: #RealInterval category: #'Domains-Kernel-Support'!
 Domain subclass: #RealInterval
 	instanceVariableNames: 'left right rightOpen leftOpen'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'RealInterval class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'RealInterval class' category: #'Domains-Kernel-Support'!
 RealInterval class
 	instanceVariableNames: ''!
 
-!classDefinition: #CartesianProduct category: #'Mathematics-Sets'!
+!classDefinition: #CartesianProduct category: #'Domains-Sets'!
 Domain subclass: #CartesianProduct
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sets'!
-!classDefinition: 'CartesianProduct class' category: #'Mathematics-Sets'!
+	category: 'Domains-Sets'!
+!classDefinition: 'CartesianProduct class' category: #'Domains-Sets'!
 CartesianProduct class
 	instanceVariableNames: ''!
 
-!classDefinition: #EquivalenceClass category: #'Mathematics-Sets'!
+!classDefinition: #EquivalenceClass category: #'Domains-Sets'!
 Domain subclass: #EquivalenceClass
 	instanceVariableNames: 'representative'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sets'!
-!classDefinition: 'EquivalenceClass class' category: #'Mathematics-Sets'!
+	category: 'Domains-Sets'!
+!classDefinition: 'EquivalenceClass class' category: #'Domains-Sets'!
 EquivalenceClass class
 	instanceVariableNames: ''!
 
-!classDefinition: #EquivalenceRelation category: #'Mathematics-Sets'!
+!classDefinition: #EquivalenceRelation category: #'Domains-Sets'!
 Domain subclass: #EquivalenceRelation
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sets'!
-!classDefinition: 'EquivalenceRelation class' category: #'Mathematics-Sets'!
+	category: 'Domains-Sets'!
+!classDefinition: 'EquivalenceRelation class' category: #'Domains-Sets'!
 EquivalenceRelation class
 	instanceVariableNames: ''!
 
-!classDefinition: #Naturals category: #'Mathematics-Sets'!
+!classDefinition: #Naturals category: #'Domains-Sets'!
 Domain subclass: #Naturals
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sets'!
-!classDefinition: 'Naturals class' category: #'Mathematics-Sets'!
+	category: 'Domains-Sets'!
+!classDefinition: 'Naturals class' category: #'Domains-Sets'!
 Naturals class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientSet category: #'Mathematics-Sets'!
+!classDefinition: #QuotientSet category: #'Domains-Sets'!
 Domain subclass: #QuotientSet
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sets'!
-!classDefinition: 'QuotientSet class' category: #'Mathematics-Sets'!
+	category: 'Domains-Sets'!
+!classDefinition: 'QuotientSet class' category: #'Domains-Sets'!
 QuotientSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #Semigroup category: #'Mathematics-Monoids'!
+!classDefinition: #Semigroup category: #'Domains-Monoids'!
 Domain subclass: #Semigroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'Semigroup class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'Semigroup class' category: #'Domains-Monoids'!
 Semigroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeAbelianSemigroup category: #'Mathematics-Monoids'!
+!classDefinition: #FreeAbelianSemigroup category: #'Domains-Monoids'!
 Semigroup subclass: #FreeAbelianSemigroup
 	instanceVariableNames: 'rank ordering'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'FreeAbelianSemigroup class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'FreeAbelianSemigroup class' category: #'Domains-Monoids'!
 FreeAbelianSemigroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeSemigroup category: #'Mathematics-Monoids'!
+!classDefinition: #FreeSemigroup category: #'Domains-Monoids'!
 Semigroup subclass: #FreeSemigroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'FreeSemigroup class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'FreeSemigroup class' category: #'Domains-Monoids'!
 FreeSemigroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #Monoid category: #'Mathematics-Monoids'!
+!classDefinition: #Monoid category: #'Domains-Monoids'!
 Semigroup subclass: #Monoid
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'Monoid class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'Monoid class' category: #'Domains-Monoids'!
 Monoid class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeAbelianMonoid category: #'Mathematics-Monoids'!
+!classDefinition: #FreeAbelianMonoid category: #'Domains-Monoids'!
 Monoid subclass: #FreeAbelianMonoid
 	instanceVariableNames: 'rank ordering'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'FreeAbelianMonoid class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'FreeAbelianMonoid class' category: #'Domains-Monoids'!
 FreeAbelianMonoid class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeMonoid category: #'Mathematics-Monoids'!
+!classDefinition: #FreeMonoid category: #'Domains-Monoids'!
 Monoid subclass: #FreeMonoid
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'FreeMonoid class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'FreeMonoid class' category: #'Domains-Monoids'!
 FreeMonoid class
 	instanceVariableNames: ''!
 
-!classDefinition: #Group category: #'Mathematics-Groups'!
+!classDefinition: #Group category: #'Domains-Groups'!
 Monoid subclass: #Group
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'Group class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'Group class' category: #'Domains-Groups'!
 Group class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirectProductGroup category: #'Mathematics-Groups'!
+!classDefinition: #DirectProductGroup category: #'Domains-Groups'!
 Group subclass: #DirectProductGroup
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'DirectProductGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'DirectProductGroup class' category: #'Domains-Groups'!
 DirectProductGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FPAbelianGroup category: #'Mathematics-Groups'!
+!classDefinition: #FPAbelianGroup category: #'Domains-Groups'!
 Group subclass: #FPAbelianGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'FPAbelianGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'FPAbelianGroup class' category: #'Domains-Groups'!
 FPAbelianGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeAbelianGroup category: #'Mathematics-Groups'!
+!classDefinition: #FreeAbelianGroup category: #'Domains-Groups'!
 FPAbelianGroup subclass: #FreeAbelianGroup
 	instanceVariableNames: 'rank ordering'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'FreeAbelianGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'FreeAbelianGroup class' category: #'Domains-Groups'!
 FreeAbelianGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FPGroup category: #'Mathematics-Groups'!
+!classDefinition: #FPGroup category: #'Domains-Groups'!
 Group subclass: #FPGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'FPGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'FPGroup class' category: #'Domains-Groups'!
 FPGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeGroup category: #'Mathematics-Groups'!
+!classDefinition: #FreeGroup category: #'Domains-Groups'!
 FPGroup subclass: #FreeGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'FreeGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'FreeGroup class' category: #'Domains-Groups'!
 FreeGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeGroup category: #'Mathematics-Groups'!
+!classDefinition: #OppositeGroup category: #'Domains-Groups'!
 Group subclass: #OppositeGroup
 	instanceVariableNames: 'opposite'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'OppositeGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'OppositeGroup class' category: #'Domains-Groups'!
 OppositeGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientGroup category: #'Mathematics-Groups'!
+!classDefinition: #QuotientGroup category: #'Domains-Groups'!
 Group subclass: #QuotientGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'QuotientGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'QuotientGroup class' category: #'Domains-Groups'!
 QuotientGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SemidirectProductGroup category: #'Mathematics-Groups'!
+!classDefinition: #SemidirectProductGroup category: #'Domains-Groups'!
 Group subclass: #SemidirectProductGroup
 	instanceVariableNames: 'left right action'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'SemidirectProductGroup class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'SemidirectProductGroup class' category: #'Domains-Groups'!
 SemidirectProductGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #PermutationGroup category: #'Mathematics-Groups-Permutations'!
+!classDefinition: #PermutationGroup category: #'Domains-Groups-Permutations'!
 Group subclass: #PermutationGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Permutations'!
-!classDefinition: 'PermutationGroup class' category: #'Mathematics-Groups-Permutations'!
+	category: 'Domains-Groups-Permutations'!
+!classDefinition: 'PermutationGroup class' category: #'Domains-Groups-Permutations'!
 PermutationGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #AlternatingGroup category: #'Mathematics-Groups-Permutations'!
+!classDefinition: #AlternatingGroup category: #'Domains-Groups-Permutations'!
 PermutationGroup subclass: #AlternatingGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Permutations'!
-!classDefinition: 'AlternatingGroup class' category: #'Mathematics-Groups-Permutations'!
+	category: 'Domains-Groups-Permutations'!
+!classDefinition: 'AlternatingGroup class' category: #'Domains-Groups-Permutations'!
 AlternatingGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SymmetricGroup category: #'Mathematics-Groups-Permutations'!
+!classDefinition: #SymmetricGroup category: #'Domains-Groups-Permutations'!
 PermutationGroup subclass: #SymmetricGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Permutations'!
-!classDefinition: 'SymmetricGroup class' category: #'Mathematics-Groups-Permutations'!
+	category: 'Domains-Groups-Permutations'!
+!classDefinition: 'SymmetricGroup class' category: #'Domains-Groups-Permutations'!
 SymmetricGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #LinearGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #LinearGroup category: #'Domains-Groups-Linear'!
 Group subclass: #LinearGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'LinearGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'LinearGroup class' category: #'Domains-Groups-Linear'!
 LinearGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #GeneralLinearGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #GeneralLinearGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #GeneralLinearGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'GeneralLinearGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'GeneralLinearGroup class' category: #'Domains-Groups-Linear'!
 GeneralLinearGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #OrthogonalGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #OrthogonalGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #OrthogonalGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'OrthogonalGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'OrthogonalGroup class' category: #'Domains-Groups-Linear'!
 OrthogonalGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #ScalarGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #ScalarGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #ScalarGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'ScalarGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'ScalarGroup class' category: #'Domains-Groups-Linear'!
 ScalarGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpecialLinearGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #SpecialLinearGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #SpecialLinearGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'SpecialLinearGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'SpecialLinearGroup class' category: #'Domains-Groups-Linear'!
 SpecialLinearGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpecialOrthogonalGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #SpecialOrthogonalGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #SpecialOrthogonalGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'SpecialOrthogonalGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'SpecialOrthogonalGroup class' category: #'Domains-Groups-Linear'!
 SpecialOrthogonalGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpecialScalarGroup category: #'Mathematics-Groups-Linear'!
+!classDefinition: #SpecialScalarGroup category: #'Domains-Groups-Linear'!
 LinearGroup subclass: #SpecialScalarGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Linear'!
-!classDefinition: 'SpecialScalarGroup class' category: #'Mathematics-Groups-Linear'!
+	category: 'Domains-Groups-Linear'!
+!classDefinition: 'SpecialScalarGroup class' category: #'Domains-Groups-Linear'!
 SpecialScalarGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineGroup category: #'Mathematics-Groups-Affine'!
+!classDefinition: #AffineGroup category: #'Domains-Groups-Affine'!
 Group subclass: #AffineGroup
 	instanceVariableNames: 'space'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Affine'!
-!classDefinition: 'AffineGroup class' category: #'Mathematics-Groups-Affine'!
+	category: 'Domains-Groups-Affine'!
+!classDefinition: 'AffineGroup class' category: #'Domains-Groups-Affine'!
 AffineGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #EuclideanGroup category: #'Mathematics-Groups-Affine'!
+!classDefinition: #EuclideanGroup category: #'Domains-Groups-Affine'!
 AffineGroup subclass: #EuclideanGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Affine'!
-!classDefinition: 'EuclideanGroup class' category: #'Mathematics-Groups-Affine'!
+	category: 'Domains-Groups-Affine'!
+!classDefinition: 'EuclideanGroup class' category: #'Domains-Groups-Affine'!
 EuclideanGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #GeneralAffineGroup category: #'Mathematics-Groups-Affine'!
+!classDefinition: #GeneralAffineGroup category: #'Domains-Groups-Affine'!
 AffineGroup subclass: #GeneralAffineGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Affine'!
-!classDefinition: 'GeneralAffineGroup class' category: #'Mathematics-Groups-Affine'!
+	category: 'Domains-Groups-Affine'!
+!classDefinition: 'GeneralAffineGroup class' category: #'Domains-Groups-Affine'!
 GeneralAffineGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpecialAffineGroup category: #'Mathematics-Groups-Affine'!
+!classDefinition: #SpecialAffineGroup category: #'Domains-Groups-Affine'!
 AffineGroup subclass: #SpecialAffineGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Affine'!
-!classDefinition: 'SpecialAffineGroup class' category: #'Mathematics-Groups-Affine'!
+	category: 'Domains-Groups-Affine'!
+!classDefinition: 'SpecialAffineGroup class' category: #'Domains-Groups-Affine'!
 SpecialAffineGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #SpecialEuclideanGroup category: #'Mathematics-Groups-Affine'!
+!classDefinition: #SpecialEuclideanGroup category: #'Domains-Groups-Affine'!
 AffineGroup subclass: #SpecialEuclideanGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Affine'!
-!classDefinition: 'SpecialEuclideanGroup class' category: #'Mathematics-Groups-Affine'!
+	category: 'Domains-Groups-Affine'!
+!classDefinition: 'SpecialEuclideanGroup class' category: #'Domains-Groups-Affine'!
 SpecialEuclideanGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #UnitGroup category: #'Mathematics-Rings'!
+!classDefinition: #UnitGroup category: #'Domains-Rings'!
 Group subclass: #UnitGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'UnitGroup class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'UnitGroup class' category: #'Domains-Rings'!
 UnitGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularIntegerUnitGroup category: #'Mathematics-Rings-Finite'!
+!classDefinition: #ModularIntegerUnitGroup category: #'Domains-Rings-Finite'!
 UnitGroup subclass: #ModularIntegerUnitGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'ModularIntegerUnitGroup class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'ModularIntegerUnitGroup class' category: #'Domains-Rings-Finite'!
 ModularIntegerUnitGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirichletGroup category: #'Mathematics-Modular Forms'!
+!classDefinition: #DirichletGroup category: #'Domains-Modular Forms'!
 Group subclass: #DirichletGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'DirichletGroup class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'DirichletGroup class' category: #'Domains-Modular Forms'!
 DirichletGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #MoebiusGroup category: #'Mathematics-Modular Forms'!
+!classDefinition: #MoebiusGroup category: #'Domains-Modular Forms'!
 Group subclass: #MoebiusGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'MoebiusGroup class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'MoebiusGroup class' category: #'Domains-Modular Forms'!
 MoebiusGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #ArithmeticGroup category: #'Mathematics-Modular Group'!
+!classDefinition: #ArithmeticGroup category: #'Domains-Modular Group'!
 Group subclass: #ArithmeticGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'ArithmeticGroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'ArithmeticGroup class' category: #'Domains-Modular Group'!
 ArithmeticGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #CongruenceSubgroup category: #'Mathematics-Modular Group'!
+!classDefinition: #CongruenceSubgroup category: #'Domains-Modular Group'!
 ArithmeticGroup subclass: #CongruenceSubgroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'CongruenceSubgroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'CongruenceSubgroup class' category: #'Domains-Modular Group'!
 CongruenceSubgroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #Gamma0CongruenceSubgroup category: #'Mathematics-Modular Group'!
+!classDefinition: #Gamma0CongruenceSubgroup category: #'Domains-Modular Group'!
 CongruenceSubgroup subclass: #Gamma0CongruenceSubgroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'Gamma0CongruenceSubgroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'Gamma0CongruenceSubgroup class' category: #'Domains-Modular Group'!
 Gamma0CongruenceSubgroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #Gamma1CongruenceSubgroup category: #'Mathematics-Modular Group'!
+!classDefinition: #Gamma1CongruenceSubgroup category: #'Domains-Modular Group'!
 CongruenceSubgroup subclass: #Gamma1CongruenceSubgroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'Gamma1CongruenceSubgroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'Gamma1CongruenceSubgroup class' category: #'Domains-Modular Group'!
 Gamma1CongruenceSubgroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #PrincipalCongruenceSubgroup category: #'Mathematics-Modular Group'!
+!classDefinition: #PrincipalCongruenceSubgroup category: #'Domains-Modular Group'!
 CongruenceSubgroup subclass: #PrincipalCongruenceSubgroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'PrincipalCongruenceSubgroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'PrincipalCongruenceSubgroup class' category: #'Domains-Modular Group'!
 PrincipalCongruenceSubgroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularGroup category: #'Mathematics-Modular Group'!
+!classDefinition: #ModularGroup category: #'Domains-Modular Group'!
 PrincipalCongruenceSubgroup subclass: #ModularGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'ModularGroup class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'ModularGroup class' category: #'Domains-Modular Group'!
 ModularGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #CoxeterGroup category: #'Mathematics-Etc-Lie'!
+!classDefinition: #CoxeterGroup category: #'Domains-Etc-Lie'!
 Group subclass: #CoxeterGroup
 	instanceVariableNames: 'diagram'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Lie'!
-!classDefinition: 'CoxeterGroup class' category: #'Mathematics-Etc-Lie'!
+	category: 'Domains-Etc-Lie'!
+!classDefinition: 'CoxeterGroup class' category: #'Domains-Etc-Lie'!
 CoxeterGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroup category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #AbelianGroup category: #'Domains-Etc-Groups-Abelian'!
 Group subclass: #AbelianGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup class' category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroup2 category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #AbelianGroup2 category: #'Domains-Etc-Groups-Abelian'!
 Group subclass: #AbelianGroup2
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroup2 class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup2 class' category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 class
 	instanceVariableNames: ''!
 
-!classDefinition: #EllipticCurveGroup category: #'Mathematics-Elliptic Curves'!
+!classDefinition: #EllipticCurveGroup category: #'Domains-Elliptic Curves'!
 AbelianGroup2 subclass: #EllipticCurveGroup
 	instanceVariableNames: 'curve scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'EllipticCurveGroup class' category: #'Mathematics-Elliptic Curves'!
+	category: 'Domains-Elliptic Curves'!
+!classDefinition: 'EllipticCurveGroup class' category: #'Domains-Elliptic Curves'!
 EllipticCurveGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirectSumGroup category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #DirectSumGroup category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 subclass: #DirectSumGroup
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'DirectSumGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'DirectSumGroup class' category: #'Domains-Etc-Groups-Abelian'!
 DirectSumGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FiniteAbelianGroup category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #FiniteAbelianGroup category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 subclass: #FiniteAbelianGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'FiniteAbelianGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'FiniteAbelianGroup class' category: #'Domains-Etc-Groups-Abelian'!
 FiniteAbelianGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FiniteCyclicGroup category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #FiniteCyclicGroup category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 subclass: #FiniteCyclicGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'FiniteCyclicGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'FiniteCyclicGroup class' category: #'Domains-Etc-Groups-Abelian'!
 FiniteCyclicGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeAbelianGroup2 category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #FreeAbelianGroup2 category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 subclass: #FreeAbelianGroup2
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'FreeAbelianGroup2 class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'FreeAbelianGroup2 class' category: #'Domains-Etc-Groups-Abelian'!
 FreeAbelianGroup2 class
 	instanceVariableNames: ''!
 
-!classDefinition: #InfiniteCyclicGroup category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #InfiniteCyclicGroup category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroup2 subclass: #InfiniteCyclicGroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'InfiniteCyclicGroup class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'InfiniteCyclicGroup class' category: #'Domains-Etc-Groups-Abelian'!
 InfiniteCyclicGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #Semiring category: #'Mathematics-Rings'!
+!classDefinition: #Semiring category: #'Domains-Rings'!
 Domain subclass: #Semiring
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'Semiring class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'Semiring class' category: #'Domains-Rings'!
 Semiring class
 	instanceVariableNames: ''!
 
-!classDefinition: #Ring category: #'Mathematics-Rings'!
+!classDefinition: #Ring category: #'Domains-Rings'!
 Semiring subclass: #Ring
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'Ring class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'Ring class' category: #'Domains-Rings'!
 Ring class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupRing category: #'Mathematics-Rings'!
+!classDefinition: #GroupRing category: #'Domains-Rings'!
 Ring subclass: #GroupRing
 	instanceVariableNames: 'group scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'GroupRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'GroupRing class' category: #'Domains-Rings'!
 GroupRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalizationRing category: #'Mathematics-Rings'!
+!classDefinition: #LocalizationRing category: #'Domains-Rings'!
 Ring subclass: #LocalizationRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'LocalizationRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'LocalizationRing class' category: #'Domains-Rings'!
 LocalizationRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #FractionRing category: #'Mathematics-Rings'!
+!classDefinition: #FractionRing category: #'Domains-Rings'!
 LocalizationRing subclass: #FractionRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'FractionRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'FractionRing class' category: #'Domains-Rings'!
 FractionRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalField category: #'Mathematics-Fields'!
+!classDefinition: #RationalField category: #'Domains-Fields'!
 FractionRing subclass: #RationalField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'RationalField class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'RationalField class' category: #'Domains-Fields'!
 RationalField class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalFunctionField category: #'Mathematics-Polynomials'!
+!classDefinition: #RationalFunctionField category: #'Domains-Polynomials'!
 FractionRing subclass: #RationalFunctionField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'RationalFunctionField class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'RationalFunctionField class' category: #'Domains-Polynomials'!
 RationalFunctionField class
 	instanceVariableNames: ''!
 
-!classDefinition: #LaurentSeriesRing category: #'Mathematics-Sequences'!
+!classDefinition: #LaurentSeriesRing category: #'Domains-Sequences'!
 FractionRing subclass: #LaurentSeriesRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'LaurentSeriesRing class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'LaurentSeriesRing class' category: #'Domains-Sequences'!
 LaurentSeriesRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeRing category: #'Mathematics-Rings'!
+!classDefinition: #OppositeRing category: #'Domains-Rings'!
 Ring subclass: #OppositeRing
 	instanceVariableNames: 'opposite'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'OppositeRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'OppositeRing class' category: #'Domains-Rings'!
 OppositeRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductRing category: #'Mathematics-Rings'!
+!classDefinition: #ProductRing category: #'Domains-Rings'!
 Ring subclass: #ProductRing
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'ProductRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'ProductRing class' category: #'Domains-Rings'!
 ProductRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientRing category: #'Mathematics-Rings'!
+!classDefinition: #QuotientRing category: #'Domains-Rings'!
 Ring subclass: #QuotientRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'QuotientRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'QuotientRing class' category: #'Domains-Rings'!
 QuotientRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularIntegerRing category: #'Mathematics-Rings-Finite'!
+!classDefinition: #ModularIntegerRing category: #'Domains-Rings-Finite'!
 QuotientRing subclass: #ModularIntegerRing
 	instanceVariableNames: 'modulus'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'ModularIntegerRing class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'ModularIntegerRing class' category: #'Domains-Rings-Finite'!
 ModularIntegerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #PrimePowerRing category: #'Mathematics-Rings-Finite'!
+!classDefinition: #PrimePowerRing category: #'Domains-Rings-Finite'!
 ModularIntegerRing subclass: #PrimePowerRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'PrimePowerRing class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'PrimePowerRing class' category: #'Domains-Rings-Finite'!
 PrimePowerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #PrimeField category: #'Mathematics-Fields-Finite'!
+!classDefinition: #PrimeField category: #'Domains-Fields-Finite'!
 PrimePowerRing subclass: #PrimeField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Finite'!
-!classDefinition: 'PrimeField class' category: #'Mathematics-Fields-Finite'!
+	category: 'Domains-Fields-Finite'!
+!classDefinition: 'PrimeField class' category: #'Domains-Fields-Finite'!
 PrimeField class
 	instanceVariableNames: ''!
 
-!classDefinition: #SmallPrimeField category: #'Mathematics-Fields-Finite'!
+!classDefinition: #SmallPrimeField category: #'Domains-Fields-Finite'!
 PrimeField subclass: #SmallPrimeField
 	instanceVariableNames: 'expTable logTable'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Finite'!
-!classDefinition: 'SmallPrimeField class' category: #'Mathematics-Fields-Finite'!
+	category: 'Domains-Fields-Finite'!
+!classDefinition: 'SmallPrimeField class' category: #'Domains-Fields-Finite'!
 SmallPrimeField class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineRing category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffineRing category: #'Domains-Schemes-Affine'!
 QuotientRing subclass: #AffineRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffineRing class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffineRing class' category: #'Domains-Schemes-Affine'!
 AffineRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #AlgebraicExtension category: #'Mathematics-Fields'!
+!classDefinition: #AlgebraicExtension category: #'Domains-Fields'!
 AffineRing subclass: #AlgebraicExtension
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'AlgebraicExtension class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'AlgebraicExtension class' category: #'Domains-Fields'!
 AlgebraicExtension class
 	instanceVariableNames: ''!
 
-!classDefinition: #GaloisRing category: #'Mathematics-Rings-Finite'!
+!classDefinition: #GaloisRing category: #'Domains-Rings-Finite'!
 AlgebraicExtension subclass: #GaloisRing
 	instanceVariableNames: ''
 	classVariableNames: 'IrreduciblePolynomialsCache'
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'GaloisRing class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'GaloisRing class' category: #'Domains-Rings-Finite'!
 GaloisRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #GaloisField category: #'Mathematics-Fields-Finite'!
+!classDefinition: #GaloisField category: #'Domains-Fields-Finite'!
 GaloisRing subclass: #GaloisField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Finite'!
-!classDefinition: 'GaloisField class' category: #'Mathematics-Fields-Finite'!
+	category: 'Domains-Fields-Finite'!
+!classDefinition: 'GaloisField class' category: #'Domains-Fields-Finite'!
 GaloisField class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuasiGaloisRing category: #'Mathematics-Rings-Finite'!
+!classDefinition: #QuasiGaloisRing category: #'Domains-Rings-Finite'!
 AlgebraicExtension subclass: #QuasiGaloisRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'QuasiGaloisRing class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'QuasiGaloisRing class' category: #'Domains-Rings-Finite'!
 QuasiGaloisRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #FunctionField category: #'Mathematics-Fields'!
+!classDefinition: #FunctionField category: #'Domains-Fields'!
 AlgebraicExtension subclass: #FunctionField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'FunctionField class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'FunctionField class' category: #'Domains-Fields'!
 FunctionField class
 	instanceVariableNames: ''!
 
-!classDefinition: #NumberField category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #NumberField category: #'Domains-Fields-Number Fields'!
 AlgebraicExtension subclass: #NumberField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'NumberField class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'NumberField class' category: #'Domains-Fields-Number Fields'!
 NumberField class
 	instanceVariableNames: ''!
 
-!classDefinition: #CyclotomicField category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #CyclotomicField category: #'Domains-Fields-Number Fields'!
 NumberField subclass: #CyclotomicField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'CyclotomicField class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'CyclotomicField class' category: #'Domains-Fields-Number Fields'!
 CyclotomicField class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuadraticField category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #QuadraticField category: #'Domains-Fields-Number Fields'!
 NumberField subclass: #QuadraticField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'QuadraticField class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'QuadraticField class' category: #'Domains-Fields-Number Fields'!
 QuadraticField class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalIntegerRing category: #'Mathematics-Rings'!
+!classDefinition: #RationalIntegerRing category: #'Domains-Rings'!
 Ring subclass: #RationalIntegerRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'RationalIntegerRing class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'RationalIntegerRing class' category: #'Domains-Rings'!
 RationalIntegerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexField category: #'Mathematics-Fields'!
+!classDefinition: #ComplexField category: #'Domains-Fields'!
 Ring subclass: #ComplexField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'ComplexField class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'ComplexField class' category: #'Domains-Fields'!
 ComplexField class
 	instanceVariableNames: ''!
 
-!classDefinition: #RealField category: #'Mathematics-Fields'!
+!classDefinition: #RealField category: #'Domains-Fields'!
 Ring subclass: #RealField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'RealField class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'RealField class' category: #'Domains-Fields'!
 RealField class
 	instanceVariableNames: ''!
 
-!classDefinition: #Order category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #Order category: #'Domains-Fields-Number Fields'!
 Ring subclass: #Order
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'Order class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'Order class' category: #'Domains-Fields-Number Fields'!
 Order class
 	instanceVariableNames: ''!
 
-!classDefinition: #NumberRing category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #NumberRing category: #'Domains-Fields-Number Fields'!
 Order subclass: #NumberRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'NumberRing class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'NumberRing class' category: #'Domains-Fields-Number Fields'!
 NumberRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #CyclotomicRing category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #CyclotomicRing category: #'Domains-Fields-Number Fields'!
 NumberRing subclass: #CyclotomicRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'CyclotomicRing class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'CyclotomicRing class' category: #'Domains-Fields-Number Fields'!
 CyclotomicRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuadraticRing category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #QuadraticRing category: #'Domains-Fields-Number Fields'!
 NumberRing subclass: #QuadraticRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'QuadraticRing class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'QuadraticRing class' category: #'Domains-Fields-Number Fields'!
 QuadraticRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #MatrixRing category: #'Mathematics-Modules-Matrices'!
+!classDefinition: #MatrixRing category: #'Domains-Modules-Matrices'!
 Ring subclass: #MatrixRing
 	instanceVariableNames: 'scalars degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'MatrixRing class' category: #'Mathematics-Modules-Matrices'!
+	category: 'Domains-Modules-Matrices'!
+!classDefinition: 'MatrixRing class' category: #'Domains-Modules-Matrices'!
 MatrixRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialRing category: #'Mathematics-Polynomials'!
+!classDefinition: #PolynomialRing category: #'Domains-Polynomials'!
 Ring subclass: #PolynomialRing
 	instanceVariableNames: 'monomials scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'PolynomialRing class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'PolynomialRing class' category: #'Domains-Polynomials'!
 PolynomialRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #PowerSeriesRing category: #'Mathematics-Sequences'!
+!classDefinition: #PowerSeriesRing category: #'Domains-Sequences'!
 Ring subclass: #PowerSeriesRing
 	instanceVariableNames: 'polynomials'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'PowerSeriesRing class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'PowerSeriesRing class' category: #'Domains-Sequences'!
 PowerSeriesRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #Module category: #'Mathematics-Modules'!
+!classDefinition: #Module category: #'Domains-Modules'!
 Domain subclass: #Module
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'Module class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'Module class' category: #'Domains-Modules'!
 Module class
 	instanceVariableNames: ''!
 
-!classDefinition: #Ideal category: #'Mathematics-Rings'!
+!classDefinition: #Ideal category: #'Domains-Rings'!
 Module subclass: #Ideal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'Ideal class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'Ideal class' category: #'Domains-Rings'!
 Ideal class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientIdeal category: #'Mathematics-Rings'!
+!classDefinition: #QuotientIdeal category: #'Domains-Rings'!
 Ideal subclass: #QuotientIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'QuotientIdeal class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'QuotientIdeal class' category: #'Domains-Rings'!
 QuotientIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalIntegerIdeal category: #'Mathematics-Rings'!
+!classDefinition: #RationalIntegerIdeal category: #'Domains-Rings'!
 Ideal subclass: #RationalIntegerIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'RationalIntegerIdeal class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'RationalIntegerIdeal class' category: #'Domains-Rings'!
 RationalIntegerIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialIdeal category: #'Mathematics-Polynomials'!
+!classDefinition: #PolynomialIdeal category: #'Domains-Polynomials'!
 Ideal subclass: #PolynomialIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'PolynomialIdeal class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'PolynomialIdeal class' category: #'Domains-Polynomials'!
 PolynomialIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #MonomialIdeal category: #'Mathematics-Polynomials'!
+!classDefinition: #MonomialIdeal category: #'Domains-Polynomials'!
 PolynomialIdeal subclass: #MonomialIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'MonomialIdeal class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'MonomialIdeal class' category: #'Domains-Polynomials'!
 MonomialIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #FractionalIdeal category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #FractionalIdeal category: #'Domains-Fields-Number Fields'!
 Module subclass: #FractionalIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'FractionalIdeal class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'FractionalIdeal class' category: #'Domains-Fields-Number Fields'!
 FractionalIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #IntegralIdeal category: #'Mathematics-Fields-Number Fields'!
+!classDefinition: #IntegralIdeal category: #'Domains-Fields-Number Fields'!
 FractionalIdeal subclass: #IntegralIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Number Fields'!
-!classDefinition: 'IntegralIdeal class' category: #'Mathematics-Fields-Number Fields'!
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'IntegralIdeal class' category: #'Domains-Fields-Number Fields'!
 IntegralIdeal class
 	instanceVariableNames: ''!
 
-!classDefinition: #HomModule category: #'Mathematics-Modules'!
+!classDefinition: #HomModule category: #'Domains-Modules'!
 Module subclass: #HomModule
 	instanceVariableNames: 'domain codomain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'HomModule class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'HomModule class' category: #'Domains-Modules'!
 HomModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientModule category: #'Mathematics-Modules'!
+!classDefinition: #QuotientModule category: #'Domains-Modules'!
 Module subclass: #QuotientModule
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'QuotientModule class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'QuotientModule class' category: #'Domains-Modules'!
 QuotientModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeModule category: #'Mathematics-Modules-Free'!
+!classDefinition: #FreeModule category: #'Domains-Modules-Free'!
 Module subclass: #FreeModule
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'FreeModule class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'FreeModule class' category: #'Domains-Modules-Free'!
 FreeModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirectSumModule category: #'Mathematics-Modules-Free'!
+!classDefinition: #DirectSumModule category: #'Domains-Modules-Free'!
 FreeModule subclass: #DirectSumModule
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'DirectSumModule class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'DirectSumModule class' category: #'Domains-Modules-Free'!
 DirectSumModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeHomModule category: #'Mathematics-Modules-Free'!
+!classDefinition: #FreeHomModule category: #'Domains-Modules-Free'!
 FreeModule subclass: #FreeHomModule
 	instanceVariableNames: 'domain codomain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'FreeHomModule class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'FreeHomModule class' category: #'Domains-Modules-Free'!
 FreeHomModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuotientSpace category: #'Mathematics-Modules-Free'!
+!classDefinition: #QuotientSpace category: #'Domains-Modules-Free'!
 FreeModule subclass: #QuotientSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'QuotientSpace class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'QuotientSpace class' category: #'Domains-Modules-Free'!
 QuotientSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #RingModule category: #'Mathematics-Modules-Free'!
+!classDefinition: #RingModule category: #'Domains-Modules-Free'!
 FreeModule subclass: #RingModule
 	instanceVariableNames: 'scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'RingModule class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'RingModule class' category: #'Domains-Modules-Free'!
 RingModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeSumsModule category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #FreeSumsModule category: #'Domains-Modules-Tuples'!
 FreeModule subclass: #FreeSumsModule
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'FreeSumsModule class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'FreeSumsModule class' category: #'Domains-Modules-Tuples'!
 FreeSumsModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #TupleModule category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #TupleModule category: #'Domains-Modules-Tuples'!
 FreeModule subclass: #TupleModule
 	instanceVariableNames: 'scalars rank'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'TupleModule class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'TupleModule class' category: #'Domains-Modules-Tuples'!
 TupleModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultivariateTupleModule category: #'Mathematics-Modules-Multivariate'!
+!classDefinition: #MultivariateTupleModule category: #'Domains-Modules-Multivariate'!
 TupleModule subclass: #MultivariateTupleModule
 	instanceVariableNames: 'ordering'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate'!
-!classDefinition: 'MultivariateTupleModule class' category: #'Mathematics-Modules-Multivariate'!
+	category: 'Domains-Modules-Multivariate'!
+!classDefinition: 'MultivariateTupleModule class' category: #'Domains-Modules-Multivariate'!
 MultivariateTupleModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #MatrixModule category: #'Mathematics-Modules-Matrices'!
+!classDefinition: #MatrixModule category: #'Domains-Modules-Matrices'!
 FreeModule subclass: #MatrixModule
 	instanceVariableNames: 'scalars height width'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'MatrixModule class' category: #'Mathematics-Modules-Matrices'!
+	category: 'Domains-Modules-Matrices'!
+!classDefinition: 'MatrixModule class' category: #'Domains-Modules-Matrices'!
 MatrixModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #Lattice category: #'Mathematics-Modules-Lattices'!
+!classDefinition: #Lattice category: #'Domains-Modules-Lattices'!
 FreeModule subclass: #Lattice
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Lattices'!
-!classDefinition: 'Lattice class' category: #'Mathematics-Modules-Lattices'!
+	category: 'Domains-Modules-Lattices'!
+!classDefinition: 'Lattice class' category: #'Domains-Modules-Lattices'!
 Lattice class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearForms category: #'Mathematics-Multilinear'!
+!classDefinition: #BilinearForms category: #'Domains-Multilinear'!
 FreeModule subclass: #BilinearForms
 	instanceVariableNames: 'vectorSpace domain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'BilinearForms class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'BilinearForms class' category: #'Domains-Multilinear'!
 BilinearForms class
 	instanceVariableNames: ''!
 
-!classDefinition: #TensorProductModule category: #'Mathematics-Multilinear'!
+!classDefinition: #TensorProductModule category: #'Domains-Multilinear'!
 FreeModule subclass: #TensorProductModule
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'TensorProductModule class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'TensorProductModule class' category: #'Domains-Multilinear'!
 TensorProductModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialFiltrationModule category: #'Mathematics-Polynomials'!
+!classDefinition: #PolynomialFiltrationModule category: #'Domains-Polynomials'!
 FreeModule subclass: #PolynomialFiltrationModule
 	instanceVariableNames: 'polynomials degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'PolynomialFiltrationModule class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'PolynomialFiltrationModule class' category: #'Domains-Polynomials'!
 PolynomialFiltrationModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialGradingModule category: #'Mathematics-Polynomials'!
+!classDefinition: #PolynomialGradingModule category: #'Domains-Polynomials'!
 FreeModule subclass: #PolynomialGradingModule
 	instanceVariableNames: 'polynomials degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'PolynomialGradingModule class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'PolynomialGradingModule class' category: #'Domains-Polynomials'!
 PolynomialGradingModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularFormSpace category: #'Mathematics-Modular Forms'!
+!classDefinition: #ModularFormSpace category: #'Domains-Modular Forms'!
 FreeModule subclass: #ModularFormSpace
 	instanceVariableNames: 'weight group'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'ModularFormSpace class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'ModularFormSpace class' category: #'Domains-Modular Forms'!
 ModularFormSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExteriorPower category: #'Mathematics-Etc'!
+!classDefinition: #ExteriorPower category: #'Domains-Etc'!
 FreeModule subclass: #ExteriorPower
 	instanceVariableNames: 'space degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'ExteriorPower class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'ExteriorPower class' category: #'Domains-Etc'!
 ExteriorPower class
 	instanceVariableNames: ''!
 
-!classDefinition: #Algebra category: #'Mathematics-Etc-Algebras'!
+!classDefinition: #Algebra category: #'Domains-Etc-Algebras'!
 FreeModule subclass: #Algebra
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Algebras'!
-!classDefinition: 'Algebra class' category: #'Mathematics-Etc-Algebras'!
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'Algebra class' category: #'Domains-Etc-Algebras'!
 Algebra class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeAlgebra category: #'Mathematics-Etc-Algebras'!
+!classDefinition: #FreeAlgebra category: #'Domains-Etc-Algebras'!
 Algebra subclass: #FreeAlgebra
 	instanceVariableNames: 'scalars words'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Algebras'!
-!classDefinition: 'FreeAlgebra class' category: #'Mathematics-Etc-Algebras'!
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'FreeAlgebra class' category: #'Domains-Etc-Algebras'!
 FreeAlgebra class
 	instanceVariableNames: ''!
 
-!classDefinition: #MatrixAlgebra category: #'Mathematics-Etc-Algebras'!
+!classDefinition: #MatrixAlgebra category: #'Domains-Etc-Algebras'!
 Algebra subclass: #MatrixAlgebra
 	instanceVariableNames: 'degree scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Algebras'!
-!classDefinition: 'MatrixAlgebra class' category: #'Mathematics-Etc-Algebras'!
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'MatrixAlgebra class' category: #'Domains-Etc-Algebras'!
 MatrixAlgebra class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultivariateModule category: #'Mathematics-Modules-Multivariate'!
+!classDefinition: #MultivariateModule category: #'Domains-Modules-Multivariate'!
 Module subclass: #MultivariateModule
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate'!
-!classDefinition: 'MultivariateModule class' category: #'Mathematics-Modules-Multivariate'!
+	category: 'Domains-Modules-Multivariate'!
+!classDefinition: 'MultivariateModule class' category: #'Domains-Modules-Multivariate'!
 MultivariateModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineSubspace category: #'Mathematics-Modules-Free'!
+!classDefinition: #AffineSubspace category: #'Domains-Modules-Free'!
 Domain subclass: #AffineSubspace
 	instanceVariableNames: 'direction representative'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'AffineSubspace class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'AffineSubspace class' category: #'Domains-Modules-Free'!
 AffineSubspace class
 	instanceVariableNames: ''!
 
-!classDefinition: #Scheme category: #'Mathematics-Schemes'!
+!classDefinition: #Scheme category: #'Domains-Schemes'!
 Domain subclass: #Scheme
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'Scheme class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'Scheme class' category: #'Domains-Schemes'!
 Scheme class
 	instanceVariableNames: ''!
 
-!classDefinition: #Grassmannian category: #'Mathematics-Modules-Free'!
+!classDefinition: #Grassmannian category: #'Domains-Modules-Free'!
 Scheme subclass: #Grassmannian
 	instanceVariableNames: 'space rank'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'Grassmannian class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'Grassmannian class' category: #'Domains-Modules-Free'!
 Grassmannian class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineScheme category: #'Mathematics-Schemes'!
+!classDefinition: #AffineScheme category: #'Domains-Schemes'!
 Scheme subclass: #AffineScheme
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'AffineScheme class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'AffineScheme class' category: #'Domains-Schemes'!
 AffineScheme class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineVariety category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffineVariety category: #'Domains-Schemes-Affine'!
 AffineScheme subclass: #AffineVariety
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffineVariety class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffineVariety class' category: #'Domains-Schemes-Affine'!
 AffineVariety class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineCurve category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffineCurve category: #'Domains-Schemes-Affine'!
 AffineVariety subclass: #AffineCurve
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffineCurve class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffineCurve class' category: #'Domains-Schemes-Affine'!
 AffineCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineHypersurface category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffineHypersurface category: #'Domains-Schemes-Affine'!
 AffineVariety subclass: #AffineHypersurface
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffineHypersurface class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffineHypersurface class' category: #'Domains-Schemes-Affine'!
 AffineHypersurface class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffinePlaneCurve category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffinePlaneCurve category: #'Domains-Schemes-Affine'!
 AffineHypersurface subclass: #AffinePlaneCurve
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffinePlaneCurve class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffinePlaneCurve class' category: #'Domains-Schemes-Affine'!
 AffinePlaneCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineSpace category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffineSpace category: #'Domains-Schemes-Affine'!
 AffineVariety subclass: #AffineSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffineSpace class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffineSpace class' category: #'Domains-Schemes-Affine'!
 AffineSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductAffineSpace category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #ProductAffineSpace category: #'Domains-Schemes-Affine'!
 AffineSpace subclass: #ProductAffineSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'ProductAffineSpace class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'ProductAffineSpace class' category: #'Domains-Schemes-Affine'!
 ProductAffineSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveScheme category: #'Mathematics-Schemes'!
+!classDefinition: #ProjectiveScheme category: #'Domains-Schemes'!
 Scheme subclass: #ProjectiveScheme
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'ProjectiveScheme class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'ProjectiveScheme class' category: #'Domains-Schemes'!
 ProjectiveScheme class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveVariety category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveVariety category: #'Domains-Schemes-Projective'!
 Scheme subclass: #ProjectiveVariety
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveVariety class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveVariety class' category: #'Domains-Schemes-Projective'!
 ProjectiveVariety class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveCurve category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveCurve category: #'Domains-Schemes-Projective'!
 ProjectiveVariety subclass: #ProjectiveCurve
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveCurve class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveCurve class' category: #'Domains-Schemes-Projective'!
 ProjectiveCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveHypersurface category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveHypersurface category: #'Domains-Schemes-Projective'!
 ProjectiveVariety subclass: #ProjectiveHypersurface
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveHypersurface class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveHypersurface class' category: #'Domains-Schemes-Projective'!
 ProjectiveHypersurface class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectivePlaneCurve category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectivePlaneCurve category: #'Domains-Schemes-Projective'!
 ProjectiveHypersurface subclass: #ProjectivePlaneCurve
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectivePlaneCurve class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectivePlaneCurve class' category: #'Domains-Schemes-Projective'!
 ProjectivePlaneCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #Conic category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #Conic category: #'Domains-Schemes-Projective'!
 ProjectivePlaneCurve subclass: #Conic
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'Conic class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'Conic class' category: #'Domains-Schemes-Projective'!
 Conic class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalCurve category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #RationalCurve category: #'Domains-Schemes-Projective'!
 ProjectivePlaneCurve subclass: #RationalCurve
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'RationalCurve class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'RationalCurve class' category: #'Domains-Schemes-Projective'!
 RationalCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #EllipticCurve category: #'Mathematics-Elliptic Curves'!
+!classDefinition: #EllipticCurve category: #'Domains-Elliptic Curves'!
 ProjectivePlaneCurve subclass: #EllipticCurve
 	instanceVariableNames: 'equation'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'EllipticCurve class' category: #'Mathematics-Elliptic Curves'!
+	category: 'Domains-Elliptic Curves'!
+!classDefinition: 'EllipticCurve class' category: #'Domains-Elliptic Curves'!
 EllipticCurve class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveSpace category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveSpace category: #'Domains-Schemes-Projective'!
 ProjectiveVariety subclass: #ProjectiveSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveSpace class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveSpace class' category: #'Domains-Schemes-Projective'!
 ProjectiveSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveLine category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveLine category: #'Domains-Schemes-Projective'!
 ProjectiveSpace subclass: #ProjectiveLine
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveLine class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveLine class' category: #'Domains-Schemes-Projective'!
 ProjectiveLine class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectivePlane category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectivePlane category: #'Domains-Schemes-Projective'!
 ProjectiveSpace subclass: #ProjectivePlane
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectivePlane class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectivePlane class' category: #'Domains-Schemes-Projective'!
 ProjectivePlane class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectiveVariety category: #'Mathematics-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectiveVariety category: #'Domains-Schemes-Projective-Product'!
 Scheme subclass: #ProductProjectiveVariety
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectiveVariety class' category: #'Mathematics-Schemes-Projective-Product'!
+	category: 'Domains-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectiveVariety class' category: #'Domains-Schemes-Projective-Product'!
 ProductProjectiveVariety class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectiveSpace category: #'Mathematics-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectiveSpace category: #'Domains-Schemes-Projective-Product'!
 ProductProjectiveVariety subclass: #ProductProjectiveSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectiveSpace class' category: #'Mathematics-Schemes-Projective-Product'!
+	category: 'Domains-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectiveSpace class' category: #'Domains-Schemes-Projective-Product'!
 ProductProjectiveSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #LinearCode category: #'Mathematics-Codes'!
+!classDefinition: #LinearCode category: #'Domains-Codes'!
 Domain subclass: #LinearCode
 	instanceVariableNames: 'subspace'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Codes'!
-!classDefinition: 'LinearCode class' category: #'Mathematics-Codes'!
+	category: 'Domains-Codes'!
+!classDefinition: 'LinearCode class' category: #'Domains-Codes'!
 LinearCode class
 	instanceVariableNames: ''!
 
-!classDefinition: #CyclicCode2 category: #'Mathematics-Codes'!
+!classDefinition: #CyclicCode2 category: #'Domains-Codes'!
 LinearCode subclass: #CyclicCode2
 	instanceVariableNames: 'generator'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Codes'!
-!classDefinition: 'CyclicCode2 class' category: #'Mathematics-Codes'!
+	category: 'Domains-Codes'!
+!classDefinition: 'CyclicCode2 class' category: #'Domains-Codes'!
 CyclicCode2 class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialCode category: #'Mathematics-Codes'!
+!classDefinition: #PolynomialCode category: #'Domains-Codes'!
 LinearCode subclass: #PolynomialCode
 	instanceVariableNames: 'generator'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Codes'!
-!classDefinition: 'PolynomialCode class' category: #'Mathematics-Codes'!
+	category: 'Domains-Codes'!
+!classDefinition: 'PolynomialCode class' category: #'Domains-Codes'!
 PolynomialCode class
 	instanceVariableNames: ''!
 
-!classDefinition: #CyclicCode category: #'Mathematics-Codes'!
+!classDefinition: #CyclicCode category: #'Domains-Codes'!
 PolynomialCode subclass: #CyclicCode
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Codes'!
-!classDefinition: 'CyclicCode class' category: #'Mathematics-Codes'!
+	category: 'Domains-Codes'!
+!classDefinition: 'CyclicCode class' category: #'Domains-Codes'!
 CyclicCode class
 	instanceVariableNames: ''!
 
-!classDefinition: #SemistandardTableaux category: #'Mathematics-Tableaux'!
+!classDefinition: #SemistandardTableaux category: #'Domains-Tableaux'!
 Domain subclass: #SemistandardTableaux
 	instanceVariableNames: 'shape alphabet'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Tableaux'!
-!classDefinition: 'SemistandardTableaux class' category: #'Mathematics-Tableaux'!
+	category: 'Domains-Tableaux'!
+!classDefinition: 'SemistandardTableaux class' category: #'Domains-Tableaux'!
 SemistandardTableaux class
 	instanceVariableNames: ''!
 
-!classDefinition: #StandardTableaux category: #'Mathematics-Tableaux'!
+!classDefinition: #StandardTableaux category: #'Domains-Tableaux'!
 SemistandardTableaux subclass: #StandardTableaux
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Tableaux'!
-!classDefinition: 'StandardTableaux class' category: #'Mathematics-Tableaux'!
+	category: 'Domains-Tableaux'!
+!classDefinition: 'StandardTableaux class' category: #'Domains-Tableaux'!
 StandardTableaux class
 	instanceVariableNames: ''!
 
-!classDefinition: #CellComplex category: #'Mathematics-Complexes'!
+!classDefinition: #CellComplex category: #'Domains-Complexes'!
 Domain subclass: #CellComplex
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Complexes'!
-!classDefinition: 'CellComplex class' category: #'Mathematics-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'CellComplex class' category: #'Domains-Complexes'!
 CellComplex class
 	instanceVariableNames: ''!
 
-!classDefinition: #SimplicialComplex category: #'Mathematics-Complexes'!
+!classDefinition: #SimplicialComplex category: #'Domains-Complexes'!
 CellComplex subclass: #SimplicialComplex
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Complexes'!
-!classDefinition: 'SimplicialComplex class' category: #'Mathematics-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'SimplicialComplex class' category: #'Domains-Complexes'!
 SimplicialComplex class
 	instanceVariableNames: ''!
 
-!classDefinition: #UpperHalfPlane category: #'Mathematics-Modular Forms'!
+!classDefinition: #UpperHalfPlane category: #'Domains-Modular Forms'!
 Domain subclass: #UpperHalfPlane
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'UpperHalfPlane class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'UpperHalfPlane class' category: #'Domains-Modular Forms'!
 UpperHalfPlane class
 	instanceVariableNames: ''!
 
-!classDefinition: #CoxeterSystem category: #'Mathematics-Etc-Lie'!
+!classDefinition: #CoxeterSystem category: #'Domains-Etc-Lie'!
 Domain subclass: #CoxeterSystem
 	instanceVariableNames: 'group generators matrix diagram'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Lie'!
-!classDefinition: 'CoxeterSystem class' category: #'Mathematics-Etc-Lie'!
+	category: 'Domains-Etc-Lie'!
+!classDefinition: 'CoxeterSystem class' category: #'Domains-Etc-Lie'!
 CoxeterSystem class
 	instanceVariableNames: ''!
 
-!classDefinition: #ApproximateRing category: #'Mathematics-Etc-Approximate-PAdics'!
+!classDefinition: #ApproximateRing category: #'Domains-Etc-Approximate-PAdics'!
 Domain subclass: #ApproximateRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Approximate-PAdics'!
-!classDefinition: 'ApproximateRing class' category: #'Mathematics-Etc-Approximate-PAdics'!
+	category: 'Domains-Etc-Approximate-PAdics'!
+!classDefinition: 'ApproximateRing class' category: #'Domains-Etc-Approximate-PAdics'!
 ApproximateRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicField category: #'Mathematics-Etc-Approximate-PAdics'!
+!classDefinition: #AdicField category: #'Domains-Etc-Approximate-PAdics'!
 ApproximateRing subclass: #AdicField
 	instanceVariableNames: 'integers'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicField class' category: #'Mathematics-Etc-Approximate-PAdics'!
+	category: 'Domains-Etc-Approximate-PAdics'!
+!classDefinition: 'AdicField class' category: #'Domains-Etc-Approximate-PAdics'!
 AdicField class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicIntegerRing category: #'Mathematics-Etc-Approximate-PAdics'!
+!classDefinition: #AdicIntegerRing category: #'Domains-Etc-Approximate-PAdics'!
 ApproximateRing subclass: #AdicIntegerRing
 	instanceVariableNames: 'p'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicIntegerRing class' category: #'Mathematics-Etc-Approximate-PAdics'!
+	category: 'Domains-Etc-Approximate-PAdics'!
+!classDefinition: 'AdicIntegerRing class' category: #'Domains-Etc-Approximate-PAdics'!
 AdicIntegerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #Element category: #'Mathematics-Kernel'!
+!classDefinition: #Element category: #'Domains-Kernel'!
 Object subclass: #Element
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel'!
-!classDefinition: 'Element class' category: #'Mathematics-Kernel'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'Element class' category: #'Domains-Kernel'!
 Element class
 	instanceVariableNames: ''!
 
-!classDefinition: #Morphism category: #'Mathematics-Kernel'!
+!classDefinition: #Morphism category: #'Domains-Kernel'!
 Element subclass: #Morphism
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel'!
-!classDefinition: 'Morphism class' category: #'Mathematics-Kernel'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'Morphism class' category: #'Domains-Kernel'!
 Morphism class
 	instanceVariableNames: ''!
 
-!classDefinition: #Function category: #'Mathematics-Kernel'!
+!classDefinition: #Function category: #'Domains-Kernel'!
 Morphism subclass: #Function
 	instanceVariableNames: 'properties'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel'!
-!classDefinition: 'Function class' category: #'Mathematics-Kernel'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'Function class' category: #'Domains-Kernel'!
 Function class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupAction category: #'Mathematics-Groups'!
+!classDefinition: #GroupAction category: #'Domains-Groups'!
 Function subclass: #GroupAction
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'GroupAction class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'GroupAction class' category: #'Domains-Groups'!
 GroupAction class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupMap category: #'Mathematics-Groups'!
+!classDefinition: #GroupMap category: #'Domains-Groups'!
 Function subclass: #GroupMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'GroupMap class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'GroupMap class' category: #'Domains-Groups'!
 GroupMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #ConjugationMap category: #'Mathematics-Groups'!
+!classDefinition: #ConjugationMap category: #'Domains-Groups'!
 GroupMap subclass: #ConjugationMap
 	instanceVariableNames: 'element elementInverse'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'ConjugationMap class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'ConjugationMap class' category: #'Domains-Groups'!
 ConjugationMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #FPGroupMap category: #'Mathematics-Groups'!
+!classDefinition: #FPGroupMap category: #'Domains-Groups'!
 GroupMap subclass: #FPGroupMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'FPGroupMap class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'FPGroupMap class' category: #'Domains-Groups'!
 FPGroupMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirichletCharacter category: #'Mathematics-Modular Forms'!
+!classDefinition: #DirichletCharacter category: #'Domains-Modular Forms'!
 GroupMap subclass: #DirichletCharacter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'DirichletCharacter class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'DirichletCharacter class' category: #'Domains-Modular Forms'!
 DirichletCharacter class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupRepresentation category: #'Mathematics-Etc'!
+!classDefinition: #GroupRepresentation category: #'Domains-Etc'!
 GroupMap subclass: #GroupRepresentation
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'GroupRepresentation class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'GroupRepresentation class' category: #'Domains-Etc'!
 GroupRepresentation class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupMap category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #AbelianGroupMap category: #'Domains-Etc-Groups-Abelian'!
 GroupMap subclass: #AbelianGroupMap
 	instanceVariableNames: 'domain codomain matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroupMap class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupMap class' category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroupMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #RingMap category: #'Mathematics-Rings'!
+!classDefinition: #RingMap category: #'Domains-Rings'!
 Function subclass: #RingMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'RingMap class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'RingMap class' category: #'Domains-Rings'!
 RingMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialRingMap category: #'Mathematics-Polynomials'!
+!classDefinition: #PolynomialRingMap category: #'Domains-Polynomials'!
 RingMap subclass: #PolynomialRingMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'PolynomialRingMap class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'PolynomialRingMap class' category: #'Domains-Polynomials'!
 PolynomialRingMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModuleMap category: #'Mathematics-Modules'!
+!classDefinition: #ModuleMap category: #'Domains-Modules'!
 Function subclass: #ModuleMap
 	instanceVariableNames: 'domain codomain matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'ModuleMap class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'ModuleMap class' category: #'Domains-Modules'!
 ModuleMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeModuleMap category: #'Mathematics-Modules-Free'!
+!classDefinition: #FreeModuleMap category: #'Domains-Modules-Free'!
 ModuleMap subclass: #FreeModuleMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'FreeModuleMap class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'FreeModuleMap class' category: #'Domains-Modules-Free'!
 FreeModuleMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineMap category: #'Mathematics-Modules-Free'!
+!classDefinition: #AffineMap category: #'Domains-Modules-Free'!
 Function subclass: #AffineMap
 	instanceVariableNames: 'linearMap translation'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Free'!
-!classDefinition: 'AffineMap class' category: #'Mathematics-Modules-Free'!
+	category: 'Domains-Modules-Free'!
+!classDefinition: 'AffineMap class' category: #'Domains-Modules-Free'!
 AffineMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuadraticForm category: #'Mathematics-Modules-Lattices'!
+!classDefinition: #QuadraticForm category: #'Domains-Modules-Lattices'!
 Function subclass: #QuadraticForm
 	instanceVariableNames: 'coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Lattices'!
-!classDefinition: 'QuadraticForm class' category: #'Mathematics-Modules-Lattices'!
+	category: 'Domains-Modules-Lattices'!
+!classDefinition: 'QuadraticForm class' category: #'Domains-Modules-Lattices'!
 QuadraticForm class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultilinearMap category: #'Mathematics-Multilinear'!
+!classDefinition: #MultilinearMap category: #'Domains-Multilinear'!
 Function subclass: #MultilinearMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'MultilinearMap class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'MultilinearMap class' category: #'Domains-Multilinear'!
 MultilinearMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearMap category: #'Mathematics-Multilinear'!
+!classDefinition: #BilinearMap category: #'Domains-Multilinear'!
 MultilinearMap subclass: #BilinearMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'BilinearMap class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'BilinearMap class' category: #'Domains-Multilinear'!
 BilinearMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearForm category: #'Mathematics-Multilinear'!
+!classDefinition: #BilinearForm category: #'Domains-Multilinear'!
 BilinearMap subclass: #BilinearForm
 	instanceVariableNames: 'halfDomain matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'BilinearForm class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'BilinearForm class' category: #'Domains-Multilinear'!
 BilinearForm class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalMap category: #'Mathematics-Schemes'!
+!classDefinition: #RationalMap category: #'Domains-Schemes'!
 Function subclass: #RationalMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'RationalMap class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'RationalMap class' category: #'Domains-Schemes'!
 RationalMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #EllipticCurveIsogeny category: #'Mathematics-Elliptic Curves'!
+!classDefinition: #EllipticCurveIsogeny category: #'Domains-Elliptic Curves'!
 RationalMap subclass: #EllipticCurveIsogeny
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'EllipticCurveIsogeny class' category: #'Mathematics-Elliptic Curves'!
+	category: 'Domains-Elliptic Curves'!
+!classDefinition: 'EllipticCurveIsogeny class' category: #'Domains-Elliptic Curves'!
 EllipticCurveIsogeny class
 	instanceVariableNames: ''!
 
-!classDefinition: #LinearFractionalMap category: #'Mathematics-Modular Forms'!
+!classDefinition: #LinearFractionalMap category: #'Domains-Modular Forms'!
 RationalMap subclass: #LinearFractionalMap
 	instanceVariableNames: 'a b c d'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'LinearFractionalMap class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'LinearFractionalMap class' category: #'Domains-Modular Forms'!
 LinearFractionalMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularMap category: #'Mathematics-Modular Forms'!
+!classDefinition: #ModularMap category: #'Domains-Modular Forms'!
 LinearFractionalMap subclass: #ModularMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'ModularMap class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'ModularMap class' category: #'Domains-Modular Forms'!
 ModularMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #Sequence category: #'Mathematics-Sequences'!
+!classDefinition: #Sequence category: #'Domains-Sequences'!
 Function subclass: #Sequence
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'Sequence class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'Sequence class' category: #'Domains-Sequences'!
 Sequence class
 	instanceVariableNames: ''!
 
-!classDefinition: #CFiniteSequence category: #'Mathematics-Sequences'!
+!classDefinition: #CFiniteSequence category: #'Domains-Sequences'!
 Sequence subclass: #CFiniteSequence
 	instanceVariableNames: 'coefficients initialValues'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'CFiniteSequence class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'CFiniteSequence class' category: #'Domains-Sequences'!
 CFiniteSequence class
 	instanceVariableNames: ''!
 
-!classDefinition: #SimplicialMap category: #'Mathematics-Complexes'!
+!classDefinition: #SimplicialMap category: #'Domains-Complexes'!
 Function subclass: #SimplicialMap
 	instanceVariableNames: 'map'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Complexes'!
-!classDefinition: 'SimplicialMap class' category: #'Mathematics-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'SimplicialMap class' category: #'Domains-Complexes'!
 SimplicialMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularForm category: #'Mathematics-Modular Forms'!
+!classDefinition: #ModularForm category: #'Domains-Modular Forms'!
 Function subclass: #ModularForm
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'ModularForm class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'ModularForm class' category: #'Domains-Modular Forms'!
 ModularForm class
 	instanceVariableNames: ''!
 
-!classDefinition: #EisensteinSeries category: #'Mathematics-Modular Forms'!
+!classDefinition: #EisensteinSeries category: #'Domains-Modular Forms'!
 ModularForm subclass: #EisensteinSeries
 	instanceVariableNames: 'weight'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'EisensteinSeries class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'EisensteinSeries class' category: #'Domains-Modular Forms'!
 EisensteinSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #Permutation category: #'Mathematics-Groups-Permutations'!
+!classDefinition: #Permutation category: #'Domains-Groups-Permutations'!
 Morphism subclass: #Permutation
 	instanceVariableNames: 'map parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Permutations'!
-!classDefinition: 'Permutation class' category: #'Mathematics-Groups-Permutations'!
+	category: 'Domains-Groups-Permutations'!
+!classDefinition: 'Permutation class' category: #'Domains-Groups-Permutations'!
 Permutation class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalPoint category: #'Mathematics-Schemes'!
+!classDefinition: #RationalPoint category: #'Domains-Schemes'!
 Morphism subclass: #RationalPoint
 	instanceVariableNames: 'codomain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes'!
-!classDefinition: 'RationalPoint class' category: #'Mathematics-Schemes'!
+	category: 'Domains-Schemes'!
+!classDefinition: 'RationalPoint class' category: #'Domains-Schemes'!
 RationalPoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffinePoint category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #AffinePoint category: #'Domains-Schemes-Affine'!
 RationalPoint subclass: #AffinePoint
 	instanceVariableNames: 'coordinates'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'AffinePoint class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'AffinePoint class' category: #'Domains-Schemes-Affine'!
 AffinePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectivePoint category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectivePoint category: #'Domains-Schemes-Projective'!
 RationalPoint subclass: #ProjectivePoint
 	instanceVariableNames: 'coordinates'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectivePoint class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectivePoint class' category: #'Domains-Schemes-Projective'!
 ProjectivePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProjectiveLinePoint category: #'Mathematics-Schemes-Projective'!
+!classDefinition: #ProjectiveLinePoint category: #'Domains-Schemes-Projective'!
 ProjectivePoint subclass: #ProjectiveLinePoint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective'!
-!classDefinition: 'ProjectiveLinePoint class' category: #'Mathematics-Schemes-Projective'!
+	category: 'Domains-Schemes-Projective'!
+!classDefinition: 'ProjectiveLinePoint class' category: #'Domains-Schemes-Projective'!
 ProjectiveLinePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #EllipticCurvePoint category: #'Mathematics-Elliptic Curves'!
+!classDefinition: #EllipticCurvePoint category: #'Domains-Elliptic Curves'!
 ProjectivePoint subclass: #EllipticCurvePoint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'EllipticCurvePoint class' category: #'Mathematics-Elliptic Curves'!
+	category: 'Domains-Elliptic Curves'!
+!classDefinition: 'EllipticCurvePoint class' category: #'Domains-Elliptic Curves'!
 EllipticCurvePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectivePoint category: #'Mathematics-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectivePoint category: #'Domains-Schemes-Projective-Product'!
 RationalPoint subclass: #ProductProjectivePoint
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectivePoint class' category: #'Mathematics-Schemes-Projective-Product'!
+	category: 'Domains-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectivePoint class' category: #'Domains-Schemes-Projective-Product'!
 ProductProjectivePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupElement category: #'Mathematics-Groups'!
+!classDefinition: #GroupElement category: #'Domains-Groups'!
 Element subclass: #GroupElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'GroupElement class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'GroupElement class' category: #'Domains-Groups'!
 GroupElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Monomial category: #'Mathematics-Monoids'!
+!classDefinition: #Monomial category: #'Domains-Monoids'!
 GroupElement subclass: #Monomial
 	instanceVariableNames: 'exponents parent degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'Monomial class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'Monomial class' category: #'Domains-Monoids'!
 Monomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #Word category: #'Mathematics-Monoids'!
+!classDefinition: #Word category: #'Domains-Monoids'!
 GroupElement subclass: #Word
 	instanceVariableNames: 'syllables parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids'!
-!classDefinition: 'Word class' category: #'Mathematics-Monoids'!
+	category: 'Domains-Monoids'!
+!classDefinition: 'Word class' category: #'Domains-Monoids'!
 Word class
 	instanceVariableNames: ''!
 
-!classDefinition: #Coset category: #'Mathematics-Groups'!
+!classDefinition: #Coset category: #'Domains-Groups'!
 GroupElement subclass: #Coset
 	instanceVariableNames: 'representative relations'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'Coset class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'Coset class' category: #'Domains-Groups'!
 Coset class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeGroupElement category: #'Mathematics-Groups'!
+!classDefinition: #OppositeGroupElement category: #'Domains-Groups'!
 GroupElement subclass: #OppositeGroupElement
 	instanceVariableNames: 'opposite'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'OppositeGroupElement class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'OppositeGroupElement class' category: #'Domains-Groups'!
 OppositeGroupElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #SemidirectProductElement category: #'Mathematics-Groups'!
+!classDefinition: #SemidirectProductElement category: #'Domains-Groups'!
 GroupElement subclass: #SemidirectProductElement
 	instanceVariableNames: 'parent left right'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'SemidirectProductElement class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'SemidirectProductElement class' category: #'Domains-Groups'!
 SemidirectProductElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroupElement category: #'Mathematics-Etc-Groups-Abelian'!
+!classDefinition: #AbelianGroupElement category: #'Domains-Etc-Groups-Abelian'!
 GroupElement subclass: #AbelianGroupElement
 	instanceVariableNames: 'parent coordinates'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroupElement class' category: #'Mathematics-Etc-Groups-Abelian'!
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroupElement class' category: #'Domains-Etc-Groups-Abelian'!
 AbelianGroupElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #RingElement category: #'Mathematics-Rings'!
+!classDefinition: #RingElement category: #'Domains-Rings'!
 Element subclass: #RingElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'RingElement class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'RingElement class' category: #'Domains-Rings'!
 RingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeRingElement category: #'Mathematics-Rings'!
+!classDefinition: #OppositeRingElement category: #'Domains-Rings'!
 RingElement subclass: #OppositeRingElement
 	instanceVariableNames: 'opposite'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'OppositeRingElement class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'OppositeRingElement class' category: #'Domains-Rings'!
 OppositeRingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductRingElement category: #'Mathematics-Rings'!
+!classDefinition: #ProductRingElement category: #'Domains-Rings'!
 RingElement subclass: #ProductRingElement
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'ProductRingElement class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'ProductRingElement class' category: #'Domains-Rings'!
 ProductRingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Ratio category: #'Mathematics-Rings'!
+!classDefinition: #Ratio category: #'Domains-Rings'!
 RingElement subclass: #Ratio
 	instanceVariableNames: 'numerator denominator'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'Ratio class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'Ratio class' category: #'Domains-Rings'!
 Ratio class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalFunction category: #'Mathematics-Polynomials'!
+!classDefinition: #RationalFunction category: #'Domains-Polynomials'!
 Ratio subclass: #RationalFunction
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'RationalFunction class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'RationalFunction class' category: #'Domains-Polynomials'!
 RationalFunction class
 	instanceVariableNames: ''!
 
-!classDefinition: #Residue category: #'Mathematics-Rings'!
+!classDefinition: #Residue category: #'Domains-Rings'!
 RingElement subclass: #Residue
 	instanceVariableNames: 'representative parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'Residue class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'Residue class' category: #'Domains-Rings'!
 Residue class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularInteger category: #'Mathematics-Rings-Finite'!
+!classDefinition: #ModularInteger category: #'Domains-Rings-Finite'!
 Residue subclass: #ModularInteger
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings-Finite'!
-!classDefinition: 'ModularInteger class' category: #'Mathematics-Rings-Finite'!
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'ModularInteger class' category: #'Domains-Rings-Finite'!
 ModularInteger class
 	instanceVariableNames: ''!
 
-!classDefinition: #SmallPrimeFieldElement category: #'Mathematics-Fields-Finite'!
+!classDefinition: #SmallPrimeFieldElement category: #'Domains-Fields-Finite'!
 ModularInteger subclass: #SmallPrimeFieldElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields-Finite'!
-!classDefinition: 'SmallPrimeFieldElement class' category: #'Mathematics-Fields-Finite'!
+	category: 'Domains-Fields-Finite'!
+!classDefinition: 'SmallPrimeFieldElement class' category: #'Domains-Fields-Finite'!
 SmallPrimeFieldElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #RegularFunction category: #'Mathematics-Schemes-Affine'!
+!classDefinition: #RegularFunction category: #'Domains-Schemes-Affine'!
 Residue subclass: #RegularFunction
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Schemes-Affine'!
-!classDefinition: 'RegularFunction class' category: #'Mathematics-Schemes-Affine'!
+	category: 'Domains-Schemes-Affine'!
+!classDefinition: 'RegularFunction class' category: #'Domains-Schemes-Affine'!
 RegularFunction class
 	instanceVariableNames: ''!
 
-!classDefinition: #AlgebraicElement category: #'Mathematics-Fields'!
+!classDefinition: #AlgebraicElement category: #'Domains-Fields'!
 RegularFunction subclass: #AlgebraicElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'AlgebraicElement class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'AlgebraicElement class' category: #'Domains-Fields'!
 AlgebraicElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Polynomial category: #'Mathematics-Polynomials'!
+!classDefinition: #Polynomial category: #'Domains-Polynomials'!
 RingElement subclass: #Polynomial
 	instanceVariableNames: 'parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'Polynomial class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'Polynomial class' category: #'Domains-Polynomials'!
 Polynomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultivariatePolynomial category: #'Mathematics-Polynomials'!
+!classDefinition: #MultivariatePolynomial category: #'Domains-Polynomials'!
 Polynomial subclass: #MultivariatePolynomial
 	instanceVariableNames: 'parts'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'MultivariatePolynomial class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'MultivariatePolynomial class' category: #'Domains-Polynomials'!
 MultivariatePolynomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #UnivariatePolynomial category: #'Mathematics-Polynomials'!
+!classDefinition: #UnivariatePolynomial category: #'Domains-Polynomials'!
 Polynomial subclass: #UnivariatePolynomial
 	instanceVariableNames: 'coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials'!
-!classDefinition: 'UnivariatePolynomial class' category: #'Mathematics-Polynomials'!
+	category: 'Domains-Polynomials'!
+!classDefinition: 'UnivariatePolynomial class' category: #'Domains-Polynomials'!
 UnivariatePolynomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #LaurentSeries category: #'Mathematics-Sequences'!
+!classDefinition: #LaurentSeries category: #'Domains-Sequences'!
 RingElement subclass: #LaurentSeries
 	instanceVariableNames: 'numerator order'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'LaurentSeries class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'LaurentSeries class' category: #'Domains-Sequences'!
 LaurentSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #PowerSeries category: #'Mathematics-Sequences'!
+!classDefinition: #PowerSeries category: #'Domains-Sequences'!
 RingElement subclass: #PowerSeries
 	instanceVariableNames: 'parent coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'PowerSeries class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'PowerSeries class' category: #'Domains-Sequences'!
 PowerSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModuleElement category: #'Mathematics-Modules'!
+!classDefinition: #ModuleElement category: #'Domains-Modules'!
 Element subclass: #ModuleElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'ModuleElement class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'ModuleElement class' category: #'Domains-Modules'!
 ModuleElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Sum category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #Sum category: #'Domains-Modules-Tuples'!
 ModuleElement subclass: #Sum
 	instanceVariableNames: 'coefficients parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'Sum class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'Sum class' category: #'Domains-Modules-Tuples'!
 Sum class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupRingElement category: #'Mathematics-Rings'!
+!classDefinition: #GroupRingElement category: #'Domains-Rings'!
 Sum subclass: #GroupRingElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Rings'!
-!classDefinition: 'GroupRingElement class' category: #'Mathematics-Rings'!
+	category: 'Domains-Rings'!
+!classDefinition: 'GroupRingElement class' category: #'Domains-Rings'!
 GroupRingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Tensor category: #'Mathematics-Multilinear'!
+!classDefinition: #Tensor category: #'Domains-Multilinear'!
 Sum subclass: #Tensor
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Multilinear'!
-!classDefinition: 'Tensor class' category: #'Mathematics-Multilinear'!
+	category: 'Domains-Multilinear'!
+!classDefinition: 'Tensor class' category: #'Domains-Multilinear'!
 Tensor class
 	instanceVariableNames: ''!
 
-!classDefinition: #Divisor category: #'Mathematics-Etc'!
+!classDefinition: #Divisor category: #'Domains-Etc'!
 Sum subclass: #Divisor
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'Divisor class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'Divisor class' category: #'Domains-Etc'!
 Divisor class
 	instanceVariableNames: ''!
 
-!classDefinition: #SimplicialChain category: #'Mathematics-Etc'!
+!classDefinition: #SimplicialChain category: #'Domains-Etc'!
 Sum subclass: #SimplicialChain
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'SimplicialChain class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'SimplicialChain class' category: #'Domains-Etc'!
 SimplicialChain class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreePolynomial category: #'Mathematics-Etc-Algebras'!
+!classDefinition: #FreePolynomial category: #'Domains-Etc-Algebras'!
 Sum subclass: #FreePolynomial
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Algebras'!
-!classDefinition: 'FreePolynomial class' category: #'Mathematics-Etc-Algebras'!
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'FreePolynomial class' category: #'Domains-Etc-Algebras'!
 FreePolynomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #Tuple category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #Tuple category: #'Domains-Modules-Tuples'!
 ModuleElement subclass: #Tuple
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'Tuple class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'Tuple class' category: #'Domains-Modules-Tuples'!
 Tuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #BitTuple category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #BitTuple category: #'Domains-Modules-Tuples'!
 Tuple subclass: #BitTuple
 	instanceVariableNames: 'bits size'
 	classVariableNames: 'One Zero'
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'BitTuple class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'BitTuple class' category: #'Domains-Modules-Tuples'!
 BitTuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #GenericTuple category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #GenericTuple category: #'Domains-Modules-Tuples'!
 Tuple subclass: #GenericTuple
 	instanceVariableNames: 'coefficients scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'GenericTuple class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'GenericTuple class' category: #'Domains-Modules-Tuples'!
 GenericTuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularTuple category: #'Mathematics-Modules-Tuples'!
+!classDefinition: #ModularTuple category: #'Domains-Modules-Tuples'!
 Tuple subclass: #ModularTuple
 	instanceVariableNames: 'representatives scalars'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Tuples'!
-!classDefinition: 'ModularTuple class' category: #'Mathematics-Modules-Tuples'!
+	category: 'Domains-Modules-Tuples'!
+!classDefinition: 'ModularTuple class' category: #'Domains-Modules-Tuples'!
 ModularTuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultivariateTuple category: #'Mathematics-Modules-Multivariate'!
+!classDefinition: #MultivariateTuple category: #'Domains-Modules-Multivariate'!
 Tuple subclass: #MultivariateTuple
 	instanceVariableNames: 'parent components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate'!
-!classDefinition: 'MultivariateTuple class' category: #'Mathematics-Modules-Multivariate'!
+	category: 'Domains-Modules-Multivariate'!
+!classDefinition: 'MultivariateTuple class' category: #'Domains-Modules-Multivariate'!
 MultivariateTuple class
 	instanceVariableNames: ''!
 
-!classDefinition: #Matrix category: #'Mathematics-Modules-Matrices'!
+!classDefinition: #Matrix category: #'Domains-Modules-Matrices'!
 ModuleElement subclass: #Matrix
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'Matrix class' category: #'Mathematics-Modules-Matrices'!
+	category: 'Domains-Modules-Matrices'!
+!classDefinition: 'Matrix class' category: #'Domains-Modules-Matrices'!
 Matrix class
 	instanceVariableNames: ''!
 
-!classDefinition: #ColumnMatrix category: #'Mathematics-Modules-Matrices'!
+!classDefinition: #ColumnMatrix category: #'Domains-Modules-Matrices'!
 Matrix subclass: #ColumnMatrix
 	instanceVariableNames: 'columns'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'ColumnMatrix class' category: #'Mathematics-Modules-Matrices'!
+	category: 'Domains-Modules-Matrices'!
+!classDefinition: 'ColumnMatrix class' category: #'Domains-Modules-Matrices'!
 ColumnMatrix class
 	instanceVariableNames: ''!
 
-!classDefinition: #RowMatrix category: #'Mathematics-Modules-Matrices'!
+!classDefinition: #RowMatrix category: #'Domains-Modules-Matrices'!
 Matrix subclass: #RowMatrix
 	instanceVariableNames: 'rows'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices'!
-!classDefinition: 'RowMatrix class' category: #'Mathematics-Modules-Matrices'!
+	category: 'Domains-Modules-Matrices'!
+!classDefinition: 'RowMatrix class' category: #'Domains-Modules-Matrices'!
 RowMatrix class
 	instanceVariableNames: ''!
 
-!classDefinition: #RandomGenerator category: #'Mathematics-Kernel-Support'!
+!classDefinition: #RandomGenerator category: #'Domains-Kernel-Support'!
 Object subclass: #RandomGenerator
 	instanceVariableNames: 'domain bits random'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Kernel-Support'!
-!classDefinition: 'RandomGenerator class' category: #'Mathematics-Kernel-Support'!
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'RandomGenerator class' category: #'Domains-Kernel-Support'!
 RandomGenerator class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupRandomGenerator category: #'Mathematics-Groups'!
+!classDefinition: #GroupRandomGenerator category: #'Domains-Groups'!
 RandomGenerator subclass: #GroupRandomGenerator
 	instanceVariableNames: 'state'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'GroupRandomGenerator class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'GroupRandomGenerator class' category: #'Domains-Groups'!
 GroupRandomGenerator class
 	instanceVariableNames: ''!
 
-!classDefinition: #MonomialOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #MonomialOrdering category: #'Domains-Monoids-Orderings'!
 Object subclass: #MonomialOrdering
 	instanceVariableNames: 'indeterminates'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'MonomialOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'MonomialOrdering class' category: #'Domains-Monoids-Orderings'!
 MonomialOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #BlockMonomialOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #BlockMonomialOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #BlockMonomialOrdering
 	instanceVariableNames: 'blocks'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'BlockMonomialOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'BlockMonomialOrdering class' category: #'Domains-Monoids-Orderings'!
 BlockMonomialOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #GradedLexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #GradedLexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #GradedLexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'GradedLexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'GradedLexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 GradedLexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #GradedReverseLexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #GradedReverseLexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #GradedReverseLexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'GradedReverseLexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'GradedReverseLexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 GradedReverseLexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #LexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #LexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #LexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'LexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'LexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 LexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalGradedLexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #LocalGradedLexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #LocalGradedLexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'LocalGradedLexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'LocalGradedLexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 LocalGradedLexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalGradedReverseLexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #LocalGradedReverseLexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #LocalGradedReverseLexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'LocalGradedReverseLexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'LocalGradedReverseLexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 LocalGradedReverseLexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalLexicographicOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #LocalLexicographicOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #LocalLexicographicOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'LocalLexicographicOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'LocalLexicographicOrdering class' category: #'Domains-Monoids-Orderings'!
 LocalLexicographicOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #WeightedMonomialOrdering category: #'Mathematics-Monoids-Orderings'!
+!classDefinition: #WeightedMonomialOrdering category: #'Domains-Monoids-Orderings'!
 MonomialOrdering subclass: #WeightedMonomialOrdering
 	instanceVariableNames: 'weights'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Monoids-Orderings'!
-!classDefinition: 'WeightedMonomialOrdering class' category: #'Mathematics-Monoids-Orderings'!
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'WeightedMonomialOrdering class' category: #'Domains-Monoids-Orderings'!
 WeightedMonomialOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #SubgroupSeries category: #'Mathematics-Groups'!
+!classDefinition: #SubgroupSeries category: #'Domains-Groups'!
 Object subclass: #SubgroupSeries
 	instanceVariableNames: 'subgroups'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups'!
-!classDefinition: 'SubgroupSeries class' category: #'Mathematics-Groups'!
+	category: 'Domains-Groups'!
+!classDefinition: 'SubgroupSeries class' category: #'Domains-Groups'!
 SubgroupSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #SchreierSims category: #'Mathematics-Groups-Algorithms'!
+!classDefinition: #SchreierSims category: #'Domains-Groups-Algorithms'!
 Object subclass: #SchreierSims
 	instanceVariableNames: 'action generators base strongGeneratingSet trees order'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Algorithms'!
-!classDefinition: 'SchreierSims class' category: #'Mathematics-Groups-Algorithms'!
+	category: 'Domains-Groups-Algorithms'!
+!classDefinition: 'SchreierSims class' category: #'Domains-Groups-Algorithms'!
 SchreierSims class
 	instanceVariableNames: ''!
 
-!classDefinition: #SchreierTree category: #'Mathematics-Groups-Algorithms'!
+!classDefinition: #SchreierTree category: #'Domains-Groups-Algorithms'!
 Object subclass: #SchreierTree
 	instanceVariableNames: 'root generators action v inverses w orbit'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Algorithms'!
-!classDefinition: 'SchreierTree class' category: #'Mathematics-Groups-Algorithms'!
+	category: 'Domains-Groups-Algorithms'!
+!classDefinition: 'SchreierTree class' category: #'Domains-Groups-Algorithms'!
 SchreierTree class
 	instanceVariableNames: ''!
 
-!classDefinition: #ToddCoxeter category: #'Mathematics-Groups-Algorithms'!
+!classDefinition: #ToddCoxeter category: #'Domains-Groups-Algorithms'!
 Object subclass: #ToddCoxeter
 	instanceVariableNames: 'group subgroup representatives generators'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Groups-Algorithms'!
-!classDefinition: 'ToddCoxeter class' category: #'Mathematics-Groups-Algorithms'!
+	category: 'Domains-Groups-Algorithms'!
+!classDefinition: 'ToddCoxeter class' category: #'Domains-Groups-Algorithms'!
 ToddCoxeter class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexAlgebraicNumber category: #'Mathematics-Fields'!
+!classDefinition: #ComplexAlgebraicNumber category: #'Domains-Fields'!
 Object subclass: #ComplexAlgebraicNumber
 	instanceVariableNames: 'minimalPolynomial approximation radius'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Fields'!
-!classDefinition: 'ComplexAlgebraicNumber class' category: #'Mathematics-Fields'!
+	category: 'Domains-Fields'!
+!classDefinition: 'ComplexAlgebraicNumber class' category: #'Domains-Fields'!
 ComplexAlgebraicNumber class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModuleResidue category: #'Mathematics-Modules'!
+!classDefinition: #ModuleResidue category: #'Domains-Modules'!
 Object subclass: #ModuleResidue
 	instanceVariableNames: 'representative parent'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules'!
-!classDefinition: 'ModuleResidue class' category: #'Mathematics-Modules'!
+	category: 'Domains-Modules'!
+!classDefinition: 'ModuleResidue class' category: #'Domains-Modules'!
 ModuleResidue class
 	instanceVariableNames: ''!
 
-!classDefinition: #ChainComplex category: #'Mathematics-Modules-Complexes'!
+!classDefinition: #ChainComplex category: #'Domains-Modules-Complexes'!
 Object subclass: #ChainComplex
 	instanceVariableNames: 'differentials degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Complexes'!
-!classDefinition: 'ChainComplex class' category: #'Mathematics-Modules-Complexes'!
+	category: 'Domains-Modules-Complexes'!
+!classDefinition: 'ChainComplex class' category: #'Domains-Modules-Complexes'!
 ChainComplex class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExactSequence category: #'Mathematics-Modules-Complexes'!
+!classDefinition: #ExactSequence category: #'Domains-Modules-Complexes'!
 ChainComplex subclass: #ExactSequence
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Complexes'!
-!classDefinition: 'ExactSequence class' category: #'Mathematics-Modules-Complexes'!
+	category: 'Domains-Modules-Complexes'!
+!classDefinition: 'ExactSequence class' category: #'Domains-Modules-Complexes'!
 ExactSequence class
 	instanceVariableNames: ''!
 
-!classDefinition: #ShortExactSequence category: #'Mathematics-Modules-Complexes'!
+!classDefinition: #ShortExactSequence category: #'Domains-Modules-Complexes'!
 ExactSequence subclass: #ShortExactSequence
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Complexes'!
-!classDefinition: 'ShortExactSequence class' category: #'Mathematics-Modules-Complexes'!
+	category: 'Domains-Modules-Complexes'!
+!classDefinition: 'ShortExactSequence class' category: #'Domains-Modules-Complexes'!
 ShortExactSequence class
 	instanceVariableNames: ''!
 
-!classDefinition: #ChainMap category: #'Mathematics-Modules-Complexes'!
+!classDefinition: #ChainMap category: #'Domains-Modules-Complexes'!
 Object subclass: #ChainMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Complexes'!
-!classDefinition: 'ChainMap class' category: #'Mathematics-Modules-Complexes'!
+	category: 'Domains-Modules-Complexes'!
+!classDefinition: 'ChainMap class' category: #'Domains-Modules-Complexes'!
 ChainMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExtendedSmithReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #ExtendedSmithReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #ExtendedSmithReduction
 	instanceVariableNames: 'matrix elementaryDivisors L S R'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'ExtendedSmithReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'ExtendedSmithReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 ExtendedSmithReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #HermiteColumnReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #HermiteColumnReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #HermiteColumnReduction
 	instanceVariableNames: 'matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'HermiteColumnReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'HermiteColumnReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 HermiteColumnReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #MatrixReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #MatrixReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #MatrixReduction
 	instanceVariableNames: 'matrix extension determinantFactor'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'MatrixReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'MatrixReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 MatrixReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #GaussianElimination category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #GaussianElimination category: #'Domains-Modules-Matrices-Algorithms'!
 MatrixReduction subclass: #GaussianElimination
 	instanceVariableNames: 'pivots currentPivot'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'GaussianElimination class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'GaussianElimination class' category: #'Domains-Modules-Matrices-Algorithms'!
 GaussianElimination class
 	instanceVariableNames: ''!
 
-!classDefinition: #GaussBareiss category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #GaussBareiss category: #'Domains-Modules-Matrices-Algorithms'!
 GaussianElimination subclass: #GaussBareiss
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'GaussBareiss class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'GaussBareiss class' category: #'Domains-Modules-Matrices-Algorithms'!
 GaussBareiss class
 	instanceVariableNames: ''!
 
-!classDefinition: #HermiteReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #HermiteReduction category: #'Domains-Modules-Matrices-Algorithms'!
 MatrixReduction subclass: #HermiteReduction
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'HermiteReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'HermiteReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 HermiteReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularHermiteReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #ModularHermiteReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #ModularHermiteReduction
 	instanceVariableNames: 'matrix HNF'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'ModularHermiteReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'ModularHermiteReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 ModularHermiteReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #SmithReduction category: #'Mathematics-Modules-Matrices-Algorithms'!
+!classDefinition: #SmithReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #SmithReduction
 	instanceVariableNames: 'matrix diagonal'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Matrices-Algorithms'!
-!classDefinition: 'SmithReduction class' category: #'Mathematics-Modules-Matrices-Algorithms'!
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'SmithReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
 SmithReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #LLL category: #'Mathematics-Modules-Lattices'!
+!classDefinition: #LLL category: #'Domains-Modules-Lattices'!
 Object subclass: #LLL
 	instanceVariableNames: 'basis delta orthogonalBasis mu'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Lattices'!
-!classDefinition: 'LLL class' category: #'Mathematics-Modules-Lattices'!
+	category: 'Domains-Modules-Lattices'!
+!classDefinition: 'LLL class' category: #'Domains-Modules-Lattices'!
 LLL class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModuleMonomial category: #'Mathematics-Modules-Multivariate'!
+!classDefinition: #ModuleMonomial category: #'Domains-Modules-Multivariate'!
 Object subclass: #ModuleMonomial
 	instanceVariableNames: 'parent monomial position'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate'!
-!classDefinition: 'ModuleMonomial class' category: #'Mathematics-Modules-Multivariate'!
+	category: 'Domains-Modules-Multivariate'!
+!classDefinition: 'ModuleMonomial class' category: #'Domains-Modules-Multivariate'!
 ModuleMonomial class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModuleMonomialOrdering category: #'Mathematics-Modules-Multivariate-Orderings'!
+!classDefinition: #ModuleMonomialOrdering category: #'Domains-Modules-Multivariate-Orderings'!
 Object subclass: #ModuleMonomialOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate-Orderings'!
-!classDefinition: 'ModuleMonomialOrdering class' category: #'Mathematics-Modules-Multivariate-Orderings'!
+	category: 'Domains-Modules-Multivariate-Orderings'!
+!classDefinition: 'ModuleMonomialOrdering class' category: #'Domains-Modules-Multivariate-Orderings'!
 ModuleMonomialOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #PositionOverTermOrdering category: #'Mathematics-Modules-Multivariate-Orderings'!
+!classDefinition: #PositionOverTermOrdering category: #'Domains-Modules-Multivariate-Orderings'!
 ModuleMonomialOrdering subclass: #PositionOverTermOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate-Orderings'!
-!classDefinition: 'PositionOverTermOrdering class' category: #'Mathematics-Modules-Multivariate-Orderings'!
+	category: 'Domains-Modules-Multivariate-Orderings'!
+!classDefinition: 'PositionOverTermOrdering class' category: #'Domains-Modules-Multivariate-Orderings'!
 PositionOverTermOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #SchreyerOrdering category: #'Mathematics-Modules-Multivariate-Orderings'!
+!classDefinition: #SchreyerOrdering category: #'Domains-Modules-Multivariate-Orderings'!
 ModuleMonomialOrdering subclass: #SchreyerOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate-Orderings'!
-!classDefinition: 'SchreyerOrdering class' category: #'Mathematics-Modules-Multivariate-Orderings'!
+	category: 'Domains-Modules-Multivariate-Orderings'!
+!classDefinition: 'SchreyerOrdering class' category: #'Domains-Modules-Multivariate-Orderings'!
 SchreyerOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #TermOverPositionOrdering category: #'Mathematics-Modules-Multivariate-Orderings'!
+!classDefinition: #TermOverPositionOrdering category: #'Domains-Modules-Multivariate-Orderings'!
 ModuleMonomialOrdering subclass: #TermOverPositionOrdering
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modules-Multivariate-Orderings'!
-!classDefinition: 'TermOverPositionOrdering class' category: #'Mathematics-Modules-Multivariate-Orderings'!
+	category: 'Domains-Modules-Multivariate-Orderings'!
+!classDefinition: 'TermOverPositionOrdering class' category: #'Domains-Modules-Multivariate-Orderings'!
 TermOverPositionOrdering class
 	instanceVariableNames: ''!
 
-!classDefinition: #Buchberger category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #Buchberger category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #Buchberger
 	instanceVariableNames: 'ideal basis'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'Buchberger class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'Buchberger class' category: #'Domains-Polynomials-Algorithms'!
 Buchberger class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExtendedBuchberger category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #ExtendedBuchberger category: #'Domains-Polynomials-Algorithms'!
 Buchberger subclass: #ExtendedBuchberger
 	instanceVariableNames: 'matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'ExtendedBuchberger class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'ExtendedBuchberger class' category: #'Domains-Polynomials-Algorithms'!
 ExtendedBuchberger class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexRootIsolator category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #ComplexRootIsolator category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #ComplexRootIsolator
 	instanceVariableNames: 'polynomial derivatives'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'ComplexRootIsolator class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'ComplexRootIsolator class' category: #'Domains-Polynomials-Algorithms'!
 ComplexRootIsolator class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultivariatePolynomialDivision category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #MultivariatePolynomialDivision category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #MultivariatePolynomialDivision
 	instanceVariableNames: 'dividend divisors quotients remainder'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'MultivariatePolynomialDivision class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'MultivariatePolynomialDivision class' category: #'Domains-Polynomials-Algorithms'!
 MultivariatePolynomialDivision class
 	instanceVariableNames: ''!
 
-!classDefinition: #NumericalComplexRootIsolator category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #NumericalComplexRootIsolator category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #NumericalComplexRootIsolator
 	instanceVariableNames: 'polynomial tolerance'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'NumericalComplexRootIsolator class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'NumericalComplexRootIsolator class' category: #'Domains-Polynomials-Algorithms'!
 NumericalComplexRootIsolator class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialDivision category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #PolynomialDivision category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #PolynomialDivision
 	instanceVariableNames: 'dividend divisor quotient remainder'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'PolynomialDivision class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'PolynomialDivision class' category: #'Domains-Polynomials-Algorithms'!
 PolynomialDivision class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialPseudoDivision category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #PolynomialPseudoDivision category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #PolynomialPseudoDivision
 	instanceVariableNames: 'dividend divisor quotient remainder'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'PolynomialPseudoDivision class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'PolynomialPseudoDivision class' category: #'Domains-Polynomials-Algorithms'!
 PolynomialPseudoDivision class
 	instanceVariableNames: ''!
 
-!classDefinition: #RealRootIsolator category: #'Mathematics-Polynomials-Algorithms'!
+!classDefinition: #RealRootIsolator category: #'Domains-Polynomials-Algorithms'!
 Object subclass: #RealRootIsolator
 	instanceVariableNames: 'polynomial sturm fourier roots'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Polynomials-Algorithms'!
-!classDefinition: 'RealRootIsolator class' category: #'Mathematics-Polynomials-Algorithms'!
+	category: 'Domains-Polynomials-Algorithms'!
+!classDefinition: 'RealRootIsolator class' category: #'Domains-Polynomials-Algorithms'!
 RealRootIsolator class
 	instanceVariableNames: ''!
 
-!classDefinition: #BerlekampMassey category: #'Mathematics-Algorithms'!
+!classDefinition: #BerlekampMassey category: #'Domains-Algorithms'!
 Object subclass: #BerlekampMassey
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'BerlekampMassey class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'BerlekampMassey class' category: #'Domains-Algorithms'!
 BerlekampMassey class
 	instanceVariableNames: ''!
 
-!classDefinition: #CRT category: #'Mathematics-Algorithms'!
+!classDefinition: #CRT category: #'Domains-Algorithms'!
 Object subclass: #CRT
 	instanceVariableNames: 'moduli C'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'CRT class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'CRT class' category: #'Domains-Algorithms'!
 CRT class
 	instanceVariableNames: ''!
 
-!classDefinition: #DFT category: #'Mathematics-Algorithms'!
+!classDefinition: #DFT category: #'Domains-Algorithms'!
 Object subclass: #DFT
 	instanceVariableNames: 'ring n alpha'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'DFT class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'DFT class' category: #'Domains-Algorithms'!
 DFT class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExtendedEuclid category: #'Mathematics-Algorithms'!
+!classDefinition: #ExtendedEuclid category: #'Domains-Algorithms'!
 Object subclass: #ExtendedEuclid
 	instanceVariableNames: 'elements gcd bezout'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'ExtendedEuclid class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'ExtendedEuclid class' category: #'Domains-Algorithms'!
 ExtendedEuclid class
 	instanceVariableNames: ''!
 
-!classDefinition: #LagrangeGaussReduction category: #'Mathematics-Algorithms'!
+!classDefinition: #LagrangeGaussReduction category: #'Domains-Algorithms'!
 Object subclass: #LagrangeGaussReduction
 	instanceVariableNames: 'vectorSpace v1 v2 shortVector'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'LagrangeGaussReduction class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'LagrangeGaussReduction class' category: #'Domains-Algorithms'!
 LagrangeGaussReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModifiedBerlekampMassey category: #'Mathematics-Algorithms'!
+!classDefinition: #ModifiedBerlekampMassey category: #'Domains-Algorithms'!
 Object subclass: #ModifiedBerlekampMassey
 	instanceVariableNames: 'input field minimalPolynomial'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'ModifiedBerlekampMassey class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'ModifiedBerlekampMassey class' category: #'Domains-Algorithms'!
 ModifiedBerlekampMassey class
 	instanceVariableNames: ''!
 
-!classDefinition: #NTT category: #'Mathematics-Algorithms'!
+!classDefinition: #NTT category: #'Domains-Algorithms'!
 Object subclass: #NTT
 	instanceVariableNames: 'modulus primitive'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'NTT class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'NTT class' category: #'Domains-Algorithms'!
 NTT class
 	instanceVariableNames: ''!
 
-!classDefinition: #TonelliShanks category: #'Mathematics-Algorithms'!
+!classDefinition: #TonelliShanks category: #'Domains-Algorithms'!
 Object subclass: #TonelliShanks
 	instanceVariableNames: 'p q e z'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Algorithms'!
-!classDefinition: 'TonelliShanks class' category: #'Mathematics-Algorithms'!
+	category: 'Domains-Algorithms'!
+!classDefinition: 'TonelliShanks class' category: #'Domains-Algorithms'!
 TonelliShanks class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirichletSeries category: #'Mathematics-Sequences'!
+!classDefinition: #DirichletSeries category: #'Domains-Sequences'!
 Object subclass: #DirichletSeries
 	instanceVariableNames: 'coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Sequences'!
-!classDefinition: 'DirichletSeries class' category: #'Mathematics-Sequences'!
+	category: 'Domains-Sequences'!
+!classDefinition: 'DirichletSeries class' category: #'Domains-Sequences'!
 DirichletSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #GraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #GraphNode category: #'Domains-Graphs-Parts'!
 Object subclass: #GraphNode
 	instanceVariableNames: 'value'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'GraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'GraphNode class' category: #'Domains-Graphs-Parts'!
 GraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #ExplicitGraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #ExplicitGraphNode category: #'Domains-Graphs-Parts'!
 GraphNode subclass: #ExplicitGraphNode
 	instanceVariableNames: 'inNeighbors outNeighbors'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'ExplicitGraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'ExplicitGraphNode class' category: #'Domains-Graphs-Parts'!
 ExplicitGraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #LabeledExplicitGraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #LabeledExplicitGraphNode category: #'Domains-Graphs-Parts'!
 ExplicitGraphNode subclass: #LabeledExplicitGraphNode
 	instanceVariableNames: 'label'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'LabeledExplicitGraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'LabeledExplicitGraphNode class' category: #'Domains-Graphs-Parts'!
 LabeledExplicitGraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitGraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #ImplicitGraphNode category: #'Domains-Graphs-Parts'!
 GraphNode subclass: #ImplicitGraphNode
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'ImplicitGraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'ImplicitGraphNode class' category: #'Domains-Graphs-Parts'!
 ImplicitGraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitCollectionGraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #ImplicitCollectionGraphNode category: #'Domains-Graphs-Parts'!
 ImplicitGraphNode subclass: #ImplicitCollectionGraphNode
 	instanceVariableNames: 'collectionBlock'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'ImplicitCollectionGraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'ImplicitCollectionGraphNode class' category: #'Domains-Graphs-Parts'!
 ImplicitCollectionGraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #ImplicitIteratorGraphNode category: #'Mathematics-Graphs-Parts'!
+!classDefinition: #ImplicitIteratorGraphNode category: #'Domains-Graphs-Parts'!
 ImplicitGraphNode subclass: #ImplicitIteratorGraphNode
 	instanceVariableNames: 'iterator'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Parts'!
-!classDefinition: 'ImplicitIteratorGraphNode class' category: #'Mathematics-Graphs-Parts'!
+	category: 'Domains-Graphs-Parts'!
+!classDefinition: 'ImplicitIteratorGraphNode class' category: #'Domains-Graphs-Parts'!
 ImplicitIteratorGraphNode class
 	instanceVariableNames: ''!
 
-!classDefinition: #DAGFrontier category: #'Mathematics-Graphs-Algorithms'!
+!classDefinition: #DAGFrontier category: #'Domains-Graphs-Algorithms'!
 Object subclass: #DAGFrontier
 	instanceVariableNames: 'frontier bag'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Algorithms'!
-!classDefinition: 'DAGFrontier class' category: #'Mathematics-Graphs-Algorithms'!
+	category: 'Domains-Graphs-Algorithms'!
+!classDefinition: 'DAGFrontier class' category: #'Domains-Graphs-Algorithms'!
 DAGFrontier class
 	instanceVariableNames: ''!
 
-!classDefinition: #Dijkstra category: #'Mathematics-Graphs-Algorithms'!
+!classDefinition: #Dijkstra category: #'Domains-Graphs-Algorithms'!
 Object subclass: #Dijkstra
 	instanceVariableNames: 'graph source predecessor distance'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Algorithms'!
-!classDefinition: 'Dijkstra class' category: #'Mathematics-Graphs-Algorithms'!
+	category: 'Domains-Graphs-Algorithms'!
+!classDefinition: 'Dijkstra class' category: #'Domains-Graphs-Algorithms'!
 Dijkstra class
 	instanceVariableNames: ''!
 
-!classDefinition: #FloydWarshall category: #'Mathematics-Graphs-Algorithms'!
+!classDefinition: #FloydWarshall category: #'Domains-Graphs-Algorithms'!
 Object subclass: #FloydWarshall
 	instanceVariableNames: 'graph distances'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Graphs-Algorithms'!
-!classDefinition: 'FloydWarshall class' category: #'Mathematics-Graphs-Algorithms'!
+	category: 'Domains-Graphs-Algorithms'!
+!classDefinition: 'FloydWarshall class' category: #'Domains-Graphs-Algorithms'!
 FloydWarshall class
 	instanceVariableNames: ''!
 
-!classDefinition: #YoungDiagram category: #'Mathematics-Tableaux'!
+!classDefinition: #YoungDiagram category: #'Domains-Tableaux'!
 Object subclass: #YoungDiagram
 	instanceVariableNames: 'shape'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Tableaux'!
-!classDefinition: 'YoungDiagram class' category: #'Mathematics-Tableaux'!
+	category: 'Domains-Tableaux'!
+!classDefinition: 'YoungDiagram class' category: #'Domains-Tableaux'!
 YoungDiagram class
 	instanceVariableNames: ''!
 
-!classDefinition: #WeierstrassEquation category: #'Mathematics-Elliptic Curves'!
+!classDefinition: #WeierstrassEquation category: #'Domains-Elliptic Curves'!
 Object subclass: #WeierstrassEquation
 	instanceVariableNames: 'coefficients'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Elliptic Curves'!
-!classDefinition: 'WeierstrassEquation class' category: #'Mathematics-Elliptic Curves'!
+	category: 'Domains-Elliptic Curves'!
+!classDefinition: 'WeierstrassEquation class' category: #'Domains-Elliptic Curves'!
 WeierstrassEquation class
 	instanceVariableNames: ''!
 
-!classDefinition: #ManinSymbol category: #'Mathematics-Modular Forms'!
+!classDefinition: #ManinSymbol category: #'Domains-Modular Forms'!
 Object subclass: #ManinSymbol
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'ManinSymbol class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'ManinSymbol class' category: #'Domains-Modular Forms'!
 ManinSymbol class
 	instanceVariableNames: ''!
 
-!classDefinition: #ModularSymbol category: #'Mathematics-Modular Forms'!
+!classDefinition: #ModularSymbol category: #'Domains-Modular Forms'!
 Object subclass: #ModularSymbol
 	instanceVariableNames: 'alpha beta'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Forms'!
-!classDefinition: 'ModularSymbol class' category: #'Mathematics-Modular Forms'!
+	category: 'Domains-Modular Forms'!
+!classDefinition: 'ModularSymbol class' category: #'Domains-Modular Forms'!
 ModularSymbol class
 	instanceVariableNames: ''!
 
-!classDefinition: #FareySymbol category: #'Mathematics-Modular Group'!
+!classDefinition: #FareySymbol category: #'Domains-Modular Group'!
 Object subclass: #FareySymbol
 	instanceVariableNames: 'group fractions pairings'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Modular Group'!
-!classDefinition: 'FareySymbol class' category: #'Mathematics-Modular Group'!
+	category: 'Domains-Modular Group'!
+!classDefinition: 'FareySymbol class' category: #'Domains-Modular Group'!
 FareySymbol class
 	instanceVariableNames: ''!
 
-!classDefinition: #AutomaticPalette category: #'Mathematics-Morphic'!
+!classDefinition: #AutomaticPalette category: #'Domains-Morphic'!
 Object subclass: #AutomaticPalette
 	instanceVariableNames: 'map'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'AutomaticPalette class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'AutomaticPalette class' category: #'Domains-Morphic'!
 AutomaticPalette class
 	instanceVariableNames: ''!
 
-!classDefinition: #ComplexPalette category: #'Mathematics-Morphic'!
+!classDefinition: #ComplexPalette category: #'Domains-Morphic'!
 Object subclass: #ComplexPalette
 	instanceVariableNames: 'luminanceBlock hueBlock zeroColor infinityColor'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'ComplexPalette class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'ComplexPalette class' category: #'Domains-Morphic'!
 ComplexPalette class
 	instanceVariableNames: ''!
 
-!classDefinition: #DiscretePalette category: #'Mathematics-Morphic'!
+!classDefinition: #DiscretePalette category: #'Domains-Morphic'!
 Object subclass: #DiscretePalette
 	instanceVariableNames: 'colors map'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'DiscretePalette class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'DiscretePalette class' category: #'Domains-Morphic'!
 DiscretePalette class
 	instanceVariableNames: ''!
 
-!classDefinition: #RealPalette category: #'Mathematics-Morphic'!
+!classDefinition: #RealPalette category: #'Domains-Morphic'!
 Object subclass: #RealPalette
 	instanceVariableNames: 'colors min max'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Morphic'!
-!classDefinition: 'RealPalette class' category: #'Mathematics-Morphic'!
+	category: 'Domains-Morphic'!
+!classDefinition: 'RealPalette class' category: #'Domains-Morphic'!
 RealPalette class
 	instanceVariableNames: ''!
 
-!classDefinition: #AlgebraicExtensionAsModule category: #'Mathematics-Etc'!
+!classDefinition: #AlgebraicExtensionAsModule category: #'Domains-Etc'!
 Object subclass: #AlgebraicExtensionAsModule
 	instanceVariableNames: 'extension'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'AlgebraicExtensionAsModule class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'AlgebraicExtensionAsModule class' category: #'Domains-Etc'!
 AlgebraicExtensionAsModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #GaussianElimination2 category: #'Mathematics-Etc'!
+!classDefinition: #GaussianElimination2 category: #'Domains-Etc'!
 Object subclass: #GaussianElimination2
 	instanceVariableNames: 'matrix extension subreducer pivots columns inverse determinant'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'GaussianElimination2 class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'GaussianElimination2 class' category: #'Domains-Etc'!
 GaussianElimination2 class
 	instanceVariableNames: ''!
 
-!classDefinition: #GramSchmidt category: #'Mathematics-Etc'!
+!classDefinition: #GramSchmidt category: #'Domains-Etc'!
 Object subclass: #GramSchmidt
 	instanceVariableNames: 'basis innerProduct orthogonalBasis matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'GramSchmidt class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'GramSchmidt class' category: #'Domains-Etc'!
 GramSchmidt class
 	instanceVariableNames: ''!
 
-!classDefinition: #GroupPresentation category: #'Mathematics-Etc'!
+!classDefinition: #GroupPresentation category: #'Domains-Etc'!
 Object subclass: #GroupPresentation
 	instanceVariableNames: 'generators relators'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'GroupPresentation class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'GroupPresentation class' category: #'Domains-Etc'!
 GroupPresentation class
 	instanceVariableNames: ''!
 
-!classDefinition: #JordanReduction category: #'Mathematics-Etc'!
+!classDefinition: #JordanReduction category: #'Domains-Etc'!
 Object subclass: #JordanReduction
 	instanceVariableNames: 'matrix blocks'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'JordanReduction class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'JordanReduction class' category: #'Domains-Etc'!
 JordanReduction class
 	instanceVariableNames: ''!
 
-!classDefinition: #LinearBasisTest category: #'Mathematics-Etc'!
+!classDefinition: #LinearBasisTest category: #'Domains-Etc'!
 Object subclass: #LinearBasisTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'LinearBasisTest class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'LinearBasisTest class' category: #'Domains-Etc'!
 LinearBasisTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #Maxel category: #'Mathematics-Etc'!
+!classDefinition: #Maxel category: #'Domains-Etc'!
 Object subclass: #Maxel
 	instanceVariableNames: 'pixels'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'Maxel class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'Maxel class' category: #'Domains-Etc'!
 Maxel class
 	instanceVariableNames: ''!
 
-!classDefinition: #OEIS category: #'Mathematics-Etc'!
+!classDefinition: #OEIS category: #'Domains-Etc'!
 Object subclass: #OEIS
 	instanceVariableNames: 'entries'
 	classVariableNames: 'Default'
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'OEIS class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'OEIS class' category: #'Domains-Etc'!
 OEIS class
 	instanceVariableNames: ''!
 
-!classDefinition: #OrderAsModule category: #'Mathematics-Etc'!
+!classDefinition: #OrderAsModule category: #'Domains-Etc'!
 Object subclass: #OrderAsModule
 	instanceVariableNames: 'order'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'OrderAsModule class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'OrderAsModule class' category: #'Domains-Etc'!
 OrderAsModule class
 	instanceVariableNames: ''!
 
-!classDefinition: #Pixel category: #'Mathematics-Etc'!
+!classDefinition: #Pixel category: #'Domains-Etc'!
 Object subclass: #Pixel
 	instanceVariableNames: 'row column'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'Pixel class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'Pixel class' category: #'Domains-Etc'!
 Pixel class
 	instanceVariableNames: ''!
 
-!classDefinition: #PolynomialInterpolator category: #'Mathematics-Etc'!
+!classDefinition: #PolynomialInterpolator category: #'Domains-Etc'!
 Object subclass: #PolynomialInterpolator
 	instanceVariableNames: 'polynomial corrector'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'PolynomialInterpolator class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'PolynomialInterpolator class' category: #'Domains-Etc'!
 PolynomialInterpolator class
 	instanceVariableNames: ''!
 
-!classDefinition: #QRDecomposition category: #'Mathematics-Etc'!
+!classDefinition: #QRDecomposition category: #'Domains-Etc'!
 Object subclass: #QRDecomposition
 	instanceVariableNames: 'matrix Q R'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'QRDecomposition class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'QRDecomposition class' category: #'Domains-Etc'!
 QRDecomposition class
 	instanceVariableNames: ''!
 
-!classDefinition: #Quaternion category: #'Mathematics-Etc'!
+!classDefinition: #Quaternion category: #'Domains-Etc'!
 Object subclass: #Quaternion
 	instanceVariableNames: 'a b c d'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'Quaternion class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'Quaternion class' category: #'Domains-Etc'!
 Quaternion class
 	instanceVariableNames: ''!
 
-!classDefinition: #SLP category: #'Mathematics-Etc'!
+!classDefinition: #SLP category: #'Domains-Etc'!
 Object subclass: #SLP
 	instanceVariableNames: 'word'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'SLP class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'SLP class' category: #'Domains-Etc'!
 SLP class
 	instanceVariableNames: ''!
 
-!classDefinition: #SturmChain category: #'Mathematics-Etc'!
+!classDefinition: #SturmChain category: #'Domains-Etc'!
 Object subclass: #SturmChain
 	instanceVariableNames: 'chain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'SturmChain class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'SturmChain class' category: #'Domains-Etc'!
 SturmChain class
 	instanceVariableNames: ''!
 
-!classDefinition: #Subdomain category: #'Mathematics-Etc'!
+!classDefinition: #Subdomain category: #'Domains-Etc'!
 Object subclass: #Subdomain
 	instanceVariableNames: 'representative'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'Subdomain class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'Subdomain class' category: #'Domains-Etc'!
 Subdomain class
 	instanceVariableNames: ''!
 
-!classDefinition: #WuRittProcess category: #'Mathematics-Etc'!
+!classDefinition: #WuRittProcess category: #'Domains-Etc'!
 Object subclass: #WuRittProcess
 	instanceVariableNames: 'polynomials characteristicSet'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc'!
-!classDefinition: 'WuRittProcess class' category: #'Mathematics-Etc'!
+	category: 'Domains-Etc'!
+!classDefinition: 'WuRittProcess class' category: #'Domains-Etc'!
 WuRittProcess class
 	instanceVariableNames: ''!
 
-!classDefinition: #CoxeterDiagram category: #'Mathematics-Etc-Lie'!
+!classDefinition: #CoxeterDiagram category: #'Domains-Etc-Lie'!
 Object subclass: #CoxeterDiagram
 	instanceVariableNames: 'matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Lie'!
-!classDefinition: 'CoxeterDiagram class' category: #'Mathematics-Etc-Lie'!
+	category: 'Domains-Etc-Lie'!
+!classDefinition: 'CoxeterDiagram class' category: #'Domains-Etc-Lie'!
 CoxeterDiagram class
 	instanceVariableNames: ''!
 
-!classDefinition: #RootSystem category: #'Mathematics-Etc-Lie'!
+!classDefinition: #RootSystem category: #'Domains-Etc-Lie'!
 Object subclass: #RootSystem
 	instanceVariableNames: 'roots ambient'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Lie'!
-!classDefinition: 'RootSystem class' category: #'Mathematics-Etc-Lie'!
+	category: 'Domains-Etc-Lie'!
+!classDefinition: 'RootSystem class' category: #'Domains-Etc-Lie'!
 RootSystem class
 	instanceVariableNames: ''!
 
-!classDefinition: #Product category: #'Mathematics-Etc-Diagrams'!
+!classDefinition: #Product category: #'Domains-Etc-Diagrams'!
 Object subclass: #Product
 	instanceVariableNames: 'projections'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Diagrams'!
-!classDefinition: 'Product class' category: #'Mathematics-Etc-Diagrams'!
+	category: 'Domains-Etc-Diagrams'!
+!classDefinition: 'Product class' category: #'Domains-Etc-Diagrams'!
 Product class
 	instanceVariableNames: ''!
 
-!classDefinition: #DirectSum category: #'Mathematics-Etc-Diagrams'!
+!classDefinition: #DirectSum category: #'Domains-Etc-Diagrams'!
 Product subclass: #DirectSum
 	instanceVariableNames: 'coprojections'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Diagrams'!
-!classDefinition: 'DirectSum class' category: #'Mathematics-Etc-Diagrams'!
+	category: 'Domains-Etc-Diagrams'!
+!classDefinition: 'DirectSum class' category: #'Domains-Etc-Diagrams'!
 DirectSum class
 	instanceVariableNames: ''!
 
-!classDefinition: #Quotient category: #'Mathematics-Etc-Diagrams'!
+!classDefinition: #Quotient category: #'Domains-Etc-Diagrams'!
 Object subclass: #Quotient
 	instanceVariableNames: 'projection'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Diagrams'!
-!classDefinition: 'Quotient class' category: #'Mathematics-Etc-Diagrams'!
+	category: 'Domains-Etc-Diagrams'!
+!classDefinition: 'Quotient class' category: #'Domains-Etc-Diagrams'!
 Quotient class
 	instanceVariableNames: ''!
 
-!classDefinition: #TensorProduct category: #'Mathematics-Etc-Diagrams'!
+!classDefinition: #TensorProduct category: #'Domains-Etc-Diagrams'!
 Object subclass: #TensorProduct
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Mathematics-Etc-Diagrams'!
-!classDefinition: 'TensorProduct class' category: #'Mathematics-Etc-Diagrams'!
+	category: 'Domains-Etc-Diagrams'!
+!classDefinition: 'TensorProduct class' category: #'Domains-Etc-Diagrams'!
 TensorProduct class
 	instanceVariableNames: ''!
 
@@ -3843,7 +3843,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
 !Domain commentStamp: '<historical>' prior: 0!
-Domains are algebraic structures (such as Groups, Rings, Modules, Schemes, etc) connected by the corresponding Morphisms. In many practical situations, domains can be seen as sets of elements, and their morphisms as structure-preserving Functions.
+Domains are algebraic structures (such as Groups, Rings, Modules, Schemes, etc), connected by their corresponding Morphisms. Domains are the objects of category theory. In many practical situations domains can be seen as sets of elements, and their morphisms as structure-preserving Functions.
 
 Domains with an underlying set can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
 
@@ -9153,7 +9153,7 @@ exampleImplicitGraph
 exampleImplicitGraph2
 	| forest |
 	forest := self implicitCollection: [:class | class ~= ProtoObject ifTrue: [{class superclass}] ifFalse:[#()]].
-	(Smalltalk organization listAtCategoryNamed: 'Mathematics-Graphs') do: [:className| forest add: (Smalltalk at: className)].
+	(Smalltalk organization listAtCategoryNamed: 'Domains-Graphs') do: [:className| forest add: (Smalltalk at: className)].
 	^ forest! !
 
 !Graph class methodsFor: 'example graphs' stamp: 'len 7/13/2016 22:47'!
@@ -44515,50 +44515,50 @@ compose: anArray
 	"Answer the tensor product composition."
 	^ self subclassResponsibility! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 11/6/2016 09:07'!
+!Object methodsFor: '*domains' stamp: 'len 11/6/2016 09:07'!
 adaptToCollection: rcvr andSend: selector
 	"If I am involved in arithmetic with a Collection, return a Collection of
 	the results of each element combined with me in that expression."
 
 	^ rcvr collect: [:element | element perform: selector with: self]! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 4/19/2019 06:23:43'!
+!Object methodsFor: '*domains' stamp: 'len 4/19/2019 06:23:43'!
 isElement
 	"Answer true if the receiver is an element of a Domain, i.e. if it understands the message #parent and answers its parent Domain."
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 5/19/2018 17:53:50'!
+!Object methodsFor: '*domains' stamp: 'len 5/19/2018 17:53:50'!
 isEvaluable
 	^ self isBlock! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 5/25/2018 17:55:58'!
+!Object methodsFor: '*domains' stamp: 'len 5/25/2018 17:55:58'!
 isFractional
 	"Answer true if this is an element of a localization, i.e. if it is some kind of fraction and understands #numerator and #denominator."
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 11/19/2015 17:01'!
+!Object methodsFor: '*domains' stamp: 'len 11/19/2015 17:01'!
 isInfinity
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 4/2/2018 05:16:06'!
+!Object methodsFor: '*domains' stamp: 'len 4/2/2018 05:16:06'!
 isMatrix
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 8/5/2016 21:51'!
+!Object methodsFor: '*domains' stamp: 'len 8/5/2016 21:51'!
 isReal
 	"Answer true if the receiver is a real number."
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 5/22/2018 16:53:19'!
+!Object methodsFor: '*domains' stamp: 'len 5/22/2018 16:53:19'!
 isSequenceable
 	"Answer true if the receiver is some sort of ordered tuple of objects, understands #at: and #size and it's indexed by integers starting at 1."
 	^ false! !
 
-!Object methodsFor: '*mathematics' stamp: 'len 3/28/2018 18:01:41'!
+!Object methodsFor: '*domains' stamp: 'len 3/28/2018 18:01:41'!
 isTuple
 	^ false! !
 
-!Class methodsFor: '*mathematics' stamp: 'len 12/1/2016 09:03:19'!
+!Class methodsFor: '*domains' stamp: 'len 12/1/2016 09:03:19'!
 newSubclass
 	"Answer a new subclass of the receiver. The new subclass will be unnamed and uncategorized, and if no instances exist it can be subject of garbage collection."
 	| newMetaclass |
@@ -44572,23 +44572,23 @@ newSubclass
 		methodDictionary: MethodDictionary new
 		format: self format! !
 
-!Magnitude methodsFor: '*mathematics' stamp: 'len 10/18/2016 13:58'!
+!Magnitude methodsFor: '*domains' stamp: 'len 10/18/2016 13:58'!
 isFinite
 	^ self isInfinite not! !
 
-!Magnitude methodsFor: '*mathematics' stamp: 'len 10/18/2016 13:57'!
+!Magnitude methodsFor: '*domains' stamp: 'len 10/18/2016 13:57'!
 isInfinite
 	^ false! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/5/2016 10:31'!
+!Number methodsFor: '*domains' stamp: 'len 11/5/2016 10:31'!
 , anObject
 	^ (QQ tuple: {self}), anObject! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 2/10/2017 15:26:13'!
+!Number methodsFor: '*domains' stamp: 'len 2/10/2017 15:26:13'!
 /// aNumber
 	^ self / aNumber! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 3/25/2018 16:03:52'!
+!Number methodsFor: '*domains' stamp: 'len 3/25/2018 16:03:52'!
 ^ aNumber
 	aNumber isInteger ifTrue: [^ self raisedToInteger: aNumber].
 	aNumber isFraction ifTrue: [^ (self root: aNumber denominator) raisedToInteger: aNumber numerator ].
@@ -44600,145 +44600,145 @@ isInfinite
 			ifFalse: [^ self]].
 	^ (aNumber * self ln) exp! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/19/2015 18:42'!
+!Number methodsFor: '*domains' stamp: 'len 11/19/2015 18:42'!
 adaptToQuaternion: rcvr andSend: selector
 	^ rcvr perform: selector with: self asQuaternion! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/19/2015 19:41'!
+!Number methodsFor: '*domains' stamp: 'len 11/19/2015 19:41'!
 asQuaternion
 	^ Quaternion a: self b: self zero c: self zero d: self zero! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 6/23/2016 23:27'!
+!Number methodsFor: '*domains' stamp: 'len 6/23/2016 23:27'!
 conjugated
 	"Answer the complex conjugate of the receiver."
 
 	^ self! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 6/4/2016 21:55'!
+!Number methodsFor: '*domains' stamp: 'len 6/4/2016 21:55'!
 imaginary
 	^ 0! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 3/17/2016 03:40'!
+!Number methodsFor: '*domains' stamp: 'len 3/17/2016 03:40'!
 isAlgebraic
 	^ false! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 8/5/2016 21:44'!
+!Number methodsFor: '*domains' stamp: 'len 8/5/2016 21:44'!
 isComplex
 	^ true "real numbers are also complex numbers"! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 5/13/2019 19:48:56'!
+!Number methodsFor: '*domains' stamp: 'len 5/13/2019 19:48:56'!
 isElement
 	^ true! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/19/2015 17:20'!
+!Number methodsFor: '*domains' stamp: 'len 11/19/2015 17:20'!
 isRational
 	^ false! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 8/5/2016 21:44'!
+!Number methodsFor: '*domains' stamp: 'len 8/5/2016 21:44'!
 isReal
 	^ true! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 1/12/2016 03:18'!
+!Number methodsFor: '*domains' stamp: 'len 1/12/2016 03:18'!
 norm
 	^ self abs! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 1/13/2016 02:54'!
+!Number methodsFor: '*domains' stamp: 'len 1/13/2016 02:54'!
 norm2
 	^ self squared! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/19/2015 20:58'!
+!Number methodsFor: '*domains' stamp: 'len 11/19/2015 20:58'!
 one
 	^ 1! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 5/27/2018 03:59:23'!
+!Number methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:23'!
 parent
 	^ RR! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 6/4/2016 21:54'!
+!Number methodsFor: '*domains' stamp: 'len 6/4/2016 21:54'!
 real
 	^ self! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 3/25/2018 16:05:30'!
+!Number methodsFor: '*domains' stamp: 'len 3/25/2018 16:05:30'!
 root: anInteger
 	anInteger = 2 ifTrue: [^ self squareRoot].
 	anInteger = 1 ifTrue: [^ self].
 	^ self notYetImplemented! !
 
-!Number methodsFor: '*mathematics' stamp: 'len 11/19/2015 20:58'!
+!Number methodsFor: '*domains' stamp: 'len 11/19/2015 20:58'!
 zero
 	^ 0! !
 
-!Float methodsFor: '*mathematics' stamp: 'len 1/13/2016 03:55'!
+!Float methodsFor: '*domains' stamp: 'len 1/13/2016 03:55'!
 adaptToAlgebraic: rcvr andSend: selector
 	^ rcvr asComplexFloat perform: selector with: self asComplex! !
 
-!Float methodsFor: '*mathematics' stamp: 'len 1/13/2016 03:52'!
+!Float methodsFor: '*domains' stamp: 'len 1/13/2016 03:52'!
 adaptToRealAlgebraic: rcvr andSend: selector
 	^ rcvr asFloat perform: selector with: self! !
 
-!Float methodsFor: '*mathematics' stamp: 'len 2/25/2016 17:17'!
+!Float methodsFor: '*domains' stamp: 'len 2/25/2016 17:17'!
 squareRoot
 	^ self sqrt! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 5/21/2018 17:30:09'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/21/2018 17:30:09'!
 % anInteger
 	| R |
 	R _ ZZ % anInteger.
 	^ (R project: numerator) / (R project: denominator)! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 1/20/2018 19:17:36'!
+!Fraction methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:36'!
 adaptToAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (ComplexAlgebraicNumber fromRational: self)! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 1/13/2016 03:55'!
+!Fraction methodsFor: '*domains' stamp: 'len 1/13/2016 03:55'!
 adaptToRealAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (RealAlgebraicNumber fromRational: self)! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 2/10/2016 21:13'!
+!Fraction methodsFor: '*domains' stamp: 'len 2/10/2016 21:13'!
 bitSize
 	^ numerator bitSize + denominator bitSize! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 1/8/2017 16:37:12'!
+!Fraction methodsFor: '*domains' stamp: 'len 1/8/2017 16:37:12'!
 height
 	^ numerator abs max: denominator! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 5/25/2018 17:56:24'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/25/2018 17:56:24'!
 isFractional
 	"Answer true if this is an element of a localization, i.e. if it is some kind of fraction and understands #numerator and #denominator."
 	^ true! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 11/19/2015 17:20'!
+!Fraction methodsFor: '*domains' stamp: 'len 11/19/2015 17:20'!
 isRational
 	^ true! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 4/28/2018 16:58:05'!
+!Fraction methodsFor: '*domains' stamp: 'len 4/28/2018 16:58:05'!
 minimalPolynomial
 	^ QQ polynomials x - self! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 5/27/2018 03:59:14'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:14'!
 parent
 	^ QQ! !
 
-!Fraction methodsFor: '*mathematics' stamp: 'len 1/20/2018 19:17:29'!
+!Fraction methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:29'!
 squareRoot
 	self positive ifTrue: [^ RealAlgebraicNumber sqrt: self].
 	^ ComplexAlgebraicNumber sqrt: self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 5/21/2018 17:30:01'!
+!Integer methodsFor: '*domains' stamp: 'len 5/21/2018 17:30:01'!
 % anInteger
 	^ ZZ % anInteger project: self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/1/2016 00:23'!
+!Integer methodsFor: '*domains' stamp: 'len 11/1/2016 00:23'!
 /// anInteger
 	"Answer the exact division of the receiver by the argument."
 	^ self // anInteger! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 8/1/2016 08:54'!
+!Integer methodsFor: '*domains' stamp: 'len 8/1/2016 08:54'!
 | anInteger
 	"Answer true if the receiver divides anInteger."
 	^ self ~= 0 and: [anInteger \\ self = 0]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/12/2016 09:35:38'!
+!Integer methodsFor: '*domains' stamp: 'len 12/12/2016 09:35:38'!
 Stirling: anInteger
 	"Answer the Stirling number of the second kind S(n,k).
 	Stirling numbers of the second kind count the ways to partition a set of n things into k nonempty subsets."
@@ -44749,19 +44749,19 @@ Stirling: anInteger
 	anInteger = 2 ifTrue: [^ 2 ^ (self-1) - 1].
 	^ anInteger*(self - 1 Stirling: anInteger) + (self - 1 Stirling: anInteger - 1)! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 1/20/2018 19:17:45'!
+!Integer methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:45'!
 adaptToAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (ComplexAlgebraicNumber fromRational: self)! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 1/13/2016 03:56'!
+!Integer methodsFor: '*domains' stamp: 'len 1/13/2016 03:56'!
 adaptToRealAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (RealAlgebraicNumber fromRational: self)! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/14/2016 14:35:53'!
+!Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:35:53'!
 additiveOrder
 	^ self == 0 ifTrue: [1] ifFalse: [Infinity positive]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/2/2016 05:45'!
+!Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:45'!
 bitCount
 	"Answer the number of bits that are set, i.e. the number of 1s in the binary representation."
 	| n |
@@ -44771,7 +44771,7 @@ bitCount
 	n _ n // 2.
 	^ (self bitShift: n negated) bitCount + (self bitAnd: (1 bitShift: n) - 1) bitCount! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/2/2016 05:43'!
+!Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:43'!
 bitParity
 	"Answer 1 if there are an odd number of bits set, 0 otherwise."
 	| n |
@@ -44781,7 +44781,7 @@ bitParity
 	n _ n // 2.
 	^ ((self bitShift: n negated) bitXor: (self bitAnd: (1 bitShift: n) - 1)) bitParity! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/2/2016 05:43'!
+!Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:43'!
 bitParity2
 	"Answer 1 if there are an odd number of bits set, 0 otherwise."
 	| i n |
@@ -44794,12 +44794,12 @@ bitParity2
 		[n _ n bitXor: (n bitShift: i negated)].
 	^ (n bitAnd: (1 bitShift: i) - 1) bitParity! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/1/2016 23:03'!
+!Integer methodsFor: '*domains' stamp: 'len 7/1/2016 23:03'!
 bitSize
 	self negative ifTrue: [^ self negated highBit + 1].
 	^ self highBit! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/12/2016 09:35:09'!
+!Integer methodsFor: '*domains' stamp: 'len 12/12/2016 09:35:09'!
 choose: anInteger
 	"Answer the binomial coefficient (self anInteger)"
 	" 6 choose: 3  "
@@ -44807,7 +44807,7 @@ choose: anInteger
 	(anInteger < 0 or: [anInteger > self]) ifTrue: [^0].
 	^(self - anInteger + 1 productTo: self) // anInteger factorial! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 6/29/2016 06:40'!
+!Integer methodsFor: '*domains' stamp: 'len 6/29/2016 06:40'!
 choose: anInteger q: q
 	"Answer the q-binomial coefficient of self with anInteger.
 	This counts the number of 'anInteger'-dimensional subspaces of a vector space of dimension 'self' over a finite field of order 'q' (power of a prime)."
@@ -44815,23 +44815,23 @@ choose: anInteger q: q
 	(anInteger < 0 or: [anInteger > self]) ifTrue: [^0].
 	^ ((0 to: anInteger - 1) inject: 1 into: [:x :i| 1 - (q^(self-i)) * x]) / ((1 to: anInteger) inject: 1 into: [:x :i| 1 - (q^i) * x])! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 4/23/2016 19:35'!
+!Integer methodsFor: '*domains' stamp: 'len 4/23/2016 19:35'!
 count: aBlock
 	| answer |
 	answer _ 0.
 	self timesRepeat: [aBlock value ifTrue: [answer _ answer + 1]].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/19/2015 18:29'!
+!Integer methodsFor: '*domains' stamp: 'len 11/19/2015 18:29'!
 denominator
 	^ 1! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/26/2016 21:24:14'!
+!Integer methodsFor: '*domains' stamp: 'len 12/26/2016 21:24:14'!
 divisors
 	"Answer the collection of positive divisors of the receiver including 1 and self."
 	^ Iterator on: self performing: #divisorsDo:! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/26/2016 21:23:53'!
+!Integer methodsFor: '*domains' stamp: 'len 12/26/2016 21:23:53'!
 divisorsDo: aBlock
 	"Iterate over the positive divisors of the receiver, including 1 and self."
 	| n sqrt |
@@ -44844,7 +44844,7 @@ divisorsDo: aBlock
 			[aBlock value: sqrt.
 			sqrt * sqrt = n ifFalse: [aBlock value: n // sqrt]]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/26/2016 20:13:44'!
+!Integer methodsFor: '*domains' stamp: 'len 12/26/2016 20:13:44'!
 factorizationDo: aBlock
 	| n times |
 	n _ self abs.
@@ -44859,7 +44859,7 @@ factorizationDo: aBlock
 		times > 0 ifTrue: [aBlock value: p value: times]].
 	n == 1 ifFalse: [aBlock value: n value: 1]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/11/2016 19:55:27'!
+!Integer methodsFor: '*domains' stamp: 'len 12/11/2016 19:55:27'!
 factors
 	"Answer a collection with the prime factors of the receiver (with multiplicity)."
 	| answer |
@@ -44867,12 +44867,12 @@ factors
 	self factorizationDo: [:p :e| answer add: p withOccurrences: e].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/19/2016 21:03:03'!
+!Integer methodsFor: '*domains' stamp: 'len 11/19/2016 21:03:03'!
 height
 	self = 0 ifTrue: [^ 1].
 	^ self abs! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/11/2016 19:58:37'!
+!Integer methodsFor: '*domains' stamp: 'len 12/11/2016 19:58:37'!
 isFundamentalDiscriminant
 	| m r |
 	r _ self \\ 4.
@@ -44882,15 +44882,15 @@ isFundamentalDiscriminant
 	r _ m \\ 4.
 	^ (r == 2 or: [r == 3]) and: [m isSquareFree]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 1/7/2017 21:04:34'!
+!Integer methodsFor: '*domains' stamp: 'len 1/7/2017 21:04:34'!
 isPerfectSquare
 	^ self sqrtFloor squared = self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/19/2015 17:21'!
+!Integer methodsFor: '*domains' stamp: 'len 11/19/2015 17:21'!
 isRational
 	^ true! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/18/2016 13:06:48'!
+!Integer methodsFor: '*domains' stamp: 'len 12/18/2016 13:06:48'!
 isSquareFree
 	"Answer true if the factorization of the receiver is squarefree."
 	self factorizationDo: [:p :e| e > 1 ifTrue: [^ false]].
@@ -44901,18 +44901,18 @@ The limit of the density of squarefree positive integers < n is 6 / pi^2 ~ 0.607
 (1000 count: [100000 atRandom isSquareFree]) / 1000.0
 "! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/4/2016 15:14:11'!
+!Integer methodsFor: '*domains' stamp: 'len 12/4/2016 15:14:11'!
 isZero
 	^ self == 0! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 4/10/2018 17:29:24'!
+!Integer methodsFor: '*domains' stamp: 'len 4/10/2018 17:29:24'!
 jacobi: m
 	"Answer the Jacobi symbol of the receiver and the positive odd integer m.
 	This is a generalization of the Legendre symbol that allows a composite argument m."
 
 	^ self kronecker: m! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 4/10/2018 17:28:55'!
+!Integer methodsFor: '*domains' stamp: 'len 4/10/2018 17:28:55'!
 jacobiNew: m
 	"Answer the Jacobi symbol of the receiver and the positive odd integer m.
 	This is a generalization of the Legendre symbol that allows a composite argument m."
@@ -44935,7 +44935,7 @@ jacobiNew: m
 		x _ z].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 8/20/97 02:26'!
+!Integer methodsFor: '*domains' stamp: 'len 8/20/97 02:26'!
 jacobiOld: n
 	"Answer the Jacoby symbol of the receiver and the argument."
 
@@ -44948,7 +44948,7 @@ jacobiOld: n
 	^ (a - 1 * minusOne) lowBit > 2
 		ifTrue: [n jacobiOld: a] ifFalse: [(n jacobiOld: a) negated]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/29/2016 07:15:13'!
+!Integer methodsFor: '*domains' stamp: 'len 12/29/2016 07:15:13'!
 kronecker: anInteger
 	"Answer the Kronecker symbol (a | b) for a, b integers. This is the Legendre symbol when b is an odd prime.
 	Reference: Henri Cohen, 'A Course in Computatational Algebraic Number Theory', Algorithm 1.4.10."
@@ -44977,7 +44977,7 @@ kronecker: anInteger
 	a _ b \\ r.
 	b _ r] repeat! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/26/2016 22:53:38'!
+!Integer methodsFor: '*domains' stamp: 'len 12/26/2016 22:53:38'!
 legendre: p
 	"Answer the Legendre symbol (a | p) where p is an odd prime. This is:
 		1 if a is a quadratic residue modulo p and a is not 0 modulo p;
@@ -44989,11 +44989,11 @@ legendre: p
 	answer > 1 ifTrue: [answer _ answer - p].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 4/28/2018 16:58:43'!
+!Integer methodsFor: '*domains' stamp: 'len 4/28/2018 16:58:43'!
 minimalPolynomial
 	^ QQ polynomials x - self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/28/2015 07:08'!
+!Integer methodsFor: '*domains' stamp: 'len 11/28/2015 07:08'!
 moebius
 	"Answer the Moebius function mu of the receiver."
 	| factors |
@@ -45001,32 +45001,32 @@ moebius
 	factors asSet size = factors size ifFalse: [^ 0].
 	^ factors size even ifTrue: [1] ifFalse: [-1]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 4/30/2019 11:01:13'!
+!Integer methodsFor: '*domains' stamp: 'len 4/30/2019 11:01:13'!
 multichoose: anInteger
 	"Answer 'd multichoose: n', the number of ways of counting n objects from a set of d elements where repetition is allowed and order does not matter."
 	^ self + anInteger - 1 choose: anInteger! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/14/2016 14:36:14'!
+!Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:36:14'!
 multiplicativeOrder
 	^ self == 1 ifTrue: [1] ifFalse: [self == -1 ifTrue: [2] ifFalse: [Infinity positive]]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/13/2015 02:00'!
+!Integer methodsFor: '*domains' stamp: 'len 12/13/2015 02:00'!
 numberOfDivisors
 	^ self primeSignature inject: 1 into: [:x :each| x * (each + 1)]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 11/19/2015 18:29'!
+!Integer methodsFor: '*domains' stamp: 'len 11/19/2015 18:29'!
 numerator
 	^ self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 5/27/2018 03:59:04'!
+!Integer methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:04'!
 parent
 	^ ZZ! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/2/2016 20:55'!
+!Integer methodsFor: '*domains' stamp: 'len 7/2/2016 20:55'!
 partitions
 	^ Iterator on: self performing: #partitionsDo:! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 7/2/2016 20:57'!
+!Integer methodsFor: '*domains' stamp: 'len 7/2/2016 20:57'!
 partitionsDo: aBlock
 	self < 0 ifTrue: [^ DomainError signal: 'negative number'].
 	self = 0 ifTrue: [^ aBlock value: #()].
@@ -45035,12 +45035,12 @@ partitionsDo: aBlock
 		(each size > 0 and: [each size < 2 or: [(each at: 2) > (each at: 1)]])
 			ifTrue: [aBlock value: (each copy at: 1 put: (each at: 1) + 1; yourself)]]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/10/2016 12:18:54'!
+!Integer methodsFor: '*domains' stamp: 'len 12/10/2016 12:18:54'!
 phi
 	"Answer Euler's totient function phi of the receiver."
 	^ (1 to: self) count: [:each| (self gcd: each) = 1]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/3/2016 13:17:26'!
+!Integer methodsFor: '*domains' stamp: 'len 12/3/2016 13:17:26'!
 pollard
 	"Answer a non trivial factor of the receiver.
 	Pollard's p-1 algorithm is used. This works well to find a prime factor p such that p - 1 is smooth."
@@ -45057,7 +45057,7 @@ pollard
 		ifFalse: [^ Array with: p with: count].
 	count _ count + 1] repeat! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/3/2016 13:25:38'!
+!Integer methodsFor: '*domains' stamp: 'len 12/3/2016 13:25:38'!
 pollard: L
 	"Answer a nontrivial factor of the receiver, or nil if fail.
 	This is Pollard's p-1 algorithm. It works well with numbers divisible by a prime p such that p - 1 is smooth with some small factor q^k where k*q <= L."
@@ -45070,13 +45070,13 @@ pollard: L
 			ifFalse: [^ F]].
 	^ nil! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/13/2015 01:49'!
+!Integer methodsFor: '*domains' stamp: 'len 12/13/2015 01:49'!
 primeSignature
 	| factors |
 	factors _ self factors.
 	^ (factors asSet asSortedCollection collect: [:each| factors occurrencesOf: each]) asArray! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/14/2016 14:48:30'!
+!Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:48:30'!
 radical
 	"Answer the product of the prime divisors of the receiver."
 	| answer |
@@ -45084,7 +45084,7 @@ radical
 	self factorizationDo: [:p :e| answer _ answer * p].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/4/2016 13:11:44'!
+!Integer methodsFor: '*domains' stamp: 'len 12/4/2016 13:11:44'!
 reciprocalModulo2: n
 	"Answer an integer x such that self * x \\ n = 1, with 0 < x < n, or nil if it doesn't exist."
 	| xgcd |
@@ -45093,7 +45093,7 @@ reciprocalModulo2: n
 	xgcd _ self xgcd: n.
 	^ (xgcd at: 1) == 1 ifTrue: [^ (xgcd at: 2) \\ n]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'sqr 1/14/2014 01:30'!
+!Integer methodsFor: '*domains' stamp: 'sqr 1/14/2014 01:30'!
 reciprocalModulo: mod
 	"Answer an integer x such that self * x \\ n = 1, with 0 < x < n, or nil if x does not exist.
 	The algorithm is a non extended euclidean modular inversion called NINV.
@@ -45119,7 +45119,7 @@ reciprocalModulo: mod
 		ifTrue: [result]
 		ifFalse: [result2]! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/14/2016 22:03:49'!
+!Integer methodsFor: '*domains' stamp: 'len 12/14/2016 22:03:49'!
 squareFree
 	"Answer the unique integer z such that the receiver equals z * y^2 with z squarefree and y^2 a perfect square."
 	| answer |
@@ -45127,12 +45127,12 @@ squareFree
 	self factorizationDo: [:p :e| e even ifFalse: [answer _ answer * p]].
 	^ answer! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 1/20/2018 19:17:41'!
+!Integer methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:41'!
 squareRoot
 	self positive ifTrue: [^ RealAlgebraicNumber sqrt: self].
 	^ ComplexAlgebraicNumber sqrt: self! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 12/12/2016 09:35:43'!
+!Integer methodsFor: '*domains' stamp: 'len 12/12/2016 09:35:43'!
 stirling: anInteger
 	"Answer the Stirling number of the first kind s(n,k).
 	Stirling numbers of the first kind count the ways to arrange n objects into k cycles."
@@ -45142,7 +45142,7 @@ stirling: anInteger
 	self+1 = anInteger ifTrue: [^ self choose: 2].
 	^ (self-1) * (self-1 stirling: anInteger) + (self-1 stirling: anInteger-1)! !
 
-!Integer methodsFor: '*mathematics' stamp: 'len 3/6/2017 16:27:34'!
+!Integer methodsFor: '*domains' stamp: 'len 3/6/2017 16:27:34'!
 xgcd: anInteger
 	"Extended Euclidean algorithm.
 	Answer an array {x. u. v} where self * u + (anInteger * v) = x, and x = (self gcd: anInteger)."
@@ -45161,7 +45161,7 @@ xgcd: anInteger
 	s _ s * b sign. t _ t * a sign.
 	^ {r. t. s}! !
 
-!SmallInteger methodsFor: '*mathematics' stamp: 'len 11/12/2016 08:38'!
+!SmallInteger methodsFor: '*domains' stamp: 'len 11/12/2016 08:38'!
 bitCount
 	"Answer the number of bits that are set, i.e. the number of 1s in the binary representation."
 	| v count |
@@ -45178,7 +45178,7 @@ bitCount
 "
 ! !
 
-!SmallInteger methodsFor: '*mathematics' stamp: 'len 7/2/2016 05:43'!
+!SmallInteger methodsFor: '*domains' stamp: 'len 7/2/2016 05:43'!
 bitParity
 	"Answer 1 if there are an odd number of bits set, 0 otherwise."
 	| v parity |
@@ -45195,93 +45195,93 @@ bitParity
 	^ (16r6996 bitShift: n negated) bitAnd: 1
 "! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 1/22/2017 08:13:12'!
+!Complex methodsFor: '*domains' stamp: 'len 1/22/2017 08:13:12'!
 ^ aNumber
 	^ self raisedTo: aNumber! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 5/13/2019 19:49:08'!
+!Complex methodsFor: '*domains' stamp: 'len 5/13/2019 19:49:08'!
 isElement
 	^ true! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 12/6/2016 13:18:52'!
+!Complex methodsFor: '*domains' stamp: 'len 12/6/2016 13:18:52'!
 isInfinite
 	^ real isInfinite or: [imaginary isInfinite]! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 8/5/2016 21:45'!
+!Complex methodsFor: '*domains' stamp: 'len 8/5/2016 21:45'!
 isReal
 	^ self imaginary isZero! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 3/3/2016 01:01'!
+!Complex methodsFor: '*domains' stamp: 'len 3/3/2016 01:01'!
 norm
 	^ (real squared + imaginary squared) squareRoot! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 1/11/2016 05:54'!
+!Complex methodsFor: '*domains' stamp: 'len 1/11/2016 05:54'!
 norm2
 	^ real squared + imaginary squared! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 12/26/2015 19:56'!
+!Complex methodsFor: '*domains' stamp: 'len 12/26/2015 19:56'!
 one
 	^ self class real: real one imaginary: imaginary zero! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 5/27/2018 03:59:33'!
+!Complex methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:33'!
 parent
 	^ CC! !
 
-!Complex methodsFor: '*mathematics' stamp: 'len 12/26/2015 19:56'!
+!Complex methodsFor: '*domains' stamp: 'len 12/26/2015 19:56'!
 zero
 	^ self class real: real zero imaginary: imaginary zero! !
 
-!BlockClosure methodsFor: '*mathematics' stamp: 'len 4/24/2016 06:00'!
+!BlockClosure methodsFor: '*domains' stamp: 'len 4/24/2016 06:00'!
 count
 	| count |
 	count _ 0.
 	self whileTrue: [count _ count + 1].
 	^ count! !
 
-!BlockClosure methodsFor: '*mathematics' stamp: 'len 3/1/2017 17:00:08'!
+!BlockClosure methodsFor: '*domains' stamp: 'len 3/1/2017 17:00:08'!
 times: anInteger histogram: binCount
 	^ HistogramMorph new: binCount samples: ((1 to: anInteger) collect: [:each| self value])! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 5/10/2019 04:26:01'!
+!Collection methodsFor: '*domains' stamp: 'len 5/10/2019 04:26:01'!
 /\ aCollection
 	^ self intersection: aCollection! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 8/12/2016 21:17'!
+!Collection methodsFor: '*domains' stamp: 'len 8/12/2016 21:17'!
 < aCollection
 	"Answer true if the receiver is a proper subcollection of aCollection."
 	^ self <= aCollection and: [self size < aCollection size]! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 8/12/2016 21:16'!
+!Collection methodsFor: '*domains' stamp: 'len 8/12/2016 21:16'!
 <= aCollection
 	"Answer true if the receiver is a subcollection of aCollection."
 	(aCollection isKindOf: self species) ifFalse: [^ false].
 	self size <= aCollection size ifFalse: [^ false].
 	^ self allSatisfy: [:each| aCollection includes: each]! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 8/12/2016 21:11'!
+!Collection methodsFor: '*domains' stamp: 'len 8/12/2016 21:11'!
 > aCollection
 	"Answer true if aCollection is a proper subcollection of the receiver."
 	^ aCollection < self! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 8/12/2016 21:12'!
+!Collection methodsFor: '*domains' stamp: 'len 8/12/2016 21:12'!
 >= aCollection
 	"Answer true if aCollection is a subcollection of the receiver."
 	^ aCollection <= self! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 2/19/2017 09:13:36'!
+!Collection methodsFor: '*domains' stamp: 'len 2/19/2017 09:13:36'!
 \ aCollection
 	"Answer the complement of aCollection in the receiver."
 	^ self reject: [:each| aCollection includes: each]! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 5/10/2019 04:26:11'!
+!Collection methodsFor: '*domains' stamp: 'len 5/10/2019 04:26:11'!
 \/ aCollection
 	^ self union: aCollection! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 5/6/2019 03:01:10'!
+!Collection methodsFor: '*domains' stamp: 'len 5/6/2019 03:01:10'!
 · anObject
 	^ anObject adaptToCollection: self andSend: #·! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 2/18/2003 21:40'!
+!Collection methodsFor: '*domains' stamp: 'len 2/18/2003 21:40'!
 anyIfNone: aBlock
 	"Answer a representative sample of the receiver. This method can
 	be helpful when needing to preinfer the nature of the contents of 
@@ -45290,47 +45290,47 @@ anyIfNone: aBlock
 	self do: [:each | ^ each].
 	^aBlock value! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 4/27/2018 01:29:32'!
+!Collection methodsFor: '*domains' stamp: 'len 4/27/2018 01:29:32'!
 apply: aFunction
 	^ self collect: aFunction! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 5/25/2018 18:10:51'!
+!Collection methodsFor: '*domains' stamp: 'len 5/25/2018 18:10:51'!
 atRandom: aRandom bits: bitSize
 	^ self atRandom: aRandom! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 1/30/2018 21:35:53'!
+!Collection methodsFor: '*domains' stamp: 'len 1/30/2018 21:35:53'!
 atRandomBits: anInteger
 	^ self atRandom! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 2/13/2003 23:19'!
+!Collection methodsFor: '*domains' stamp: 'len 2/13/2003 23:19'!
 copyEmpty
 	^ self species new! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 2/13/2003 23:19'!
+!Collection methodsFor: '*domains' stamp: 'len 2/13/2003 23:19'!
 copyEmpty: anInteger
 	^ self species new: anInteger! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 2/19/2017 10:40:52'!
+!Collection methodsFor: '*domains' stamp: 'len 2/19/2017 10:40:52'!
 intersects: aCollection
 	^ self anySatisfy: [:any| aCollection includes: any]! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 5/6/2019 02:58:39'!
+!Collection methodsFor: '*domains' stamp: 'len 5/6/2019 02:58:39'!
 inverse
 	^ self collect: [:a | a inverse]! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 6/23/2016 05:29'!
+!Collection methodsFor: '*domains' stamp: 'len 6/23/2016 05:29'!
 isFinite
 	^ true! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 6/23/2016 05:29'!
+!Collection methodsFor: '*domains' stamp: 'len 6/23/2016 05:29'!
 isInfinite
 	^ false! !
 
-!Collection methodsFor: '*mathematics' stamp: 'len 4/25/2016 07:52'!
+!Collection methodsFor: '*domains' stamp: 'len 4/25/2016 07:52'!
 plot: aFunction
 	^ FunctionPlotMorph new evaluationPoints: self; function: aFunction! !
 
-!Collection class methodsFor: '*mathematics-instance creation'!
+!Collection class methodsFor: '*domains-instance creation'!
 accumulate: iteratorBlock
 	"Return a new instance of myself by evaluating the iteratorBlock.
 	Examples:
@@ -45346,7 +45346,7 @@ accumulate: iteratorBlock
 	iteratorBlock value: [ :element | collection add: element].
 	^collection! !
 
-!Collection class methodsFor: '*mathematics-instance creation'!
+!Collection class methodsFor: '*domains-instance creation'!
 accumulate: iteratorSymbol on: collection
 	"Return a new instance of myself by sending the iteratorSymbol to the collection.
 	Examples:
@@ -45362,22 +45362,22 @@ accumulate: iteratorSymbol on: collection
 	collection perform: iteratorSymbol with: [ :element | newCollection add: element].
 	^newCollection! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 8/12/2016 22:01'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 8/12/2016 22:01'!
 <= aCollection
 	"Answer true if the receiver is a subcollection of aCollection."
 	(aCollection isKindOf: self species) ifFalse: [^ false].
 	self size <= aCollection size ifFalse: [^ false].
 	^ (aCollection indexOfSubCollection: self startingAt: 1) > 0! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 3/23/2016 05:04'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 3/23/2016 05:04'!
 at: anInteger add: anObject
 	^ self at: anInteger put: (self at: anInteger) + anObject! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 2/21/2017 18:59:40'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 2/21/2017 18:59:40'!
 combinations: r
 	^ Iterator on: [:aBlock| self combinations: r atATimeDo: [:each| aBlock value: each copy]]! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 11/22/2016 05:40:12'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 11/22/2016 05:40:12'!
 convolution: aCollection
 	| answer |
 	self isEmpty ifTrue: [^ self].
@@ -45389,34 +45389,34 @@ convolution: aCollection
 			answer at: i+k-1 add: (self at: i) * (aCollection at: k)]].
 	^ answer! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 11/6/2016 09:06'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 11/6/2016 09:06'!
 isZero
 	self do: [:each| each isZero ifFalse: [^ false]].
 	^ true! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 2/21/2017 19:00:52'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 2/21/2017 19:00:52'!
 permutations
 	^ Iterator on: [:aBlock| self permutationsDo: [:each| aBlock value: each copy]]! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 11/18/2016 08:42:32'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 11/18/2016 08:42:32'!
 permutedBy: aPermutation
 	| answer |
 	answer _ Array new: self size.
 	1 to: self size do: [:i| answer at: (aPermutation at: i) put: (self at: i)].
 	^ answer! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 7/17/2016 22:13'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 7/17/2016 22:13'!
 plot
 	^ FunctionPlotMorph new evaluationPoints: (1 to: self size); function: (Function evaluating: [:n| self at: n])! !
 
-!SequenceableCollection methodsFor: '*mathematics' stamp: 'len 11/18/2016 08:58:16'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 11/18/2016 08:58:16'!
 sum
 	| answer |
 	answer _ self at: 1.
 	2 to: self size do: [:i| answer _ answer + (self at: i)].
 	^ answer! !
 
-!Array methodsFor: '*mathematics' stamp: 'len 11/6/2016 09:26'!
+!Array methodsFor: '*domains' stamp: 'len 11/6/2016 09:26'!
 printOn: aStream
 	self == Smalltalk specialObjectsArray
 		ifTrue: [aStream nextPutAll: 'Smalltalk specialObjectsArray' ]
@@ -45425,43 +45425,43 @@ printOn: aStream
 			self do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
 			aStream nextPut: $)]! !
 
-!Float64Array methodsFor: '*mathematics' stamp: 'len 5/13/2019 21:32:22'!
+!Float64Array methodsFor: '*domains' stamp: 'len 5/13/2019 21:32:22'!
 · anObject
 	^ self dot: anObject! !
 
-!FloatArray methodsFor: '*mathematics' stamp: 'len 5/13/2019 21:32:12'!
+!FloatArray methodsFor: '*domains' stamp: 'len 5/13/2019 21:32:12'!
 · anObject
 	^ self dot: anObject! !
 
-!Interval methodsFor: '*mathematics' stamp: 'len 11/14/2016 13:59'!
+!Interval methodsFor: '*domains' stamp: 'len 11/14/2016 13:59'!
 isStandard
 	"Answer true if the receiver is an interval [1..n]."
 	^ start = 1 and: [stop isInteger and: [stop >= 1 and: [stop - start + 1 = count]]]! !
 
-!Interval methodsFor: '*mathematics' stamp: 'len 11/14/2016 10:15'!
+!Interval methodsFor: '*domains' stamp: 'len 11/14/2016 10:15'!
 printOn: aStream
 	self increment = 1
 		ifTrue: [aStream nextPut: $[; print: start; nextPutAll: '..'; print: stop; nextPut: $]]
 		ifFalse: [self storeOn: aStream]! !
 
-!Interval methodsFor: '*mathematics' stamp: 'len 11/14/2016 10:14'!
+!Interval methodsFor: '*domains' stamp: 'len 11/14/2016 10:14'!
 storeOn: aStream
 	aStream nextPut: $(; print: start; nextPutAll: ' to: '; print: stop.
 	self increment ~= 1 ifTrue: [aStream nextPutAll: ' by: '; print: self increment].
 	aStream nextPut: $)! !
 
-!Bag methodsFor: '*Mathematics' stamp: 'len 4/24/2018 17:42:11'!
+!Bag methodsFor: '*domains' stamp: 'len 4/24/2018 17:42:11'!
 apply: aFunction
 	| answer |
 	answer _ self species new.
 	self withOccurrencesDo: [:each :times| answer add: (aFunction value: each) withOccurrences: times].
 	^ answer! !
 
-!Bag methodsFor: '*Mathematics' stamp: 'len 12/10/2016 11:26:24'!
+!Bag methodsFor: '*domains' stamp: 'len 12/10/2016 11:26:24'!
 withOccurrencesDo: aBlock
 	contents associationsDo: [:each| aBlock value: each key value: each value]! !
 
-!Set methodsFor: '*mathematics' stamp: 'len 4/27/2016 02:28'!
+!Set methodsFor: '*domains' stamp: 'len 4/27/2016 02:28'!
 add: newObject ifAbsent: aBlock
 	"Include newObject as one of the receiver's elements, but only if
 	not already present. Answer newObject."
@@ -45472,7 +45472,7 @@ add: newObject ifAbsent: aBlock
 	(array at: index) ifNil: [self atNewIndex: index put: newObject. aBlock value].
 	^ newObject! !
 
-!Set methodsFor: '*mathematics' stamp: 'len 5/12/2016 23:24'!
+!Set methodsFor: '*domains' stamp: 'len 5/12/2016 23:24'!
 add: newObject ifPresent: aBlock
 	"Include newObject as one of the receiver's elements, but only if
 	not already present. Answer newObject."
@@ -45485,7 +45485,7 @@ add: newObject ifPresent: aBlock
 		ifFalse: [aBlock value].
 	^ newObject! !
 
-!Set methodsFor: '*mathematics' stamp: 'len 6/13/2016 01:03'!
+!Set methodsFor: '*domains' stamp: 'len 6/13/2016 01:03'!
 powerset
 	"Answer all subsets of the receiver, including self and {}."
 	| e answer |
@@ -45495,7 +45495,7 @@ powerset
 	answer copy do: [:each| answer add: (each copyWith: e)].
 	^ answer! !
 
-!Set methodsFor: '*mathematics' stamp: 'len 11/7/2016 09:28'!
+!Set methodsFor: '*domains' stamp: 'len 11/7/2016 09:28'!
 printOn: aStream
 	(self isMemberOf: Set)
 		ifFalse: [^ super printOn: aStream].
@@ -45503,7 +45503,7 @@ printOn: aStream
 	self do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $}! !
 
-!Dictionary methodsFor: '*mathematics' stamp: 'len 11/30/2016 14:47:44'!
+!Dictionary methodsFor: '*domains' stamp: 'len 11/30/2016 14:47:44'!
 at: key add: value
 	| index assoc |
 	index _ self findElementOrNil: key.
@@ -45518,7 +45518,7 @@ at: key add: value
 			^ newValue].
 	^ value! !
 
-!Dictionary methodsFor: '*mathematics' stamp: 'len 11/30/2016 14:47:14'!
+!Dictionary methodsFor: '*domains' stamp: 'len 11/30/2016 14:47:14'!
 at: key addAndRemoveIfZero: value
 	| index assoc |
 	index _ self findElementOrNil: key.
@@ -45538,22 +45538,22 @@ at: key addAndRemoveIfZero: value
 			^ newValue].
 	^ value! !
 
-!Point methodsFor: '*mathematics' stamp: 'len 2/25/2016 17:01'!
+!Point methodsFor: '*domains' stamp: 'len 2/25/2016 17:01'!
 norm
 	^ (x*x + (y*y)) sqrt! !
 
-!Point methodsFor: '*mathematics' stamp: 'len 2/25/2016 17:00'!
+!Point methodsFor: '*domains' stamp: 'len 2/25/2016 17:00'!
 norm2
 	^ x*x + (y*y)! !
 
-!StrikeFont class methodsFor: '*mathematics-character shapes' stamp: 'len 12/8/2016 12:11:12'!
+!StrikeFont class methodsFor: '*domains-character shapes' stamp: 'len 12/8/2016 12:11:12'!
 buildMathFont
 	"
 	StrikeFont buildMathFont
 	"
 	#(5 6 7 8 9 10 11 12 13 14 17 22) do: [:pointSize| self buildMathFont: pointSize]! !
 
-!StrikeFont class methodsFor: '*mathematics-character shapes' stamp: 'len 3/7/2017 08:00:46'!
+!StrikeFont class methodsFor: '*domains-character shapes' stamp: 'len 3/7/2017 08:00:46'!
 buildMathFont: pointSize
 	| font normal larger muchLarger |
 	font _ AbstractFont familyName: 'DejaVu Sans Mono' pointSize: pointSize.
@@ -45575,7 +45575,7 @@ buildMathFont: pointSize
 	'' do: [:each|
 		font takeAllGlyphFor: each from: each in: larger]! !
 
-!StrikeFont class methodsFor: '*mathematics-character shapes' stamp: 'len 3/7/2017 08:03:34'!
+!StrikeFont class methodsFor: '*domains-character shapes' stamp: 'len 3/7/2017 08:03:34'!
 installMathFonts
 "
 StrikeFont installMathFonts
