@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 16 May 2019 at 10:23:44 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 23 May 2019 at 7:16:42 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 496!
+!provides: 'Domains' 1 497!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -5465,14 +5465,14 @@ printOn: aStream
 		ifFalse: [aStream nextPut: $(; print: domain; nextPut: $)].
 	aStream nextPut: $/; print: self relation"! !
 
-!FreeAbelianSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 12:23:53'!
+!FreeAbelianSemigroup methodsFor: 'printing' stamp: 'len 5/13/2019 12:23:53'!
 printOn: aStream
 	self isTrivial ifTrue: [^ super printOn: aStream].
 	aStream nextPut: $[.
 	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	aStream nextPutAll: ']+'! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:10:38'!
+!FreeSemigroup methodsFor: 'printing' stamp: 'len 5/13/2019 11:10:38'!
 printOn: aStream
 	self isTrivial ifTrue: [aStream nextPutAll: '{}'. ^ self].
 	aStream nextPut: ${.
@@ -14493,44 +14493,148 @@ isSemigroup
 isTrivial
 	^ self isEmpty! !
 
-!FreeAbelianSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 20:44:07'!
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:14:29'!
+generators
+	^ self propertyAt: #generators ifAbsentPut: [(1 to: rank) collect: [:i| (Monomial new: rank x: i) parent: self]]! !
+
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:15:55'!
+names
+	"Answer the indeterminate names to use when printing monomials."
+	^ self propertyAt: #names ifAbsent: [self rank = 1 ifTrue: [#(x)]]! !
+
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:16:09'!
+names: anArray
+	"Set indeterminate names to use when printing monomials."
+	self propertyAt: #names put: anArray! !
+
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:10:47'!
+ordering
+	^ ordering! !
+
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:15:21'!
+rank
+	^ rank! !
+
+!FreeAbelianSemigroup methodsFor: 'accessing' stamp: 'len 5/23/2019 19:11:24'!
+size
+	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [0]! !
+
+!FreeAbelianSemigroup methodsFor: 'comparing' stamp: 'len 5/23/2019 19:09:57'!
+= anObject
+	^ (anObject isKindOf: FreeAbelianSemigroup) and: [anObject rank = rank]! !
+
+!FreeAbelianSemigroup methodsFor: 'comparing' stamp: 'len 5/23/2019 19:09:41'!
+hash
+	^ self rank + self class hash! !
+
+!FreeAbelianSemigroup methodsFor: 'elements' stamp: 'len 5/23/2019 19:07:06'!
+!! anObject
+	| exponents n |
+	exponents _ anObject isSequenceable ifTrue: [anObject] ifFalse: [anObject exponents].
+	(n _ exponents size) = rank
+		ifFalse:
+			[n > rank
+				ifTrue: [exponents _ exponents copyFrom: 1 to: rank]
+				ifFalse: [exponents _ exponents, (ByteArray new: rank - n) "hack"]].
+	^ (Monomial exponents: exponents) parent: self! !
+
+!FreeAbelianSemigroup methodsFor: 'elements' stamp: 'len 5/13/2019 20:44:07'!
 exponents: anArray
 	anArray size = rank ifFalse: [self error: 'exponents size doesn''t match rank'].
 	^ (Monomial exponents: anArray) parent: self! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:07:37'!
+!FreeAbelianSemigroup methodsFor: 'enumerating' stamp: 'len 5/23/2019 19:09:12'!
+do: aBlock
+	| first |
+	first _ true.
+	NN ^ self rank do: [:each| first ifFalse: [aBlock value: self !! (each asArray collect: [:x| x - 1])]. first _ false]! !
+
+!FreeAbelianSemigroup methodsFor: 'random' stamp: 'len 5/23/2019 19:05:59'!
+atRandom: aRandom bits: bitSize
+	| M |
+	M _ ZZ ^ self rank.
+	^ self !! (((M atRandom: aRandom bits: bitSize) collect: [:each| each abs]) + (M generators atRandom: aRandom))! !
+
+!FreeAbelianSemigroup methodsFor: 'testing' stamp: 'len 5/23/2019 18:50:38'!
+isCommutative
+	^ true! !
+
+!FreeAbelianSemigroup methodsFor: 'private' stamp: 'len 5/23/2019 19:10:28'!
+ordering: aMonomialOrdering
+	ordering _ aMonomialOrdering isSymbol
+		ifTrue: [MonomialOrdering perform: (aMonomialOrdering,':') asSymbol with: (1 to: self rank)]
+		ifFalse: [aMonomialOrdering]! !
+
+!FreeAbelianSemigroup methodsFor: 'private' stamp: 'len 5/23/2019 19:15:17'!
+rank: anInteger
+	rank _ anInteger! !
+
+!FreeAbelianSemigroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:10:39'!
+new: anIntegerOrCollection
+	^ self new: anIntegerOrCollection ordering: #grevlex! !
+
+!FreeAbelianSemigroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:10:18'!
+new: anIntegerOrCollection ordering: aMonomialOrdering
+	^ (anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]) ordering: aMonomialOrdering! !
+
+!FreeSemigroup methodsFor: 'accessing' stamp: 'len 5/13/2019 11:07:37'!
 generators
 	^ self propertyAt: #generators ifAbsentPut: ((1 to: self rank) collect: [:i| (Word x: i) parent: self])! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:08:15'!
-isCommutative
-	^ self rank <= 1! !
-
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 05:42:11'!
+!FreeSemigroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:42:11'!
 names
 	"Answer the indeterminate names to use when printing words."
 	^ self propertyAt: #names ifAbsent: [self rank = 1 ifTrue: [#(x)]]! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 13:01:27'!
+!FreeSemigroup methodsFor: 'accessing' stamp: 'len 5/13/2019 11:07:26'!
+rank
+	^ self propertyAt: #rank! !
+
+!FreeSemigroup methodsFor: 'accessing' stamp: 'len 5/13/2019 11:06:58'!
+size
+	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [0]! !
+
+!FreeSemigroup methodsFor: 'random' stamp: 'len 5/23/2019 18:59:49'!
+atRandom: aRandom bits: bitSize
+	| answer n |
+	answer _ self generators atRandom: aRandom.
+	n _ self rank.
+	bitSize // n highBit
+		timesRepeat:
+			[((n + 1) atRandom: aRandom) = 1
+				ifFalse: [answer _ (self x: (self rank atRandom: aRandom)) * answer]].
+	^ answer! !
+
+!FreeSemigroup methodsFor: 'testing' stamp: 'len 5/23/2019 18:58:43'!
+contains: aWord
+	aWord isEmpty ifTrue: [^ false].
+	aWord do: [:i :exp| (self rank <= i and: [exp >= 0]) ifFalse: [^ false]].
+	^ true! !
+
+!FreeSemigroup methodsFor: 'testing' stamp: 'len 5/23/2019 18:57:55'!
+includes: aWord
+	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
+
+!FreeSemigroup methodsFor: 'testing' stamp: 'len 5/13/2019 11:08:15'!
+isCommutative
+	^ self rank <= 1! !
+
+!FreeSemigroup methodsFor: 'private' stamp: 'len 5/13/2019 13:01:27'!
 names: anArray
 	"Set indeterminate names to use when printing words."
 	self propertyAt: #names put: anArray! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:07:26'!
-rank
-	^ self propertyAt: #rank! !
-
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:21:46'!
+!FreeSemigroup methodsFor: 'private' stamp: 'len 5/13/2019 11:21:46'!
 rank: anInteger
 	self propertyAt: #rank put: anInteger! !
 
-!FreeSemigroup methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 11:06:58'!
-size
-	^ self rank > 0 ifTrue: [Aleph new] ifFalse: [0]! !
-
-!FreeSemigroup class methodsFor: 'instance creation' stamp: 'len 5/13/2019 11:23:55'!
-new: anInteger
-	^ self new rank: anInteger! !
+!FreeSemigroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:09:21'!
+new: anIntegerOrCollection
+	^ anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]! !
 
 !Monoid methodsFor: 'accessing' stamp: 'len 12/28/2016 11:26:45'!
 identity
@@ -14664,13 +14768,15 @@ example2
 	"The free abelian monoid in 3 indeterminates with lexicographic monomial ordering:"
 	^ FreeAbelianMonoid new: 3 ordering: #lex! !
 
-!FreeAbelianMonoid class methodsFor: 'instance creation' stamp: 'len 2/12/2017 06:07:42'!
-new: anInteger
-	^ self new: anInteger ordering: #grevlex! !
+!FreeAbelianMonoid class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:07:28'!
+new: anIntegerOrCollection
+	^ self new: anIntegerOrCollection ordering: #grevlex! !
 
-!FreeAbelianMonoid class methodsFor: 'instance creation' stamp: 'len 11/20/2016 11:02:53'!
-new: anInteger ordering: aMonomialOrdering
-	^ self new rank: anInteger; ordering: aMonomialOrdering! !
+!FreeAbelianMonoid class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:08:49'!
+new: anIntegerOrCollection ordering: aMonomialOrdering
+	^ (anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]) ordering: aMonomialOrdering! !
 
 !FreeMonoid methodsFor: 'accessing' stamp: 'len 5/13/2019 11:05:39'!
 generators
@@ -14730,9 +14836,11 @@ isCommutative
 rank: anInteger
 	self propertyAt: #rank put: anInteger! !
 
-!FreeMonoid class methodsFor: 'instance creation' stamp: 'len 5/10/2019 18:33:19'!
-new: anInteger
-	^ self new rank: anInteger! !
+!FreeMonoid class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:06:53'!
+new: anIntegerOrCollection
+	^ anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]! !
 
 !Group methodsFor: 'accessing' stamp: 'len 12/28/2016 11:27:45'!
 exponent
@@ -15687,13 +15795,15 @@ ordering: aMonomialOrdering
 rank: anInteger
 	rank _ anInteger! !
 
-!FreeAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:08:54'!
-new: anInteger
-	^ self new: anInteger ordering: #grevlex! !
+!FreeAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:12:05'!
+new: anIntegerOrCollection
+	^ self new: anIntegerOrCollection ordering: #grevlex! !
 
-!FreeAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 09:09:01'!
-new: anInteger ordering: aMonomialOrdering
-	^ self new rank: anInteger; ordering: aMonomialOrdering! !
+!FreeAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:12:13'!
+new: anIntegerOrCollection ordering: aMonomialOrdering
+	^ (anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]) ordering: aMonomialOrdering! !
 
 !FPGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 02:27:28'!
 base
@@ -15833,32 +15943,32 @@ base: aFreeGroup
 relators: aCollection
 	self propertyAt: #relators put: aCollection! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:01:35'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:14:28'!
 D
 	"Answer the infinite dihedral group as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(r f).
 	^ F / (F !! [:r :f| {f^2. (r·f)^2}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:25:10'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:14:59'!
 GL2Z
 	"Answer GL(2,Z) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 3.
+	F _ FreeGroup new: #(a b j).
 	^ F / (F !! [:a :b :j| {a·b·a eq: b·a·b. (a·b·a)^4. j^2. (j·a)^2. (j·b)^2}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:24:43'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:09'!
 PSL2Z
 	"Answer PSL(2,Z) (the modular group) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(a b).
 	^ F / (F !! [:a :b| {a^2. b^3}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:24:55'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:17'!
 SL2Z
 	"Answer SL(2,Z) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(a b).
 	^ F / (F !! [:a :b| {a·b·a eq: b·a·b. (a·b·a)^4}])! !
 
 !FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:16:25'!
@@ -15879,41 +15989,41 @@ cyclic: n
 	F _ FreeGroup new: 1.
 	^ F / (F !! [:x| x^n])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:03:39'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:38'!
 dicyclic: n
 	"Answer the infinite dihedral group as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(r f).
 	^ F / (F !! [:r :f| {r^(2*n). r^n·(f^-2). r·f·r·f inverse}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:00:29'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:47'!
 dihedral: order
 	"Answer the dihedral group of order 2n as a finitely presented group."
 	| n F |
 	order even ifFalse: [self error: 'order should be even'].
 	n _ order // 2.
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(r f).
 	^ F / (F !! [:r :f| {r^n. f^2. (r·f)^2}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:19:01'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:53'!
 icosahedral
 	"Answer the icosahedral group (ismorphic to A5) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(s t).
 	^ F / (F !! [:s :t| {s^2. t^3. (s·t)^5}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:19:20'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:15:59'!
 octahedral
 	"Answer the octahedral group (ismorphic to S4) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(s t).
 	^ F / (F !! [:s :t| {s^2. t^3. (s·t)^4}])! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:21:01'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:16:09'!
 quaternion
 	"Answer the quaternion group as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(i j).
 	^ F / (F !! [:i :j| {j·i·j·i inverse. i·j·i·j inverse}])! !
 
 !FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:15:08'!
@@ -15928,11 +16038,11 @@ symmetric: n
 		i < n-1 ifTrue: [relators add: ((F x: i)·(F x: i+1))^3]].
 	^ F / relators! !
 
-!FPGroup class methodsFor: 'examples' stamp: 'len 5/14/2019 15:18:15'!
+!FPGroup class methodsFor: 'examples' stamp: 'len 5/23/2019 17:16:20'!
 tetrahedral
 	"Answer the tetrahedral group (ismorphic to A4) as a finitely presented group."
 	| F |
-	F _ FreeGroup new: 2.
+	F _ FreeGroup new: #(s t).
 	^ F / (F !! [:s :t| {s^2. t^3. (s·t)^3}])! !
 
 !FPGroup class methodsFor: 'instance creation' stamp: 'len 5/14/2019 02:26:37'!
@@ -16031,9 +16141,11 @@ isCommutative
 rank: anInteger
 	self propertyAt: #rank put: anInteger! !
 
-!FreeGroup class methodsFor: 'instance creation' stamp: 'len 5/13/2019 11:22:05'!
-new: anInteger
-	^ self new rank: anInteger! !
+!FreeGroup class methodsFor: 'instance creation' stamp: 'len 5/23/2019 17:11:34'!
+new: anIntegerOrCollection
+	^ anIntegerOrCollection isInteger
+		ifTrue: [self new rank: anIntegerOrCollection] 
+		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]! !
 
 !FreeGroup class methodsFor: 'instance creation' stamp: 'len 5/14/2019 10:02:06'!
 on: aFreeGroup relators: aCollection
@@ -21852,18 +21964,6 @@ torsion
 zero
 	^ self propertyAt: #zero ifAbsentPut: [self isAmbient ifTrue: [self generators anyOne * self scalars zero] ifFalse: [self ambient zero]]! !
 
-!Module methodsFor: 'private' stamp: 'len 1/15/2018 20:13:05'!
-generators: aCollection
-	super generators: (aCollection asSet reject: [:each| each isZero])! !
-
-!Module methodsFor: 'private' stamp: 'len 5/16/2019 18:37:11'!
-relationMatrix: aMatrix
-	self propertyAt: #relationMatrix put: aMatrix! !
-
-!Module methodsFor: 'private' stamp: 'len 12/28/2016 11:35:02'!
-scalars: aRing
-	self propertyAt: #scalars put: aRing! !
-
 !Module methodsFor: 'comparing' stamp: 'len 1/13/2018 22:41:11'!
 = anObject
 	self == anObject ifTrue: [^ true].
@@ -22043,6 +22143,18 @@ isTrivial
 	"Answer true if the receiver is the trivial submodule {0}."
 	(self generators allSatisfy: [:each| each isZero]) ifTrue: [^ true].
 	^ (self relationMatrix \ self relationMatrix transposed identity) notNil! !
+
+!Module methodsFor: 'private' stamp: 'len 1/15/2018 20:13:05'!
+generators: aCollection
+	super generators: (aCollection asSet reject: [:each| each isZero])! !
+
+!Module methodsFor: 'private' stamp: 'len 5/16/2019 18:37:11'!
+relationMatrix: aMatrix
+	self propertyAt: #relationMatrix put: aMatrix! !
+
+!Module methodsFor: 'private' stamp: 'len 12/28/2016 11:35:02'!
+scalars: aRing
+	self propertyAt: #scalars put: aRing! !
 
 !Ideal methodsFor: 'accessing' stamp: 'len 1/15/2018 17:56:11'!
 codimension
