@@ -10,6 +10,8 @@ For more details refer to the [online documentation](https://github.com/len/Doma
 
 ![alt tag](https://raw.githubusercontent.com/len/Domains/master/img/screenshot2.png)
 
-Bitcoin donations are welcome at 3LVAgTscsumbxXK9nz5MyoZ7wxYKkGnmD1
+Bitcoin donations are welcome at 3LVAgTscsumbxXK9nz5MyoZ7wxYKkGnmD1  
+
+
 ![alt tag](https://raw.githubusercontent.com/len/Domains/master/img/qr.png)
 
