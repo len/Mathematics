@@ -7,6 +7,9 @@ The goal is to build an extensible and mathematically rigorous environment where
 
 For more details refer to the [online documentation](https://github.com/len/Domains/wiki) in the wiki.
 
-Bitcoin donations are welcome at 3LVAgTscsumbxXK9nz5MyoZ7wxYKkGnmD1
 
-![alt tag](https://raw.githubusercontent.com/len/Domains/master/screenshots/screenshot2.png)
+![alt tag](https://raw.githubusercontent.com/len/Domains/master/img/screenshot2.png)
+
+Bitcoin donations are welcome at 3LVAgTscsumbxXK9nz5MyoZ7wxYKkGnmD1
+![alt tag](https://raw.githubusercontent.com/len/Domains/master/img/qr.png)
+
