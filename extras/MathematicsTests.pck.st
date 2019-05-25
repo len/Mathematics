@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3748] on 16 May 2019 at 9:17:38 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 25 May 2019 at 8:34:29 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 127!
+!provides: 'MathematicsTests' 1 128!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1081,7 +1081,7 @@ testFPAbelianGroupOrder
 	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
 	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 18:53:39'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/24/2019 11:13:49'!
 testFreeAbelianGroup
 	| G |
 	G _ FPAbelianGroup orders: #(0 0).
@@ -3379,12 +3379,12 @@ testKleinFour
 	A _ AlternatingGroup new: 4.
 	self assert: (V isNormalIn: A)! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 8/30/2016 19:35'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2019 04:46:36'!
 testLagrangeTheorem
 	"G finite group, H subgroup of G, then |H| divides |G|."
 	| G H |
 	G _ self smallGroupAtRandom.
-	H _ G span: (G random next: 3 atRandom) asSet.
+	H _ G span: ((1 to: 3 atRandom) collect: [:i| G atRandom]) asSet.
 	self assert: H order | G order! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:10:56'!

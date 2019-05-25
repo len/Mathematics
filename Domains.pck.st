@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 24 May 2019 at 11:21:08 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 25 May 2019 at 8:34:17 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 498!
+!provides: 'Domains' 1 499!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -24,7 +24,7 @@ SystemOrganization addCategory: #'Domains-Modules-Tuples'!
 SystemOrganization addCategory: #'Domains-Modules-Matrices'!
 SystemOrganization addCategory: #'Domains-Modules-Matrices-Algorithms'!
 SystemOrganization addCategory: #'Domains-Modules-Lattices'!
-SystemOrganization addCategory: #'Domains-Multilinear'!
+SystemOrganization addCategory: #'Domains-Modules-Tensors'!
 SystemOrganization addCategory: #'Domains-Modules-Multivariate'!
 SystemOrganization addCategory: #'Domains-Modules-Multivariate-Orderings'!
 SystemOrganization addCategory: #'Domains-Polynomials'!
@@ -1594,23 +1594,23 @@ FreeModule subclass: #Lattice
 Lattice class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearForms category: #'Domains-Multilinear'!
+!classDefinition: #BilinearForms category: #'Domains-Modules-Tensors'!
 FreeModule subclass: #BilinearForms
 	instanceVariableNames: 'vectorSpace domain'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'BilinearForms class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'BilinearForms class' category: #'Domains-Modules-Tensors'!
 BilinearForms class
 	instanceVariableNames: ''!
 
-!classDefinition: #TensorProductModule category: #'Domains-Multilinear'!
+!classDefinition: #TensorProductModule category: #'Domains-Modules-Tensors'!
 FreeModule subclass: #TensorProductModule
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'TensorProductModule class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'TensorProductModule class' category: #'Domains-Modules-Tensors'!
 TensorProductModule class
 	instanceVariableNames: ''!
 
@@ -2114,16 +2114,6 @@ GroupMap subclass: #ConjugationMap
 ConjugationMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #FPGroupMap category: #'Domains-Groups'!
-GroupMap subclass: #FPGroupMap
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Groups'!
-!classDefinition: 'FPGroupMap class' category: #'Domains-Groups'!
-FPGroupMap class
-	instanceVariableNames: ''!
-
 !classDefinition: #DirichletCharacter category: #'Domains-Modular Forms'!
 GroupMap subclass: #DirichletCharacter
 	instanceVariableNames: ''
@@ -2214,33 +2204,33 @@ Function subclass: #QuadraticForm
 QuadraticForm class
 	instanceVariableNames: ''!
 
-!classDefinition: #MultilinearMap category: #'Domains-Multilinear'!
+!classDefinition: #MultilinearMap category: #'Domains-Modules-Tensors'!
 Function subclass: #MultilinearMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'MultilinearMap class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'MultilinearMap class' category: #'Domains-Modules-Tensors'!
 MultilinearMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearMap category: #'Domains-Multilinear'!
+!classDefinition: #BilinearMap category: #'Domains-Modules-Tensors'!
 MultilinearMap subclass: #BilinearMap
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'BilinearMap class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'BilinearMap class' category: #'Domains-Modules-Tensors'!
 BilinearMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #BilinearForm category: #'Domains-Multilinear'!
+!classDefinition: #BilinearForm category: #'Domains-Modules-Tensors'!
 BilinearMap subclass: #BilinearForm
 	instanceVariableNames: 'halfDomain matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'BilinearForm class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'BilinearForm class' category: #'Domains-Modules-Tensors'!
 BilinearForm class
 	instanceVariableNames: ''!
 
@@ -2336,7 +2326,7 @@ EisensteinSeries class
 
 !classDefinition: #Permutation category: #'Domains-Groups-Permutations'!
 Morphism subclass: #Permutation
-	instanceVariableNames: 'map parent'
+	instanceVariableNames: 'images parent'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Groups-Permutations'!
@@ -2654,13 +2644,13 @@ Sum subclass: #GroupRingElement
 GroupRingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #Tensor category: #'Domains-Multilinear'!
+!classDefinition: #Tensor category: #'Domains-Modules-Tensors'!
 Sum subclass: #Tensor
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Multilinear'!
-!classDefinition: 'Tensor class' category: #'Domains-Multilinear'!
+	category: 'Domains-Modules-Tensors'!
+!classDefinition: 'Tensor class' category: #'Domains-Modules-Tensors'!
 Tensor class
 	instanceVariableNames: ''!
 
@@ -2774,26 +2764,6 @@ Matrix subclass: #RowMatrix
 RowMatrix class
 	instanceVariableNames: ''!
 
-!classDefinition: #RandomGenerator category: #'Domains-Kernel-Support'!
-Object subclass: #RandomGenerator
-	instanceVariableNames: 'domain bits random'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Kernel-Support'!
-!classDefinition: 'RandomGenerator class' category: #'Domains-Kernel-Support'!
-RandomGenerator class
-	instanceVariableNames: ''!
-
-!classDefinition: #GroupRandomGenerator category: #'Domains-Groups'!
-RandomGenerator subclass: #GroupRandomGenerator
-	instanceVariableNames: 'state'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Groups'!
-!classDefinition: 'GroupRandomGenerator class' category: #'Domains-Groups'!
-GroupRandomGenerator class
-	instanceVariableNames: ''!
-
 !classDefinition: #MonomialOrdering category: #'Domains-Monoids-Orderings'!
 Object subclass: #MonomialOrdering
 	instanceVariableNames: 'indeterminates'
@@ -2892,6 +2862,16 @@ Object subclass: #SubgroupSeries
 	category: 'Domains-Groups'!
 !classDefinition: 'SubgroupSeries class' category: #'Domains-Groups'!
 SubgroupSeries class
+	instanceVariableNames: ''!
+
+!classDefinition: #ProductReplacementRandomGenerator category: #'Domains-Groups-Algorithms'!
+Object subclass: #ProductReplacementRandomGenerator
+	instanceVariableNames: 'generators state'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Groups-Algorithms'!
+!classDefinition: 'ProductReplacementRandomGenerator class' category: #'Domains-Groups-Algorithms'!
+ProductReplacementRandomGenerator class
 	instanceVariableNames: ''!
 
 !classDefinition: #SchreierSims category: #'Domains-Groups-Algorithms'!
@@ -3502,16 +3482,6 @@ Object subclass: #GramSchmidt
 	category: 'Domains-Etc'!
 !classDefinition: 'GramSchmidt class' category: #'Domains-Etc'!
 GramSchmidt class
-	instanceVariableNames: ''!
-
-!classDefinition: #GroupPresentation category: #'Domains-Etc'!
-Object subclass: #GroupPresentation
-	instanceVariableNames: 'generators relators'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc'!
-!classDefinition: 'GroupPresentation class' category: #'Domains-Etc'!
-GroupPresentation class
 	instanceVariableNames: ''!
 
 !classDefinition: #JordanReduction category: #'Domains-Etc'!
@@ -4613,13 +4583,10 @@ References:
 	https://en.wikipedia.org/wiki/Group_action!
 
 !GroupMap commentStamp: '<historical>' prior: 0!
-Group homomorphisms. See Group.!
+Group homomorphisms. They can be defined by an evaluable expression or Smalltalk block, or by images of generators. See Group.!
 
 !ConjugationMap commentStamp: '<historical>' prior: 0!
 Group homomorphisms defined as conjugation by a given element. These are the inner automorphisms.!
-
-!FPGroupMap commentStamp: '<historical>' prior: 0!
-Gruop homomorphisms from a finitely-presented group to an arbitrary group. They are defined by images of generators. See FPGroup.!
 
 !DirichletCharacter commentStamp: '<historical>' prior: 0!
 Characters on the units of Z/nZ, i.e. group homomorphisms (Z/nZ)* -> C* from the unit group of the ring Z/nZ to the multiplicative group of nonzero complex numbers.!
@@ -4909,9 +4876,6 @@ My instances are matrices with coefficients over some commutative ring, represen
 !RowMatrix commentStamp: '<historical>' prior: 0!
 Matrices with coefficients over some commutative ring, represented as a list of row tuples. Row operations are fast on these matrices.!
 
-!GroupRandomGenerator commentStamp: '<historical>' prior: 0!
-Product Replacement Algorithm for generating random elements in a group from a set of generators. Essentially, it performs a random walk on a Cayley graph.!
-
 !MonomialOrdering commentStamp: '<historical>' prior: 0!
 A monomial ordering is a total order on the set of all monomials in n indeterminates, satisfying the properties:
 - respects multiplication: if u <= v, then u*w <= v*w for any other monomial w;
@@ -4978,10 +4942,13 @@ if aSum < bSum, then a < b; if aSum > bSum, then a > b; if aSum = bSum, we conti
 Theorem: For any monomial ordering in a finite number of variables, there is a collection of weights that models the ordering. So, with this idea we can contruct any ordering.
 !
 
+!ProductReplacementRandomGenerator commentStamp: '<historical>' prior: 0!
+Product Replacement Algorithm for generating random elements in a group from a set of generators. Essentially, it performs a random walk on a Cayley graph.!
+
 !SchreierTree commentStamp: '<historical>' prior: 0!
 Given a finite group G with a generating set S, and an action of G on X, a Schreier tree with root x for S is a representation of the orbit of x: it's a tree rooted at x with the elements of x^G as its vertices, and its edges describing the elements of S needed to get from x to each vertex, i.e. each edge {i,j} in the tree with i closer to the root than j is labeled by a generator s in S moving i to j.
 
-Schreier trees allow for fast computation of stabilizers by Schreier's Lemma: with the notation above, the stabilizer of x is generated by the set of Schreier generators <t(i) * s * t(s(i))^-1> where i runs over the the orbit of x, s runs over the generating set S, and t(i) is an element of G moving x to i, i.e. a coset representative of i (see >>trace: and >>traceInverse:).
+Schreier trees allow for fast computation of stabilizers by Schreier's Lemma: with the notation above, the stabilizer of x is generated by the set of Schreier generators <t(i) * s * t(s(i))^-1> where i runs over the orbit of x, s runs over the generating set S, and t(i) is an element of G moving x to i, i.e. a coset representative of i (see >>trace: and >>traceInverse:).
 !
 
 !ComplexAlgebraicNumber commentStamp: '<historical>' prior: 0!
@@ -6344,10 +6311,6 @@ printOn: aStream
 			separatedBy: [aStream nextPut: $]; lf; nextPutAll: ' ['].
 	aStream nextPut: $]! !
 
-!RandomGenerator methodsFor: 'printing' stamp: 'len 5/6/2016 02:32'!
-printOn: aStream
-	aStream nextPutAll: 'Random('; print: domain; nextPut: $)! !
-
 !MonomialOrdering methodsFor: 'printing' stamp: 'len 2/26/2017 09:25:36'!
 printOn: aStream
 	| M |
@@ -6489,15 +6452,6 @@ printOn: aStream
 	1 to: n do: [:i|
 		aStream nextPutAll: ' (', (self pairingAt: i) asString, ') '; print: (self numeratorAt: i); nextPut: $/; print: (self denominatorAt: i)].
 	aStream nextPutAll: ' (', (self pairingAt: n+1) asString, ') '; print: Infinity positive! !
-
-!GroupPresentation methodsFor: 'printing' stamp: 'len 2/12/2016 07:34'!
-printOn: aStream
-	aStream nextPut: $<.
-	generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
-	aStream nextPutAll: ' | '.
-	relators isEmpty ifTrue: [aStream nextPut: Character emptySet].
-	relators do: [:each| aStream print: each; nextPutAll: '=1'] separatedBy: [aStream nextPut: $,].
-	aStream nextPut: $>! !
 
 !Pixel methodsFor: 'as yet unclassified' stamp: 'len 2/13/2016 17:45'!
 printOn: aStream
@@ -13536,6 +13490,12 @@ evaluatingWithArguments: aBlock
 identity
 	^ self isEndomorphisms ifTrue: [self domain id]! !
 
+!HomSet methodsFor: 'elements' stamp: 'len 5/24/2019 11:28:29'!
+mapping: aBlock
+	"Answer a morphism defined by images of generators.
+	aBlock takes indices i and evaluates to the image of the i-th generator."
+	^ self domain to: self codomain mapping: aBlock! !
+
 !HomSet methodsFor: 'operations' stamp: 'len 9/16/2018 16:14:03'!
 opposite
 	^ self class from: self codomain to: self domain! !
@@ -15023,6 +14983,11 @@ to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ GroupMap from: self to: aGroup evaluating: aBlock! !
 
+!Group methodsFor: 'morphisms' stamp: 'len 5/25/2019 08:25:10'!
+to: aGroup mapping: aBlock
+	aGroup isGroup ifFalse: [^ super to: aGroup mapping: aBlock].
+	^ GroupMap from: self to: aGroup mapping: aBlock! !
+
 !Group methodsFor: 'operations' stamp: 'len 5/9/2019 11:24:34'!
 * anElementOrGroup
 	(anElementOrGroup isKindOf: Group) ifTrue: [^ self freeProduct: anElementOrGroup].
@@ -15135,7 +15100,7 @@ index
 indexOf: aSubgroup
 	^ (self / aSubgroup) size! !
 
-!Group methodsFor: 'operations' stamp: 'len 5/6/2019 04:55:08'!
+!Group methodsFor: 'operations' stamp: 'len 5/25/2019 04:45:26'!
 normalClosureOf: aSubset
 	"From Handbook of Computational Group Theory (Holt) 74p.
 	The normal closure of A <= G in G (denoted A^G) is the smallest normal subgroup of G that contains A, i.e. the intersection of all normal subgroups that contain A. Equivalently, it is the set A^G := {g^-1 * a * g | g in G, a in A}."
@@ -15144,20 +15109,18 @@ normalClosureOf: aSubset
 	X _ self generators.
 	Y _ aSubset.
 	Z _ Y.
-	random _ self random.
+	random _ Random new.
 	N _ self copyEmpty generators: Z.
 	["test whether <Z> = <Y>^<X>"
 	X allSatisfy: [:g| Z allSatisfy: [:h| N includes: g · h · g inverse]]]
 		whileFalse:
 			["add some new random conjugates to Z"
-			| random2 |
-			random2 _ N random.
 			10 timesRepeat:
 				[| h g hg |
-				g _ random next.
-				h _ random2 next.
+				g _ self atRandom: random.
+				h _ N atRandom: random.
 				hg _ g · h · g inverse. "h^g"
-				(N includes: hg) ifFalse: [Z add: hg. N _ self copyEmpty generators: Z. random2 _ N random]]].
+				(N includes: hg) ifFalse: [Z add: hg. N _ self copyEmpty generators: Z]]].
 	^ N! !
 
 !Group methodsFor: 'operations' stamp: 'len 5/5/2019 18:06:49'!
@@ -15204,15 +15167,15 @@ span: aCollection
 	"Answer the subgroup generated by the argument."
 	^ self copyEmpty generators: aCollection! !
 
-!Group methodsFor: 'random' stamp: 'len 5/25/2018 18:10:13'!
+!Group methodsFor: 'random' stamp: 'len 5/25/2019 04:43:18'!
+atRandom: aRandom
+	self propertyAt: #elements ifPresent: [:aCollection| ^ aCollection atRandom: aRandom].
+	^ (self propertyAt: #randomGenerator ifAbsentPut: [ProductReplacementRandomGenerator new generators: self generators]) atRandom: aRandom! !
+
+!Group methodsFor: 'random' stamp: 'len 5/25/2019 04:41:49'!
 atRandom: aRandom bits: bitSize
 	self propertyAt: #elements ifPresent: [:aCollection| ^ aCollection atRandom: aRandom bits: bitSize].
-	self generators notNil ifTrue: [^ (GroupRandomGenerator on: self random: aRandom) bits: bitSize; next].
-	^ self subclassResponsibility! !
-
-!Group methodsFor: 'random' stamp: 'len 8/17/2016 16:43'!
-random
-	^ GroupRandomGenerator on: self! !
+	^ self atRandom: aRandom "assume it's finite"! !
 
 !Group methodsFor: 'series' stamp: 'len 3/6/2017 16:38:33'!
 derivedSeriesDo: aBlock
@@ -15568,6 +15531,11 @@ exponents: anArray
 	anArray size = self generators size ifFalse: [self error: 'exponents size doesn''t match rank'].
 	^ (Monomial exponents: (self orders with: anArray collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]])) parent: self! !
 
+!FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/25/2019 08:23:03'!
+wordOf: aMonomial
+	"Answer the argument expressed as a word on the generators."
+	^ aMonomial! !
+
 !FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:41:44'!
 x: anInteger to: exponent
 	| m |
@@ -15583,11 +15551,6 @@ x: anInteger to: exponent
 to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ self to: aGroup mapping: [:i| aBlock value: (self generators at: i)]! !
-
-!FPAbelianGroup methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:48:10'!
-to: aGroup mapping: aBlock
-	aGroup isGroup ifFalse: [^ super to: aGroup mapping: aBlock].
-	^ FPGroupMap from: self to: aGroup mapping: aBlock! !
 
 !FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:56:53'!
 * anInteger
@@ -15874,6 +15837,11 @@ hash
 	(anObject isKindOf: Word) and: [anObject parent = self ifTrue: [^ anObject]].
 	^ super !! anObject! !
 
+!FPGroup methodsFor: 'elements' stamp: 'len 5/25/2019 08:23:29'!
+wordOf: aWord
+	"Answer the argument expressed as a word on the generators."
+	^ aWord! !
+
 !FPGroup methodsFor: 'morphisms' stamp: 'len 5/14/2019 10:09:58'!
 from: aDomain
 	self base == self ifTrue: [^ super from: aDomain].
@@ -15885,11 +15853,6 @@ from: aDomain
 to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ self to: aGroup mapping: [:i| aBlock value: (self generators at: i)]! !
-
-!FPGroup methodsFor: 'morphisms' stamp: 'len 5/14/2019 03:59:21'!
-to: aGroup mapping: aBlock
-	aGroup isGroup ifFalse: [^ super to: aGroup mapping: aBlock].
-	^ FPGroupMap from: self to: aGroup mapping: aBlock! !
 
 !FPGroup methodsFor: 'operations' stamp: 'len 5/14/2019 12:24:29'!
 * aGroup
@@ -16406,6 +16369,26 @@ asMatrixGroup
 copyEmpty
 	^ self species new ambient: self ambient! !
 
+!PermutationGroup methodsFor: 'operations' stamp: 'len 5/24/2019 16:58:00'!
+× aGroup
+	"Answer the direct product of the receiver and the argument."
+	| S n m G1 G2 k answer |
+	(aGroup isKindOf: PermutationGroup) ifFalse: [^ super × aGroup].
+	n _ self degree.
+	m _ aGroup degree.
+	S _ SymmetricGroup new: n + m.
+	G1 _ self generators collect: [:g| S !! (g asArray, (n+1 to: n+m))].
+	G2 _ aGroup generators collect: [:g| S !! ((1 to: n), (g asArray collect: [:i| i+n]))].
+	k _ G1 size.
+	^ (answer _ S span: G1, G2) "<- assumes the order of the generators is kept"
+		addCoprojections:
+			{self into: answer mapping: [:i| answer x: i].
+			aGroup into: answer mapping: [:i| answer x: i+k]};
+		addProjections:
+			{answer onto: self mapping: [:i| i <= k ifTrue: [self x: i] ifFalse: [self identity]].
+			answer onto: aGroup mapping: [:i| i > k ifTrue: [aGroup x: i-k] ifFalse: [aGroup identity]]};
+		yourself! !
+
 !PermutationGroup methodsFor: 'operations' stamp: 'len 2/1/2018 23:47:51'!
 span: aCollection
 	^ self ambient span: aCollection! !
@@ -16419,15 +16402,14 @@ isStandard
 	"Answer true if the domain of the receiver is an interval [1..n]."
 	^ self ambient isStandard! !
 
-!PermutationGroup methodsFor: 'testing' stamp: 'len 5/23/2016 19:35'!
+!PermutationGroup methodsFor: 'testing' stamp: 'len 5/25/2019 04:47:19'!
 isSubgroupOfAn
 	"Monte Carlo test."
 	| random |
 	self flag: #fix.
 	self isTransitive ifFalse: [^ false].
-	random _ self random.
-	20 timesRepeat:
-		[random next isPurple ifTrue: [^ true]].
+	random _ Random new.
+	20 timesRepeat: [(self atRandom: random) isPurple ifTrue: [^ true]].
 	^ false! !
 
 !PermutationGroup methodsFor: 'private' stamp: 'len 4/23/2019 02:12:09'!
@@ -16447,10 +16429,6 @@ computeSize
 		G _ tree stabilizer].
 	self error: 'what?'.
 	^ answer! !
-
-!PermutationGroup methodsFor: 'private' stamp: 'len 2/1/2018 23:22:51'!
-generators: aCollection
-	super generators: (aCollection asSet reject: [:each| each isIdentity])! !
 
 !PermutationGroup methodsFor: 'private' stamp: 'len 3/4/2016 20:36'!
 species
@@ -16596,7 +16574,7 @@ space
 		ifTrue: [^ self space >= anObject space].
 	^ super >= anObject! !
 
-!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/1/2019 02:31:01'!
+!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/25/2019 06:25:17'!
 !! anObject
 	"Coerce anObject to an element of the receiver (a permutation)."
 	anObject isEvaluable
@@ -16606,10 +16584,10 @@ space
 	(anObject allSatisfy: [:each| each isSequenceable and: [self space includesAllOf: each]]) "cycles"
 		ifTrue: [^ self cycles: anObject].
 	(self space includesAllOf: anObject)
-		ifTrue: [^ self mapping: (anObject asArray collect: [:each| self spaceToIndex at: each])].
+		ifTrue: [^ self images: (anObject asArray collect: [:each| self spaceToIndex at: each])].
 	^ super !! anObject! !
 
-!SymmetricGroup methodsFor: 'elements' stamp: 'len 4/30/2019 18:13:20'!
+!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/25/2019 06:25:31'!
 cycle: anArray
 	| map first last |
 	anArray size > 1 ifFalse: [^ self identity].
@@ -16621,44 +16599,44 @@ cycle: anArray
 			ifFalse: [map at: last put: i].
 		last _ i].
 	map at: last put: first.
-	^ self mapping: map! !
+	^ self images: map! !
 
 !SymmetricGroup methodsFor: 'elements' stamp: 'len 4/30/2019 18:07:59'!
 cycles: anArray
 	^ anArray inject: self identity into: [:answer :each| answer * (self cycle: each)]! !
 
-!SymmetricGroup methodsFor: 'elements' stamp: 'len 4/30/2019 18:05:17'!
+!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/25/2019 06:26:00'!
 evaluating: aBlock
-	^ self mapping: (self indexToSpace collect: [:each| self spaceToIndex at: (aBlock value: each)])! !
+	^ self images: (self indexToSpace collect: [:each| self spaceToIndex at: (aBlock value: each)])! !
 
-!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/1/2019 02:00:58'!
+!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/25/2019 06:26:05'!
 identity
-	^ self propertyAt: #identity ifAbsentPut: [self mapping: (1 to: self degree) asArray]! !
+	^ self propertyAt: #identity ifAbsentPut: [self images: (1 to: self degree) asArray]! !
 
-!SymmetricGroup methodsFor: 'elements' stamp: 'len 4/30/2019 18:17:50'!
-mapping: anArray
-	^ Permutation in: self map: anArray! !
+!SymmetricGroup methodsFor: 'elements' stamp: 'len 5/25/2019 06:26:14'!
+images: anArray
+	^ Permutation new parent: self; images: anArray! !
 
 !SymmetricGroup methodsFor: 'elements' stamp: 'len 4/30/2019 18:16:46'!
 transposing: anObject with: anotherObject
 	"Answer the tranposition of anObject with anotherObject."
 	^ self cycle: {anObject. anotherObject}! !
 
-!SymmetricGroup methodsFor: 'enumerating' stamp: 'len 4/30/2019 12:03:17'!
+!SymmetricGroup methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:25:47'!
 do: aBlock
-	(1 to: self degree) permutationsDo: [:each| aBlock value: (self mapping: each copy)]! !
+	(1 to: self degree) permutationsDo: [:each| aBlock value: (self images: each copy)]! !
 
 !SymmetricGroup methodsFor: 'operations' stamp: 'len 5/2/2019 10:15:00'!
 commutator
 	^ AlternatingGroup on: self space! !
 
-!SymmetricGroup methodsFor: 'operations' stamp: 'len 9/26/2018 22:52:55'!
+!SymmetricGroup methodsFor: 'operations' stamp: 'len 5/24/2019 17:04:24'!
 span: aCollection
-	^ self copyEmpty generators: (aCollection collect: [:each| self !! each])! !
+	^ self species new ambient: self; generators: (aCollection collect: [:each| self !! each])! !
 
-!SymmetricGroup methodsFor: 'random' stamp: 'len 4/30/2019 12:01:51'!
+!SymmetricGroup methodsFor: 'random' stamp: 'len 5/25/2019 06:25:25'!
 atRandom: aRandom
-	^ self mapping: ((1 to: self degree) asArray shuffledBy: aRandom)! !
+	^ self images: ((1 to: self degree) asArray shuffledBy: aRandom)! !
 
 !SymmetricGroup methodsFor: 'random' stamp: 'len 4/19/2016 22:45'!
 atRandom: aRandom bits: bits
@@ -29059,6 +29037,15 @@ inverse
 		ifFalse: [^ false].
 	^ self domain generators allSatisfy: [:each| (self value: each) = (anObject value: each)]! !
 
+!GroupMap methodsFor: 'operations' stamp: 'len 5/25/2019 08:19:40'!
+value: anElement
+	| answer images |
+	self propertyAt: #expression ifPresent: [:anExpression| ^ anExpression value: anElement].
+	answer _ self codomain identity.
+	images _ self images.
+	(self domain wordOf: anElement) do: [:i :exponent| answer _ answer · ((images at: i) ^ exponent)].
+	^ answer! !
+
 !GroupMap methodsFor: 'testing' stamp: 'len 5/10/2019 07:40:55'!
 isGroupHomomorphism
 	^ true! !
@@ -29071,13 +29058,13 @@ isInjective
 isSurjective
 	^ self image = self codomain! !
 
-!GroupMap methodsFor: 'private' stamp: 'len 2/20/2017 18:43:46'!
-map
-	^ self propertyAt: #map ifAbsent: []! !
+!GroupMap methodsFor: 'private' stamp: 'len 5/25/2019 08:13:13'!
+images
+	^ self propertyAt: #images! !
 
-!GroupMap methodsFor: 'private' stamp: 'len 2/20/2017 18:43:56'!
-map: aDictionary
-	self propertyAt: #map put: aDictionary! !
+!GroupMap methodsFor: 'private' stamp: 'len 5/25/2019 08:13:18'!
+images: anArray
+	self propertyAt: #images put: anArray! !
 
 !GroupMap methodsFor: 'private' stamp: 'len 1/11/2018 18:20:41'!
 species
@@ -29087,9 +29074,9 @@ species
 verify
 	^ super isGroupHomomorphism! !
 
-!GroupMap class methodsFor: 'instance creation' stamp: 'len 2/20/2017 18:42:54'!
-from: aDomain to: anotherDomain map: aDictionary
-	^ self new domain: aDomain; codomain: anotherDomain; map: aDictionary! !
+!GroupMap class methodsFor: 'instance creation' stamp: 'len 5/25/2019 08:15:12'!
+from: aGroup to: anotherGroup mapping: aBlock
+	^ self new domain: aGroup; codomain: anotherGroup; images: ((1 to: aGroup generators size) collect: [:i| aBlock value: i])! !
 
 !ConjugationMap methodsFor: 'accessing' stamp: 'len 2/12/2016 06:37'!
 image
@@ -29128,30 +29115,6 @@ value: anElement
 !ConjugationMap class methodsFor: 'instance creation' stamp: 'len 5/12/2016 10:06'!
 by: anElement in: aGroup
 	^ self new domain: aGroup; codomain: aGroup; element: anElement! !
-
-!FPGroupMap methodsFor: 'operations' stamp: 'len 5/10/2019 18:38:36'!
-value: aWord
-	| answer map |
-	answer _ self codomain identity.
-	map _ self map.
-	aWord do: [:i :exponent| answer _ answer · ((map at: i) ^ exponent)].
-	^ answer! !
-
-!FPGroupMap methodsFor: 'private' stamp: 'len 5/10/2019 18:36:52'!
-map
-	^ self propertyAt: #map! !
-
-!FPGroupMap methodsFor: 'private' stamp: 'len 5/10/2019 18:36:35'!
-map: anArray
-	self propertyAt: #map put: anArray! !
-
-!FPGroupMap class methodsFor: 'instance creation' stamp: 'len 5/13/2019 14:33:47'!
-from: aFreeGroup to: aGroup evaluating: aBlock
-	^ self from: aFreeGroup to: aGroup mapping: [:i| aBlock value: (aFreeGroup x: i)]! !
-
-!FPGroupMap class methodsFor: 'instance creation' stamp: 'len 5/15/2019 05:06:20'!
-from: aFPGroup to: aGroup mapping: aBlock
-	^ self new domain: aFPGroup; codomain: aGroup; map: ((1 to: aFPGroup generators size) collect: [:i| aBlock value: i])! !
 
 !DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 15:19:25'!
 conductor
@@ -31448,36 +31411,36 @@ weight: anInteger
 new: anInteger
 	^ self new weight: anInteger! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 5/1/2019 02:35:35'!
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:27:21'!
 aChange
-	"Answer an element changed by the receiver (or nil if there is none)."
-	self changesDo: [:each| ^ each].
+	"Answer a point changed by the receiver (or nil if there is none)."
+	self supportDo: [:each| ^ each].
 	^ nil! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:30:17'!
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:22:47'!
 at: anInteger
-	^ map at: anInteger ifAbsent: [anInteger]! !
+	^ images at: anInteger ifAbsent: [anInteger]! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:28:02'!
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:36'!
 at: anInteger put: anotherInteger
-	^ map at: anInteger put: anotherInteger! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:41:36'!
-changes
-	"Answer the elements changed by the receiver."
-	^ Iterator on: self performing: #changesDo:! !
+	^ images at: anInteger put: anotherInteger! !
 
 !Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:49:09'!
 codomain
 	^ self domain! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:30:37'!
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:41'!
 degree
-	^ map size! !
+	^ images size! !
 
 !Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:30:51'!
 domain
 	^ parent space! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:29:24'!
+fixedPoints
+	"Answer the points fixed by the receiver."
+	^ Iterator on: self performing: #fixedPointsDo:! !
 
 !Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:31:23'!
 identity
@@ -31514,13 +31477,18 @@ sign
 
 	"^ self transpositions size even ifTrue: [1] ifFalse: [-1]"! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 5/1/2019 02:52:53'!
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:26:06'!
+support
+	"Answer the points changed by the receiver."
+	^ Iterator on: self performing: #supportDo:! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:25:42'!
 transpositions
 	"Answer the decomposition of the receiver in product of transpositions."
 	| answer last value X |
 	answer _ OrderedCollection new.
 	X _ parent indexToSpace.
-	self changesDo: [:each|	
+	self supportDo: [:each|
 		last _ each.
 		answer reverseDo: [:one| last _ one at: last].
 		(value _ self at: each) = last
@@ -31544,32 +31512,32 @@ permute: anArray
 value: anObject
 	^ self at: (parent spaceToIndex at: anObject ifAbsent: [^ anObject])! !
 
-!Permutation methodsFor: 'comparing' stamp: 'len 4/30/2019 12:27:15'!
+!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:21:34'!
 = aPermutation
-	^ self class = aPermutation class and: [map = aPermutation map]! !
+	^ self class = aPermutation class and: [images = aPermutation images]! !
 
-!Permutation methodsFor: 'comparing' stamp: 'len 4/30/2019 12:31:05'!
+!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:22:25'!
 hash
 	| answer |
 	answer _ 0.
-	1 to: map size do: [:i| | value |
-		(value _ map at: i) = i ifFalse: [answer _ answer bitXor: i hash hashMultiply + value hash]].
+	1 to: images size do: [:i| | value |
+		(value _ images at: i) = i ifFalse: [answer _ answer bitXor: i hash hashMultiply + value hash]].
 	^ answer! !
 
-!Permutation methodsFor: 'converting' stamp: 'len 4/30/2019 12:27:33'!
+!Permutation methodsFor: 'converting' stamp: 'len 5/25/2019 06:22:16'!
 asArray
-	^ map! !
+	^ images! !
 
 !Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 08:49:33'!
 cycles
 	"Answer the cycles of the receiver."
 	^ Iterator on: self performing: #cyclesDo:! !
 
-!Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 09:38:00'!
+!Permutation methodsFor: 'cycles' stamp: 'len 5/25/2019 05:26:23'!
 cyclesDo: aBlock
 	"Iterate over the cycles of the receiver."
 	| left first next cycle |
-	left _ self changes copyAs: Set.
+	left _ self support copyAs: Set.
 	[left size > 0] whileTrue:
 		[first _ left anyOne.
 		cycle _ OrderedCollection new.
@@ -31577,9 +31545,15 @@ cyclesDo: aBlock
 		[(cycle add: (left remove: (next _ self at: next))) ~= first] whileTrue.
 		aBlock value: cycle]! !
 
-!Permutation methodsFor: 'enumerating' stamp: 'len 4/30/2019 12:30:08'!
-changesDo: aBlock
-	1 to: map size do: [:i| (map at: i) = i ifFalse: [aBlock value: i]]! !
+!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:19:47'!
+fixedPointsDo: aBlock
+	"Enumerate the points fixed by the receiver."
+	1 to: images size do: [:i| (images at: i) = i ifTrue: [aBlock value: i]]! !
+
+!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:21:06'!
+supportDo: aBlock
+	"Enumerate the points changed by the receiver."
+	1 to: images size do: [:i| (images at: i) = i ifFalse: [aBlock value: i]]! !
 
 !Permutation methodsFor: 'operations' stamp: 'len 5/5/2019 18:20:17'!
 * aPermutation
@@ -31587,25 +31561,25 @@ changesDo: aBlock
 	This is the group operation."
 	^ self · aPermutation! !
 
-!Permutation methodsFor: 'operations' stamp: 'len 5/5/2019 18:19:58'!
+!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:25'!
 · aPermutation
 	"Answer the product (function composition) of the receiver with the argument.
 	This is the group operation."
-	| otherMap newMap |
-	(map size = aPermutation map size)
+	| otherImages newImages |
+	(images size = aPermutation images size)
 		ifFalse: [^ DomainError signal: 'permutation of different degree'].
-	otherMap _ aPermutation map.
-	newMap _ map class new: map size.
-	1 to: map size do: [:i| newMap at: i put: (map at: (otherMap at: i))].
-	^ parent mapping: newMap! !
+	otherImages _ aPermutation images.
+	newImages _ images class new: images size.
+	1 to: images size do: [:i| newImages at: i put: (images at: (otherImages at: i))].
+	^ parent images: newImages! !
 
-!Permutation methodsFor: 'operations' stamp: 'len 4/30/2019 12:31:49'!
+!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:32'!
 inverse
 	"Answer the compositive inverse of the receiver."
 	| values |
-	values _ map class new: map size.
-	1 to: map size do: [:i| values at: (map at: i) put: i].
-	^ parent mapping: values! !
+	values _ images class new: images size.
+	1 to: images size do: [:i| values at: (images at: i) put: i].
+	^ parent images: values! !
 
 !Permutation methodsFor: 'operations' stamp: 'len 5/16/2019 12:30:01'!
 retraction
@@ -31633,37 +31607,33 @@ isCycle
 
 	^ self cycles size = 1! !
 
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:50:45'!
+!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:31'!
 isIdentity
 	"Answer true if the receiver is the identity permutation."
 
-	^ self changes size = 0! !
+	^ self support size = 0! !
 
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 09:05:50'!
+!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:46'!
 isTransposition
 	"Answer true if the receiver is a transposition."
 
-	^ self changes size = 2! !
+	^ self support size = 2! !
 
 !Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:51:17'!
 odd
 	^ self sign = -1! !
 
-!Permutation methodsFor: 'private' stamp: 'len 4/30/2019 12:31:57'!
-map
-	^ map! !
+!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:22:06'!
+images
+	^ images! !
 
-!Permutation methodsFor: 'private' stamp: 'len 5/1/2019 02:34:56'!
-map: anArray
-	map _ anArray! !
+!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:21:59'!
+images: anArray
+	images _ anArray! !
 
 !Permutation methodsFor: 'private' stamp: 'len 4/30/2019 12:32:14'!
 parent: aSymmetricGroup
 	parent _ aSymmetricGroup! !
-
-!Permutation class methodsFor: 'instance creation' stamp: 'len 4/30/2019 18:19:46'!
-in: aSymmetricGroup map: anArray
-	^ self new parent: aSymmetricGroup; map: anArray! !
 
 !RationalPoint methodsFor: 'accessing' stamp: 'len 2/9/2017 09:54:09'!
 ambient
@@ -32131,6 +32101,10 @@ conjugatedBy: anElement
 !GroupElement methodsFor: 'operations' stamp: 'len 5/6/2019 02:49:53'!
 inverse
 	^ self subclassResponsibility! !
+
+!GroupElement methodsFor: 'testing' stamp: 'len 5/25/2019 06:18:44'!
+isIdentity
+	^ self = self identity! !
 
 !Monomial methodsFor: 'accessing' stamp: 'len 11/21/2016 15:56:16'!
 at: anIndeterminate
@@ -39246,68 +39220,6 @@ newFrom: aMatrix
 rows: anArray
 	^ self basicNew rows: anArray! !
 
-!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 22:03'!
-bits: anInteger
-	anInteger >= 1 ifFalse: [^ self error: 'bitsize must be >= 1'].
-	bits _ anInteger! !
-
-!RandomGenerator methodsFor: 'accessing' stamp: 'len 4/19/2016 04:04'!
-domain
-	^ domain! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 11/30/2016 14:44:24'!
-distinct: n
-	"Answer n distinct elements choosen at random."
-	| answer |
-	answer _ Set new: n.
-	[answer size < n] whileTrue: [answer add: self next].
-	^ answer! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 4/19/2016 22:04'!
-next
-	^ domain atRandom: random bits: bits! !
-
-!RandomGenerator methodsFor: 'generating' stamp: 'len 2/17/2016 01:25'!
-next: n
-	^ (1 to: n) collect: [:each| self next]! !
-
-!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 22:04'!
-domain: aDomain
-	domain _ aDomain.
-	bits _ Infinity positive! !
-
-!RandomGenerator methodsFor: 'private' stamp: 'len 4/19/2016 21:47'!
-random: aRandom
-	random _ aRandom! !
-
-!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
-on: aDomain
-	| random |
-	random _ Random new.
-	80 timesRepeat: [random next].
-	^ self on: aDomain random: random! !
-
-!RandomGenerator class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:03'!
-on: aDomain random: aRandom
-	^ self new domain: aDomain; random: aRandom! !
-
-!GroupRandomGenerator methodsFor: 'accessing' stamp: 'len 2/17/2016 01:23'!
-generators: aCollection
-	state _ aCollection asOrderedCollection.
-	60 - (state size min: 10) timesRepeat: [self next] "initial precomputation takes about 60 multiplications / inversions in the group"! !
-
-!GroupRandomGenerator methodsFor: 'generating' stamp: 'len 5/5/2019 18:12:33'!
-next
-	"Product Replacement Algorithm. After the initial precomputation, every new random element takes one multiplication and 1/2 inversion in the group."
-	| g h i |
-	state isNil ifTrue: [self generators: self domain generators].
-	g _ state atRandom: random.
-	[(state at: (i _ state size atRandom: random)) == g and: [state size > 1 "otherwise fails with cyclic groups"]] whileTrue.
-	(2 atRandom: random) = 1 ifTrue: [g _ g inverse].
-	h _ random nextBoolean ifTrue: [g · (state at: i)] ifFalse: [(state at: i) · g].
-	state size < 10 ifTrue: [state add: h] ifFalse: [state at: i put: h].
-	^ h! !
-
 !MonomialOrdering methodsFor: 'accessing' stamp: 'len 7/4/2016 00:40'!
 indeterminates
 	^ indeterminates! !
@@ -39947,13 +39859,24 @@ isNormal
 subgroups: aCollection
 	subgroups _ aCollection! !
 
-!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 07:31'!
-action: aGroupAction
-	action _ aGroupAction! !
-
-!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 16:32'!
+!ProductReplacementRandomGenerator methodsFor: 'accessing' stamp: 'len 5/25/2019 04:34:49'!
 generators: aCollection
-	generators _ aCollection asArray! !
+	generators _ aCollection.
+	state _ nil! !
+
+!ProductReplacementRandomGenerator methodsFor: 'generating' stamp: 'len 5/25/2019 04:36:25'!
+atRandom: aRandom
+	"Product Replacement Algorithm. After the initial precomputation, every new random element takes one multiplication and 1/2 inversion in the group."
+	| g h i |
+	state isNil ifTrue: "initial precomputation takes about 60 multiplications / inversions in the group"
+		[state _ generators asOrderedCollection.
+		60 - (state size min: 10) timesRepeat: [self atRandom: aRandom]].
+	g _ state atRandom: aRandom.
+	[(state at: (i _ state size atRandom: aRandom)) == g and: [state size > 1 "otherwise fails with cyclic groups"]] whileTrue.
+	(2 atRandom: aRandom) = 1 ifTrue: [g _ g inverse].
+	h _ aRandom nextBoolean ifTrue: [g · (state at: i)] ifFalse: [(state at: i) · g].
+	state size < 10 ifTrue: [state add: h] ifFalse: [state at: i put: h].
+	^ h! !
 
 !SchreierSims methodsFor: 'accessing' stamp: 'len 6/30/2016 09:02'!
 base
@@ -39971,6 +39894,45 @@ order
 strongGeneratingSet
 	strongGeneratingSet ifNil: [self run].
 	^ strongGeneratingSet! !
+
+!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 07:31'!
+action: aGroupAction
+	action _ aGroupAction! !
+
+!SchreierSims methodsFor: 'accessing-private' stamp: 'len 6/22/2016 16:32'!
+generators: aCollection
+	generators _ aCollection asArray! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:18'!
+elementFromImage: anArray
+	| image g |
+	image _ anArray copy.
+	g _ action group identity.
+	trees withIndexDo: [:each :i|
+		g _ (each trace: (image at: i)) · g.
+		i to: base size do: [:j| image at: j put: (action value: {each traceInverse: (image at: i). image at: j})]].
+	^ g! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:02'!
+imageOf: anElement
+	^ base collect: [:each| action value: {anElement. each}]! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:13'!
+includes: anElement
+	"Answer true if the group includes anElement."
+	^ (self strip: anElement) = action group identity! !
+
+!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:34'!
+strip: anElement
+	| g |
+	g _ anElement.
+	trees withIndexDo: [:each :i| | b b2 |
+		b _ each root.
+		b2 _ action value: {g. b}.
+		(each orbits includes: b2)
+			ifFalse: [^ {g. i}].
+		g _ g · (each traceInverse: b2)].
+	^ {g. trees size + 1}! !
 
 !SchreierSims methodsFor: 'computing-private' stamp: 'len 7/1/2016 05:46'!
 buildBSGS
@@ -40005,37 +39967,6 @@ run
 		G _ tree stabilizer].
 	self error: 'what?'.
 	^ order! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:18'!
-elementFromImage: anArray
-	| image g |
-	image _ anArray copy.
-	g _ action group identity.
-	trees withIndexDo: [:each :i|
-		g _ (each trace: (image at: i)) · g.
-		i to: base size do: [:j| image at: j put: (action value: {each traceInverse: (image at: i). image at: j})]].
-	^ g! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:02'!
-imageOf: anElement
-	^ base collect: [:each| action value: {anElement. each}]! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 6/30/2016 10:13'!
-includes: anElement
-	"Answer true if the group includes anElement."
-	^ (self strip: anElement) = action group identity! !
-
-!SchreierSims methodsFor: 'computing' stamp: 'len 5/8/2019 19:33:34'!
-strip: anElement
-	| g |
-	g _ anElement.
-	trees withIndexDo: [:each :i| | b b2 |
-		b _ each root.
-		b2 _ action value: {g. b}.
-		(each orbits includes: b2)
-			ifFalse: [^ {g. i}].
-		g _ g · (each traceInverse: b2)].
-	^ {g. trees size + 1}! !
 
 !SchreierTree methodsFor: 'accessing' stamp: 'len 6/24/2016 03:07'!
 orbit
@@ -43597,59 +43528,6 @@ example
 	V _ QQ ^ 3.
 	basis _ LinearBasis on: V elements: {(1, 1, 0). (0, 1, 1). (1, 0, 1)}.
 	^ (GramSchmidt basis: basis) orthogonalBasis! !
-
-!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:14'!
-* aPresentation
-	"Answer the free product of the receiver with the argument."
-	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators)! !
-
-!GroupPresentation methodsFor: 'morphisms' stamp: 'len 10/9/2016 21:13'!
-× aPresentation
-	^ self class generators: (generators, aPresentation generators) relators: (relators, aPresentation relators, (self commutatorWith: aPresentation))! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 2/12/2016 07:49'!
-deficiency
-	^ generators size - relators size! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
-generators
-	^ generators! !
-
-!GroupPresentation methodsFor: 'accessing' stamp: 'len 11/27/2015 21:34'!
-relators
-	^ relators! !
-
-!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
-generators: aCollection
-	generators _ aCollection! !
-
-!GroupPresentation methodsFor: 'accessing-private' stamp: 'len 11/27/2015 21:35'!
-relators: aCollection
-	relators _ aCollection! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
-C: n
-	"Answer the cyclic group of order n."
-	| x |
-	x _ Word x: 1.
-	^ self generators: {x} relators: {x^n}! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 2/13/2016 08:37'!
-D: n
-	"Answer the dihedral group of order n."
-	| x1 x2 |
-	x1 _ Word x: 1.
-	x2 _ Word x: 2.
-	^ self generators: {x1. x2} relators: {x1^n. x2^2. (x1*x2)^2}! !
-
-!GroupPresentation class methodsFor: 'examples' stamp: 'len 11/27/2015 21:46'!
-free: aCollection
-	"Answer the free group on aCollection."
-	^ self generators: aCollection relators: #()! !
-
-!GroupPresentation class methodsFor: 'instance creation' stamp: 'len 11/27/2015 21:45'!
-generators: aCollection relators: anotherCollection
-	^ self new generators: aCollection; relators: anotherCollection! !
 
 !JordanReduction methodsFor: 'as yet unclassified' stamp: 'len 11/12/2016 07:39'!
 block: eigenvalue size: n
