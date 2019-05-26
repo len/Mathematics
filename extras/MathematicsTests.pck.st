@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 11:41:32 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 12:40:32 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 131!
+!provides: 'MathematicsTests' 1 132!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1044,18 +1044,6 @@ testAbelianGroupHomomorphism: phi
 	self assert: (phi value: G identity) = H identity.
 	self assert: (phi value: a·b) = ((phi value: a)·(phi value: b))! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:29:27'!
-testAbelianGroupWithTorsion
-	| G |
-	G _ FPAbelianGroup orders: #(0 0 2 3).
-	self assert: G rank = 2.
-	self assert: G primaryInvariants sorted = #(0 0 2 3).
-	self assert: G torsion primaryInvariants sorted = #(2 3).
-	self assert: G isTorsion not.
-	self assert: G isFree not.
-	self assert: G torsion isTorsion.
-	self assert: G torsion isFree not! !
-
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 04:25:48'!
 testDirectSum
 	| A B C |
@@ -1066,18 +1054,18 @@ testDirectSum
 	self testAbelianGroupHomomorphism: (C -< (A, B)) atRandom.
 	self testAbelianGroupHomomorphism: ((A, B) >- C) atRandom! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:34:24'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testExponent
 	| G |
-	G _ FPAbelianGroup orders: #(2 3 7).
+	G _ AbelianGroup orders: #(2 3 7).
 	self assert: G exponent = 42.
-	G _ FPAbelianGroup orders: #(2 4 6).
+	G _ AbelianGroup orders: #(2 4 6).
 	self assert: G exponent = 12! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:30:32'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testFreeAbelianGroup
 	| G |
-	G _ FPAbelianGroup orders: #(0 0).
+	G _ AbelianGroup orders: #(0 0).
 	self assert: G rank = 2.
 	self assert: G invariants = #(0 0).
 	self assert: G torsion invariants = #().
@@ -1108,33 +1096,48 @@ testIntegers
 	self assert: ZZ !! (g1 · g2) = (x1 + x2).
 	self assert: ZZ !! g1 inverse = x1 negated.! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:30:16'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testInvariants
-	self assert: (FPAbelianGroup orders: #(1 3 5 12)) invariants = #(3 60).
-	self assert: (FPAbelianGroup orders: #(2 3)) invariants = #(6).
-	self assert: (FPAbelianGroup orders: #(6)) invariants = #(6).
-	self assert: (FPAbelianGroup orders: #(2 6)) invariants = #(2 6).
-	self assert: (FPAbelianGroup orders: #(3 4 5)) invariants = #(60).
-	self assert: (FPAbelianGroup orders: #(0 6)) invariants = #(0 6).
+	self assert: (AbelianGroup orders: #(1 3 5 12)) invariants = #(3 60).
+	self assert: (AbelianGroup orders: #(2 3)) invariants = #(6).
+	self assert: (AbelianGroup orders: #(6)) invariants = #(6).
+	self assert: (AbelianGroup orders: #(2 6)) invariants = #(2 6).
+	self assert: (AbelianGroup orders: #(3 4 5)) invariants = #(60).
+	self assert: (AbelianGroup orders: #(0 6)) invariants = #(0 6).
 ! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:34:06'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testIsCyclic
 	| G |
-	G _ FPAbelianGroup orders: #(2 3).
+	G _ AbelianGroup orders: #(2 3).
 	self assert: G isCyclic.
-	G _ FPAbelianGroup orders: #(6).
+	G _ AbelianGroup orders: #(6).
 	self assert: G isCyclic.
-	G _ FPAbelianGroup orders: #(2 2).
+	G _ AbelianGroup orders: #(2 2).
 	self assert: G isCyclic not.
-	G _ FPAbelianGroup orders: #(2 4).
+	G _ AbelianGroup orders: #(2 4).
 	self assert: G isCyclic not.
-	G _ FPAbelianGroup orders: #().
+	G _ AbelianGroup orders: #().
 	self assert: G isCyclic.
-	G _ FPAbelianGroup orders: #(0).
+	G _ AbelianGroup orders: #(0).
 	self assert: G isCyclic.
-	G _ FPAbelianGroup orders: #(3 4 5).
+	G _ AbelianGroup orders: #(3 4 5).
 	self assert: G isCyclic! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:39:47'!
+testMixedAbelianGroup
+	| G |
+	G _ AbelianGroup orders: #(0 0 2 3).
+	self assert: G rank = 2.
+	self assert: G primaryInvariants = #(0 0 2 3).
+	self assert: G torsion primaryInvariants = #(2 3).
+	self assert: G isTorsion not.
+	self assert: G isFree not.
+	self assert: G isMixed.
+	self assert: G torsion isTorsion.
+	self assert: G torsion isFree not.
+	self assert: G torsionFree isFree.
+	self assert: G torsionFree rank = 2! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:48'!
 testModularIntegers
@@ -1143,19 +1146,31 @@ testModularIntegers
 	self testAbelianGroup: R asAbelianGroup.
 	self testAbelianGroupHomomorphism: R projection asAbelianGroupMap! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:35:07'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testOrder
-	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
-	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
+	self assert: (AbelianGroup orders: #(2 3)) size = 6.
+	self assert: (AbelianGroup orders: #(0 2 3)) size isInfinite! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 04:11:04'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testOrderOfElements
 	| G g |
-	G _ FPAbelianGroup orders: #(2 3 4 5 0).
+	G _ AbelianGroup orders: #(2 3 4 5 0).
 	g _ G !! [:a :b :c :d :e| a*(b^2)*(d^4)].
 	self assert: g order = 30.
 	g _ G !! [:a :b :c :d :e| a*e].
 	self assert: g order = 0! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:39:37'!
+testTorsionAbelianGroup
+	| G |
+	G _ AbelianGroup orders: #(2 3).
+	self assert: G rank = 0.
+	self assert: G primaryInvariants = #(2 3).
+	self assert: G = G torsion.
+	self assert: G isTorsion.
+	self assert: G isFree not.
+	self assert: G isMixed not.
+	self assert: G torsionFree isTrivial! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 1/22/2017 08:21:59'!
 testAffineHull
