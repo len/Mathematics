@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 4:38:31 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 10:34:04 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 129!
+!provides: 'MathematicsTests' 1 130!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1044,13 +1044,13 @@ testAbelianGroupHomomorphism: phi
 	self assert: (phi value: G identity) = H identity.
 	self assert: (phi value: a·b) = ((phi value: a)·(phi value: b))! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 18:54:31'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:29:27'!
 testAbelianGroupWithTorsion
 	| G |
 	G _ FPAbelianGroup orders: #(0 0 2 3).
 	self assert: G rank = 2.
-	self assert: G invariants = #(0 0 2 3).
-	self assert: G torsion invariants = #(2 3).
+	self assert: G primaryInvariants sorted = #(0 0 2 3).
+	self assert: G torsion primaryInvariants sorted = #(2 3).
 	self assert: G isTorsion not.
 	self assert: G isFree not.
 	self assert: G torsion isTorsion.
@@ -1066,22 +1066,12 @@ testDirectSum
 	self testAbelianGroupHomomorphism: (C -< (A, B)) atRandom.
 	self testAbelianGroupHomomorphism: ((A, B) >- C) atRandom! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:20:34'!
-testElementaryDivisors
-	self assert: (FPAbelianGroup orders: #(1 3 5 12)) elementaryDivisors = #(3 60).
-	self assert: (FPAbelianGroup orders: #(2 3)) elementaryDivisors = #(6).
-	self assert: (FPAbelianGroup orders: #(6)) elementaryDivisors = #(6).
-	self assert: (FPAbelianGroup orders: #(2 6)) elementaryDivisors = #(2 6).
-	self assert: (FPAbelianGroup orders: #(3 4 5)) elementaryDivisors = #(60).
-	self assert: (FPAbelianGroup orders: #(0 6)) elementaryDivisors = #(6 0).
-! !
-
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:28:34'!
 testFPAbelianGroupOrder
 	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
 	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/24/2019 11:13:49'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:30:32'!
 testFreeAbelianGroup
 	| G |
 	G _ FPAbelianGroup orders: #(0 0).
@@ -1114,6 +1104,16 @@ testIntegers
 	self assert: ZZ !! G identity = 0.
 	self assert: ZZ !! (g1 · g2) = (x1 + x2).
 	self assert: ZZ !! g1 inverse = x1 negated.! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:30:16'!
+testInvariants
+	self assert: (FPAbelianGroup orders: #(1 3 5 12)) invariants = #(3 60).
+	self assert: (FPAbelianGroup orders: #(2 3)) invariants = #(6).
+	self assert: (FPAbelianGroup orders: #(6)) invariants = #(6).
+	self assert: (FPAbelianGroup orders: #(2 6)) invariants = #(2 6).
+	self assert: (FPAbelianGroup orders: #(3 4 5)) invariants = #(60).
+	self assert: (FPAbelianGroup orders: #(0 6)) invariants = #(0 6).
+! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:48'!
 testModularIntegers
@@ -3306,21 +3306,11 @@ testGroupAction: phi
 	self assert: (phi value: {e. x}) = x.
 	self assert: (phi value: {g. phi value: {h. x}}) = (phi value: {g · h. x})! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:43:49'!
-testGroupHomomorphism: phi
-	| G H a b |
-	G _ phi domain.
-	H _ phi codomain.
-	a _ G atRandomBits: 100.
-	b _ G atRandomBits: 100.
-	self assert: (phi value: G identity) = H identity.
-	self assert: (phi value: a · b) = ((phi value: a) · (phi value: b))! !
-
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 03:02:40'!
-testGroupRing
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 08:43:33'!
+testGroupAlgebra
 	| G R a b c xa xb xc |
 	G _ self smallGroupAtRandom.
-	R _ G groupRing.
+	R _ G groupAlgebra.
 	a _ G atRandom.
 	b _ G atRandom.
 	c _ G atRandom.
@@ -3331,11 +3321,11 @@ testGroupRing
 	self assert: xa*2 + xb*xc - (xa*xc) - (xb*xc) = (R embed: a·c).
 	self assert: (xa + xb) * (xa - xb) = (xa^2 - (xb^2) + (xb*xa) - (xa*xb))! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 3/7/2017 07:24:24'!
-testGroupRingIsARing
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 08:43:44'!
+testGroupAlgebraIsARing
 	| G R a a2 b b2 c c2 e e2 |
 	G _ self smallGroupAtRandom.
-	R _ G groupRing.
+	R _ G groupAlgebra.
 	e _ G identity.
 	a _ G atRandom.
 	b _ G atRandom.
@@ -3349,6 +3339,16 @@ testGroupRingIsARing
 	self assert: a2 * e2 = a2.
 	self assert: (a2 * b2 * c2) = (a2 * (b2 * c2)).
 	G isCommutative ifTrue: [self assert: a2 * b2 = (b2 * a2)].! !
+
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:43:49'!
+testGroupHomomorphism: phi
+	| G H a b |
+	G _ phi domain.
+	H _ phi codomain.
+	a _ G atRandomBits: 100.
+	b _ G atRandomBits: 100.
+	self assert: (phi value: G identity) = H identity.
+	self assert: (phi value: a · b) = ((phi value: a) · (phi value: b))! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:03'!
 testHessian
