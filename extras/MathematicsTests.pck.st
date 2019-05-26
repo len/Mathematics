@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 25 May 2019 at 8:34:29 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 4:38:31 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 128!
+!provides: 'MathematicsTests' 1 129!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1056,15 +1056,15 @@ testAbelianGroupWithTorsion
 	self assert: G torsion isTorsion.
 	self assert: G torsion isFree not! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 06:07:13'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 04:25:48'!
 testDirectSum
 	| A B C |
 	A _ ZZ asAbelianGroup.
 	B _ (ZZ / (2 to: 10) atRandom) asAbelianGroup.
 	C _ A ê B.
 	self testAbelianGroup: C.
-	self testAbelianGroupHomomorphism: ((C projections: {A. B}) at: 2 atRandom).
-	self testAbelianGroupHomomorphism: ((C coprojections: {A. B}) at: 2 atRandom)! !
+	self testAbelianGroupHomomorphism: (C -< (A, B)) atRandom.
+	self testAbelianGroupHomomorphism: ((A, B) >- C) atRandom! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:20:34'!
 testElementaryDivisors
@@ -4447,6 +4447,17 @@ testRankNullityTheorem
 	A _ self newRandomMatrix: n@n over: QQ.
 	self assert: A rank + A nullity = n! !
 
+!MatrixTest methodsFor: 'invariants' stamp: 'len 5/25/2019 09:48:55'!
+testRankOverPolynomialsOverZ5
+	"Example form Magma handbook (H88E7)."
+	| K P x M a |
+	K _ ZZ/5.
+	P _ K polynomials.
+	x _ P x.
+	M _ P^(5@5).
+	a _ M evaluating: [:i :j| x^i + (x^j)].
+	self assert: a rank = 2! !
+
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:00:17'!
 testEchelonOverFiniteField
 	"From Magma Handbook example H26E10."
@@ -4608,78 +4619,78 @@ testReducerPivots
 	A _ ZZ ^ (3@3) rows: {(0,-1,-1). (0,-20,1). (0,1,2)}.
 	self assert: A reduction pivots asArray = {1@2. 2@3}! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:41:26'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:30'!
 testSmithNormalForm
 	| A |
 	A _ ZZ^(3@3) rows: { (2,4,4). (-6,6,12). (10,-4,-16) }.
-	self assert: A SNF = #(2 6 12)! !
+	self assert: A elementaryDivisors = #(2 6 12)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:41:53'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:39'!
 testSmithNormalForm2
 	| A |
 	"Reduced Laplacian matrix of K_4:"
 	A _ ZZ^(3@3) rows: { (3,-1,-1). (-1,3,-1). (-1,-1,3) }.
-	self assert: A SNF = #(1 4 4)! !
+	self assert: A elementaryDivisors = #(1 4 4)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:42:08'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:45'!
 testSmithNormalForm3
 	"Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ZZ^(3@3) rows: { (1,4,9). (16,25,36). (49,64,81) }.
-	self assert: A SNF = #(1 3 72)! !
+	self assert: A elementaryDivisors = #(1 3 72)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:42:30'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:02'!
 testSmithNormalForm4
 	"Smith form of a 3x3 matrix of rank 2.
 	Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ZZ^(3@3) rows: { (2,3,4). (5,6,7). (8,9,10) }.
-	self assert: A SNF2 = #(1 3 0) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
+	self assert: A elementaryDivisors2 = #(1 3 0) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 4/21/2019 14:03:00'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:13'!
 testSmithNormalForm5
 	"Example from youtube video: 'Derek Holt: Algorithms for finitely presented groups' @ 25:49."
 	| A |
 	A _ ZZ matrix: #((1 2 0 -2) (0 2 2 0) (-1 -4 4 2)).
-	self assert: A SNF2 = #(1 2 6 0)! !
+	self assert: A elementaryDivisors2 = #(1 2 6 0)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:45:20'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:20'!
 testSmithNormalForm6
 	"From Magma Handbook example H26E10."
 	| A |
 	A _ ZZ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
-	self assert: A SNF2 = #(1 1 1 2)! !
+	self assert: A elementaryDivisors2 = #(1 1 1 2)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:33:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:52'!
 testSmithNormalForm7
 	"From GAP manual."
 	| A |
 	A _ ZZ matrix: #((1 15 28) (4 5 6) (7 8 9)).
-	self assert: A SNF = #(1 1 3)
+	self assert: A elementaryDivisors = #(1 1 3)
 ! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 14:46:04'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:31'!
 testSmithNormalForm8
 	| A |
 	A _ ZZ matrix: #((2 1 -3) (3 -2 -1) (1 -3 2)).
-	self assert: A SNF2 = #(1 7 0)! !
+	self assert: A elementaryDivisors2 = #(1 7 0)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 14:49:06'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:40'!
 testSmithNormalForm9
 	| A |
 	A _ ZZ matrix: #((1 2 3 4 5 6 7) (1 0 1 0 1 0 1) (2 4 5 6 1 1 1) (1 4 2 5 2 0 0) (0 0 1 1 2 2 3)).
 	"actually it should be:	self assert: A SNF = #(1 1 1 1 2)"
-	self assert: A SNF2 = #(1 1 1 1 2 0 0)! !
+	self assert: A elementaryDivisors2 = #(1 1 1 1 2 0 0)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 11:44:09'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:57'!
 testSmithNormalFormDiagonal
 	| A |
 	A _ ZZ matrix: #((2 0 0) (0 1 0) (0 0 0)).
-	self assert: A SNF2 = #(1 2 0).
+	self assert: A elementaryDivisors2 = #(1 2 0).
 	A _ ZZ matrix: #((5 0 0) (0 2 0) (0 0 0)).
-	self assert: A SNF2 = #(1 10 0)! !
+	self assert: A elementaryDivisors2 = #(1 10 0)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/4/2019 15:50:41'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:59'!
 testSmithNormalFormOverPolynomials
 	"Example from Sage documentation."
 	| R x M A |
@@ -4687,7 +4698,29 @@ testSmithNormalFormOverPolynomials
 	x _ R x.
 	M _ R^(2@2).
 	A _ M !! 1 * x - (M !! #(3 -4 1 -1)).
-	self assert: A SNF = {R one. x^2 - (x*2) + 1}! !
+	self assert: A elementaryDivisors = {R one. x^2 - (x*2) + 1}! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 17:54:54'!
+testSmithNormalFormOverPolynomialsOverPrimeField1
+	"Example form Magma handbook (H88E7)."
+	| K P x M a |
+	K _ ZZ/5.
+	P _ K polynomials.
+	x _ P x.
+	M _ P^(5@5).
+	a _ M evaluating: [:i :j| x^i + (x^j)].
+	self assert: a elementaryDivisors = {x. x^3 + (x^2*3) + x}! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 17:53:09'!
+testSmithNormalFormOverPolynomialsOverPrimeField2
+	"Example form Magma handbook (H88E7)."
+	| K P x a |
+	K _ ZZ/5.
+	P _ K polynomials.
+	x _ P x.
+	a _ ZZ matrix: 5 coefficients: #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
+	a _ a over: P.
+	self assert: (a identity * x - a) elementaryDivisors = {P one. P one. x - 1. x^2 - 1. x^2 - 1}! !
 
 !ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
 testGamma0Index
