@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 10:33:43 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 11:14:24 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 501!
+!provides: 'Domains' 1 502!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -15452,9 +15452,10 @@ generators
 identity
 	^ self propertyAt: #identity ifAbsentPut: [self exponents: (self orders collect: [:each| 0])]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 10:27:33'!
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 10:43:55'!
 invariants
-	"Answer the Smith form invariants of the reciever. Each infinite cylic factor is represented by 0."
+	"Answer the Smith normal form abelian invariants of the reciever, each dividing the next.
+	Each infinite cylic factor is represented by 0."
 	^ self propertyAt: #invariants ifAbsentPut: [(self orders select: [:each| each isZero]), ((ZZ diagonalMatrix: (self orders select: [:each| each isZero not])) elementaryDivisors select: [:each| each ~= 1])]! !
 
 !FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:40:39'!
@@ -15467,15 +15468,17 @@ orders
 	"Answer the orders of the generators, with 0 to denote infinite order."
 	^ self propertyAt: #orders! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 10:28:38'!
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 11:12:26'!
 primaryInvariants
-	"Answer the primary invariants of the receiver, consisting of a Bag where each prime p occurrs n times, and the receiver is isomorphic to the direct sum of groups of the form Z/p^nZ. Each infinite cyclic factor is represented by 0."
-	| answer |
+	"Answer the primary abelian invariants of the receiver, consisting prime powers q(i) such that the torsion subgroup of the receiver is isomorphic to the direct sum of all the Z/q(i)Z. Each infinite cyclic factor is represented by 0."
+	| factors answer |
 	self propertyAt: #primaryInvariants ifPresent: [:aBag| ^ aBag].
-	answer _ Bag new.
+	factors _ Bag new.
+	answer _ OrderedCollection new.
 	"this can be improved because each invariant divides the next:"
-	self invariants do: [:each| each isZero ifTrue: [answer add: each] ifFalse: [answer addAll: each factors]].
-	^ self propertyAt: #primaryInvariants put: answer! !
+	self invariants do: [:each| each isZero ifTrue: [answer add: each] ifFalse: [factors addAll: each factors]].
+	factors withOccurrencesDo: [:p :k| answer add: p^k].
+	^ self propertyAt: #primaryInvariants put: answer sorted! !
 
 !FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:37:18'!
 rank
