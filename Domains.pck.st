@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 25 May 2019 at 8:34:17 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 4:38:02 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 499!
+!provides: 'Domains' 1 500!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -3036,7 +3036,7 @@ ModularHermiteReduction class
 
 !classDefinition: #SmithReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #SmithReduction
-	instanceVariableNames: 'matrix diagonal'
+	instanceVariableNames: 'elementaryDivisors matrix'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Modules-Matrices-Algorithms'!
@@ -12984,6 +12984,13 @@ upTo: max do: aBlock
 		aBlock value: each.
 		k _ k+1]! !
 
+!Domain methodsFor: 'morphisms' stamp: 'len 5/26/2019 04:34:02'!
+-< aCartesianProduct
+	"Answer the tuple of canonical projections from the receiver to each component of the argument.
+	See also CartesianProduct's message >-."
+	self propertyAt: #outputMapTuples ifPresent: [:aDictionary| aDictionary at: aCartesianProduct asArray ifPresent: [:aTupleOfMaps| ^ aTupleOfMaps]].
+	^ nil! !
+
 !Domain methodsFor: 'morphisms' stamp: 'len 5/15/2019 01:09:33'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
@@ -13055,12 +13062,6 @@ automorphisms
 	self flag: #fix. "this shouldn't be here for all subclasses to inherit, maybe Domain should be abstract, and we could consider Collections as finite sets and implement these things in Collection; same with #to:evaluating:, etc."
 	^ SymmetricGroup on: self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/14/2019 12:12:59'!
-coprojections: anArrayOfDomains
-	"Answer the tuple of canonical coprojections from each component of the argument to the receiver."
-	self propertyAt: #inputMapTuples ifPresent: [:aDictionary| aDictionary at: anArrayOfDomains ifPresent: [:aTupleOfMaps| ^ aTupleOfMaps]].
-	^ nil! !
-
 !Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:36:41'!
 endomorphisms
 	^ self => self! !
@@ -13111,12 +13112,6 @@ onto: aCodomain evaluating: aBlock
 !Domain methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:47:30'!
 onto: aCodomain mapping: aBlock
 	^ self to: aCodomain mapping: aBlock! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 5/14/2019 11:43:29'!
-projections: anArrayOfCodomains
-	"Answer the tuple of canonical projections from the receiver to each component of the argument."
-	self propertyAt: #outputMapTuples ifPresent: [:aDictionary| aDictionary at: anArrayOfCodomains ifPresent: [:aTupleOfMaps| ^ aTupleOfMaps]].
-	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/13/2019 18:49:19'!
 to: aCodomain
@@ -14175,6 +14170,10 @@ size
 hash
 	^ components hash! !
 
+!CartesianProduct methodsFor: 'converting' stamp: 'len 5/26/2019 04:31:21'!
+asArray
+	^ components! !
+
 !CartesianProduct methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:53'!
 do: aBlock
 	(self components allSatisfy: [:each| each isFinite])
@@ -14197,6 +14196,13 @@ upTo: max rank: n do: aBlock
 upToComponent: k do: aBlock
 	k = 0 ifTrue: [aBlock value: Array new. ^ self].
 	self upToComponent: k-1 do: [:each| (self at: k) do: [:last| aBlock value: (each copyWith: last)]]! !
+
+!CartesianProduct methodsFor: 'morphisms' stamp: 'len 5/26/2019 04:33:44'!
+>- aCodomain
+	"Answer the tuple of canonical coprojections from each component of the receiver to the argument.
+	See also Domain's message -<."
+	aCodomain propertyAt: #inputMapTuples ifPresent: [:aDictionary| aDictionary at: self asArray ifPresent: [:aTupleOfMaps| ^ aTupleOfMaps]].
+	^ nil! !
 
 !CartesianProduct methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:41'!
 projection: i
@@ -15433,9 +15439,9 @@ base
 	self names ifNotNil: [:aCollection| answer names: aCollection].
 	^ answer! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 02:24:36'!
+!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/25/2019 10:40:37'!
 elementaryDivisors
-	^ self propertyAt: #elementaryDivisors ifAbsentPut: [(ZZ diagonalMatrix: self orders) SNF select: [:each| each ~= 1]]! !
+	^ self propertyAt: #elementaryDivisors ifAbsentPut: [(ZZ diagonalMatrix: self orders) elementaryDivisors select: [:each| each ~= 1]]! !
 
 !FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:32:14'!
 exponent
@@ -15854,13 +15860,13 @@ to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ self to: aGroup mapping: [:i| aBlock value: (self generators at: i)]! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 5/14/2019 12:24:29'!
+!FPGroup methodsFor: 'operations' stamp: 'len 5/26/2019 04:32:21'!
 * aGroup
 	"Answer the free product of the receiver with the argument."
 	| F p |
 	(aGroup isKindOf: FPGroup) ifFalse: [^ super * aGroup].
 	F _ self base * aGroup base.
-	p _ F projections: {self base. aGroup base}.
+	p _ F -< (self base, aGroup base).
 	^ F / ((self relators apply: p first), (aGroup relators apply: p second))! !
 
 !FPGroup methodsFor: 'operations' stamp: 'len 5/15/2019 05:57:45'!
@@ -15877,13 +15883,13 @@ to: aGroup evaluating: aBlock
 		addMap: (self onto: answer mapping: [:i| answer x: i]);
 		yourself! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 5/15/2019 05:57:07'!
+!FPGroup methodsFor: 'operations' stamp: 'len 5/26/2019 04:32:42'!
 ×  aGroup
 	"Answer the direct product of the receiver with the argument."
 	| F p commutators relatorsLeft relatorsRight |
 	(aGroup isKindOf: FPGroup) ifFalse: [^ super * aGroup].
 	F _ self base * aGroup base.
-	p _ F projections: {self base. aGroup base}.
+	p _ F -< (self base, aGroup base).
 	relatorsLeft _ self relators apply: p first.
 	relatorsRight _ aGroup relators apply: p second.
 	commutators _ OrderedCollection new.
@@ -23152,9 +23158,9 @@ base
 generators
 	^ self base generators collect: [:each| self project: each]! !
 
-!QuotientModule methodsFor: 'accessing' stamp: 'len 5/1/2019 19:22:01'!
+!QuotientModule methodsFor: 'accessing' stamp: 'len 5/25/2019 10:44:08'!
 invariants
-	^ self matrix isEmpty ifTrue: [^ self scalars tuple: #()] ifFalse: [self matrix SNF2]! !
+	^ self matrix isEmpty ifTrue: [^ self scalars tuple: #()] ifFalse: [self matrix elementaryDivisors2]! !
 
 !QuotientModule methodsFor: 'accessing' stamp: 'len 5/19/2018 20:09:11'!
 matrix
@@ -37752,11 +37758,11 @@ scalars
 			(self at: i@j) = (anObject at: i@j) ifFalse: [^ false]]].
 	^ true! !
 
-!Matrix methodsFor: 'comparing' stamp: 'len 1/28/2018 08:30:11'!
+!Matrix methodsFor: 'comparing' stamp: 'len 5/25/2019 10:42:30'!
 ~ aMatrix
 	"Answer true if the receiver is similar to aMatrix.
 	Two matrices A and B are 'similar' if there exists an invertible matrix P such that B = P^-1 * A * P. This is the conjugacy equivalence relation in GL."
-	^ self characteristicMatrix SNF = aMatrix characteristicMatrix SNF! !
+	^ self characteristicMatrix elementaryDivisors = aMatrix characteristicMatrix elementaryDivisors! !
 
 !Matrix methodsFor: 'comparing' stamp: 'len 4/5/2018 15:31:22'!
 hash
@@ -38421,27 +38427,12 @@ QR
 	R _ Q transposed * self.
 	^ {Q. R}! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 5/20/2018 18:27:34'!
+!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:41:17'!
 SNF
-	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one."
+	"Answer the Smith normal form of the receiver."
 	self isEmpty ifTrue: [^ #()].
 	self scalars isPID ifFalse: [^ DomainError signal: 'coefficients ring is not a PID'].
-	^ (SmithReduction new matrix: self copy; diagonal) asArray! !
-
-!Matrix methodsFor: 'reduction' stamp: 'len 5/5/2019 09:59:05'!
-SNF2
-	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one. Perform first a HNF reduction."
-	| H n |
-	H _ self HNF.
-	n _ H diagonal findLast: [:each| each isZero not].
-	^ (H copyFrom: 1@1 to: n@n) SNF, (Array new: (H width max: H height) - n withAll: 0)! !
-
-!Matrix methodsFor: 'reduction' stamp: 'len 5/4/2019 16:30:28'!
-SNF3
-	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one."
-	self isEmpty ifTrue: [^ #()].
-	self scalars isPID ifFalse: [^ DomainError signal: 'coefficients ring is not a PID'].
-	^ (SmithReduction new matrix: self copy; diagonal) asArray! !
+	^ SmithReduction new matrix: self copy; reduced! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 5/5/2019 12:16:22'!
 SNFOneStep
@@ -38545,6 +38536,21 @@ echelon
 	"Answer the echelon form of the receiver."
 	self isEmpty ifTrue: [^ self].
 	^ self reduction reduced! !
+
+!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:40:49'!
+elementaryDivisors
+	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one."
+	self isEmpty ifTrue: [^ #()].
+	self scalars isPID ifFalse: [^ DomainError signal: 'coefficients ring is not a PID'].
+	^ (SmithReduction new matrix: self copy; elementaryDivisors) asArray! !
+
+!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:44:42'!
+elementaryDivisors2
+	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one. Perform first a HNF reduction."
+	| H n |
+	H _ self HNF.
+	n _ H diagonal findLast: [:each| each isZero not].
+	^ (H copyFrom: 1@1 to: n@n) elementaryDivisors, (Array new: (H width max: H height) - n withAll: 0)! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 4/7/2018 06:26:26'!
 jordan
@@ -40919,20 +40925,24 @@ run
 		HNF _ addRow: a to: HNF | x
 "! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 3/21/2016 03:34'!
-diagonal
-	diagonal isNil ifTrue: [self run].
-	^ diagonal! !
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:28:53'!
+elementaryDivisors
+	elementaryDivisors isNil ifTrue: [self run].
+	^ elementaryDivisors! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 3/20/2016 23:35'!
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:28:41'!
 matrix
 	^ matrix! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 3/20/2016 23:35'!
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:28:41'!
 matrix: aMatrix
 	matrix _ aMatrix! !
 
-!SmithReduction methodsFor: 'private' stamp: 'len 4/18/2018 06:24:22'!
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:39:16'!
+reduced
+	^ matrix scalars matrix: self elementaryDivisors size coefficients: self elementaryDivisors! !
+
+!SmithReduction methodsFor: 'private' stamp: 'len 5/25/2019 10:28:41'!
 reduceStep: i mod: R
 	| j c euclid B Ai Aj |
 	"2. Initialize j for row reduction:"
@@ -40962,16 +40972,16 @@ reduceStep: i mod: R
 			c _ c + 1].
 	c > 0] whileTrue "8. Repeat stage i?"! !
 
-!SmithReduction methodsFor: 'private' stamp: 'len 5/4/2019 09:45:43'!
+!SmithReduction methodsFor: 'private' stamp: 'len 5/25/2019 10:28:41'!
 run
 	| n i R b k |
 	n _ matrix height.
-	diagonal _ OrderedCollection new: n.
+	elementaryDivisors _ OrderedCollection new: n.
 	"1. Initialize i:"
 	i _ n.
 	R _ matrix determinant.
 	(matrix scalars isKindOf: RationalIntegerRing) ifTrue: [R _ R abs]. "not sure why take abs"
-	n = 1 ifTrue: [diagonal add: R. ^ self].
+	n = 1 ifTrue: [elementaryDivisors add: R. ^ self].
 	"2-9. Reduction:"
 	[[self reduceStep: i mod: R.
 	"9. Check the rest of the matrix:"
@@ -40980,11 +40990,11 @@ run
 	k isNil]
 		whileFalse: [matrix rowAt: i put: (matrix rowAt: i) + (matrix rowAt: k)].
 	"10. Next stage:"
-	diagonal add: ((matrix at: i@i) gcd: R).
-	R _ R /// diagonal last.
+	elementaryDivisors add: ((matrix at: i@i) gcd: R).
+	R _ R /// elementaryDivisors last.
 	i = 2]
 		whileFalse: [i _ i - 1].
-	diagonal add: ((matrix at: 1@1) gcd: R).
+	elementaryDivisors add: ((matrix at: 1@1) gcd: R).
 "	diagonal _ matrix scalars tuple: diagonal"! !
 
 !LLL methodsFor: 'initialization' stamp: 'len 12/26/2015 21:06'!
