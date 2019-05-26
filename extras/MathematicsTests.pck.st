@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 10:34:04 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 11:41:32 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 130!
+!provides: 'MathematicsTests' 1 131!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1066,10 +1066,13 @@ testDirectSum
 	self testAbelianGroupHomomorphism: (C -< (A, B)) atRandom.
 	self testAbelianGroupHomomorphism: ((A, B) >- C) atRandom! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 02:28:34'!
-testFPAbelianGroupOrder
-	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
-	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:34:24'!
+testExponent
+	| G |
+	G _ FPAbelianGroup orders: #(2 3 7).
+	self assert: G exponent = 42.
+	G _ FPAbelianGroup orders: #(2 4 6).
+	self assert: G exponent = 12! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 10:30:32'!
 testFreeAbelianGroup
@@ -1115,12 +1118,35 @@ testInvariants
 	self assert: (FPAbelianGroup orders: #(0 6)) invariants = #(0 6).
 ! !
 
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:34:06'!
+testIsCyclic
+	| G |
+	G _ FPAbelianGroup orders: #(2 3).
+	self assert: G isCyclic.
+	G _ FPAbelianGroup orders: #(6).
+	self assert: G isCyclic.
+	G _ FPAbelianGroup orders: #(2 2).
+	self assert: G isCyclic not.
+	G _ FPAbelianGroup orders: #(2 4).
+	self assert: G isCyclic not.
+	G _ FPAbelianGroup orders: #().
+	self assert: G isCyclic.
+	G _ FPAbelianGroup orders: #(0).
+	self assert: G isCyclic.
+	G _ FPAbelianGroup orders: #(3 4 5).
+	self assert: G isCyclic! !
+
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/28/2018 06:50:48'!
 testModularIntegers
 	| R |
 	R _ ZZ / (2 to: 10) atRandom.
 	self testAbelianGroup: R asAbelianGroup.
 	self testAbelianGroupHomomorphism: R projection asAbelianGroupMap! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 11:35:07'!
+testOrder
+	self assert: (FPAbelianGroup orders: #(2 3)) size = 6.
+	self assert: (FPAbelianGroup orders: #(0 2 3)) size isInfinite! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 04:11:04'!
 testOrderOfElements
