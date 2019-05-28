@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 11:14:24 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 28 May 2019 at 9:59:52 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 502!
+!provides: 'Domains' 1 503!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -634,6 +634,26 @@ Monoid subclass: #Group
 Group class
 	instanceVariableNames: ''!
 
+!classDefinition: #AbelianGroup category: #'Domains-Groups'!
+Group subclass: #AbelianGroup
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Groups'!
+!classDefinition: 'AbelianGroup class' category: #'Domains-Groups'!
+AbelianGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #FreeAbelianGroup category: #'Domains-Groups'!
+AbelianGroup subclass: #FreeAbelianGroup
+	instanceVariableNames: 'rank ordering'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Groups'!
+!classDefinition: 'FreeAbelianGroup class' category: #'Domains-Groups'!
+FreeAbelianGroup class
+	instanceVariableNames: ''!
+
 !classDefinition: #DirectProductGroup category: #'Domains-Groups'!
 Group subclass: #DirectProductGroup
 	instanceVariableNames: 'components'
@@ -642,26 +662,6 @@ Group subclass: #DirectProductGroup
 	category: 'Domains-Groups'!
 !classDefinition: 'DirectProductGroup class' category: #'Domains-Groups'!
 DirectProductGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #FPAbelianGroup category: #'Domains-Groups'!
-Group subclass: #FPAbelianGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Groups'!
-!classDefinition: 'FPAbelianGroup class' category: #'Domains-Groups'!
-FPAbelianGroup class
-	instanceVariableNames: ''!
-
-!classDefinition: #FreeAbelianGroup category: #'Domains-Groups'!
-FPAbelianGroup subclass: #FreeAbelianGroup
-	instanceVariableNames: 'rank ordering'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Groups'!
-!classDefinition: 'FreeAbelianGroup class' category: #'Domains-Groups'!
-FreeAbelianGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #FPGroup category: #'Domains-Groups'!
@@ -974,16 +974,6 @@ Group subclass: #CoxeterGroup
 CoxeterGroup class
 	instanceVariableNames: ''!
 
-!classDefinition: #AbelianGroup category: #'Domains-Etc-Groups-Abelian'!
-Group subclass: #AbelianGroup
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Groups-Abelian'!
-!classDefinition: 'AbelianGroup class' category: #'Domains-Etc-Groups-Abelian'!
-AbelianGroup class
-	instanceVariableNames: ''!
-
 !classDefinition: #AbelianGroup2 category: #'Domains-Etc-Groups-Abelian'!
 Group subclass: #AbelianGroup2
 	instanceVariableNames: ''
@@ -1052,6 +1042,16 @@ AbelianGroup2 subclass: #InfiniteCyclicGroup
 	category: 'Domains-Etc-Groups-Abelian'!
 !classDefinition: 'InfiniteCyclicGroup class' category: #'Domains-Etc-Groups-Abelian'!
 InfiniteCyclicGroup class
+	instanceVariableNames: ''!
+
+!classDefinition: #AbelianGroup3 category: #'Domains-Etc-Groups-Abelian'!
+Group subclass: #AbelianGroup3
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Groups-Abelian'!
+!classDefinition: 'AbelianGroup3 class' category: #'Domains-Etc-Groups-Abelian'!
+AbelianGroup3 class
 	instanceVariableNames: ''!
 
 !classDefinition: #Semiring category: #'Domains-Rings'!
@@ -2024,8 +2024,18 @@ Domain subclass: #Algebra
 Algebra class
 	instanceVariableNames: ''!
 
+!classDefinition: #FPAlgebra category: #'Domains-Etc-Algebras'!
+Algebra subclass: #FPAlgebra
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'FPAlgebra class' category: #'Domains-Etc-Algebras'!
+FPAlgebra class
+	instanceVariableNames: ''!
+
 !classDefinition: #FreeAlgebra category: #'Domains-Etc-Algebras'!
-Algebra subclass: #FreeAlgebra
+FPAlgebra subclass: #FreeAlgebra
 	instanceVariableNames: 'scalars words'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -2324,16 +2334,6 @@ ModularForm subclass: #EisensteinSeries
 EisensteinSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #Permutation category: #'Domains-Groups-Permutations'!
-Morphism subclass: #Permutation
-	instanceVariableNames: 'images parent'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Groups-Permutations'!
-!classDefinition: 'Permutation class' category: #'Domains-Groups-Permutations'!
-Permutation class
-	instanceVariableNames: ''!
-
 !classDefinition: #RationalPoint category: #'Domains-Schemes'!
 Morphism subclass: #RationalPoint
 	instanceVariableNames: 'codomain'
@@ -2452,6 +2452,16 @@ GroupElement subclass: #SemidirectProductElement
 	category: 'Domains-Groups'!
 !classDefinition: 'SemidirectProductElement class' category: #'Domains-Groups'!
 SemidirectProductElement class
+	instanceVariableNames: ''!
+
+!classDefinition: #Permutation category: #'Domains-Groups-Permutations'!
+GroupElement subclass: #Permutation
+	instanceVariableNames: 'images parent'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Groups-Permutations'!
+!classDefinition: 'Permutation class' category: #'Domains-Groups-Permutations'!
+Permutation class
 	instanceVariableNames: ''!
 
 !classDefinition: #AbelianGroupElement category: #'Domains-Etc-Groups-Abelian'!
@@ -3036,7 +3046,7 @@ ModularHermiteReduction class
 
 !classDefinition: #SmithReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #SmithReduction
-	instanceVariableNames: 'elementaryDivisors matrix'
+	instanceVariableNames: 'matrix invariants'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Modules-Matrices-Algorithms'!
@@ -3956,11 +3966,11 @@ Some specific groups (such as permutation groups and matrix groups) can be repre
 References:
 	https://en.wikipedia.org/wiki/Group_(mathematics)!
 
+!AbelianGroup commentStamp: '<historical>' prior: 0!
+Finitely presented abelian groups. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
+
 !DirectProductGroup commentStamp: '<historical>' prior: 0!
 Direct products of groups. Elements are tuples, and the group composition law is defined component-wise.!
-
-!FPAbelianGroup commentStamp: '<historical>' prior: 0!
-Finitely presented abelian groups. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
 
 !FPGroup commentStamp: '<historical>' prior: 0!
 Finitely presented groups given by generators and relators. Their elements are (noncommutative) words. See Word.!
@@ -4709,9 +4719,6 @@ A modular form f(z) can be seen as power series on a new variable q = e^(2 pi i 
 
 Given a group G, the set of modular forms of a given weight k form a finite-dimensional vector space M_k(G). See ModularFormSpace. The set of all modular forms of all weights is noted M_*(G) and it's a ring. All modular functions form a field.!
 
-!Permutation commentStamp: '<historical>' prior: 0!
-Permutations are bijective functions on a set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
-
 !RationalPoint commentStamp: '<historical>' prior: 0!
 Abstract superclass for K-rational points on a scheme X, seen as morphisms Spec(K) -> X.
 
@@ -4752,6 +4759,9 @@ Right cosets of a subgroup H of a group G: {Hg : g in G}.!
 
 !OppositeGroupElement commentStamp: 'len 5/8/2019 14:34:38' prior: 0!
 Elements of the opposite group of a given group. See OppositeGroup.!
+
+!Permutation commentStamp: '<historical>' prior: 0!
+Permutations are bijective functions on a finite set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
 
 !OppositeRingElement commentStamp: 'len 5/8/2019 14:55:26' prior: 0!
 Elements of the opposite ring of a given ring. See OppositeRing.!
@@ -5473,11 +5483,7 @@ printOn: aStream
 	generators do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: '; '].
 	aStream nextPut: $>! !
 
-!DirectProductGroup methodsFor: 'printing' stamp: 'len 6/11/2016 21:02'!
-printOn: aStream
-	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
-
-!FPAbelianGroup methodsFor: 'printing' stamp: 'len 5/14/2019 04:18:16'!
+!AbelianGroup methodsFor: 'printing' stamp: 'len 5/14/2019 04:18:16'!
 printOn: aStream
 	self generators isEmpty
 		ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
@@ -5507,6 +5513,10 @@ printOn: aStream
 	aStream nextPut: $<.
 	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	aStream nextPutAll: '>'! !
+
+!DirectProductGroup methodsFor: 'printing' stamp: 'len 6/11/2016 21:02'!
+printOn: aStream
+	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
 
 !FPGroup methodsFor: 'printing' stamp: 'len 5/14/2019 02:33:15'!
 printOn: aStream
@@ -5593,24 +5603,6 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: Character Gamma! !
 
-!AbelianGroup methodsFor: 'printing' stamp: 'len 5/6/2019 13:04:11'!
-printOn: aStream
-	| first |
-	self isTrivial ifTrue: [aStream nextPutAll: '{0}'. ^ self].
-	first _ true.
-	(RunArray newFrom: self orders) runsAndValuesDo: [:exponent :modulus|
-		first ifFalse: [aStream nextPut: Character oplus].
-		modulus = 0
-			ifTrue: [aStream print: ZZ]
-			ifFalse:
-				[aStream print: ZZ; nextPutAll: modulus printString sub].
-"			ifFalse:
-				[exponent > 1 ifTrue: [aStream nextPut: $(].
-				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
-				exponent > 1 ifTrue: [aStream nextPut: $)]]."
-		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
-		first _ false]! !
-
 !EllipticCurveGroup methodsFor: 'printing' stamp: 'len 11/10/2016 08:13'!
 printOn: aStream
 	aStream nextPutAll: 'E('; print: self scalars; nextPut: $)! !
@@ -5637,6 +5629,24 @@ printOn: aStream
 !InfiniteCyclicGroup methodsFor: 'printing' stamp: 'len 9/29/2018 18:28:32'!
 printOn: aStream
 	self asRing printOn: aStream! !
+
+!AbelianGroup3 methodsFor: 'printing' stamp: 'len 5/6/2019 13:04:11'!
+printOn: aStream
+	| first |
+	self isTrivial ifTrue: [aStream nextPutAll: '{0}'. ^ self].
+	first _ true.
+	(RunArray newFrom: self orders) runsAndValuesDo: [:exponent :modulus|
+		first ifFalse: [aStream nextPut: Character oplus].
+		modulus = 0
+			ifTrue: [aStream print: ZZ]
+			ifFalse:
+				[aStream print: ZZ; nextPutAll: modulus printString sub].
+"			ifFalse:
+				[exponent > 1 ifTrue: [aStream nextPut: $(].
+				aStream print: ZZ; nextPut: $/; print: modulus; print: ZZ.
+				exponent > 1 ifTrue: [aStream nextPut: $)]]."
+		exponent > 1 ifTrue: [aStream nextPutAll: exponent printString super].
+		first _ false]! !
 
 !LocalizationRing methodsFor: 'printing' stamp: 'len 12/18/2016 21:05:06'!
 printOn: aStream
@@ -6086,20 +6096,6 @@ printOn: aStream
 printOn: aStream
 	aStream nextPutAll: 'G', weight printString sub! !
 
-!Permutation methodsFor: 'printing' stamp: 'len 5/1/2019 02:47:04'!
-printOn: aStream
-	"Print a representation of the receiver on the stream aStream."
-
-	self isIdentity ifTrue: [aStream nextPutAll: 'id'. ^ self].
-	self cyclesDo: [:cycle|
-		aStream nextPut: $(.
-		cycle do: [:i| | element |
-			element _ parent indexToSpace at: i.
-			element isSymbol
-				ifTrue: [aStream nextPutAll: element]
-				ifFalse: [aStream print: element]] separatedBy: [aStream space].
-		aStream nextPut: $)]! !
-
 !AffinePoint methodsFor: 'printing' stamp: 'len 12/30/2016 14:37:32'!
 printOn: aStream
 	aStream print: self coordinates! !
@@ -6167,6 +6163,20 @@ printOn: aStream
 !SemidirectProductElement methodsFor: 'printing' stamp: 'len 2/12/2016 06:10'!
 printOn: aStream
 	aStream nextPut: $(; print: left; nextPutAll: ', '; print: right; nextPut: $)! !
+
+!Permutation methodsFor: 'printing' stamp: 'len 5/1/2019 02:47:04'!
+printOn: aStream
+	"Print a representation of the receiver on the stream aStream."
+
+	self isIdentity ifTrue: [aStream nextPutAll: 'id'. ^ self].
+	self cyclesDo: [:cycle|
+		aStream nextPut: $(.
+		cycle do: [:i| | element |
+			element _ parent indexToSpace at: i.
+			element isSymbol
+				ifTrue: [aStream nextPutAll: element]
+				ifFalse: [aStream print: element]] separatedBy: [aStream space].
+		aStream nextPut: $)]! !
 
 !AbelianGroupElement methodsFor: 'printing' stamp: 'len 5/6/2019 12:54:14'!
 printOn: aStream
@@ -14850,6 +14860,31 @@ null
 order
 	^ self size! !
 
+!Group methodsFor: 'converting' stamp: 'len 5/28/2019 09:15:13'!
+asAbelianGroup
+	| generators elementaryDivisors G H |
+	self isTrivial ifTrue: [^ #()].
+	generators _ self generators.
+	elementaryDivisors _ OrderedCollection new.
+	G _ self.
+	H _ G commutator.
+	G size factors asSet do: [:p| | ranks powers K r |
+		ranks _ OrderedCollection new.
+		[powers _ OrderedCollection new.
+		generators do: [:g| | x |
+			x _ g^p.
+			(H contains: x) ifFalse: [powers add: x]].
+		K _ powers isEmpty ifTrue: [H] ifFalse: [H ambient span: H generators, powers].
+		r _ G size // K size.
+		G _ K.
+		generators _ powers.
+		r = 1] whileFalse: [ranks add: (r factors occurrencesOf: p)].
+		ranks isEmpty ifFalse:
+			[powers _ (Array new: ranks first) atAllPut: 1.
+			ranks do: [:i| 1 to: i do: [:j| powers at: j put: (powers at: j) * p]].
+			elementaryDivisors addAll: powers]].
+	^ AbelianGroup orders: elementaryDivisors sorted! !
+
 !Group methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:44'!
 collect: aBlock
 	"Answer the subgroup resulting of mapping the elements of the receiver by aBlock."
@@ -15216,9 +15251,18 @@ upperCentralSeriesQuotientsDo: aBlock
 	Z1 _ self null.
 	self upperCentralSeriesDo: [:Z| aBlock value: Z / Z1. Z1 _ Z]! !
 
-!Group methodsFor: 'testing' stamp: 'len 5/2/2016 02:32'!
+!Group methodsFor: 'testing' stamp: 'len 5/28/2019 04:23:16'!
+isCommutative
+	(self generators ifNil: [self]) do: [:x|
+		(self generators ifNil: [self]) do: [:y|
+			x ∑ y = (y ∑ x) ifFalse: [^ false]]].
+	^ true! !
+
+!Group methodsFor: 'testing' stamp: 'len 5/28/2019 04:51:53'!
 isCyclic
 	"Answer true if the receiver is generated by one element."
+	self isTrivial ifTrue: [^ true].
+	self generators ifNotNil: [:aCollection| aCollection size <= 1 ifTrue: [^ true]].
 	self do: [:each| (self span: {each}) size = self size ifTrue: [^ true]].
 	^ false! !
 
@@ -15346,160 +15390,93 @@ schnorr: q
 	(g _ h raisedTo: r modulo: p) = 1] whileTrue.
 	^ Group new generator: g % p! !
 
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 4/19/2019 07:14:28'!
-ambient
-	^ self propertyAt: #ambient ifAbsentPut: [(components allSatisfy: [:each| each isAmbient]) ifTrue: [self] ifFalse: [self class components: (components collect: [:each| each ambient])]]! !
-
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/16/2016 07:30'!
-arity
-	^ components size! !
-
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:02'!
-at: anInteger
-	^ components at: anInteger! !
-
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 4/22/2016 20:49'!
-identity
-	^ components collect: [:each| each identity]! !
-
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:10'!
-size
-	^ components product: [:each| each size]! !
-
-!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 2/12/2016 20:00'!
-components
-	^ components! !
-
-!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 11/5/2016 06:40'!
-components: anArray
-	components _ anArray! !
-
-!DirectProductGroup methodsFor: 'comparing' stamp: 'len 2/12/2016 20:05'!
-= anObject
-	^ (anObject isKindOf: DirectProductGroup) and: [anObject components = components]! !
-
-!DirectProductGroup methodsFor: 'comparing' stamp: 'len 2/12/2016 20:05'!
-hash
-	^ components hash! !
-
-!DirectProductGroup methodsFor: 'converting' stamp: 'len 4/19/2016 20:39'!
-asCartesianProduct
-	^ CartesianProduct components: components! !
-
-!DirectProductGroup methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:51'!
-do: aBlock
-	self asCartesianProduct do: aBlock! !
-
-!DirectProductGroup methodsFor: 'morphisms' stamp: 'len 4/23/2019 02:14:02'!
-coprojection: i
-	^ ((self at: i) to: self evaluating: [:x| components withIndexCollect: [:each :k| k = i ifTrue: [x] ifFalse: [each identity]]]) name: 'i', i printText sub! !
-
-!DirectProductGroup methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:42'!
-projection: i
-	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
-
-!DirectProductGroup methodsFor: 'random' stamp: 'len 4/19/2016 20:39'!
-atRandom: aRandom
-	^ self asCartesianProduct atRandom: aRandom! !
-
-!DirectProductGroup methodsFor: 'random' stamp: 'len 4/19/2016 20:39'!
-atRandom: aRandom bits: bits
-	^ self asCartesianProduct atRandom: aRandom bits: bits! !
-
-!DirectProductGroup methodsFor: 'testing' stamp: 'len 5/22/2018 16:54:23'!
-includes: anObject
-	anObject isSequenceable ifFalse: [^ false].
-	anObject size = components size ifFalse: [^ false].
-	components with: anObject do: [:G :x| (G includes: x) ifFalse: [^ false]].
-	^ true! !
-
-!DirectProductGroup methodsFor: 'testing' stamp: 'len 4/22/2016 13:43'!
-isProduct
-	^ true! !
-
-!DirectProductGroup methodsFor: 'private' stamp: 'len 12/30/2017 15:11:22'!
-computeGenerators
-	| answer |
-	answer _ OrderedCollection new.
-	1 to: self arity do: [:i|
-		| p |
-		p _ self projection: i.
-		(self at: i) generators do: [:each| answer add: (p value: each)]].
-	^ answer! !
-
-!DirectProductGroup class methodsFor: 'instance creation' stamp: 'len 2/12/2016 20:02'!
-components: anArray
-	^ self new components: anArray! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 03:17:35'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/27/2019 10:11:58'!
 base
 	| answer |
 	self isFree ifTrue: [^ self].
-	answer _ self species new: self generators size.
+	answer _ FreeAbelianGroup new: self generators size.
 	self names ifNotNil: [:aCollection| answer names: aCollection].
 	^ answer! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:32:14'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 09:55:41'!
+basis
+	"Answer a list of generators whose orders are the invariant factors (the Smith abelian invariants) of the receiver.
+	See >>invariants."
+	self notYetImplemented! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 09:56:10'!
+elementaryBasis
+	"Answer a list of generators whose orders are the elementary divisors of the receiver.
+	See >>elementaryDivisors."
+	self notYetImplemented! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 09:56:00'!
+elementaryDivisors
+	"Answer the elementary divisors (or primary abelian invariants) of the receiver, consisting prime powers q(i) such that the torsion subgroup of the receiver is isomorphic to the direct sum of all the Z/q(i)Z. Each infinite cyclic factor is represented by 0."
+	| answer |
+	self propertyAt: #elementaryDivisors ifPresent: [:aBag| ^ aBag].
+	answer _ Bag new.
+	"this can be improved because each invariant divides the next:"
+	self invariants do: [:each|
+		each isZero
+			ifTrue: [answer add: each]
+			ifFalse: [each factors withOccurrencesDo: [:p :k| answer add: p^k]]].
+	^ self propertyAt: #elementaryDivisors put: answer! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:32:14'!
 exponent
 	"Answer the exponent of the receiver, i.e. the maximum order of an element."
 	^ self orders inject: 1 into: [:answer :each| answer lcm: each]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:39:53'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:39:53'!
 generators
 	^ self propertyAt: #generators ifAbsentPut: [(1 to: self orders size) collect: [:i| self x: i to: 1]]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:34:32'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:34:32'!
 identity
 	^ self propertyAt: #identity ifAbsentPut: [self exponents: (self orders collect: [:each| 0])]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 10:43:55'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 09:24:21'!
 invariants
 	"Answer the Smith normal form abelian invariants of the reciever, each dividing the next.
 	Each infinite cylic factor is represented by 0."
-	^ self propertyAt: #invariants ifAbsentPut: [(self orders select: [:each| each isZero]), ((ZZ diagonalMatrix: (self orders select: [:each| each isZero not])) elementaryDivisors select: [:each| each ~= 1])]! !
+	^ self propertyAt: #invariants ifAbsentPut:
+		[(self orders select: [:each| each isZero]), (self relationMatrix isEmpty ifTrue: [#()] ifFalse: [self relationMatrix SNF diagonal asArray select: [:each| each ~= 1]])]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:40:39'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 05:40:39'!
 names
 	"Answer the indeterminate names to use when printing words."
 	^ self propertyAt: #names ifAbsent: [self generators size = 1 ifTrue: [#(x)]]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 03:18:45'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 03:18:45'!
 orders
 	"Answer the orders of the generators, with 0 to denote infinite order."
 	^ self propertyAt: #orders! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/26/2019 11:12:26'!
-primaryInvariants
-	"Answer the primary abelian invariants of the receiver, consisting prime powers q(i) such that the torsion subgroup of the receiver is isomorphic to the direct sum of all the Z/q(i)Z. Each infinite cyclic factor is represented by 0."
-	| factors answer |
-	self propertyAt: #primaryInvariants ifPresent: [:aBag| ^ aBag].
-	factors _ Bag new.
-	answer _ OrderedCollection new.
-	"this can be improved because each invariant divides the next:"
-	self invariants do: [:each| each isZero ifTrue: [answer add: each] ifFalse: [factors addAll: each factors]].
-	factors withOccurrencesDo: [:p :k| answer add: p^k].
-	^ self propertyAt: #primaryInvariants put: answer sorted! !
-
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:37:18'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 03:37:18'!
 rank
 	"Answer the torsion-free rank of the receiver."
 	^ self orders count: [:each| each = 0]! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 04:22:38'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 03:37:09'!
+relationMatrix
+	^ ZZ diagonalMatrix: (self orders select: [:each| each isZero not])! !
+
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 04:22:38'!
 relators
 	| answer |
 	answer _ OrderedCollection new.
 	self orders withIndexDo: [:each :i| each ~= 0 ifTrue: [answer add: (self base x: i to: each)]].
 	^ answer! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 02:26:34'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 02:26:34'!
 size
 	| answer |
 	self orders isEmpty ifTrue: [^ 1].
 	(answer _ self orders product) = 0 ifTrue: [^ Aleph new].
 	^ answer! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 03:16:01'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 03:16:01'!
 torsion
 	"Answer the torsion subgroup, i.e. the subgroup of elements of finite order."
 	| answer finiteOrderIndices |
@@ -15508,22 +15485,22 @@ torsion
 		addMap: ((answer into: self mapping: [:i| self x: (finiteOrderIndices at: i)]) name: 'i');
 		yourself! !
 
-!FPAbelianGroup methodsFor: 'accessing' stamp: 'len 5/15/2019 04:49:44'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/27/2019 19:03:59'!
 torsionFree
 	"Answer the torsion-free subgroup, i.e. the subgroup of elements of infinite order (plus the identity)."
 	| answer infiniteOrderIndices |
 	infiniteOrderIndices _ (1 to: self orders size) select: [:each| (self orders at: each) = 0].
-	^ (answer _ self species new: infiniteOrderIndices size)
+	^ (answer _ FreeAbelianGroup new: infiniteOrderIndices size)
 		addMap: ((answer into: self mapping: [:i| self x: (infiniteOrderIndices at: i)]) name: 'i');
 		yourself! !
 
-!FPAbelianGroup methodsFor: 'comparing' stamp: 'len 5/26/2019 10:17:41'!
+!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/28/2019 09:10:02'!
 ~ aGroup
 	"Answer true if the receiver is isomorphic to the argument."
-	(aGroup isKindOf: FPAbelianGroup) ifTrue: [^ self invariants = aGroup invariants].
+	(aGroup isKindOf: AbelianGroup) ifTrue: [^ self invariants = aGroup invariants].
 	^ super ~ aGroup! !
 
-!FPAbelianGroup methodsFor: 'converting' stamp: 'len 5/15/2019 05:05:36'!
+!AbelianGroup methodsFor: 'converting' stamp: 'len 5/15/2019 05:05:36'!
 asFPGroup
 	| F relators answer |
 	F _ FreeGroup new: self orders size.
@@ -15535,64 +15512,73 @@ asFPGroup
 		addMap: (answer to: self mapping: [:i| self x: i]);
 		yourself! !
 
-!FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:32:26'!
+!AbelianGroup methodsFor: 'converting' stamp: 'len 5/28/2019 09:10:12'!
+asPermutationGroup
+	| answer |
+	self isTorsion ifFalse: [self error: 'infinite abelian groups are not isomorphic to finite permutation groups'].
+	answer _ SymmetricGroup new: 0.
+	self invariants do: [:each| answer _ answer ◊ (PermutationGroup cyclic: each)].
+	"TODO: add isomorphisms"
+	^ answer! !
+
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:32:26'!
 !! anObject
 	(anObject isSequenceable and: [anObject size = self orders size])
 		ifTrue: [^ self exponents: anObject].
 	^ super !! anObject! !
 
-!FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:33:32'!
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:33:32'!
 exponents: anArray
 	anArray size = self generators size ifFalse: [self error: 'exponents size doesn''t match rank'].
 	^ (Monomial exponents: (self orders with: anArray collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]])) parent: self! !
 
-!FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/25/2019 08:23:03'!
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/25/2019 08:23:03'!
 wordOf: aMonomial
 	"Answer the argument expressed as a word on the generators."
 	^ aMonomial! !
 
-!FPAbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:41:44'!
+!AbelianGroup methodsFor: 'elements' stamp: 'len 5/14/2019 03:41:44'!
 x: anInteger to: exponent
 	| m |
 	m _ self orders at: anInteger.
 	^ (Monomial new: self orders size x: anInteger to: (m = 0 ifTrue: [exponent] ifFalse: [exponent \\ m])) parent: self! !
 
-!FPAbelianGroup methodsFor: 'morphisms' stamp: 'len 4/21/2019 13:32:42'!
+!AbelianGroup methodsFor: 'morphisms' stamp: 'len 5/26/2019 12:18:23'!
 => anAbelianGroup
-	(anAbelianGroup isKindOf: FPAbelianGroup) ifFalse: [^ super => anAbelianGroup].
+	(anAbelianGroup isKindOf: AbelianGroup) ifFalse: [^ super => anAbelianGroup].
 	^ AbelianGroupHomSet from: self to: anAbelianGroup! !
 
-!FPAbelianGroup methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:50:21'!
+!AbelianGroup methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:50:21'!
 to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ self to: aGroup mapping: [:i| aBlock value: (self generators at: i)]! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:56:53'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:56:53'!
 * anInteger
 	^ self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:43:22'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 07:43:22'!
 + anAbelianGroup
 	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
 	^ self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:00'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:00'!
 / aCollectionOrElement
 	"Answer the quotient of the receiver by the given relations."
 	self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:40'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:40'!
 /\ anAbelianGroup
 	self ambient = anAbelianGroup ambient ifFalse: [DomainError signal].
 	^ self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 06:04:23'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/26/2019 12:18:23'!
 ◊ aGroup
 	"Answer the direct product (or direct sum) of the receiver and the argument."
-	(aGroup isKindOf: FPAbelianGroup) ifTrue: [^ self ê aGroup].
+	(aGroup isKindOf: AbelianGroup) ifTrue: [^ self ê aGroup].
 	^ super ◊ aGroup! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 22:24:44'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/27/2019 12:46:43'!
 ê anAbelianGroup
 	"Answer the direct sum of the receiver and the argument as abelian groups."
 	| n answer |
@@ -15606,22 +15592,22 @@ to: aGroup evaluating: aBlock
 			answer onto: anAbelianGroup mapping: [:i| i > n ifTrue: [anAbelianGroup x: i-n] ifFalse: [anAbelianGroup identity]]};
 		yourself! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/14/2019 20:48:55'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/14/2019 20:48:55'!
 ë anAbelianGroup
 	^ self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 03:32:23'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 03:32:23'!
 centralizerOf: aCollection
 	^ self! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 03:34:16'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 03:34:16'!
 commutator
 	"Answer the commutator group [G,G] of the receiver G, also called the derived group and noted G'.
 	This is the smallest normal subgroup of G such that the quotient G / [G,G] is commutative.
 	Since the receiver is abelian, this is the trivial group."
 	^ self null! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 04:09:18'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 04:09:18'!
 orderOf: aMonomial
 	| answer |
 	answer _ 1.
@@ -15633,69 +15619,69 @@ orderOf: aMonomial
 			ifFalse: [answer _ answer lcm: n / (n gcd: k)]].
 	^ answer! !
 
-!FPAbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:57'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 4/21/2019 04:58:57'!
 span: aCollection
 	"Answer the subgroup spanned by the elements in aCollection."
 	^ self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 00:05:21'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 00:05:21'!
 includes: aMonomial
 	^ (aMonomial isKindOf: Monomial) and: [aMonomial parent = self]! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:54:04'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:54:04'!
 isCommutative
 	^ true! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/26/2019 10:17:58'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/28/2019 09:10:17'!
 isCyclic
 	^ self invariants size <= 1! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 04:56:58'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 04:56:58'!
 isElementaryAbelian
 	"Answer true if the receiver is isomorphic to a direct sum of n copies of a cyclic group of prime order, i.e. isomorphic to (Z/pZ)^n for some prime p and natural number n."
 	self notYetImplemented! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:24'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:24'!
 isFree
 	^ self orders allSatisfy: [:each| each = 0]! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 04:15:34'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 04:15:34'!
 isMixed
 	"An abelian group is mixed if it is nother a torsion group nor free."
 	^ self isTorsion not and: [self isFree not]! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:33'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:33'!
 isTorsion
 	^ self orders noneSatisfy: [:each| each = 0]! !
 
-!FPAbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:37'!
+!AbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:43:37'!
 isTrivial
 	^ self orders isEmpty! !
 
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:43:16'!
+!AbelianGroup methodsFor: 'private' stamp: 'len 4/21/2019 04:43:16'!
 names: anArray
 	"Set indeterminate names to use when printing words."
 	self propertyAt: #names put: anArray! !
 
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 5/14/2019 03:48:53'!
+!AbelianGroup methodsFor: 'private' stamp: 'len 5/14/2019 03:48:53'!
 ordering
 	^ self propertyAt: #ordering ifAbsentPut: [MonomialOrdering lex: self generators size]! !
 
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 5/14/2019 03:35:24'!
+!AbelianGroup methodsFor: 'private' stamp: 'len 5/14/2019 03:35:24'!
 orders: anArray
 	self propertyAt: #orders put: anArray! !
 
-!FPAbelianGroup methodsFor: 'private' stamp: 'len 5/15/2019 03:25:15'!
+!AbelianGroup methodsFor: 'private' stamp: 'len 5/26/2019 12:18:23'!
 species
-	^ FPAbelianGroup! !
+	^ AbelianGroup! !
 
-!FPAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/14/2019 03:36:17'!
-new: anInteger
-	^ self orders: ((1 to: anInteger) collect: [:each| 0])! !
-
-!FPAbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/14/2019 03:36:10'!
+!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/14/2019 03:36:10'!
 orders: anArray
 	^ self new orders: anArray! !
+
+!FreeAbelianGroup methodsFor: 'accessing' stamp: 'len 5/27/2019 10:12:20'!
+base
+	^ self! !
 
 !FreeAbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 02:10:04'!
 generators
@@ -15783,10 +15769,6 @@ includes: aMonomial
 isCommutative
 	^ true! !
 
-!FreeAbelianGroup methodsFor: 'testing' stamp: 'len 5/13/2019 20:03:07'!
-isCyclic
-	^ self rank = 1! !
-
 !FreeAbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 08:58:30'!
 ordering: aMonomialOrdering
 	ordering _ aMonomialOrdering isSymbol
@@ -15806,6 +15788,91 @@ new: anIntegerOrCollection ordering: aMonomialOrdering
 	^ (anIntegerOrCollection isInteger
 		ifTrue: [self new rank: anIntegerOrCollection] 
 		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray]) ordering: aMonomialOrdering! !
+
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 4/19/2019 07:14:28'!
+ambient
+	^ self propertyAt: #ambient ifAbsentPut: [(components allSatisfy: [:each| each isAmbient]) ifTrue: [self] ifFalse: [self class components: (components collect: [:each| each ambient])]]! !
+
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/16/2016 07:30'!
+arity
+	^ components size! !
+
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:02'!
+at: anInteger
+	^ components at: anInteger! !
+
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 4/22/2016 20:49'!
+identity
+	^ components collect: [:each| each identity]! !
+
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:10'!
+size
+	^ components product: [:each| each size]! !
+
+!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 2/12/2016 20:00'!
+components
+	^ components! !
+
+!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 11/5/2016 06:40'!
+components: anArray
+	components _ anArray! !
+
+!DirectProductGroup methodsFor: 'comparing' stamp: 'len 2/12/2016 20:05'!
+= anObject
+	^ (anObject isKindOf: DirectProductGroup) and: [anObject components = components]! !
+
+!DirectProductGroup methodsFor: 'comparing' stamp: 'len 2/12/2016 20:05'!
+hash
+	^ components hash! !
+
+!DirectProductGroup methodsFor: 'converting' stamp: 'len 4/19/2016 20:39'!
+asCartesianProduct
+	^ CartesianProduct components: components! !
+
+!DirectProductGroup methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:51'!
+do: aBlock
+	self asCartesianProduct do: aBlock! !
+
+!DirectProductGroup methodsFor: 'morphisms' stamp: 'len 4/23/2019 02:14:02'!
+coprojection: i
+	^ ((self at: i) to: self evaluating: [:x| components withIndexCollect: [:each :k| k = i ifTrue: [x] ifFalse: [each identity]]]) name: 'i', i printText sub! !
+
+!DirectProductGroup methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:42'!
+projection: i
+	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
+
+!DirectProductGroup methodsFor: 'random' stamp: 'len 4/19/2016 20:39'!
+atRandom: aRandom
+	^ self asCartesianProduct atRandom: aRandom! !
+
+!DirectProductGroup methodsFor: 'random' stamp: 'len 4/19/2016 20:39'!
+atRandom: aRandom bits: bits
+	^ self asCartesianProduct atRandom: aRandom bits: bits! !
+
+!DirectProductGroup methodsFor: 'testing' stamp: 'len 5/22/2018 16:54:23'!
+includes: anObject
+	anObject isSequenceable ifFalse: [^ false].
+	anObject size = components size ifFalse: [^ false].
+	components with: anObject do: [:G :x| (G includes: x) ifFalse: [^ false]].
+	^ true! !
+
+!DirectProductGroup methodsFor: 'testing' stamp: 'len 4/22/2016 13:43'!
+isProduct
+	^ true! !
+
+!DirectProductGroup methodsFor: 'private' stamp: 'len 12/30/2017 15:11:22'!
+computeGenerators
+	| answer |
+	answer _ OrderedCollection new.
+	1 to: self arity do: [:i|
+		| p |
+		p _ self projection: i.
+		(self at: i) generators do: [:each| answer add: (p value: each)]].
+	^ answer! !
+
+!DirectProductGroup class methodsFor: 'instance creation' stamp: 'len 2/12/2016 20:02'!
+components: anArray
+	^ self new components: anArray! !
 
 !FPGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 02:27:28'!
 base
@@ -16404,6 +16471,14 @@ copyEmpty
 			answer onto: aGroup mapping: [:i| i > k ifTrue: [aGroup x: i-k] ifFalse: [aGroup identity]]};
 		yourself! !
 
+!PermutationGroup methodsFor: 'operations' stamp: 'len 5/26/2019 11:26:50'!
+reduced
+	"Answer a permutation group isomorphic to the receiver but acting on a smaller space (if possible)."
+"	support _ Set new.
+	self generators do: [:each| support add: each support].
+"
+	self notYetImplemented! !
+
 !PermutationGroup methodsFor: 'operations' stamp: 'len 2/1/2018 23:47:51'!
 span: aCollection
 	^ self ambient span: aCollection! !
@@ -16675,10 +16750,15 @@ isStandard
 	"Answer true if the domain of the receiver is an interval [1..n]."
 	^ self propertyAt: #isStandard ifAbsentPut: [self space = (1 to: self degree) asArray]! !
 
-!SymmetricGroup methodsFor: 'private' stamp: 'len 5/1/2019 02:28:04'!
+!SymmetricGroup methodsFor: 'testing' stamp: 'len 5/26/2019 12:24:52'!
+isTrivial
+	^ self degree = 0! !
+
+!SymmetricGroup methodsFor: 'private' stamp: 'len 5/26/2019 12:25:43'!
 computeGenerators
 	| X |
 	X _ self indexToSpace.
+	X isEmpty ifTrue: [^ #()].
 	^ (2 to: X size) collect: [:i| (self transposing: X first with: (X at: i))]
 "alternatively: Coxeter generators, the set of (i,i+1) all the adjacent transpositions"! !
 
@@ -17544,76 +17624,6 @@ matrix: aMatrix
 			m > 3 ifTrue: [graph addEdgeFrom: i to: j label: m]]].
 	^ self diagram: graph! !
 
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:21:12'!
-generators
-	^ self propertyAt: #generators ifAbsentPut: [(1 to: self orders size) collect: [:i| self x: i]]! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:59:00'!
-identity
-	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| 0]) in: self! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:55:47'!
-names
-	"Answer the generator names to use when printing elements."
-	^ self propertyAt: #names ifAbsent: [self orders size = 1 ifTrue: [#(x)]]! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 12:53:17'!
-orders
-	^ self propertyAt: #orders! !
-
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 13:01:31'!
-size
-	(self orders anySatisfy: [:any| any = 0]) ifTrue: [^ Aleph new].
-	^ self orders inject: 1 into: [:result :each| result * each]! !
-
-!AbelianGroup methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:02:12'!
-ê anAbelianGroup
-	^ self class orders: self orders, anAbelianGroup orders! !
-
-!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:32'!
-= anObject
-	^ (anObject isKindOf: AbelianGroup) and: [self orders = anObject orders]! !
-
-!AbelianGroup methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:39'!
-hash
-	^ self orders hash! !
-
-!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 13:17:04'!
-!! anObject
-	(anObject isSequenceable and: [anObject size = self orders size])
-		ifTrue: [^ AbelianGroupElement coordinates: (self orders with: anObject collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]]) in: self].
-	^ super !! anObject! !
-
-!AbelianGroup methodsFor: 'elements' stamp: 'len 5/6/2019 12:58:35'!
-x: i
-	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| each = i ifTrue: [1] ifFalse: [0]]) in: self! !
-
-!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 12:55:58'!
-isCommutative
-	^ true! !
-
-!AbelianGroup methodsFor: 'testing' stamp: 'len 5/6/2019 14:03:59'!
-isTrivial
-	^ self size = 1! !
-
-!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 12:55:03'!
-names: anArray
-	"Set generator names to use when printing elements."
-	self propertyAt: #names put: anArray! !
-
-!AbelianGroup methodsFor: 'private' stamp: 'len 5/6/2019 13:17:18'!
-orders: anArray
-	self propertyAt: #orders put: anArray asArray! !
-
-!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:23:49'!
-new: anInteger
-	"Answer the free abelian group of the given order n, isomorphic to Z^n."
-	^ self orders: ((1 to: anInteger) collect: [:each| 0])! !
-
-!AbelianGroup class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:04:58'!
-orders: anArray
-	^ self new orders: anArray! !
-
 !AbelianGroup2 methodsFor: 'accessing' stamp: 'len 9/30/2018 05:59:47'!
 identity
 	^ self propertyAt: #identity ifAbsentPut: [self == self ambient ifTrue: [self generators anyOne * 0] ifFalse: [self ambient identity]]! !
@@ -17643,10 +17653,10 @@ to: aCodomain
 	anAbelianGroup isAbelianGroup ifTrue: [^ self ê anAbelianGroup].
 	^ super ◊ anAbelianGroup! !
 
-!AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/20/2017 22:13:11'!
+!AbelianGroup2 methodsFor: 'operations' stamp: 'len 5/26/2019 12:17:35'!
 ê anAbelianGroup
 	"Answer the direct sum of the receiver and the argument."
-	(anAbelianGroup isKindOf: AbelianGroup) ifFalse: [^ DomainError signal: 'argument is not an abelian group'].
+	(anAbelianGroup isKindOf: AbelianGroup3) ifFalse: [^ DomainError signal: 'argument is not an abelian group'].
 	^ DirectSumGroup components: {self. anAbelianGroup}! !
 
 !AbelianGroup2 methodsFor: 'operations' stamp: 'len 2/27/2017 17:42:32'!
@@ -17686,10 +17696,10 @@ isTorsion
 isTorsionFree
 	^ self torsion isTrivial! !
 
-!AbelianGroup2 methodsFor: 'private' stamp: 'len 12/16/2016 12:37:21'!
+!AbelianGroup2 methodsFor: 'private' stamp: 'len 5/26/2019 12:17:35'!
 species
 	"Any subgroup of an abelian group is also abelian."
-	^ AbelianGroup! !
+	^ AbelianGroup3! !
 
 !EllipticCurveGroup methodsFor: 'accessing' stamp: 'len 9/28/2018 06:40:54'!
 ambient
@@ -18023,6 +18033,76 @@ isCyclic
 !InfiniteCyclicGroup methodsFor: 'testing' stamp: 'len 9/30/2018 08:00:40'!
 isFree
 	^ true! !
+
+!AbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 13:21:12'!
+generators
+	^ self propertyAt: #generators ifAbsentPut: [(1 to: self orders size) collect: [:i| self x: i]]! !
+
+!AbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 12:59:00'!
+identity
+	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| 0]) in: self! !
+
+!AbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 12:55:47'!
+names
+	"Answer the generator names to use when printing elements."
+	^ self propertyAt: #names ifAbsent: [self orders size = 1 ifTrue: [#(x)]]! !
+
+!AbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 12:53:17'!
+orders
+	^ self propertyAt: #orders! !
+
+!AbelianGroup3 methodsFor: 'accessing' stamp: 'len 5/6/2019 13:01:31'!
+size
+	(self orders anySatisfy: [:any| any = 0]) ifTrue: [^ Aleph new].
+	^ self orders inject: 1 into: [:result :each| result * each]! !
+
+!AbelianGroup3 methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:02:12'!
+ê anAbelianGroup
+	^ self class orders: self orders, anAbelianGroup orders! !
+
+!AbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/26/2019 12:17:35'!
+= anObject
+	^ (anObject isKindOf: AbelianGroup3) and: [self orders = anObject orders]! !
+
+!AbelianGroup3 methodsFor: 'comparing' stamp: 'len 5/6/2019 12:56:39'!
+hash
+	^ self orders hash! !
+
+!AbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 13:17:04'!
+!! anObject
+	(anObject isSequenceable and: [anObject size = self orders size])
+		ifTrue: [^ AbelianGroupElement coordinates: (self orders with: anObject collect: [:m :each| m=0 ifTrue: [each] ifFalse: [each \\ m]]) in: self].
+	^ super !! anObject! !
+
+!AbelianGroup3 methodsFor: 'elements' stamp: 'len 5/6/2019 12:58:35'!
+x: i
+	^ AbelianGroupElement coordinates: ((1 to: self orders size) collect: [:each| each = i ifTrue: [1] ifFalse: [0]]) in: self! !
+
+!AbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 12:55:58'!
+isCommutative
+	^ true! !
+
+!AbelianGroup3 methodsFor: 'testing' stamp: 'len 5/6/2019 14:03:59'!
+isTrivial
+	^ self size = 1! !
+
+!AbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 12:55:03'!
+names: anArray
+	"Set generator names to use when printing elements."
+	self propertyAt: #names put: anArray! !
+
+!AbelianGroup3 methodsFor: 'private' stamp: 'len 5/6/2019 13:17:18'!
+orders: anArray
+	self propertyAt: #orders put: anArray asArray! !
+
+!AbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:23:49'!
+new: anInteger
+	"Answer the free abelian group of the given order n, isomorphic to Z^n."
+	^ self orders: ((1 to: anInteger) collect: [:each| 0])! !
+
+!AbelianGroup3 class methodsFor: 'instance creation' stamp: 'len 5/6/2019 13:04:58'!
+orders: anArray
+	^ self new orders: anArray! !
 
 !Semiring methodsFor: 'accessing' stamp: 'len 2/22/2017 21:27:02'!
 addition
@@ -19477,10 +19557,10 @@ relations: anIdeal
 	super relations: anIdeal.
 	self modulus: anIdeal generator! !
 
-!ModularIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/14/2019 04:10:36'!
+!ModularIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 asAbelianGroup
 	| answer |
-	^ (answer _ FPAbelianGroup orders: {self modulus})
+	^ (answer _ AbelianGroup orders: {self modulus})
 		addMap: (self to: answer evaluating: [:each| answer !! {each representative}]);
 		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
 		yourself! !
@@ -22229,10 +22309,6 @@ apply: aMorphism
 	"Answer the colon quotient I:J of the receiver I with the argument J."
 	self subclassResponsibility! !
 
-!Ideal methodsFor: 'operations' stamp: 'len 1/15/2018 18:47:23'!
-annihilator
-	^ self scalars zeroIdeal ˜ self! !
-
 !Ideal methodsFor: 'operations' stamp: 'len 1/15/2018 22:22:45'!
 quotientRing
 	"Answer the quotient ring of the base ring by the receiver."
@@ -23073,9 +23149,9 @@ base
 generators
 	^ self base generators collect: [:each| self project: each]! !
 
-!QuotientModule methodsFor: 'accessing' stamp: 'len 5/25/2019 10:44:08'!
+!QuotientModule methodsFor: 'accessing' stamp: 'len 5/28/2019 09:08:46'!
 invariants
-	^ self matrix isEmpty ifTrue: [^ self scalars tuple: #()] ifFalse: [self matrix elementaryDivisors2]! !
+	^ self matrix isEmpty ifTrue: [#()] ifFalse: [self matrix SNF2 diagonal asArray]! !
 
 !QuotientModule methodsFor: 'accessing' stamp: 'len 5/19/2018 20:09:11'!
 matrix
@@ -23394,7 +23470,7 @@ x: anInteger
 hash
 	^ self scalars hash + self rank hashMultiply! !
 
-!FreeModule methodsFor: 'converting' stamp: 'len 5/14/2019 04:14:10'!
+!FreeModule methodsFor: 'converting' stamp: 'len 5/26/2019 12:18:23'!
 asAbelianGroup
 	| answer |
 	(self scalars isKindOf: RationalIntegerRing) ifTrue:
@@ -23403,23 +23479,23 @@ asAbelianGroup
 			addMap: (answer to: self evaluating: [:each| self !! each exponents]);
 			yourself].
 	(self scalars isKindOf: ModularIntegerRing) ifTrue:
-		[^ (answer _ FPAbelianGroup orders: ((1 to: self rank) collect: [:each| self scalars modulus]))
+		[^ (answer _ AbelianGroup orders: ((1 to: self rank) collect: [:each| self scalars modulus]))
 			addMap: (self to: answer evaluating: [:each| answer !! (self coordinatesOf: each) representatives]);
 			addMap: (answer to: self evaluating: [:each| self !! each exponents]);
 			yourself].
 	^ DomainError signal! !
 
-!FreeModule methodsFor: 'converting' stamp: 'len 5/23/2018 22:16:32'!
+!FreeModule methodsFor: 'converting' stamp: 'len 5/28/2019 07:52:23'!
 asAlgebraicVariety
 	| R |
 	R _ self scalars polynomialsIn: self ambient rank.
-	^ (R * (self annihilator basis asArray collect: [:each| R !! each])) variety! !
+	^ (R * (self annihilatorSpace basis asArray collect: [:each| R !! each])) variety! !
 
-!FreeModule methodsFor: 'converting' stamp: 'len 5/15/2019 05:14:02'!
+!FreeModule methodsFor: 'converting' stamp: 'len 5/26/2019 12:18:23'!
 asElementaryAbelianGroup
 	| answer |
 	(self scalars isKindOf: PrimeField) ifFalse: [^ DomainError signal].
-	^ (answer _ FPAbelianGroup orders: ((1 to: self rank) collect: [:i| self scalars modulus]))
+	^ (answer _ AbelianGroup orders: ((1 to: self rank) collect: [:i| self scalars modulus]))
 		addMap: (self to: answer evaluating: [:x| answer !! (self coordinatesOf: x) lift]);
 		addMap: (answer to: self evaluating: [:x| self !! x exponents]);
 		yourself! !
@@ -23576,8 +23652,8 @@ to: aModule matrix: aMatrix
 	self scalars = aFreeModule scalars ifFalse: [DomainError signal: 'scalars don''t match'].
 	^ TensorProductModule components: {self. aFreeModule}! !
 
-!FreeModule methodsFor: 'operations' stamp: 'len 4/1/2018 22:02:47'!
-annihilator
+!FreeModule methodsFor: 'operations' stamp: 'len 5/28/2019 07:52:08'!
+annihilatorSpace
 	"Answer the space of all linear forms that are 0 at all vectors in the receiver."
 	self isTrivial ifTrue: [^ self ambient dual].
 	self isFullRank ifTrue: [^ self ambient dual null].
@@ -25279,14 +25355,14 @@ example1
 	S _ V span: {(1,2,3)}.
 	^ S + (1,1,1)! !
 
-!AffineSubspace class methodsFor: 'examples' stamp: 'len 3/5/2017 17:19:39'!
+!AffineSubspace class methodsFor: 'examples' stamp: 'len 5/27/2019 07:09:38'!
 example2
-	"The fiber (or inverse image) of a linear map is an affine subspace."
+	"The preimage of a linear map is an affine subspace."
 	| V f |
 	V _ QQ^3.
 	f _ V endomorphisms evaluatingWithArguments: [:x :y :z| (x+z, (y+z), z)].
-	"The fiber at (1,2,3) is the set of all vectors that f sends to (1,2,3):"
-	^ f fiberAt: (1,2,3)! !
+	"The preimage of (1,2,3) is the set of all vectors that f sends to (1,2,3):"
+	^ f preimage: (1,2,3)! !
 
 !AffineSubspace class methodsFor: 'instance creation' stamp: 'len 12/15/2017 20:00:41'!
 representative: aVector direction: aSubspace
@@ -29018,12 +29094,6 @@ character
 	self space isModule ifFalse: [^ self error: 'not a linear representation'].
 	^ Function from: self domain to: self space scalars evaluating: [:g| (self value: g) trace] "should be a GroupMap?"! !
 
-!GroupMap methodsFor: 'accessing' stamp: 'len 3/5/2017 08:30:15'!
-fiberAt: anElement
-	"Answer the fiber (or inverse image) of anElement, a Coset.
-	Answer nil if the element is not in the image of the receiver."
-	^ self kernel * (self domain detect: [:one| (self value: one) = anElement] ifNone: [^ nil])! !
-
 !GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 16:38:15'!
 image
 	^ self codomain span: ((self domain generators ifNil: [^ super image]) apply: self)! !
@@ -29031,6 +29101,17 @@ image
 !GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 16:40:43'!
 kernel
 	^ self domain select: [:each| (self value: each) = self codomain identity]! !
+
+!GroupMap methodsFor: 'accessing' stamp: 'len 5/27/2019 07:04:40'!
+preimage: anElement
+	"Answer the preimage of anElement, a Coset."
+	^ self kernel * (self preimageRepresentative: anElement)! !
+
+!GroupMap methodsFor: 'accessing' stamp: 'len 5/27/2019 07:05:41'!
+preimageRepresentative: anElement
+	"Answer a representative of the preimage of anElement.
+	Answer nil if anElement is not in the image of the receiver."
+	^ self domain detect: [:one| (self value: one) = anElement] ifNone: [^ nil]! !
 
 !GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 15:45:33'!
 space
@@ -29244,10 +29325,10 @@ units
 	"This is the natural functor from the cateogry of rings to the category of groups which sends each ring R to its group of units U(R) and each ring homomorphism to the restriction to U(R). This functor has a left adjoint which sends each group G to the integral group ring Z[G]."
 	^ self domain units to: self codomain units evaluating: [:each| self value: each]! !
 
-!RingMap methodsFor: 'testing' stamp: 'len 9/22/2018 19:00:14'!
+!RingMap methodsFor: 'testing' stamp: 'len 5/26/2019 13:51:26'!
 isInjective
 	(self domain isField and: [self codomain isTrivial not]) ifTrue: [^ true]. "a ring homomorphism from a field to a nontrivial ring is injective."
-	^ self kernel isZero! !
+	^ self kernel isTrivial! !
 
 !RingMap methodsFor: 'testing' stamp: 'len 9/22/2018 19:00:11'!
 isLocal
@@ -29570,24 +29651,6 @@ determinant
 	self isEndomorphism ifFalse: [DomainError signal: 'not an endomorphism'].
 	^ matrix determinant! !
 
-!FreeModuleMap methodsFor: 'operations' stamp: 'len 5/24/2019 08:38:30'!
-fiberAt: aVector
-	"Answer the fiber (or inverse image) of aVector.
-	The answer is an affine subspace (a linear variety or flat)."
-	| n B M1 V r j0 d x |
-	n _ matrix width.
-	B _ codomain coordinatesOf: aVector.
-	"1. Compute kernel"
-	M1 _ matrix : B.
-	V _ M1 kernelMatrix.
-	r _ V height.
-	"2. Solution exists?"
-	j0 _ (1 to: r) detect: [:j| (V at: j@(n+1)) isZero not] ifNone: [^ nil "no solution"].
-	d _ (V at: j0@(n+1)) negated.
-	x _ self scalars tuple: n evaluating: [:i| (V at: j0@i) / d].
-	"K _ V copyFrom: 1@1 to: (r-1)@n. <- this is 'self matrix kernelMatrix', should avoid computing the kernel again, and cache it"
-	^ self kernel + (domain elementAt: x)! !
-
 !FreeModuleMap methodsFor: 'operations' stamp: 'len 1/23/2018 16:53:39'!
 index
 	"Answer the index of the receiver, assuming it is an endomorphism.
@@ -29603,9 +29666,9 @@ inverse
 kernel
 	^ self propertyAt: #kernel ifAbsentPut: [self isTrivial ifTrue: [self domain] ifFalse: [self domain span: matrix kernelMatrix]]! !
 
-!FreeModuleMap methodsFor: 'operations' stamp: 'len 1/21/2018 21:37:09'!
+!FreeModuleMap methodsFor: 'operations' stamp: 'len 5/27/2019 07:10:03'!
 kernel2
-	^ self propertyAt: #kernel ifAbsentPut: [(self fiberAt: self codomain ambient zero) direction] "!! 3-5 times slower than the other implementaiton"! !
+	^ self propertyAt: #kernel ifAbsentPut: [(self preimage: self codomain ambient zero) direction] "!! 3-5 times slower than the other implementaiton"! !
 
 !FreeModuleMap methodsFor: 'operations' stamp: 'len 2/22/2017 09:05:25'!
 minimalPolynomial
@@ -29616,6 +29679,30 @@ minimalPolynomial
 nullity
 	"Answer the dimension of the kernel of the receiver."
 	^ matrix width - self rank! !
+
+!FreeModuleMap methodsFor: 'operations' stamp: 'len 5/27/2019 07:08:03'!
+preimage: anElement
+	"Answer the preimage of anElement.
+	The answer is an affine subspace (a linear variety or flat)."
+	^ self kernel + (self preimageRepresentative: anElement)! !
+
+!FreeModuleMap methodsFor: 'operations' stamp: 'len 5/27/2019 07:08:56'!
+preimageRepresentative: anElement
+	"Answer a representative of the preimage of anElement.
+	Answer nil if anElement is not in the image of the receiver."
+	| n B M1 V r j0 d x |
+	n _ matrix width.
+	B _ codomain coordinatesOf: anElement.
+	"1. Compute kernel"
+	M1 _ matrix : B.
+	V _ M1 kernelMatrix.
+	r _ V height.
+	"2. Solution exists?"
+	j0 _ (1 to: r) detect: [:j| (V at: j@(n+1)) isZero not] ifNone: [^ nil "no solution"].
+	d _ (V at: j0@(n+1)) negated.
+	x _ self scalars tuple: n evaluating: [:i| (V at: j0@i) / d].
+	"K _ V copyFrom: 1@1 to: (r-1)@n. <- this is 'self matrix kernelMatrix', should avoid computing the kernel again, and cache it"
+	^ domain elementAt: x! !
 
 !FreeModuleMap methodsFor: 'operations' stamp: 'len 1/8/2016 06:35'!
 rank
@@ -29818,10 +29905,6 @@ asRationalMap
 	self domain >= anAffineMap codomain ifFalse: [^ DomainError signal: 'domains don''t match'].
 	^ self class from: anAffineMap domain to: self codomain evaluating: [:x| self value: (anAffineMap value: x)]! !
 
-!AffineMap methodsFor: 'operations' stamp: 'len 1/22/2018 17:13:23'!
-fiberAt: aPoint
-	^ linearMap fiberAt: aPoint - translation! !
-
 !AffineMap methodsFor: 'operations' stamp: 'len 4/28/2019 16:33:39'!
 image
 	^ AffineSubspace representative: translation direction: linearMap image! !
@@ -29834,6 +29917,10 @@ inverse
 !AffineMap methodsFor: 'operations' stamp: 'len 1/22/2018 17:11:14'!
 negated
 	^ self class linearMap: linearMap negated translation: translation negated! !
+
+!AffineMap methodsFor: 'operations' stamp: 'len 5/27/2019 07:11:03'!
+preimage: aPoint
+	^ linearMap preimage: aPoint - translation! !
 
 !AffineMap methodsFor: 'operations' stamp: 'len 5/16/2019 12:19:48'!
 retraction
@@ -31426,230 +31513,6 @@ weight: anInteger
 new: anInteger
 	^ self new weight: anInteger! !
 
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:27:21'!
-aChange
-	"Answer a point changed by the receiver (or nil if there is none)."
-	self supportDo: [:each| ^ each].
-	^ nil! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:22:47'!
-at: anInteger
-	^ images at: anInteger ifAbsent: [anInteger]! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:36'!
-at: anInteger put: anotherInteger
-	^ images at: anInteger put: anotherInteger! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:49:09'!
-codomain
-	^ self domain! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:41'!
-degree
-	^ images size! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:30:51'!
-domain
-	^ parent space! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:29:24'!
-fixedPoints
-	"Answer the points fixed by the receiver."
-	^ Iterator on: self performing: #fixedPointsDo:! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:31:23'!
-identity
-	"Answer the identity permutation."
-	^ parent identity! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:52:14'!
-one
-	^ self identity! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 09:09:16'!
-order
-	self isIdentity ifTrue: [^ 1].
-	^ self cycles inject: 1 into: [:last :each| last lcm: each size]! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:51:36'!
-order2
-	| answer next |
-	answer _ 1.
-	next _ self.
-	[next isIdentity] whileFalse: [next _ next * self. answer _ answer + 1].
-	^ answer! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:32:10'!
-parent
-	^ parent! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 09:28:02'!
-sign
-	| answer |
-	answer _ 1.
-	self cyclesDo: [:each| each size even ifTrue: [answer _ answer * -1]].
-	^ answer
-
-	"^ self transpositions size even ifTrue: [1] ifFalse: [-1]"! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:26:06'!
-support
-	"Answer the points changed by the receiver."
-	^ Iterator on: self performing: #supportDo:! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:25:42'!
-transpositions
-	"Answer the decomposition of the receiver in product of transpositions."
-	| answer last value X |
-	answer _ OrderedCollection new.
-	X _ parent indexToSpace.
-	self supportDo: [:each|
-		last _ each.
-		answer reverseDo: [:one| last _ one at: last].
-		(value _ self at: each) = last
-			ifFalse: [answer addFirst: (parent transposing: (X at: last) with: (X at: value))]].
-	^ answer! !
-
-!Permutation methodsFor: 'accessing' stamp: 'len 5/1/2019 02:37:25'!
-type
-	"Answer the type of the receiver."
-	^ (self cycles asSortedCollection: [:a :b| a size <= b size]) collect: [:each| each size]! !
-
-!Permutation methodsFor: 'actions' stamp: 'len 2/8/2018 08:51:52'!
-permute: anArray
-	"Answer the permutation of the elements of anArray induced by the receiver."
-	| answer |
-	answer _ Array new: anArray size.
-	1 to: anArray size do: [:i| answer at: i put: (anArray at: (self at: i))].
-	^ answer! !
-
-!Permutation methodsFor: 'actions' stamp: 'len 5/1/2019 02:43:35'!
-value: anObject
-	^ self at: (parent spaceToIndex at: anObject ifAbsent: [^ anObject])! !
-
-!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:21:34'!
-= aPermutation
-	^ self class = aPermutation class and: [images = aPermutation images]! !
-
-!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:22:25'!
-hash
-	| answer |
-	answer _ 0.
-	1 to: images size do: [:i| | value |
-		(value _ images at: i) = i ifFalse: [answer _ answer bitXor: i hash hashMultiply + value hash]].
-	^ answer! !
-
-!Permutation methodsFor: 'converting' stamp: 'len 5/25/2019 06:22:16'!
-asArray
-	^ images! !
-
-!Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 08:49:33'!
-cycles
-	"Answer the cycles of the receiver."
-	^ Iterator on: self performing: #cyclesDo:! !
-
-!Permutation methodsFor: 'cycles' stamp: 'len 5/25/2019 05:26:23'!
-cyclesDo: aBlock
-	"Iterate over the cycles of the receiver."
-	| left first next cycle |
-	left _ self support copyAs: Set.
-	[left size > 0] whileTrue:
-		[first _ left anyOne.
-		cycle _ OrderedCollection new.
-		next _ first.
-		[(cycle add: (left remove: (next _ self at: next))) ~= first] whileTrue.
-		aBlock value: cycle]! !
-
-!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:19:47'!
-fixedPointsDo: aBlock
-	"Enumerate the points fixed by the receiver."
-	1 to: images size do: [:i| (images at: i) = i ifTrue: [aBlock value: i]]! !
-
-!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:21:06'!
-supportDo: aBlock
-	"Enumerate the points changed by the receiver."
-	1 to: images size do: [:i| (images at: i) = i ifFalse: [aBlock value: i]]! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 5/5/2019 18:20:17'!
-* aPermutation
-	"Answer the product (function composition) of the receiver with the argument.
-	This is the group operation."
-	^ self ∑ aPermutation! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:25'!
-∑ aPermutation
-	"Answer the product (function composition) of the receiver with the argument.
-	This is the group operation."
-	| otherImages newImages |
-	(images size = aPermutation images size)
-		ifFalse: [^ DomainError signal: 'permutation of different degree'].
-	otherImages _ aPermutation images.
-	newImages _ images class new: images size.
-	1 to: images size do: [:i| newImages at: i put: (images at: (otherImages at: i))].
-	^ parent images: newImages! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:32'!
-inverse
-	"Answer the compositive inverse of the receiver."
-	| values |
-	values _ images class new: images size.
-	1 to: images size do: [:i| values at: (images at: i) put: i].
-	^ parent images: values! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 5/16/2019 12:30:01'!
-retraction
-	"Answer a left inverse of the receiver."
-	^ self inverse! !
-
-!Permutation methodsFor: 'operations' stamp: 'len 5/16/2019 12:30:10'!
-section
-	"Answer a right inverse of the receiver."
-	^ self inverse! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:44:34'!
-even
-	^ self sign = 1! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:45:31'!
-isConjugateWith: aPermutation
-	"Answer true if the receiver and the argument are conjugate."
-
-	^ self type = aPermutation type! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:45:37'!
-isCycle
-	"Answer true if the receiver is a cycle."
-
-	^ self cycles size = 1! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:31'!
-isIdentity
-	"Answer true if the receiver is the identity permutation."
-
-	^ self support size = 0! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:46'!
-isTransposition
-	"Answer true if the receiver is a transposition."
-
-	^ self support size = 2! !
-
-!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:51:17'!
-odd
-	^ self sign = -1! !
-
-!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:22:06'!
-images
-	^ images! !
-
-!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:21:59'!
-images: anArray
-	images _ anArray! !
-
-!Permutation methodsFor: 'private' stamp: 'len 4/30/2019 12:32:14'!
-parent: aSymmetricGroup
-	parent _ aSymmetricGroup! !
-
 !RationalPoint methodsFor: 'accessing' stamp: 'len 2/9/2017 09:54:09'!
 ambient
 	^ self codomain ambient! !
@@ -32729,6 +32592,220 @@ inverse
 !SemidirectProductElement methodsFor: 'private' stamp: 'len 10/6/2016 15:37'!
 parent
 	^ parent! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:27:21'!
+aChange
+	"Answer a point changed by the receiver (or nil if there is none)."
+	self supportDo: [:each| ^ each].
+	^ nil! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:22:47'!
+at: anInteger
+	^ images at: anInteger ifAbsent: [anInteger]! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:36'!
+at: anInteger put: anotherInteger
+	^ images at: anInteger put: anotherInteger! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:49:09'!
+codomain
+	^ self domain! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 06:19:41'!
+degree
+	^ images size! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:30:51'!
+domain
+	^ parent space! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:29:24'!
+fixedPoints
+	"Answer the points fixed by the receiver."
+	^ Iterator on: self performing: #fixedPointsDo:! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:31:23'!
+identity
+	"Answer the identity permutation."
+	^ parent identity! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:52:14'!
+one
+	^ self identity! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 09:09:16'!
+order
+	self isIdentity ifTrue: [^ 1].
+	^ self cycles inject: 1 into: [:last :each| last lcm: each size]! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 08:51:36'!
+order2
+	| answer next |
+	answer _ 1.
+	next _ self.
+	[next isIdentity] whileFalse: [next _ next * self. answer _ answer + 1].
+	^ answer! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 4/30/2019 12:32:10'!
+parent
+	^ parent! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 2/8/2018 09:28:02'!
+sign
+	| answer |
+	answer _ 1.
+	self cyclesDo: [:each| each size even ifTrue: [answer _ answer * -1]].
+	^ answer
+
+	"^ self transpositions size even ifTrue: [1] ifFalse: [-1]"! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:26:06'!
+support
+	"Answer the points changed by the receiver."
+	^ Iterator on: self performing: #supportDo:! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:25:42'!
+transpositions
+	"Answer the decomposition of the receiver in product of transpositions."
+	| answer last value X |
+	answer _ OrderedCollection new.
+	X _ parent indexToSpace.
+	self supportDo: [:each|
+		last _ each.
+		answer reverseDo: [:one| last _ one at: last].
+		(value _ self at: each) = last
+			ifFalse: [answer addFirst: (parent transposing: (X at: last) with: (X at: value))]].
+	^ answer! !
+
+!Permutation methodsFor: 'accessing' stamp: 'len 5/1/2019 02:37:25'!
+type
+	"Answer the type of the receiver."
+	^ (self cycles asSortedCollection: [:a :b| a size <= b size]) collect: [:each| each size]! !
+
+!Permutation methodsFor: 'actions' stamp: 'len 2/8/2018 08:51:52'!
+permute: anArray
+	"Answer the permutation of the elements of anArray induced by the receiver."
+	| answer |
+	answer _ Array new: anArray size.
+	1 to: anArray size do: [:i| answer at: i put: (anArray at: (self at: i))].
+	^ answer! !
+
+!Permutation methodsFor: 'actions' stamp: 'len 5/1/2019 02:43:35'!
+value: anObject
+	^ self at: (parent spaceToIndex at: anObject ifAbsent: [^ anObject])! !
+
+!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:21:34'!
+= aPermutation
+	^ self class = aPermutation class and: [images = aPermutation images]! !
+
+!Permutation methodsFor: 'comparing' stamp: 'len 5/25/2019 06:22:25'!
+hash
+	| answer |
+	answer _ 0.
+	1 to: images size do: [:i| | value |
+		(value _ images at: i) = i ifFalse: [answer _ answer bitXor: i hash hashMultiply + value hash]].
+	^ answer! !
+
+!Permutation methodsFor: 'converting' stamp: 'len 5/25/2019 06:22:16'!
+asArray
+	^ images! !
+
+!Permutation methodsFor: 'cycles' stamp: 'len 2/8/2018 08:49:33'!
+cycles
+	"Answer the cycles of the receiver."
+	^ Iterator on: self performing: #cyclesDo:! !
+
+!Permutation methodsFor: 'cycles' stamp: 'len 5/25/2019 05:26:23'!
+cyclesDo: aBlock
+	"Iterate over the cycles of the receiver."
+	| left first next cycle |
+	left _ self support copyAs: Set.
+	[left size > 0] whileTrue:
+		[first _ left anyOne.
+		cycle _ OrderedCollection new.
+		next _ first.
+		[(cycle add: (left remove: (next _ self at: next))) ~= first] whileTrue.
+		aBlock value: cycle]! !
+
+!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:19:47'!
+fixedPointsDo: aBlock
+	"Enumerate the points fixed by the receiver."
+	1 to: images size do: [:i| (images at: i) = i ifTrue: [aBlock value: i]]! !
+
+!Permutation methodsFor: 'enumerating' stamp: 'len 5/25/2019 06:21:06'!
+supportDo: aBlock
+	"Enumerate the points changed by the receiver."
+	1 to: images size do: [:i| (images at: i) = i ifFalse: [aBlock value: i]]! !
+
+!Permutation methodsFor: 'operations' stamp: 'len 5/5/2019 18:20:17'!
+* aPermutation
+	"Answer the product (function composition) of the receiver with the argument.
+	This is the group operation."
+	^ self ∑ aPermutation! !
+
+!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:25'!
+∑ aPermutation
+	"Answer the product (function composition) of the receiver with the argument.
+	This is the group operation."
+	| otherImages newImages |
+	(images size = aPermutation images size)
+		ifFalse: [^ DomainError signal: 'permutation of different degree'].
+	otherImages _ aPermutation images.
+	newImages _ images class new: images size.
+	1 to: images size do: [:i| newImages at: i put: (images at: (otherImages at: i))].
+	^ parent images: newImages! !
+
+!Permutation methodsFor: 'operations' stamp: 'len 5/25/2019 06:26:32'!
+inverse
+	"Answer the compositive inverse of the receiver."
+	| values |
+	values _ images class new: images size.
+	1 to: images size do: [:i| values at: (images at: i) put: i].
+	^ parent images: values! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:44:34'!
+even
+	^ self sign = 1! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:45:31'!
+isConjugateWith: aPermutation
+	"Answer true if the receiver and the argument are conjugate."
+
+	^ self type = aPermutation type! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:45:37'!
+isCycle
+	"Answer true if the receiver is a cycle."
+
+	^ self cycles size = 1! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:31'!
+isIdentity
+	"Answer true if the receiver is the identity permutation."
+
+	^ self support size = 0! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 5/25/2019 05:26:46'!
+isTransposition
+	"Answer true if the receiver is a transposition."
+
+	^ self support size = 2! !
+
+!Permutation methodsFor: 'testing' stamp: 'len 2/8/2018 08:51:17'!
+odd
+	^ self sign = -1! !
+
+!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:22:06'!
+images
+	^ images! !
+
+!Permutation methodsFor: 'private' stamp: 'len 5/25/2019 06:21:59'!
+images: anArray
+	images _ anArray! !
+
+!Permutation methodsFor: 'private' stamp: 'len 4/30/2019 12:32:14'!
+parent: aSymmetricGroup
+	parent _ aSymmetricGroup! !
 
 !AbelianGroupElement methodsFor: 'accessing' stamp: 'len 4/21/2019 08:01:39'!
 parent
@@ -37767,11 +37844,13 @@ scalars
 			(self at: i@j) = (anObject at: i@j) ifFalse: [^ false]]].
 	^ true! !
 
-!Matrix methodsFor: 'comparing' stamp: 'len 5/25/2019 10:42:30'!
+!Matrix methodsFor: 'comparing' stamp: 'len 5/28/2019 09:23:46'!
 ~ aMatrix
 	"Answer true if the receiver is similar to aMatrix.
 	Two matrices A and B are 'similar' if there exists an invertible matrix P such that B = P^-1 * A * P. This is the conjugacy equivalence relation in GL."
-	^ self characteristicMatrix elementaryDivisors = aMatrix characteristicMatrix elementaryDivisors! !
+	self isEmpty ifTrue: [^ aMatrix isEmpty].
+	aMatrix isEmpty ifTrue: [^ self isEmpty].
+	^ self characteristicMatrix SNF diagonal = aMatrix characteristicMatrix SNF diagonal! !
 
 !Matrix methodsFor: 'comparing' stamp: 'len 4/5/2018 15:31:22'!
 hash
@@ -38436,12 +38515,20 @@ QR
 	R _ Q transposed * self.
 	^ {Q. R}! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:41:17'!
+!Matrix methodsFor: 'reduction' stamp: 'len 5/28/2019 09:19:13'!
 SNF
 	"Answer the Smith normal form of the receiver."
-	self isEmpty ifTrue: [^ #()].
+	self isEmpty ifTrue: [^ self].
 	self scalars isPID ifFalse: [^ DomainError signal: 'coefficients ring is not a PID'].
 	^ SmithReduction new matrix: self copy; reduced! !
+
+!Matrix methodsFor: 'reduction' stamp: 'len 5/28/2019 08:55:44'!
+SNF2
+	"Answer the Smith normal form of the receiver. Perform first a HNF reduction."
+	| H n |
+	H _ self HNF.
+	n _ H diagonal findLast: [:each| each isZero not].
+	^ (H copyFrom: 1@1 to: n@n) SNF ê (self scalars zeroMatrix: (H width max: H height) - n)! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 5/5/2019 12:16:22'!
 SNFOneStep
@@ -38545,21 +38632,6 @@ echelon
 	"Answer the echelon form of the receiver."
 	self isEmpty ifTrue: [^ self].
 	^ self reduction reduced! !
-
-!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:40:49'!
-elementaryDivisors
-	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one."
-	self isEmpty ifTrue: [^ #()].
-	self scalars isPID ifFalse: [^ DomainError signal: 'coefficients ring is not a PID'].
-	^ (SmithReduction new matrix: self copy; elementaryDivisors) asArray! !
-
-!Matrix methodsFor: 'reduction' stamp: 'len 5/25/2019 10:44:42'!
-elementaryDivisors2
-	"Answer the diagonal of the Smith normal form of the receiver, ordered such that each element divides the next one. Perform first a HNF reduction."
-	| H n |
-	H _ self HNF.
-	n _ H diagonal findLast: [:each| each isZero not].
-	^ (H copyFrom: 1@1 to: n@n) elementaryDivisors, (Array new: (H width max: H height) - n withAll: 0)! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 4/7/2018 06:26:26'!
 jordan
@@ -40934,10 +41006,10 @@ run
 		HNF _ addRow: a to: HNF | x
 "! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:28:53'!
-elementaryDivisors
-	elementaryDivisors isNil ifTrue: [self run].
-	^ elementaryDivisors! !
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/28/2019 08:51:31'!
+invariants
+	invariants isNil ifTrue: [self run].
+	^ invariants! !
 
 !SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:28:41'!
 matrix
@@ -40947,9 +41019,9 @@ matrix
 matrix: aMatrix
 	matrix _ aMatrix! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 5/25/2019 10:39:16'!
+!SmithReduction methodsFor: 'accessing' stamp: 'len 5/28/2019 08:55:12'!
 reduced
-	^ matrix scalars matrix: self elementaryDivisors size coefficients: self elementaryDivisors! !
+	^ matrix scalars diagonalMatrix: self invariants! !
 
 !SmithReduction methodsFor: 'private' stamp: 'len 5/25/2019 10:28:41'!
 reduceStep: i mod: R
@@ -40981,16 +41053,16 @@ reduceStep: i mod: R
 			c _ c + 1].
 	c > 0] whileTrue "8. Repeat stage i?"! !
 
-!SmithReduction methodsFor: 'private' stamp: 'len 5/25/2019 10:28:41'!
+!SmithReduction methodsFor: 'private' stamp: 'len 5/28/2019 08:50:56'!
 run
 	| n i R b k |
 	n _ matrix height.
-	elementaryDivisors _ OrderedCollection new: n.
+	invariants _ OrderedCollection new: n.
 	"1. Initialize i:"
 	i _ n.
 	R _ matrix determinant.
 	(matrix scalars isKindOf: RationalIntegerRing) ifTrue: [R _ R abs]. "not sure why take abs"
-	n = 1 ifTrue: [elementaryDivisors add: R. ^ self].
+	n = 1 ifTrue: [invariants add: R. ^ self].
 	"2-9. Reduction:"
 	[[self reduceStep: i mod: R.
 	"9. Check the rest of the matrix:"
@@ -40999,11 +41071,11 @@ run
 	k isNil]
 		whileFalse: [matrix rowAt: i put: (matrix rowAt: i) + (matrix rowAt: k)].
 	"10. Next stage:"
-	elementaryDivisors add: ((matrix at: i@i) gcd: R).
-	R _ R /// elementaryDivisors last.
+	invariants add: ((matrix at: i@i) gcd: R).
+	R _ R /// invariants last.
 	i = 2]
 		whileFalse: [i _ i - 1].
-	elementaryDivisors add: ((matrix at: 1@1) gcd: R).
+	invariants add: ((matrix at: 1@1) gcd: R).
 "	diagonal _ matrix scalars tuple: diagonal"! !
 
 !LLL methodsFor: 'initialization' stamp: 'len 12/26/2015 21:06'!

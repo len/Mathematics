@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 26 May 2019 at 12:40:32 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 28 May 2019 at 9:59:57 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 132!
+!provides: 'MathematicsTests' 1 133!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1044,6 +1044,12 @@ testAbelianGroupHomomorphism: phi
 	self assert: (phi value: G identity) = H identity.
 	self assert: (phi value: a·b) = ((phi value: a)·(phi value: b))! !
 
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:47:47'!
+testAsPermutationGroup
+	| A |
+	A _ AbelianGroup orders: #(2 5 4 2).
+	self assert: A asPermutationGroup asAbelianGroup invariants = A invariants! !
+
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 04:25:48'!
 testDirectSum
 	| A B C |
@@ -1062,7 +1068,7 @@ testExponent
 	G _ AbelianGroup orders: #(2 4 6).
 	self assert: G exponent = 12! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:10:30'!
 testFreeAbelianGroup
 	| G |
 	G _ AbelianGroup orders: #(0 0).
@@ -1096,7 +1102,7 @@ testIntegers
 	self assert: ZZ !! (g1 · g2) = (x1 + x2).
 	self assert: ZZ !! g1 inverse = x1 negated.! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:10:45'!
 testInvariants
 	self assert: (AbelianGroup orders: #(1 3 5 12)) invariants = #(3 60).
 	self assert: (AbelianGroup orders: #(2 3)) invariants = #(6).
@@ -1105,6 +1111,18 @@ testInvariants
 	self assert: (AbelianGroup orders: #(3 4 5)) invariants = #(60).
 	self assert: (AbelianGroup orders: #(0 6)) invariants = #(0 6).
 ! !
+
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:42:14'!
+testInvariantsAndElementaryDivisors
+	| invariants elementaryDivisors A |
+	invariants _ {2^2*3*(5^2). 2^5*(3^3)*(5^2)}.
+	elementaryDivisors _ {2^2. 2^5. 3. 3^3. 5^2. 5^2} asBag.
+	A _ AbelianGroup orders: invariants shuffled.
+	self assert: A invariants = invariants.
+	self assert: A elementaryDivisors = elementaryDivisors.
+	A _ AbelianGroup orders: elementaryDivisors asArray shuffled.
+	self assert: A invariants = invariants.
+	self assert: A elementaryDivisors = elementaryDivisors! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testIsCyclic
@@ -1124,13 +1142,13 @@ testIsCyclic
 	G _ AbelianGroup orders: #(3 4 5).
 	self assert: G isCyclic! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:39:47'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:50:16'!
 testMixedAbelianGroup
 	| G |
 	G _ AbelianGroup orders: #(0 0 2 3).
 	self assert: G rank = 2.
-	self assert: G primaryInvariants = #(0 0 2 3).
-	self assert: G torsion primaryInvariants = #(2 3).
+	self assert: G elementaryDivisors = #(0 0 2 3) asBag.
+	self assert: G torsion elementaryDivisors = #(2 3) asBag.
 	self assert: G isTorsion not.
 	self assert: G isFree not.
 	self assert: G isMixed.
@@ -1160,12 +1178,12 @@ testOrderOfElements
 	g _ G !! [:a :b :c :d :e| a*e].
 	self assert: g order = 0! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:39:37'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:49:56'!
 testTorsionAbelianGroup
 	| G |
 	G _ AbelianGroup orders: #(2 3).
 	self assert: G rank = 0.
-	self assert: G primaryInvariants = #(2 3).
+	self assert: G elementaryDivisors = #(2 3) asBag.
 	self assert: G = G torsion.
 	self assert: G isTorsion.
 	self assert: G isFree not.
@@ -4660,78 +4678,77 @@ testReducerPivots
 	A _ ZZ ^ (3@3) rows: {(0,-1,-1). (0,-20,1). (0,1,2)}.
 	self assert: A reduction pivots asArray = {1@2. 2@3}! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:30'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:02:44'!
 testSmithNormalForm
 	| A |
 	A _ ZZ^(3@3) rows: { (2,4,4). (-6,6,12). (10,-4,-16) }.
-	self assert: A elementaryDivisors = #(2 6 12)! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(2  6 12))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:39'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:02:29'!
 testSmithNormalForm2
 	| A |
 	"Reduced Laplacian matrix of K_4:"
 	A _ ZZ^(3@3) rows: { (3,-1,-1). (-1,3,-1). (-1,-1,3) }.
-	self assert: A elementaryDivisors = #(1 4 4)! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1  4  4))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:45'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:02:14'!
 testSmithNormalForm3
 	"Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ZZ^(3@3) rows: { (1,4,9). (16,25,36). (49,64,81) }.
-	self assert: A elementaryDivisors = #(1 3 72)! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 3 72))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:02'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:05:47'!
 testSmithNormalForm4
 	"Smith form of a 3x3 matrix of rank 2.
 	Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
-	A _ ZZ^(3@3) rows: { (2,3,4). (5,6,7). (8,9,10) }.
-	self assert: A elementaryDivisors2 = #(1 3 0) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
+	A _ ZZ matrix: #((2 3 4) (5 6 7) (8 9 10)).
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 3 0)) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:13'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:04:46'!
 testSmithNormalForm5
 	"Example from youtube video: 'Derek Holt: Algorithms for finitely presented groups' @ 25:49."
 	| A |
 	A _ ZZ matrix: #((1 2 0 -2) (0 2 2 0) (-1 -4 4 2)).
-	self assert: A elementaryDivisors2 = #(1 2 6 0)! !
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 2 6 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:20'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:05:00'!
 testSmithNormalForm6
 	"From Magma Handbook example H26E10."
 	| A |
 	A _ ZZ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
-	self assert: A elementaryDivisors2 = #(1 1 1 2)! !
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 1 1 2))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:52'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:01:48'!
 testSmithNormalForm7
 	"From GAP manual."
 	| A |
 	A _ ZZ matrix: #((1 15 28) (4 5 6) (7 8 9)).
-	self assert: A elementaryDivisors = #(1 1 3)
-! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 1 3))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:31'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:06'!
 testSmithNormalForm8
 	| A |
 	A _ ZZ matrix: #((2 1 -3) (3 -2 -1) (1 -3 2)).
-	self assert: A elementaryDivisors2 = #(1 7 0)! !
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 7 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:40'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:17'!
 testSmithNormalForm9
 	| A |
 	A _ ZZ matrix: #((1 2 3 4 5 6 7) (1 0 1 0 1 0 1) (2 4 5 6 1 1 1) (1 4 2 5 2 0 0) (0 0 1 1 2 2 3)).
 	"actually it should be:	self assert: A SNF = #(1 1 1 1 2)"
-	self assert: A elementaryDivisors2 = #(1 1 1 1 2 0 0)! !
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 1 1 1 2 0 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:43:57'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:42'!
 testSmithNormalFormDiagonal
 	| A |
 	A _ ZZ matrix: #((2 0 0) (0 1 0) (0 0 0)).
-	self assert: A elementaryDivisors2 = #(1 2 0).
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 2 0)).
 	A _ ZZ matrix: #((5 0 0) (0 2 0) (0 0 0)).
-	self assert: A elementaryDivisors2 = #(1 10 0)! !
+	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 10 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 10:41:59'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:19'!
 testSmithNormalFormOverPolynomials
 	"Example from Sage documentation."
 	| R x M A |
@@ -4739,9 +4756,9 @@ testSmithNormalFormOverPolynomials
 	x _ R x.
 	M _ R^(2@2).
 	A _ M !! 1 * x - (M !! #(3 -4 1 -1)).
-	self assert: A elementaryDivisors = {R one. x^2 - (x*2) + 1}! !
+	self assert: A SNF = (R diagonalMatrix: {R one. x^2 - (x*2) + 1})! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 17:54:54'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:37'!
 testSmithNormalFormOverPolynomialsOverPrimeField1
 	"Example form Magma handbook (H88E7)."
 	| K P x M a |
@@ -4750,9 +4767,9 @@ testSmithNormalFormOverPolynomialsOverPrimeField1
 	x _ P x.
 	M _ P^(5@5).
 	a _ M evaluating: [:i :j| x^i + (x^j)].
-	self assert: a elementaryDivisors = {x. x^3 + (x^2*3) + x}! !
+	self assert: a SNF = (P diagonalMatrix: {x. x^3 + (x^2*3) + x})! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/25/2019 17:53:09'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:49'!
 testSmithNormalFormOverPolynomialsOverPrimeField2
 	"Example form Magma handbook (H88E7)."
 	| K P x a |
@@ -4761,7 +4778,7 @@ testSmithNormalFormOverPolynomialsOverPrimeField2
 	x _ P x.
 	a _ ZZ matrix: 5 coefficients: #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
 	a _ a over: P.
-	self assert: (a identity * x - a) elementaryDivisors = {P one. P one. x - 1. x^2 - 1. x^2 - 1}! !
+	self assert: (a identity * x - a) SNF = (P diagonalMatrix: {P one. P one. x - 1. x^2 - 1. x^2 - 1})! !
 
 !ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
 testGamma0Index
@@ -4848,15 +4865,15 @@ newSmallVectorSpace
 newVectorSpace
 	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom. QQ polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/19/2019 04:41:25'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/28/2019 07:55:20'!
 testAdjointMap
 	| V W f a |
 	V _ QQ ^ (1 to: 3) atRandom.
 	W _ QQ ^ (1 to: 5) atRandom.
 	f _ V => W atRandomBits: 100.
 	a _ f adjoint.
-	self assert: a kernel = f image annihilator.
-	self assert: a image = f kernel annihilator.
+	self assert: a kernel = f image annihilatorSpace.
+	self assert: a image = f kernel annihilatorSpace.
 	self assert: f isSurjective = a isInjective.
 	self assert: f isInjective = a isSurjective! !
 
@@ -4874,17 +4891,17 @@ testAdjointProperties
 	f _ U => V atRandomBits: 100.
 	self assert: (g · f) adjoint = (f adjoint · g adjoint)! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 8/26/2016 05:57'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/28/2019 07:55:33'!
 testAnnihilator
 	| V v S S0 |
 	V _ QQ ^ 3.
 	v _ (1,-2,1).
 	S _ V span: {v}.
-	S0 _ S annihilator.
+	S0 _ S annihilatorSpace.
 	self assert: S0 dimension = S codimension.
 	S0 basis do: [:f| self assert: (f value: v) isZero]! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 5/10/2019 04:32:00'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/28/2019 07:56:08'!
 testAnnihilatorProperties
 	| V S T |
 	V _ QQ ^ 5.
@@ -4892,19 +4909,19 @@ testAnnihilatorProperties
 	T _ (S grassmannian: 2) atRandomBits: 100.
 	T _ V span: T basis. "hack, otherwise T ambient = S"
 	self assert: T <= S.
-	self assert: T annihilator >= S annihilator. "reverses inclusions"
-	self assert: (S + T) annihilator = (S annihilator /\ T annihilator).
-	self assert: S dimension + S annihilator dimension = V dimension.
-	self assert: V annihilator isTrivial.
+	self assert: T annihilatorSpace >= S annihilatorSpace. "reverses inclusions"
+	self assert: (S + T) annihilatorSpace = (S annihilatorSpace /\ T annihilatorSpace).
+	self assert: S dimension + S annihilatorSpace dimension = V dimension.
+	self assert: V annihilatorSpace isTrivial.
 "	self assert: S annihilator annihilator = S dual dual"! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 12/2/2016 11:17:43'!
+!ModuleTest methodsFor: 'other' stamp: 'len 5/28/2019 07:56:17'!
 testAnnihilatorZ2
 	| V v S S0 |
 	V _ (ZZ / 2) ^ 4.
 	[(v _ V atRandom) isZero] whileTrue.
 	S _ V span: {v}.
-	S0 _ S annihilator.
+	S0 _ S annihilatorSpace.
 	self assert: S0 dimension = S codimension.
 	S0 basis do: [:f| self assert: (f value: v) isZero]! !
 
@@ -5482,14 +5499,6 @@ testLinearMapCompositionError
 	g _ Y => Z atRandomBits: 1000.
 	self should: [f · g] raise: DomainError! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:52:54'!
-testLinearMapFiber
-	| f w v |
-	f _ self newLinearMap.
-	w _ f image atRandomBits: 100.
-	v _ (f fiberAt: w) atRandomBits: 100.
-	self assert: (f value: v) = w! !
-
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:53:31'!
 testLinearMapImage
 	| f image v w |
@@ -5532,6 +5541,14 @@ testLinearMapLeftInverse
 	W _ QQ ^ 5.
 	[f _ V => W atRandomBits: 1000. f rank = 3] whileFalse.
 	self assert: f retraction · f = V id! !
+
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/27/2019 07:10:28'!
+testLinearMapPreimage
+	| f w v |
+	f _ self newLinearMap.
+	w _ f image atRandomBits: 100.
+	v _ (f preimage: w) atRandomBits: 100.
+	self assert: (f value: v) = w! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:13'!
 testLinearMapRetraction
