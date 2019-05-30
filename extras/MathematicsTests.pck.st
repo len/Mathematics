@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 28 May 2019 at 9:59:57 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 30 May 2019 at 4:37:14 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 133!
+!provides: 'MathematicsTests' 1 134!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1112,17 +1112,17 @@ testInvariants
 	self assert: (AbelianGroup orders: #(0 6)) invariants = #(0 6).
 ! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:42:14'!
-testInvariantsAndElementaryDivisors
-	| invariants elementaryDivisors A |
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:36:50'!
+testInvariantsAndPrimaryInvariants
+	| invariants primaryInvariants A |
 	invariants _ {2^2*3*(5^2). 2^5*(3^3)*(5^2)}.
-	elementaryDivisors _ {2^2. 2^5. 3. 3^3. 5^2. 5^2} asBag.
+	primaryInvariants _ {2^2. 2^5. 3. 3^3. 5^2. 5^2} asBag.
 	A _ AbelianGroup orders: invariants shuffled.
 	self assert: A invariants = invariants.
-	self assert: A elementaryDivisors = elementaryDivisors.
-	A _ AbelianGroup orders: elementaryDivisors asArray shuffled.
+	self assert: A primaryInvariants = primaryInvariants.
+	A _ AbelianGroup orders: primaryInvariants asArray shuffled.
 	self assert: A invariants = invariants.
-	self assert: A elementaryDivisors = elementaryDivisors! !
+	self assert: A primaryInvariants = primaryInvariants! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testIsCyclic
@@ -1142,13 +1142,13 @@ testIsCyclic
 	G _ AbelianGroup orders: #(3 4 5).
 	self assert: G isCyclic! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:50:16'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:37:05'!
 testMixedAbelianGroup
 	| G |
 	G _ AbelianGroup orders: #(0 0 2 3).
 	self assert: G rank = 2.
-	self assert: G elementaryDivisors = #(0 0 2 3) asBag.
-	self assert: G torsion elementaryDivisors = #(2 3) asBag.
+	self assert: G primaryInvariants = #(0 0 2 3) asBag.
+	self assert: G torsion primaryInvariants = #(2 3) asBag.
 	self assert: G isTorsion not.
 	self assert: G isFree not.
 	self assert: G isMixed.
@@ -1178,12 +1178,12 @@ testOrderOfElements
 	g _ G !! [:a :b :c :d :e| a*e].
 	self assert: g order = 0! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:49:56'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:37:13'!
 testTorsionAbelianGroup
 	| G |
 	G _ AbelianGroup orders: #(2 3).
 	self assert: G rank = 0.
-	self assert: G elementaryDivisors = #(2 3) asBag.
+	self assert: G primaryInvariants = #(2 3) asBag.
 	self assert: G = G torsion.
 	self assert: G isTorsion.
 	self assert: G isFree not.
@@ -4576,9 +4576,9 @@ testHermiteNormalForm5
 	H _ ZZ matrix: #((1 1 1 6 -164) (0 3 0 16 -348) (0 0 2 13 -200) (0 0 0 19 -316)).
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:41:15'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 04:16:51'!
 testHermiteNormalForm6
-	"From MuPAD."
+	"From MuPAD documentation."
 	| A H |
 	A _ ZZ matrix: #(
 		(25 -300 1050 -1400 630)
@@ -4592,7 +4592,7 @@ testHermiteNormalForm6
 		(0 0 420 0 0)
 		(0 0 0 840 0)
 		(0 0 0 0 2520)).
-	self assert: A HNF = H! !
+	self assert: A HNF = H "this fails, but it seems to be a bug in MuPAD, because 'H isHermiteNormalForm' answers false"! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:32:35'!
 testHermiteNormalForm7
@@ -4618,14 +4618,14 @@ testHermiteNormalForm9
 	H _ ZZ matrix: #((1 0 17 259 7) (0 1 31 453 13) (0 0 40 582 17)).
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 12:25:16'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 04:03:25'!
 testHermiteNormalFormOverPolynomials
-	"From MuPAD."
+	"From MuPAD documentation."
 	| R x A H |
 	R _ QQ polynomials.
 	x _ R x.
 	A _ R matrix: 2 coefficients: {x^2 + 3. (x*2 - 1)^2. (x + 2)^2. x^2*3 + 5}.
-	H _ R matrix: 2 coefficients: {1. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. 0. x^4 + (x^2*13) - (x*12) - 11}.
+	H _ R matrix: 2 coefficients: {R one. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. R zero. x^4 + (x^3*12) - (x^2*13) - (x*12) - 11}.
 	self assert: A HNF = H! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:36:34'!
@@ -4672,6 +4672,12 @@ testJordanNormalForm
 	B _ QQ ^ (2@2) scalar: 4 :: at: 1@2 put: 1; yourself.
 	self assert: (jordan includes: B)! !
 
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/29/2019 12:00:15'!
+testRCF
+	| A |
+	A _ QQ matrix: #((-2 0 0) (-1 -4 -1) (2 4 0)).
+	self assert: A RCF = (QQ matrix: #((-2 0 0) (0 0 -4) (0 1 -4)))! !
+
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 06:11:28'!
 testReducerPivots
 	| A |
@@ -4698,27 +4704,27 @@ testSmithNormalForm3
 	A _ ZZ^(3@3) rows: { (1,4,9). (16,25,36). (49,64,81) }.
 	self assert: A SNF = (ZZ diagonalMatrix: #(1 3 72))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:05:47'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 03:25:41'!
 testSmithNormalForm4
 	"Smith form of a 3x3 matrix of rank 2.
 	Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ZZ matrix: #((2 3 4) (5 6 7) (8 9 10)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 3 0)) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 3 0)) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:04:46'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 13:14:46'!
 testSmithNormalForm5
 	"Example from youtube video: 'Derek Holt: Algorithms for finitely presented groups' @ 25:49."
 	| A |
 	A _ ZZ matrix: #((1 2 0 -2) (0 2 2 0) (-1 -4 4 2)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 2 6 0))! !
+	self assert: A SNF = (ZZ matrix: #((1 0 0 0) (0 2 0 0) (0 0 6 0)))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:05:00'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/29/2019 16:05:55'!
 testSmithNormalForm6
 	"From Magma Handbook example H26E10."
 	| A |
 	A _ ZZ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 1 1 2))! !
+	self assert: A elementaryDivisors = #(1 1 1 2)! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:01:48'!
 testSmithNormalForm7
@@ -4727,26 +4733,25 @@ testSmithNormalForm7
 	A _ ZZ matrix: #((1 15 28) (4 5 6) (7 8 9)).
 	self assert: A SNF = (ZZ diagonalMatrix: #(1 1 3))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:06'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 03:27:17'!
 testSmithNormalForm8
 	| A |
 	A _ ZZ matrix: #((2 1 -3) (3 -2 -1) (1 -3 2)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 7 0))! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 7 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:17'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 13:19:00'!
 testSmithNormalForm9
 	| A |
 	A _ ZZ matrix: #((1 2 3 4 5 6 7) (1 0 1 0 1 0 1) (2 4 5 6 1 1 1) (1 4 2 5 2 0 0) (0 0 1 1 2 2 3)).
-	"actually it should be:	self assert: A SNF = #(1 1 1 1 2)"
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 1 1 1 2 0 0))! !
+	self assert: A SNF = (ZZ matrix: #((1 0 0 0 0 0 0) (0 1 0 0 0 0 0) (0 0 1 0 0 0 0) (0 0 0 1 0 0 0) (0 0 0 0 2 0 0)))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:06:42'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/30/2019 03:30:21'!
 testSmithNormalFormDiagonal
 	| A |
 	A _ ZZ matrix: #((2 0 0) (0 1 0) (0 0 0)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 2 0)).
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 2 0)).
 	A _ ZZ matrix: #((5 0 0) (0 2 0) (0 0 0)).
-	self assert: A SNF2 = (ZZ diagonalMatrix: #(1 10 0))! !
+	self assert: A SNF = (ZZ diagonalMatrix: #(1 10 0))! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:19'!
 testSmithNormalFormOverPolynomials
