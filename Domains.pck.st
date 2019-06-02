@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 30 May 2019 at 4:35:40 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 2 June 2019 at 11:42:39 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 506!
+!provides: 'Domains' 1 507!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -14,6 +14,7 @@ SystemOrganization addCategory: #'Domains-Groups-Affine'!
 SystemOrganization addCategory: #'Domains-Groups-Algorithms'!
 SystemOrganization addCategory: #'Domains-Rings'!
 SystemOrganization addCategory: #'Domains-Rings-Finite'!
+SystemOrganization addCategory: #'Domains-Rings-Adic'!
 SystemOrganization addCategory: #'Domains-Fields'!
 SystemOrganization addCategory: #'Domains-Fields-Finite'!
 SystemOrganization addCategory: #'Domains-Fields-Number Fields'!
@@ -48,7 +49,7 @@ SystemOrganization addCategory: #'Domains-Modular Group'!
 SystemOrganization addCategory: #'Domains-Morphic'!
 SystemOrganization addCategory: #'Domains-Etc'!
 SystemOrganization addCategory: #'Domains-Etc-Lie'!
-SystemOrganization addCategory: #'Domains-Etc-Approximate-PAdics'!
+SystemOrganization addCategory: #'Domains-Etc-Approximate'!
 SystemOrganization addCategory: #'Domains-Etc-Diagrams'!
 SystemOrganization addCategory: #'Domains-Etc-Algebras'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Abelian'!
@@ -82,26 +83,6 @@ Number subclass: #DyadicFraction
 	category: 'Domains-Etc'!
 !classDefinition: 'DyadicFraction class' category: #'Domains-Etc'!
 DyadicFraction class
-	instanceVariableNames: ''!
-
-!classDefinition: #AdicInteger category: #'Domains-Etc-Approximate-PAdics'!
-Number subclass: #AdicInteger
-	instanceVariableNames: 'parent digits'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicInteger class' category: #'Domains-Etc-Approximate-PAdics'!
-AdicInteger class
-	instanceVariableNames: ''!
-
-!classDefinition: #AdicNumber category: #'Domains-Etc-Approximate-PAdics'!
-Number subclass: #AdicNumber
-	instanceVariableNames: 'numerator valuation'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicNumber class' category: #'Domains-Etc-Approximate-PAdics'!
-AdicNumber class
 	instanceVariableNames: ''!
 
 !classDefinition: #MutualAssociation category: #'Domains-Graphs-Parts'!
@@ -1024,6 +1005,16 @@ LocalizationRing subclass: #FractionRing
 FractionRing class
 	instanceVariableNames: ''!
 
+!classDefinition: #AdicField category: #'Domains-Rings-Adic'!
+FractionRing subclass: #AdicField
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicField class' category: #'Domains-Rings-Adic'!
+AdicField class
+	instanceVariableNames: ''!
+
 !classDefinition: #RationalField category: #'Domains-Fields'!
 FractionRing subclass: #RationalField
 	instanceVariableNames: ''
@@ -1122,6 +1113,16 @@ PrimeField subclass: #SmallPrimeField
 	category: 'Domains-Fields-Finite'!
 !classDefinition: 'SmallPrimeField class' category: #'Domains-Fields-Finite'!
 SmallPrimeField class
+	instanceVariableNames: ''!
+
+!classDefinition: #AdicQuotientRing category: #'Domains-Rings-Adic'!
+QuotientRing subclass: #AdicQuotientRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicQuotientRing class' category: #'Domains-Rings-Adic'!
+AdicQuotientRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #AffineRing category: #'Domains-Schemes-Affine'!
@@ -1224,6 +1225,16 @@ Ring subclass: #RationalIntegerRing
 RationalIntegerRing class
 	instanceVariableNames: ''!
 
+!classDefinition: #AdicRing category: #'Domains-Rings-Adic'!
+Ring subclass: #AdicRing
+	instanceVariableNames: 'p'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicRing class' category: #'Domains-Rings-Adic'!
+AdicRing class
+	instanceVariableNames: ''!
+
 !classDefinition: #ComplexField category: #'Domains-Fields'!
 Ring subclass: #ComplexField
 	instanceVariableNames: ''
@@ -1284,6 +1295,16 @@ NumberRing subclass: #QuadraticRing
 QuadraticRing class
 	instanceVariableNames: ''!
 
+!classDefinition: #GaussianIntegerRing category: #'Domains-Fields-Number Fields'!
+QuadraticRing subclass: #GaussianIntegerRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Fields-Number Fields'!
+!classDefinition: 'GaussianIntegerRing class' category: #'Domains-Fields-Number Fields'!
+GaussianIntegerRing class
+	instanceVariableNames: ''!
+
 !classDefinition: #MatrixRing category: #'Domains-Modules-Matrices'!
 Ring subclass: #MatrixRing
 	instanceVariableNames: 'scalars degree'
@@ -1312,6 +1333,16 @@ Ring subclass: #PowerSeriesRing
 	category: 'Domains-Sequences'!
 !classDefinition: 'PowerSeriesRing class' category: #'Domains-Sequences'!
 PowerSeriesRing class
+	instanceVariableNames: ''!
+
+!classDefinition: #LocalRing category: #'Domains-Etc-Approximate'!
+Ring subclass: #LocalRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Approximate'!
+!classDefinition: 'LocalRing class' category: #'Domains-Etc-Approximate'!
+LocalRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #Module category: #'Domains-Modules'!
@@ -1914,36 +1945,6 @@ Domain subclass: #CoxeterSystem
 CoxeterSystem class
 	instanceVariableNames: ''!
 
-!classDefinition: #ApproximateRing category: #'Domains-Etc-Approximate-PAdics'!
-Domain subclass: #ApproximateRing
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate-PAdics'!
-!classDefinition: 'ApproximateRing class' category: #'Domains-Etc-Approximate-PAdics'!
-ApproximateRing class
-	instanceVariableNames: ''!
-
-!classDefinition: #AdicField category: #'Domains-Etc-Approximate-PAdics'!
-ApproximateRing subclass: #AdicField
-	instanceVariableNames: 'integers'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicField class' category: #'Domains-Etc-Approximate-PAdics'!
-AdicField class
-	instanceVariableNames: ''!
-
-!classDefinition: #AdicIntegerRing category: #'Domains-Etc-Approximate-PAdics'!
-ApproximateRing subclass: #AdicIntegerRing
-	instanceVariableNames: 'p'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate-PAdics'!
-!classDefinition: 'AdicIntegerRing class' category: #'Domains-Etc-Approximate-PAdics'!
-AdicIntegerRing class
-	instanceVariableNames: ''!
-
 !classDefinition: #Algebra category: #'Domains-Etc-Algebras'!
 Domain subclass: #Algebra
 	instanceVariableNames: ''
@@ -2494,6 +2495,26 @@ RegularFunction subclass: #AlgebraicElement
 AlgebraicElement class
 	instanceVariableNames: ''!
 
+!classDefinition: #AdicInteger category: #'Domains-Rings-Adic'!
+RingElement subclass: #AdicInteger
+	instanceVariableNames: 'parent digits'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicInteger class' category: #'Domains-Rings-Adic'!
+AdicInteger class
+	instanceVariableNames: ''!
+
+!classDefinition: #AdicNumber category: #'Domains-Rings-Adic'!
+RingElement subclass: #AdicNumber
+	instanceVariableNames: 'numerator valuation'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicNumber class' category: #'Domains-Rings-Adic'!
+AdicNumber class
+	instanceVariableNames: ''!
+
 !classDefinition: #Polynomial category: #'Domains-Polynomials'!
 RingElement subclass: #Polynomial
 	instanceVariableNames: 'parent'
@@ -2542,6 +2563,26 @@ RingElement subclass: #PowerSeries
 	category: 'Domains-Sequences'!
 !classDefinition: 'PowerSeries class' category: #'Domains-Sequences'!
 PowerSeries class
+	instanceVariableNames: ''!
+
+!classDefinition: #LocalRingElement category: #'Domains-Etc-Approximate'!
+RingElement subclass: #LocalRingElement
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Approximate'!
+!classDefinition: 'LocalRingElement class' category: #'Domains-Etc-Approximate'!
+LocalRingElement class
+	instanceVariableNames: ''!
+
+!classDefinition: #TruncatedAdicNumber category: #'Domains-Etc-Approximate'!
+LocalRingElement subclass: #TruncatedAdicNumber
+	instanceVariableNames: 'valuation unit precision'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Approximate'!
+!classDefinition: 'TruncatedAdicNumber class' category: #'Domains-Etc-Approximate'!
+TruncatedAdicNumber class
 	instanceVariableNames: ''!
 
 !classDefinition: #ModuleElement category: #'Domains-Modules'!
@@ -2832,6 +2873,16 @@ Object subclass: #ToddCoxeter
 	category: 'Domains-Groups-Algorithms'!
 !classDefinition: 'ToddCoxeter class' category: #'Domains-Groups-Algorithms'!
 ToddCoxeter class
+	instanceVariableNames: ''!
+
+!classDefinition: #AdicIntegerResidue category: #'Domains-Rings-Adic'!
+Object subclass: #AdicIntegerResidue
+	instanceVariableNames: 'representative'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicIntegerResidue class' category: #'Domains-Rings-Adic'!
+AdicIntegerResidue class
 	instanceVariableNames: ''!
 
 !classDefinition: #ComplexAlgebraicNumber category: #'Domains-Fields'!
@@ -4037,6 +4088,9 @@ The ring of fractions is a particular case of the more general construction of t
 References:
 	https://en.wikipedia.org/wiki/Field_of_fractions!
 
+!AdicField commentStamp: '<historical>' prior: 0!
+Fields of p-adic numbers Qp. These are fraction fields of rings of p-adic integers. See AdicIntegerRing and AdicNumber.!
+
 !RationalField commentStamp: '<historical>' prior: 0!
 The singletion global instance QQ is the field of rational numbers.!
 
@@ -4134,6 +4188,9 @@ Quadratic number fields, i.e. number fields with defining quadratic polynomial o
 
 !RationalIntegerRing commentStamp: '<historical>' prior: 0!
 The singletion global instance ZZ is the ring of rational integers.!
+
+!AdicRing commentStamp: '<historical>' prior: 0!
+Rings of p-adic integers Zp. See AdicInteger.!
 
 !ComplexField commentStamp: '<historical>' prior: 0!
 The singletion global instance CC is the field of complex numbers.!
@@ -4414,15 +4471,6 @@ This serves as a model of the hyperbolic plane, defining lines as:
 2. the intersection of the half-plane H and Euclidean half-circles with center on the real axis.
 
 The group of hyperbolic isometries, as well as conformal automorphisms, is the general Moebius group. This is the group of Moebius transformations, i.e. transformations of the form z |-> (az + b) / (cz + d) with ad - cd ~= 0 (or without loss of generality ad - cd = 1).!
-
-!ApproximateRing commentStamp: '<historical>' prior: 0!
-Approximate rings are not really rings. Their elements are finite approximations to otherwise infinite objects, such as float numbers, truncated p-adic numbers, or truncated power series.!
-
-!AdicField commentStamp: '<historical>' prior: 0!
-Fields of p-adic numbers Qp. These are fraction fields of rings of p-adic integers. See AdicIntegerRing and AdicNumber.!
-
-!AdicIntegerRing commentStamp: '<historical>' prior: 0!
-Rings of p-adic integers Zp. See AdicInteger.!
 
 !FreeAlgebra commentStamp: '<historical>' prior: 0!
 (Associative) algebras of noncommutative polynomials in a finite set of indeterminates. Their elements are FreePolynomials.
@@ -4864,6 +4912,10 @@ Given a finite group G with a generating set S, and an action of G on X, a Schre
 Schreier trees allow for fast computation of stabilizers by Schreier's Lemma: with the notation above, the stabilizer of x is generated by the set of Schreier generators <t(i) * s * t(s(i))^-1> where i runs over the orbit of x, s runs over the generating set S, and t(i) is an element of G moving x to i, i.e. a coset representative of i (see >>trace: and >>traceInverse:).
 !
 
+!AdicIntegerResidue commentStamp: '<historical>' prior: 0!
+Residues of a p-adic quotient ring Zp/(p^k)Zp, or equivalently p-adic integers (finite approximations to p-adic integers by the p-adic expansion up to p^k). It is represented by an integer residue class modulo p^k (i.e., an element of a PrimePowerRing).
+!
+
 !ComplexAlgebraicNumber commentStamp: '<historical>' prior: 0!
 Complex algebraic numbers, i.e. zeros of polynomials with integer (or rational) coefficients, in 'minimal polynomial' representation. See also RealAlgebraicNumber.!
 
@@ -5183,12 +5235,6 @@ I'm the Ritt-Wu process.
 Input: a set of polynomials F = {f1,...,fr} in K[x1,...,xn];
 Output: an extended characteristic set (or ascending chain, or Wu characteristic set) of F.
 !
-
-!AdicInteger methodsFor: 'printing' stamp: 'len 12/17/2016 21:04:05'!
-printOn: aStream
-	aStream nextPut: $(.
-	digits do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ','].
-	aStream nextPutAll: '..)'! !
 
 !MutualAssociation methodsFor: 'printing' stamp: 'len 7/13/2016 07:31'!
 printOn: aStream
@@ -5519,6 +5565,10 @@ printOn: aStream
 printOn: aStream
 	aStream nextPutAll: 'Frac('; print: self integers; nextPut: $)! !
 
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:21:17'!
+printOn: aStream
+	aStream print: QQ; nextPutAll: self p printString sub! !
+
 !RationalField methodsFor: 'printing' stamp: 'len 6/8/2016 21:05'!
 printOn: aStream
 	aStream nextPut: Character QQ! !
@@ -5597,6 +5647,10 @@ printOn: aStream
 !RationalIntegerRing methodsFor: 'printing' stamp: 'len 12/8/2016 12:38:27'!
 printOn: aStream
 	aStream nextPut: Character ZZ! !
+
+!AdicRing methodsFor: 'printing' stamp: 'len 6/1/2019 17:25:31'!
+printOn: aStream
+	aStream print: ZZ; nextPutAll: p printString sub! !
 
 !ComplexField methodsFor: 'printing' stamp: 'len 8/5/2016 21:35'!
 printOn: aStream
@@ -5815,14 +5869,6 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: Character HH! !
 
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:21:17'!
-printOn: aStream
-	aStream print: QQ; nextPutAll: self p printString sub! !
-
-!AdicIntegerRing methodsFor: 'printing' stamp: 'len 12/17/2016 22:21:27'!
-printOn: aStream
-	aStream print: ZZ; nextPutAll: p printString sub! !
-
 !FreeAlgebra methodsFor: 'printing' stamp: 'len 1/10/2018 12:24:54'!
 printOn: aStream
 	aStream print: scalars.
@@ -5942,14 +5988,19 @@ printOn: aStream
 		ifTrue: [aStream print: denominator]
 		ifFalse: [aStream nextPut: $(; print: denominator; nextPut: $)]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 12/24/2015 02:59'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:29:30'!
 >> anInteger
-	^ self shift: anInteger! !
+	^ self species to: self codomain evaluating: [:i| self at: i-anInteger]! !
 
 !Sequence methodsFor: 'printing' stamp: 'len 8/6/2016 00:59'!
 printOn: aStream
 	(self startIndex to: self printLimit) do: [:i| aStream print: (self at: i)] separatedBy: [aStream nextPutAll:', ' ].
 	aStream nextPutAll: '...'! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:30:15'!
+>> anInteger
+	anInteger > 0 ifTrue: [^ super >> anInteger].
+	^ self class to: self codomain evaluating: (super >> anInteger) maxOrder: self order squared! !
 
 !SimplicialMap methodsFor: 'printing' stamp: 'len 2/20/2017 15:23:39'!
 printOn: aStream
@@ -6078,6 +6129,14 @@ printOn: aStream
 printOn: aStream
 	aStream print: representative! !
 
+!AdicInteger methodsFor: 'printing' stamp: 'len 6/2/2019 10:09:25'!
+printOn: aStream
+	self printOn: aStream withPowersShiftedBy: 0! !
+
+!AdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 10:10:00'!
+printOn: aStream
+	numerator printOn: aStream withPowersShiftedBy: valuation! !
+
 !Polynomial methodsFor: 'printing' stamp: 'len 5/30/2019 16:13:48'!
 printOn: aStream
 	| monomials leadingMonomial c |
@@ -6196,6 +6255,10 @@ printOn: aStream
 	super printOn: aStream.
 	aStream space.
 	self weights do: [:each| aStream print: each] separatedBy: [aStream space]! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 16:24:27'!
+printOn: aStream
+	((ZZ polynomialsIn: {(' ', self p printString) italic} ordering: #llex) coefficients: self digits) printOn: aStream! !
 
 !ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 1/11/2016 06:44'!
 printOn: aStream
@@ -6967,145 +7030,6 @@ fromInteger: anInteger
 !DyadicFraction class methodsFor: 'instance creation' stamp: 'len 1/15/2016 07:46'!
 numerator: anInteger shift: n
 	^ self new setNumerator: anInteger shift: n! !
-
-!AdicInteger methodsFor: 'arithmetic' stamp: 'len 12/17/2016 22:38:42'!
-* aPAdicInteger
-	| newDigits p q |
-	p _ self p.
-	q _ 1.
-	aPAdicInteger isInteger
-		ifTrue:
-			[aPAdicInteger == 0 ifTrue: [^ self zero].
-			newDigits _ digits collect: [:each| q _ q * p. each * aPAdicInteger \\ q]]
-		ifFalse:
-			[newDigits _ digits with: aPAdicInteger digits collect: [:a :b| q _ q * p. a * b \\ q]].
-	^ self class in: parent digits: newDigits! !
-
-!AdicInteger methodsFor: 'arithmetic' stamp: 'len 12/17/2016 21:18:16'!
-+ aPAdicInteger
-	| newDigits p q |
-	p _ self p.
-	q _ 1.
-	newDigits _ digits with: aPAdicInteger digits collect: [:a :b| q _ q * p. a + b \\ q].
-	^ self class in: parent digits: newDigits! !
-
-!AdicInteger methodsFor: 'arithmetic' stamp: 'len 12/17/2016 21:19:06'!
-- aPAdicInteger
-	| newDigits p q |
-	p _ self p.
-	q _ 1.
-	newDigits _ digits with: aPAdicInteger digits collect: [:a :b| q _ q * p. a - b \\ q].
-	^ self class in: parent digits: newDigits! !
-
-!AdicInteger methodsFor: 'arithmetic' stamp: 'len 12/17/2016 21:20:35'!
-negated
-	| newDigits p q |
-	p _ self p.
-	q _ 1.
-	newDigits _ digits collect: [:a| q _ q * p. a == 0 ifTrue: [a] ifFalse: [q - a]].
-	^ self class in: parent digits: newDigits! !
-
-!AdicInteger methodsFor: 'arithmetic' stamp: 'len 12/17/2016 21:24:10'!
-reciprocal
-	| newDigits p q |
-	(digits at: 1) isZero ifTrue: [^ (ZeroDivide dividend: self one) signal].
-	p _ self p.
-	q _ 1.
-	newDigits _ digits collect: [:a| q _ q * p. a == 1 ifTrue: [a] ifFalse: [a reciprocalModulo2: q]].
-	^ self class in: parent digits: newDigits! !
-
-!AdicInteger methodsFor: 'comparing' stamp: 'len 12/7/2015 03:01'!
-= aPAdicInteger
-	^ aPAdicInteger class == self class and: [digits = aPAdicInteger digits]! !
-
-!AdicInteger methodsFor: 'comparing' stamp: 'len 12/7/2015 03:01'!
-hash
-	^ digits hash! !
-
-!AdicInteger methodsFor: 'accessing' stamp: 'len 7/17/2016 23:31'!
-at: anInteger
-	"Answer the digit corresponding to p^(anInteger-1)."
-	anInteger > digits size ifTrue: [^ digits last].
-	^ digits at: anInteger! !
-
-!AdicInteger methodsFor: 'accessing' stamp: 'len 12/8/2015 03:24'!
-norm
-	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
-
-!AdicInteger methodsFor: 'accessing' stamp: 'len 12/17/2016 21:22:57'!
-p
-	^ parent p! !
-
-!AdicInteger methodsFor: 'accessing' stamp: 'len 12/7/2015 02:55'!
-size
-	^ digits size! !
-
-!AdicInteger methodsFor: 'accessing' stamp: 'len 12/17/2016 21:58:49'!
-valuation
-	self isZero ifTrue: [^ Infinity positive].
-	^ (digits findFirst: [:one| one ~~ 0]) - 1! !
-
-!AdicInteger methodsFor: 'accessing-private' stamp: 'len 12/7/2015 02:54'!
-digits
-	^ digits! !
-
-!AdicInteger methodsFor: 'initialization' stamp: 'len 12/17/2016 21:01:23'!
-digits: aSequence
-	digits _ aSequence
-"	| n |
-	digits _ ZZ tuple: anArray.
-	n _ (digits size to: 2 by: -1) detect: [:i| (digits at: i) representative ~= (digits at: i-1) representative] ifNone: [^ self].
-	n < digits size ifTrue: [digits _ digits copyFrom: 1 to: n]"! !
-
-!AdicInteger methodsFor: 'initialization' stamp: 'len 12/17/2016 21:00:54'!
-parent: aPAdicIntegersRing
-	parent _ aPAdicIntegersRing! !
-
-!AdicInteger methodsFor: 'testing' stamp: 'len 12/7/2015 03:45'!
-isUniformizing
-	"Answer true if the receiver is a uniformizing element."
-	^ self valuation = 1! !
-
-!AdicInteger methodsFor: 'testing' stamp: 'len 7/17/2016 23:30'!
-isZero
-	^ digits isZero! !
-
-!AdicInteger methodsFor: 'constants' stamp: 'len 12/17/2016 21:25:08'!
-one
-	^ parent one! !
-
-!AdicInteger methodsFor: 'constants' stamp: 'len 12/17/2016 21:25:02'!
-zero
-	^ parent zero! !
-
-!AdicInteger methodsFor: 'private' stamp: 'len 12/17/2016 20:59:36'!
-parent
-	^ parent! !
-
-!AdicInteger class methodsFor: 'instance creation' stamp: 'len 12/17/2016 20:55:17'!
-in: aPAdicIntegersRing digits: aSequence
-	^ self new parent: aPAdicIntegersRing; digits: aSequence! !
-
-!AdicNumber methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:41'!
-denominator
-	^ numerator parent !! (self p ^ valuation)! !
-
-!AdicNumber methodsFor: 'accessing' stamp: 'len 12/8/2015 03:24'!
-norm
-	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
-
-!AdicNumber methodsFor: 'accessing' stamp: 'len 12/17/2016 21:46:48'!
-numerator
-	^ numerator! !
-
-!AdicNumber methodsFor: 'accessing' stamp: 'len 4/17/2018 22:54:47'!
-p
-	^ numerator p! !
-
-!AdicNumber methodsFor: 'accessing' stamp: 'len 12/17/2016 21:53:12'!
-valuation
-	"Answer the p-adic absolute value of the receiver."
-	^ valuation! !
 
 !MutualAssociation methodsFor: 'comparing' stamp: 'len 7/13/2016 07:55'!
 = anAssociation
@@ -18330,6 +18254,27 @@ at: anIdeal
 on: anIntegralDomain
 	^ super at: anIntegralDomain zeroIdeal! !
 
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:27:31'!
+= anObject
+	(anObject isKindOf: AdicField) ifTrue: [^ self p = anObject p and: [self precision = anObject precision]].
+	^ super = anObject! !
+
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:27:40'!
+hash
+	^ self p! !
+
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 20:30:57'!
+p
+	^ self integers p! !
+
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:25:32'!
+precision
+	^ self integers precision! !
+
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:24:21'!
+primeSubfield
+	^ self! !
+
 !RationalField methodsFor: 'accessing' stamp: 'len 9/22/2018 18:58:22'!
 degree
 	"Answer the degree of the receiver as an algebraic extension (as a number field)."
@@ -18418,6 +18363,10 @@ to: aCodomain
 !RationalField methodsFor: 'operations' stamp: 'len 9/23/2018 01:37:20'!
 adic: aPrime
 	^ (self integers adic: aPrime) fractions! !
+
+!RationalField methodsFor: 'operations' stamp: 'len 6/2/2019 05:00:13'!
+adic: aPrime precision: anInteger
+	^ (self integers adic: aPrime precision: anInteger) fractions! !
 
 !RationalField methodsFor: 'operations' stamp: 'len 5/18/2016 22:22'!
 adjoin: anAlgebraicNumber
@@ -19364,6 +19313,10 @@ inverseOfRepresentative: anInteger
 	anInteger == 1 ifTrue: [^ 1].
 	^ expTable at: modulus - 1 - (logTable at: anInteger)! !
 
+!AdicQuotientRing methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:23:49'!
+primeSubring
+	^ self! !
+
 !AffineRing methodsFor: 'accessing' stamp: 'len 11/3/2016 04:30'!
 characteristic
 	^ self base characteristic! !
@@ -20164,9 +20117,13 @@ to: aCodomain
 		[^ PrimePowerRing new: factors anyOne to: factors size].
 	^ ModularIntegerRing new: anInteger! !
 
-!RationalIntegerRing methodsFor: 'operations' stamp: 'len 4/17/2018 22:57:08'!
+!RationalIntegerRing methodsFor: 'operations' stamp: 'len 6/1/2019 17:22:04'!
 adic: aPrime
-	^ AdicIntegerRing p: aPrime! !
+	^ AdicRing p: aPrime! !
+
+!RationalIntegerRing methodsFor: 'operations' stamp: 'len 6/2/2019 05:00:42'!
+adic: aPrime precision: anInteger
+	^ AdicRing p: aPrime precision: anInteger! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 7/15/2016 18:31'!
 fractions
@@ -20246,6 +20203,126 @@ idealClass
 initialize
 	super initialize.
 	Smalltalk at: #ZZ put: self new! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 12/17/2016 20:31:49'!
+characteristic
+	^ 0! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 04:11:15'!
+fractions
+	^ self propertyAt: #fractions ifAbsentPut: [AdicField on: self]! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 04:28:48'!
+maximalIdeal
+	^ self * self p! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:26'!
+one
+	^ self !! 1! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/1/2019 17:22:28'!
+p
+	^ p! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 05:02:07'!
+precision
+	"Answer the precision bound for the receiver."
+	^ self propertyAt: #precision ifAbsent: [Infinity positive]! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 05:24:00'!
+primeSubring
+	^ self! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:30'!
+zero
+	^ self !! 0! !
+
+!AdicRing methodsFor: 'elements' stamp: 'len 6/1/2019 17:17:51'!
+!! anObject
+	anObject isFraction ifTrue: [^ self fromFraction: anObject].
+	anObject isInteger ifTrue: [^ self fromRationalInteger: anObject].
+	^ super !! anObject! !
+
+!AdicRing methodsFor: 'elements' stamp: 'len 6/1/2019 17:00:30'!
+digits: aSequence
+	^ AdicInteger new digits: aSequence; parent: self! !
+
+!AdicRing methodsFor: 'elements' stamp: 'len 6/1/2019 17:00:48'!
+streaming: aBlock
+	^ self digits: (Sequence streaming: aBlock)! !
+
+!AdicRing methodsFor: 'morphisms' stamp: 'len 6/1/2019 17:23:08'!
+fromRationalInteger: anInteger
+	| pp q |
+	pp _ p.
+	q _ anInteger.
+	^ self streaming: [| r | r _ q \\ pp. q _ q // pp. r]! !
+
+!AdicRing methodsFor: 'random' stamp: 'len 6/2/2019 09:41:11'!
+atRandom: aRandom
+	| pp random |
+	random _ Random seed: (aRandom nextBits: 31).
+	pp _ self p.
+	^ self streaming: [(random nextInteger:  pp) - 1]! !
+
+!AdicRing methodsFor: 'random' stamp: 'len 6/2/2019 09:33:02'!
+atRandom: aRandom bits: bitSize
+	| n |
+	n _ ZZ atRandom: aRandom bits: bitSize.
+	n = 0 ifTrue: [n _ 1].
+	^ self !! n! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 6/2/2019 04:10:34'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 6/2/2019 05:03:27'!
+isBounded
+	"Answer true if the precision of the receiver is bounded."
+	^ self precision isFinite! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 12/7/2015 01:29'!
+isIntegralDomain
+	^ true! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 6/2/2019 04:27:35'!
+isLocal
+	^ true! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 6/2/2019 05:03:44'!
+isUnbounded
+	"Answer true if the precision of the receiver is unbounded."
+	^ self precision isInfinite! !
+
+!AdicRing methodsFor: 'testing' stamp: 'len 6/1/2019 01:35:22'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	^ (anElement at: 1) isZero not! !
+
+!AdicRing methodsFor: 'private' stamp: 'len 6/1/2019 17:22:23'!
+p: aPrime
+	p _ aPrime! !
+
+!AdicRing methodsFor: 'private' stamp: 'len 6/2/2019 05:02:50'!
+precision: anInteger
+	self propertyAt: #precision put: anInteger! !
+
+!AdicRing methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:26:55'!
+= anObject
+	(anObject isKindOf: AdicRing) ifTrue: [^ self p = anObject p and: [self precision = anObject precision]].
+	^ super = anObject! !
+
+!AdicRing methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:27:08'!
+hash
+	^ self p! !
+
+!AdicRing class methodsFor: 'instance creation' stamp: 'len 6/1/2019 17:22:12'!
+p: aPrime
+	^ self new p: aPrime! !
+
+!AdicRing class methodsFor: 'instance creation' stamp: 'len 6/2/2019 05:02:29'!
+p: aPrime precision: anInteger
+	^ self new p: aPrime; precision: anInteger! !
 
 !ComplexField methodsFor: 'accessing' stamp: 'len 8/6/2016 03:44'!
 characteristic
@@ -20438,13 +20515,14 @@ isNoetherian
 basis
 	^ self ambient integralBasis! !
 
-!NumberRing methodsFor: 'as yet unclassified' stamp: 'len 1/17/2019 03:23:26'!
+!NumberRing methodsFor: 'operations' stamp: 'len 5/31/2019 05:26:56'!
+fractions
+	"NOTE: Magma does this differently, the fractions field of a number ring is not its ambient field but an isomorphic field made of formal fractions with denominator a rational integer."
+	^ self ambient! !
+
+!NumberRing methodsFor: 'random' stamp: 'len 1/17/2019 03:23:26'!
 atRandom: aRandom bits: bitSize
 	^ (self ambient atRandom: aRandom bits: bitSize) numerator! !
-
-!NumberRing methodsFor: 'operations' stamp: 'len 1/18/2018 19:23:03'!
-fractions
-	^ self ambient! !
 
 !NumberRing methodsFor: 'testing' stamp: 'len 12/18/2016 15:02:54'!
 isDedekindDomain
@@ -20469,7 +20547,7 @@ isUFD
 on: aNumberField
 	^ self new ambient: aNumberField! !
 
-!QuadraticRing methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 16:00:15'!
+!QuadraticRing methodsFor: 'elements-testing' stamp: 'len 9/27/2018 16:00:15'!
 isPrime: aNumber
 	"The norm of a (quadratic) prime is a (rational) integer prime or a prime squared.
 	If the norm is a prime, the number is prime."
@@ -20479,16 +20557,16 @@ isPrime: aNumber
 	(factors size <= 2 and: [factors asSet size = 1]) ifFalse: [^ false].
 	self notYetImplemented! !
 
-!QuadraticRing methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:47:41'!
+!QuadraticRing methodsFor: 'elements-testing' stamp: 'len 9/26/2018 21:47:41'!
 isUnit: aNumber
 	^ aNumber norm abs = 1
 "there's also equations, a + bw is a unit if:
 	a^2 - Db^2 = 1 for D = 2,3 mod 4
 	(a + b/2)^2 - (1/4)Db^2 = 1 for D = 1 mod 4"! !
 
-!QuadraticRing methodsFor: 'testing' stamp: 'len 1/18/2018 19:24:20'!
+!QuadraticRing methodsFor: 'testing' stamp: 'len 5/31/2019 05:28:03'!
 isEuclidean
-	self field d negative ifFalse: [self notYetImplemented].
+	self ambient d negative ifFalse: [self notYetImplemented].
 	(#(-11 -7 -3 -2 -1) includes: self ambient d) ifFalse: [^ false].
 	self notYetImplemented! !
 
@@ -20500,10 +20578,27 @@ isIntegralDomain
 isNormEuclidean
 	^ #(-11 -7 -3 -2 -1 2 3 5 6 7 11 13 17 19 21 29 33 37 41 57 73) includes: self ambient d! !
 
-!QuadraticRing methodsFor: 'testing' stamp: 'len 1/18/2018 19:25:28'!
+!QuadraticRing methodsFor: 'testing' stamp: 'len 5/31/2019 05:27:48'!
 isPID
-	self field d negative ifTrue: [^ #(-1 -2 -3 -7 -11 -19 -43 -67 -163) includes: self ambient d].
+	self ambient d negative ifTrue: [^ #(-1 -2 -3 -7 -11 -19 -43 -67 -163) includes: self ambient d].
 	^ self ambient classNumber = 1! !
+
+!GaussianIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/31/2019 05:36:51'!
+isIrreducible: aNumber
+	"A Gaussian integer is irriducible if and only if it is prime."
+	^ self isPrime: aNumber! !
+
+!GaussianIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/31/2019 05:35:44'!
+isPrime: aNumber
+	"a+bi is prime if either:
+	- one of a, b is zero and absolute value of the other is prime congruent to 3 mod 4;
+	- both are nonzero and a^2 + b%2 is prime"
+	super isPrime: aNumber! !
+
+!GaussianIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/31/2019 05:38:24'!
+isUnit: aNumber
+	"All the units are: 1, -1, i, -i."
+	^ super isUnit: aNumber! !
 
 !MatrixRing methodsFor: 'accessing' stamp: 'len 1/5/2017 08:07:08'!
 degree
@@ -21356,6 +21451,14 @@ over: aRing
 !PowerSeriesRing class methodsFor: 'instance creation' stamp: 'len 10/28/2016 10:41'!
 polynomials: aPolynomialRing
 	^ self new polynomials: aPolynomialRing! !
+
+!LocalRing methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:29:07'!
+isIntegral: anElement
+	^ anElement valuation >= 0! !
+
+!LocalRing methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:28:58'!
+isUnit: anElement
+	^ anElement valuation = 0! !
 
 !Module methodsFor: 'accessing' stamp: 'len 12/16/2016 13:26:11'!
 addition
@@ -27480,159 +27583,6 @@ schlafliMatrix
 simpleReflections
 	^ generators! !
 
-!ApproximateRing methodsFor: 'elements' stamp: 'len 5/4/2019 07:40:48'!
-!! anObject
-	anObject isInteger ifTrue: [^ self one * anObject].
-	anObject isFraction ifTrue: [^ (self one * anObject numerator) / (self one * anObject denominator)].
-	^ super !! anObject! !
-
-!ApproximateRing methodsFor: 'elements' stamp: 'len 5/4/2019 07:40:18'!
-one
-	^ self propertyAt: #one ifAbsentPut: [self generators anyOne one]! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:00'!
-identityMatrix: dimension
-	^ self matrix: dimension scalar: self one! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:14'!
-matrix: aCollection
-	^ Matrix rows: (aCollection collect: [:each| self tuple: each])! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:19'!
-matrix: dimension coefficients: aCollection
-	| stream |
-	stream _ aCollection readStream.
-	^ self matrix: dimension evaluating: [:i :j| stream next]! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:26'!
-matrix: dimension evaluating: aBlock
-	| n m |
-	dimension isInteger ifTrue: [n _ m _ dimension] ifFalse: [n _ dimension x. m _ dimension y].
-	^ Matrix rows: ((1 to: n) collect: [:i| self tuple: m evaluating: [:j| aBlock value: i value: j]])! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:32'!
-matrix: dimension evaluatingDiagonal: aBlock
-	| zero |
-	zero _ self zero.
-	^ self matrix: dimension evaluating: [:i :j| i == j ifTrue: [aBlock value: i] ifFalse: [zero]]! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:36'!
-matrix: dimension scalar: anElement
-	^ self matrix: dimension evaluatingDiagonal: [:i| anElement]! !
-
-!ApproximateRing methodsFor: 'elements-matrices' stamp: 'len 5/4/2019 07:50:05'!
-zeroMatrix: dimension
-	^ self matrix: dimension scalar: self zero! !
-
-!ApproximateRing methodsFor: 'elements-tuples' stamp: 'len 5/15/2019 13:30:03'!
-tuple: anArray
-	^ GenericTuple coefficients: anArray over: self! !
-
-!ApproximateRing methodsFor: 'elements-tuples' stamp: 'len 5/4/2019 07:43:25'!
-tuple: anInteger e: index
-	| zero |
-	zero _ self zero.
-	^ self tuple: anInteger evaluating: [:i| i = index ifTrue: [self one] ifFalse: [zero]]! !
-
-!ApproximateRing methodsFor: 'elements-tuples' stamp: 'len 5/8/2019 03:19:10'!
-tuple: anInteger evaluating: aBlock
-	| array |
-	array _ Array new: anInteger.
-	1 to: anInteger do: [:i| array at: i put: (aBlock value: i)].
-	^ self tuple: array! !
-
-!ApproximateRing methodsFor: 'elements-tuples' stamp: 'len 5/4/2019 07:45:23'!
-zeroTuple: anInteger
-	| zero |
-	zero _ self zero.
-	^ self tuple: anInteger evaluating: [:i| zero]! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 21:39:52'!
-characteristic
-	^ 0! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 9/23/2018 01:35:42'!
-embed: aNumber
-	aNumber isInteger ifTrue: [^ self integers embed: aNumber].
-	aNumber isFraction ifFalse: [self notYetImplemented].
-	self notYetImplemented! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 21:37:58'!
-integers
-	^ integers! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 10/18/2016 20:55'!
-isField
-	^ true! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 9/23/2018 01:32:33'!
-one
-	^ integers one! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 20:30:57'!
-p
-	^ self integers p! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 4/17/2018 22:57:15'!
-p: aPrime
-	integers _ AdicIntegerRing p: aPrime! !
-
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 9/23/2018 01:32:37'!
-zero
-	^ integers zero! !
-
-!AdicField class methodsFor: 'instance creation' stamp: 'len 12/17/2016 21:36:49'!
-p: aPrime
-	^ self new p: aPrime! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 12/17/2016 20:31:49'!
-characteristic
-	^ 0! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 9/23/2018 01:37:40'!
-fractions
-	^ self propertyAt: #fractions ifAbsentPut: [AdicField p: p]! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:26'!
-one
-	^ self !! 1! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 12/7/2015 01:16'!
-p
-	^ p! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:30'!
-zero
-	^ self !! 0! !
-
-!AdicIntegerRing methodsFor: 'elements' stamp: 'len 4/17/2018 22:56:45'!
-digits: aSequence
-	^ AdicInteger in: self digits: aSequence! !
-
-!AdicIntegerRing methodsFor: 'initialization' stamp: 'len 12/7/2015 01:16'!
-p: aPrime
-	p _ aPrime! !
-
-!AdicIntegerRing methodsFor: 'morphisms' stamp: 'len 4/17/2018 23:00:02'!
-embed: aNumber
-	| q digits max |
-	aNumber isFraction ifTrue: [^ (self embed: aNumber numerator) / (self embed: aNumber denominator)].
-	aNumber isInteger ifFalse: [^ DomainError signal: 'not a rational number'].
-	q _ 1.
-	max _ aNumber abs.
-	digits _ OrderedCollection new.
-	[q _ q * p.
-	digits add: aNumber \\ q.
-	q > max ifTrue: [^ self digits: digits asArray]] repeat! !
-
-!AdicIntegerRing methodsFor: 'testing' stamp: 'len 12/7/2015 01:29'!
-isIntegralDomain
-	^ true! !
-
-!AdicIntegerRing class methodsFor: 'instance creation' stamp: 'len 12/7/2015 01:15'!
-p: aPrime
-	^ self new p: aPrime! !
-
 !Algebra methodsFor: 'as yet unclassified' stamp: 'len 10/10/2018 06:38:23'!
 multiplication
 	^ ((self, self) to: self evaluatingWithArguments: [:x :y| x * y]) name: '*'! !
@@ -30197,6 +30147,11 @@ codomain
 domain
 	^ self propertyAt: #domain ifAbsent: [NN]! !
 
+!Sequence methodsFor: 'accessing' stamp: 'len 6/1/2019 08:33:57'!
+scalars
+	"For compatibility with tuples."
+	^ self codomain! !
+
 !Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:26'!
 size
 	^ self propertyAt: #size ifAbsent: [Aleph new]! !
@@ -30222,10 +30177,10 @@ hash
 asStream
 	^ ReadStream on: self! !
 
-!Sequence methodsFor: 'copying' stamp: 'len 10/18/2016 14:02'!
+!Sequence methodsFor: 'copying' stamp: 'len 6/1/2019 08:31:20'!
 copyFrom: start to: end
 	end isInfinite
-		ifTrue: [^ self shift: 1 - start].
+		ifTrue: [^ self >> (1 - start)].
 	^ (start to: end) collect: [:i| self at: i]! !
 
 !Sequence methodsFor: 'copying' stamp: 'len 4/20/2016 21:25'!
@@ -30243,6 +30198,13 @@ count: aBlock
 !Sequence methodsFor: 'enumerating' stamp: 'len 12/27/2015 03:45'!
 do: aBlock
 	1 to: self size do: [:each| aBlock value: (self at: each)]! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 6/2/2019 04:31:06'!
+findFirst: aBlock
+	"Return the index of my first element for which aBlock evaluates as true."
+	| index |
+	index _ 0.
+	[(aBlock value: (self at: (index _ index + 1))) ifTrue: [^ index]] repeat! !
 
 !Sequence methodsFor: 'enumerating' stamp: 'len 12/3/2015 23:16'!
 select: aBlock
@@ -30279,9 +30241,9 @@ withIndexDo: aBlock
 / anObject
 	^ self * anObject reciprocal! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 12/24/2015 02:59'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:29:43'!
 << anInteger
-	^ self shift: anInteger negated! !
+	^ self >> anInteger negated! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
 average
@@ -30314,10 +30276,10 @@ centralDifference: n at: h
 convolution: aSequence
 	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:i| (self at: self startIndex + i) * (aSequence at: aSequence startIndex+n-1-i)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 8/15/2016 18:28'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:31:04'!
 difference
 	"Answer the 'difference' sequence of the receiver, or delta, or discrete derivative."
-	^ (self shift: -1) - self! !
+	^ (self << 1) - self! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
 dirichlet: aSequence
@@ -30566,13 +30528,13 @@ phi
 	"Euler's totient function."
 	^ Sequence evaluating: [:n| n phi]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:31:22'!
+!Sequence class methodsFor: 'examples' stamp: 'len 6/1/2019 13:35:39'!
 primeGaps
 	"The sequence of prime gaps.
 	This is p(n+1) - p(n), the difference between concecutive primes."
 	| p |
 	p _ 2.
-	^ Sequence streamming: [p negated + (p _ p nextPrime)]
+	^ Sequence streaming: [p negated + (p _ p nextPrime)]
 "	^ Sequence primes difference"! !
 
 !Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:31:34'!
@@ -30624,9 +30586,9 @@ initialValues: anArray recurrence: aBinaryBlock
 recurrence: aBinaryBlock
 	^ self initialValues: #() recurrence: aBinaryBlock! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:30'!
-streamming: aBlock
-	^ self to: ZZ streamming: aBlock! !
+!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:29'!
+streaming: aBlock
+	^ self to: ZZ streaming: aBlock! !
 
 !Sequence class methodsFor: 'intance creation' stamp: 'len 4/19/2016 21:42'!
 to: aDomain constant: anObject
@@ -30658,8 +30620,8 @@ to: aDomain initialValues: anArray recurrence: aBlock
 to: aDomain recurrence: aBlock
 	^ self to: aDomain initialValues: #() recurrence: aBlock! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/6/2016 23:51'!
-to: aDomain streamming: aBlock
+!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:57'!
+to: aDomain streaming: aBlock
 	| cache |
 	cache _ OrderedCollection new.
 	^ self to: aDomain evaluating:
@@ -30749,11 +30711,6 @@ minimal
 !CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:31'!
 negated
 	^ self class to: self codomain evaluating: super negated maxOrder: self order! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/27/2015 01:54'!
-shift: anInteger
-	anInteger > 0 ifTrue: [^ super shift: anInteger].
-	^ self class to: self codomain evaluating: (super shift: anInteger) maxOrder: self order squared! !
 
 !CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:39'!
 squared
@@ -33106,6 +33063,186 @@ trace
 "alternatively:
 	^ self representation trace"! !
 
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 10:18:59'!
+absolutePrecision
+	^ parent precision! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:30:48'!
+digits
+	^ digits! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:30:06'!
+norm
+	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:24:34'!
+p
+	^ parent p! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 10:44:11'!
+relativePrecision
+	| answer |
+	answer _ self absolutePrecision.
+	answer isInfinite ifFalse: [answer _ answer - self valuation].
+	^ answer! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 11:30:57'!
+valuation
+	self isZero ifTrue: [^ Infinity positive].
+	^ (digits findFirst: [:x| x isZero not]) - 1
+"	i _ 0.
+	precision _ parent precision.
+	[(digits at: (i _ i + 1)) isZero not ifTrue: [^ i].
+	precision > i ifFalse: [^ i]] repeat"! !
+
+!AdicInteger methodsFor: 'arithmetic' stamp: 'len 6/2/2019 11:02:42'!
+* anAdic
+	| a b n carry  p |
+	anAdic class = self class ifFalse: [^ self * (parent !! anAdic)].
+	a _ digits.
+	b _ anAdic digits.
+	p _ self p.
+	n _ 1.
+	carry _ 0.
+	^ parent streaming:
+		[| t |
+		t _ ((1 to: n) sum: [:i| (a at: i) * (b at: n-i+1)]) + carry.
+		n _ n + 1.
+		carry _ t // p.
+		t \\ p]! !
+
+!AdicInteger methodsFor: 'arithmetic' stamp: 'len 6/1/2019 17:30:18'!
++ anAdic
+	| a b n carry  p |
+	a _ digits.
+	b _ anAdic digits.
+	p _ self p.
+	n _ 1.
+	carry _ 0.
+	^ parent streaming:
+		[| t |
+		t _ (a at: n) + (b at: n) + carry.
+		n _ n + 1.
+		t < p ifTrue: [carry _ 0. t] ifFalse: [carry _ 1. t - p]]! !
+
+!AdicInteger methodsFor: 'arithmetic' stamp: 'len 6/1/2019 17:30:22'!
+- anAdic
+	| a b n carry  p |
+	a _ digits.
+	b _ anAdic digits.
+	p _ self p.
+	n _ 1.
+	carry _ 0.
+	^ parent streaming:
+		[| t |
+		t _ (a at: n) - (b at: n) - carry.
+		n _ n + 1.
+		t >= 0 ifTrue: [carry _ 0. t] ifFalse: [carry _ 1. t + p]]! !
+
+!AdicInteger methodsFor: 'arithmetic' stamp: 'len 6/2/2019 11:39:02'!
+negated
+	| n p |
+	p _ self p.
+	n _ 0.
+	^ parent streaming: [n = 0 ifTrue: [p - (digits at: (n _ n + 1))] ifFalse: [p - 1 - (digits at: (n _ n + 1))]]! !
+
+!AdicInteger methodsFor: 'comparing' stamp: 'len 6/2/2019 11:25:29'!
+= anAdic
+	1 to: self absolutePrecision do: [:i|
+		(digits at: i) = (anAdic digits at: i) ifFalse: [^ false]].
+	^ true! !
+
+!AdicInteger methodsFor: 'comparing' stamp: 'len 6/2/2019 11:23:20'!
+hash
+	| answer |
+	answer _ 0.
+	1 to: (self absolutePrecision min: 10) do: [:i|
+		answer _ answer hashMultiply + (digits at: i) hash].
+	^ answer! !
+
+!AdicInteger methodsFor: 'printing' stamp: 'len 6/2/2019 11:33:11'!
+printOn: aStream withPowersShiftedBy: k
+	| printPrecision first |
+	self isZero
+		ifTrue: [aStream nextPut: $0]
+		ifFalse:
+			[printPrecision _ 5.
+			first _ true.
+			self valuation - k to: self valuation + printPrecision - 1 - k do: [:i|
+				| x |
+				(x _ self digits at: i+1+k) isZero
+					ifFalse:
+						[first ifFalse: [aStream nextPutAll: ' + '].
+						(x ~= 1 or: [i = 0]) ifTrue: [aStream print: x. i ~= 0 ifTrue: [aStream nextPut: Character dot]].
+						i ~= 0 ifTrue: [aStream print: self p. i ~= 1 ifTrue: [aStream nextPutAll: i printString super]].
+						first _ false]]].
+	aStream nextPutAll: ' + ...'
+	"parent isBounded
+		ifTrue: [aStream nextPutAll: ' + ', 'O' italic; nextPut: $(; print: self p; nextPutAll: parent precision printString super; nextPut: $)]
+		ifFalse: [aStream nextPutAll: ' + ...']"! !
+
+!AdicInteger methodsFor: 'testing' stamp: 'len 12/7/2015 03:45'!
+isUniformizing
+	"Answer true if the receiver is a uniformizing element."
+	^ self valuation = 1! !
+
+!AdicInteger methodsFor: 'testing' stamp: 'len 6/2/2019 10:00:28'!
+isZero
+	parent isBounded ifFalse: [^ false].
+	"a bounded p-adic that is 0 up to its precision is considered 0
+	(but maybe it should answers always false, like Magma)"
+	1 to: parent precision do: [:i|
+		(digits at: i) isZero ifFalse: [^ false]].
+	^ true! !
+
+!AdicInteger methodsFor: 'private' stamp: 'len 6/1/2019 16:50:33'!
+digits: aSequence
+	digits _ aSequence! !
+
+!AdicInteger methodsFor: 'private' stamp: 'len 12/17/2016 20:59:36'!
+parent
+	^ parent! !
+
+!AdicInteger methodsFor: 'private' stamp: 'len 6/1/2019 16:50:14'!
+parent: aPAdicIntegersRing
+	parent _ aPAdicIntegersRing! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/2/2019 10:46:22'!
+absolutePrecision
+	^ numerator absolutePrecision! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/1/2019 17:28:31'!
+denominator
+	^ numerator parent !! (self p ^ valuation)! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/1/2019 17:28:36'!
+norm
+	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 12/17/2016 21:46:48'!
+numerator
+	^ numerator! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/1/2019 17:28:39'!
+p
+	^ numerator p! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/2/2019 10:46:39'!
+relativePrecision
+	^ self absolutePrecision - valuation! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/2/2019 10:48:05'!
+valuation
+	^ valuation! !
+
+!AdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 08:27:07'!
+<< anInteger
+	^ self >> anInteger negated! !
+
+!AdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 04:09:58'!
+isFractional
+	^ true! !
+
 !Polynomial methodsFor: 'accessing' stamp: 'len 4/21/2018 17:52:05'!
 denominator
 	"Considering the receiver as an element of the fraction ring, answer the denominator."
@@ -35394,7 +35531,7 @@ parent: aPowerSeriesRing
 	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal].
 	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/28/2015 05:47'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/1/2019 13:50:59'!
 inverse
 	| b1 a |
 	a _ coefficients.
@@ -35402,11 +35539,10 @@ inverse
 	^ self class coefficients:
 		(Sequence
 			to: self scalars
+			initialValues: {b1}
 			recurrence:
 				[:b :n|
-				n=1
-					ifTrue: [b1]
-					ifFalse: [b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])]])! !
+				b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])])! !
 
 !PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:14'!
 negated
@@ -35473,7 +35609,7 @@ exp
 sin
 	^ self coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
 
-!PowerSeries class methodsFor: 'examples' stamp: 'len 7/30/2016 07:19'!
+!PowerSeries class methodsFor: 'examples' stamp: 'len 6/1/2019 13:36:11'!
 taylorSeriesOf: aFunction at: x0
 	| f n |
 	f _ aFunction.
@@ -35481,7 +35617,7 @@ taylorSeriesOf: aFunction at: x0
 	^ self coefficients:
 		(Sequence
 			to: aFunction codomain
-			streamming:
+			streaming:
 				[| value |
 				value _ (f value: x0) / n factorial.
 				f _ f derivative.
@@ -35495,6 +35631,54 @@ coefficients: aSequence
 !PowerSeries class methodsFor: 'instance creation' stamp: 'len 11/25/2016 10:32:44'!
 fromPolynomial: aPolynomial
 	^ self coefficients: (CFiniteSequence to: aPolynomial scalars initialValues: aPolynomial coefficients periodic: {aPolynomial scalars zero})! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:31:49'!
+absolutePrecision
+	^ self subclassResponsibility! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:27:00'!
+isIntegral
+	^ self valuation >= 0! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:26:54'!
+isUnit
+	^ self valuation = 0! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:27:52'!
+precision
+	^ self subclassResponsibility! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:31:56'!
+relativePrecision
+	^ self absolutePrecision - self valuation! !
+
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:26:46'!
+valuation
+	^ self subclassResponsibility! !
+
+!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:46:22'!
+digits
+	| x p answer |
+	x _ unit.
+	p _ self parent p.
+	answer _ OrderedCollection new.
+	[x = 0]
+		whileFalse:
+			[answer add: x \\ p.
+			x _ x // p].
+	^ answer! !
+
+!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:25'!
+precision
+	^ precision! !
+
+!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:19'!
+unit
+	^ unit! !
+
+!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:09'!
+valuation
+	^ valuation! !
 
 !ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:31:05'!
 adaptToFraction: rcvr andSend: selector
@@ -39597,6 +39781,42 @@ verify
 !SchreierTree class methodsFor: 'instance creation' stamp: 'len 6/24/2016 03:07'!
 root: aPoint generators: anArray action: aGroupAction
 	^ self new root: aPoint generators: anArray action: aGroupAction! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 04:28:18'!
+digits
+	| x p answer |
+	x _ representative representative.
+	p _ self p.
+	answer _ OrderedCollection new.
+	[x = 0]
+		whileFalse:
+			[answer add: x \\ p.
+			x _ x // p].
+	^ answer
+			! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:26:34'!
+isZero
+	^ representative isZero! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:23:23'!
+precision
+	^ representative parent exponent! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 10:46:36'!
+reciprocal
+	"Answer the multiplicative inverse of the receiver. The valuation of the receiver must be 0."
+	self isUnit ifFalse: [(ZeroDivide dividend: self) signal].
+	self notYetImplemented! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 04:31:39'!
+representative: aModularInteger
+	representative _ aModularInteger! !
+
+!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 16:24:15'!
+valuation
+	self isZero ifTrue: [^ Infinity positive].
+	^ (self digits findFirst: [:one| one ~~ 0]) - 1! !
 
 !ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 00:27:26'!
 printOn: aStream base: base
@@ -44271,6 +44491,11 @@ squareRoot
 	R _ ZZ % anInteger.
 	^ (R project: numerator) / (R project: denominator)! !
 
+!Fraction methodsFor: '*domains' stamp: 'len 5/31/2019 17:36:32'!
+abs: p
+	"Answer the p-adic absolute value."
+	^ (numerator abs: p) / (denominator abs: p)! !
+
 !Fraction methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:36'!
 adaptToAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (ComplexAlgebraicNumber fromRational: self)! !
@@ -44333,6 +44558,16 @@ Stirling: anInteger
 	self+1 = anInteger ifTrue: [^ self choose: 2].
 	anInteger = 2 ifTrue: [^ 2 ^ (self-1) - 1].
 	^ anInteger*(self - 1 Stirling: anInteger) + (self - 1 Stirling: anInteger - 1)! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/31/2019 17:34:37'!
+abs: p
+	"Answer the p-adic absolute value."
+	| powers q |
+	self = 0 ifTrue: [^ 0].
+	q _ self abs.
+	powers _ 1.
+	[p | q] whileTrue: [powers _ powers * p. q _ q // p].
+	^ powers reciprocal! !
 
 !Integer methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:45'!
 adaptToAlgebraic: rcvr andSend: selector
