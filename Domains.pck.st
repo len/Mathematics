@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 2 June 2019 at 11:42:39 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 2 June 2019 at 5:24:58 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 507!
+!provides: 'Domains' 1 508!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -6161,11 +6161,11 @@ printOn: aStream
 >> anInteger
 	^ self << anInteger negated! !
 
-!PowerSeries methodsFor: 'printing' stamp: 'len 5/15/2019 01:51:19'!
+!PowerSeries methodsFor: 'printing' stamp: 'len 6/2/2019 17:15:44'!
 printOn: aStream
 	| P f n |
 	n _ coefficients printLimit.
-	P _ coefficients codomain polynomials.
+	P _ parent polynomials.
 	f _ (P coefficients: (coefficients copyFrom: coefficients startIndex to: coefficients startIndex + n)) orderedBy: #llex.
 	aStream print: f; nextPutAll: ' + ', 'O' italic, '('; print: P x ^ (n+1); nextPut: $)! !
 
@@ -17825,6 +17825,10 @@ polynomialsIn: anIntegerOrCollection ordering: aMonomialOrdering
 		ifTrue: [^ PolynomialRing new: anIntegerOrCollection over: self ordering: aMonomialOrdering].
 	^ (PolynomialRing new: anIntegerOrCollection size over: self ordering: aMonomialOrdering) names: anIntegerOrCollection! !
 
+!Ring methodsFor: 'operations' stamp: 'len 6/2/2019 16:57:27'!
+powerSeries
+	^ self polynomials completion! !
+
 !Ring methodsFor: 'operations' stamp: 'len 5/21/2018 22:01:12'!
 radical
 	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals."
@@ -19100,11 +19104,11 @@ idealsDo: aBlock
 		[aBlock value: self * a.
 		a _ a * self p]! !
 
-!PrimePowerRing methodsFor: 'morphisms' stamp: 'len 5/15/2019 06:45:14'!
+!PrimePowerRing methodsFor: 'morphisms' stamp: 'len 6/2/2019 16:47:37'!
 to: aCodomain
 	"Cannonical projection from Z/(p^n)Z to Z/(p^m)Z, 1 <= m <= n."
 	((aCodomain isKindOf: PrimePowerRing) and: [aCodomain p = self p and: [aCodomain exponent < self exponent]])
-		ifTrue: [^ self onto: aCodomain evaluating: [:x| aCodomain project: x representative]].
+		ifTrue: [^ (self onto: aCodomain evaluating: [:x| aCodomain project: x representative]) name: Character pi asString].
 	^ super to: aCodomain! !
 
 !PrimePowerRing methodsFor: 'operations' stamp: 'len 5/21/2018 16:20:06'!
@@ -20233,6 +20237,19 @@ precision
 primeSubring
 	^ self! !
 
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 16:44:49'!
+residueField
+	"Answer the prime field Z/pZ isomorphic to the residue field of the receiver, equiped with the canonical projection."
+	^ self propertyAt: #residueField ifAbsentPut:
+		[| answer |
+		(answer _ PrimeField new: p)
+			addMap: (self onto: answer evaluating: [:x| answer !! (x at: 0)]); "TODO: add kernel and section"
+			yourself]! !
+
+!AdicRing methodsFor: 'accessing' stamp: 'len 6/2/2019 16:34:31'!
+size
+	^ Aleph new! !
+
 !AdicRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:30'!
 zero
 	^ self !! 0! !
@@ -21126,9 +21143,10 @@ to: aRing evaluating: aBlock
 			answer names: names].
 	^ answer! !
 
-!PolynomialRing methodsFor: 'operations' stamp: 'len 10/28/2016 11:10'!
+!PolynomialRing methodsFor: 'operations' stamp: 'len 6/2/2019 16:52:07'!
 completion
 	"Answer the ring of power series, i.e. the completion of the receiver at 0."
+	self isUnivariate ifFalse: [^ self notYetImplemented].
 	^ PowerSeriesRing polynomials: self! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 10/27/2016 17:25'!
@@ -21375,45 +21393,82 @@ new: anInteger over: aRing ordering: aMonomialOrdering
 characteristic
 	^ self scalars characteristic! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 10/28/2016 14:27'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:18:41'!
 generators
-	^ self polynomials generators collect: [:each| self embed: each]! !
+	^ polynomials generators collect: [:each| self !! each]! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 10/31/2016 04:02'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:04:40'!
 maximalIdeal
-	self notYetImplemented! !
+	^ self * self x! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 4/15/2016 20:49'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:03:16'!
+names
+	^ polynomials names! !
+
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:04:00'!
+names: anArray
+	polynomials names: anArray! !
+
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:16:43'!
 one
-	^ PowerSeries fromPolynomial: self scalars polynomials one! !
+	^ self !! polynomials one! !
 
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 10/28/2016 10:47'!
 polynomials
 	^ polynomials! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 10/28/2016 10:27'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:04:10'!
 scalars
-	^ self polynomials scalars! !
+	^ polynomials scalars! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 10/28/2016 10:47'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:05:15'!
+x
+	^ self generators first! !
+
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:18:33'!
 zero
-	^ self fromPolynomial: self polynomials zero! !
+	^ self !! polynomials zero! !
 
-!PowerSeriesRing methodsFor: 'accessing-private' stamp: 'len 1/19/2017 07:30:06'!
-polynomials: aPolynomialRing
-"	aPolynomialRing isUnivariate ifFalse: [self error: 'multivariate power series not yet supported']."
-	polynomials _ aPolynomialRing ordering isLocal
-		ifTrue: [aPolynomialRing]
-		ifFalse: [aPolynomialRing orderedBy: #llex]! !
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:21:27'!
+!! anObject
+	(polynomials includes: anObject) ifTrue: [^ self coefficients: (CFiniteSequence to: self scalars initialValues: anObject coefficients periodic: {self scalars zero})].
+	^ super !! anObject! !
 
-!PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 10/31/2016 04:00'!
-embed: aPolynomial
-	^ PowerSeries fromPolynomial: aPolynomial! !
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:19:24'!
+coefficients: aSequence
+	^ (PowerSeries coefficients: aSequence) parent: self! !
 
-!PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 5/13/2019 18:13:57'!
-embedding
-	"Answer the embedding map from the polynomial ring into the receiver."
-	^ self propertyAt: #embedding ifAbsentPut: [(self polynomials to: self evaluating: [:x| self embed: x]) name: 'i']! !
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:01:31'!
+cos
+	^ self coefficients: (Sequence to: QQ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
+
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:01:36'!
+exp
+	^ self coefficients: (Sequence to: QQ evaluating: [:n| 1 / n factorial])! !
+
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:01:40'!
+sin
+	^ self coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
+
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:01:45'!
+taylorSeriesOf: aFunction at: x0
+	| f n |
+	f _ aFunction.
+	n _ 0.
+	^ self coefficients:
+		(Sequence
+			to: aFunction codomain
+			streaming:
+				[| value |
+				value _ (f value: x0) / n factorial.
+				f _ f derivative.
+				n _ n + 1.
+				value])! !
+
+!PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 6/2/2019 17:17:47'!
+from: aDomain
+	aDomain = polynomials ifTrue: [^ self addMap: ((polynomials into: self evaluating: [:x| self!! x]) name: 'i')].
+	^ super from: aDomain! !
 
 !PowerSeriesRing methodsFor: 'operations' stamp: 'len 9/22/2018 19:18:17'!
 fractions
@@ -21435,6 +21490,12 @@ isMultivariate
 isUnit: aPowerSeries
 	"Answer true if the argument is invertible."
 	^ self scalars isUnit: aPowerSeries independentCoefficient! !
+
+!PowerSeriesRing methodsFor: 'private' stamp: 'len 6/2/2019 16:52:15'!
+polynomials: aPolynomialRing
+	polynomials _ aPolynomialRing ordering isLocal
+		ifTrue: [aPolynomialRing]
+		ifFalse: [aPolynomialRing orderedBy: #llex]! !
 
 !PowerSeriesRing class methodsFor: 'instance creation' stamp: 'len 1/19/2017 07:30:17'!
 new: anInteger over: aRing
@@ -30365,29 +30426,29 @@ printStringBase: base
 	^ String streamContents:
 		[:aStream| self printOn: aStream base: base]! !
 
-!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:25'!
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 16:58:56'!
 bellSeries: p
-	^ PowerSeries coefficients: (self species to: self codomain evaluating: [:n| self at: p^(n-1)])! !
+	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| self at: p^(n-1)])! !
 
 !Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:25'!
 dirichletSeries
 	"Answer the Dirichlet series generating function of the receiver."
 	^ DirichletSeries coefficients: self! !
 
-!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:25'!
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:18'!
 exponentialSeries
 	"Answer the exponential generating function of the receiver."
-	^ PowerSeries coefficients: (self species to: self codomain evaluating: [:n| (self at: n) / (n-1) factorial])! !
+	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| (self at: n) / (n-1) factorial])! !
 
 !Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:26'!
 generatingSeries
 	"Answer the ordinary generating function of the receiver."
 	^ self ordinaryGeneratingSeries! !
 
-!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:26'!
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:31'!
 ordinaryGeneratingSeries
 	"Answer the ordinary generating function of the receiver."
-	^ PowerSeries coefficients: self! !
+	^ self codomain powerSeries coefficients: self! !
 
 !Sequence methodsFor: 'private' stamp: 'len 12/3/2015 20:34'!
 species
@@ -33067,6 +33128,11 @@ trace
 absolutePrecision
 	^ parent precision! !
 
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 16:35:37'!
+at: anInteger
+	anInteger < 0 ifTrue: [^ 0].
+	^ digits at: anInteger + 1! !
+
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:30:48'!
 digits
 	^ digits! !
@@ -33079,12 +33145,9 @@ norm
 p
 	^ parent p! !
 
-!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 10:44:11'!
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 13:54:50'!
 relativePrecision
-	| answer |
-	answer _ self absolutePrecision.
-	answer isInfinite ifFalse: [answer _ answer - self valuation].
-	^ answer! !
+	^ self absolutePrecision! !
 
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 11:30:57'!
 valuation
@@ -35495,48 +35558,32 @@ coefficients: aSequence
 parent: aPowerSeriesRing
 	parent _ aPowerSeriesRing! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:11'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:09:36'!
 * anObject
+	((anObject isKindOf: PowerSeries) and: [anObject parent = parent])
+		ifTrue: [^ parent coefficients: (coefficients convolution: anObject coefficients)].
 	(self scalars includes: anObject)
-		ifTrue: [^ self class coefficients: coefficients * anObject].
-	(anObject isKindOf: self class)
-		ifTrue: [^ self class coefficients: (coefficients convolution: anObject coefficients)].
+		ifTrue: [^ parent coefficients: coefficients * anObject].
 	(anObject isKindOf: Polynomial)
-		ifTrue: [^ self * (self class fromPolynomial: anObject)].
+		ifTrue: [^ self * (parent !! anObject)].
 	^ DomainError signal! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 10/31/2016 04:14'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:10:27'!
 + anObject
+	(anObject isKindOf: PowerSeries)
+		ifTrue: [^ parent coefficients: coefficients + anObject coefficients].
 	(self scalars includes: anObject)
-		ifTrue: [^ self class coefficients: coefficients + (CFiniteSequence to: self scalars initialValues: {anObject} periodic: {anObject zero})].
-	(anObject isKindOf: self class)
-		ifTrue: [^ self class coefficients: coefficients + anObject coefficients].
+		ifTrue: [^ parent coefficients: coefficients + (CFiniteSequence to: self scalars initialValues: {anObject} periodic: {anObject zero})].
 	(anObject isKindOf: Polynomial)
-		ifTrue: [^ self + (self class fromPolynomial: anObject)].
+		ifTrue: [^ self + (parent !! anObject)].
 	^ DomainError signal! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:12'!
-- anObject
-	^ self + anObject negated! !
-
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:13'!
-/ anObject
-	^ self * anObject reciprocal! !
-
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 1/22/2017 08:17:46'!
-^ anInteger
-	"Answer the receiver raised to the power anInteger."
-	anInteger = 1 ifTrue: [^ self].
-	anInteger = 0 ifTrue: [^ self one].
-	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal].
-	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
-
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/1/2019 13:50:59'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:13:58'!
 inverse
 	| b1 a |
 	a _ coefficients.
 	b1 _ (a at: 1) reciprocal.
-	^ self class coefficients:
+	^ parent coefficients:
 		(Sequence
 			to: self scalars
 			initialValues: {b1}
@@ -35544,17 +35591,17 @@ inverse
 				[:b :n|
 				b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])])! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:14'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:14:04'!
 negated
-	^ self class coefficients: coefficients negated! !
+	^ parent coefficients: coefficients negated! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 5/4/2018 19:24:43'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:13:51'!
 reciprocal
 	| b1 a |
 	self flag: #fix. "this is composition inverse, same as >>inverse"
 	a _ coefficients.
 	b1 _ (a at: 1) reciprocal.
-	^ self class coefficients:
+	^ parent coefficients:
 		(Sequence
 			to: self scalars
 			initialValues: {b1}
@@ -35562,13 +35609,9 @@ reciprocal
 				[:b :n|
 				b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])])! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 12/27/2015 16:14'!
-squared
-	^ self * self! !
-
-!PowerSeries methodsFor: 'comparing' stamp: 'len 12/28/2015 19:46'!
+!PowerSeries methodsFor: 'comparing' stamp: 'len 6/2/2019 17:14:32'!
 = anObject
-	^ (anObject isKindOf: PowerSeries) and: [self coefficients = anObject coefficients]! !
+	^ (anObject isKindOf: PowerSeries) and: [coefficients = anObject coefficients]! !
 
 !PowerSeries methodsFor: 'comparing' stamp: 'len 12/28/2015 19:45'!
 hash
@@ -35578,9 +35621,9 @@ hash
 asRationalFunction
 	^ coefficients generatingFunction! !
 
-!PowerSeries methodsFor: 'operations' stamp: 'len 10/31/2016 04:14'!
+!PowerSeries methodsFor: 'operations' stamp: 'len 6/2/2019 17:11:59'!
 derivative
-	^ self class coefficients: coefficients << 1 * CFiniteSequence identity! !
+	^ parent coefficients: coefficients << 1 * CFiniteSequence identity! !
 
 !PowerSeries methodsFor: 'operations' stamp: 'len 2/29/2016 04:58'!
 value: anObject upTo: n
@@ -35589,40 +35632,9 @@ value: anObject upTo: n
 	self terms do: [:each| each degree > n ifTrue: [^ answer]. answer _ answer + (each value: anObject)].
 	^ answer! !
 
-!PowerSeries methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:49'!
-isUnit
-	^ self scalars isUnit: self independentCoefficient! !
-
 !PowerSeries methodsFor: 'testing' stamp: 'len 4/11/2016 23:09'!
 isZero
 	^ coefficients isZero! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 7/15/2016 18:36'!
-cos
-	^ self coefficients: (Sequence to: QQ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 7/15/2016 18:36'!
-exp
-	^ self coefficients: (Sequence to: QQ evaluating: [:n| 1 / n factorial])! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 7/15/2016 18:36'!
-sin
-	^ self coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 6/1/2019 13:36:11'!
-taylorSeriesOf: aFunction at: x0
-	| f n |
-	f _ aFunction.
-	n _ 0.
-	^ self coefficients:
-		(Sequence
-			to: aFunction codomain
-			streaming:
-				[| value |
-				value _ (f value: x0) / n factorial.
-				f _ f derivative.
-				n _ n + 1.
-				value])! !
 
 !PowerSeries class methodsFor: 'instance creation' stamp: 'len 12/27/2015 16:21'!
 coefficients: aSequence
@@ -35632,9 +35644,9 @@ coefficients: aSequence
 fromPolynomial: aPolynomial
 	^ self coefficients: (CFiniteSequence to: aPolynomial scalars initialValues: aPolynomial coefficients periodic: {aPolynomial scalars zero})! !
 
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:31:49'!
+!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 13:55:40'!
 absolutePrecision
-	^ self subclassResponsibility! !
+	^ self parent precision! !
 
 !LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:27:00'!
 isIntegral
