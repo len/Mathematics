@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 30 May 2019 at 4:37:14 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 2 June 2019 at 11:41:52 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 134!
+!provides: 'MathematicsTests' 1 135!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -6110,16 +6110,75 @@ testTotallyReal
 	E _ NumberField polynomial: x^4 - 2.
 	self assert: E isReal not! !
 
-!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/17/2018 22:57:01'!
-testPAdicNorm
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:17:07'!
+testAddition
+	| Z7 a b c |
+	Z7 _ ZZ adic: 7 precision: 100.
+	a _ Z7 !! 676.
+	b _ Z7 !! 123.
+	c _ Z7 !! (676+123).
+	self assert: a+b = c! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:17:28'!
+testAddition2
+	| Z7 a b c |
+	Z7 _ ZZ adic: 7 precision: 100.
+	a _ Z7 !! -676.
+	b _ Z7 !! 123.
+	c _ Z7 !! (-676+123).
+	self assert: a+b = c! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:12:51'!
+testFractionsField
+	| Z7 Q7 |
+	Z7 _ ZZ adic: 7.
+	Q7 _ QQ adic: 7.
+	self assert: Z7 fractions = Q7! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:14:33'!
+testLocalProperties
+	| Z7 |
+	Z7 _ ZZ adic: 7 precision: 100.
+	self assert: Z7 isLocal.
+	self assert: Z7 maximalIdeal generator = (Z7 !! 7)! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:20:00'!
+testMultiplication
+	| Z7 a b c |
+	Z7 _ ZZ adic: 7 precision: 100.
+	a _ Z7 !! 676.
+	b _ Z7 !! 123.
+	c _ Z7 !! (676 * 123).
+	self assert: a * b = c! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:18:03'!
+testNegation
+	| Z7 a b |
+	Z7 _ ZZ adic: 7 precision: 100.
+	a _ Z7 !! -676.
+	b _ Z7 !! 676.
+	self assert: a = b negated.
+	self assert: a negated negated = a! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:30:41'!
+testNormAndValuation
 	| Z7 x |
-	Z7 _ AdicIntegerRing p: 2.
-	x _ Z7 embed: 7.
+	Z7 _ ZZ adic: 2.
+	x _ Z7 !! 7.
 	self assert: x valuation = 0.
 	self assert: x norm = 1.
 	x _ x * 4.
 	self assert: x valuation = 2.
 	self assert: x norm = (1/4)! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:18:54'!
+testSubstraction
+	| Z7 a b c |
+	Z7 _ ZZ adic: 7 precision: 100.
+	a _ Z7 !! 676.
+	b _ Z7 !! 123.
+	c _ Z7 !! (676 - 123).
+	self assert: a - b = c! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 1/9/2017 21:38:34'!
 testAllMonomialsOfDegree
