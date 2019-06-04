@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 4 June 2019 at 3:07:41 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 6:12:05 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 136!
+!provides: 'MathematicsTests' 1 137!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7312,12 +7312,23 @@ testGaloisRingNilradical
 	R _ GaloisRing new: 3 to: 3 to: 2.
 	self assert: R nilradical = (R * 3)! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 12/2/2016 11:14:10'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:26:00'!
 testModularIntegers
-	| Zm |
-	Zm _ ZZ / (10 atRandom + 1).
-	self testRing: Zm.
-	self testRingHomomorphism: Zm projection! !
+	| R |
+	R _ ZZ / (10 atRandom + 1).
+	self testRing: R.
+	self testRingHomomorphism: R projection! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:25:01'!
+testModularIntegersProperties
+	| m R |
+	m _ (2 to: 10) atRandom.
+	R _ ZZ/m.
+	self assert: R isPIR.
+	self assert: m isPrime = R isField.
+	self assert: m isPrimePower = R isLocal.
+	self assert: R isField = R isIntegralDomain.
+	self assert: R isField = R isPID! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
 testPrimeFieldLogarithm
@@ -7551,11 +7562,11 @@ testWeylGroupAndSimpleRoots
 	W _ R weylGroup.
 	R roots do: [:r| self assert: (W anySatisfy: [:w| R simpleRoots includes: (w value: r)])]! !
 
-!SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 8/6/2016 00:54'!
+!SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 18:09:49'!
 testBellNumbers
-	self assert: (Sequence bellNumbers beginsWith: #(1 2 5 15 52 203 877)).
-	"The binomial transform is the shift operator for the Bell numbers:"
-	self assert: (Sequence bellNumbers binomialTransform2 beginsWith: #(2 5 15 52 203 877)).! !
+	self assert: (Sequence bellNumbers beginsWith: #(1 1 2 5 15 52 203 877)).
+	"The inverse binomial transform is the shift operator for the Bell numbers:"
+	self assert: (Sequence bellNumbers binomialInverseTransform beginsWith: #(1 2 5 15 52 203 877)).! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 12/5/2015 01:13'!
 testDirichletConvolution

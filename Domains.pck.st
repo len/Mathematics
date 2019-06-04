@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 5:01:58 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 6:11:42 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 510!
+!provides: 'Domains' 1 511!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -3958,7 +3958,7 @@ References:
 	https://en.wikipedia.org/wiki/Group_(mathematics)!
 
 !AbelianGroup commentStamp: '<historical>' prior: 0!
-Finitely presented abelian groups. They are isomorphic to Z^n x T, where T is the torsion subgroup (the subgroup of elements of finite order), and n is called the rank of the group.!
+Finitely generated abelian groups.!
 
 !DirectProductGroup commentStamp: '<historical>' prior: 0!
 Direct products of groups. Elements are tuples, and the group composition law is defined component-wise.!
@@ -18217,8 +18217,9 @@ isArtinian
 isCommutative
 	^ true! !
 
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:39:20'!
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 17:48:25'!
 isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
 	"The localization of a Dedekind domain at a non-zero prime ideal is DVR."
 	^ self integers isDedekindDomain and: [self ideal isTrivial not]! !
 
@@ -18311,8 +18312,9 @@ includes: anObject
 	R _ self integers.
 	^ (R includes: anObject) or: [anObject isFractional and: [R includes: anObject numerator]]! !
 
-!FractionRing methodsFor: 'testing' stamp: 'len 6/3/2019 03:15:19'!
+!FractionRing methodsFor: 'testing' stamp: 'len 6/4/2019 17:48:31'!
 isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
 	^ self integers isDVR! !
 
 !FractionRing methodsFor: 'testing' stamp: 'len 10/31/2016 15:21'!
@@ -20491,8 +20493,9 @@ isBounded
 	"Answer true if the precision of the receiver is bounded."
 	^ self precision isFinite! !
 
-!AdicRing methodsFor: 'testing' stamp: 'len 6/3/2019 02:54:40'!
+!AdicRing methodsFor: 'testing' stamp: 'len 6/4/2019 17:48:35'!
 isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
 	^ true! !
 
 !AdicRing methodsFor: 'testing' stamp: 'len 12/7/2015 01:29'!
@@ -21669,8 +21672,9 @@ printIndeterminatesOn: aStream
 includes: anObject
 	^ anObject isElement and: [anObject parent = self]! !
 
-!PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/3/2019 03:13:00'!
+!PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/4/2019 17:48:43'!
 isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
 	^ self scalars isField! !
 
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/3/2019 03:05:34'!
@@ -30514,14 +30518,14 @@ backwardDifference: n at: h
 		to: self codomain
 		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + (i*h))]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:41:17'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:10:01'!
+binomialInverseTransform
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (n-1 choose: k) * (self at: k+1)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:06:06'!
 binomialTransform
 	"The binomial transform is its own inverse, it's an involution."
-	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (-1)^(n-k) * (n choose: k) * (self at: k+1)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:41:02'!
-binomialTransform2
-	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (n choose: k) * (self at: k+1)]]! !
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (-1)^(n-1-k) * (n-1 choose: k) * (self at: k+1)]]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:08'!
 centralDifference: n at: h
@@ -30669,10 +30673,10 @@ bbs: s p: p q: q
 	m _ p * q.
 	^ self evaluating: [:i| s raisedTo: (2 raisedTo: i modulo: lambda) modulo: m]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 6/4/2019 05:37:38'!
+!Sequence class methodsFor: 'examples' stamp: 'len 6/4/2019 18:03:08'!
 bellNumbers
 	"The Bell numbers."
-	^ Sequence evaluating: [:n| (0 to: n) sum: [:k| n Stirling: k]]! !
+	^ Sequence evaluating: [:n| (0 to: n-1) sum: [:k| n-1 Stirling: k]]! !
 
 !Sequence class methodsFor: 'examples' stamp: 'len 12/12/2016 17:08:06'!
 bernoulli
