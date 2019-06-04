@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:06:37 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:26:12 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 512!
+!provides: 'Domains' 1 513!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -21496,6 +21496,11 @@ isLocal
 isMultivariate
 	^ self rank > 1! !
 
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:22:30'!
+isNilpotent: aPolynomial
+	"Answer true if aPolynomial^n = 0 for some integer n >= 1."
+	^ aPolynomial coefficients allSatisfy: [:each| self scalars isNilpotent: each]! !
+
 !PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:14'!
 isNoetherian
 	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
@@ -21512,11 +21517,16 @@ isUFD
 	self scalars isUFD ifTrue: [^ true]. "proof based on Gauss lemma"
 	^ super isUFD! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 5/15/2019 06:45:14'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:20:18'!
 isUnit: aPolynomial
 	"Answer true if the argument is invertible."
 	aPolynomial isConstant ifTrue: [^ self scalars isUnit: aPolynomial leadingCoefficient].
 	self scalars isIntegralDomain ifTrue: [^ false].
+	(self scalars isUnit: aPolynomial independentCoefficient) ifFalse: [^ false].
+	"this assumes the polynomial is univariate, can it be generalized to multivariate?"
+	^ (1 to: aPolynomial degree) allSatisfy: [:i| self scalars isNilpotent: (aPolynomial at: i)]
+
+"the above two lines generalize this:
 	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimePowerRing])
 		ifTrue:
 			[| M a |
@@ -21525,11 +21535,18 @@ isUnit: aPolynomial
 			(M contains: (a at: 1)) ifTrue: [^ false].
 			2 to: a size do: [:i| (M contains: (a at: i)) ifFalse: [^ false]].
 			^ true].
-	^ self notYetImplemented! !
+	^ self notYetImplemented"! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 10/22/2016 18:16'!
 isUnivariate
 	^ self rank = 1! !
+
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:21:57'!
+isZeroDivisor: aPolynomial
+	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
+	self isIntegralDomain ifTrue: [^ aPolynomial isZero].
+	self scalars isFinite ifFalse: [^ self notYetImplemented].
+	^ self scalars anySatisfy: [:any| any isZero not and: [(aPolynomial * any) isZero]]! !
 
 !PolynomialRing methodsFor: 'private' stamp: 'len 10/30/2016 15:48'!
 idealClass
