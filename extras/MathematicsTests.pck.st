@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 2 June 2019 at 11:41:52 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 4 June 2019 at 3:07:41 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 135!
+!provides: 'MathematicsTests' 1 136!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -6160,16 +6160,20 @@ testNegation
 	self assert: a = b negated.
 	self assert: a negated negated = a! !
 
-!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:30:41'!
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 13:59:05'!
 testNormAndValuation
 	| Z7 x |
-	Z7 _ ZZ adic: 2.
-	x _ Z7 !! 7.
+	Z7 _ ZZ adic: 7.
+	x _ Z7 !! 13.
 	self assert: x valuation = 0.
 	self assert: x norm = 1.
-	x _ x * 4.
+	x _ x * (7*7).
 	self assert: x valuation = 2.
-	self assert: x norm = (1/4)! !
+	self assert: x norm = (1/(7*7)).
+	Z7 _ ZZ adic: 7 precision: 100.
+	x _ Z7 !! 0.
+	self assert: x valuation = Infinity positive.
+	self assert: x norm = 0! !
 
 !PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:18:54'!
 testSubstraction
@@ -7564,7 +7568,7 @@ testLinearRecursiveSequenceBug
 	F _ CFiniteSequence fibonacci.
 	self assert: ((F - F) at: 1) = 0! !
 
-!SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 12/28/2015 05:56'!
+!SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 02:31:59'!
 testPowerSeries
 	| cos sin |
 	sin _ PowerSeries sin.

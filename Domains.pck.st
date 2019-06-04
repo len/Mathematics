@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3771] on 3 June 2019 at 6:43:17 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 5:01:58 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 509!
+!provides: 'Domains' 1 510!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4150,7 +4150,9 @@ These are the simplest examples of Galois rings, GR(p^n,1). They are local rings
 
 These are also the simplest examples of 'chain rings', rings whose ideals form a chain under inclusion. A finite chain ring is a principal ideal ring, and its maximal ideal is the nilradical (the set of nilpotent elements).
 
-There are canonical projections from Z/(p^n)Z to Z/(p^m)Z for any 1 <= m <= n.!
+There are canonical projections from Z/(p^n)Z to Z/(p^m)Z for any 1 <= m <= n.
+
+Since the ring of p-adic integers Zp is the projective limit of Z/(p^n)Z, there are also canonical projections from Zp to Z/(p^n)Z, and these are approximations of precision n (see AdicRing).!
 
 !PrimeField commentStamp: '<historical>' prior: 0!
 Residue class fields Z/pZ of integers modulo a prime p.
@@ -4213,7 +4215,7 @@ Quadratic number fields, i.e. number fields with defining quadratic polynomial o
 The singletion global instance ZZ is the ring of rational integers.!
 
 !AdicRing commentStamp: '<historical>' prior: 0!
-Rings of p-adic integers Zp. Elements are AdicIntegers. See also AdicField and AdicNumber.!
+Rings of p-adic integers Zp. Elements are AdicIntegers. See also AdicField, AdicNumber and PrimePowerRing.!
 
 !ComplexField commentStamp: '<historical>' prior: 0!
 The singletion global instance CC is the field of complex numbers.!
@@ -6024,9 +6026,9 @@ printOn: aStream
 >> anInteger
 	^ self species to: self codomain evaluating: [:i| self at: i-anInteger ifAbsent: [self codomain zero]]! !
 
-!Sequence methodsFor: 'printing' stamp: 'len 8/6/2016 00:59'!
+!Sequence methodsFor: 'printing' stamp: 'len 6/4/2019 05:30:08'!
 printOn: aStream
-	(self startIndex to: self printLimit) do: [:i| aStream print: (self at: i)] separatedBy: [aStream nextPutAll:', ' ].
+	(1 to: self printLimit) do: [:i| aStream print: (self at: i)] separatedBy: [aStream nextPutAll:', ' ].
 	aStream nextPutAll: '...'! !
 
 !CFiniteSequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:30:15'!
@@ -6198,12 +6200,12 @@ printOn: aStream
 >> anInteger
 	^ self << anInteger negated! !
 
-!PowerSeries methodsFor: 'printing' stamp: 'len 6/2/2019 17:15:44'!
+!PowerSeries methodsFor: 'printing' stamp: 'len 6/4/2019 05:28:58'!
 printOn: aStream
 	| P f n |
 	n _ coefficients printLimit.
 	P _ parent polynomials.
-	f _ (P coefficients: (coefficients copyFrom: coefficients startIndex to: coefficients startIndex + n)) orderedBy: #llex.
+	f _ (P coefficients: (coefficients first: n)) orderedBy: #llex.
 	aStream print: f; nextPutAll: ' + ', 'O' italic, '('; print: P x ^ (n+1); nextPut: $)! !
 
 !Sum methodsFor: 'copying' stamp: 'len 11/18/2016 17:34:33'!
@@ -6366,15 +6368,15 @@ printOn: aStream
 	self verify ifFalse: [aStream nextPutAll: ' (broken)'].
 	self verifyMinimal ifFalse: [aStream nextPutAll: ' (not minimal)']! !
 
-!DirichletSeries methodsFor: 'printing' stamp: 'len 12/6/2016 10:11:13'!
+!DirichletSeries methodsFor: 'printing' stamp: 'len 6/4/2019 05:32:31'!
 printOn: aStream
 	| c n first |
 	first _ true.
-	coefficients startIndex to: coefficients printLimit do: [:i|
+	1 to: coefficients printLimit do: [:i|
 		c _ coefficients at: i.
 		c isZero
 			ifFalse:
-				[n _ i - coefficients startIndex + 1.
+				[n _ i.
 				c printString first = $-
 					ifTrue: [first ifFalse: [aStream nextPutAll: ' - '].
 								c _ c negated]
@@ -17555,6 +17557,11 @@ dimension
 	self isDedekindDomain ifTrue: [^ 1].
 	^ self propertyAt: #dimension! !
 
+!Ring methodsFor: 'accessing' stamp: 'len 6/4/2019 04:56:41'!
+euclideanFunction
+	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
+	^ self propertyAt: #euclideanFunction! !
+
 !Ring methodsFor: 'accessing' stamp: 'len 5/20/2018 22:37:12'!
 maximalIdeal
 	"If the receiver is a local ring, answer the unique maximal ideal."
@@ -17564,11 +17571,6 @@ maximalIdeal
 !Ring methodsFor: 'accessing' stamp: 'len 4/30/2019 04:14:30'!
 one
 	^ self propertyAt: #one ifAbsentPut: [self generators anyOne one]! !
-
-!Ring methodsFor: 'accessing' stamp: 'len 9/2/2018 20:48:03'!
-valuation
-	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
-	^ self propertyAt: #valuation! !
 
 !Ring methodsFor: 'converting' stamp: 'len 8/29/2016 16:30'!
 asIdeal
@@ -17915,14 +17917,20 @@ isArtinian
 	self isFinite ifTrue: [^ true].
 	^ self propertyAt: #isArtinian! !
 
-!Ring methodsFor: 'testing' stamp: 'len 4/29/2019 04:46:07'!
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 15:32:37'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	self isPIR ifTrue: [^ true].
+	self propertyAt: #isBezout! !
+
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 15:27:20'!
 isBezoutDomain
 	"An integral domain is Bezout if any finitely generated ideal is principal.
 	This is the constructive algebra approximation to PID, adding 'finitely generated'.
 	1) Any Bezout domain is coherent;
 	2) A Bezout domain is strongly discrete iff we can decide divisibility."
 	self isEuclideanDomain ifTrue: [^ true].
-	^ self propertyAt: #isBezout! !
+	^ self isIntegralDomain and: [self isBezout]! !
 
 !Ring methodsFor: 'testing' stamp: 'len 5/1/2019 17:33:39'!
 isCoherent
@@ -17936,9 +17944,15 @@ isCommutative
 	self isIntegralDomain ifTrue: [^ true].
 	^ self propertyAt: #isCommutative! !
 
-!Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:10:28'!
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 05:06:35'!
+isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
+	^ self isLocal and: [self isPID and: [self isField not]]! !
+
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 07:43:57'!
 isDedekindDomain
 	"A Dedekind domain is an integral domain in which every non-zero proper ideal factors into a product of prime ideals."
+	self isPID ifTrue: [^ true].
 	^ self propertyAt: #isDedekindDomain! !
 
 !Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:11:14'!
@@ -18008,9 +18022,11 @@ isLocalField
 isLocalization
 	^ false! !
 
-!Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:10:02'!
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 16:08:34'!
 isNoetherian
-	self isField ifTrue: [^ true].
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
+	self isFinite ifTrue: [^ true].
+"	self isField ifTrue: [^ true]. already included in isPID"
 	self isPID ifTrue: [^ true].
 	self isDedekindDomain ifTrue: [^ true].
 	^ self propertyAt: #isNoetherian! !
@@ -18023,11 +18039,11 @@ isPID
 	self isEuclideanDomain ifTrue: [^ true].
 	^ self propertyAt: #isPID! !
 
-!Ring methodsFor: 'testing' stamp: 'len 9/24/2018 06:14:18'!
+!Ring methodsFor: 'testing' stamp: 'len 6/4/2019 15:57:30'!
 isPIR
 	"A principal ideal ring (PIR) is a ring in which every ideal is principal, i.e. can be generated by a single element."
-	self isPID ifTrue: [^ true].
-	^ self self propertyAt: #isPID! !
+	"Principal ideal rings are exactly the rings that are both Bezout and Noetherian:"
+	^ self isBezout and: [self isNoetherian]! !
 
 !Ring methodsFor: 'testing' stamp: 'len 5/5/2018 00:02:30'!
 isPerfectField
@@ -18201,6 +18217,17 @@ isArtinian
 isCommutative
 	^ true! !
 
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:39:20'!
+isDVR
+	"The localization of a Dedekind domain at a non-zero prime ideal is DVR."
+	^ self integers isDedekindDomain and: [self ideal isTrivial not]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:42:45'!
+isDedekindDomain
+	"A localization of a Dedekind domain at any multiplicative set is also a Dedekind domain."
+	self integers isDedekindDomain ifTrue: [^ true].
+	^ super isDedekindDomain! !
+
 !LocalizationRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:09'!
 isEuclidean
 	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
@@ -18219,10 +18246,17 @@ isLocal
 isLocalization
 	^ true! !
 
-!LocalizationRing methodsFor: 'testing' stamp: 'len 5/20/2018 13:40:04'!
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:34'!
 isNoetherian
-	self integers isNoetherian ifTrue: [^ true]. "is it iff?"
-	^ super isNoetherian! !
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
+	^ self integers isNoetherian or: [super isNoetherian]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:14:04'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	"A localization of a PIR at any multiplicative subset is again a PIR."
+	self integers isPIR ifTrue: [^ true].
+	^ super isPIR! !
 
 !LocalizationRing methodsFor: 'testing' stamp: 'len 4/28/2018 05:11:31'!
 isReduced
@@ -18308,6 +18342,10 @@ embed: anAdicInteger
 	| v |
 	v _ anAdicInteger valuation.
 	^ AdicNumber valuation: v unit: anAdicInteger << v! !
+
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 04:52:35'!
+isLocalField
+	^ true! !
 
 !AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 20:30:57'!
 p
@@ -18559,6 +18597,10 @@ on: aPolynomialRing
 		ifFalse: [aPolynomialRing orderedBy: #llex]."
 	^ super on: R! !
 
+!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 05:02:19'!
+isLocalField
+	^ self scalars isGaloisField! !
+
 !LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 02:45:08'!
 names
 	^ self integers names! !
@@ -18714,6 +18756,12 @@ includes: anObject
 	components with: anObject do: [:R :x| (R includes: x) ifFalse: [^ false]].
 	^ true! !
 
+!ProductRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:39:05'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	"Bezout rings (like PIRs) are closed under products:"
+	^ (components allSatisfy: [:each| each isBezout]) or: [super isBezout]! !
+
 !ProductRing methodsFor: 'testing' stamp: 'len 5/1/2019 17:18:47'!
 isCoherent
 	"Answer true if the receiver is a coherent ring, i.e. if it is coherent as a module over itself."
@@ -18737,6 +18785,12 @@ isIntegralDomain
 	components do: [:each| each isTrivial ifFalse: [(count _ count + 1) > 1 ifTrue: [^ false]]].
 	self halt.
 	^ true! !
+
+!ProductRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:12:47'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	"A product ring is a PIR if and only if all its components are PIRs."
+	^ components allSatisfy: [:each| each isPIR]! !
 
 !ProductRing methodsFor: 'testing' stamp: 'len 8/29/2016 04:14'!
 isProduct
@@ -18913,6 +18967,12 @@ isArtinian
 	self base isArtinian ifTrue: [^ true]. "only if commutative?"
 	^ super isArtinian! !
 
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:38:15'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	"Bezout rings (like PIRs) are closed under quotients:"
+	^ self base isBezout or: [super isBezout]! !
+
 !QuotientRing methodsFor: 'testing' stamp: 'len 11/29/2016 14:41:50'!
 isCommutative
 	self base isCommutative ifTrue: [^ true]. "if the ring is not commutative, we dont know if the quotient is or not"
@@ -18938,6 +18998,12 @@ isLocal
 !QuotientRing methodsFor: 'testing' stamp: 'len 1/12/2018 21:31:43'!
 isNoetherian
 	^ self base isNoetherian or: [super isNoetherian]! !
+
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:37:07'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	"Any quotient of a PIR is again a PIR:"
+	^ self base isPIR or: [super isPIR]! !
 
 !QuotientRing methodsFor: 'testing' stamp: 'len 8/10/2016 01:01'!
 isQuotient
@@ -19120,6 +19186,11 @@ isIntegralDomain
 !ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/27/2018 21:29:36'!
 isPID
 	^ self isIntegralDomain! !
+
+!ModularIntegerRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:09:28'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	^ true! !
 
 !ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/27/2018 15:54:29'!
 isReduced
@@ -19744,6 +19815,12 @@ nilradical
 zeroDivisors
 	^ self maximalIdeal! !
 
+!GaloisRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:59:26'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	"All non-zero ideals are of the form <p^i>."
+	^ true! !
+
 !GaloisRing methodsFor: 'testing' stamp: 'len 9/16/2018 23:15:40'!
 isChainRing
 	"A chain ring is a ring whose ideals form a chain under inclusion.
@@ -19769,11 +19846,6 @@ isGaloisRing
 
 !GaloisRing methodsFor: 'testing' stamp: 'len 5/21/2018 16:54:03'!
 isLocal
-	^ true! !
-
-!GaloisRing methodsFor: 'testing' stamp: 'len 9/24/2018 06:23:58'!
-isPIR
-	"All nontrivial ideals are of the form <p^i>."
 	^ true! !
 
 !GaloisRing class methodsFor: 'class initialization' stamp: 'len 5/15/2019 10:35:45'!
@@ -20119,22 +20191,14 @@ dimension
 	"Answer the Krull dimension of the receiver."
 	^ 1! !
 
+!RationalIntegerRing methodsFor: 'accessing' stamp: 'len 6/4/2019 04:56:05'!
+euclideanFunction
+	"Answer the Euclidean function of the receiver."
+	^ self propertyAt: #euclideanFunction ifAbsentPut: [Function from: self to: self evaluating: [:x| x abs]]! !
+
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:58'!
 size
 	^ Aleph new! !
-
-!RationalIntegerRing methodsFor: 'accessing' stamp: 'len 5/30/2019 03:40:23'!
-valuation
-	"Answer the Euclidean function of the receiver."
-	^ self propertyAt: #valuation ifAbsentPut: [Function from: self to: self evaluating: [:x| x abs]]! !
-
-!RationalIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 15:30:07'!
-asAbelianGroup
-	| answer |
-	^ (answer _ FreeAbelianGroup new: 1)
-		addMap: (self to: answer evaluating: [:each| answer !! {each}]);
-		addMap: (answer to: self evaluating: [:each| each at: 1]);
-		yourself! !
 
 !RationalIntegerRing methodsFor: 'comparing' stamp: 'len 6/1/2016 23:56'!
 <= aDomain
@@ -20147,6 +20211,14 @@ asAbelianGroup
 !RationalIntegerRing methodsFor: 'comparing' stamp: 'len 12/14/2015 01:59'!
 hash
 	^ self class hash! !
+
+!RationalIntegerRing methodsFor: 'converting' stamp: 'len 5/13/2019 15:30:07'!
+asAbelianGroup
+	| answer |
+	^ (answer _ FreeAbelianGroup new: 1)
+		addMap: (self to: answer evaluating: [:each| answer !! {each}]);
+		addMap: (answer to: self evaluating: [:each| each at: 1]);
+		yourself! !
 
 !RationalIntegerRing methodsFor: 'elements' stamp: 'len 3/25/2018 16:18:04'!
 !! anObject
@@ -20262,6 +20334,11 @@ atRandom: aRandom bits: bitSize
 includes: anObject
 	^ anObject isInteger! !
 
+!RationalIntegerRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:15:35'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	^ true! !
+
 !RationalIntegerRing methodsFor: 'testing' stamp: 'len 3/27/2018 19:46:01'!
 isDedekindDomain
 	"A Dedekind domain is an integral domain in which every non-zero proper ideal factors into a product of prime ideals."
@@ -20283,8 +20360,9 @@ isInitial
 isIntegralDomain
 	^ true! !
 
-!RationalIntegerRing methodsFor: 'testing' stamp: 'len 10/20/2016 03:38'!
+!RationalIntegerRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:50'!
 isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
 	^ true! !
 
 !RationalIntegerRing methodsFor: 'testing' stamp: 'len 10/2/2018 01:52:16'!
@@ -20634,8 +20712,9 @@ isField
 isIntegrallyClosedDomain
 	^ self isMaximal! !
 
-!Order methodsFor: 'testing' stamp: 'len 1/19/2018 23:47:51'!
+!Order methodsFor: 'testing' stamp: 'len 6/4/2019 16:10:11'!
 isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
 	^ true! !
 
 !NumberRing methodsFor: 'accessing' stamp: 'len 1/18/2018 19:22:57'!
@@ -20795,6 +20874,11 @@ dimension
 	self scalars isNoetherian ifTrue: [^ self scalars dimension + self rank].
 	^ super dimension! !
 
+!PolynomialRing methodsFor: 'accessing' stamp: 'len 6/4/2019 04:54:23'!
+euclideanFunction
+	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
+	^ self propertyAt: #euclideanFunction ifAbsentPut: [self scalars isField ifTrue: [Function from: self to: ZZ evaluating: [:f| f degree]]]! !
+
 !PolynomialRing methodsFor: 'accessing' stamp: 'len 10/2/2016 10:34'!
 generators
 	^ (1 to: self rank) collect: [:i| self x: i]! !
@@ -20850,11 +20934,6 @@ scalars
 !PolynomialRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:59'!
 size
 	^ Aleph new * self scalars size! !
-
-!PolynomialRing methodsFor: 'accessing' stamp: 'len 5/30/2019 03:39:23'!
-valuation
-	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
-	^ self propertyAt: #valuation ifAbsentPut: [self scalars isField ifTrue: [Function from: self to: ZZ evaluating: [:f| f degree]]]! !
 
 !PolynomialRing methodsFor: 'comparing' stamp: 'len 7/19/2016 01:12'!
 < aDomain
@@ -21396,8 +21475,9 @@ isLocal
 isMultivariate
 	^ self rank > 1! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 10/22/2016 18:10'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:14'!
 isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
 	self scalars isNoetherian ifTrue: [^ true]. "Hilber's basis theorem"
 	^ super isNoetherian! !
 
@@ -21507,9 +21587,10 @@ characteristic
 generators
 	^ polynomials generators collect: [:each| self !! each]! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/3/2019 02:57:57'!
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/4/2019 05:16:30'!
 maximalIdeal
-	^ self * self uniformizer! !
+	self scalars isField ifTrue: [^ self * self uniformizer].
+	^ self * ((self scalars maximalIdeal generators collect: [:each| self !! each]), {self x})! !
 
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/2/2019 17:03:16'!
 names
@@ -21545,9 +21626,11 @@ x
 zero
 	^ self !! polynomials zero! !
 
-!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:21:27'!
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/4/2019 09:26:33'!
 !! anObject
 	(polynomials includes: anObject) ifTrue: [^ self coefficients: (CFiniteSequence to: self scalars initialValues: anObject coefficients periodic: {self scalars zero})].
+	(self scalars includes: anObject) ifTrue: [^ self  coefficients: (CFiniteSequence to: self scalars initialValues: {anObject} periodic: {self scalars zero})].
+	((anObject isKindOf: Sequence) and: [self scalars = anObject codomain]) ifTrue: [^ self coefficients: anObject].
 	^ super !! anObject! !
 
 !PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/2/2019 17:19:24'!
@@ -21582,6 +21665,10 @@ fractions
 printIndeterminatesOn: aStream
 	self polynomials printIndeterminatesOn: aStream! !
 
+!PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/4/2019 05:17:21'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
+
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/3/2019 03:13:00'!
 isDVR
 	^ self scalars isField! !
@@ -21597,6 +21684,11 @@ isLocal
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 10/28/2016 14:17'!
 isMultivariate
 	^ self polynomials isMultivariate! !
+
+!PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:12:02'!
+isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
+	^ self scalars isNoetherian or: [super isNoetherian]! !
 
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:55'!
 isUnit: aPowerSeries
@@ -21812,12 +21904,12 @@ isLocal
 isModule
 	^ true! !
 
-!Module methodsFor: 'testing' stamp: 'len 4/19/2019 07:16:00'!
+!Module methodsFor: 'testing' stamp: 'len 6/4/2019 16:14:26'!
 isNoetherian
 	"A module is called Noetherian if every submodule is finitely generated."
 	(self isAmbient not and: [self ambient isNoetherian]) ifTrue: [^ true].
-	self scalars isNoetherian ifTrue: [^ true]. "because the receiver is finitely generated"
-	^ false "it means we don't know"! !
+	"A ring R is Noetherian if and only if every finitely generated R-module is a Noetherian module:"
+	^ self scalars isNoetherian "because the receiver is finitely generated"! !
 
 !Module methodsFor: 'testing' stamp: 'len 12/16/2016 13:55:08'!
 isTerminal
@@ -22116,10 +22208,16 @@ isSaturated
 isSquareFree
 	^ self = self squareFree! !
 
-!Ideal methodsFor: 'testing' stamp: 'len 10/29/2016 11:34'!
+!Ideal methodsFor: 'testing' stamp: 'len 6/4/2019 07:52:22'!
+isTrivial
+	"Answer true if the receiver is the trivial ideal {0}."
+	self flag: #fix. "look at superclass, take into account relationMatrix"
+	^ self generators allSatisfy: [:each| each isZero]! !
+
+!Ideal methodsFor: 'testing' stamp: 'len 6/4/2019 07:48:40'!
 isZero
 	"Answer true if the receiver is the zero ideal {0}."
-	^ self generators allSatisfy: [:each| each isZero]! !
+	^ self isTrivial! !
 
 !Ideal class methodsFor: 'examples' stamp: 'len 5/11/2018 20:52:37'!
 example1
@@ -30296,9 +30394,9 @@ isHyperbolic
 isParabolic
 	^ self trace abs = 2! !
 
-!Sequence methodsFor: 'accessing' stamp: 'len 10/10/2016 14:06'!
+!Sequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:30'!
 at: anInteger
-	^ anInteger >= 0 ifTrue: [super value: anInteger]! !
+	^ self at: anInteger ifAbsent: []! !
 
 !Sequence methodsFor: 'accessing' stamp: 'len 6/3/2019 17:30:31'!
 at: anInteger ifAbsent: aBlock
@@ -30320,10 +30418,6 @@ scalars
 !Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:26'!
 size
 	^ self propertyAt: #size ifAbsent: [Aleph new]! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:49'!
-startIndex
-	^ self propertyAt: #startIndex ifAbsent: [1]! !
 
 !Sequence methodsFor: 'comparing' stamp: 'len 12/5/2015 01:11'!
 beginsWith: aSequenceableCollection
@@ -30386,17 +30480,17 @@ withIndexDo: aBlock
 	i _ 1.
 	self do: [:each| aBlock value: each value: i. i _ i + 1]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:50:48'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:20:19'!
 * anObject
 	^ (self codomain includes: anObject)
-		ifTrue: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) * anObject]]
-		ifFalse: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) * (anObject value: each)]]! !
+		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) * anObject]]
+		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) * (anObject at: n)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:53:26'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:05'!
 + anObject
 	^ (self codomain includes: anObject)
-		ifTrue: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) + anObject]]
-		ifFalse: [self species from: self domain to: self codomain evaluating: [:each| (self value: each) + (anObject value: each)]]! !
+		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) + anObject]]
+		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) + (anObject at: n)]]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:53:45'!
 - anObject
@@ -30414,32 +30508,30 @@ withIndexDo: aBlock
 average
 	^ self species to: self codomain evaluating: [:N| ((1 to: N) sum: [:n| self at: n]) / N]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:56:01'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:51'!
 backwardDifference: n at: h
 	^ self species
-		from: self domain
 		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self value: x + (i*h))]]! !
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + (i*h))]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 12/12/2016 09:35:47'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:41:17'!
 binomialTransform
 	"The binomial transform is its own inverse, it's an involution."
-	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (-1)^(n-k) * (n choose: k) * (self at: k)]]! !
+	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (-1)^(n-k) * (n choose: k) * (self at: k+1)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 12/12/2016 09:35:51'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:41:02'!
 binomialTransform2
-	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (n choose: k) * (self at: k)]]! !
+	^ self species to: self codomain evaluating: [:n| (0 to: n) sum: [:k| (n choose: k) * (self at: k+1)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:55:55'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:08'!
 centralDifference: n at: h
 	^ self species
-		from: self domain
 		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self value: x + ((n/2 - i)*h))]]! !
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + ((n/2 - i)*h))]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 12/28/2015 19:24'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:29:55'!
 convolution: aSequence
-	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:i| (self at: self startIndex + i) * (aSequence at: aSequence startIndex+n-1-i)]]! !
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:i| (self at: 1+i) * (aSequence at: n-i)]]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:31:04'!
 difference
@@ -30452,17 +30544,16 @@ dirichlet: aSequence
 	The set of arithmetic functions form a commutative ring (the Dirichlet ring) under pointwise addition and Dirichlet convolution."
 	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| (self at: d) * (aSequence at: n/d)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:56:09'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:27'!
 forwardDifference: n at: h
 	^ self species
-		from: self domain
 		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^(n-i) * (n choose: i) * (self value: x + ((n-i)*h))]]! !
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^(n-i) * (n choose: i) * (self at: x + ((n-i)*h))]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 11/12/2016 08:20'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:50'!
 hadamard: aSequence
 	"Answer the entrywise product with the argument, also called Hadamard product."
-	^ self class evaluating: [:i| (self at: i) * (aSequence at: i)]! !
+	^ self class to: self codomain evaluating: [:i| (self at: i) * (aSequence at: i)]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
 moebiusInverse
@@ -30470,18 +30561,18 @@ moebiusInverse
 	If f(n) and g(n) are two arithmetic functions satisfying g = f * 1 (Dirichlet convolution of f with the constant function 1), then the Moebius inversion formula can be used to retrieve f as f = mu * g. It is said that f and g and Moebius transforms of each other."
 	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| d moebius * (self at: n/d)]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:54:34'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:24:13'!
 negated
-	^ self species from: self domain to: self codomain evaluating: [:each| (self value: each) negated]! !
+	^ self species to: self codomain evaluating: [:n| (self at: n) negated]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:48'!
 product
 	"Answer the indefinite product of the receiver."
 	^ self species to: self codomain evaluating: [:i| (1 to: i) collect: [:k| self at: k] andFold: [:a :b| a*b]]! !
 
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:54:14'!
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:23:27'!
 reciprocal
-	^ self species from: self domain to: self codomain evaluating: [:each| (self value: each) reciprocal]! !
+	^ self species to: self codomain evaluating: [:n| (self at: n) reciprocal]! !
 
 !Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
 shift: anInteger
@@ -30558,10 +30649,6 @@ ordinaryGeneratingSeries
 species
 	^ Sequence! !
 
-!Sequence methodsFor: 'private' stamp: 'len 12/28/2016 11:13:35'!
-startIndex: anInteger
-	self propertyAt: #startIndex put: anInteger! !
-
 !Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:53'!
 Omega
 	"Number of prime divisors of n counted with multiplicity. A001222."
@@ -30582,10 +30669,10 @@ bbs: s p: p q: q
 	m _ p * q.
 	^ self evaluating: [:i| s raisedTo: (2 raisedTo: i modulo: lambda) modulo: m]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:10'!
+!Sequence class methodsFor: 'examples' stamp: 'len 6/4/2019 05:37:38'!
 bellNumbers
 	"The Bell numbers."
-	^ (Sequence evaluating: [:n| (0 to: n) sum: [:k| n Stirling: k]]) startIndex: 0! !
+	^ Sequence evaluating: [:n| (0 to: n) sum: [:k| n Stirling: k]]! !
 
 !Sequence class methodsFor: 'examples' stamp: 'len 12/12/2016 17:08:06'!
 bernoulli
@@ -30795,8 +30882,8 @@ to: aDomain streaming: aBlock
 			[cache size < n] whileTrue: [cache add: aBlock value].
 			cache at: n]! !
 
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 4/11/2016 23:07'!
-at: n
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:53'!
+at: n ifAbsent: aBlock
 	self order = 0 ifTrue: [^ self codomain zero].
 	n <= initialValues size ifTrue: [^ initialValues at: n].
 	^ (self matrix ^ (n - self order) * initialValues) last
@@ -30974,13 +31061,13 @@ to: codomain initialValues: anArray minimalPolynomial: aPolynomial
 	answer propertyAt: #minimal put: answer.
 	^ answer! !
 
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/30/2015 05:45'!
-to: codomain initialValues: initialArray periodic: periodArray
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 6/4/2019 07:19:55'!
+to: aCodomain initialValues: initialArray periodic: periodArray
 	| coefficients |
 	coefficients _ Array new: initialArray size + periodArray size.
 	coefficients atAllPut: periodArray first zero.
 	coefficients at: initialArray size + 1 put: periodArray first one.
-	^ self to: codomain initialValues: initialArray, periodArray coefficients: coefficients! !
+	^ self to: aCodomain initialValues: initialArray asArray, periodArray coefficients: coefficients! !
 
 !CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 03:41'!
 to: codomain periodic: anArray
@@ -35790,6 +35877,24 @@ value: anObject upTo: n
 isZero
 	^ coefficients isZero! !
 
+!PowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:01:28'!
+cos
+	"The power series expansion of cos(x)."
+	^ QQ powerSeries coefficients:
+		(Sequence to: QQ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
+
+!PowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:02:05'!
+exp
+	"The power series expansion of exp(x)."
+	^ QQ powerSeries
+		coefficients: (Sequence to: QQ evaluating: [:n| 1 / n factorial])! !
+
+!PowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:01:49'!
+sin
+	"The power series expansion of sin(x)."
+	^ QQ powerSeries
+		coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
+
 !PowerSeries class methodsFor: 'instance creation' stamp: 'len 12/27/2015 16:21'!
 coefficients: aSequence
 	^ self new coefficients: aSequence! !
@@ -35797,21 +35902,6 @@ coefficients: aSequence
 !PowerSeries class methodsFor: 'instance creation' stamp: 'len 11/25/2016 10:32:44'!
 fromPolynomial: aPolynomial
 	^ self coefficients: (CFiniteSequence to: aPolynomial scalars initialValues: aPolynomial coefficients periodic: {aPolynomial scalars zero})! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 6/3/2019 02:28:53'!
-cos
-	^ QQ powerSeries coefficients:
-		(Sequence to: QQ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 6/3/2019 02:29:15'!
-exp
-	^ QQ powerSeries
-		coefficients: (Sequence to: QQ evaluating: [:n| 1 / n factorial])! !
-
-!PowerSeries class methodsFor: 'examples' stamp: 'len 6/3/2019 02:29:36'!
-sin
-	^ QQ powerSeries
-		coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
 
 !LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 13:55:40'!
 absolutePrecision
@@ -42226,13 +42316,13 @@ indeterminate
 scalars
 	^ coefficients codomain! !
 
-!DirichletSeries methodsFor: 'operations' stamp: 'len 12/7/2016 11:44:27'!
+!DirichletSeries methodsFor: 'operations' stamp: 'len 6/4/2019 05:32:07'!
 value: aNumber upTo: n
 	| answer |
 	answer _ aNumber zero.
 	1 to: n do: [:i|
 		| c |
-		c _ coefficients at: coefficients startIndex + i - 1.
+		c _ coefficients at: i.
 		answer _ answer + (c / (i ^ aNumber))].
 	^ answer! !
 
@@ -44886,6 +44976,11 @@ isFundamentalDiscriminant
 !Integer methodsFor: '*domains' stamp: 'len 1/7/2017 21:04:34'!
 isPerfectSquare
 	^ self sqrtFloor squared = self! !
+
+!Integer methodsFor: '*domains' stamp: 'len 6/4/2019 15:23:02'!
+isPrimePower
+	"Answer true if the receiver is of the form p^k for a prime p and a k > 0."
+	^ self > 1 and: [self factors asSet size = 1]! !
 
 !Integer methodsFor: '*domains' stamp: 'len 11/19/2015 17:21'!
 isRational
