@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 6:11:42 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:06:37 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 511!
+!provides: 'Domains' 1 512!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4146,7 +4146,7 @@ Residue class rings of Z, i.e. rings Z/mZ of residue classes of integers modulo 
 !PrimePowerRing commentStamp: '<historical>' prior: 0!
 Residue class rings Z/(p^n)Z of integers modulo p^n.
 
-These are the simplest examples of Galois rings, GR(p^n,1). They are local rings with maximal ideal <p>, and <p> is also the set of zero-divisors as well as nilpotent elements. Other Galois rings are constructed by finite algebraic extensions (see GaloisRing).
+These are the simplest examples of Galois rings, GR(p^n,1). They are local rings with maximal ideal <p> and residue field isomorphic to Z/pZ. The maximal ideal <p> is also the set of zero-divisors as well as nilpotent elements. Other Galois rings are constructed by finite algebraic extensions (see GaloisRing).
 
 These are also the simplest examples of 'chain rings', rings whose ideals form a chain under inclusion. A finite chain ring is a principal ideal ring, and its maximal ideal is the nilradical (the set of nilpotent elements).
 
@@ -17868,16 +17868,20 @@ polynomialsIn: anIntegerOrCollection ordering: aMonomialOrdering
 powerSeries
 	^ self polynomials completion! !
 
-!Ring methodsFor: 'operations' stamp: 'len 5/21/2018 22:01:12'!
+!Ring methodsFor: 'operations' stamp: 'len 6/4/2019 18:50:35'!
 radical
 	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals."
+	| generators |
 	self isLocal ifTrue: [^ self maximalIdeal].
-	^ self subclassResponsibility
+	self isFinite ifFalse: [^ self notYetImplemented].
+	generators _ Set new.
+	self do: [:x| (self allSatisfy: [:y| self isUnit: self one - (x*y)]) ifTrue: [generators add: x]].
+	^ self * generators
 
 "alternative:
 	| answer |
 	answer _ self oneIdeal.
-	self maximalIdealsDo: [:each| answer _ answer • each].
+	self maximalIdealsDo: [:each| answer _ answer /\ each].
 	^ answer"! !
 
 !Ring methodsFor: 'operations' stamp: 'len 5/21/2018 16:32:33'!
@@ -18985,13 +18989,13 @@ isField
 	"Answer true if the receiver forms a residue field."
 	^ self base isTrivial not and: [self base isCommutative and: [self relations isMaximal]]! !
 
-!QuotientRing methodsFor: 'testing' stamp: 'len 4/27/2018 05:59:40'!
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/4/2019 18:21:40'!
 isIntegralDomain
 	(self base isTrivial not and: [self base isCommutative])
 		ifTrue: [^ self relations isPrime].
 	self isIntegrallyClosedDomain
 		ifTrue: [^ true].
-	^ self notYetImplemented! !
+	^ super isIntegralDomain! !
 
 !QuotientRing methodsFor: 'testing' stamp: 'len 5/20/2018 21:59:53'!
 isLocal
@@ -19185,6 +19189,11 @@ isFinite
 isIntegralDomain
 	^ self isField! !
 
+!ModularIntegerRing methodsFor: 'testing' stamp: 'len 6/4/2019 18:39:42'!
+isLocal
+	"Z/mZ is local if and only if m is a prime power. See PrimePowerRing."
+	^ self modulusFactors asSet size = 1! !
+
 !ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/27/2018 21:29:36'!
 isPID
 	^ self isIntegralDomain! !
@@ -19247,6 +19256,15 @@ p
 !PrimePowerRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:46'!
 primeSubfield
 	^ self propertyAt: #primeSubfield ifAbsentPut: [PrimeField new: self p]! !
+
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 6/4/2019 18:34:10'!
+residueField
+	"Answer the prime field Z/pZ isomorphic to the residue field of the receiver, equiped with the canonical projection."
+	^ self propertyAt: #residueField ifAbsentPut:
+		[| answer |
+		(answer _ PrimeField new: self p)
+			addMap: (self onto: answer evaluating: [:x| answer !! x representative]); "TODO: add kernel and section"
+			yourself]! !
 
 !PrimePowerRing methodsFor: 'accessing-private' stamp: 'len 9/22/2018 18:56:42'!
 p: aPrime to: anInteger
