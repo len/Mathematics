@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 6:12:05 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:07:57 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 137!
+!provides: 'MathematicsTests' 1 138!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7270,6 +7270,12 @@ testFiniteRing4
 	self assert: R isLocal not.
 	self assert: S isLocal! !
 
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 19:01:44'!
+testFiniteRingJacobsonRadical
+	| R |
+	R _ ZZ/12.
+	self assert: R radical = (R*6)! !
+
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:59:11'!
 testGaloisRing
 	| R |
@@ -7497,6 +7503,13 @@ testQuotientRingWhichIsAField
 	R _ QQ polynomials.
 	R _ R / (R x^2 + (R x * 2) + 2).
 	self assert: R isField! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/4/2019 18:28:31'!
+testLocalHomomorphism
+	| f |
+	f _ ZZ/4 to: ZZ/2 evaluating: [:x| ZZ/2 !! x representative].
+	self assert: f isLocal
+! !
 
 !RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
 rootSystem1
