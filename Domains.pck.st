@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:26:12 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 June 2019 at 5:33:34 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 513!
+!provides: 'Domains' 1 514!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -17589,13 +17589,6 @@ asSelfModule
 	(anObject isKindOf: Ideal) ifTrue: [^ self * (anObject generators collect: [:each| self !! each])].
 	^ super !! anObject! !
 
-!Ring methodsFor: 'elements' stamp: 'len 9/25/2018 00:09:45'!
-associatedUnit: anElement
-	"Answer a choice for associated unit of anElement."
-	(self isUnit: anElement) ifTrue: [^ anElement].
-	anElement isZero ifTrue: [^ self one].
-	^ self subclassResponsibility! !
-
 !Ring methodsFor: 'elements-matrices' stamp: 'len 5/15/2019 02:12:12'!
 diagonalMatrix: anArray
 	^ self matrix: anArray size @ anArray size evaluatingDiagonal: [:i| anArray at: i]! !
@@ -17634,8 +17627,27 @@ matrix: dimension scalar: anElement
 zeroMatrix: dimension
 	^ self matrix: dimension scalar: self zero! !
 
-!Ring methodsFor: 'elements-testing' stamp: 'len 9/22/2018 18:59:16'!
+!Ring methodsFor: 'elements-operations' stamp: 'len 9/25/2018 00:09:45'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	(self isUnit: anElement) ifTrue: [^ anElement].
+	anElement isZero ifTrue: [^ self one].
+	^ self subclassResponsibility! !
+
+!Ring methodsFor: 'elements-operations' stamp: 'len 6/5/2019 13:36:06'!
+divide: anElement by: anotherElement
+	"Answer the quotient and remainder of the division of anElement by anotherElement."
+	^ {anElement // anotherElement. anElement \\ anotherElement}! !
+
+!Ring methodsFor: 'elements-operations' stamp: 'len 6/5/2019 12:31:54'!
+valuation: anElement
+	"If the receiver is a valuation ring, answer the valuation of anElement."
+	self isValuationRing ifFalse: [^ self shouldNotImplement].
+	self subclassResponsibility! !
+
+!Ring methodsFor: 'elements-testing' stamp: 'len 6/5/2019 17:18:21'!
 isIrreducible: anElement
+	"An nonzero element 'a' is called irreducible if a=bc implies that a|b (and then c is a unit) or a|c (and then b is a unit)."
 	^ self subclassResponsibility! !
 
 !Ring methodsFor: 'elements-testing' stamp: 'len 9/22/2018 18:59:19'!
@@ -17643,8 +17655,9 @@ isNilpotent: anElement
 	"Answer true if anElement^n = 0 for some integer n >= 1."
 	^ self nilradical contains: anElement! !
 
-!Ring methodsFor: 'elements-testing' stamp: 'len 9/25/2018 15:28:24'!
+!Ring methodsFor: 'elements-testing' stamp: 'len 6/5/2019 17:17:06'!
 isPrime: anElement
+	"An nonzero element 'a' is called a prime if a|bc implies that a|b or a|c."
 	^ self subclassResponsibility! !
 
 !Ring methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:43:16'!
@@ -18395,11 +18408,6 @@ valuation
 	"Answer the absolute value valuation."
 	^ self propertyAt: #valuation ifAbsentPut: [Function from: self to: ZZ evaluating: [:x| x abs]]! !
 
-!RationalField methodsFor: 'accessing' stamp: 'len 7/15/2016 18:21'!
-valuation: p
-	"Answer the p-adic valuation."
-	^ Function from: self to: NN evaluating: [:x| p / ((x numerator factors occurrencesOf: p) - (x denominator factors occurrencesOf: p))]! !
-
 !RationalField methodsFor: 'comparing' stamp: 'len 6/1/2016 23:56'!
 <= aDomain
 	^ aDomain isField and: [(aDomain includes: 1) and: [aDomain includes: 0]]! !
@@ -19107,14 +19115,6 @@ relations: anIdeal
 	super relations: anIdeal.
 	self modulus: anIdeal generator! !
 
-!ModularIntegerRing methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
-asAbelianGroup
-	| answer |
-	^ (answer _ AbelianGroup orders: {self modulus})
-		addMap: (self to: answer evaluating: [:each| answer !! {each representative}]);
-		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
-		yourself! !
-
 !ModularIntegerRing methodsFor: 'comparing' stamp: 'len 4/26/2018 20:11:02'!
 = anObject
 	self == anObject ifTrue: [^ true].
@@ -19124,6 +19124,25 @@ asAbelianGroup
 !ModularIntegerRing methodsFor: 'comparing' stamp: 'len 4/26/2018 20:11:10'!
 hash
 	^ self modulus hash! !
+
+!ModularIntegerRing methodsFor: 'converting' stamp: 'len 5/26/2019 12:18:23'!
+asAbelianGroup
+	| answer |
+	^ (answer _ AbelianGroup orders: {self modulus})
+		addMap: (self to: answer evaluating: [:each| answer !! {each representative}]);
+		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
+		yourself! !
+
+!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:09:03'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	^ (anElement representative gcd: self modulus) = 1! !
+
+!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:31:52'!
+isZeroDivisor: anElement
+	"Answer true if there exists a nonzero element that multiplied by the argument is zero.
+	An element in a finite ring is either a unit or a zero-divisor."
+	^ (self isUnit: anElement) not! !
 
 !ModularIntegerRing methodsFor: 'elements-tuples' stamp: 'len 5/8/2019 04:20:52'!
 tuple: anArray
@@ -19212,17 +19231,6 @@ isReduced
 	^ true
 
 "	^ modulus = 0 or: [modulus isSquareFree]"! !
-
-!ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:09:03'!
-isUnit: anElement
-	"Answer true if the argument is invertible."
-	^ (anElement representative gcd: self modulus) = 1! !
-
-!ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:31:52'!
-isZeroDivisor: anElement
-	"Answer true if there exists a nonzero element that multiplied by the argument is zero.
-	An element in a finite ring is either a unit or a zero-divisor."
-	^ (self isUnit: anElement) not! !
 
 !ModularIntegerRing methodsFor: 'private' stamp: 'len 1/5/2017 08:14:58'!
 elementClass
@@ -19363,6 +19371,20 @@ isUnit: anElement
 isZeroDivisor: anElement
 	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
 	^ self p | anElement representative! !
+
+!PrimePowerRing methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 13:32:28'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	| p q |
+	anElement isZero ifTrue: [^ self one].
+	p _ self p.
+	q _ anElement representative.
+	[p | q] whileTrue: [q _ q // p].
+	^ self project: q! !
+
+!PrimePowerRing methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 13:33:00'!
+valuation: anElement
+	^ anElement representative valuation: self p! !
 
 !PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/15/2019 06:45:14'!
 example1
@@ -21195,6 +21217,38 @@ z
 zero
 	^ self propertyAt: #zero ifAbsentPut: [self constant: self scalars zero]! !
 
+!PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/4/2019 19:22:30'!
+isNilpotent: aPolynomial
+	"Answer true if aPolynomial^n = 0 for some integer n >= 1."
+	^ aPolynomial coefficients allSatisfy: [:each| self scalars isNilpotent: each]! !
+
+!PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/5/2019 16:08:27'!
+isUnit: aPolynomial
+	"Answer true if the argument is invertible."
+	aPolynomial isConstant ifTrue: [^ self scalars isUnit: aPolynomial leadingCoefficient].
+	self scalars isIntegralDomain ifTrue: [^ false].
+	(self scalars isUnit: aPolynomial independentCoefficient) ifFalse: [^ false].
+	"this assumes the polynomial is univariate, can it be generalized to multivariate?"
+	^ (1 to: aPolynomial degree) allSatisfy: [:i| self scalars isNilpotent: (aPolynomial atDegree: i)]
+
+"the above two lines generalize this:
+	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimePowerRing])
+		ifTrue:
+			[| M a |
+			M _ self scalars maximalIdeal.
+			a _ aPolynomial coefficients.
+			(M contains: (a at: 1)) ifTrue: [^ false].
+			2 to: a size do: [:i| (M contains: (a at: i)) ifFalse: [^ false]].
+			^ true].
+	^ self notYetImplemented"! !
+
+!PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/4/2019 19:21:57'!
+isZeroDivisor: aPolynomial
+	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
+	self isIntegralDomain ifTrue: [^ aPolynomial isZero].
+	self scalars isFinite ifFalse: [^ self notYetImplemented].
+	^ self scalars anySatisfy: [:any| any isZero not and: [(aPolynomial * any) isZero]]! !
+
 !PolynomialRing methodsFor: 'enumerating' stamp: 'len 1/9/2017 21:30:17'!
 allMonomialsOfDegree: anInteger
 	^ (self monomials allMonomialsOfDegree: anInteger) collect: [:each| self monomial: each]! !
@@ -21496,11 +21550,6 @@ isLocal
 isMultivariate
 	^ self rank > 1! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:22:30'!
-isNilpotent: aPolynomial
-	"Answer true if aPolynomial^n = 0 for some integer n >= 1."
-	^ aPolynomial coefficients allSatisfy: [:each| self scalars isNilpotent: each]! !
-
 !PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:14'!
 isNoetherian
 	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
@@ -21517,36 +21566,9 @@ isUFD
 	self scalars isUFD ifTrue: [^ true]. "proof based on Gauss lemma"
 	^ super isUFD! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:20:18'!
-isUnit: aPolynomial
-	"Answer true if the argument is invertible."
-	aPolynomial isConstant ifTrue: [^ self scalars isUnit: aPolynomial leadingCoefficient].
-	self scalars isIntegralDomain ifTrue: [^ false].
-	(self scalars isUnit: aPolynomial independentCoefficient) ifFalse: [^ false].
-	"this assumes the polynomial is univariate, can it be generalized to multivariate?"
-	^ (1 to: aPolynomial degree) allSatisfy: [:i| self scalars isNilpotent: (aPolynomial at: i)]
-
-"the above two lines generalize this:
-	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimePowerRing])
-		ifTrue:
-			[| M a |
-			M _ self scalars maximalIdeal.
-			a _ aPolynomial coefficients.
-			(M contains: (a at: 1)) ifTrue: [^ false].
-			2 to: a size do: [:i| (M contains: (a at: i)) ifFalse: [^ false]].
-			^ true].
-	^ self notYetImplemented"! !
-
 !PolynomialRing methodsFor: 'testing' stamp: 'len 10/22/2016 18:16'!
 isUnivariate
 	^ self rank = 1! !
-
-!PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2019 19:21:57'!
-isZeroDivisor: aPolynomial
-	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
-	self isIntegralDomain ifTrue: [^ aPolynomial isZero].
-	self scalars isFinite ifFalse: [^ self notYetImplemented].
-	^ self scalars anySatisfy: [:any| any isZero not and: [(aPolynomial * any) isZero]]! !
 
 !PolynomialRing methodsFor: 'private' stamp: 'len 10/30/2016 15:48'!
 idealClass
@@ -21690,6 +21712,12 @@ taylorSeriesOf: aFunction at: x0
 				n _ n + 1.
 				value])! !
 
+!PowerSeriesRing methodsFor: 'elements-testing' stamp: 'len 6/5/2019 17:07:20'!
+isUnit: aPowerSeries
+	"Answer true if the argument is invertible."
+	self scalars isField ifTrue: [^ self scalars isUnit: aPowerSeries independentCoefficient].
+	^ super isUnit: aPowerSeries! !
+
 !PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 6/2/2019 17:17:47'!
 from: aDomain
 	aDomain = polynomials ifTrue: [^ self addMap: ((polynomials into: self evaluating: [:x| self!! x]) name: 'i')].
@@ -21728,11 +21756,6 @@ isMultivariate
 isNoetherian
 	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
 	^ self scalars isNoetherian or: [super isNoetherian]! !
-
-!PowerSeriesRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:55'!
-isUnit: aPowerSeries
-	"Answer true if the argument is invertible."
-	^ self scalars isUnit: aPowerSeries independentCoefficient! !
 
 !PowerSeriesRing methodsFor: 'private' stamp: 'len 6/2/2019 16:52:15'!
 polynomials: aPolynomialRing
@@ -22083,8 +22106,9 @@ reduce: anElement
 	self isZero ifTrue: [^ anElement].
 	^ anElement \\ self generator! !
 
-!Ideal methodsFor: 'enumerating' stamp: 'len 1/15/2018 18:48:18'!
+!Ideal methodsFor: 'enumerating' stamp: 'len 6/5/2019 16:17:47'!
 do: aBlock
+	self isTrivial ifTrue: [aBlock value: self scalars zero. ^ self].
 	self scalars isCommutative
 		ifTrue:
 			[self scalars do: [:each| self generators do: [:g| aBlock value: each * g]]]
@@ -28899,7 +28923,7 @@ value: anElement
 by: anElement in: aGroup
 	^ self new domain: aGroup; codomain: aGroup; element: anElement! !
 
-!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 15:19:25'!
+!DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 11:39:02'!
 conductor
 	| factors p e answer |
 	(self modulus = 1 or: [self isTrivial]) ifTrue: [^ 1].
@@ -28907,7 +28931,7 @@ conductor
 		ifTrue: [^ self decomposition product: [:each| each conductor]].
 	p _ factors anyOne.
 	e _ factors size.
-	answer _ p ^ ((self size valuation: p) + 1).
+	answer _ p ^ ((self size abs: p) + 1).
 "	p = 2 and: [e > 2 and: [ ..."
 	^ answer! !
 
@@ -31697,6 +31721,10 @@ lastIndeterminate
 ordering
 	^ parent ordering! !
 
+!Monomial methodsFor: 'accessing' stamp: 'len 1/23/2017 11:35:28'!
+parent
+	^ parent! !
+
 !Monomial methodsFor: 'accessing' stamp: 'len 2/18/2017 19:54:35'!
 support
 	"Answer the list of indeterminates effectively present in this monomial (with non-zero exponent)."
@@ -31941,10 +31969,6 @@ isUnivariateIn: anIndeterminate
 !Monomial methodsFor: 'private' stamp: 'len 3/16/2016 20:04'!
 exponents: anArray
 	exponents _ anArray! !
-
-!Monomial methodsFor: 'private' stamp: 'len 1/23/2017 11:35:28'!
-parent
-	^ parent! !
 
 !Monomial methodsFor: 'private' stamp: 'len 2/26/2017 10:37:42'!
 parent: aFreeAbelianMonoid
@@ -32241,22 +32265,14 @@ left
 	"Answer the left component of the receiver."
 	^ left! !
 
+!SemidirectProductElement methodsFor: 'accessing' stamp: 'len 10/6/2016 15:37'!
+parent
+	^ parent! !
+
 !SemidirectProductElement methodsFor: 'accessing' stamp: 'len 5/5/98 00:18'!
 right
 	"Answer the right component of the receiver."
 	^ right! !
-
-!SemidirectProductElement methodsFor: 'accessing-private' stamp: 'len 5/5/98 00:17'!
-left: anObject
-	left _ anObject! !
-
-!SemidirectProductElement methodsFor: 'accessing-private' stamp: 'len 10/6/2016 15:37'!
-parent: aSemidirectProductGroup
-	parent _ aSemidirectProductGroup! !
-
-!SemidirectProductElement methodsFor: 'accessing-private' stamp: 'len 5/5/98 00:17'!
-right: anObject
-	right _ anObject! !
 
 !SemidirectProductElement methodsFor: 'constants' stamp: 'len 1/23/2017 11:46:24'!
 identity
@@ -32276,9 +32292,17 @@ inverse
 	rightInverse _ right inverse.
 	^ parent project: {leftInverse. (parent action value: {leftInverse. rightInverse}) inverse}! !
 
+!SemidirectProductElement methodsFor: 'private' stamp: 'len 5/5/98 00:17'!
+left: anObject
+	left _ anObject! !
+
 !SemidirectProductElement methodsFor: 'private' stamp: 'len 10/6/2016 15:37'!
-parent
-	^ parent! !
+parent: aSemidirectProductGroup
+	parent _ aSemidirectProductGroup! !
+
+!SemidirectProductElement methodsFor: 'private' stamp: 'len 5/5/98 00:17'!
+right: anObject
+	right _ anObject! !
 
 !Permutation methodsFor: 'accessing' stamp: 'len 5/25/2019 05:27:21'!
 aChange
@@ -32513,6 +32537,11 @@ numerator
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:58:16'!
 one
 	^ self parent one! !
+
+!RingElement methodsFor: 'accessing' stamp: 'len 6/5/2019 14:35:08'!
+valuation
+	"If the receiver is an element of a valuation ring, answer its valuation."
+	^ self parent valuation: self! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:58:19'!
 zero
@@ -33379,6 +33408,11 @@ trace
 << anInteger
 	^ self >> anInteger negated! !
 
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/5/2019 13:18:16'!
+abs
+	"Answer the p-adic absolute value (or norm) of the receiver."
+	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
+
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 10:18:59'!
 absolutePrecision
 	^ parent precision! !
@@ -33392,13 +33426,13 @@ at: anInteger
 digits
 	^ digits! !
 
-!AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:30:06'!
-norm
-	^ self isZero ifTrue: [0] ifFalse: [self p ^ self valuation negated]! !
-
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/1/2019 17:24:34'!
 p
 	^ parent p! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 12/17/2016 20:59:36'!
+parent
+	^ parent! !
 
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 13:54:50'!
 relativePrecision
@@ -33516,13 +33550,14 @@ isZero
 digits: aSequence
 	digits _ aSequence! !
 
-!AdicInteger methodsFor: 'private' stamp: 'len 12/17/2016 20:59:36'!
-parent
-	^ parent! !
-
 !AdicInteger methodsFor: 'private' stamp: 'len 6/1/2019 16:50:14'!
 parent: aPAdicIntegersRing
 	parent _ aPAdicIntegersRing! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/5/2019 13:19:40'!
+abs
+	"Answer the p-adic absolute value (or norm) of the receiver."
+	^ self isZero ifTrue: [0] ifFalse: [self p ^ valuation negated]! !
 
 !AdicNumber methodsFor: 'accessing' stamp: 'len 6/3/2019 18:20:17'!
 absolutePrecision
@@ -33532,10 +33567,6 @@ absolutePrecision
 denominator
 	^ valuation < 0 ifTrue: [unit parent !! (self p ^ valuation negated)] ifFalse: [unit one]! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 6/3/2019 18:23:01'!
-norm
-	^ self isZero ifTrue: [0] ifFalse: [self p ^ valuation negated]! !
-
 !AdicNumber methodsFor: 'accessing' stamp: 'len 6/3/2019 18:21:46'!
 numerator
 	^ valuation <= 0 ifTrue: [unit] ifFalse: [unit >> valuation]! !
@@ -33543,6 +33574,10 @@ numerator
 !AdicNumber methodsFor: 'accessing' stamp: 'len 6/3/2019 18:21:54'!
 p
 	^ unit p! !
+
+!AdicNumber methodsFor: 'accessing' stamp: 'len 6/5/2019 11:26:00'!
+parent
+	^ unit parent fractions! !
 
 !AdicNumber methodsFor: 'accessing' stamp: 'len 6/2/2019 10:46:39'!
 relativePrecision
@@ -34768,6 +34803,23 @@ negated
 	"Answer the additive inverse of the receiver."
 	^ self parent coefficients: self coefficients negated! !
 
+!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 6/5/2019 17:09:29'!
+reciprocal
+	^ super reciprocal
+
+	"If not over a field, compute the inverse of the receoiver, provided the receiver is a unit."
+"
+	don't know when to finish, this is actually the power series expansion and if the independent coefficient is a unit and the other coefficients are all nilpotents this process is finite, but don't know when to end it..
+	| a b u |
+	self scalars isField ifTrue: [^ super reciprocal].
+	a _ coefficients.
+	a isEmpty ifTrue: [(ZeroDivide dividend: self one) signal].
+	u _ a first reciprocal.
+	b _ OrderedCollection new: self degree.
+	b add: u.
+	2 to: a size do: [:k| b add: ((1 to: k-1) sum: [:i| (b at: k-i) * (a at: i+1)]) negated * u].
+	^ self parent coefficients: b"! !
+
 !UnivariatePolynomial methodsFor: 'comparing' stamp: 'len 7/9/2016 03:00'!
 = anObject
 	(anObject isKindOf: UnivariatePolynomial) ifFalse: [^ false].
@@ -35858,27 +35910,13 @@ parent: aPowerSeriesRing
 		ifTrue: [^ self + (parent !! anObject)].
 	^ DomainError signal! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:13:58'!
-inverse
-	| b1 a |
-	a _ coefficients.
-	b1 _ (a at: 1) reciprocal.
-	^ parent coefficients:
-		(Sequence
-			to: self scalars
-			initialValues: {b1}
-			recurrence:
-				[:b :n|
-				b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])])! !
-
 !PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:14:04'!
 negated
 	^ parent coefficients: coefficients negated! !
 
-!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/2/2019 17:13:51'!
+!PowerSeries methodsFor: 'arithmetic' stamp: 'len 6/5/2019 17:04:52'!
 reciprocal
 	| b1 a |
-	self flag: #fix. "this is composition inverse, same as >>inverse"
 	a _ coefficients.
 	b1 _ (a at: 1) reciprocal.
 	^ parent coefficients:
@@ -35887,7 +35925,7 @@ reciprocal
 			initialValues: {b1}
 			recurrence:
 				[:b :n|
-				b1 negated * ((2 to: n) sum: [:i| (a at: i+1) * (b at: n-i+1)])])! !
+				b1 negated * ((2 to: n) sum: [:i| (a at: i) * (b at: n-i+1)])])! !
 
 !PowerSeries methodsFor: 'comparing' stamp: 'len 6/2/2019 17:14:32'!
 = anObject
@@ -36078,6 +36116,10 @@ lift
 numerator
 	self scalars isLocalization ifFalse: [^ self].
 	^ self * self denominator over: self scalars integers! !
+
+!Sum methodsFor: 'accessing' stamp: 'len 1/10/2018 21:04:16'!
+parent
+	^ parent! !
 
 !Sum methodsFor: 'accessing' stamp: 'len 4/23/2018 20:40:20'!
 representative
@@ -36270,10 +36312,6 @@ coefficients
 coefficients: aDictionary
 	coefficients _ aDictionary.
 	coefficients associationsDo: [:each| each value isZero ifTrue: [self error: 'the coefficinets dictionary contains zeroes']]! !
-
-!Sum methodsFor: 'private' stamp: 'len 1/10/2018 21:04:16'!
-parent
-	^ parent! !
 
 !Sum methodsFor: 'private' stamp: 'len 1/10/2018 21:04:09'!
 parent: aDomain
@@ -44801,9 +44839,9 @@ squareRoot
 	R _ ZZ % anInteger.
 	^ (R project: numerator) / (R project: denominator)! !
 
-!Fraction methodsFor: '*domains' stamp: 'len 5/31/2019 17:36:32'!
+!Fraction methodsFor: '*domains' stamp: 'len 6/5/2019 14:48:57'!
 abs: p
-	"Answer the p-adic absolute value."
+	"Answer the p-adic absolute value of the receiver."
 	^ (numerator abs: p) / (denominator abs: p)! !
 
 !Fraction methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:36'!
@@ -44844,6 +44882,11 @@ squareRoot
 	self positive ifTrue: [^ RealAlgebraicNumber sqrt: self].
 	^ ComplexAlgebraicNumber sqrt: self! !
 
+!Fraction methodsFor: '*domains' stamp: 'len 6/5/2019 14:50:10'!
+valuation: p
+	"Answer the p-adic valuation of the receiver."
+	^ (numerator valuation: p) - (denominator valuation: p)! !
+
 !Integer methodsFor: '*domains' stamp: 'len 5/21/2018 17:30:01'!
 % anInteger
 	^ ZZ % anInteger project: self! !
@@ -44869,9 +44912,9 @@ Stirling: anInteger
 	anInteger = 2 ifTrue: [^ 2 ^ (self-1) - 1].
 	^ anInteger*(self - 1 Stirling: anInteger) + (self - 1 Stirling: anInteger - 1)! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/31/2019 17:34:37'!
+!Integer methodsFor: '*domains' stamp: 'len 6/5/2019 14:49:05'!
 abs: p
-	"Answer the p-adic absolute value."
+	"Answer the p-adic absolute value of the receiver."
 	| powers q |
 	self = 0 ifTrue: [^ 0].
 	q _ self abs.
@@ -45276,6 +45319,16 @@ stirling: anInteger
 	self = anInteger ifTrue: [^ self Stirling: anInteger].
 	self+1 = anInteger ifTrue: [^ self choose: 2].
 	^ (self-1) * (self-1 stirling: anInteger) + (self-1 stirling: anInteger-1)! !
+
+!Integer methodsFor: '*domains' stamp: 'len 6/5/2019 13:14:56'!
+valuation: p
+	"Answer the p-adic valuation of the receiver."
+	| answer q |
+	self = 0 ifTrue: [^ Infinity positive].
+	q _ self abs.
+	answer _ 0.
+	[p | q] whileTrue: [answer _ answer + 1. q _ q // p].
+	^ answer! !
 
 !Integer methodsFor: '*domains' stamp: 'len 3/6/2017 16:27:34'!
 xgcd: anInteger
