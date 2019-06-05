@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 June 2019 at 5:33:34 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 June 2019 at 8:06:14 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 514!
+!provides: 'Domains' 1 515!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -12626,7 +12626,7 @@ null
 	"The null object in the category of sets is the empty set."
 	^ self propertyAt: #null ifAbsent: [self class newFrom: (Set new: 0)]! !
 
-!Domain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:22:38'!
+!Domain methodsFor: 'accessing' stamp: 'len 6/5/2019 19:55:56'!
 size
 	^ self propertyAt: #size ifAbsentPut: [self elements size]! !
 
@@ -18914,10 +18914,10 @@ associatedUnit: aResidue
 reciprocalOf: anElement
 	^ self project: ((self relations reciprocalOf: anElement representative) ifNil: [^ nil])! !
 
-!QuotientRing methodsFor: 'enumerating' stamp: 'len 11/30/2016 14:44:20'!
+!QuotientRing methodsFor: 'enumerating' stamp: 'len 6/5/2019 19:57:24'!
 do: aBlock
 	| visited |
-	self flag: #fix. "does this work in any ring? depends on ring|#do:"
+	self flag: #fix. "does this work in any ring? depends on the implementation of do: in the base ring"
 	visited _ Set new.
 	self base do: [:each|
 		| q |
@@ -21830,6 +21830,17 @@ over: aRing
 	"Answer the change of base ring of the receiver."
 	self notYetImplemented! !
 
+!Module methodsFor: 'enumerating' stamp: 'len 6/5/2019 20:04:26'!
+do: aBlock
+	| visited |
+	self isTrivial ifTrue: [aBlock value: self zero. ^ self].
+	visited _ Set new.
+	self scalars ^ self generators size do: [:each|
+		| x |
+		x _ self zero.
+		each withIndexDo: [:ai :i| x _ (self x: i) * ai + x].
+		visited add: x ifAbsent: [aBlock value: x]]! !
+
 !Module methodsFor: 'morphisms' stamp: 'len 4/22/2019 12:50:31'!
 => aModule
 	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
@@ -22105,15 +22116,6 @@ reduce: anElement
 	Subclasses should override."
 	self isZero ifTrue: [^ anElement].
 	^ anElement \\ self generator! !
-
-!Ideal methodsFor: 'enumerating' stamp: 'len 6/5/2019 16:17:47'!
-do: aBlock
-	self isTrivial ifTrue: [aBlock value: self scalars zero. ^ self].
-	self scalars isCommutative
-		ifTrue:
-			[self scalars do: [:each| self generators do: [:g| aBlock value: each * g]]]
-		ifFalse:
-			[self scalars do: [:each| self generators do: [:g| aBlock value: each * g; value: g * each]]]! !
 
 !Ideal methodsFor: 'morphisms' stamp: 'len 5/13/2019 17:13:23'!
 apply: aMorphism
