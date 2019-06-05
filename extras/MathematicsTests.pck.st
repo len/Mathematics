@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 June 2019 at 7:07:57 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 June 2019 at 4:22:40 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 138!
+!provides: 'MathematicsTests' 1 139!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -6160,20 +6160,29 @@ testNegation
 	self assert: a = b negated.
 	self assert: a negated negated = a! !
 
-!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 13:59:05'!
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 13:19:06'!
 testNormAndValuation
 	| Z7 x |
 	Z7 _ ZZ adic: 7.
 	x _ Z7 !! 13.
 	self assert: x valuation = 0.
-	self assert: x norm = 1.
+	self assert: x abs = 1.
 	x _ x * (7*7).
 	self assert: x valuation = 2.
-	self assert: x norm = (1/(7*7)).
+	self assert: x abs = (1/(7*7)).
 	Z7 _ ZZ adic: 7 precision: 100.
 	x _ Z7 !! 0.
 	self assert: x valuation = Infinity positive.
-	self assert: x norm = 0! !
+	self assert: x abs = 0! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 11:32:10'!
+testProjectionToPrimePowerRingAndLifting
+	| Z7 a x |
+	Z7 _ ZZ adic: 7.
+	a _ (-1024 to: 1024) atRandom.
+	x _ Z7 !! a.
+	self assert: ((ZZ/(7^5)) !! x) lift = a.
+	self assert: ((ZZ/(7^(5 to: 10) atRandom)) !! x) lift = a! !
 
 !PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:18:54'!
 testSubstraction
@@ -6712,6 +6721,20 @@ testIsIrreducibleOverZ
 	self assert: (f*(x+1)) isIrreducible not.
 ! !
 
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 16:14:11'!
+testIsNilpotentOverZm
+	| m R N U d f k |
+	m _ (2 to: 100) atRandom.
+	R _ ZZ/m.
+	N _ R nilradical asSet.
+	U _ R units asSet.
+	d _ (1 to: 5) atRandom.
+	f _ R polynomials coefficients: ((1 to: d) collect: [:i| N atRandom]).
+	self assert: f isNilpotent.
+	k _ (1 to: d) atRandom.
+	f _ R polynomials coefficients: ((1 to: d) collect: [:i| i=k ifTrue: [U atRandom] ifFalse: [N atRandom]]).
+	self assert: f isNilpotent not! !
+
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/27/2018 21:22:40'!
 testIsSeparableNot
 	"A tipical example of a polynomial that is NOT separable."
@@ -6723,6 +6746,23 @@ testIsSeparableNot
 	y _ Fy x.
 	f _ y^p - x.
 	self assert: f isSeparable not! !
+
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 16:19:04'!
+testIsUnitOverZm
+	| m R N U d f k |
+	m _ (2 to: 100) atRandom.
+	R _ ZZ/m.
+	N _ R nilradical asSet.
+	U _ R units asSet.
+	d _ (0 to: 5) atRandom.
+	f _ R polynomials coefficients: ({U atRandom}, ((1 to: d) collect: [:i| N atRandom])).
+	self assert: f isUnit.
+	f _ R polynomials coefficients: ({N atRandom}, ((1 to: d) collect: [:i| N atRandom])).
+	self assert: f isUnit not.
+	d _ (1 to: 5) atRandom.
+	k _ (1 to: d) atRandom.
+	f _ R polynomials coefficients: ({U atRandom}, ((1 to: d) collect: [:i| i=k ifTrue: [U atRandom] ifFalse: [N atRandom]])).
+	self assert: f isUnit not! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:36'!
 testMultivariateDivision
@@ -7360,8 +7400,8 @@ testPrimeFieldPrimitiveRoot
 	[x = F one] whileFalse: [x _ x*g. i _ i+1].
 	self assert: i = (p-1)! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 06:45:14'!
-testPrimeRing
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:40:55'!
+testPrimePowerRing
 	| R |
 	R _ PrimePowerRing new: 3 to: 3.
 	self assert: R characteristic = (3^3).
@@ -7371,8 +7411,8 @@ testPrimeRing
 	self assert: R maximalIdeal = (R*3).
 	self testRing: R! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:56:17'!
-testPrimeRingCanonicalProjections
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:21'!
+testPrimePowerRingCanonicalProjections
 	"Canonical homomorphism from ZZ/<p^n> to ZZ/<p^m> with 1 <= m <= n."
 	| p n m A B phi a b |
 	p _ 100 atRandom nextPrime.
@@ -7387,11 +7427,24 @@ testPrimeRingCanonicalProjections
 	self assert: a representative \\ (p^m) = b representative.
 	self testRingHomomorphism: phi! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 06:45:14'!
-testPrimeRingNilradical
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:29'!
+testPrimePowerRingNilradical
 	| R |
 	R _ PrimePowerRing new: 3 to: 3.
 	self assert: R nilradical = (R * 3)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:41:41'!
+testPrimePowerRingValuationAndUnit
+	| R x |
+	R _ PrimePowerRing new: 3 to: 5.
+	x _ R !! 5.
+	self assert: x valuation = 0.
+	self assert: x associatedUnit = x.
+	x _ R !! (3*3*5*2).
+	self assert: x valuation = 2.
+	self assert: x associatedUnit = (R !! 10).
+	x _ R !! 0.
+	self assert: x valuation = Infinity positive! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 10:00:45'!
 testQuasiGaloisRing1
