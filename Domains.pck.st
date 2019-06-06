@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 6 June 2019 at 4:59:14 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 6 June 2019 at 6:28:15 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 517!
+!provides: 'Domains' 1 518!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -18114,6 +18114,15 @@ one
 zero
 	^ self embed: self base zero! !
 
+!CompletionRing methodsFor: 'comparing' stamp: 'len 6/6/2019 17:06:14'!
+= anObject
+	self == anObject ifTrue: [^ true].
+	^ (anObject isKindOf: CompletionRing) and: [anObject completionIdeal = self completionIdeal]! !
+
+!CompletionRing methodsFor: 'comparing' stamp: 'len 6/6/2019 17:06:28'!
+hash
+	^ self completionIdeal hash + self base hash! !
+
 !CompletionRing methodsFor: 'morphisms' stamp: 'len 6/6/2019 16:55:32'!
 from: aDomain
 	aDomain = self base ifTrue: [^ self addMap: ((self base into: self evaluating: [:x| self embed: x]) name: 'i')].
@@ -18274,6 +18283,14 @@ characteristic
 generators
 	^ self base generators collect: [:each| self !! each]! !
 
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 18:23:25'!
+jet: anInteger
+	"Answer the anInteger-th jet of the receiver, that is the quotient ring isomorphic to the anInteger-th truncation of the receiver."
+	| answer |
+	^ (answer _ self base / (self completionIdeal ^ anInteger))
+		addMap: (self onto: answer evaluating: [:f| answer project: (self base coefficients: (f coefficients first: anInteger))]);
+		yourself! !
+
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/4/2019 05:16:30'!
 maximalIdeal
 	self scalars isField ifTrue: [^ self * self uniformizer].
@@ -18290,6 +18307,10 @@ names: anArray
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 13:20:12'!
 scalars
 	^ self base scalars! !
+
+!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 17:08:15'!
+size
+	^ Aleph new: 1! !
 
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/3/2019 03:14:32'!
 uniformizer
@@ -22145,14 +22166,17 @@ apply: aMorphism
 	"Join."
 	^ self + anIdeal! !
 
-!Ideal methodsFor: 'operations' stamp: 'len 1/5/2018 11:00:18'!
+!Ideal methodsFor: 'operations' stamp: 'len 6/6/2019 18:26:13'!
 ^ anInteger
 	"Answer the receiver raised to the power anInteger."
+	| answer |
 	anInteger <= 0 ifTrue: [self error: 'exponent is not positive'].
 	anInteger = 1 ifTrue: [^ self].
 "	anInteger = 0 ifTrue: [^ self ring oneIdeal].
 	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal]."
-	^ self squared ^ (anInteger // 2) * (self ^ (anInteger \\ 2))! !
+	answer _ self squared ^ (anInteger // 2).
+	anInteger \\ 2 = 1 ifTrue: [answer _ answer * self].
+	^ answer! !
 
 !Ideal methodsFor: 'operations' stamp: 'len 2/23/2017 08:16:26'!
 ÷ anIdeal
@@ -22680,11 +22704,13 @@ contains: aPolynomial
 isHomogeneous
 	^ self generators allSatisfy: [:each| each isHomogeneous]! !
 
-!PolynomialIdeal methodsFor: 'testing' stamp: 'len 10/1/2018 05:23:32'!
+!PolynomialIdeal methodsFor: 'testing' stamp: 'len 6/6/2019 17:11:48'!
 isOne
 	"Answer true if the receiver is <1>.
 	Ref. Algorithmic Algebra, B. Mishra, pag. 142-145."
 	(self generators anySatisfy: [:g| g isConstant]) ifTrue: [^ true].
+	"If the receiver is principal and the generator is not constant, or if the receiver is trivial (no generators), then it's not <1>:"
+	self generators size <= 1 ifTrue: [^ false].
 	^ self groebnerBasis anySatisfy: [:g| g isConstant]! !
 
 !PolynomialIdeal methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:38'!
@@ -33437,6 +33463,10 @@ parent
 relativePrecision
 	^ self absolutePrecision! !
 
+!AdicInteger methodsFor: 'accessing' stamp: 'len 6/6/2019 17:08:35'!
+size
+	^ Aleph new: 1! !
+
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/2/2019 11:30:57'!
 valuation
 	self isZero ifTrue: [^ Infinity positive].
@@ -33531,13 +33561,18 @@ hash
 		answer _ answer hashMultiply + (digits at: i) hash].
 	^ answer! !
 
-!AdicInteger methodsFor: 'printing' stamp: 'len 6/2/2019 11:33:11'!
+!AdicInteger methodsFor: 'converting' stamp: 'len 6/6/2019 17:22:53'!
+jet: anInteger
+	"Answer the anInteger-th jet of the receiver, that is the truncation to anInteger terns."
+	^ (self parent jet: anInteger) !! self! !
+
+!AdicInteger methodsFor: 'printing' stamp: 'len 6/6/2019 17:17:32'!
 printOn: aStream withPowersShiftedBy: k
 	| printPrecision first |
 	self isZero
 		ifTrue: [aStream nextPut: $0]
 		ifFalse:
-			[printPrecision _ 5.
+			[printPrecision _ 10.
 			first _ true.
 			self valuation - k to: self valuation + printPrecision - 1 - k do: [:i|
 				| x |
@@ -35953,6 +35988,11 @@ hash
 !PowerSeries methodsFor: 'converting' stamp: 'len 12/27/2015 19:09'!
 asRationalFunction
 	^ coefficients generatingFunction! !
+
+!PowerSeries methodsFor: 'converting' stamp: 'len 6/6/2019 17:22:29'!
+jet: anInteger
+	"Answer the anInteger-th jet of the receiver, that is the truncation to anInteger terns."
+	^ (self parent jet: anInteger) !! self! !
 
 !PowerSeries methodsFor: 'operations' stamp: 'len 6/2/2019 17:11:59'!
 derivative
