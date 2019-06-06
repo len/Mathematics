@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 6 June 2019 at 1:36:35 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 6 June 2019 at 4:59:14 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 516!
+!provides: 'Domains' 1 517!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -1243,16 +1243,6 @@ NumberField subclass: #QuadraticField
 	category: 'Domains-Fields-Number Fields'!
 !classDefinition: 'QuadraticField class' category: #'Domains-Fields-Number Fields'!
 QuadraticField class
-	instanceVariableNames: ''!
-
-!classDefinition: #AdicQuotientRing category: #'Domains-Etc'!
-QuotientRing subclass: #AdicQuotientRing
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc'!
-!classDefinition: 'AdicQuotientRing class' category: #'Domains-Etc'!
-AdicQuotientRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #RationalIntegerRing category: #'Domains-Rings'!
@@ -3445,16 +3435,6 @@ Object subclass: #RealPalette
 RealPalette class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicIntegerResidue category: #'Domains-Etc'!
-Object subclass: #AdicIntegerResidue
-	instanceVariableNames: 'representative'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc'!
-!classDefinition: 'AdicIntegerResidue class' category: #'Domains-Etc'!
-AdicIntegerResidue class
-	instanceVariableNames: ''!
-
 !classDefinition: #AlgebraicExtensionAsModule category: #'Domains-Etc'!
 Object subclass: #AlgebraicExtensionAsModule
 	instanceVariableNames: 'extension'
@@ -5218,10 +5198,6 @@ References
 	Chris A. Kurth, Ling Long, "Computations with finite index subgroups of PSL(2,Z) using Farey symbols".
 	John Voight, "Computational methods for modular and Shimura curves", lecture videos in youtube.!
 
-!AdicIntegerResidue commentStamp: '<historical>' prior: 0!
-Residues of a p-adic quotient ring Zp/(p^k)Zp, or equivalently p-adic integers (finite approximations to p-adic integers by the p-adic expansion up to p^k). It is represented by an integer residue class modulo p^k (i.e., an element of a PrimePowerRing).
-!
-
 !AlgebraicExtensionAsModule commentStamp: '<historical>' prior: 0!
 Algebraic extensions seen as modules or vector spaces. See AlgebraicExtension.!
 
@@ -6418,10 +6394,6 @@ printOn: aStream
 	1 to: n do: [:i|
 		aStream nextPutAll: ' (', (self pairingAt: i) asString, ') '; print: (self numeratorAt: i); nextPut: $/; print: (self denominatorAt: i)].
 	aStream nextPutAll: ' (', (self pairingAt: n+1) asString, ') '; print: Infinity positive! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 16:24:27'!
-printOn: aStream
-	((ZZ polynomialsIn: {(' ', self p printString) italic} ordering: #llex) coefficients: self digits) printOn: aStream! !
 
 !Pixel methodsFor: 'as yet unclassified' stamp: 'len 2/13/2016 17:45'!
 printOn: aStream
@@ -13326,9 +13298,9 @@ mapping: aBlock
 opposite
 	^ self class from: self codomain to: self domain! !
 
-!HomSet methodsFor: 'testing' stamp: 'len 10/4/2016 09:02'!
-includes: aMorphism
-	^ (aMorphism isKindOf: Morphism) and: [aMorphism domain = self domain and: [aMorphism codomain = self codomain]]! !
+!HomSet methodsFor: 'testing' stamp: 'len 6/6/2019 16:41:29'!
+includes: anObject
+	^ (anObject isKindOf: Morphism) and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
 
 !HomSet methodsFor: 'testing' stamp: 'len 4/19/2016 04:53'!
 isEndomorphisms
@@ -14424,9 +14396,9 @@ contains: aWord
 	aWord do: [:i :exp| (self rank <= i and: [exp >= 0]) ifFalse: [^ false]].
 	^ true! !
 
-!FreeSemigroup methodsFor: 'testing' stamp: 'len 5/23/2019 18:57:55'!
-includes: aWord
-	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
+!FreeSemigroup methodsFor: 'testing' stamp: 'len 6/6/2019 16:39:51'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FreeSemigroup methodsFor: 'testing' stamp: 'len 5/13/2019 11:08:15'!
 isCommutative
@@ -14635,9 +14607,9 @@ contains: aWord
 	aWord do: [:i :exp| (self rank <= i and: [exp >= 0]) ifFalse: [^ false]].
 	^ true! !
 
-!FreeMonoid methodsFor: 'testing' stamp: 'len 5/10/2019 15:17:39'!
-includes: aWord
-	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
+!FreeMonoid methodsFor: 'testing' stamp: 'len 6/6/2019 16:39:31'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FreeMonoid methodsFor: 'testing' stamp: 'len 5/10/2019 15:15:33'!
 isCommutative
@@ -15451,9 +15423,9 @@ span: aCollection
 	"Answer the subgroup spanned by the elements in aCollection."
 	^ self notYetImplemented! !
 
-!AbelianGroup methodsFor: 'testing' stamp: 'len 5/15/2019 00:05:21'!
-includes: aMonomial
-	^ (aMonomial isKindOf: Monomial) and: [aMonomial parent = self]! !
+!AbelianGroup methodsFor: 'testing' stamp: 'len 6/6/2019 16:34:42'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
 
 !AbelianGroup methodsFor: 'testing' stamp: 'len 5/14/2019 03:54:04'!
 isCommutative
@@ -15817,9 +15789,9 @@ atRandom: aRandom bits: bitSize
 			[answer _ (self generators atRandom: aRandom)^(#(-1 1) atRandom: aRandom) * answer].
 	^ answer! !
 
-!FPGroup methodsFor: 'testing' stamp: 'len 5/10/2019 14:37:34'!
-includes: aWord
-	^ (aWord isKindOf: Word) and: [aWord parent = self]! !
+!FPGroup methodsFor: 'testing' stamp: 'len 6/6/2019 16:37:49'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FPGroup methodsFor: 'testing' stamp: 'len 5/14/2019 02:33:50'!
 isCommutative
@@ -16019,9 +15991,9 @@ span: aCollection
 	answer addMap: (answer into: self mapping: [:i| newGenerators at: i]).
 	^ answer! !
 
-!FreeGroup methodsFor: 'testing' stamp: 'len 5/14/2019 07:06:36'!
+!FreeGroup methodsFor: 'testing' stamp: 'len 6/6/2019 16:38:39'!
 includes: anObject
-	^ (anObject isKindOf: Word) and: [anObject parent = self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FreeGroup methodsFor: 'testing' stamp: 'len 5/13/2019 11:08:09'!
 isCommutative
@@ -16570,9 +16542,9 @@ contains: aPermutation
 	"Answer true if the receiver contains the given element of its ambient."
 	^ true! !
 
-!SymmetricGroup methodsFor: 'testing' stamp: 'len 4/30/2019 18:17:43'!
+!SymmetricGroup methodsFor: 'testing' stamp: 'len 6/6/2019 16:48:22'!
 includes: anObject
-	^ (anObject isKindOf: Permutation) and: [anObject parent = self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !SymmetricGroup methodsFor: 'testing' stamp: 'len 2/16/2016 05:55'!
 isAlmostSimple
@@ -18134,6 +18106,19 @@ maximalIdeal
 	"Answer the unique maximal ideal in the receiver."
 	^ self * (self completionIdeal generators collect: [:each| self embed: each])! !
 
+!CompletionRing methodsFor: 'accessing' stamp: 'len 6/6/2019 16:52:57'!
+one
+	^ self embed: self base one! !
+
+!CompletionRing methodsFor: 'accessing' stamp: 'len 6/6/2019 16:53:02'!
+zero
+	^ self embed: self base zero! !
+
+!CompletionRing methodsFor: 'morphisms' stamp: 'len 6/6/2019 16:55:32'!
+from: aDomain
+	aDomain = self base ifTrue: [^ self addMap: ((self base into: self evaluating: [:x| self embed: x]) name: 'i')].
+	^ super from: aDomain! !
+
 !CompletionRing methodsFor: 'operations' stamp: 'len 6/6/2019 11:59:39'!
 jet: anInteger
 	"Answer the anInteger-th jet of the receiver, that is the quotient ring isomorphic to the anInteger-th truncation of the receiver."
@@ -18158,14 +18143,6 @@ characteristic
 !AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:19:30'!
 fractions
 	^ self propertyAt: #fractions ifAbsentPut: [AdicRationalField on: self]! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/3/2019 02:57:38'!
-maximalIdeal
-	^ self * self uniformizer! !
-
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:26'!
-one
-	^ self !! 1! !
 
 !AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/6/2019 12:06:38'!
 p
@@ -18198,10 +18175,6 @@ uniformizer
 	"A uniformizer (or uniformizing parameter, uniformizer element or prime element) is any irreducible element of a DVR, or equivalently a generator of the maximal ideal. All non-zero ideals are generated by some power of the uniformizer."
 	^ self !! self p! !
 
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 4/22/2019 03:44:30'!
-zero
-	^ self !! 0! !
-
 !AdicIntegerRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:18:44'!
 = anObject
 	(anObject isKindOf: AdicIntegerRing) ifTrue: [^ self p = anObject p and: [self precision = anObject precision]].
@@ -18211,18 +18184,18 @@ zero
 hash
 	^ self p! !
 
-!AdicIntegerRing methodsFor: 'elements' stamp: 'len 6/1/2019 17:17:51'!
+!AdicIntegerRing methodsFor: 'elements' stamp: 'len 6/6/2019 16:51:30'!
 !! anObject
+	anObject isInteger ifTrue: [^ self embed: anObject].
 	anObject isFraction ifTrue: [^ self fromFraction: anObject].
-	anObject isInteger ifTrue: [^ self fromRationalInteger: anObject].
 	^ super !! anObject! !
 
 !AdicIntegerRing methodsFor: 'elements' stamp: 'len 6/1/2019 17:00:30'!
 digits: aSequence
 	^ AdicInteger new digits: aSequence; parent: self! !
 
-!AdicIntegerRing methodsFor: 'elements' stamp: 'len 6/6/2019 12:07:37'!
-fromRationalInteger: anInteger
+!AdicIntegerRing methodsFor: 'elements' stamp: 'len 6/6/2019 16:51:18'!
+embed: anInteger
 	| p q |
 	p _ self p.
 	q _ anInteger.
@@ -18237,12 +18210,12 @@ jet: anInteger
 	"Answer the anInteger-th jet of the receiver, that is the quotient ring isomorphic to the anInteger-th truncation of the receiver."
 	^ PrimePowerRing new: self p to: anInteger! !
 
-!AdicIntegerRing methodsFor: 'random' stamp: 'len 6/2/2019 09:41:11'!
+!AdicIntegerRing methodsFor: 'random' stamp: 'len 6/6/2019 16:17:10'!
 atRandom: aRandom
-	| pp random |
+	| p random |
 	random _ Random seed: (aRandom nextBits: 31).
-	pp _ self p.
-	^ self streaming: [(random nextInteger:  pp) - 1]! !
+	p _ self p.
+	^ self streaming: [(random nextInteger:  p) - 1]! !
 
 !AdicIntegerRing methodsFor: 'random' stamp: 'len 6/2/2019 09:33:02'!
 atRandom: aRandom bits: bitSize
@@ -18267,10 +18240,6 @@ isDVR
 
 !AdicIntegerRing methodsFor: 'testing' stamp: 'len 12/7/2015 01:29'!
 isIntegralDomain
-	^ true! !
-
-!AdicIntegerRing methodsFor: 'testing' stamp: 'len 6/2/2019 04:27:35'!
-isLocal
 	^ true! !
 
 !AdicIntegerRing methodsFor: 'testing' stamp: 'len 6/2/2019 05:03:44'!
@@ -18318,10 +18287,6 @@ names
 names: anArray
 	self base names: anArray! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 13:21:34'!
-one
-	^ self !! self base one! !
-
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 13:20:12'!
 scalars
 	^ self base scalars! !
@@ -18336,13 +18301,9 @@ uniformizer
 x
 	^ self !! self base x! !
 
-!PowerSeriesRing methodsFor: 'accessing' stamp: 'len 6/6/2019 13:20:48'!
-zero
-	^ self !! self base zero! !
-
-!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/6/2019 13:19:40'!
+!PowerSeriesRing methodsFor: 'elements' stamp: 'len 6/6/2019 16:52:02'!
 !! anObject
-	(self base includes: anObject) ifTrue: [^ self coefficients: (CFiniteSequence to: self scalars initialValues: anObject coefficients periodic: {self scalars zero})].
+	(self base includes: anObject) ifTrue: [^ self embed: anObject].
 	(self scalars includes: anObject) ifTrue: [^ self  coefficients: (CFiniteSequence to: self scalars initialValues: {anObject} periodic: {self scalars zero})].
 	((anObject isKindOf: Sequence) and: [self scalars = anObject codomain]) ifTrue: [^ self coefficients: anObject].
 	^ super !! anObject! !
@@ -18372,10 +18333,9 @@ isUnit: aPowerSeries
 	self scalars isField ifTrue: [^ self scalars isUnit: aPowerSeries independentCoefficient].
 	^ super isUnit: aPowerSeries! !
 
-!PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 6/6/2019 13:20:37'!
-from: aDomain
-	aDomain = self base ifTrue: [^ self addMap: ((self base into: self evaluating: [:x| self !! x]) name: 'i')].
-	^ super from: aDomain! !
+!PowerSeriesRing methodsFor: 'morphisms' stamp: 'len 6/6/2019 16:52:29'!
+embed: aPolynomial
+	^ self coefficients: (CFiniteSequence to: self scalars initialValues: aPolynomial coefficients periodic: {self scalars zero})! !
 
 !PowerSeriesRing methodsFor: 'operations' stamp: 'len 6/3/2019 03:08:37'!
 fractions
@@ -18415,8 +18375,9 @@ isNoetherian
 at: anIdeal
 	^ self shouldNotImplement! !
 
-!PowerSeriesRing class methodsFor: 'instance creation' stamp: 'len 6/6/2019 13:18:59'!
+!PowerSeriesRing class methodsFor: 'instance creation' stamp: 'len 6/6/2019 16:12:54'!
 on: aPolynomialRing
+	aPolynomialRing scalars isLocal ifFalse: [^ DomainError signal: 'coefficients ring is not local'].
 	^ super at: (aPolynomialRing isLocal ifTrue: [aPolynomialRing] ifFalse: [aPolynomialRing localization]) maximalIdeal! !
 
 !LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:37'!
@@ -18791,9 +18752,9 @@ extension: aPolynomial
 realClosure
 	^ RR! !
 
-!RationalField methodsFor: 'testing' stamp: 'len 1/11/2016 05:56'!
+!RationalField methodsFor: 'testing' stamp: 'len 6/6/2019 16:46:55'!
 includes: anObject
-	^ anObject isNumber and: [anObject isRational or: [anObject isFloat]]! !
+	^ anObject isNumber and: [anObject isRational]! !
 
 !RationalField methodsFor: 'testing' stamp: 'len 1/8/2017 07:50:01'!
 isField
@@ -19270,10 +19231,9 @@ atRandom: aRandom bits: bitSize
 "	^ self atRandom: aRandom"
 	^ self project: (self base atRandom: aRandom bits: bitSize)! !
 
-!QuotientRing methodsFor: 'testing' stamp: 'len 5/8/2019 19:39:08'!
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/6/2019 16:46:12'!
 includes: anObject
-	(anObject isKindOf: Residue) ifFalse: [^ false].
-	^ self base includes: anObject representative! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !QuotientRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:58:16'!
 isArtinian
@@ -19493,9 +19453,9 @@ atRandom: aRandom
 atRandom: aRandom bits: bitSize
 	^ self atRandom: aRandom! !
 
-!ModularIntegerRing methodsFor: 'testing' stamp: 'len 6/9/2018 20:15:48'!
+!ModularIntegerRing methodsFor: 'testing' stamp: 'len 6/6/2019 16:44:32'!
 includes: anObject
-	^ anObject class = self elementClass and: [anObject modulus = self modulus]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !ModularIntegerRing methodsFor: 'testing' stamp: 'len 12/28/2016 12:13:20'!
 isField
@@ -20524,10 +20484,6 @@ example
 !QuadraticField class methodsFor: 'instance creation' stamp: 'len 12/14/2016 14:57:22'!
 sqrt: anInteger
 	^ self new sqrt: anInteger! !
-
-!AdicQuotientRing methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:23:49'!
-primeSubring
-	^ self! !
 
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 11/5/2015 17:34'!
 characteristic
@@ -22239,9 +22195,9 @@ atRandom: aRandom bits: bitSize
 	"Answer true if the receiver divides anIdeal."
 	^ self >= anIdeal! !
 
-!Ideal methodsFor: 'testing' stamp: 'len 12/13/2016 07:40:07'!
+!Ideal methodsFor: 'testing' stamp: 'len 6/6/2019 16:42:40'!
 contains: anObject
-	self isZero ifTrue: [^ anObject isZero].
+	self isTrivial ifTrue: [^ anObject isZero].
 	^ (self reduce: anObject) isZero! !
 
 !Ideal methodsFor: 'testing' stamp: 'len 1/15/2018 19:03:20'!
@@ -24901,9 +24857,9 @@ composition
 	"This is the product of tensors. This is a multilinear map."
 	^ (Function from: self asCartesianProduct to: self evaluating: [:each| self compose: each]) name: Character otimes asString! !
 
-!TensorProductModule methodsFor: 'testing' stamp: 'len 9/16/2018 16:18:31'!
+!TensorProductModule methodsFor: 'testing' stamp: 'len 6/6/2019 16:48:41'!
 includes: anObject
-	^ (anObject isKindOf: Tensor) and: [anObject parent = self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !TensorProductModule methodsFor: 'private' stamp: 'len 6/3/2018 20:15:26'!
 components
@@ -28045,9 +28001,9 @@ atRandom: aRandom bits: bitSize maxDegree: d
 		answer _ answer + term].
 	^ answer! !
 
-!FreeAlgebra methodsFor: 'testing' stamp: 'len 1/10/2018 21:53:30'!
+!FreeAlgebra methodsFor: 'testing' stamp: 'len 6/6/2019 16:38:26'!
 includes: anObject
-	^ (anObject isKindOf: FreePolynomial) and: [anObject parent = self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FreeAlgebra methodsFor: 'testing' stamp: 'len 3/5/2016 04:24'!
 isAssociative
@@ -28143,9 +28099,9 @@ contains: anObject
 		(scalars includes: value) ifFalse: [^ false]].
 	^ true! !
 
-!GroupAlgebra methodsFor: 'testing' stamp: 'len 5/26/2019 08:45:37'!
+!GroupAlgebra methodsFor: 'testing' stamp: 'len 6/6/2019 16:40:44'!
 includes: anObject
-	^ (anObject isKindOf: GroupAlgebraElement) and: [anObject parent = self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !GroupAlgebra methodsFor: 'testing' stamp: 'len 8/25/2016 08:37'!
 isCommutative
@@ -43418,42 +43374,6 @@ new: anInteger interpolating: anArray
 			| mu |
 			mu _ i * anArray size / (anInteger-1).
 			(anArray atPin: mu floor + 1) mixed: mu - mu floor with: (anArray atPin: mu ceiling + 1)])! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 04:28:18'!
-digits
-	| x p answer |
-	x _ representative representative.
-	p _ self p.
-	answer _ OrderedCollection new.
-	[x = 0]
-		whileFalse:
-			[answer add: x \\ p.
-			x _ x // p].
-	^ answer
-			! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:26:34'!
-isZero
-	^ representative isZero! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:23:23'!
-precision
-	^ representative parent exponent! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 10:46:36'!
-reciprocal
-	"Answer the multiplicative inverse of the receiver. The valuation of the receiver must be 0."
-	self isUnit ifFalse: [(ZeroDivide dividend: self) signal].
-	self notYetImplemented! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 04:31:39'!
-representative: aModularInteger
-	representative _ aModularInteger! !
-
-!AdicIntegerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 16:24:15'!
-valuation
-	self isZero ifTrue: [^ Infinity positive].
-	^ (self digits findFirst: [:one| one ~~ 0]) - 1! !
 
 !AlgebraicExtensionAsModule methodsFor: 'basis' stamp: 'len 10/2/2018 16:48:38'!
 basis
