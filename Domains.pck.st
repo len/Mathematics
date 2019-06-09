@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:37:03 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 11:17:43 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 521!
+!provides: 'Domains' 1 523!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -38780,10 +38780,16 @@ QR
 	R _ Q transposed * self.
 	^ {Q. R}! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 5/29/2019 11:56:03'!
+!Matrix methodsFor: 'reduction' stamp: 'len 6/9/2019 11:17:35'!
 RCF
-	"Answer the rational canonical form of the receiver."
-	^ self minimalPolynomial factors inject: (self scalars matrix: #()) into: [:matrix :each| matrix ê each companion]! !
+	"Answer the Frobenius normal form (or rational canonical form) of the receiver, assuming it's a square matrix over a field."
+	| R P a ax x |
+	R _ self scalars.
+	P _ R polynomials.
+	x _ P x.
+	a _ self over: P.
+	ax _ a identity * x - a.
+	^ ax elementaryDivisors inject: (self scalars matrix: #()) into: [:matrix :each| matrix ê each companion]! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 6/9/2019 10:00:06'!
 SNF
