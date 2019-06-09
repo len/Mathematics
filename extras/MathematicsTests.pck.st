@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 June 2019 at 4:22:40 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 9:02:18 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 139!
+!provides: 'MathematicsTests' 1 140!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -342,6 +342,16 @@ Benchmark subclass: #SparsePolynomialMultiplicationBenchmark
 	category: 'MathematicsTests'!
 !classDefinition: 'SparsePolynomialMultiplicationBenchmark class' category: #MathematicsTests!
 SparsePolynomialMultiplicationBenchmark class
+	instanceVariableNames: ''!
+
+!classDefinition: #TupleConvolutionBenchmark category: #MathematicsTests!
+Benchmark subclass: #TupleConvolutionBenchmark
+	instanceVariableNames: 'a b'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MathematicsTests'!
+!classDefinition: 'TupleConvolutionBenchmark class' category: #MathematicsTests!
+TupleConvolutionBenchmark class
 	instanceVariableNames: ''!
 
 !classDefinition: #CASBenchmark category: #MathematicsTests!
@@ -986,6 +996,13 @@ testBigCoefficientsProduct	10.5 seconds. (polynomials as dictionaries monomial -
 testBigExponentsProduct	10.2 seconds.
 testProduct	0.289 per second.
 !
+
+!TupleConvolutionBenchmark commentStamp: 'len 6/6/2019 09:09:54' prior: 0!
+self new run
+
+
+
+testConvolution	3.02  runs per second!
 
 !CASBenchmark commentStamp: '<historical>' prior: 0!
 These benchmarks show some of the fundamental bottlenecks for a computational algebra system in pure Smalltalk. Many important algorithms end up doing these operations.
@@ -7257,7 +7274,7 @@ testZZPrimeNotMaximalIdeal
 	self assert: I isPrime.
 	self assert: I isMaximal not! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/3/2018 06:28:51'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:04:31'!
 testFiniteRing
 	| R |
 	R _ (ZZ/2) polynomials.
@@ -7265,7 +7282,8 @@ testFiniteRing
 	self assert: R isField not.
 	self assert: R size = 8.
 	self assert: R units size = 2.
-	self assert: R zeroDivisors size = 6
+	self assert: R zeroDivisors size = 6.
+	self assert: R radical asSet = {R zero. R x^2 + R x} asSet
 	"also, this ring has two maximal ideals, and the Jacobson radical is {0, x^2 + x}"! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 17:52:20'!
@@ -7291,7 +7309,7 @@ testFiniteRing2Alternative
 	self assert: R isLocal not.
 	"more about this ring: two maximal (and principal as well) ideals (so not a local ring)"! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/3/2018 01:48:31'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:05:37'!
 testFiniteRing3
 	| R |
 	R _ ZZ/4 × (ZZ/4).
@@ -7299,22 +7317,35 @@ testFiniteRing3
 	self assert: R isField not.
 	self assert: R size = 16.
 	self assert: R zeroDivisors size = 12.
-	self assert: R units size = 4
+	self assert: R units size = 4.
+	self assert: R radical isTrivial not
 	"more about this ring: two maximal ideals (so not a local ring), and non-trivial jacobson radical"! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/21/2018 17:08:55'!
-testFiniteRing4
-	| R S |
-	R _ ZZ/6. "this is not a Galois ring, the zero-divisors dont form an ideal"
-	S _ ZZ/8. "this is a Galois ring"
-	self assert: R isLocal not.
-	self assert: S isLocal! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 19:01:44'!
 testFiniteRingJacobsonRadical
 	| R |
 	R _ ZZ/12.
 	self assert: R radical = (R*6)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:00:10'!
+testFiniteRingLocalAndNotLocal
+	| R S |
+	R _ ZZ/6. "this is not a Galois ring, the zero-divisors dont form an ideal"
+	S _ ZZ/8. "this is a Galois ring"
+	self assert: R isLocal not.
+	self assert: S isLocal! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:02:21'!
+testFiniteRingsAreArtinian
+	| R |
+	R _ ZZ/6. "not local"
+	self assert: R isArtinian.
+	R _ ZZ/8. "local, prime power ring, Galois ring"
+	self assert: R isArtinian.
+	R _ ZZ/4 × (ZZ/4).
+	self assert: R isArtinian.
+	R _ GaloisRing new: 3 to: 2 to: 4.
+	self assert: R isArtinian! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:59:11'!
 testGaloisRing
@@ -7433,7 +7464,15 @@ testPrimePowerRingNilradical
 	R _ PrimePowerRing new: 3 to: 3.
 	self assert: R nilradical = (R * 3)! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:41:41'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 17:26:32'!
+testPrimePowerRingNilradicalAndUnits
+	| p n R |
+	p _ 30 atRandom nextPrime.
+	n _ 4 atRandom.
+	R _ ZZ/(p^n).
+	self assert: R units size + R nilradical size = R size! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 08:54:54'!
 testPrimePowerRingValuationAndUnit
 	| R x |
 	R _ PrimePowerRing new: 3 to: 5.
@@ -7444,9 +7483,9 @@ testPrimePowerRingValuationAndUnit
 	self assert: x valuation = 2.
 	self assert: x associatedUnit = (R !! 10).
 	x _ R !! 0.
-	self assert: x valuation = Infinity positive! !
+	self assert: x valuation = Infinity positive "as an Euclidean function, this valuation doesn't match the p-adic valuation at 0"! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2019 10:00:45'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 03:03:30'!
 testQuasiGaloisRing1
 	| p r n A |
 	p _ #(2 3) atRandom.
@@ -7455,7 +7494,6 @@ testQuasiGaloisRing1
 	A _ QuasiGaloisRing new: p to: r to: n.
 	self assert: A characteristic = p.
 	self assert: A size = (p^(r*n)).
-	self assert: A isCommutative.
 	self assert: A isLocal.
 	self assert: A isFinite! !
 
@@ -7564,6 +7602,45 @@ testLocalHomomorphism
 	self assert: f isLocal
 ! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:46:33'!
+testEuclideanRing: R
+	| a b q r |
+	a _ R atRandomBits: 100.
+	[b _ R atRandomBits: 100. b isZero] whileTrue.
+	q _ a // b.
+	r _ a \\ b.
+	self assert: a = (q * b + r).
+	self assert: (r isZero or: [r valuation < b valuation])! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:53:13'!
+testGaloisRingIsEuclidean
+	| R |
+	R _ GaloisRing new: 5 atRandom nextPrime to: 3 atRandom to: 3 atRandom.
+	self assert: R isEuclidean.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:52:23'!
+testPolynomialsOverFieldIsEuclidean
+	| F R |
+	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
+	R _ F polynomials.
+	self assert: R isEuclidean.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:48:27'!
+testPrimePowerRingIsEuclidean
+	| p k R |
+	p _ 10 atRandom nextPrime.
+	k _ 10 atRandom.
+	R _ PrimePowerRing new: p to: k.
+	self assert: R isEuclidean.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:49:01'!
+testRationalIntegerRingIsEuclidean
+	self assert: ZZ isEuclidean.
+	self testEuclideanRing: ZZ! !
+
 !RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
 rootSystem1
 	| V roots |
@@ -7651,6 +7728,12 @@ testPowerSeries
 	sin _ PowerSeries sin.
 	cos _ PowerSeries cos.
 	self assert: ((cos squared + sin squared) coefficients beginsWith: #(1 0 0 0 0 0 0 0 0))! !
+
+!SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 17:10:44'!
+testPowerSeriesReciprocal
+	| cos |
+	cos _ PowerSeries cos.
+	self assert: ((cos * cos reciprocal) coefficients beginsWith: #(1 0 0 0 0 0 0 0 0))! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 11/25/2016 10:32:36'!
 testRecursive
@@ -8492,6 +8575,22 @@ testBigExponentsProduct
 !SparsePolynomialMultiplicationBenchmark methodsFor: 'as yet unclassified' stamp: 'len 6/5/2016 08:44'!
 testProduct
 	p * pPlusOne! !
+
+!TupleConvolutionBenchmark methodsFor: 'as yet unclassified' stamp: 'len 6/6/2019 09:34:36'!
+setUp
+	| n R |
+	n _ 80.
+	R _ ZZ^n.
+	a _ R atRandomBits: n*10.
+	b _ R atRandomBits: n*10! !
+
+!TupleConvolutionBenchmark methodsFor: 'as yet unclassified' stamp: 'len 6/6/2019 09:31:24'!
+testConvolution
+	a convolution: b! !
+
+!TupleConvolutionBenchmark methodsFor: 'as yet unclassified' stamp: 'len 6/6/2019 09:31:54'!
+testConvolution2
+	a convolution2: b! !
 
 !CASBenchmark methodsFor: 'as yet unclassified' stamp: 'len 11/19/2016 11:05:43'!
 run
