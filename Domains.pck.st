@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:15:34 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:37:03 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 520!
+!provides: 'Domains' 1 521!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -1085,16 +1085,6 @@ LocalizationRing subclass: #ValuationRing
 ValuationRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeRing category: #'Domains-Rings'!
-Ring subclass: #OppositeRing
-	instanceVariableNames: 'opposite'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings'!
-!classDefinition: 'OppositeRing class' category: #'Domains-Rings'!
-OppositeRing class
-	instanceVariableNames: ''!
-
 !classDefinition: #ProductRing category: #'Domains-Rings'!
 Ring subclass: #ProductRing
 	instanceVariableNames: 'components'
@@ -1323,16 +1313,6 @@ QuadraticRing subclass: #GaussianIntegerRing
 	category: 'Domains-Fields-Number Fields'!
 !classDefinition: 'GaussianIntegerRing class' category: #'Domains-Fields-Number Fields'!
 GaussianIntegerRing class
-	instanceVariableNames: ''!
-
-!classDefinition: #MatrixRing category: #'Domains-Modules-Matrices'!
-Ring subclass: #MatrixRing
-	instanceVariableNames: 'scalars degree'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Modules-Matrices'!
-!classDefinition: 'MatrixRing class' category: #'Domains-Modules-Matrices'!
-MatrixRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #PolynomialRing category: #'Domains-Polynomials'!
@@ -1987,12 +1967,22 @@ GroupAlgebra class
 
 !classDefinition: #MatrixAlgebra category: #'Domains-Etc-Algebras'!
 Algebra subclass: #MatrixAlgebra
-	instanceVariableNames: 'degree scalars'
+	instanceVariableNames: 'scalars degree'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Etc-Algebras'!
 !classDefinition: 'MatrixAlgebra class' category: #'Domains-Etc-Algebras'!
 MatrixAlgebra class
+	instanceVariableNames: ''!
+
+!classDefinition: #OppositeAlgebra category: #'Domains-Etc-Algebras'!
+Algebra subclass: #OppositeAlgebra
+	instanceVariableNames: 'opposite'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'OppositeAlgebra class' category: #'Domains-Etc-Algebras'!
+OppositeAlgebra class
 	instanceVariableNames: ''!
 
 !classDefinition: #Element category: #'Domains-Kernel'!
@@ -2405,16 +2395,6 @@ Element subclass: #RingElement
 RingElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #OppositeRingElement category: #'Domains-Rings'!
-RingElement subclass: #OppositeRingElement
-	instanceVariableNames: 'opposite'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings'!
-!classDefinition: 'OppositeRingElement class' category: #'Domains-Rings'!
-OppositeRingElement class
-	instanceVariableNames: ''!
-
 !classDefinition: #ProductRingElement category: #'Domains-Rings'!
 RingElement subclass: #ProductRingElement
 	instanceVariableNames: 'components'
@@ -2623,6 +2603,16 @@ LocalRingElement subclass: #TruncatedAdicNumber
 	category: 'Domains-Etc-Approximate'!
 !classDefinition: 'TruncatedAdicNumber class' category: #'Domains-Etc-Approximate'!
 TruncatedAdicNumber class
+	instanceVariableNames: ''!
+
+!classDefinition: #OppositeAlgebraElement category: #'Domains-Etc-Algebras'!
+RingElement subclass: #OppositeAlgebraElement
+	instanceVariableNames: 'opposite'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'OppositeAlgebraElement class' category: #'Domains-Etc-Algebras'!
+OppositeAlgebraElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #ModuleElement category: #'Domains-Modules'!
@@ -4136,13 +4126,6 @@ The field of fractions of a polynomial ring with coefficients over a field.!
 !LaurentSeriesRing commentStamp: '<historical>' prior: 0!
 Ring R((x)) of univariate formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
 
-!OppositeRing commentStamp: 'len 5/8/2019 14:55:02' prior: 0!
-The opposite ring R^op of a ring R is a ring constructed from the original ring R inverting the order of multiplication. This way, it is possible to define left modules as a special case of right modules.
-
-Commutative rings are equal to their opposites.
-
-See also OppositeRingElement.!
-
 !ProductRing commentStamp: 'len 5/22/2018 16:08:59' prior: 0!
 Direct products of rings. Elements are tuples where the i-th component corresponds to an element in the i-th ring of the product (see ProductRingElement), and multiplication and addition are defined component wise.!
 
@@ -4248,9 +4231,6 @@ Rings of integers of cyclotomic number fields. See CyclotomicField.!
 
 !QuadraticRing commentStamp: '<historical>' prior: 0!
 Rings of integers of quadratic number fields. See QuadraticField.!
-
-!MatrixRing commentStamp: '<historical>' prior: 0!
-Rings of square matrices with coefficients over a commutative ring R. They are R-algebras. See also MatrixModule.!
 
 !PolynomialRing commentStamp: '<historical>' prior: 0!
 Polynomial rings R[x1,...,xn] in one or many indeterminates over a commutative ring R. These are the finitely-generated free commutative R-algebras.
@@ -4527,6 +4507,16 @@ Categorically, the group ring construction is left adjoint to the group of units
 References:
 	https://en.wikipedia.org/wiki/Group_ring!
 
+!MatrixAlgebra commentStamp: '<historical>' prior: 0!
+Rings of square matrices with coefficients over a commutative ring R. They are R-algebras. See also MatrixModule.!
+
+!OppositeAlgebra commentStamp: '<historical>' prior: 0!
+The opposite algebra A^op of an algebra A is an algebra constructed from the original algebra A inverting the order of multiplication. This way, it is possible to define left modules as a special case of right modules.
+
+Commutative rings are equal to their opposites.
+
+See also OppositeAlgebraElement.!
+
 !Element commentStamp: '<historical>' prior: 0!
 Elements are members of the underlying set of a Domain (their parent). They are, for example, numbers in a field or ring, n-tuples in a module, polynomials in a polynomial ring, etc.!
 
@@ -4752,9 +4742,6 @@ Elements of the opposite group of a given group. See OppositeGroup.!
 !Permutation commentStamp: '<historical>' prior: 0!
 Permutations are bijective functions on a finite set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
 
-!OppositeRingElement commentStamp: 'len 5/8/2019 14:55:26' prior: 0!
-Elements of the opposite ring of a given ring. See OppositeRing.!
-
 !ProductRingElement commentStamp: 'len 5/22/2018 16:08:11' prior: 0!
 Elements of direct products of rings. See ProductRing.!
 
@@ -4808,6 +4795,9 @@ Univariate formal Laurent series with coefficients over a commutative ring. See 
 
 !PowerSeries commentStamp: '<historical>' prior: 0!
 Univariate formal power series with coefficients over a commutative ring. See PowerSeriesRing.!
+
+!OppositeAlgebraElement commentStamp: '<historical>' prior: 0!
+Elements of the opposite algebra of a given algebra. See OppositeAlgebra.!
 
 !Sum commentStamp: '<historical>' prior: 0!
 Formal sums (or formal linear combinations) of arbitrary symbols with coefficients over a given ring R. They can be thought of as Tuples indexed not by positive integers but by arbitrary symbols. They form free R-modules (see FreeSumsModule).
@@ -5636,10 +5626,6 @@ printOn: aStream
 printOn: aStream
 	aStream nextPutAll: 'V('; print: self fractions; nextPut: $,; print: self p; nextPut: $)! !
 
-!OppositeRing methodsFor: 'printing' stamp: 'len 5/8/2019 14:52:19'!
-printOn: aStream
-	aStream print: opposite; nextPutAll: 'op' super! !
-
 !ProductRing methodsFor: 'printing' stamp: 'len 8/29/2016 04:12'!
 printOn: aStream
 	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
@@ -5721,10 +5707,6 @@ printOn: aStream
 	K _ self ambient.
 	a _ K d \\ 4 = 1 ifTrue: [K x + K one / (K one * 2)] ifFalse: [K x].
 	aStream print: ZZ; nextPut: $[; print: a; nextPut: $]! !
-
-!MatrixRing methodsFor: 'printing' stamp: 'len 1/5/2017 08:08:47'!
-printOn: aStream
-	aStream print: self asModule! !
 
 !PolynomialRing methodsFor: 'printing' stamp: 'len 2/12/2017 06:49:02'!
 printOn: aStream
@@ -5921,6 +5903,14 @@ printOn: aStream
 !GroupAlgebra methodsFor: 'printing' stamp: 'len 8/7/2016 08:38'!
 printOn: aStream
 	aStream print: self scalars; nextPut: $[; print: self group; nextPut: $]! !
+
+!MatrixAlgebra methodsFor: 'printing' stamp: 'len 1/5/2017 08:08:47'!
+printOn: aStream
+	aStream print: self asModule! !
+
+!OppositeAlgebra methodsFor: 'printing' stamp: 'len 5/8/2019 14:52:19'!
+printOn: aStream
+	aStream print: opposite; nextPutAll: 'op' super! !
 
 !Morphism methodsFor: 'printing' stamp: 'len 11/16/2016 18:08'!
 name
@@ -6132,10 +6122,6 @@ printOn: aStream
 				ifFalse: [aStream print: element]] separatedBy: [aStream space].
 		aStream nextPut: $)]! !
 
-!OppositeRingElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
-printOn: aStream
-	opposite printOn: aStream! !
-
 !ProductRingElement methodsFor: 'printing' stamp: 'len 5/22/2018 16:12:57'!
 printOn: aStream
 	aStream print: components! !
@@ -6232,6 +6218,10 @@ printOn: aStream
 						first _ false]]].
 "	aStream nextPutAll: ' + ...'"
 	aStream nextPutAll: ' + ', 'O' italic; nextPut: $(; print: parent p; nextPutAll: precision printString super; nextPut: $)! !
+
+!OppositeAlgebraElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
+printOn: aStream
+	opposite printOn: aStream! !
 
 !Sum methodsFor: 'copying' stamp: 'len 11/18/2016 17:34:33'!
 postCopy
@@ -17868,10 +17858,9 @@ nilradical
 oneIdeal
 	^ self * self one! !
 
-!Ring methodsFor: 'operations' stamp: 'len 5/8/2019 14:56:41'!
+!Ring methodsFor: 'operations' stamp: 'len 6/9/2019 10:32:30'!
 opposite
-	self isCommutative ifTrue: [^ self].
-	^ self propertyAt: #opposite ifAbsentPut: [OppositeRing opposite: self]! !
+	^ self! !
 
 !Ring methodsFor: 'operations' stamp: 'len 5/15/2019 01:11:18'!
 polynomials
@@ -19005,35 +18994,6 @@ uniformizer
 !ValuationRing class methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:25'!
 on: aFractionsField p: aPrime
 	^ self new fractions: aFractionsField; p: aPrime! !
-
-!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:52:11'!
-generators
-	^ opposite generators collect: [:each| self !! each]! !
-
-!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:55'!
-one
-	^ self !! opposite one! !
-
-!OppositeRing methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:59'!
-zero
-	^ self !! opposite zero! !
-
-!OppositeRing methodsFor: 'elements' stamp: 'len 5/8/2019 14:44:48'!
-!! anElement
-	(opposite includes: anElement) ifTrue: [^ OppositeRingElement opposite: anElement inverse].
-	^ super !! anElement! !
-
-!OppositeRing methodsFor: 'operations' stamp: 'len 5/8/2019 14:43:21'!
-opposite
-	^ opposite! !
-
-!OppositeRing methodsFor: 'private' stamp: 'len 5/8/2019 14:43:31'!
-opposite: aRing
-	opposite _ aRing! !
-
-!OppositeRing class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:25'!
-opposite: aRing
-	^ self new opposite: aRing! !
 
 !ProductRing methodsFor: 'accessing' stamp: 'len 8/29/2016 04:09'!
 arity
@@ -21064,62 +21024,6 @@ isPrime: aNumber
 isUnit: aNumber
 	"All the units are: 1, -1, i, -i."
 	^ super isUnit: aNumber! !
-
-!MatrixRing methodsFor: 'accessing' stamp: 'len 1/5/2017 08:07:08'!
-degree
-	^ degree! !
-
-!MatrixRing methodsFor: 'accessing' stamp: 'len 1/5/2017 08:07:03'!
-scalars
-	^ scalars! !
-
-!MatrixRing methodsFor: 'accessing' stamp: 'len 1/5/2017 20:23:17'!
-size
-	^ self scalars size ^ self degree squared! !
-
-!MatrixRing methodsFor: 'accessing-private' stamp: 'len 1/5/2017 08:07:47'!
-degree: anInteger
-	degree _ anInteger! !
-
-!MatrixRing methodsFor: 'accessing-private' stamp: 'len 1/5/2017 08:07:29'!
-scalars: aRing
-	scalars _ aRing! !
-
-!MatrixRing methodsFor: 'converting' stamp: 'len 1/5/2017 08:08:18'!
-asModule
-	^ MatrixModule new: self degree @ self degree over: self scalars! !
-
-!MatrixRing methodsFor: 'elements' stamp: 'len 1/5/2017 20:20:36'!
-one
-	^ self scalar: scalars one! !
-
-!MatrixRing methodsFor: 'elements' stamp: 'len 1/5/2017 20:25:23'!
-scalar: aNumber
-	| zero |
-	zero _ self scalars zero.
-	^ self scalars matrix: self degree evaluating: [:i :j| i=j ifTrue: [aNumber] ifFalse: [zero]]! !
-
-!MatrixRing methodsFor: 'elements' stamp: 'len 1/5/2017 20:21:45'!
-zero
-	^ self scalar: scalars zero! !
-
-!MatrixRing methodsFor: 'enumerating' stamp: 'len 1/5/2017 20:28:05'!
-do: aBlock
-	self asModule do: aBlock! !
-
-!MatrixRing methodsFor: 'random' stamp: 'len 1/5/2017 20:29:56'!
-atRandom: aRandom bits: bitSize
-	| n |
-	n _ bitSize // self degree.
-	^ self scalars matrix: self degree evaluating: [:i :j| self scalars atRandom: aRandom bits: n]! !
-
-!MatrixRing methodsFor: 'testing' stamp: 'len 10/3/2018 03:05:18'!
-isCommutative
-	^ self degree = 1 and: [self scalars isCommutative]! !
-
-!MatrixRing class methodsFor: 'instance creation' stamp: 'len 1/5/2017 08:09:09'!
-new: anInteger over: aRing
-	^ self new degree: anInteger; scalars: aRing! !
 
 !PolynomialRing methodsFor: 'accessing' stamp: 'len 1/2/2017 10:08:58'!
 characteristic
@@ -24426,11 +24330,6 @@ elementAt: aTuple
 	(anObject isKindOf: MatrixModule)
 		ifTrue: [^ self scalars = anObject scalars and: [self height = anObject height and: [self width = anObject width]]].
 	^ super = anObject! !
-
-!MatrixModule methodsFor: 'converting' stamp: 'len 4/5/2018 15:50:20'!
-asRing
-	self isSquare ifFalse: [DomainError signal: 'not a module of square matrices'].
-	^ MatrixRing new: height over: scalars! !
 
 !MatrixModule methodsFor: 'converting' stamp: 'len 4/23/2016 06:12'!
 over: aRing
@@ -28004,6 +27903,11 @@ multiplication
 multiplicationInverse
 	^ (self to: self evaluating: [:each| each reciprocal]) name: 'x^-1'! !
 
+!Algebra methodsFor: 'as yet unclassified' stamp: 'len 6/9/2019 10:28:58'!
+opposite
+	self isCommutative ifTrue: [^ self].
+	^ self propertyAt: #opposite ifAbsentPut: [OppositeAlgebra opposite: self]! !
+
 !FreeAlgebra methodsFor: 'accessing' stamp: 'len 8/25/2016 08:22'!
 indeterminates
 	^ words symbols! !
@@ -28215,37 +28119,90 @@ scalars: aRing
 on: aGroup over: aRing
 	^ self new group: aGroup; scalars: aRing! !
 
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:39:44'!
-= anObject
-	self == anObject ifTrue: [^ true].
-	(anObject isKindOf: MatrixAlgebra)
-		ifTrue: [^ anObject scalars = self scalars and: [self degree = anObject degree]].
-	^ super = anObject! !
-
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:38:21'!
-basis
-	^ self propertyAt: #basis ifAbsentPut:
-		[| one zero |
-		one _ scalars one.
-		zero _ scalars zero.
-		(1 to: degree squared) collect: [:index|
-			self evaluating: [:i :j| (i-1)*degree + j = index ifTrue: [one] ifFalse: [zero]]]]! !
-
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:36:14'!
+!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 1/5/2017 08:07:08'!
 degree
 	^ degree! !
 
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:36:24'!
-degree: anInteger
-	degree _ anInteger! !
-
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:36:47'!
+!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 1/5/2017 08:07:03'!
 scalars
 	^ scalars! !
 
-!MatrixAlgebra methodsFor: 'as yet unclassified' stamp: 'len 10/13/2018 17:37:00'!
+!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 1/5/2017 20:23:17'!
+size
+	^ self scalars size ^ self degree squared! !
+
+!MatrixAlgebra methodsFor: 'accessing-private' stamp: 'len 1/5/2017 08:07:47'!
+degree: anInteger
+	degree _ anInteger! !
+
+!MatrixAlgebra methodsFor: 'accessing-private' stamp: 'len 1/5/2017 08:07:29'!
 scalars: aRing
 	scalars _ aRing! !
+
+!MatrixAlgebra methodsFor: 'converting' stamp: 'len 1/5/2017 08:08:18'!
+asModule
+	^ MatrixModule new: self degree @ self degree over: self scalars! !
+
+!MatrixAlgebra methodsFor: 'elements' stamp: 'len 1/5/2017 20:20:36'!
+one
+	^ self scalar: scalars one! !
+
+!MatrixAlgebra methodsFor: 'elements' stamp: 'len 1/5/2017 20:25:23'!
+scalar: aNumber
+	| zero |
+	zero _ self scalars zero.
+	^ self scalars matrix: self degree evaluating: [:i :j| i=j ifTrue: [aNumber] ifFalse: [zero]]! !
+
+!MatrixAlgebra methodsFor: 'elements' stamp: 'len 1/5/2017 20:21:45'!
+zero
+	^ self scalar: scalars zero! !
+
+!MatrixAlgebra methodsFor: 'enumerating' stamp: 'len 1/5/2017 20:28:05'!
+do: aBlock
+	self asModule do: aBlock! !
+
+!MatrixAlgebra methodsFor: 'random' stamp: 'len 1/5/2017 20:29:56'!
+atRandom: aRandom bits: bitSize
+	| n |
+	n _ bitSize // self degree.
+	^ self scalars matrix: self degree evaluating: [:i :j| self scalars atRandom: aRandom bits: n]! !
+
+!MatrixAlgebra methodsFor: 'testing' stamp: 'len 10/3/2018 03:05:18'!
+isCommutative
+	^ self degree = 1 and: [self scalars isCommutative]! !
+
+!MatrixAlgebra class methodsFor: 'instance creation' stamp: 'len 1/5/2017 08:09:09'!
+new: anInteger over: aRing
+	^ self new degree: anInteger; scalars: aRing! !
+
+!OppositeAlgebra methodsFor: 'accessing' stamp: 'len 5/8/2019 14:52:11'!
+generators
+	^ opposite generators collect: [:each| self !! each]! !
+
+!OppositeAlgebra methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:55'!
+one
+	^ self !! opposite one! !
+
+!OppositeAlgebra methodsFor: 'accessing' stamp: 'len 5/8/2019 14:51:59'!
+zero
+	^ self !! opposite zero! !
+
+!OppositeAlgebra methodsFor: 'elements' stamp: 'len 6/9/2019 10:27:01'!
+!! anElement
+	(opposite includes: anElement) ifTrue: [^ OppositeAlgebraElement opposite: anElement inverse].
+	^ super !! anElement! !
+
+!OppositeAlgebra methodsFor: 'operations' stamp: 'len 5/8/2019 14:43:21'!
+opposite
+	^ opposite! !
+
+!OppositeAlgebra methodsFor: 'private' stamp: 'len 5/8/2019 14:43:31'!
+opposite: aRing
+	opposite _ aRing! !
+
+!OppositeAlgebra class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:25'!
+opposite: aRing
+	^ self new opposite: aRing! !
 
 !Element methodsFor: 'accessing' stamp: 'len 9/24/2018 02:08:20'!
 parent
@@ -32749,42 +32706,6 @@ isZero
 isZeroDivisor
 	^ self parent isZeroDivisor: self! !
 
-!OppositeRingElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
-opposite
-	^ opposite! !
-
-!OppositeRingElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:41:34'!
-parent
-	^ opposite parent opposite! !
-
-!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:41:57'!
-* anElement
-	^ self class opposite: anElement opposite * opposite! !
-
-!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:18'!
-+ anElement
-	^ self class opposite: opposite + anElement opposite! !
-
-!OppositeRingElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:29'!
-negated
-	^ self class opposite: opposite negated! !
-
-!OppositeRingElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:04:24'!
-= anElement
-	^ self class = anElement class and: [opposite = anElement opposite]! !
-
-!OppositeRingElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:03:56'!
-hash
-	^ opposite hash! !
-
-!OppositeRingElement methodsFor: 'private' stamp: 'len 5/8/2019 14:43:50'!
-opposite: anElement
-	opposite _ anElement! !
-
-!OppositeRingElement class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:01'!
-opposite: anElement
-	^ self new opposite: anElement! !
-
 !ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:21'!
 at: anInteger
 	^ components at: anInteger! !
@@ -36360,6 +36281,42 @@ unit
 !TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:09'!
 valuation
 	^ valuation! !
+
+!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
+opposite
+	^ opposite! !
+
+!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:41:34'!
+parent
+	^ opposite parent opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:41:57'!
+* anElement
+	^ self class opposite: anElement opposite * opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:18'!
++ anElement
+	^ self class opposite: opposite + anElement opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:29'!
+negated
+	^ self class opposite: opposite negated! !
+
+!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:04:24'!
+= anElement
+	^ self class = anElement class and: [opposite = anElement opposite]! !
+
+!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:03:56'!
+hash
+	^ opposite hash! !
+
+!OppositeAlgebraElement methodsFor: 'private' stamp: 'len 5/8/2019 14:43:50'!
+opposite: anElement
+	opposite _ anElement! !
+
+!OppositeAlgebraElement class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:01'!
+opposite: anElement
+	^ self new opposite: anElement! !
 
 !ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:31:05'!
 adaptToFraction: rcvr andSend: selector
