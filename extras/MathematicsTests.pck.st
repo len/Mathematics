@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:17:18 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 11:18:11 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 141!
+!provides: 'MathematicsTests' 1 142!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -4695,6 +4695,30 @@ testRCF
 	A _ QQ matrix: #((-2 0 0) (-1 -4 -1) (2 4 0)).
 	self assert: A RCF = (QQ matrix: #((-2 0 0) (0 0 -4) (0 1 -4)))! !
 
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/9/2019 11:14:04'!
+testRCF2
+	"Example from wikipedia:"
+	| A C |
+	A _ QQ matrix: #(
+		(-1 3 -1 0 -2 0 0 -2)
+		(-1 -1 1 1 -2 -1 0 -1)
+		(-2 -6 4 3 -8 -4 -2 1)
+		(-1 8 -3 -1 5 2 3 -3)
+		(0 0 0 0 0 0 0 1)
+		(0 0 0 0 -1 0 0 0)
+		(1 0 0 0 2 0 0 0)
+		(0 0 0 0 4 0 1 0)).
+	C _ QQ matrix: #(
+		(0 1 0 0 0 0 0 0)
+		(1 1 0 0 0 0 0 0)
+		(0 0 0 0 0 0 0 -1)
+		(0 0 1 0 0 0 0 -4)
+		(0 0 0 1 0 0 0 -4)
+		(0 0 0 0 1 0 0 2)
+		(0 0 0 0 0 1 0 4)
+		(0 0 0 0 0 0 1 0)).
+	self assert: A RCF = C! !
+
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 06:11:28'!
 testReducerPivots
 	| A |
@@ -4791,16 +4815,18 @@ testSmithNormalFormOverPolynomialsOverPrimeField1
 	a _ M evaluating: [:i :j| x^i + (x^j)].
 	self assert: a elementaryDivisors = {x. x^3 + (x^2*3) + x}! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:49'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/9/2019 10:49:39'!
 testSmithNormalFormOverPolynomialsOverPrimeField2
 	"Example form Magma handbook (H88E7)."
-	| K P x a |
+	| K P x a ax |
 	K _ ZZ/5.
 	P _ K polynomials.
 	x _ P x.
 	a _ ZZ matrix: 5 coefficients: #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
 	a _ a over: P.
-	self assert: (a identity * x - a) SNF = (P diagonalMatrix: {P one. P one. x - 1. x^2 - 1. x^2 - 1})! !
+	ax _ a identity * x - a.
+	self assert: ax SNF = (P diagonalMatrix: {P one. P one. x - 1. x^2 - 1. x^2 - 1}).
+	self assert: ax elementaryDivisors = {P one. P one. x - 1. x^2 - 1. x^2 - 1}! !
 
 !ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
 testGamma0Index
@@ -7206,10 +7232,6 @@ testKrullDimension
 	R _ QQ polynomialsIn: #(x y).
 	I _ R * {R x ^ 2 + (R y ^ 2) - 1}.
 	self assert: (R / I) dimension = 1! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:34'!
-testMatrixRing
-	self testRing: (ZZ ^ (5@5)) asRing! !
 
 !RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
 testNilradical
