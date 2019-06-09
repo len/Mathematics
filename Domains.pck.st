@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 7:36:23 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:15:34 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 519!
+!provides: 'Domains' 1 520!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4116,11 +4116,8 @@ Ring R[[x]] of univariate formal power series over a commutative ring R in an in
 !LocalizationRing commentStamp: '<historical>' prior: 0!
 Localization of a given commutative ring R at a given prime ideal P. The elements are fractions a / b with a in R and b in R \ P.!
 
-!FractionRing commentStamp: 'len 9/28/2018 19:17:32' prior: 0!
-Rings of fractions (quotients) with numerator and (nonzero) denominator in a ring. When the ring is an integral domain they form a field. See Ring>>fractions.
-
-For example, the field of fractions of the rational integers is the rational numbers:
-	ZZ fractions
+!FractionRing commentStamp: 'len 6/9/2019 08:34:55' prior: 0!
+Ring of fractions Frac(R) of a ring R. The elements are formal fractions a/b with a and b in R, b not zero. When the ring is an integral domain this is a field. See Ring>>fractions.
 
 The ring of fractions is a particular case of the more general construction of the localization of a ring or module. The ring of fractions is the localization at the zero ideal.
 
@@ -17573,11 +17570,6 @@ dimension
 	self isDedekindDomain ifTrue: [^ 1].
 	^ self propertyAt: #dimension! !
 
-!Ring methodsFor: 'accessing' stamp: 'len 6/4/2019 04:56:41'!
-euclideanFunction
-	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
-	^ self propertyAt: #euclideanFunction! !
-
 !Ring methodsFor: 'accessing' stamp: 'len 6/6/2019 18:56:11'!
 hilbertSeries
 	"Answer the Hilbert series of the receiver."
@@ -17660,10 +17652,9 @@ divide: anElement by: anotherElement
 	"Answer the quotient and remainder of the division of anElement by anotherElement."
 	^ {anElement // anotherElement. anElement \\ anotherElement}! !
 
-!Ring methodsFor: 'elements-operations' stamp: 'len 6/5/2019 12:31:54'!
+!Ring methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:16:00'!
 valuation: anElement
-	"If the receiver is a valuation ring, answer the valuation of anElement."
-	self isValuationRing ifFalse: [^ self shouldNotImplement].
+	"If the receiver is an Euclidean ring or a valuation ring, answer the valuation of anElement."
 	self subclassResponsibility! !
 
 !Ring methodsFor: 'elements-testing' stamp: 'len 6/5/2019 17:18:21'!
@@ -18416,6 +18407,10 @@ taylorSeriesOf: aFunction at: x0
 				n _ n + 1.
 				value])! !
 
+!PowerSeriesRing methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:27:05'!
+valuation: aPowerSeries
+	^ (aPowerSeries coefficients findFirst: [:each| each isZero not]) - 1! !
+
 !PowerSeriesRing methodsFor: 'elements-testing' stamp: 'len 6/5/2019 17:07:20'!
 isUnit: aPowerSeries
 	"Answer true if the argument is invertible."
@@ -18546,6 +18541,11 @@ over: aRing
 	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
 	^ super !! anObject! !
 
+!LocalizationRing methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:40:33'!
+valuation: anElement
+	"If the receiver is an Euclidean ring or a valuation ring, answer the valuation of anElement."
+	^ (self integers valuation: anElement numerator) - (self integers valuation: anElement denominator)! !
+
 !LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/25/2018 17:53:41'!
 embed: anObject
 	^ anObject! !
@@ -18586,10 +18586,10 @@ isArtinian
 	self integers isArtinian ifTrue: [^ true]. "only if commutative?"
 	^ super isArtinian! !
 
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:09:10'!
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/9/2019 08:41:30'!
 isDVR
 	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
-	"The localization of a Dedekind domain at a non-zero prime ideal is DVR."
+	"The localization of a Dedekind domain at a non-zero prime ideal is a DVR."
 	^ self integers isDedekindDomain and: [self localizationIdeal isTrivial not]! !
 
 !LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:42:45'!
@@ -18694,9 +18694,9 @@ isField
 isFractionRing
 	^ true! !
 
-!FractionRing class methodsFor: 'examples' stamp: 'len 9/28/2018 19:18:34'!
+!FractionRing class methodsFor: 'examples' stamp: 'len 6/9/2019 08:35:43'!
 example1
-	"The field of fractions of the rational integers is the field of rational numbers:"
+	"The ring of fractions of the rational integers is the field of rational numbers:"
 	^ ZZ fractions
 ! !
 
@@ -18758,11 +18758,6 @@ localizationIdeal
 !RationalField methodsFor: 'accessing' stamp: 'len 4/24/2016 03:00'!
 size
 	^ Aleph new! !
-
-!RationalField methodsFor: 'accessing' stamp: 'len 5/30/2019 03:40:35'!
-valuation
-	"Answer the absolute value valuation."
-	^ self propertyAt: #valuation ifAbsentPut: [Function from: self to: ZZ evaluating: [:x| x abs]]! !
 
 !RationalField methodsFor: 'comparing' stamp: 'len 6/1/2016 23:56'!
 <= aDomain
@@ -19635,9 +19630,12 @@ associatedUnit: anElement
 	[p | q] whileTrue: [q _ q // p].
 	^ self project: q! !
 
-!PrimePowerRing methodsFor: 'elements-operations' stamp: 'len 6/5/2019 13:33:00'!
+!PrimePowerRing methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:24:10'!
 valuation: anElement
-	^ anElement representative valuation: self p! !
+	"Answer the Euclidean valuation of the argument."
+	| v |
+	(v _ anElement representative valuation: self p) isInfinity ifTrue: [^ Infinity negative].
+	^ v! !
 
 !PrimePowerRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:56:26'!
 idealsDo: aBlock
@@ -20116,9 +20114,9 @@ embeddingsIn: aField
 	^ (self polynomial rootsIn: aField) asArray
 		collect: [:x| self to: aField evaluating: [:alpha| alpha representative value: x]]! !
 
-!AlgebraicExtensionRing methodsFor: 'testing' stamp: 'len 5/21/2018 04:44:34'!
+!AlgebraicExtensionRing methodsFor: 'testing' stamp: 'len 6/9/2019 09:35:19'!
 isField
-	^ self scalars isField! !
+	^ self scalars isField and: [self polynomial isIrreducible] "<- should assume all extensions are by an irreducible polynomial? QuasiGaloisRing is not"! !
 
 !AlgebraicExtensionRing methodsFor: 'testing' stamp: 'len 5/21/2018 05:12:35'!
 isIntegralDomain
@@ -20299,6 +20297,10 @@ isAbelianExtension
 	"Galois fields are Abelian extensions."
 	^ true! !
 
+!GaloisField methodsFor: 'testing' stamp: 'len 6/9/2019 09:35:56'!
+isField
+	^ true! !
+
 !GaloisField methodsFor: 'testing' stamp: 'len 9/22/2018 18:53:39'!
 isGaloisField
 	^ true! !
@@ -20341,9 +20343,9 @@ isIntegralDomain
 isLocal
 	^ true! !
 
-!QuasiGaloisRing class methodsFor: 'instance creation' stamp: 'len 5/9/2019 09:52:23'!
+!QuasiGaloisRing class methodsFor: 'instance creation' stamp: 'len 6/9/2019 09:14:33'!
 new: p to: r to: n
-	"Answer Quasi-Galois ring of characteristic p and order p^(r*n)."
+	"Answer the quasi-Galois ring of characteristic p and order p^(r*n)."
 	| F f |
 	F _ GaloisField new: p to: r.
 	n = 1 ifTrue: [^ F].
@@ -20353,6 +20355,10 @@ new: p to: r to: n
 !FunctionField methodsFor: 'as yet unclassified' stamp: 'len 1/5/2017 19:50:45'!
 genus
 	^ self notYetImplemented! !
+
+!FunctionField methodsFor: 'testing' stamp: 'len 6/9/2019 09:35:47'!
+isField
+	^ true! !
 
 !FunctionField methodsFor: 'testing' stamp: 'len 9/22/2018 18:48:55'!
 isGlobalField
@@ -20435,6 +20441,10 @@ regulator
 !NumberField methodsFor: 'testing' stamp: 'len 1/2/2017 10:53:30'!
 isCubic
 	^ self degree = 3! !
+
+!NumberField methodsFor: 'testing' stamp: 'len 6/9/2019 09:36:07'!
+isField
+	^ true! !
 
 !NumberField methodsFor: 'testing' stamp: 'len 1/7/2017 21:04:57'!
 isGaloisExtension
@@ -20582,11 +20592,6 @@ dimension
 	"Answer the Krull dimension of the receiver."
 	^ 1! !
 
-!RationalIntegerRing methodsFor: 'accessing' stamp: 'len 6/4/2019 04:56:05'!
-euclideanFunction
-	"Answer the Euclidean function of the receiver."
-	^ self propertyAt: #euclideanFunction ifAbsentPut: [Function from: self to: self evaluating: [:x| x abs]]! !
-
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:58'!
 size
 	^ Aleph new! !
@@ -20628,6 +20633,11 @@ zero
 associatedUnit: anInteger
 	"Answer a choice for associated unit of anInteger."
 	^ anInteger < 0 ifTrue: [-1] ifFalse: [1]! !
+
+!RationalIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:20:55'!
+valuation: anInteger
+	"Answer the Euclidean valuation of the argument."
+	^ anInteger abs! !
 
 !RationalIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/22/2018 18:58:26'!
 isIrreducible: anInteger
@@ -21123,11 +21133,6 @@ dimension
 	self scalars isNoetherian ifTrue: [^ self scalars dimension + self rank].
 	^ super dimension! !
 
-!PolynomialRing methodsFor: 'accessing' stamp: 'len 6/4/2019 04:54:23'!
-euclideanFunction
-	"Answer the Euclidean function of the receiver, if it is an Euclidean domain."
-	^ self propertyAt: #euclideanFunction ifAbsentPut: [self scalars isField ifTrue: [Function from: self to: ZZ evaluating: [:f| f degree]]]! !
-
 !PolynomialRing methodsFor: 'accessing' stamp: 'len 10/2/2016 10:34'!
 generators
 	^ (1 to: self rank) collect: [:i| self x: i]! !
@@ -21422,6 +21427,11 @@ zero
 associatedUnit: aPolynomial
 	"Answer a choice for associated unit of aPolynomial."
 	^ self constant: (self scalars associatedUnit: aPolynomial leadingCoefficient)! !
+
+!PolynomialRing methodsFor: 'elements-operations' stamp: 'len 6/9/2019 08:19:44'!
+valuation: aPolynomial
+	"Answer the Euclidean valuation of the argument."
+	^ aPolynomial leadingMonomial degree! !
 
 !PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/4/2019 19:22:30'!
 isNilpotent: aPolynomial
@@ -33381,11 +33391,6 @@ isZero
 \\ anElement
 	^ self - (self // anElement * anElement)! !
 
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/9/2019 03:47:50'!
-abs
-	self isZero ifTrue: [^ 0].
-	^ parent p ^ self valuation negated! !
-
 !PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/9/2019 04:52:06'!
 euclideanFunction
 	| v |
@@ -33403,10 +33408,6 @@ lcm: anElement
 !PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/8/2019 13:56:15'!
 gcd: anElement
 	^ parent one! !
-
-!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/8/2019 13:57:05'!
-valuation
-	^ 0! !
 
 !SmallPrimeResidue methodsFor: 'operations' stamp: 'len 9/2/2018 21:50:50'!
 * aModularInteger
@@ -33955,11 +33956,6 @@ terms
 	"Answer the composition of the receiver with the argument."
 	anObject isBlock ifTrue: [^ [:x| self value: (anObject value: x)]].
 	^ self value: anObject! !
-
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/30/2019 03:49:27'!
-abs
-	"Answer the Euclidean function at the receiver."
-	^ self degree! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:40:24'!
 divisionBy: aPolynomial
@@ -38832,18 +38828,19 @@ RCF
 	"Answer the rational canonical form of the receiver."
 	^ self minimalPolynomial factors inject: (self scalars matrix: #()) into: [:matrix :each| matrix  each companion]! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 5/30/2019 13:28:33'!
+!Matrix methodsFor: 'reduction' stamp: 'len 6/9/2019 10:00:06'!
 SNF
 	"Answer the Smith normal form of the receiver.
 	This is a naive implementation of Kannan-Bachem algorithm."
-	| H a |
+	| H a n |
 	self isEmpty ifTrue: [^ self].
 	"Repeatedly compute the Hermite normal form and transposes until a diagonal form is obtained:"
 	H _ self HNF.
 	[H isDiagonal] whileFalse: [H _ H transposed HNF transposed HNF].
 	"Once in diagonal form, substitute neighboring diagonal elements by their gcd and lcm:"
+	n _ ((H width min: H height) to: 2 by: -1) detect: [:i| (H at: i at: i) isZero not] ifNone: [^ H].
 	[a _ H at: 1 at: 1.
-	2 to: (H width min: H height) do: [:i| | b gcd |
+	2 to: n do: [:i| | b gcd |
 		b _ H at: i at: i.
 		H at: i-1 at: i-1 put: (gcd _ a gcd: b). "gcd"
 		H at: i at: i put: (a _ a // gcd * b) "lcm"].
@@ -38966,12 +38963,12 @@ echelon
 	self isEmpty ifTrue: [^ self].
 	^ self reduction reduced! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 5/29/2019 15:54:23'!
+!Matrix methodsFor: 'reduction' stamp: 'len 6/9/2019 10:08:46'!
 elementaryDivisors
 	"Answer the diagonal of the Smith normal form."
 	self isEmpty ifTrue: [^ #()].
 	self scalars isField ifTrue: [^ (1 to: self rank) collect: [:each| self scalars one]].
-	^ self SNF diagonal asArray! !
+	^ self SNF diagonal asArray select: [:each| each isZero not]! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 4/7/2018 06:26:26'!
 jordan
@@ -41307,7 +41304,7 @@ oldreduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/30/2019 07:19:44'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 6/9/2019 08:05:00'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| R i0 b |
@@ -41317,7 +41314,7 @@ reduceStep: k column: j
 		detect: [:i| (matrix at: i@j) isZero not]
 		ifNone: [self multiplyRow: k by: (R associatedUnit: (matrix at: k@j)) reciprocal. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
-	i0 _ ((i0 to: k by: -1) select: [:i| (matrix at: i@j) isZero not]) detectMin: [:i| (matrix at: i@j) abs].
+	i0 _ ((i0 to: k by: -1) select: [:i| (matrix at: i@j) isZero not]) detectMin: [:i| (matrix at: i@j) valuation].
 	i0 > k ifTrue: [self swapRow: i0 with: k].
 	self multiplyRow: k by: (R associatedUnit: (matrix at: k@j)) reciprocal.
 	b _ matrix at: k@j.
@@ -41326,7 +41323,7 @@ reduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/30/2019 07:19:53'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 6/9/2019 09:39:23'!
 run
 	| n m k j l b |
 	m _ matrix height.
@@ -41338,7 +41335,7 @@ run
 	[self reduceStep: k column: j.
 	"5. Final reductions:"
 	b _ matrix at: k@j.
-	b = 0
+	b isZero
 		ifTrue:
 			[k _ k - 1]
 		ifFalse:
@@ -45644,6 +45641,11 @@ stirling: anInteger
 	self = anInteger ifTrue: [^ self Stirling: anInteger].
 	self+1 = anInteger ifTrue: [^ self choose: 2].
 	^ (self-1) * (self-1 stirling: anInteger) + (self-1 stirling: anInteger-1)! !
+
+!Integer methodsFor: '*domains' stamp: 'len 6/9/2019 07:58:03'!
+valuation
+	"Answer the Euclidean function at the receiver."
+	^ self abs! !
 
 !Integer methodsFor: '*domains' stamp: 'len 6/5/2019 13:14:56'!
 valuation: p
