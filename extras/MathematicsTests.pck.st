@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 9:02:18 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 June 2019 at 10:17:18 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 140!
+!provides: 'MathematicsTests' 1 141!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -4780,7 +4780,7 @@ testSmithNormalFormOverPolynomials
 	A _ M !! 1 * x - (M !! #(3 -4 1 -1)).
 	self assert: A SNF = (R diagonalMatrix: {R one. x^2 - (x*2) + 1})! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:37'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/9/2019 10:10:02'!
 testSmithNormalFormOverPolynomialsOverPrimeField1
 	"Example form Magma handbook (H88E7)."
 	| K P x M a |
@@ -4789,7 +4789,7 @@ testSmithNormalFormOverPolynomialsOverPrimeField1
 	x _ P x.
 	M _ P^(5@5).
 	a _ M evaluating: [:i :j| x^i + (x^j)].
-	self assert: a SNF = (P diagonalMatrix: {x. x^3 + (x^2*3) + x})! !
+	self assert: a elementaryDivisors = {x. x^3 + (x^2*3) + x}! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/28/2019 09:03:49'!
 testSmithNormalFormOverPolynomialsOverPrimeField2
@@ -7485,17 +7485,18 @@ testPrimePowerRingValuationAndUnit
 	x _ R !! 0.
 	self assert: x valuation = Infinity positive "as an Euclidean function, this valuation doesn't match the p-adic valuation at 0"! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 03:03:30'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 09:29:08'!
 testQuasiGaloisRing1
 	| p r n A |
 	p _ #(2 3) atRandom.
 	r _ 3 atRandom.
-	n _ 3 atRandom.
+	n _ 3 atRandom+1.
 	A _ QuasiGaloisRing new: p to: r to: n.
 	self assert: A characteristic = p.
 	self assert: A size = (p^(r*n)).
 	self assert: A isLocal.
-	self assert: A isFinite! !
+	self assert: A isFinite.
+	self assert: A isField not! !
 
 !RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:19:56'!
 testLocalizationInclusions
