@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 3:23:39 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 6:41:20 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 143!
+!provides: 'MathematicsTests' 1 144!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7645,16 +7645,19 @@ testLocalHomomorphism
 	self assert: f isLocal
 ! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 15:00:35'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:23'!
 testEuclideanRing: R
 	"Test division on a pair of elements:"
 	| a b q r |
-	a _ R atRandomBits: 100.
-	[b _ R atRandomBits: 100. b isZero] whileTrue.
-	q _ a // b.
-	r _ a \\ b.
-	self assert: a = (q * b + r).
-	self assert: (r isZero or: [r valuation < b valuation])! !
+	self assert: R isEuclidean.
+	R size < 300 ifTrue: [self testEuclideanRingAll: R].
+	100 timesRepeat:
+		[a _ R atRandomBits: 100.
+		[b _ R atRandomBits: 100. b isZero] whileTrue.
+		q _ a // b.
+		r _ a \\ b.
+		self assert: a = (q * b + r).
+		self assert: (r isZero or: [r valuation < b valuation])]! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 14:59:58'!
 testEuclideanRingAll: R
@@ -7668,40 +7671,125 @@ testEuclideanRingAll: R
 				self assert: a = (q * b + r).
 				self assert: (r isZero or: [r valuation < b valuation])]]]]! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 15:01:07'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:44:10'!
+testGCD: R
+	R size < 60 ifTrue: [self testGCDAll: R].
+	self testGCDZero: R.
+	100 timesRepeat:
+		[| a b gcd |
+		[(a _ R atRandomBits: 100) isZero] whileTrue.
+		[(b _ R atRandomBits: 100) isZero] whileTrue.
+		gcd _ a gcd: b.
+		self assert: gcd | a.
+		self assert: gcd | b.
+		self assert: gcd = gcd normalized]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:22:36'!
+testGCDAll: R
+	R do: [:a|
+		a isZero ifFalse:
+			[R do: [:b|
+				b isZero ifFalse:
+					[| gcd |
+					gcd _ a gcd: b.
+					self assert: gcd | a.
+					self assert: gcd | b.
+					self assert: gcd = gcd normalized.
+					R do: [:c| (c | a and: [c | b]) ifTrue: [self assert: c valuation <= gcd valuation]]]]]]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 16:43:23'!
+testGCDZero: R
+	| a gcd |
+	a _ R atRandomBits: 100.
+	gcd _ a gcd: R zero.
+	self assert: gcd = (R zero gcd: a).
+	self assert: gcd = a normalized.
+	self assert: (R zero gcd: R zero) = R zero! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:30'!
 testGaloisRingIsEuclidean
 	| R |
 	R _ GaloisRing new: 5 atRandom nextPrime to: 3 atRandom to: 3 atRandom.
-	self assert: R isEuclidean.
-	self testEuclideanRingAll: R! !
+	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 15:01:21'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:57:12'!
+testLCM: R
+	R size < 60 ifTrue: [self testLCMAll: R].
+	self testLCMZero: R.
+	100 timesRepeat:
+		[| a b lcm |
+		[(a _ R atRandomBits: 100) isZero] whileTrue.
+		[(b _ R atRandomBits: 100) isZero] whileTrue.
+		lcm _ a lcm: b.
+		self assert: a | lcm.
+		self assert: b | lcm.
+		self assert: lcm = lcm normalized]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:58:11'!
+testLCMAll: R
+	R do: [:a|
+		a isZero ifFalse:
+			[R do: [:b|
+				b isZero ifFalse:
+					[| lcm |
+					lcm _ a lcm: b.
+					self assert: a | lcm.
+					self assert: b | lcm.
+					self assert: lcm = lcm normalized.
+					R do: [:c| (c | a and: [c | b]) ifTrue: [self assert: c valuation >= lcm valuation]]]]]]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:58:37'!
+testLCMZero: R
+	| a lcm |
+	a _ R atRandomBits: 100.
+	lcm _ a lcm: R zero.
+	self assert: lcm = (R zero gcd: a).
+	self assert: lcm = a normalized.
+	self assert: (R zero lcm: R zero) = R zero! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:09'!
+testModuleIntegersRingGCD
+	| R |
+	R _ ZZ/(2 to: 256) atRandom.
+	self testGCD: R.
+	self testLCM: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:17'!
 testModuleIntegersRingIsEuclidean
 	| R |
 	R _ ZZ/(2 to: 256) atRandom.
-	self assert: R isEuclidean.
-	self testEuclideanRingAll: R! !
+	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:52:23'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:17'!
+testPolynomialsOverFieldGCD
+	| F R |
+	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
+	R _ F polynomials.
+	self testGCD: R.
+	self testLCM: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:49'!
 testPolynomialsOverFieldIsEuclidean
 	| F R |
 	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
 	R _ F polynomials.
-	self assert: R isEuclidean.
 	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 15:02:36'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:46:04'!
 testPrimePowerRingIsEuclidean
 	| p k R |
 	p _ 10 atRandom nextPrime.
 	k _ 10 atRandom.
 	R _ PrimePowerRing new: p to: k.
-	self assert: R isEuclidean.
-	self testEuclideanRingAll: R! !
+	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/9/2019 08:49:01'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:34'!
+testRationalIntegerRingGCD
+	self testGCD: ZZ.
+	self testLCM: ZZ! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:46:15'!
 testRationalIntegerRingIsEuclidean
-	self assert: ZZ isEuclidean.
 	self testEuclideanRing: ZZ! !
 
 !RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
