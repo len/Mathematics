@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 3:21:13 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 6:40:07 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 527!
+!provides: 'Domains' 1 528!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -18001,9 +18001,10 @@ isEuclideanDomain
 isField
 	^ self propertyAt: #isField ifAbsent: [false]! !
 
-!Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:10:57'!
+!Ring methodsFor: 'testing' stamp: 'len 6/16/2019 15:52:33'!
 isGCDDomain
 	"A GCD domain is an integral domain with the property that any two non-zero elements have GCD (or equivalently any two non-zero elements have a LCM)."
+	self isUFD ifTrue: [^ true].
 	^ self propertyAt: #isGCDDomain! !
 
 !Ring methodsFor: 'testing' stamp: 'len 9/17/2018 00:41:55'!
@@ -18115,10 +18116,10 @@ isTrivial
 	"The trivial ring is the zero ring with a single element 0 = 1."
 	^ self size = 1! !
 
-!Ring methodsFor: 'testing' stamp: 'len 9/24/2018 06:17:18'!
+!Ring methodsFor: 'testing' stamp: 'len 6/16/2019 15:52:22'!
 isUFD
 	"A unique factorization domain (UFD) is a commutative ring in which every non-zero non-unit element can be written as a product of prime elements (or irreducible elements), uniquely up to order and units."
-	(self isPID or: [self isEuclideanDomain]) ifTrue: [^ true].
+	self isPID ifTrue: [^ true].
 	^ self propertyAt: #isUFD! !
 
 !Ring methodsFor: 'private' stamp: 'len 1/20/2018 18:12:11'!
@@ -20147,6 +20148,12 @@ primitiveRoot
 	For GR(p^n,r), a basic primitive element is an element of multiplicative order p^r - 1, which is a root of a basic primitive polynomial of degree r over Z/(p^n)Z and dividing x^(p^r - 1) - 1 in Z/(p^n)Z[x]. Powers of this element form a Teichmuller set."
 	^ self notYetImplemented! !
 
+!GaloisRing methodsFor: 'accessing' stamp: 'len 6/9/2019 15:12:35'!
+residueField
+	"Answer the Galois field GF(p,r) isomorphic to the residue field of the receiver, equiped with the canonical projection."
+	^ self propertyAt: #residueField ifAbsentPut:
+		[GaloisField polynomial: (self polynomial apply: self scalars -> self scalars residueField)]! !
+
 !GaloisRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:54:27'!
 teichmuller
 	"Answer a Teichmuller set of the receiver.
@@ -20231,12 +20238,6 @@ isGaloisRing
 !GaloisRing methodsFor: 'testing' stamp: 'len 5/21/2018 16:54:03'!
 isLocal
 	^ true! !
-
-!GaloisRing methodsFor: 'nil' stamp: 'len 6/9/2019 15:12:35'!
-residueField
-	"Answer the Galois field GF(p,r) isomorphic to the residue field of the receiver, equiped with the canonical projection."
-	^ self propertyAt: #residueField ifAbsentPut:
-		[GaloisField polynomial: (self polynomial apply: self scalars -> self scalars residueField)]! !
 
 !GaloisRing class methodsFor: 'class initialization' stamp: 'len 5/15/2019 10:35:45'!
 initialize
@@ -21616,9 +21617,9 @@ printIndeterminatesOn: aStream
 		do: [:i| aStream print: (self x: i)]
 		separatedBy: [aStream nextPut: $,]! !
 
-!PolynomialRing methodsFor: 'random' stamp: 'len 3/25/2018 16:15:00'!
+!PolynomialRing methodsFor: 'random' stamp: 'len 6/16/2019 17:51:45'!
 atRandom: aRandom bits: bitSize
-	^ self atRandom: aRandom bits: bitSize maxDegree: ((bitSize raisedTo: (1/self rank)) min: bitSize - 1) truncated! !
+	^ self atRandom: aRandom bits: bitSize maxDegree: ((bitSize raisedTo: 1/(self rank+1)) min: bitSize - 1) truncated! !
 
 !PolynomialRing methodsFor: 'random' stamp: 'len 10/22/2016 18:12'!
 atRandom: aRandom bits: bitSize maxDegree: d
@@ -32658,6 +32659,10 @@ adaptToInteger: rcvr andSend: selector
 / aRingElement
 	^ self * aRingElement reciprocal! !
 
+!RingElement methodsFor: 'operations' stamp: 'len 6/16/2019 16:27:23'!
+\\ anElement
+	^ self - (self // anElement * anElement)! !
+
 !RingElement methodsFor: 'operations' stamp: 'len 6/8/2019 02:31:41'!
 ^ anInteger
 	"Answer the receiver raised to the power anInteger."
@@ -32689,6 +32694,14 @@ lcm: aRingElement
 !RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:14'!
 negated
 	^ self subclassResponsibility! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 6/16/2019 16:26:32'!
+raisedTo: anInteger modulo: anElement
+	"Answer the receiver raised to the power anInteger modulo anElement."
+	anInteger = 1 ifTrue: [^ self \\ anElement].
+	anInteger = 0 ifTrue: [^ self one \\ anElement].
+	anInteger < 0 ifTrue: [^ (self raisedTo: anInteger negated modulo: anElement) reciprocal \\ anElement].
+	^ anInteger even ifTrue: [self squared \\ anElement raisedTo: anInteger // 2 modulo: anElement] ifFalse: [(self squared \\ anElement raisedTo: anInteger // 2) * self \\ anElement]! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:09'!
 reciprocal
@@ -33180,6 +33193,11 @@ isZero
 bitSize
 	^ representative bitSize! !
 
+!ModularInteger methodsFor: 'accessing' stamp: 'len 6/16/2019 16:03:02'!
+factors
+	"Answer a collection with the irreducible factors of the receiver (with multiplicity)."
+	^ self normalized representative factors apply: [:each| parent representative: each]! !
+
 !ModularInteger methodsFor: 'accessing' stamp: 'len 6/3/2019 15:06:31'!
 lift
 	| m |
@@ -33339,17 +33357,7 @@ squareRoot
 	(p bitAnd: 3) == 3 ifTrue: [^ self ^ (p + 1 // 4)].
 	^ self parent squareRootOf: self! !
 
-!ModularInteger methodsFor: 'testing' stamp: 'len 12/29/2016 07:20:37'!
-isQuadraticResidue
-	(representative kronecker: self modulus) ~= 1 ifTrue: [^ false].
-	(parent isKindOf: PrimeField) ifTrue: [^ true].
-	^ self notYetImplemented! !
-
-!ModularInteger methodsFor: 'testing' stamp: 'len 12/4/2016 15:16:58'!
-isZero
-	^ representative == 0! !
-
-!ModularInteger methodsFor: 'as yet unclassified' stamp: 'len 6/16/2019 13:12:26'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:12:26'!
 // anElement
 	| m x y u v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
@@ -33361,19 +33369,19 @@ isZero
 	v _ anElement representative // y.
 	^ parent project: u * (v reciprocalModulo: m) * (x // y)! !
 
-!ModularInteger methodsFor: 'as yet unclassified' stamp: 'len 6/16/2019 07:37:33'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 07:37:33'!
 \\ anElement
 	^ self - (self // anElement * anElement)! !
 
-!ModularInteger methodsFor: 'as yet unclassified' stamp: 'len 6/16/2019 13:02:14'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:02:14'!
 gcd: anElement
 	^ parent representative: (self normalized representative gcd: anElement normalized representative)! !
 
-!ModularInteger methodsFor: 'as yet unclassified' stamp: 'len 6/16/2019 13:03:01'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:03:01'!
 lcm: anElement
 	^ parent representative: (self normalized representative lcm: anElement normalized representative)! !
 
-!ModularInteger methodsFor: 'as yet unclassified' stamp: 'len 6/16/2019 14:46:31'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 14:46:31'!
 valuation
 	"Answer the Euclidean valuation of the receiver."
 	| answer q |
@@ -33383,7 +33391,17 @@ valuation
 	parent modulusPrimes do: [:p| [p | q] whileTrue: [q _ q // p. answer _ answer * p]].
 	^ answer - 1! !
 
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/15/2019 10:17:39'!
+!ModularInteger methodsFor: 'testing' stamp: 'len 12/29/2016 07:20:37'!
+isQuadraticResidue
+	(representative kronecker: self modulus) ~= 1 ifTrue: [^ false].
+	(parent isKindOf: PrimeField) ifTrue: [^ true].
+	^ self notYetImplemented! !
+
+!ModularInteger methodsFor: 'testing' stamp: 'len 12/4/2016 15:16:58'!
+isZero
+	^ representative == 0! !
+
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/15/2019 10:17:39'!
 // anElement
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
@@ -33391,19 +33409,19 @@ valuation
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
 	^ self associatedUnit / anElement associatedUnit * (parent p ^ v)! !
 
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/9/2019 03:38:00'!
-\\ anElement
-	^ self - (self // anElement * anElement)! !
-
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/8/2019 12:27:15'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 17:01:30'!
 gcd: anElement
+	self isZero ifTrue: [^ anElement normalized].
+	anElement isZero ifTrue: [^ self normalized].
 	^ parent representative: parent p ^ (self valuation min: anElement valuation)! !
 
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/8/2019 12:29:34'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 18:00:53'!
 lcm: anElement
+	self isZero ifTrue: [^ anElement normalized].
+	anElement isZero ifTrue: [^ self normalized].
 	^ parent representative: parent p ^ (self valuation max: anElement valuation)! !
 
-!PrimePowerResidue methodsFor: 'as yet unclassified' stamp: 'len 6/15/2019 09:29:40'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/15/2019 09:29:40'!
 valuation
 	"Answer the Euclidean valuation of the receiver.
 	We define it as infinity at 0; although this is undefined for an Euclidean function, it makes it compatible with the p-adic valuation."
