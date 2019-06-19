@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:50:15 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:14:50 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 145!
+!provides: 'MathematicsTests' 1 146!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7429,6 +7429,17 @@ testModularIntegers
 	self testRing: R.
 	self testRingHomomorphism: R projection! !
 
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 16:11:38'!
+testModularIntegersPrimitiveRoots
+	| X |
+	"number of primitive roots in Z/nZ for n=2 to 17:"
+	X _ #(1 1 1 2 1 2 0 2 2 4 0 4 2 0 0 8).
+	self assert: ((2 to: 17) collect: [:m| (ZZ/m) count: [:x| x isPrimitiveRoot]]) = X.
+	X withIndexDo: [:n :i|
+		n > 0
+			ifTrue: [self assert: (ZZ/(i+1)) primitiveRoot isPrimitiveRoot]
+			ifFalse: [self should: [(ZZ/(i+1)) primitiveRoot] raise: Error]]! !
+
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:25:01'!
 testModularIntegersProperties
 	| m R |
@@ -7439,6 +7450,14 @@ testModularIntegersProperties
 	self assert: m isPrimePower = R isLocal.
 	self assert: R isField = R isIntegralDomain.
 	self assert: R isField = R isPID! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 15:22:23'!
+testModularIntegersTrivial
+	| R |
+	R _ ZZ/1.
+	self assert: R isTrivial.
+	self assert: R size = 1.
+	self assert: R zero = R one! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
 testPrimeFieldLogarithm
@@ -7666,15 +7685,15 @@ testCongruenceSolving2
 	self assert: solutions size = 23.
 	self assert: (solutions allSatisfy: [:x| a*x = b])! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:23'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:12:58'!
 testEuclideanRing: R
 	"Test division on a pair of elements:"
 	| a b q r |
 	self assert: R isEuclidean.
 	R size < 300 ifTrue: [self testEuclideanRingAll: R].
 	100 timesRepeat:
-		[a _ R atRandomBits: 100.
-		[b _ R atRandomBits: 100. b isZero] whileTrue.
+		[a _ R atRandomBits: 30.
+		[b _ R atRandomBits: 30. b isZero] whileTrue.
 		q _ a // b.
 		r _ a \\ b.
 		self assert: a = (q * b + r).
@@ -7692,14 +7711,14 @@ testEuclideanRingAll: R
 				self assert: a = (q * b + r).
 				self assert: (r isZero or: [r valuation < b valuation])]]]! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:44:10'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:07'!
 testGCD: R
 	R size < 60 ifTrue: [self testGCDAll: R].
 	self testGCDZero: R.
 	100 timesRepeat:
 		[| a b gcd |
-		[(a _ R atRandomBits: 100) isZero] whileTrue.
-		[(b _ R atRandomBits: 100) isZero] whileTrue.
+		[(a _ R atRandomBits: 30) isZero] whileTrue.
+		[(b _ R atRandomBits: 30) isZero] whileTrue.
 		gcd _ a gcd: b.
 		self assert: gcd | a.
 		self assert: gcd | b.
@@ -7733,14 +7752,14 @@ testGaloisRingIsEuclidean
 	R _ GaloisRing new: 5 atRandom nextPrime to: 3 atRandom to: 3 atRandom.
 	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:57:12'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:15'!
 testLCM: R
 	R size < 60 ifTrue: [self testLCMAll: R].
 	self testLCMZero: R.
 	100 timesRepeat:
 		[| a b lcm |
-		[(a _ R atRandomBits: 100) isZero] whileTrue.
-		[(b _ R atRandomBits: 100) isZero] whileTrue.
+		[(a _ R atRandomBits: 30) isZero] whileTrue.
+		[(b _ R atRandomBits: 30) isZero] whileTrue.
 		lcm _ a lcm: b.
 		self assert: a | lcm.
 		self assert: b | lcm.
@@ -7920,6 +7939,29 @@ testPrimePowerRingIsEuclidean
 	p _ 10 atRandom nextPrime.
 	k _ 10 atRandom.
 	R _ PrimePowerRing new: p to: k.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:05:59'!
+testProductOfEuclideanRingsIsEuclidean1
+	| R |
+	R _ ZZ × ZZ.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:05:40'!
+testProductOfEuclideanRingsIsEuclidean2
+	| A B R |
+	A _ ZZ/(2 to: 32) atRandom.
+	B _ ZZ/(2 to: 32) atRandom.
+	R _ A × B.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:06:44'!
+testProductOfEuclideanRingsIsEuclidean3
+	| A B C R |
+	A _ ZZ.
+	B _ ZZ/(2 to: 32) atRandom.
+	C _ ZZ/(2 to: 32) atRandom.
+	R _ A × B × C.
 	self testEuclideanRing: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:17:02'!
