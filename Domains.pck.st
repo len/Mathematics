@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:46:40 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:13:51 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 529!
+!provides: 'Domains' 1 530!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2397,7 +2397,7 @@ RingElement class
 
 !classDefinition: #ProductRingElement category: #'Domains-Rings'!
 RingElement subclass: #ProductRingElement
-	instanceVariableNames: 'components'
+	instanceVariableNames: 'parent components'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Rings'!
@@ -14994,7 +14994,7 @@ normalizerOf: aCollection
 opposite
 	^ self propertyAt: #opposite ifAbsentPut: [OppositeGroup opposite: self]! !
 
-!Group methodsFor: 'operations' stamp: 'len 9/24/2018 22:31:55'!
+!Group methodsFor: 'operations' stamp: 'len 6/19/2019 15:03:04'!
 orderOf: anElement
 	"Answer the order of the argument in the receiver, i.e. the minimum e such that g^e = 1.
 	COHEN Algorithm 1.4.3 (Order of an Element)."
@@ -15005,8 +15005,8 @@ orderOf: anElement
 	id _ self identity.
 	factors asSet do: [:p|
 		e _ e / (p ^ (factors occurrencesOf: p)).
-		g1 _ self raise: anElement to: e.
-		[g1 = id] whileFalse: [g1 _ self raise: g1 to: p. e _ e*p]].
+		g1 _ anElement ^ e.
+		[g1 = id] whileFalse: [g1 _ g1 ^ p. e _ e*p]].
 	^ e! !
 
 !Group methodsFor: 'operations' stamp: 'len 7/27/2016 02:01'!
@@ -19056,13 +19056,30 @@ one
 zero
 	^ self compose: (components collect: [:each| each zero])! !
 
+!ProductRing methodsFor: 'elements-operations' stamp: 'len 6/19/2019 13:55:59'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	^ self compose: (components with: anElement components collect: [:R :x| R associatedUnit: x])! !
+
+!ProductRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:25:57'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	components with: anElement do: [:each :x| (each isUnit: x) ifFalse: [^ false]].
+	^ true! !
+
+!ProductRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:31:39'!
+isZeroDivisor: anElement
+	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
+	components with: anElement do: [:each :x| (each isZeroDivisor: x) ifTrue: [^ true]].
+	^ false! !
+
 !ProductRing methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:15:22'!
 do: aBlock
 	self asCartesianProduct do: [:each| aBlock value: (self compose: each)]! !
 
-!ProductRing methodsFor: 'morphisms' stamp: 'len 9/16/2018 16:15:15'!
+!ProductRing methodsFor: 'morphisms' stamp: 'len 6/19/2019 13:53:11'!
 compose: anArray
-	^ ProductRingElement components: anArray! !
+	^ ProductRingElement new parent: self; components: anArray asArray! !
 
 !ProductRing methodsFor: 'morphisms' stamp: 'len 9/16/2018 16:15:19'!
 composition
@@ -19134,18 +19151,6 @@ isReduced
 	(components allSatisfy: [:each| each isReduced]) ifTrue: [^ true]. "is it iff?"
 	^ super isReduced! !
 
-!ProductRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:25:57'!
-isUnit: anElement
-	"Answer true if the argument is invertible."
-	components with: anElement do: [:each :x| (each isUnit: x) ifFalse: [^ false]].
-	^ true! !
-
-!ProductRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:31:39'!
-isZeroDivisor: anElement
-	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
-	components with: anElement do: [:each :x| (each isZeroDivisor: x) ifTrue: [^ true]].
-	^ false! !
-
 !ProductRing class methodsFor: 'examples' stamp: 'len 5/22/2018 21:56:13'!
 example1
 	"The product ring of two finite rings. This is a ring of order 4,
@@ -19185,9 +19190,9 @@ maximalIdeal
 modulus
 	^ self relations generator! !
 
-!QuotientRing methodsFor: 'accessing' stamp: 'len 11/30/2016 18:59:01'!
+!QuotientRing methodsFor: 'accessing' stamp: 'len 6/19/2019 15:18:48'!
 one
-	^ self representative: self base one! !
+	^ self propertyAt: #one ifAbsentPut: [self project: self base one] "becomes 0 when the receiver is trivial"! !
 
 !QuotientRing methodsFor: 'accessing' stamp: 'len 2/27/2017 20:53:26'!
 relation
@@ -19201,9 +19206,9 @@ relations
 relators
 	^ self relations generators! !
 
-!QuotientRing methodsFor: 'accessing' stamp: 'len 11/30/2016 18:58:54'!
+!QuotientRing methodsFor: 'accessing' stamp: 'len 6/19/2019 15:19:04'!
 zero
-	^ self representative: self base zero! !
+	^ self propertyAt: #zero ifAbsentPut: [self representative: self base zero]! !
 
 !QuotientRing methodsFor: 'accessing-private' stamp: 'len 2/27/2017 20:48:00'!
 relations: anIdeal
@@ -19415,6 +19420,23 @@ dimension
 modulus
 	^ modulus! !
 
+!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 6/19/2019 15:47:01'!
+phi
+	"Answer the order of the units group. This is Euler's totient function."
+	^ modulus phi! !
+
+!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 6/19/2019 16:08:45'!
+primitiveRoot
+	| order powers |
+	self propertyAt: #primitiveRoot ifPresent: [:anElement| ^ anElement].
+	modulus <= 2 ifTrue: [^ self one].
+	order _ self phi.
+	powers _ order factors asSet asArray collect: [:p| order / p].
+	self unitsDo: [:x|
+		(powers anySatisfy: [:n| (x^n) representative = 1])
+			ifFalse: [^ self propertyAt: #primitiveRoot put: x]].
+	^ self error: 'no primitive element'! !
+
 !ModularIntegerRing methodsFor: 'accessing' stamp: 'len 2/27/2017 20:49:49'!
 relations
 	^ self propertyAt: #relations ifAbsentPut: [ZZ * modulus]! !
@@ -19459,9 +19481,10 @@ associatedUnit: anElement
 	^ self units detect: [:u| associate * u = anElement]
 "	^ self project: (anElement representative quotientBy: (anElement representative gcd: modulus) modulo: modulus)"! !
 
-!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:09:03'!
+!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 6/19/2019 15:12:47'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
+	anElement isZero ifTrue: [^ self isTrivial].
 	^ (anElement representative gcd: self modulus) = 1! !
 
 !ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:31:52'!
@@ -19505,10 +19528,18 @@ lifting
 project: anInteger
 	^ self representative: anInteger \\ modulus! !
 
-!ModularIntegerRing methodsFor: 'operations' stamp: 'len 5/2/2019 08:03:17'!
+!ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/19/2019 14:03:37'!
+decomposition
+	"Answer the decomposition of the receiver as product of prime power rings."
+	^ self notYetImplemented
+"	components _ OrderedCollection new.
+	self modulusFactors withOccurrencesDo: [:p :k| components add: (PrimePowerRing new: p to: k)].
+	^ ProductRing components: components asArray. ...."! !
+
+!ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/19/2019 14:53:21'!
 units
 	"Answer the multiplicative group of units of the receiver (i.e., elements that have multiplicative inverse)."
-	^ ModularIntegerUnitGroup on: self! !
+	^ self propertyAt: #units ifAbsentPut: [ModularIntegerUnitGroup on: self]! !
 
 !ModularIntegerRing methodsFor: 'random' stamp: 'len 4/25/2016 00:26'!
 atRandom: aRandom
@@ -19743,14 +19774,28 @@ new: p to: n
 	n = 1 ifTrue: [^ PrimeField new: p].
 	^ self new p: p to: n! !
 
+!PrimeField methodsFor: 'accessing' stamp: 'len 6/19/2019 14:27:56'!
+exponent
+	^ 1! !
+
+!PrimeField methodsFor: 'accessing' stamp: 'len 6/19/2019 14:26:59'!
+p
+	^ self modulus! !
+
+!PrimeField methodsFor: 'accessing' stamp: 'len 6/19/2019 15:47:17'!
+phi
+	"Answer the order of the units group. This is Euler's totient function."
+	^ modulus - 1! !
+
 !PrimeField methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:03'!
 primeSubfield
 	^ self! !
 
-!PrimeField methodsFor: 'accessing' stamp: 'len 6/11/2018 06:33:23'!
-primitiveRoot
-	"When the receiver is a field Z/<p>, answer a primitive root modulo p."
-	^ self propertyAt: #primitiveRoot ifAbsentPut: [self computePrimitiveRoot]! !
+!PrimeField methodsFor: 'accessing-private' stamp: 'len 6/19/2019 14:24:13'!
+modulus: anInteger
+	self propertyAt: #modulusFactors put: (Bag with: anInteger).
+"	self propertyAt: #p put: anInteger."
+	super modulus: anInteger! !
 
 !PrimeField methodsFor: 'accessing-private' stamp: 'len 5/21/2018 04:28:02'!
 p: aPrime to: anInteger
@@ -19773,6 +19818,10 @@ squareRootOf: anElement
 !PrimeField methodsFor: 'enumerating' stamp: 'len 5/4/2018 20:12:15'!
 primeIdealsDo: aBlock
 	aBlock value: self zeroIdeal! !
+
+!PrimeField methodsFor: 'enumerating' stamp: 'len 6/19/2019 16:09:42'!
+unitsDo: aBlock
+	1 to: modulus - 1 do: [:each| aBlock value: (self representative: each)]! !
 
 !PrimeField methodsFor: 'operations' stamp: 'len 5/21/2018 16:20:33'!
 extension: aPolynomial
@@ -19802,19 +19851,6 @@ isUnit: anElement
 isZeroDivisor: anElement
 	"Answer true if there exists a nonzero element that multiplied by the argument is zero."
 	^ anElement isZero! !
-
-!PrimeField methodsFor: 'private' stamp: 'len 9/2/2018 21:03:24'!
-computePrimitiveRoot
-	| a order primeFactors |
-	modulus = 2 ifTrue: [^ self one].
-	order _ modulus - 1.
-	primeFactors _ order factors asSet.
-	a _ 2.
-	[primeFactors anySatisfy: [:pi| (a raisedTo: order / pi modulo: modulus) = 1]]
-		whileTrue:
-			[a _ a + 1.
-			a >= modulus ifTrue: [self error: 'no primitive element, the modulus is not prime']].
-	^ self representative: a! !
 
 !PrimeField methodsFor: 'private' stamp: 'len 6/8/2019 12:43:54'!
 elementClass
@@ -20707,10 +20743,10 @@ span: aCollection
 	"Answer the ideal generated by the argument."
 	^ RationalIntegerIdeal new generators: aCollection! !
 
-!RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/2/2019 08:03:10'!
+!RationalIntegerRing methodsFor: 'operations' stamp: 'len 6/19/2019 14:53:51'!
 units
 	"Answer the multiplicative group of units of the receiver (i.e., elements that have multiplicative inverse)."
-	^ super units elements: {1. -1}! !
+	^ (UnitGroup on: self) elements: {1. -1}! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/2/2018 16:06:54'!
 zeroDivisors
@@ -32777,30 +32813,59 @@ isZeroDivisor
 at: anInteger
 	^ components at: anInteger! !
 
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/19/2019 13:48:30'!
+parent
+	^ parent! !
+
 !ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:29'!
 size
 	^ components size! !
 
-!ProductRingElement methodsFor: 'arithmetic' stamp: 'len 9/16/2018 16:16:11'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/19/2019 05:19:52'!
+valuation
+	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	| p v |
+	p _ 2.
+	v _ 1.
+	1 to: self size do: [:i| v _ v * (p ^ (self at: i) valuation). p _ p nextPrime].
+	^ v - 1! !
+
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:49:21'!
 * anObject
-	anObject isInteger ifTrue: [^ self class components: components * anObject].
-	^ self class components: components * anObject components! !
+	anObject isInteger ifTrue: [^ parent compose: components * anObject].
+	^ parent compose: components * anObject components! !
 
-!ProductRingElement methodsFor: 'arithmetic' stamp: 'len 9/24/2018 23:09:16'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:49:41'!
 + anElement
-	^ self class components: components + anElement components! !
+	^ parent compose: components + anElement components! !
 
-!ProductRingElement methodsFor: 'arithmetic' stamp: 'len 5/22/2018 16:12:18'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:49:51'!
+// anElement
+	^ parent compose: components // anElement components! !
+
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:01'!
+\\ anElement
+	^ parent compose: components \\ anElement components! !
+
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:13'!
+gcd: anElement
+	^ parent compose: (components with: anElement components collect: [:a :b| a gcd: b])! !
+
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:25'!
+lcm: anElement
+	^ parent compose: (components with: anElement components collect: [:a :b| a lcm: b])! !
+
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:33'!
 negated
-	^ self class components: (components collect: [:each| each negated])! !
+	^ parent compose: (components collect: [:each| each negated])! !
 
-!ProductRingElement methodsFor: 'arithmetic' stamp: 'len 9/16/2018 16:16:05'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:41'!
 reciprocal
-	^ self class components: (components collect: [:each| each reciprocal ifNil: [^ nil]])! !
+	^ parent compose: (components collect: [:each| each reciprocal ifNil: [^ nil]])! !
 
-!ProductRingElement methodsFor: 'comparing' stamp: 'len 9/16/2018 16:16:01'!
+!ProductRingElement methodsFor: 'comparing' stamp: 'len 6/19/2019 13:51:19'!
 = anObject
-	^ self class = anObject class and: [components = anObject components]! !
+	^ anObject isElement and: [parent = anObject parent and: [components = anObject components]]! !
 
 !ProductRingElement methodsFor: 'comparing' stamp: 'len 5/25/2018 18:50:35'!
 hash
@@ -32818,9 +32883,9 @@ components
 components: anArray
 	components _ anArray! !
 
-!ProductRingElement class methodsFor: 'instance creation' stamp: 'len 5/22/2018 16:12:30'!
-components: anArray
-	^ self new components: anArray! !
+!ProductRingElement methodsFor: 'private' stamp: 'len 6/19/2019 13:48:20'!
+parent: aProductRing
+	parent _ aProductRing! !
 
 !Ratio methodsFor: 'accessing' stamp: 'len 12/28/2015 20:31'!
 bitSize
@@ -33362,8 +33427,9 @@ log: b
 	[x = representative] whileFalse: [x = 0 ifTrue: [^ nil]. x _ x * g \\ m. answer _ answer + 1].
 	^ answer! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 12/9/2016 22:34:58'!
+!ModularInteger methodsFor: 'operations' stamp: 'len 6/19/2019 14:57:16'!
 multiplicativeOrder
+	self isZero ifTrue: [^ 0].
 	^ parent units orderOf: self! !
 
 !ModularInteger methodsFor: 'operations' stamp: 'len 6/8/2019 12:06:49'!
@@ -33405,6 +33471,10 @@ valuation
 	"Answer the Euclidean valuation of the receiver."
 	self isZero ifTrue: [^ Infinity negative].
 	^ (representative gcd: parent modulus) - 1! !
+
+!ModularInteger methodsFor: 'testing' stamp: 'len 6/19/2019 15:10:07'!
+isPrimitiveRoot
+	^ self isUnit and: [self multiplicativeOrder = self parent units size "phi"]! !
 
 !ModularInteger methodsFor: 'testing' stamp: 'len 12/29/2016 07:20:37'!
 isQuadraticResidue
