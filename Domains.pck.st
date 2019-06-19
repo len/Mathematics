@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 6:40:07 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:46:40 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 528!
+!provides: 'Domains' 1 529!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -17634,10 +17634,10 @@ matrix: dimension scalar: anElement
 zeroMatrix: dimension
 	^ self matrix: dimension scalar: self zero! !
 
-!Ring methodsFor: 'elements-operations' stamp: 'len 6/15/2019 09:12:37'!
+!Ring methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:06:10'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
-	anElement isUnit ifTrue: [^ anElement].
+	(self isUnit: anElement) ifTrue: [^ anElement].
 	anElement isZero ifTrue: [^ self one].
 	^ self subclassResponsibility! !
 
@@ -19228,14 +19228,14 @@ representative: anElement
 	"Answer the residue class corresponding to the given representative (which is already reduced)."
 	^ self elementClass new parent: self; representative: anElement! !
 
-!QuotientRing methodsFor: 'elements-operations' stamp: 'len 6/15/2019 09:19:26'!
+!QuotientRing methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:06:26'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
-	^ self project: anElement representative associatedUnit "<- this looks wrong"! !
+	^ self project: (self base associatedUnit: anElement representative) "<- this looks wrong"! !
 
-!QuotientRing methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:35:46'!
-reciprocalOf: anElement
-	^ self project: ((self relations reciprocalOf: anElement representative) ifNil: [^ nil])! !
+!QuotientRing methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:13:47'!
+invert: anElement
+	^ self project: ((self relations invert: anElement representative) ifNil: [^ nil])! !
 
 !QuotientRing methodsFor: 'enumerating' stamp: 'len 6/5/2019 19:57:24'!
 do: aBlock
@@ -19267,10 +19267,10 @@ from: aDomain
 	aDomain -> self base ifNotNil: [:aMorphism| ^ aMorphism -> self].
 	^ super from: aDomain! !
 
-!QuotientRing methodsFor: 'morphisms' stamp: 'len 9/25/2018 15:35:25'!
+!QuotientRing methodsFor: 'morphisms' stamp: 'len 6/18/2019 09:11:50'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
-	^ (self reciprocalOf: anElement) notNil! !
+	^ (self invert: anElement) notNil! !
 
 !QuotientRing methodsFor: 'morphisms' stamp: 'len 5/7/2018 22:52:32'!
 lifting
@@ -19450,17 +19450,14 @@ asAbelianGroup
 		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
 		yourself! !
 
-!ModularIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/16/2019 12:59:58'!
+!ModularIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/19/2019 04:34:47'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
-	| associate q |
+	| associate |
 	anElement isZero ifTrue: [^ self one].
-	associate _ 1.
-	q _ anElement representative.
-	self modulusPrimes do: [:p| [p | q] whileTrue: [q _ q // p. associate _ associate * p]].
-	associate = anElement representative ifTrue: [^ self one].
-	associate = 1 ifTrue: [^ anElement].
-	^ self representative: anElement representative // associate! !
+	associate _ anElement normalized.
+	^ self units detect: [:u| associate * u = anElement]
+"	^ self project: (anElement representative quotientBy: (anElement representative gcd: modulus) modulo: modulus)"! !
 
 !ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:09:03'!
 isUnit: anElement
@@ -19617,7 +19614,7 @@ p: aPrime to: anInteger
 	self modulus: aPrime^anInteger.
 	self propertyAt: #modulusFactors put: (Bag new add: aPrime withOccurrences: anInteger; yourself)! !
 
-!PrimePowerRing methodsFor: 'elements-operations' stamp: 'len 6/15/2019 09:18:36'!
+!PrimePowerRing methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:06:30'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
 	| p q |
@@ -19765,8 +19762,8 @@ p: aPrime to: anInteger
 	"Any two finite fields of the same cardinality are isomorphic."
 	^ aRing isField and: [self size = aRing size]! !
 
-!PrimeField methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:36:26'!
-reciprocalOf: anElement
+!PrimeField methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:12:46'!
+invert: anElement
 	^ self representative: ((self inverseOfRepresentative: anElement representative) ifNil: [^ nil])! !
 
 !PrimeField methodsFor: 'elements-operations' stamp: 'len 12/29/2016 08:04:45'!
@@ -20627,7 +20624,7 @@ one
 zero
 	^ 0! !
 
-!RationalIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/15/2019 09:16:27'!
+!RationalIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:06:21'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
 	^ anElement < 0 ifTrue: [-1] ifFalse: [1]! !
@@ -21363,12 +21360,12 @@ z
 zero
 	^ self propertyAt: #zero ifAbsentPut: [self constant: self scalars zero]! !
 
-!PolynomialRing methodsFor: 'elements-operations' stamp: 'len 6/15/2019 09:20:56'!
+!PolynomialRing methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:06:36'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
 	anElement isZero ifTrue: [^ self one].
-	self scalars isField ifTrue: [^ self constant: anElement leadingCoefficient].
-	^ self constant: (self scalars associatedUnit: self leadingCoefficient)! !
+"	self scalars isField ifTrue: [^ self constant: anElement leadingCoefficient]."
+	^ self constant: (self scalars associatedUnit: anElement leadingCoefficient)! !
 
 !PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/4/2019 19:22:30'!
 isNilpotent: aPolynomial
@@ -22112,8 +22109,8 @@ copy
 	"Answer a copy of the receiver."
 	^ self class new scalars: self scalars; generators: self generators copy! !
 
-!Ideal methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:36:14'!
-reciprocalOf: anElement
+!Ideal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:11:29'!
+invert: anElement
 	"This works only for ideals of an euclidean domain given by one generator."
 	| euclid |
 	self scalars isEuclideanDomain ifFalse: [^ nil].
@@ -22325,9 +22322,9 @@ representative
 	"If the receiver is an ideal I of a quotient ring A/J, return the lifting of I to A, this is the ideal in A generated by the representatives in A of the generators of I."
 	^ self propertyAt: #representative ifAbsentPut: [self scalars base * (self generators collect: [:each| each representative]) + self scalars relations]! !
 
-!QuotientIdeal methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:34:44'!
-reciprocalOf: anElement
-	^ self scalars project: (self representative reciprocalOf: anElement representative)! !
+!QuotientIdeal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:13:25'!
+invert: anElement
+	^ self scalars project: (self representative invert: anElement representative)! !
 
 !QuotientIdeal methodsFor: 'elements-operations' stamp: 'len 4/22/2018 00:04:40'!
 reduce: anElement
@@ -22361,8 +22358,8 @@ isPrincipal
 scalars
 	^ ZZ! !
 
-!RationalIntegerIdeal methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:36:39'!
-reciprocalOf: anInteger
+!RationalIntegerIdeal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:14:04'!
+invert: anInteger
 	| result |
 	result _ anInteger xgcd: self generator.
 	^ (result at: 1) = 1 ifTrue: [result at: 2]! !
@@ -22502,10 +22499,10 @@ generators: aCollection
 orderedBy: aMonomialOrdering
 	^ (self scalars orderedBy: aMonomialOrdering) !! self! !
 
-!PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 9/25/2018 15:34:21'!
-reciprocalOf: aPolynomial
+!PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:12:24'!
+invert: aPolynomial
 	aPolynomial = self scalars one ifTrue: [^ aPolynomial].
-	^ super reciprocalOf: aPolynomial! !
+	^ super invert: aPolynomial! !
 
 !PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 9/22/2018 18:55:34'!
 reduce: aPolynomial
@@ -32592,7 +32589,7 @@ images: anArray
 parent: aSymmetricGroup
 	parent _ aSymmetricGroup! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 6/15/2019 09:13:22'!
+!RingElement methodsFor: 'accessing' stamp: 'len 6/18/2019 09:08:56'!
 associatedUnit
 	"Answer a choice for associated unit of the receiver."
 	^ self parent associatedUnit: self! !
@@ -32601,7 +32598,7 @@ associatedUnit
 denominator
 	^ self one! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 6/14/2019 01:20:58'!
+!RingElement methodsFor: 'accessing' stamp: 'len 6/18/2019 09:07:57'!
 normalized
 	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
 	^ self * self associatedUnit reciprocal! !
@@ -32643,24 +32640,30 @@ adaptToInteger: rcvr andSend: selector
 	selector = #/ ifTrue: [^ self one * rcvr / self].
 	^ super adaptToInteger: rcvr andSend: selector! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:23'!
-* aRingElement
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:47'!
+* anElement
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:08:47'!
-+ aRingElement
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:52'!
++ anElement
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:08:59'!
-- aRingElement
-	^ self + aRingElement negated! !
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:36'!
+- anElement
+	^ self + anElement negated! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:10:03'!
-/ aRingElement
-	^ self * aRingElement reciprocal! !
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:26'!
+/ anElement
+	^ self * anElement reciprocal! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 6/16/2019 16:27:23'!
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 04:31:06'!
+// anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
+	^ self subclassResponsibility! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 04:31:16'!
 \\ anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	^ self - (self // anElement * anElement)! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 6/8/2019 02:31:41'!
@@ -32671,29 +32674,45 @@ adaptToInteger: rcvr andSend: selector
 	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) reciprocal].
 	^ anInteger even ifTrue: [self squared ^ (anInteger // 2)] ifFalse: [self squared ^ (anInteger // 2) * self]! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/5/2019 18:35:05'!
-· aRingElement
-	^ self * aRingElement! !
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:20:04'!
+· anElement
+	^ self * anElement! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 22:49:00'!
-gcd: aRingElement
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:11'!
+gcd: anElement
 	"Answer the greatest common divisor of the receiver and the argument.
-	The result is unique (normalized)."
+	The result is the canonical associate (normalized)."
 	^ self subclassResponsibility! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 5/5/2019 18:35:19'!
 inverse
 	^ self reciprocal! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 6/8/2019 12:28:38'!
-lcm: aRingElement
+!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:00'!
+lcm: anElement
 	"Answer the least common multiple of the receiver and the argument.
-	The result is unique (normalized)."
-	^ (self / (self gcd: aRingElement) * aRingElement) normalized! !
+	The result is the canonical associate (normalized)."
+	self isZero ifTrue: [^ self].
+	anElement isZero ifTrue: [^ anElement].
+	^ (self // (self gcd: anElement) * anElement) normalized! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:14'!
 negated
 	^ self subclassResponsibility! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 6/18/2019 09:38:42'!
+quotientBy: anElement modulo: m
+	| f g fs gs h hs q r |
+	f _ anElement. fs _ self one.
+	g _ m. gs _ self zero.
+	[g isZero] whileFalse:
+		[q _ f // g. r _ f - (g*q).
+		h _ g. hs _ gs.
+		g _ r. gs _ fs - (q*gs).
+		f _ h. fs _ hs].
+	q _ self // f.
+	q isNil ifTrue: [^ nil].
+	^ fs * q \\ m! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 6/16/2019 16:26:32'!
 raisedTo: anInteger modulo: anElement
@@ -32711,10 +32730,13 @@ reciprocal
 squared
 	^ self * self! !
 
-!RingElement methodsFor: 'testing' stamp: 'len 6/10/2019 08:54:20'!
+!RingElement methodsFor: 'testing' stamp: 'len 6/17/2019 10:19:39'!
 | anElement
 	"Answer true if the receiver divides anElement."
-	^ self isZero not and: [(anElement \\ self) isZero]! !
+	^ self isZero not and: [(anElement \\ self) isZero]
+
+"	^ self isZero not and: [self parent * self includes: anElement]"
+! !
 
 !RingElement methodsFor: 'testing' stamp: 'len 9/25/2018 15:26:51'!
 isIdempotent
@@ -33160,21 +33182,17 @@ zero
 	"Answer the exact division of the receiver by the argument."
 	^ parent project: representative /// aResidueClass representative! !
 
-!Residue methodsFor: 'operations' stamp: 'len 10/24/2016 12:02'!
-gcd: aResidueClass
-	^ parent project: (representative gcd: aResidueClass representative)! !
-
-!Residue methodsFor: 'operations' stamp: 'len 9/22/2018 18:58:38'!
-lcm: aResidueClass
-	^ parent project: (representative lcm: aResidueClass representative)! !
+!Residue methodsFor: 'operations' stamp: 'len 6/17/2019 04:33:01'!
+gcd: anElement
+	^ parent representative: (self normalized representative gcd: anElement normalized representative)! !
 
 !Residue methodsFor: 'operations' stamp: 'len 10/16/2016 15:57'!
 negated
 	^ parent project: representative negated! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/24/2019 11:03:06'!
+!Residue methodsFor: 'operations' stamp: 'len 6/18/2019 09:11:57'!
 reciprocal
-	^ (parent reciprocalOf: self) ifNil: [(ZeroDivide dividend: self one) signal]! !
+	^ (parent invert: self) ifNil: [(ZeroDivide dividend: self one) signal]! !
 
 !Residue methodsFor: 'testing' stamp: 'len 9/15/2018 16:07:02'!
 contains: anObject
@@ -33198,22 +33216,17 @@ factors
 	"Answer a collection with the irreducible factors of the receiver (with multiplicity)."
 	^ self normalized representative factors apply: [:each| parent representative: each]! !
 
-!ModularInteger methodsFor: 'accessing' stamp: 'len 6/3/2019 15:06:31'!
+!ModularInteger methodsFor: 'accessing' stamp: 'len 6/17/2019 08:05:08'!
 lift
 	| m |
-	m _ self modulus.
+	m _ parent modulus.
 	^ representative <= (m >> 1) ifTrue: [representative] ifFalse: [representative - m]! !
 
-!ModularInteger methodsFor: 'accessing' stamp: 'len 6/16/2019 13:01:18'!
+!ModularInteger methodsFor: 'accessing' stamp: 'len 6/18/2019 09:08:16'!
 normalized
 	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
-	| associate q |
-	self isZero ifTrue: [^ self].
-	associate _ 1.
-	q _ representative.
-	parent modulusPrimes do: [:p| [p | q] whileTrue: [q _ q // p. associate _ associate * p]].
-	associate = representative ifTrue: [^ self].
-	^ parent representative: associate! !
+	representative = 0 ifTrue: [^ self].
+	^ parent representative: (representative gcd: parent modulus)! !
 
 !ModularInteger methodsFor: 'accessing' stamp: 'len 3/29/2016 20:49'!
 representative
@@ -33306,6 +33319,22 @@ asRationalMaxNumerator: N maxDenominator: D
 	aModularInteger isInteger ifTrue: [^ self * (parent inverseOfRepresentative: aModularInteger)].
 	^ self * aModularInteger reciprocal! !
 
+!ModularInteger methodsFor: 'operations' stamp: 'len 6/19/2019 01:57:24'!
+\ anElement
+	"Answer all solutions 'x' such that 'ax = b (mod m)', where the receiver is 'a (mod m)' and the argument is 'b (mod m)'."
+	| a b d m x |
+	m _ parent modulus.
+	a _ representative.
+	b _ anElement isInteger ifTrue: [anElement] ifFalse: [anElement representative].
+	d _ a gcd: m.
+	d = 1 ifTrue: [^ {parent project: (a reciprocalModulo: m) * b}].
+	d | b ifFalse: [^ #()].
+	a _ a // d.
+	b _ b // d.
+	m _ m // d.
+	x _ (a reciprocalModulo: m) * b.
+	^ Iterator on: [:aBlock| 0 to: d-1 do: [:i| aBlock value: (parent project: i*m + x)]]! !
+
 !ModularInteger methodsFor: 'operations' stamp: 'len 6/8/2019 12:06:56'!
 ^ anInteger
 	^ parent representative: (representative raisedTo: anInteger modulo: parent modulus)
@@ -33342,10 +33371,10 @@ negated
 	representative = 0 ifTrue: [^ self].
 	^ parent representative: parent modulus - representative! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 5/24/2019 11:04:14'!
+!ModularInteger methodsFor: 'operations' stamp: 'len 6/18/2019 09:11:44'!
 reciprocal
 	representative == 1 ifTrue: [^ self].
-	^ (parent reciprocalOf: self) ifNil: [(ZeroDivide dividend: self one) signal]! !
+	^ (parent invert: self) ifNil: [(ZeroDivide dividend: self one) signal]! !
 
 !ModularInteger methodsFor: 'operations' stamp: 'len 12/29/2016 08:26:24'!
 squareRoot
@@ -33357,39 +33386,25 @@ squareRoot
 	(p bitAnd: 3) == 3 ifTrue: [^ self ^ (p + 1 // 4)].
 	^ self parent squareRootOf: self! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:12:26'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/19/2019 04:30:04'!
 // anElement
-	| m x y u v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
-	m _ parent modulus.
-	x _ self normalized representative.
-	u _ representative // x.
-	y _ anElement normalized representative.
-	v _ anElement representative // y.
-	^ parent project: u * (v reciprocalModulo: m) * (x // y)! !
+	^ parent project: (representative quotientBy: anElement representative modulo: parent modulus)! !
 
 !ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 07:37:33'!
 \\ anElement
 	^ self - (self // anElement * anElement)! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:02:14'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/18/2019 03:06:16'!
 gcd: anElement
-	^ parent representative: (self normalized representative gcd: anElement normalized representative)! !
+	^ parent project: (self normalized lift gcd: anElement normalized lift)! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 13:03:01'!
-lcm: anElement
-	^ parent representative: (self normalized representative lcm: anElement normalized representative)! !
-
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 14:46:31'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/19/2019 04:22:37'!
 valuation
 	"Answer the Euclidean valuation of the receiver."
-	| answer q |
 	self isZero ifTrue: [^ Infinity negative].
-	answer _ 1.
-	q _ representative.
-	parent modulusPrimes do: [:p| [p | q] whileTrue: [q _ q // p. answer _ answer * p]].
-	^ answer - 1! !
+	^ (representative gcd: parent modulus) - 1! !
 
 !ModularInteger methodsFor: 'testing' stamp: 'len 12/29/2016 07:20:37'!
 isQuadraticResidue
@@ -33401,7 +33416,7 @@ isQuadraticResidue
 isZero
 	^ representative == 0! !
 
-!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/15/2019 10:17:39'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/18/2019 09:03:42'!
 // anElement
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
@@ -33415,10 +33430,10 @@ gcd: anElement
 	anElement isZero ifTrue: [^ self normalized].
 	^ parent representative: parent p ^ (self valuation min: anElement valuation)! !
 
-!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 18:00:53'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/17/2019 04:27:08'!
 lcm: anElement
-	self isZero ifTrue: [^ anElement normalized].
-	anElement isZero ifTrue: [^ self normalized].
+	self isZero ifTrue: [^ self].
+	anElement isZero ifTrue: [^ anElement].
 	^ parent representative: parent p ^ (self valuation max: anElement valuation)! !
 
 !PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/15/2019 09:29:40'!
@@ -33427,8 +33442,20 @@ valuation
 	We define it as infinity at 0; although this is undefined for an Euclidean function, it makes it compatible with the p-adic valuation."
 	^ representative valuation: parent p! !
 
-!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/8/2019 13:56:15'!
+!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/17/2019 04:25:10'!
 gcd: anElement
+	representative = 0 ifTrue: [^ anElement normalized].
+	^ parent one! !
+
+!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/17/2019 04:26:04'!
+lcm: anElement
+	representative = 0 ifTrue: [^ parent zero].
+	^ anElement normalized! !
+
+!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/18/2019 09:08:09'!
+normalized
+	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
+	representative = 0 ifTrue: [^ self].
 	^ parent one! !
 
 !SmallPrimeResidue methodsFor: 'operations' stamp: 'len 9/2/2018 21:50:50'!
@@ -34001,12 +34028,12 @@ exactlyDividedBy: aPolynomial
 		ifFalse: [^ (PolynomialPseudoDivision divide: self by: aPolynomial) exactQuotient].
 	^ (PolynomialDivision divide: self by: aPolynomial) exactQuotient! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/23/2018 22:30:01'!
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 6/17/2019 14:41:15'!
 gcd: aPolynomial
 	"Answer the greatest common divisor of the receiver and aPolynomial."
 	| a b r |
-	self isZero ifTrue: [^ aPolynomial].
-	aPolynomial isZero ifTrue: [^ self].
+	self isZero ifTrue: [^ aPolynomial normalized].
+	aPolynomial isZero ifTrue: [^ self normalized].
 	(self isUnivariate and: [aPolynomial isUnivariate])
 		ifFalse: "Multivariate case:"
 			[self scalars isUFD ifFalse: [^ DomainError signal: 'not an UFD'].
@@ -34027,10 +34054,11 @@ gcd: aPolynomial
 	[(r _ a \\ b) isZero] whileFalse: [a _ b. b _ r].
 	^ b * b leadingCoefficient reciprocal! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 9/24/2018 23:53:03'!
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 6/17/2019 04:34:59'!
 lcm: aPolynomial
 	"Answer the least common multiple of the receiver and aPolynomial."
-
+	self isZero ifTrue: [^ self].
+	aPolynomial isZero ifTrue: [^ aPolynomial].
 	^ ((self exactlyDividedBy: (self gcd: aPolynomial)) * aPolynomial) normalized! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 1/23/2017 11:43:10'!
@@ -41443,7 +41471,7 @@ oldreduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 6/14/2019 02:13:15'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 6/18/2019 09:03:30'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -45358,7 +45386,7 @@ adaptToRealAlgebraic: rcvr andSend: selector
 additiveOrder
 	^ self == 0 ifTrue: [1] ifFalse: [Infinity positive]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 6/14/2019 01:17:11'!
+!Integer methodsFor: '*domains' stamp: 'len 6/18/2019 09:08:48'!
 associatedUnit
 	"Answer a choice for associated unit of the receiver."
 	^ self < 0 ifTrue: [-1] ifFalse: [1]! !
@@ -45617,7 +45645,7 @@ multichoose: anInteger
 multiplicativeOrder
 	^ self == 1 ifTrue: [1] ifFalse: [self == -1 ifTrue: [2] ifFalse: [Infinity positive]]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 6/14/2019 01:21:13'!
+!Integer methodsFor: '*domains' stamp: 'len 6/18/2019 09:08:22'!
 normalized
 	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
 	^ self abs! !
@@ -45687,6 +45715,37 @@ primeSignature
 	| factors |
 	factors _ self factors.
 	^ (factors asSet asSortedCollection collect: [:each| factors occurrencesOf: each]) asArray! !
+
+!Integer methodsFor: '*domains' stamp: 'len 6/19/2019 04:29:41'!
+quotientBy: anInteger modulo: m
+	| f g fs gs h hs q r |
+	f _ anInteger. fs _ 1.
+	g _ m. gs _ 0.
+	[g isZero] whileFalse:
+		[q _ f // g. r _ f - (g*q).
+		h _ g. hs _ gs.
+		g _ r. gs _ fs - (q*gs).
+		f _ h. fs _ hs].
+	q _ self // f.
+	q isNil ifTrue: [^ nil].
+	^ fs * q \\ m
+
+"	| m r s g |
+	m _ anotherInteger.
+	m = 1 ifTrue: [^ 0].
+	r _ self \\ m.
+	r = 0 ifTrue: [^ 0].
+	s _ anInteger \\ m.
+	s = 0 ifTrue: [^ (ZeroDivide dividend: self) signal].
+	g _ r gcd: s.
+	r _ r // g.
+	s _ s // g.
+	g _ g gcd: m.
+	m _ m // g.
+	g _ s gcd: m.
+	g = 1 ifTrue: [^ r * (s reciprocalModulo: m) \\ anotherInteger].
+	g | r ifFalse: [^ 0].
+	^ r // g * (s // g reciprocalModulo: m // g) \\ anotherInteger"! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:48:30'!
 radical
