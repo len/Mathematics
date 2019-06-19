@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 June 2019 at 6:41:20 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:50:15 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 144!
+!provides: 'MathematicsTests' 1 145!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7645,6 +7645,27 @@ testLocalHomomorphism
 	self assert: f isLocal
 ! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 01:27:43'!
+testCongruenceSolving1
+	| R a b solutions |
+	R _ ZZ/20.
+	a _ R !! 11.
+	b _ R !! 15.
+	solutions _ a \ b.
+	self assert: solutions first = (R !! 5).
+	self assert: solutions size = 1! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 01:26:02'!
+testCongruenceSolving2
+	| R a b solutions |
+	R _ ZZ/12167.
+	a _ R !! 230.
+	b _ R !! 1081.
+	solutions _ a \ b.
+	self assert: (solutions includes: (R !! 2491)).
+	self assert: solutions size = 23.
+	self assert: (solutions allSatisfy: [:x| a*x = b])! !
+
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:23'!
 testEuclideanRing: R
 	"Test division on a pair of elements:"
@@ -7659,17 +7680,17 @@ testEuclideanRing: R
 		self assert: a = (q * b + r).
 		self assert: (r isZero or: [r valuation < b valuation])]! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 14:59:58'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 15:17:37'!
 testEuclideanRingAll: R
 	"Test division on all pairs of elements:"
 	R do: [:b|
 		b isZero ifFalse:
 			[R do: [:a|
-				[| q r |
+				| q r |
 				q _ a // b.
 				r _ a \\ b.
 				self assert: a = (q * b + r).
-				self assert: (r isZero or: [r valuation < b valuation])]]]]! !
+				self assert: (r isZero or: [r valuation < b valuation])]]]! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:44:10'!
 testGCD: R
@@ -7725,7 +7746,7 @@ testLCM: R
 		self assert: b | lcm.
 		self assert: lcm = lcm normalized]! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:58:11'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 04:40:57'!
 testLCMAll: R
 	R do: [:a|
 		a isZero ifFalse:
@@ -7736,37 +7757,148 @@ testLCMAll: R
 					self assert: a | lcm.
 					self assert: b | lcm.
 					self assert: lcm = lcm normalized.
-					R do: [:c| (c | a and: [c | b]) ifTrue: [self assert: c valuation >= lcm valuation]]]]]]! !
+					R do: [:c| (c isZero not and: [a | c and: [b | c]]) ifTrue: [self assert: c valuation >= lcm valuation]]]]]]! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:58:37'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 04:37:30'!
 testLCMZero: R
 	| a lcm |
 	a _ R atRandomBits: 100.
 	lcm _ a lcm: R zero.
-	self assert: lcm = (R zero gcd: a).
-	self assert: lcm = a normalized.
+	self assert: lcm = (R zero lcm: a).
+	self assert: lcm = R zero.
 	self assert: (R zero lcm: R zero) = R zero! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:09'!
-testModuleIntegersRingGCD
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 08:23:46'!
+testModularIntegersEuclideanExample
+	"Some random example built in Magma online calculator."
+	| R a b c |
+	R _ ZZ/12.
+	a _ R !! 2.
+	b _ R !! 9.
+	c _ a lcm: b.
+	self assert: c = (R !! 6).
+	self assert: c // a = (R !! 3).
+	self assert: c // b = (R !! 10)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 08:24:36'!
+testModularIntegersEuclideanExample2
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/39.
+	a _ R !! 36.
+	b _ R !! 3.
+	self assert: a // b = (R !! 12)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 08:31:49'!
+testModularIntegersEuclideanExample3
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/78.
+	a _ R !! 9.
+	b _ R !! 39.
+	self assert: a // b = (R !! 0)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 14:24:38'!
+testModularIntegersEuclideanExample4
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/230.
+	a _ R !! 205.
+	b _ R !! 128.
+	self assert: (a gcd: b) = (R !! 1).
+	self assert: (a lcm: b) = (R !! 10).! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:14:20'!
+testModularIntegersEuclideanExample5
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/10.
+	a _ R !! 4.
+	b _ R !! 8.
+	self assert: b normalized = (R !! 2).
+	self assert: b associatedUnit = (R !! 9).
+	self assert: (a gcd: b) = (R !! 2).
+	self assert: (a lcm: b) = (R !! 2)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 14:10:09'!
+testModularIntegersEuclideanExample6
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/12.
+	a _ R !! 4.
+	b _ R !! 8.
+	self assert: a // b = (R !! 11).
+	self assert: b // a = (R !! 2)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 14:58:14'!
+testModularIntegersEuclideanExample7
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/6.
+	a _ R !! 4.
+	b _ R !! 3.
+	self assert: (a gcd: b) = (R !! 1).
+	self assert: (a lcm: b) = (R !! 0)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 15:24:17'!
+testModularIntegersEuclideanExample8
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/10.
+	a _ R !! 6.
+	b _ R !! 4.
+	self assert: a // b = (R !! 4).
+	self assert: b // a = (R !! 4)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 15:41:33'!
+testModularIntegersEuclideanExample9
+	"Some random example built in Magma online calculator."
+	| R a b |
+	R _ ZZ/10.
+	a _ R !! 2.
+	b _ R !! 4.
+	self assert: a // b = (R !! 8).
+	self assert: b // a = (R !! 2)! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:06'!
+testModularIntegersRingGCD
 	| R |
 	R _ ZZ/(2 to: 256) atRandom.
-	self testGCD: R.
-	self testLCM: R! !
+	self testGCD: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:17'!
-testModuleIntegersRingIsEuclidean
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 07:56:51'!
+testModularIntegersRingIsEuclidean
 	| R |
 	R _ ZZ/(2 to: 256) atRandom.
 	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:17'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:17'!
+testModularIntegersRingLCM
+	| R |
+	R _ ZZ/(2 to: 256) atRandom.
+	self testLCM: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:57:41'!
+testModularIntegersRingNormalizedAndAssociatedUnit
+	| R |
+	R _ ZZ/(2 to: 256) atRandom.
+	self testNormalizedAndAssociatedUnit: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:57:04'!
+testNormalizedAndAssociatedUnit: R
+	| x |
+"	R size < 300 ifTrue: [self testNormalizedAndAssociatedUnitAll: R]."
+	100 timesRepeat:
+		[x _ R atRandomBits: 100.
+		self assert: x normalized * x associatedUnit = x.
+		self assert: x associatedUnit isUnit]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:32'!
 testPolynomialsOverFieldGCD
 	| F R |
 	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
 	R _ F polynomials.
-	self testGCD: R.
-	self testLCM: R! !
+	self testGCD: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:49'!
 testPolynomialsOverFieldIsEuclidean
@@ -7774,6 +7906,13 @@ testPolynomialsOverFieldIsEuclidean
 	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
 	R _ F polynomials.
 	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:39'!
+testPolynomialsOverFieldLCM
+	| F R |
+	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
+	R _ F polynomials.
+	self testLCM: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:46:04'!
 testPrimePowerRingIsEuclidean
@@ -7783,8 +7922,8 @@ testPrimePowerRingIsEuclidean
 	R _ PrimePowerRing new: p to: k.
 	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:59:34'!
-testRationalIntegerRingGCD
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:17:02'!
+testRationalIntegerRingGCDAndLCM
 	self testGCD: ZZ.
 	self testLCM: ZZ! !
 
