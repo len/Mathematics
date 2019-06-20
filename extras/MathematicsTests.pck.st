@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:14:50 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 7:23:34 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 146!
+!provides: 'MathematicsTests' 1 147!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -7429,6 +7429,25 @@ testModularIntegers
 	self testRing: R.
 	self testRingHomomorphism: R projection! !
 
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 15:48:10'!
+testModularIntegersFactorization
+	| R |
+	R _ ZZ/(2 to: 1000) atRandom.
+	100 timesRepeat:
+		[| x factors |
+		x _ R atRandom.
+		factors _ x factors.
+		self assert: (factors asSet allSatisfy: [:each| each isIrreducible]).
+		self assert: (x isZero or: [x isUnit or: [x normalized = factors product]])]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:09:29'!
+testModularIntegersPrimesExamples
+	| R |
+	R _ ZZ/6.
+	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 4) asSet.
+	R _ ZZ/12.
+	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 9 10) asSet! !
+
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 16:11:38'!
 testModularIntegersPrimitiveRoots
 	| X |
@@ -7458,6 +7477,40 @@ testModularIntegersTrivial
 	self assert: R isTrivial.
 	self assert: R size = 1.
 	self assert: R zero = R one! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:45'!
+testModularIntegersUnitsIrreduciblesAndReducibles
+	"From 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
+	| m R factors p |
+	m _ (2 to: 100) atRandom.
+	R _ ZZ/m.
+	self assert: R units asSet size = m phi.
+	factors _ m factors.
+	self assert: R irreducibles size = (m phi * ((factors asSet select: [:each| (factors occurrencesOf: each) > 1]) sum: [:each| 1/each] ifEmpty: [0])).
+	p _ 10 atRandom nextPrime.
+	m _ p ^ (2 to: 4) atRandom.
+	R _ ZZ/m.
+	self assert: R reducibles size = (R irreducibles size / (p - 1) - 1)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:27'!
+testModularIntegersUnitsIrreduciblesAndReduciblesExamples
+	"Examples from 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
+	| R |
+	R _ ZZ/8.
+	self assert: (R units asSet collect: [:each| each representative]) = #(1 3 5 7) asSet.
+	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 6) asSet.
+	R _ ZZ/36.
+	self assert: (R units asSet collect: [:each| each representative]) = #(1 5 7 11 13 17 19 23 25 29 31 35) asSet.
+	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 3 10 14 15 21 22 26 33 34) asSet.
+	R _ ZZ/25.
+	self assert: R irreducibles size = 4.
+	self assert: R reducibles isEmpty.
+	R _ ZZ/32.
+	self assert: R irreducibles size = 8.
+	self assert: R reducibles size = 7.
+	R _ ZZ/343.
+	self assert: R irreducibles size = 42.
+	self assert: R reducibles size = 6! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
 testPrimeFieldLogarithm
