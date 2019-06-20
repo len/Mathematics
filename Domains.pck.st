@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 4:31:37 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 7:22:57 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 531!
+!provides: 'Domains' 1 532!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -17646,9 +17646,11 @@ divide: anElement by: anotherElement
 	"Answer the quotient and remainder of the division of anElement by anotherElement."
 	^ {anElement // anotherElement. anElement \\ anotherElement}! !
 
-!Ring methodsFor: 'elements-testing' stamp: 'len 6/16/2019 13:41:48'!
+!Ring methodsFor: 'elements-testing' stamp: 'len 6/20/2019 18:11:49'!
 isIrreducible: anElement
-	"A nonzero element 'a' is called irreducible if a=bc implies that a|b (and then c is a unit) or a|c (and then b is a unit)."
+	"A nonzero nonunit element 'a' is called irreducible if a=bc implies that a|b (and then c is a unit) or a|c (and then b is a unit)."
+	(anElement isZero or: [self isUnit: anElement]) ifTrue: [^ false].
+	self isIntegralDomain ifTrue: [^ self isPrime: anElement].
 	self isFinite ifFalse: [^ self subclassResponsibility].
 	self do: [:x|
 		self do: [:y|
@@ -17660,13 +17662,15 @@ isNilpotent: anElement
 	"Answer true if anElement^n = 0 for some integer n >= 1."
 	^ self nilradical contains: anElement! !
 
-!Ring methodsFor: 'elements-testing' stamp: 'len 6/16/2019 13:43:32'!
+!Ring methodsFor: 'elements-testing' stamp: 'len 6/20/2019 18:11:58'!
 isPrime: anElement
-	"A nonzero element 'a' is called a prime if a|bc implies that a|b or a|c."
+	"A nonzero nonunit element 'a' is called prime if a|bc implies that a|b or a|c."
+	(anElement isZero or: [self isUnit: anElement]) ifTrue: [^ false].
 	self isFinite ifFalse: [^ self subclassResponsibility].
 	self do: [:x|
-		self do: [:y|
-			anElement | (x*y) ifTrue: [(anElement | x or: [anElement | y]) ifFalse: [^ false]]]].
+		self do: [:y| | xy |
+			((xy _ x*y) isZero not and: [anElement | (xy)])
+				ifTrue: [(anElement | x or: [anElement | y]) ifFalse: [^ false]]]].
 	^ true! !
 
 !Ring methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:43:16'!
@@ -17716,11 +17720,23 @@ zeroTuple: anInteger
 idealsDo: aBlock
 	^ self subclassResponsibility! !
 
+!Ring methodsFor: 'enumerating' stamp: 'len 6/20/2019 16:39:28'!
+irreduciblesDo: aBlock
+	self do: [:each| (self isIrreducible: each) ifTrue: [aBlock value: each]]! !
+
 !Ring methodsFor: 'enumerating' stamp: 'len 6/9/2019 16:21:27'!
 primeIdealsDo: aBlock
 	self isField ifTrue: [aBlock value: self zeroIdeal. ^ self].
 	self isDVR ifTrue: [aBlock value: self zeroIdeal; value: self maximalIdeal. ^ self].
 	self idealsDo: [:each| each isPrime ifTrue: [aBlock value: each]]! !
+
+!Ring methodsFor: 'enumerating' stamp: 'len 6/20/2019 16:39:11'!
+primesDo: aBlock
+	self do: [:each| (self isPrime: each) ifTrue: [aBlock value: each]]! !
+
+!Ring methodsFor: 'enumerating' stamp: 'len 6/20/2019 18:21:29'!
+reduciblesDo: aBlock
+	self do: [:each| (each isZero not and: [(self isUnit: each) not and: [(self isIrreducible: each) not]]) ifTrue: [aBlock value: each]]! !
 
 !Ring methodsFor: 'enumerating' stamp: 'len 5/19/2018 16:33:52'!
 relevantPrimeIdealsDo: aBlock
@@ -17830,6 +17846,10 @@ freeModuleIn: aCollection
 ideals
 	^ Iterator on: self performing: #idealsDo:! !
 
+!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 16:40:26'!
+irreducibles
+	^ Iterator on: self performing: #irreduciblesDo:! !
+
 !Ring methodsFor: 'operations' stamp: 'len 1/23/2018 21:19:27'!
 localizationAt: aPrimeIdeal
 	"Answer the localization of the receiver at aPrimeIdeal."
@@ -17885,6 +17905,10 @@ polynomialsIn: anIntegerOrCollection ordering: aMonomialOrdering
 powerSeries
 	^ self polynomials completion! !
 
+!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 16:40:16'!
+primes
+	^ Iterator on: self performing: #primesDo:! !
+
 !Ring methodsFor: 'operations' stamp: 'len 6/10/2019 08:47:25'!
 radical
 	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals. In a local ring, it is equal to the set of non-invertible elements, i.e. the maximal ideal."
@@ -17900,6 +17924,10 @@ radical
 	answer _ self oneIdeal.
 	self maximalIdealsDo: [:each| answer _ answer /\ each].
 	^ answer"! !
+
+!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 18:21:56'!
+reducibles
+	^ Iterator on: self performing: #reduciblesDo:! !
 
 !Ring methodsFor: 'operations' stamp: 'len 6/7/2019 10:56:08'!
 residueField
@@ -19493,6 +19521,18 @@ associatedUnit: anElement
 	associate _ anElement normalized.
 	^ self units detect: [:u| associate * u = anElement]"! !
 
+!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 6/20/2019 19:13:01'!
+isIrreducible: anElement
+	"An element of Z/mZ is irreducible iff its canonical associate is a prime p in Z and its exponent in the prime factorization of m is > 1, or equivalently p^2 | m."
+	^ (self modulusFactors occurrencesOf: anElement normalized representative) > 1! !
+
+!ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 6/20/2019 19:15:40'!
+isPrime: anElement
+	"An element of Z/mZ is prime iff its canonical associate is a prime p in Z and p < m."
+	| p |
+	p _ anElement normalized representative.
+	^ p < modulus and: [self modulusFactors includes: p]! !
+
 !ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 6/19/2019 15:12:47'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
@@ -19517,17 +19557,16 @@ tupleClass
 do: aBlock
 	0 to: self modulus - 1 do: [:i| aBlock value: (self project: i)]! !
 
-!ModularIntegerRing methodsFor: 'enumerating' stamp: 'len 5/4/2018 23:28:53'!
+!ModularIntegerRing methodsFor: 'enumerating' stamp: 'len 6/20/2019 16:37:09'!
 primeIdealsDo: aBlock
-	| p |
-"	aBlock value: self * self zero."
+	self modulusPrimes do: [:p| aBlock value: self * (self project: p)]
+
+"	| p |
 	p _ 2.
 	[p > modulus]
 		whileFalse:
 			[p | modulus ifTrue: [aBlock value: self * (self project: p)].
-			p _ p nextPrime]
-
-! !
+			p _ p nextPrime]"! !
 
 !ModularIntegerRing methodsFor: 'morphisms' stamp: 'len 5/7/2018 22:53:40'!
 lifting
@@ -20707,6 +20746,13 @@ primeIdealsDo: aBlock
 	| p |
 	p _ 0.
 	[aBlock value: self * p.
+	p _ p nextPrime] repeat! !
+
+!RationalIntegerRing methodsFor: 'enumerating' stamp: 'len 6/20/2019 17:45:26'!
+primesDo: aBlock
+	| p |
+	p _ 2.
+	[aBlock value: p.
 	p _ p nextPrime] repeat! !
 
 !RationalIntegerRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:58:29'!
@@ -32778,10 +32824,16 @@ reciprocal
 squared
 	^ self * self! !
 
-!RingElement methodsFor: 'testing' stamp: 'len 6/17/2019 10:19:39'!
+!RingElement methodsFor: 'testing' stamp: 'len 6/20/2019 18:13:26'!
 | anElement
 	"Answer true if the receiver divides anElement."
-	^ self isZero not and: [(anElement \\ self) isZero]
+	self isZero ifTrue: [^ false].
+	anElement isZero ifTrue: [^ true].
+	self parent isEuclidean ifTrue: [^ (anElement \\ self) isZero].
+	self parent isFinite ifFalse: [self subclassResponsibility].
+	^ self parent anySatisfy: [:any| self * any = anElement]
+	
+"	^ self isZero not and: [(anElement \\ self) isZero]"
 
 "	^ self isZero not and: [self parent * self includes: anElement]"
 ! !
@@ -32808,6 +32860,11 @@ isPrime
 	"Answer true if the receiver is prime."
 	^ self parent isPrime: self! !
 
+!RingElement methodsFor: 'testing' stamp: 'len 6/20/2019 18:19:45'!
+isReducible
+	"A nonzero nonunit element is called 'reducible' if it is not irreducible."
+	^ self isZero not and: [self isUnit not and: [self isIrreducible not]]! !
+
 !RingElement methodsFor: 'testing' stamp: 'len 9/24/2018 02:12:34'!
 isUnit
 	"Answer true if the receiver is invertible."
@@ -32833,14 +32890,20 @@ parent
 size
 	^ components size! !
 
-!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/19/2019 05:19:52'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/20/2019 14:52:58'!
 valuation
 	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
-	| p v |
+	| answer |
+	self isZero ifTrue: [^ Infinity positive].
+	answer _ 0.
+	components do: [:each| each isZero ifFalse: [answer _ answer + each valuation]].
+	^ answer
+
+"	| p v |
 	p _ 2.
 	v _ 1.
 	1 to: self size do: [:i| v _ v * (p ^ (self at: i) valuation). p _ p nextPrime].
-	^ v - 1! !
+	^ v - 1"! !
 
 !ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:49:21'!
 * anObject
@@ -33193,6 +33256,11 @@ relations
 !Residue methodsFor: 'accessing' stamp: 'len 11/25/2015 03:11'!
 representative
 	^ representative! !
+
+!Residue methodsFor: 'accessing' stamp: 'len 6/20/2019 14:54:25'!
+valuation
+	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	^ self lift valuation "assuming the lift has minimal valuation in the base ring"! !
 
 !Residue methodsFor: 'accessing-private' stamp: 'len 10/16/2016 16:01'!
 parent: aQuotientRing
