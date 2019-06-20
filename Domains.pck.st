@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 June 2019 at 4:13:51 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 4:31:37 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 530!
+!provides: 'Domains' 1 531!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -19472,14 +19472,26 @@ asAbelianGroup
 		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
 		yourself! !
 
-!ModularIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/19/2019 04:34:47'!
+!ModularIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/20/2019 04:30:43'!
 associatedUnit: anElement
 	"Answer a choice for associated unit of anElement."
-	| associate |
+	"Adapted from ModularInteger>>\. This algorithm solves the congruence ax = anElement (mod m) where 'a' is the canonical associate of anElement, and then looks for a solution 'x' that is a unit."
+	| a x m |
 	anElement isZero ifTrue: [^ self one].
+	a _ anElement representative gcd: modulus.
+	a = 1 ifTrue: [^ anElement].
+	x _ anElement representative // a.
+	m _ modulus // a.
+	[(x gcd: modulus) = 1] whileFalse: [x _ x + m]. "at most 'a' solutions, and some is guaranteed to be a unit"
+	^ self project: x
+
+"alternative 1 (similar as above but computes extra GCDs and creates extra elements):
+	^ anElement normalized \ anElement detect: [:u| u isUnit]"
+	
+"alternative 2 (bruteforce):
+	| associate |
 	associate _ anElement normalized.
-	^ self units detect: [:u| associate * u = anElement]
-"	^ self project: (anElement representative quotientBy: (anElement representative gcd: modulus) modulo: modulus)"! !
+	^ self units detect: [:u| associate * u = anElement]"! !
 
 !ModularIntegerRing methodsFor: 'elements-testing' stamp: 'len 6/19/2019 15:12:47'!
 isUnit: anElement
