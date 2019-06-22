@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 7:22:57 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 22 June 2019 at 3:45:30 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 532!
+!provides: 'Domains' 1 533!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -1015,18 +1015,8 @@ CompletionRing subclass: #PowerSeriesRing
 PowerSeriesRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalizationRing category: #'Domains-Rings'!
-Ring subclass: #LocalizationRing
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings'!
-!classDefinition: 'LocalizationRing class' category: #'Domains-Rings'!
-LocalizationRing class
-	instanceVariableNames: ''!
-
 !classDefinition: #FractionRing category: #'Domains-Rings'!
-LocalizationRing subclass: #FractionRing
+Ring subclass: #FractionRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1075,14 +1065,14 @@ FractionRing subclass: #LaurentSeriesRing
 LaurentSeriesRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #ValuationRing category: #'Domains-Etc-Approximate'!
-LocalizationRing subclass: #ValuationRing
+!classDefinition: #LocalizationRing category: #'Domains-Rings'!
+Ring subclass: #LocalizationRing
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate'!
-!classDefinition: 'ValuationRing class' category: #'Domains-Etc-Approximate'!
-ValuationRing class
+	category: 'Domains-Rings'!
+!classDefinition: 'LocalizationRing class' category: #'Domains-Rings'!
+LocalizationRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #ProductRing category: #'Domains-Rings'!
@@ -1333,6 +1323,16 @@ Ring subclass: #LocalRing
 	category: 'Domains-Etc-Approximate'!
 !classDefinition: 'LocalRing class' category: #'Domains-Etc-Approximate'!
 LocalRing class
+	instanceVariableNames: ''!
+
+!classDefinition: #ValuationRing category: #'Domains-Etc-Approximate'!
+Ring subclass: #ValuationRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Approximate'!
+!classDefinition: 'ValuationRing class' category: #'Domains-Etc-Approximate'!
+ValuationRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #Module category: #'Domains-Modules'!
@@ -4103,13 +4103,10 @@ Ring of p-adic integers Zp. Elements are AdicIntegers. See also AdicRationalFiel
 !PowerSeriesRing commentStamp: '<historical>' prior: 0!
 Ring R[[x]] of univariate formal power series over a commutative ring R in an indetermiate x. See PowerSeries.!
 
-!LocalizationRing commentStamp: '<historical>' prior: 0!
-Localization of a given commutative ring R at a given prime ideal P. The elements are fractions a / b with a in R and b in R \ P.!
+!FractionRing commentStamp: '<historical>' prior: 0!
+Total ring of fractions Frac(R) of a ring R. The elements are formal fractions a/b with a and b in R, b not a zero-divisor. When the ring is an integral domain this is a field. See Ring>>fractions.
 
-!FractionRing commentStamp: 'len 6/9/2019 08:34:55' prior: 0!
-Ring of fractions Frac(R) of a ring R. The elements are formal fractions a/b with a and b in R, b not zero. When the ring is an integral domain this is a field. See Ring>>fractions.
-
-The ring of fractions is a particular case of the more general construction of the localization of a ring or module. The ring of fractions is the localization at the zero ideal.
+The ring of fractions is a particular case of the more general construction of the localization of a ring or module. The field of fractions of an integral domain is the localization at the zero ideal. See also LocalizationRing.
 
 References:
 	https://en.wikipedia.org/wiki/Field_of_fractions!
@@ -4125,6 +4122,9 @@ The field of fractions of a polynomial ring with coefficients over a field.!
 
 !LaurentSeriesRing commentStamp: '<historical>' prior: 0!
 Ring R((x)) of univariate formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
+
+!LocalizationRing commentStamp: '<historical>' prior: 0!
+Localization of a given commutative ring R at a given prime ideal P. The elements are fractions a / b with a in R and b in R \ P.!
 
 !ProductRing commentStamp: 'len 5/22/2018 16:08:59' prior: 0!
 Direct products of rings. Elements are tuples where the i-th component corresponds to an element in the i-th ring of the product (see ProductRingElement), and multiplication and addition are defined component wise.!
@@ -4746,7 +4746,7 @@ Permutations are bijective functions on a finite set. Permutations under composi
 Elements of direct products of rings. See ProductRing.!
 
 !Ratio commentStamp: '<historical>' prior: 0!
-Elements of the form 'a / b', with a and b in a commutative ring R, and satisfying the equivalence relation: (a / b) = (a' / b') iff a*b' = a'*b.
+Elements of the form 'a / b', with a and b in a commutative ring R, and satisfying the equivalence relation: (a / b) = (c / d) iff a*d = c*b.
 
 They are elements of ring localizations or fraction fields. See LocalizationRing and FractionRing.!
 
@@ -5593,10 +5593,6 @@ printOn: aStream
 	self printIndeterminatesOn: aStream.
 	aStream nextPutAll: ']]'! !
 
-!LocalizationRing methodsFor: 'printing' stamp: 'len 12/18/2016 21:05:06'!
-printOn: aStream
-	aStream print: self integers; nextPutAll: self maximalIdeal printString sub! !
-
 !FractionRing methodsFor: 'printing' stamp: 'len 10/20/2016 11:00'!
 printOn: aStream
 	aStream nextPutAll: 'Frac('; print: self integers; nextPut: $)! !
@@ -5622,9 +5618,9 @@ printOn: aStream
 	self integers printIndeterminatesOn: aStream.
 	aStream nextPutAll: '))'! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:23:32'!
+!LocalizationRing methodsFor: 'printing' stamp: 'len 12/18/2016 21:05:06'!
 printOn: aStream
-	aStream nextPutAll: 'V('; print: self fractions; nextPut: $,; print: self p; nextPut: $)! !
+	aStream print: self integers; nextPutAll: self maximalIdeal printString sub! !
 
 !ProductRing methodsFor: 'printing' stamp: 'len 8/29/2016 04:12'!
 printOn: aStream
@@ -5714,6 +5710,10 @@ printOn: aStream
 	self printIndeterminatesOn: aStream.
 	aStream nextPut: $].
 	self ordering isLocal ifTrue: [aStream nextPutAll: self maximalIdeal printText sub]! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:23:32'!
+printOn: aStream
+	aStream nextPutAll: 'V('; print: self fractions; nextPut: $,; print: self p; nextPut: $)! !
 
 !Module methodsFor: 'printing' stamp: 'len 4/29/2019 04:57:07'!
 printOn: aStream
@@ -12641,16 +12641,16 @@ null
 size
 	^ self propertyAt: #size ifAbsentPut: [self elements size]! !
 
-!Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:51'!
+!Domain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:12'!
 < aDomain
-	"Answer true if the receiver is a proper subobject of aDomain (strict inclusion)."
+	"Answer true if the receiver is a proper subset of aDomain (strict inclusion)."
 	aDomain isFinite ifTrue: [^ self size < aDomain size and: [self elements allSatisfy: [:each| aDomain includes: each]]].
 	self isFinite ifTrue: [self do: [:each| (aDomain includes: each) ifFalse: [^ false]]. ^ true].
 	^ aDomain > self! !
 
-!Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:49'!
+!Domain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:21'!
 <= aDomain
-	"Answer true if the receiver is a subobject of aDomain (inclusion)."
+	"Answer true if the receiver is a subset of aDomain (inclusion)."
 	^ self = aDomain or: [self < aDomain]! !
 
 !Domain methodsFor: 'comparing' stamp: 'len 12/28/2016 11:21:40'!
@@ -12662,14 +12662,14 @@ size
 	aDomain propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ self = aCollectionOrDomain].
 	^ super = aDomain! !
 
-!Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:49'!
+!Domain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:33'!
 > aDomain
-	"Answer true if aDomain is a proper subobject of the receiver (strict inclusion)."
+	"Answer true if aDomain is a proper subset of the receiver (strict inclusion)."
 	^ aDomain < self! !
 
-!Domain methodsFor: 'comparing' stamp: 'len 8/12/2016 21:50'!
+!Domain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:41'!
 >= aDomain
-	"Answer true if aDomain is a subobject of the receiver (inclusion)."
+	"Answer true if aDomain is a subset of the receiver (inclusion)."
 	^ aDomain <= self! !
 
 !Domain methodsFor: 'comparing' stamp: 'len 7/16/2016 05:22'!
@@ -17998,6 +17998,10 @@ isCoherent
 isCommutative
 	^ true! !
 
+!Ring methodsFor: 'testing' stamp: 'len 6/22/2019 03:11:32'!
+isCompletion
+	^ false! !
+
 !Ring methodsFor: 'testing' stamp: 'len 6/4/2019 05:06:35'!
 isDVR
 	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
@@ -18024,6 +18028,10 @@ isEuclidean
 isEuclideanDomain
 	"Answer true if the receiver is an Euclidean domain, i.e. an integral domain that has division with remainder."
 	^ self isIntegralDomain and: [self isEuclidean]! !
+
+!Ring methodsFor: 'testing' stamp: 'len 6/22/2019 03:39:12'!
+isExtension
+	^ false! !
 
 !Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:10:52'!
 isField
@@ -18154,6 +18162,19 @@ isUFD
 fractionalIdealClass
 	^ FractionalIdeal! !
 
+!Ring methodsFor: 'as yet unclassified' stamp: 'len 6/22/2019 03:36:14'!
+< aRing
+	aRing isRing ifFalse: [^ false].
+	(aRing isLocalization and: [self <= aRing integers]) ifTrue: [^ true].
+	(aRing isCompletion and: [self <= aRing base]) ifTrue: [^ true].
+	(aRing isExtension and: [self <= aRing scalars]) ifTrue: [^ true].
+	^ false! !
+
+!Ring methodsFor: 'as yet unclassified' stamp: 'len 6/22/2019 03:36:22'!
+<= aRing
+	self = aRing ifTrue: [^ true].
+	^ self < aRing! !
+
 !CompletionRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:56:17'!
 base
 	^ self completionIdeal scalars! !
@@ -18201,6 +18222,10 @@ jet: anInteger
 	"Answer the anInteger-th jet of the receiver, that is the quotient ring isomorphic to the anInteger-th truncation of the receiver."
 	^ self base / (self completionIdeal ^ anInteger)! !
 
+!CompletionRing methodsFor: 'testing' stamp: 'len 6/22/2019 03:11:07'!
+isCompletion
+	^ true! !
+
 !CompletionRing methodsFor: 'testing' stamp: 'len 6/6/2019 10:55:42'!
 isLocal
 	^ true! !
@@ -18208,6 +18233,17 @@ isLocal
 !CompletionRing methodsFor: 'private' stamp: 'len 6/6/2019 11:11:28'!
 completionIdeal: anIdeal
 	self propertyAt: #completionIdeal put: anIdeal! !
+
+!CompletionRing methodsFor: 'as yet unclassified' stamp: 'len 6/22/2019 03:13:21'!
+> aRing
+	self base > aRing ifTrue: [^ true].
+	^ super > aRing! !
+
+!CompletionRing methodsFor: 'as yet unclassified' stamp: 'len 6/22/2019 03:14:37'!
+>= aRing
+	super >= aRing ifTrue: [^ true].
+	self base >= aRing ifTrue: [^ true].
+	^ false! !
 
 !CompletionRing methodsFor: 'as yet unclassified' stamp: 'len 6/6/2019 18:58:05'!
 hilbertSeriesAt: t
@@ -18490,217 +18526,92 @@ on: aPolynomialRing
 	aPolynomialRing scalars isLocal ifFalse: [^ DomainError signal: 'coefficients ring is not local'].
 	^ super at: (aPolynomialRing isLocal ifTrue: [aPolynomialRing] ifFalse: [aPolynomialRing localization]) maximalIdeal! !
 
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:37'!
+!FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:07'!
 characteristic
 	^ self integers characteristic! !
 
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 5/13/2019 19:03:21'!
+!FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:36:54'!
 generators
 	^ self propertyAt: #generators ifAbsentPut: [(self integers generators ifNil: [^ nil]) apply: self integers -> self]! !
 
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:09:02'!
+!FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:25'!
 integers
-	^ self localizationIdeal scalars! !
+	^ self propertyAt: #integers! !
 
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:08:37'!
-localizationIdeal
-	^ self propertyAt: #localizationIdeal! !
-
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:09:55'!
-maximalIdeal
-	"Answer the unique maximal ideal in the receiver."
-	^ self * (self localizationIdeal generators collect: [:each| self embed: each])! !
-
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:39'!
+!FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:38'!
 one
 	^ self embed: self integers one! !
-
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:39'!
-zero
-	^ self embed: self integers zero! !
-
-!LocalizationRing methodsFor: 'comparing' stamp: 'len 10/29/2016 10:16'!
-< aRing
-	"Answer true if the receiver is strictly included in the argument."
-	^ self ~= aRing and: [self <= aRing]! !
-
-!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:06:19'!
-<= aRing
-	"Answer true if the receiver is included in the argument."
-	self == aRing ifTrue: [^ true].
-	(aRing isKindOf: Ring) ifFalse: [^ false].
-	(aRing isKindOf: LocalizationRing)
-		ifTrue: [^ self integers <= aRing integers and: [self localizationIdeal >= aRing localizationIdeal]].
-	^ false! !
-
-!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:06:34'!
-= anObject
-	self == anObject ifTrue: [^ true].
-	^ (anObject isKindOf: LocalizationRing) and: [self localizationIdeal = anObject localizationIdeal]! !
-
-!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:06:51'!
->= aRing
-	"Answer true if the argument is included in the receiver."
-	self == aRing ifTrue: [^ true].
-	(aRing isKindOf: Ring) ifFalse: [^ false].
-	(aRing isKindOf: LocalizationRing)
-		ifTrue: [^ self integers >= aRing integers and: [self localizationIdeal <= aRing localizationIdeal]].
-	^ self integers >= aRing! !
-
-!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:07:16'!
-hash
-	^ self localizationIdeal hash + self integers hash! !
-
-!LocalizationRing methodsFor: 'converting' stamp: 'len 6/6/2019 11:10:08'!
-over: aRing
-	"Change the base ring."
-	^ self class at: (self localizationIdeal over: aRing)! !
-
-!LocalizationRing methodsFor: 'elements' stamp: 'len 5/25/2018 17:36:46'!
-!! anObject
-	(self integers includes: anObject) ifTrue: [^ self embed: anObject].
-	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
-	^ super !! anObject! !
-
-!LocalizationRing methodsFor: 'enumerating' stamp: 'len 6/10/2019 14:49:45'!
-primeIdealsDo: aBlock
-	| embedding P |
-	self isField ifTrue: [aBlock value: self zeroIdeal. ^ self].
-	self isDVR ifTrue: [aBlock value: self zeroIdeal; value: self maximalIdeal. ^ self].
-	"The prime ideals of the localization of R at a prime ideal P are in one-to-one correspondence with the prime ideals I of R that satisfy I <= P:"
-	embedding _ self integers -> self.
-	P _ self localizationIdeal.
-	self integers primeIdealsDo: [:each| each <= P ifTrue: [aBlock value: (each apply: embedding)]]! !
-
-!LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/25/2018 17:53:41'!
-embed: anObject
-	^ anObject! !
-
-!LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/13/2019 19:00:12'!
-from: aDomain
-	aDomain = self integers ifTrue: [^ self addMap: ((self integers to: self evaluating: [:x| self embed: x]) name: 'i')].
-	aDomain -> self integers ifNotNil: [:aMorphism| ^ aMorphism -> self].
-	^ super from: aDomain! !
-
-!LocalizationRing methodsFor: 'operations' stamp: 'len 1/19/2017 07:19:45'!
-fractions
-	^ self integers fractions! !
-
-!LocalizationRing methodsFor: 'random' stamp: 'len 6/6/2019 11:06:59'!
-atRandom: aRandom
-	| a b |
-	a _ self integers atRandom: aRandom.
-	[b _ self integers atRandom: aRandom. self localizationIdeal includes: b] whileTrue.
-	^ (self embed: a) / (self embed: b)! !
-
-!LocalizationRing methodsFor: 'random' stamp: 'len 6/6/2019 11:07:07'!
-atRandom: aRandom bits: bitSize
-	| a b |
-	bitSize < 2 ifTrue: [^ self embed: (self integers atRandom: aRandom bits: bitSize)].
-	a _ self integers atRandom: aRandom bits: bitSize/2.
-	[b _ self integers atRandom: aRandom bits: bitSize/2. self localizationIdeal includes: b] whileTrue.
-	^ (self embed: a) / (self embed: b)! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:08:13'!
-includes: anObject
-	^ (self integers includes: anObject) or: [anObject isFractional and: [(self integers includes: anObject numerator) and: [(self localizationIdeal includes: anObject denominator) not]]]! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:12'!
-isArtinian
-	"Answer true if the receiver is an Artinian ring, i.e. it satisfied the descending chain condition on ideals.
-	In the non-commutative case, one should talk about 'left Artinian' or 'right Artinian' rings."
-	self integers isArtinian ifTrue: [^ true]. "only if commutative?"
-	^ super isArtinian! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/9/2019 08:41:30'!
-isDVR
-	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
-	"The localization of a Dedekind domain at a non-zero prime ideal is a DVR."
-	^ self integers isDedekindDomain and: [self localizationIdeal isTrivial not]! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:42:45'!
-isDedekindDomain
-	"A localization of a Dedekind domain at any multiplicative set is also a Dedekind domain."
-	self integers isDedekindDomain ifTrue: [^ true].
-	^ super isDedekindDomain! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:09'!
-isEuclidean
-	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
-	self integers isEuclidean ifTrue: [^ true].
-	^ super isEuclidean! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:09:20'!
-isField
-	^ self integers isIntegralDomain and: [self localizationIdeal isZero]! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 10/28/2016 16:06'!
-isLocal
-	^ true! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 1/28/2018 22:20:01'!
-isLocalization
-	^ true! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:34'!
-isNoetherian
-	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
-	^ self integers isNoetherian or: [super isNoetherian]! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:14:04'!
-isPIR
-	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
-	"A localization of a PIR at any multiplicative subset is again a PIR."
-	self integers isPIR ifTrue: [^ true].
-	^ super isPIR! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 4/28/2018 05:11:31'!
-isReduced
-	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0."
-	self integers isReduced ifTrue: [^ true]. "is it iff?"
-	^ super isReduced! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 9/16/2018 18:16:41'!
-isTrivial
-	^ self integers isTrivial "or: [self maximalIdeal includes: self zero]"! !
-
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:09:45'!
-isUnit: anElement
-	"Answer true if the argument is invertible."
-	^ (self localizationIdeal includes: anElement numerator) not! !
-
-!LocalizationRing methodsFor: 'private' stamp: 'len 6/6/2019 11:07:48'!
-localizationIdeal: anIdeal
-	self propertyAt: #localizationIdeal put: anIdeal! !
-
-!LocalizationRing class methodsFor: 'examples' stamp: 'len 1/23/2018 21:24:50'!
-exampleZZLocalizedAt2
-	"Answer the localization of the integers at <2>.
-	This is the ring of fractions with odd denominator."
-	^ ZZ localizationAt: 2! !
-
-!LocalizationRing class methodsFor: 'instance creation' stamp: 'len 6/6/2019 11:10:47'!
-at: anIdeal
-	^ self new localizationIdeal: anIdeal! !
 
 !FractionRing methodsFor: 'accessing' stamp: 'len 6/10/2019 14:08:19'!
 uniformizer
 	"A uniformizer (or uniformizing parameter, uniformizer element or prime element) is any irreducible element of a DVR, or equivalently a generator of the maximal ideal. All non-zero ideals are generated by some power of the uniformizer."
 	^ self embed: self integers uniformizer! !
 
+!FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:43'!
+zero
+	^ self embed: self integers zero! !
+
 !FractionRing methodsFor: 'comparing' stamp: 'len 10/31/2016 15:20'!
 = anObject
 	self == anObject ifTrue: [^ true].
 	^ (anObject isKindOf: FractionRing) and: [anObject integers = self integers]! !
+
+!FractionRing methodsFor: 'comparing' stamp: 'len 6/21/2019 18:00:11'!
+hash
+	^ self integers hash! !
 
 !FractionRing methodsFor: 'converting' stamp: 'len 1/20/2017 09:07:54'!
 over: aRing
 	"Change the base ring."
 	^ self class on: (self integers over: aRing)! !
 
+!FractionRing methodsFor: 'elements' stamp: 'len 6/21/2019 18:01:49'!
+!! anObject
+	(self integers includes: anObject) ifTrue: [^ self embed: anObject].
+	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
+	^ super !! anObject! !
+
+!FractionRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:10:04'!
+isNilpotent: anElement
+	^ self integers isNilpotent: anElement numerator! !
+
+!FractionRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:08:26'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	^ (self integers isZeroDivisor: anElement numerator) not! !
+
+!FractionRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:10:09'!
+isZeroDivisor: anElement
+	^ self integers isZeroDivisor: anElement numerator! !
+
+!FractionRing methodsFor: 'morphisms' stamp: 'len 6/21/2019 18:02:22'!
+embed: anObject
+	^ anObject! !
+
+!FractionRing methodsFor: 'morphisms' stamp: 'len 6/21/2019 18:02:39'!
+from: aDomain
+	aDomain = self integers ifTrue: [^ self addMap: ((self integers to: self evaluating: [:x| self embed: x]) name: 'i')].
+	aDomain -> self integers ifNotNil: [:aMorphism| ^ aMorphism -> self].
+	^ super from: aDomain! !
+
 !FractionRing methodsFor: 'operations' stamp: 'len 2/28/2017 19:59:48'!
 fractions
 	^ self! !
+
+!FractionRing methodsFor: 'random' stamp: 'len 6/21/2019 18:12:36'!
+atRandom: aRandom
+	| a b |
+	a _ self integers atRandom: aRandom.
+	[b _ self integers atRandom: aRandom. self integers isZeroDivisor: b] whileTrue.
+	^ (self embed: a) / (self embed: b)! !
+
+!FractionRing methodsFor: 'random' stamp: 'len 6/21/2019 18:13:00'!
+atRandom: aRandom bits: bitSize
+	| a b |
+	bitSize < 2 ifTrue: [^ self embed: (self integers atRandom: aRandom bits: bitSize)].
+	a _ self integers atRandom: aRandom bits: bitSize/2.
+	[b _ self integers atRandom: aRandom bits: bitSize/2. self integers isZeroDivisor: b] whileTrue.
+	^ (self embed: a) / (self embed: b)! !
 
 !FractionRing methodsFor: 'testing' stamp: 'len 5/25/2018 17:47:54'!
 includes: anObject
@@ -18708,10 +18619,11 @@ includes: anObject
 	R _ self integers.
 	^ (R includes: anObject) or: [anObject isFractional and: [R includes: anObject numerator]]! !
 
-!FractionRing methodsFor: 'testing' stamp: 'len 6/4/2019 17:48:31'!
-isDVR
-	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
-	^ self integers isDVR! !
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:05:49'!
+isDedekindDomain
+	"A localization of a Dedekind domain at any multiplicative set is also a Dedekind domain."
+	self integers isDedekindDomain ifTrue: [^ true].
+	^ super isDedekindDomain! !
 
 !FractionRing methodsFor: 'testing' stamp: 'len 10/31/2016 15:21'!
 isField
@@ -18721,19 +18633,44 @@ isField
 isFractionRing
 	^ true! !
 
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:37:01'!
+isLocalization
+	^ true! !
+
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:06:30'!
+isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
+	^ self integers isNoetherian or: [super isNoetherian]! !
+
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:06:40'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	"A localization of a PIR at any multiplicative subset is again a PIR."
+	self integers isPIR ifTrue: [^ true].
+	^ super isPIR! !
+
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:07:43'!
+isReduced
+	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0."
+	^ self integers isReduced! !
+
+!FractionRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:07:59'!
+isTrivial
+	^ self integers isTrivial! !
+
+!FractionRing methodsFor: 'private' stamp: 'len 6/21/2019 17:35:53'!
+integers: aRing
+	self propertyAt: #integers put: aRing! !
+
 !FractionRing class methodsFor: 'examples' stamp: 'len 6/9/2019 08:35:43'!
 example1
 	"The ring of fractions of the rational integers is the field of rational numbers:"
 	^ ZZ fractions
 ! !
 
-!FractionRing class methodsFor: 'instance creation' stamp: 'len 1/23/2018 21:25:31'!
-at: anIdeal
-	^ self shouldNotImplement! !
-
-!FractionRing class methodsFor: 'instance creation' stamp: 'len 1/23/2018 21:18:50'!
-on: anIntegralDomain
-	^ super at: anIntegralDomain zeroIdeal! !
+!FractionRing class methodsFor: 'instance creation' stamp: 'len 6/21/2019 17:36:14'!
+on: aRing
+	^ self new integers: aRing! !
 
 !RationalField methodsFor: 'accessing' stamp: 'len 9/22/2018 18:58:22'!
 degree
@@ -18756,8 +18693,8 @@ localizationIdeal
 size
 	^ Aleph new! !
 
-!RationalField methodsFor: 'comparing' stamp: 'len 6/1/2016 23:56'!
-<= aDomain
+!RationalField methodsFor: 'comparing' stamp: 'len 6/22/2019 03:34:50'!
+< aDomain
 	^ aDomain isField and: [(aDomain includes: 1) and: [aDomain includes: 0]]! !
 
 !RationalField methodsFor: 'comparing' stamp: 'len 11/10/2015 23:14'!
@@ -18956,6 +18893,10 @@ extension: aPolynomial
 	aPolynomial parent isUnivariate ifFalse: [DomainError signal: 'not univariate poylnomial'].
 	^ FunctionField polynomial: aPolynomial! !
 
+!RationalFunctionField methodsFor: 'testing' stamp: 'len 6/22/2019 03:16:03'!
+isExtension
+	^ true! !
+
 !RationalFunctionField methodsFor: 'testing' stamp: 'len 9/16/2018 16:26:30'!
 isUnit: aRationalFunction
 	"Answer true if the argument is invertible."
@@ -19006,33 +18947,196 @@ names: anArray
 x
 	^ self !! self integers x! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:20:58'!
-fractions
-	^ self propertyAt: #fractions! !
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:37'!
+characteristic
+	^ self integers characteristic! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:21:14'!
-fractions: aFractionField
-	^ self propertyAt: #fractions put: aFractionField! !
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 5/13/2019 19:03:21'!
+generators
+	^ self propertyAt: #generators ifAbsentPut: [(self integers generators ifNil: [^ nil]) apply: self integers -> self]! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:34:28'!
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:09:02'!
 integers
-	^ self fractions integers! !
+	^ self localizationIdeal scalars! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:40'!
-p
-	^ self propertyAt: #p! !
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:08:37'!
+localizationIdeal
+	^ self propertyAt: #localizationIdeal! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:46'!
-p: aPrime
-	self propertyAt: #p put: aPrime! !
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:09:55'!
+maximalIdeal
+	"Answer the unique maximal ideal in the receiver."
+	^ self * (self localizationIdeal generators collect: [:each| self embed: each])! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:40:25'!
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:39'!
+one
+	^ self embed: self integers one! !
+
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/21/2019 05:12:24'!
 uniformizer
-	^ self !! self p! !
+	"A uniformizer (or uniformizing parameter, uniformizer element or prime element) is any irreducible element of a DVR, or equivalently a generator of the maximal ideal. All non-zero ideals are generated by some power of the uniformizer."
+	self isDVR ifFalse: [^ DomainError signal: 'not a DVR'].
+	^ self maximalIdeal generator! !
 
-!ValuationRing class methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:25'!
-on: aFractionsField p: aPrime
-	^ self new fractions: aFractionsField; p: aPrime! !
+!LocalizationRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:39'!
+zero
+	^ self embed: self integers zero! !
+
+!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/22/2019 03:30:10'!
+< aRing
+	"Answer true if the receiver is included in the argument."
+	super < aRing ifTrue: [^ true].
+	(aRing isKindOf: FractionRing) ifTrue: [^ self integers <= aRing integers].
+	(aRing isKindOf: LocalizationRing) ifTrue: [^ self integers <= aRing integers and: [self localizationIdeal >= aRing localizationIdeal]].
+	^ false! !
+
+!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/6/2019 11:06:34'!
+= anObject
+	self == anObject ifTrue: [^ true].
+	^ (anObject isKindOf: LocalizationRing) and: [self localizationIdeal = anObject localizationIdeal]! !
+
+!LocalizationRing methodsFor: 'comparing' stamp: 'len 6/22/2019 03:30:45'!
+hash
+	^ self localizationIdeal hash! !
+
+!LocalizationRing methodsFor: 'converting' stamp: 'len 6/6/2019 11:10:08'!
+over: aRing
+	"Change the base ring."
+	^ self class at: (self localizationIdeal over: aRing)! !
+
+!LocalizationRing methodsFor: 'elements' stamp: 'len 5/25/2018 17:36:46'!
+!! anObject
+	(self integers includes: anObject) ifTrue: [^ self embed: anObject].
+	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
+	^ super !! anObject! !
+
+!LocalizationRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:11:10'!
+isNilpotent: anElement
+	^ self integers isNilpotent: anElement numerator! !
+
+!LocalizationRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:11:01'!
+isZeroDivisor: anElement
+	^ self integers isZeroDivisor: anElement numerator! !
+
+!LocalizationRing methodsFor: 'enumerating' stamp: 'len 6/10/2019 14:49:45'!
+primeIdealsDo: aBlock
+	| embedding P |
+	self isField ifTrue: [aBlock value: self zeroIdeal. ^ self].
+	self isDVR ifTrue: [aBlock value: self zeroIdeal; value: self maximalIdeal. ^ self].
+	"The prime ideals of the localization of R at a prime ideal P are in one-to-one correspondence with the prime ideals I of R that satisfy I <= P:"
+	embedding _ self integers -> self.
+	P _ self localizationIdeal.
+	self integers primeIdealsDo: [:each| each <= P ifTrue: [aBlock value: (each apply: embedding)]]! !
+
+!LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/25/2018 17:53:41'!
+embed: anObject
+	^ anObject! !
+
+!LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/13/2019 19:00:12'!
+from: aDomain
+	aDomain = self integers ifTrue: [^ self addMap: ((self integers to: self evaluating: [:x| self embed: x]) name: 'i')].
+	aDomain -> self integers ifNotNil: [:aMorphism| ^ aMorphism -> self].
+	^ super from: aDomain! !
+
+!LocalizationRing methodsFor: 'operations' stamp: 'len 1/19/2017 07:19:45'!
+fractions
+	^ self integers fractions! !
+
+!LocalizationRing methodsFor: 'random' stamp: 'len 6/6/2019 11:06:59'!
+atRandom: aRandom
+	| a b |
+	a _ self integers atRandom: aRandom.
+	[b _ self integers atRandom: aRandom. self localizationIdeal includes: b] whileTrue.
+	^ (self embed: a) / (self embed: b)! !
+
+!LocalizationRing methodsFor: 'random' stamp: 'len 6/6/2019 11:07:07'!
+atRandom: aRandom bits: bitSize
+	| a b |
+	bitSize < 2 ifTrue: [^ self embed: (self integers atRandom: aRandom bits: bitSize)].
+	a _ self integers atRandom: aRandom bits: bitSize/2.
+	[b _ self integers atRandom: aRandom bits: bitSize/2. self localizationIdeal includes: b] whileTrue.
+	^ (self embed: a) / (self embed: b)! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:08:13'!
+includes: anObject
+	^ (self integers includes: anObject) or: [anObject isFractional and: [(self integers includes: anObject numerator) and: [(self localizationIdeal includes: anObject denominator) not]]]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:05:09'!
+isArtinian
+	"Answer true if the receiver is an Artinian ring, i.e. it satisfied the descending chain condition on ideals."
+	self integers isArtinian ifTrue: [^ true].
+	^ super isArtinian! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/9/2019 08:41:30'!
+isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
+	"The localization of a Dedekind domain at a non-zero prime ideal is a DVR."
+	^ self integers isDedekindDomain and: [self localizationIdeal isTrivial not]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 07:42:45'!
+isDedekindDomain
+	"A localization of a Dedekind domain at any multiplicative set is also a Dedekind domain."
+	self integers isDedekindDomain ifTrue: [^ true].
+	^ super isDedekindDomain! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 9/22/2018 18:55:09'!
+isEuclidean
+	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
+	self integers isEuclidean ifTrue: [^ true].
+	^ super isEuclidean! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:09:20'!
+isField
+	^ self integers isIntegralDomain and: [self localizationIdeal isZero]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 10/28/2016 16:06'!
+isLocal
+	^ true! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 1/28/2018 22:20:01'!
+isLocalization
+	^ true! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 16:09:34'!
+isNoetherian
+	"Answer true if the receiver is a Noetherian ring, i.e. every ideal is finitely generated."
+	^ self integers isNoetherian or: [super isNoetherian]! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:14:04'!
+isPIR
+	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
+	"A localization of a PIR at any multiplicative subset is again a PIR."
+	self integers isPIR ifTrue: [^ true].
+	^ super isPIR! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 4/28/2018 05:11:31'!
+isReduced
+	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0."
+	self integers isReduced ifTrue: [^ true]. "is it iff?"
+	^ super isReduced! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 9/16/2018 18:16:41'!
+isTrivial
+	^ self integers isTrivial "or: [self maximalIdeal includes: self zero]"! !
+
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:09:45'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	^ (self localizationIdeal includes: anElement numerator) not! !
+
+!LocalizationRing methodsFor: 'private' stamp: 'len 6/6/2019 11:07:48'!
+localizationIdeal: anIdeal
+	self propertyAt: #localizationIdeal put: anIdeal! !
+
+!LocalizationRing class methodsFor: 'examples' stamp: 'len 1/23/2018 21:24:50'!
+exampleZZLocalizedAt2
+	"Answer the localization of the integers at <2>.
+	This is the ring of fractions with odd denominator."
+	^ ZZ localizationAt: 2! !
+
+!LocalizationRing class methodsFor: 'instance creation' stamp: 'len 6/6/2019 11:10:47'!
+at: anIdeal
+	^ self new localizationIdeal: anIdeal! !
 
 !ProductRing methodsFor: 'accessing' stamp: 'len 8/29/2016 04:09'!
 arity
@@ -19579,13 +19683,13 @@ lifting
 project: anInteger
 	^ self representative: anInteger \\ modulus! !
 
-!ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/19/2019 14:03:37'!
+!ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/21/2019 03:41:14'!
 decomposition
 	"Answer the decomposition of the receiver as product of prime power rings."
-	^ self notYetImplemented
-"	components _ OrderedCollection new.
+	| components |
+	components _ OrderedCollection new.
 	self modulusFactors withOccurrencesDo: [:p :k| components add: (PrimePowerRing new: p to: k)].
-	^ ProductRing components: components asArray. ...."! !
+	^ ProductRing components: components asArray! !
 
 !ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/19/2019 14:53:21'!
 units
@@ -20089,6 +20193,10 @@ proj
 spec
 	"Answer the spectrum of the receiver, Spec(R/I) as subscheme of Spec(R)."
 	^ AffineVariety coordinateRing: self! !
+
+!AffineRing methodsFor: 'testing' stamp: 'len 6/22/2019 03:17:29'!
+isExtension
+	^ true! !
 
 !AffineRing methodsFor: 'testing' stamp: 'len 2/12/2017 05:49:37'!
 isGlobal
@@ -20678,9 +20786,9 @@ dimension
 size
 	^ Aleph new! !
 
-!RationalIntegerRing methodsFor: 'comparing' stamp: 'len 6/1/2016 23:56'!
-<= aDomain
-	^ aDomain isRing and: [(aDomain includes: 1) and: [aDomain includes: 0]]! !
+!RationalIntegerRing methodsFor: 'comparing' stamp: 'len 6/22/2019 03:32:02'!
+< aDomain
+	^ aDomain isRing! !
 
 !RationalIntegerRing methodsFor: 'comparing' stamp: 'len 11/10/2015 23:14'!
 = anObject
@@ -20898,10 +21006,6 @@ zero
 = anObject
 	^ anObject class == self class! !
 
-!ComplexField methodsFor: 'comparing' stamp: 'len 1/20/2018 19:07:07'!
-> aDomain
-	^ (aDomain isKindOf: RationalField) or: [(aDomain isKindOf: RationalIntegerRing) or: [aDomain isKindOf: RealField]]! !
-
 !ComplexField methodsFor: 'comparing' stamp: 'len 1/20/2018 19:07:25'!
 hash
 	^ self class hash! !
@@ -20951,17 +21055,13 @@ size
 zero
 	^ 0! !
 
-!RealField methodsFor: 'comparing' stamp: 'len 1/20/2018 18:59:45'!
+!RealField methodsFor: 'comparing' stamp: 'len 6/22/2019 03:33:36'!
 < aDomain
-	^ ((aDomain isKindOf: RationalField) or: [aDomain isKindOf: RationalIntegerRing]) or: [super < aDomain]! !
+	^ super < aDomain or: [aDomain isKindOf: ComplexField]! !
 
 !RealField methodsFor: 'comparing' stamp: 'len 1/20/2018 18:59:57'!
 = anObject
 	^ anObject class == self class! !
-
-!RealField methodsFor: 'comparing' stamp: 'len 1/20/2018 19:00:02'!
-> aDomain
-	^ (aDomain isKindOf: RationalField) or: [aDomain isKindOf: RationalIntegerRing]! !
 
 !RealField methodsFor: 'comparing' stamp: 'len 1/20/2018 19:00:05'!
 hash
@@ -21220,41 +21320,10 @@ scalars
 size
 	^ Aleph new * self scalars size! !
 
-!PolynomialRing methodsFor: 'comparing' stamp: 'len 7/19/2016 01:12'!
-< aDomain
-	(aDomain isKindOf: PolynomialRing) ifFalse: [^ false].
-	self rank = aDomain rank ifFalse: [^ false].
-	self scalars < aDomain scalars ifFalse: [^ false].
-	^ true! !
-
-!PolynomialRing methodsFor: 'comparing' stamp: 'len 9/22/2018 23:45:26'!
-<= aDomain
-	"Answer true if the receiver is included in the argument, i.e. it's a subring of the argument."
-	self == aDomain ifTrue: [^ true].
-	(aDomain isKindOf: RationalFunctionField) ifTrue: [^ aDomain integers >= self].
-	(aDomain isKindOf: PolynomialRing) ifFalse: [^ false].
-	self rank = aDomain rank ifFalse: [^ false].
-	self scalars <= aDomain scalars ifFalse: [^ false].
-	^ true! !
-
 !PolynomialRing methodsFor: 'comparing' stamp: 'len 2/10/2017 20:12:10'!
 = anObject
 	self == anObject ifTrue: [^ true].
 	^ (anObject isKindOf: PolynomialRing) and: [self scalars = anObject scalars and: [self rank = anObject rank "and: [self ordering = anObject ordering]"]]! !
-
-!PolynomialRing methodsFor: 'comparing' stamp: 'len 7/19/2016 01:12'!
-> aDomain
-	(aDomain isKindOf: PolynomialRing) ifFalse: [^ false].
-	self rank = aDomain rank ifFalse: [^ false].
-	self scalars > aDomain scalars ifFalse: [^ false].
-	^ true! !
-
-!PolynomialRing methodsFor: 'comparing' stamp: 'len 7/19/2016 01:12'!
->= aDomain
-	(aDomain isKindOf: PolynomialRing) ifFalse: [^ false].
-	self rank = aDomain rank ifFalse: [^ false].
-	self scalars >= aDomain scalars ifFalse: [^ false].
-	^ true! !
 
 !PolynomialRing methodsFor: 'comparing' stamp: 'len 8/30/2016 07:09'!
 ~ aPolynomialRing
@@ -21749,9 +21818,9 @@ atRandomMaxDegree: d
 has: anIndeterminate
 	^ self indeterminates includes: anIndeterminate! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 1/23/2017 11:44:49'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:46:43'!
 includes: anObject
-	^ (anObject isKindOf: Polynomial) and: [anObject parent <= self]! !
+	^ (anObject isKindOf: Polynomial) and: [anObject parent = self]! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 5/1/2019 17:33:22'!
 isCoherent
@@ -21764,6 +21833,10 @@ isCoherent
 isEuclidean
 	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
 	^ self scalars isEuclidean! !
+
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/22/2019 03:17:46'!
+isExtension
+	^ true! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 4/29/2019 04:48:51'!
 isGCDDomain
@@ -21885,6 +21958,34 @@ isIntegral: anElement
 !LocalRing methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:28:58'!
 isUnit: anElement
 	^ anElement valuation = 0! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:20:58'!
+fractions
+	^ self propertyAt: #fractions! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:21:14'!
+fractions: aFractionField
+	^ self propertyAt: #fractions put: aFractionField! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:34:28'!
+integers
+	^ self fractions integers! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:40'!
+p
+	^ self propertyAt: #p! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:46'!
+p: aPrime
+	self propertyAt: #p put: aPrime! !
+
+!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:40:25'!
+uniformizer
+	^ self !! self p! !
+
+!ValuationRing class methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:25'!
+on: aFractionsField p: aPrime
+	^ self new fractions: aFractionsField; p: aPrime! !
 
 !Module methodsFor: 'accessing' stamp: 'len 12/16/2016 13:26:11'!
 addition
@@ -32914,21 +33015,13 @@ valuation
 + anElement
 	^ parent compose: components + anElement components! !
 
-!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:49:51'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/20/2019 19:27:05'!
 // anElement
-	^ parent compose: components // anElement components! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:01'!
-\\ anElement
-	^ parent compose: components \\ anElement components! !
+	^ parent compose: (components with: anElement components collect: [:x :y| y isZero ifTrue: [y] ifFalse: [x // y]])! !
 
 !ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:13'!
 gcd: anElement
 	^ parent compose: (components with: anElement components collect: [:a :b| a gcd: b])! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:25'!
-lcm: anElement
-	^ parent compose: (components with: anElement components collect: [:a :b| a lcm: b])! !
 
 !ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:33'!
 negated
@@ -32987,13 +33080,13 @@ valuation
 	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
 	^ numerator valuation - denominator valuation! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 4/7/2018 00:34:52'!
+!Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 00:34:52'!
 * anObject
 	anObject class == self class
 		ifTrue: [^ self class numerator: numerator * anObject numerator denominator: denominator * anObject denominator].
 	^ self class numerator: numerator * anObject denominator: denominator! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 4/7/2018 01:03:10'!
+!Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 01:03:10'!
 + anObject
 	anObject class == self class
 		ifTrue: [^ self class
@@ -33001,7 +33094,7 @@ valuation
 			denominator: denominator * anObject denominator].
 	^ self class numerator: numerator + (denominator * anObject) denominator: denominator! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 1/22/2017 08:13:41'!
+!Ratio methodsFor: 'operations' stamp: 'len 1/22/2017 08:13:41'!
 ^ anInteger
 	anInteger = 1 ifTrue: [^ self].
 	anInteger < 0 ifTrue: [^ self reciprocal ^ anInteger negated].
@@ -33009,17 +33102,17 @@ valuation
 		numerator: numerator ^ anInteger
 		denominator: denominator ^ anInteger! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 11/28/2015 06:42'!
+!Ratio methodsFor: 'operations' stamp: 'len 11/28/2015 06:42'!
 negated 
 	^ self class
 		numerator: numerator negated
 		denominator: denominator! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 4/7/2018 00:37:00'!
+!Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 00:37:00'!
 reciprocal
 	^ self class numerator: denominator denominator: numerator! !
 
-!Ratio methodsFor: 'arithmetic' stamp: 'len 4/7/2018 00:37:15'!
+!Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 00:37:15'!
 squared
 	^ self class
 		numerator: numerator squared
