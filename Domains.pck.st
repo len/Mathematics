@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 22 June 2019 at 3:45:30 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 2 July 2019 at 9:47:58 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 533!
+!provides: 'Domains' 1 534!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -33,7 +33,6 @@ SystemOrganization addCategory: #'Domains-Polynomials-Algorithms'!
 SystemOrganization addCategory: #'Domains-Schemes'!
 SystemOrganization addCategory: #'Domains-Schemes-Affine'!
 SystemOrganization addCategory: #'Domains-Schemes-Projective'!
-SystemOrganization addCategory: #'Domains-Schemes-Projective-Product'!
 SystemOrganization addCategory: #'Domains-Codes'!
 SystemOrganization addCategory: #'Domains-Algorithms'!
 SystemOrganization addCategory: #'Domains-Sequences'!
@@ -50,9 +49,9 @@ SystemOrganization addCategory: #'Domains-Morphic'!
 SystemOrganization addCategory: #'Domains-Etc'!
 SystemOrganization addCategory: #'Domains-Etc-Lie'!
 SystemOrganization addCategory: #'Domains-Etc-Approximate'!
-SystemOrganization addCategory: #'Domains-Etc-Diagrams'!
 SystemOrganization addCategory: #'Domains-Etc-Algebras'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Abelian'!
+SystemOrganization addCategory: #'Domains-Etc-Schemes-Projective-Product'!
 
 
 !classDefinition: #RealAlgebraicNumber category: #'Domains-Fields'!
@@ -1035,14 +1034,14 @@ FractionRing subclass: #RationalField
 RationalField class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicRationalField category: #'Domains-Rings-Adic'!
-FractionRing subclass: #AdicRationalField
+!classDefinition: #AdicField category: #'Domains-Rings-Adic'!
+FractionRing subclass: #AdicField
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Rings-Adic'!
-!classDefinition: 'AdicRationalField class' category: #'Domains-Rings-Adic'!
-AdicRationalField class
+!classDefinition: 'AdicField class' category: #'Domains-Rings-Adic'!
+AdicField class
 	instanceVariableNames: ''!
 
 !classDefinition: #RationalFunctionField category: #'Domains-Polynomials'!
@@ -1325,16 +1324,6 @@ Ring subclass: #LocalRing
 LocalRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #ValuationRing category: #'Domains-Etc-Approximate'!
-Ring subclass: #ValuationRing
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate'!
-!classDefinition: 'ValuationRing class' category: #'Domains-Etc-Approximate'!
-ValuationRing class
-	instanceVariableNames: ''!
-
 !classDefinition: #Module category: #'Domains-Modules'!
 Domain subclass: #Module
 	instanceVariableNames: ''
@@ -1343,6 +1332,16 @@ Domain subclass: #Module
 	category: 'Domains-Modules'!
 !classDefinition: 'Module class' category: #'Domains-Modules'!
 Module class
+	instanceVariableNames: ''!
+
+!classDefinition: #FractionalIdeal category: #'Domains-Rings'!
+Module subclass: #FractionalIdeal
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings'!
+!classDefinition: 'FractionalIdeal class' category: #'Domains-Rings'!
+FractionalIdeal class
 	instanceVariableNames: ''!
 
 !classDefinition: #Ideal category: #'Domains-Rings'!
@@ -1393,16 +1392,6 @@ PolynomialIdeal subclass: #MonomialIdeal
 	category: 'Domains-Polynomials'!
 !classDefinition: 'MonomialIdeal class' category: #'Domains-Polynomials'!
 MonomialIdeal class
-	instanceVariableNames: ''!
-
-!classDefinition: #FractionalIdeal category: #'Domains-Fields-Number Fields'!
-Module subclass: #FractionalIdeal
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Fields-Number Fields'!
-!classDefinition: 'FractionalIdeal class' category: #'Domains-Fields-Number Fields'!
-FractionalIdeal class
 	instanceVariableNames: ''!
 
 !classDefinition: #HomModule category: #'Domains-Modules'!
@@ -1706,7 +1695,7 @@ ProjectiveScheme class
 	instanceVariableNames: ''!
 
 !classDefinition: #ProjectiveVariety category: #'Domains-Schemes-Projective'!
-Scheme subclass: #ProjectiveVariety
+ProjectiveScheme subclass: #ProjectiveVariety
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1805,23 +1794,23 @@ ProjectiveSpace subclass: #ProjectivePlane
 ProjectivePlane class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectiveVariety category: #'Domains-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectiveVariety category: #'Domains-Etc-Schemes-Projective-Product'!
 Scheme subclass: #ProductProjectiveVariety
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectiveVariety class' category: #'Domains-Schemes-Projective-Product'!
+	category: 'Domains-Etc-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectiveVariety class' category: #'Domains-Etc-Schemes-Projective-Product'!
 ProductProjectiveVariety class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectiveSpace category: #'Domains-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectiveSpace category: #'Domains-Etc-Schemes-Projective-Product'!
 ProductProjectiveVariety subclass: #ProductProjectiveSpace
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectiveSpace class' category: #'Domains-Schemes-Projective-Product'!
+	category: 'Domains-Etc-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectiveSpace class' category: #'Domains-Etc-Schemes-Projective-Product'!
 ProductProjectiveSpace class
 	instanceVariableNames: ''!
 
@@ -2305,13 +2294,13 @@ ProjectivePoint subclass: #EllipticCurvePoint
 EllipticCurvePoint class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductProjectivePoint category: #'Domains-Schemes-Projective-Product'!
+!classDefinition: #ProductProjectivePoint category: #'Domains-Etc-Schemes-Projective-Product'!
 RationalPoint subclass: #ProductProjectivePoint
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Schemes-Projective-Product'!
-!classDefinition: 'ProductProjectivePoint class' category: #'Domains-Schemes-Projective-Product'!
+	category: 'Domains-Etc-Schemes-Projective-Product'!
+!classDefinition: 'ProductProjectivePoint class' category: #'Domains-Etc-Schemes-Projective-Product'!
 ProductProjectivePoint class
 	instanceVariableNames: ''!
 
@@ -2395,6 +2384,16 @@ Element subclass: #RingElement
 RingElement class
 	instanceVariableNames: ''!
 
+!classDefinition: #Germ category: #'Domains-Rings'!
+RingElement subclass: #Germ
+	instanceVariableNames: 'parent fraction'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings'!
+!classDefinition: 'Germ class' category: #'Domains-Rings'!
+Germ class
+	instanceVariableNames: ''!
+
 !classDefinition: #ProductRingElement category: #'Domains-Rings'!
 RingElement subclass: #ProductRingElement
 	instanceVariableNames: 'parent components'
@@ -2415,16 +2414,6 @@ RingElement subclass: #Ratio
 Ratio class
 	instanceVariableNames: ''!
 
-!classDefinition: #RationalNumber category: #'Domains-Rings'!
-Ratio subclass: #RationalNumber
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings'!
-!classDefinition: 'RationalNumber class' category: #'Domains-Rings'!
-RationalNumber class
-	instanceVariableNames: ''!
-
 !classDefinition: #RationalFunction category: #'Domains-Polynomials'!
 Ratio subclass: #RationalFunction
 	instanceVariableNames: ''
@@ -2433,16 +2422,6 @@ Ratio subclass: #RationalFunction
 	category: 'Domains-Polynomials'!
 !classDefinition: 'RationalFunction class' category: #'Domains-Polynomials'!
 RationalFunction class
-	instanceVariableNames: ''!
-
-!classDefinition: #ValuationRingElement category: #'Domains-Etc-Approximate'!
-Ratio subclass: #ValuationRingElement
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate'!
-!classDefinition: 'ValuationRingElement class' category: #'Domains-Etc-Approximate'!
-ValuationRingElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #Residue category: #'Domains-Rings'!
@@ -2513,6 +2492,16 @@ RegularFunction subclass: #AlgebraicElement
 	category: 'Domains-Fields'!
 !classDefinition: 'AlgebraicElement class' category: #'Domains-Fields'!
 AlgebraicElement class
+	instanceVariableNames: ''!
+
+!classDefinition: #GaloisRingElement category: #'Domains-Rings-Finite'!
+AlgebraicElement subclass: #GaloisRingElement
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Finite'!
+!classDefinition: 'GaloisRingElement class' category: #'Domains-Rings-Finite'!
+GaloisRingElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #AdicInteger category: #'Domains-Rings-Adic'!
@@ -2595,34 +2584,14 @@ RingElement subclass: #InexactAdicNumber
 InexactAdicNumber class
 	instanceVariableNames: ''!
 
-!classDefinition: #LocalRingElement category: #'Domains-Etc-Approximate'!
-RingElement subclass: #LocalRingElement
-	instanceVariableNames: ''
+!classDefinition: #Germ2 category: #'Domains-Etc-Approximate'!
+RingElement subclass: #Germ2
+	instanceVariableNames: 'parent valuation unit'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Etc-Approximate'!
-!classDefinition: 'LocalRingElement class' category: #'Domains-Etc-Approximate'!
-LocalRingElement class
-	instanceVariableNames: ''!
-
-!classDefinition: #TruncatedAdicNumber category: #'Domains-Etc-Approximate'!
-LocalRingElement subclass: #TruncatedAdicNumber
-	instanceVariableNames: 'valuation unit precision'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Approximate'!
-!classDefinition: 'TruncatedAdicNumber class' category: #'Domains-Etc-Approximate'!
-TruncatedAdicNumber class
-	instanceVariableNames: ''!
-
-!classDefinition: #OppositeAlgebraElement category: #'Domains-Etc-Algebras'!
-RingElement subclass: #OppositeAlgebraElement
-	instanceVariableNames: 'opposite'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Algebras'!
-!classDefinition: 'OppositeAlgebraElement class' category: #'Domains-Etc-Algebras'!
-OppositeAlgebraElement class
+!classDefinition: 'Germ2 class' category: #'Domains-Etc-Approximate'!
+Germ2 class
 	instanceVariableNames: ''!
 
 !classDefinition: #ModuleElement category: #'Domains-Modules'!
@@ -2773,6 +2742,16 @@ Matrix subclass: #RowMatrix
 	category: 'Domains-Modules-Matrices'!
 !classDefinition: 'RowMatrix class' category: #'Domains-Modules-Matrices'!
 RowMatrix class
+	instanceVariableNames: ''!
+
+!classDefinition: #OppositeAlgebraElement category: #'Domains-Etc-Algebras'!
+Element subclass: #OppositeAlgebraElement
+	instanceVariableNames: 'opposite'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Algebras'!
+!classDefinition: 'OppositeAlgebraElement class' category: #'Domains-Etc-Algebras'!
+OppositeAlgebraElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #MonomialOrdering category: #'Domains-Monoids-Orderings'!
@@ -3635,46 +3614,6 @@ Object subclass: #RootSystem
 RootSystem class
 	instanceVariableNames: ''!
 
-!classDefinition: #Product category: #'Domains-Etc-Diagrams'!
-Object subclass: #Product
-	instanceVariableNames: 'projections'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Diagrams'!
-!classDefinition: 'Product class' category: #'Domains-Etc-Diagrams'!
-Product class
-	instanceVariableNames: ''!
-
-!classDefinition: #DirectSum category: #'Domains-Etc-Diagrams'!
-Product subclass: #DirectSum
-	instanceVariableNames: 'coprojections'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Diagrams'!
-!classDefinition: 'DirectSum class' category: #'Domains-Etc-Diagrams'!
-DirectSum class
-	instanceVariableNames: ''!
-
-!classDefinition: #Quotient category: #'Domains-Etc-Diagrams'!
-Object subclass: #Quotient
-	instanceVariableNames: 'projection'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Diagrams'!
-!classDefinition: 'Quotient class' category: #'Domains-Etc-Diagrams'!
-Quotient class
-	instanceVariableNames: ''!
-
-!classDefinition: #TensorProduct category: #'Domains-Etc-Diagrams'!
-Object subclass: #TensorProduct
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Diagrams'!
-!classDefinition: 'TensorProduct class' category: #'Domains-Etc-Diagrams'!
-TensorProduct class
-	instanceVariableNames: ''!
-
 
 !RealAlgebraicNumber commentStamp: '<historical>' prior: 0!
 Real algebraic numbers, i.e. real zeros of polynomials with integer (or rational) coefficients, in 'minimal polynomial' representation. See also ComplexAlgebraicNumber.!
@@ -4098,23 +4037,26 @@ References:
 Completion of a given commutative ring R at a given maximal ideal I. This is the inverse limit of the quotient rings R / I^n.!
 
 !AdicIntegerRing commentStamp: '<historical>' prior: 0!
-Ring of p-adic integers Zp. Elements are AdicIntegers. See also AdicRationalField, AdicNumber and PrimePowerRing.!
+Ring of p-adic integers Zp. Elements are AdicIntegers. See also AdicField, AdicNumber and PrimePowerRing.
+
+For each prime number p, the ring of p-adic integers Zp is the formal completion of the ring Z at the prime ideal <p>. Geometrically this means that Zp is the ring of functions on a formal neighbourhood of p inside Spec(Z). Algebaically it means that the elements in Zp look like formal power series where the formal variable is the prime number p.!
 
 !PowerSeriesRing commentStamp: '<historical>' prior: 0!
 Ring R[[x]] of univariate formal power series over a commutative ring R in an indetermiate x. See PowerSeries.!
 
 !FractionRing commentStamp: '<historical>' prior: 0!
-Total ring of fractions Frac(R) of a ring R. The elements are formal fractions a/b with a and b in R, b not a zero-divisor. When the ring is an integral domain this is a field. See Ring>>fractions.
+Total ring of fractions Frac(R) of a ring R, also called the "total quotient ring" of R. The elements are formal fractions a/b with a and b in R, b regular (not a zero-divisor). When the ring R is an integral domain, Frac(R) is a field and it is called the "field of fractions" of R. See Ring>>fractions.
 
 The ring of fractions is a particular case of the more general construction of the localization of a ring or module. The field of fractions of an integral domain is the localization at the zero ideal. See also LocalizationRing.
 
 References:
+	https://en.wikipedia.org/wiki/Total_ring_of_fractions
 	https://en.wikipedia.org/wiki/Field_of_fractions!
 
 !RationalField commentStamp: '<historical>' prior: 0!
 The singletion global instance QQ is the field of rational numbers.!
 
-!AdicRationalField commentStamp: '<historical>' prior: 0!
+!AdicField commentStamp: '<historical>' prior: 0!
 Field of p-adic numbers Qp. This is the fraction field of the ring of p-adic integers Zp. Elements are AdicNumbers. See also AdicIntegerRing and AdicInteger.!
 
 !RationalFunctionField commentStamp: '<historical>' prior: 0!
@@ -4124,7 +4066,11 @@ The field of fractions of a polynomial ring with coefficients over a field.!
 Ring R((x)) of univariate formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
 
 !LocalizationRing commentStamp: '<historical>' prior: 0!
-Localization of a given commutative ring R at a given prime ideal P. The elements are fractions a / b with a in R and b in R \ P.!
+Localization of a commutative ring R at a prime ideal P. The elements are 'germs at P' (see Germ), and can be thought as fractions a / b with a in R and b in R \ P. This is a subring of the total ring of fractions Frac(R) (see FractionRing).
+
+The localization of R at a prime ideal P is the stalk of the structure sheaf of Spec(R) at the point P. As the elements of R are thought as functions on the space Spec(R), the elements of the localization at P are thought at function germs, i.e. functions that characterize the local behavior of Spec(R) near P.
+
+The localization of R at the prime ideal P is equipped with a canonical map (the localization map) from the ring of integers R, as well as a canonical embedding into the total ring of ractions Frac(R). It is a local ring, with maximal ideal equal to the extension of P by the localization map. The quotient by the maximal ideal is called the 'residue field'.!
 
 !ProductRing commentStamp: 'len 5/22/2018 16:08:59' prior: 0!
 Direct products of rings. Elements are tuples where the i-th component corresponds to an element in the i-th ring of the product (see ProductRingElement), and multiplication and addition are defined component wise.!
@@ -4147,7 +4093,7 @@ Residue class ring Z/(p^n)Z of integers modulo p^n.
 
 These are Euclidean rings, and the simplest examples of Galois rings, GR(p^n,1). They are local rings with maximal ideal <p> and residue field isomorphic to Z/pZ. The maximal ideal <p> is also the set of zero-divisors as well as nilpotent elements. Other Galois rings are constructed by finite algebraic extensions (see GaloisRing).
 
-These are also the simplest examples of 'chain rings', rings whose ideals form a chain under inclusion. A finite chain ring is a principal ideal ring, and its maximal ideal is the nilradical (the set of nilpotent elements).
+These are also the simplest examples of 'chain rings', rings whose ideals form a chain under inclusion. A finite-chain ring is a principal ideal ring, and its maximal ideal is the nilradical (the set of nilpotent elements).
 
 There are canonical projections from Z/(p^n)Z to Z/(p^m)Z for any 1 <= m <= n. These projections form a projective system (or inverse system), and the projective limit is the ring of p-adic integers Zp. There is a canonical projection from Zp to Z/(p^n)Z, and in this sense Z/(p^n)Z can be thought of as a truncation or an approximation of precision n of Zp (see AdicIntegerRing).!
 
@@ -4242,8 +4188,14 @@ Polynomial rings have an associated monomial ordering. This is used for defining
 See also PolynomialRingMap, PolynomialIdeal, AffineRing, RationalFunctionField, AffineSpace.
 !
 
+!LocalRing commentStamp: '<historical>' prior: 0!
+Valuation rings obtained by localization of a given integral domain R at a prime ideal <p>. See also LocalizationRing and FractionRing.!
+
 !Module commentStamp: '<historical>' prior: 0!
 Finitely-presented R-modules, where R is a commutative ring.!
+
+!FractionalIdeal commentStamp: '<historical>' prior: 0!
+A fractional ideal is an R-submodule of the fraction field of R, for an integral domain R.!
 
 !Ideal commentStamp: 'len 6/9/2019 15:51:41' prior: 0!
 Finitely-generated ideal of a commutative ring R, i.e. an R-submodule of R.
@@ -4275,9 +4227,6 @@ Monomial ideals have a rich theory with connections to convex geometry and combi
 - Unions of coordinate subspaces of K^n.
 
 See also SimplicialComplex.!
-
-!FractionalIdeal commentStamp: '<historical>' prior: 0!
-A fractional ideal is an R-submodule of the fraction field of R, for an integral domain R.!
 
 !HomModule commentStamp: '<historical>' prior: 0!
 R-modules of linear maps from a R-module A to another one B, i.e. the internal Hom(A,B) of the category of R-modules. When A = B, it is noted End(A). Note that this is an R-module because R is commutative, otherwise it would just be a Z-module.
@@ -4765,6 +4714,9 @@ Residue classes of polynomials modulo an ideal. They are elements of a quotient 
 !AlgebraicElement commentStamp: '<historical>' prior: 0!
 Elements of finite algebraic field (or ring) extensions. See AlgebraicExtensionRing.!
 
+!GaloisRingElement commentStamp: '<historical>' prior: 0!
+Elements of a Galois ring. See GaloisRing.!
+
 !AdicInteger commentStamp: '<historical>' prior: 0!
 Elements of the p-adic ring Zp. See AdicIntegerRing.!
 
@@ -4795,9 +4747,6 @@ Univariate formal Laurent series with coefficients over a commutative ring. See 
 
 !PowerSeries commentStamp: '<historical>' prior: 0!
 Univariate formal power series with coefficients over a commutative ring. See PowerSeriesRing.!
-
-!OppositeAlgebraElement commentStamp: '<historical>' prior: 0!
-Elements of the opposite algebra of a given algebra. See OppositeAlgebra.!
 
 !Sum commentStamp: '<historical>' prior: 0!
 Formal sums (or formal linear combinations) of arbitrary symbols with coefficients over a given ring R. They can be thought of as Tuples indexed not by positive integers but by arbitrary symbols. They form free R-modules (see FreeSumsModule).
@@ -4866,6 +4815,9 @@ My instances are matrices with coefficients over some commutative ring, represen
 
 !RowMatrix commentStamp: '<historical>' prior: 0!
 Matrices with coefficients over some commutative ring, represented as a list of row tuples. Row operations are fast on these matrices.!
+
+!OppositeAlgebraElement commentStamp: '<historical>' prior: 0!
+Elements of the opposite algebra of a given algebra. See OppositeAlgebra.!
 
 !MonomialOrdering commentStamp: '<historical>' prior: 0!
 A monomial ordering is a total order on the set of all monomials in n indeterminates, satisfying the properties:
@@ -5142,7 +5094,7 @@ Abstract class for nodes that are held in a graph.
 
 Each node holds on to a corresponding object that is the value of that node.
 
-Subclasses add state/behaviour to represent edges in the graph.!
+Subclasses add state/behavior to represent edges in the graph.!
 
 !ExplicitGraphNode commentStamp: '<historical>' prior: 0!
 An explicit nodes stores the edges in a collection, an instance variable. The type of the collection varies as to whether the graph is ordered, of fixed arity, etc.
@@ -5601,7 +5553,7 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: Character QQ! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:21:17'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 22:21:17'!
 printOn: aStream
 	aStream print: QQ; nextPutAll: self p printString sub! !
 
@@ -5711,9 +5663,9 @@ printOn: aStream
 	aStream nextPut: $].
 	self ordering isLocal ifTrue: [aStream nextPutAll: self maximalIdeal printText sub]! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:23:32'!
+!LocalRing methodsFor: 'printing' stamp: 'len 6/26/2019 11:10:34'!
 printOn: aStream
-	aStream nextPutAll: 'V('; print: self fractions; nextPut: $,; print: self p; nextPut: $)! !
+	aStream print: self integers; nextPutAll: self maximalIdeal printString sub! !
 
 !Module methodsFor: 'printing' stamp: 'len 4/29/2019 04:57:07'!
 printOn: aStream
@@ -5722,6 +5674,14 @@ printOn: aStream
 	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: '; '].
 	aStream nextPut: $>.
 	self scalars ~= self ambient scalars ifTrue: [aStream nextPutAll: self scalars printText sub]! !
+
+!FractionalIdeal methodsFor: 'printing' stamp: 'len 6/26/2019 03:42:17'!
+printOn: aStream
+	self isZero ifTrue: [aStream nextPut: ${; print: self scalars zero; nextPut: $}. ^ self].
+	aStream nextPut: $<.
+	(self generators asSortedCollection: [:a :b| a printString <= b printString])
+		do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
+	aStream nextPut: $>! !
 
 !Ideal methodsFor: 'printing' stamp: 'len 1/15/2018 18:51:39'!
 printOn: aStream
@@ -5742,13 +5702,6 @@ printOn: aStream
 printOn: aStream
 	self isZero ifTrue: [aStream nextPutAll: '{0}'. ^ self].
 	aStream print: self generator; nextPut: Character ZZ! !
-
-!FractionalIdeal methodsFor: 'printing' stamp: 'len 5/5/2018 05:12:32'!
-printOn: aStream
-	aStream nextPut: $<.
-	(self generators asSortedCollection: [:a :b| a printString <= b printString])
-		do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
-	aStream nextPut: $>! !
 
 !HomModule methodsFor: 'printing' stamp: 'len 10/2/2018 01:19:34'!
 printOn: aStream
@@ -5848,9 +5801,9 @@ printOn: aStream
 printOn: aStream
 	self components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
 
-!ProjectiveVariety methodsFor: 'printing' stamp: 'len 10/20/2016 15:27'!
+!ProjectiveScheme methodsFor: 'printing' stamp: 'len 7/1/2019 17:04:20'!
 printOn: aStream
-		aStream nextPutAll: 'Proj '; print: self coordinateRing! !
+	aStream nextPutAll: 'Proj '; print: self coordinateRing! !
 
 !ProjectivePlaneCurve methodsFor: 'printing' stamp: 'len 12/25/2016 11:57:45'!
 printOn: aStream
@@ -6122,6 +6075,22 @@ printOn: aStream
 				ifFalse: [aStream print: element]] separatedBy: [aStream space].
 		aStream nextPut: $)]! !
 
+!Germ methodsFor: 'printing' stamp: 'len 6/28/2019 13:41:40'!
+printOn: aStream
+	aStream print: fraction
+"	| n u |
+	(n _ self valuation) isZero ifTrue: [aStream print: fraction. ^ self].
+	u _ self associatedUnit.
+	(u numerator printString first = $-) ifTrue: [u _ u negated. aStream nextPut: $-].
+	n ~= 0 ifTrue:
+		[aStream print: parent p.
+		n ~= 1 ifTrue: [aStream nextPutAll: n printString super].
+		u ~= parent fractions one ifTrue: [aStream nextPut: Character dot]].
+	u ~= parent fractions one ifTrue:
+		[((u numerator printString includesAnyOf: ' +-') and: [(u printString beginsWith: '(') not])
+			ifTrue: [aStream nextPut: $(; print: u; nextPut: $)]
+			ifFalse: [aStream print: u]]"! !
+
 !ProductRingElement methodsFor: 'printing' stamp: 'len 5/22/2018 16:12:57'!
 printOn: aStream
 	aStream print: components! !
@@ -6219,9 +6188,20 @@ printOn: aStream
 "	aStream nextPutAll: ' + ...'"
 	aStream nextPutAll: ' + ', 'O' italic; nextPut: $(; print: parent p; nextPutAll: precision printString super; nextPut: $)! !
 
-!OppositeAlgebraElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
+!Germ2 methodsFor: 'printing' stamp: 'len 6/27/2019 11:25:23'!
 printOn: aStream
-	opposite printOn: aStream! !
+	| u |
+	valuation isZero ifTrue: [aStream print: unit. ^ self].
+	u _ unit.
+	(u numerator printString first = $-) ifTrue: [u _ u negated. aStream nextPut: $-].
+	valuation ~= 0 ifTrue:
+		[aStream print: parent p.
+		valuation ~= 1 ifTrue: [aStream nextPutAll: valuation printString super].
+		u ~= parent fractions one ifTrue: [aStream nextPut: Character dot]].
+	u ~= parent fractions one ifTrue:
+		[((u numerator printString includesAnyOf: ' +-') and: [(u printString beginsWith: '(') not])
+			ifTrue: [aStream nextPut: $(; print: u; nextPut: $)]
+			ifFalse: [aStream print: u]]! !
 
 !Sum methodsFor: 'copying' stamp: 'len 11/18/2016 17:34:33'!
 postCopy
@@ -6288,6 +6268,10 @@ printOn: aStream
 		pad timesRepeat: [aStream space]]
 			separatedBy: [aStream nextPut: $]; lf; nextPutAll: ' ['].
 	aStream nextPut: $]! !
+
+!OppositeAlgebraElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
+printOn: aStream
+	opposite printOn: aStream! !
 
 !MonomialOrdering methodsFor: 'printing' stamp: 'len 2/26/2017 09:25:36'!
 printOn: aStream
@@ -6483,14 +6467,6 @@ printOn: aStream
 	aStream nextPut: ${.
 	roots do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	aStream nextPut: $}! !
-
-!Product methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 03:05:23'!
-printOn: aStream
-	self components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
-
-!DirectSum methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 03:18:37'!
-printOn: aStream
-	self components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character oplus]! !
 
 !RealAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 18:33:11'!
 * aNumber
@@ -17673,14 +17649,15 @@ isPrime: anElement
 				ifTrue: [(anElement | x or: [anElement | y]) ifFalse: [^ false]]]].
 	^ true! !
 
-!Ring methodsFor: 'elements-testing' stamp: 'len 9/16/2018 16:43:16'!
+!Ring methodsFor: 'elements-testing' stamp: 'len 6/25/2019 03:51:23'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
 	| one |
 	self isDivisionRing ifTrue: [^ anElement isZero not].
 	self isFinite ifFalse: [^ self notYetImplemented].
+	"(self isZeroDivisor: anElement) ifTrue: [^ false]. unnecesary?"
 	one _ self one.
-	^ self anySatisfy: [:any| anElement * any = one]! !
+	^ self anySatisfy: [:any| anElement * any = one] "should any be a non-zero-divisor too?"! !
 
 !Ring methodsFor: 'elements-testing' stamp: 'len 9/16/2018 17:56:27'!
 isZeroDivisor: anElement
@@ -17850,7 +17827,7 @@ ideals
 irreducibles
 	^ Iterator on: self performing: #irreduciblesDo:! !
 
-!Ring methodsFor: 'operations' stamp: 'len 1/23/2018 21:19:27'!
+!Ring methodsFor: 'operations' stamp: 'len 6/28/2019 15:19:04'!
 localizationAt: aPrimeIdeal
 	"Answer the localization of the receiver at aPrimeIdeal."
 	| P |
@@ -17860,7 +17837,18 @@ localizationAt: aPrimeIdeal
 			aPrimeIdeal]
 		ifFalse:
 			[self * aPrimeIdeal].
+	(P isTrivial and: [self isIntegralDomain]) ifTrue: [^ self fractions].
 	^ LocalizationRing at: P! !
+
+!Ring methodsFor: 'operations' stamp: 'len 6/26/2019 10:51:25'!
+localizationAwayFrom: aPrimeElement
+	"Answer the localization of the receiver awat from aPrimeElement, i.e. a new ring where aPrimeElement is invertible."
+	| P L F |
+	P _ self polynomials.
+	L _ P / (P x * aPrimeElement - P one).
+	F _ self fractions.
+	L addMap: (L into: F evaluating: [:f| F numerator: f numerator denominator: f denominator]). "<- add also retraction"
+	^ L! !
 
 !Ring methodsFor: 'operations' stamp: 'len 11/22/2015 06:26'!
 mod: anObject
@@ -17924,6 +17912,11 @@ radical
 	answer _ self oneIdeal.
 	self maximalIdealsDo: [:each| answer _ answer /\ each].
 	^ answer"! !
+
+!Ring methodsFor: 'operations' stamp: 'len 6/27/2019 11:14:42'!
+reduced
+	"Answer the associated reduced ring. This is the quotient by the ideal of all nilpotent elements (the nilradical)."
+	^ self / self nilradical! !
 
 !Ring methodsFor: 'operations' stamp: 'len 6/20/2019 18:21:56'!
 reducibles
@@ -18259,9 +18252,9 @@ at: anIdeal
 characteristic
 	^ 0! !
 
-!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:19:30'!
+!AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/28/2019 10:07:18'!
 fractions
-	^ self propertyAt: #fractions ifAbsentPut: [AdicRationalField on: self]! !
+	^ self propertyAt: #fractions ifAbsentPut: [AdicField on: self]! !
 
 !AdicIntegerRing methodsFor: 'accessing' stamp: 'len 6/6/2019 12:06:38'!
 p
@@ -18565,7 +18558,7 @@ over: aRing
 	"Change the base ring."
 	^ self class on: (self integers over: aRing)! !
 
-!FractionRing methodsFor: 'elements' stamp: 'len 6/21/2019 18:01:49'!
+!FractionRing methodsFor: 'elements' stamp: 'len 6/27/2019 11:27:29'!
 !! anObject
 	(self integers includes: anObject) ifTrue: [^ self embed: anObject].
 	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
@@ -18684,10 +18677,6 @@ generators
 !RationalField methodsFor: 'accessing' stamp: 'len 10/14/2016 22:01'!
 integers
 	^ ZZ! !
-
-!RationalField methodsFor: 'accessing' stamp: 'len 6/6/2019 11:37:19'!
-localizationIdeal
-	^ ZZ zeroIdeal! !
 
 !RationalField methodsFor: 'accessing' stamp: 'len 4/24/2016 03:00'!
 size
@@ -18810,33 +18799,33 @@ initialize
 	super initialize.
 	Smalltalk at: #QQ put: self new! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 17:25:37'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 17:25:37'!
 embed: anAdicInteger
 	| v |
 	v _ anAdicInteger valuation.
 	^ AdicNumber valuation: v unit: anAdicInteger << v! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 04:52:35'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 04:52:35'!
 isLocalField
 	^ true! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 20:30:57'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 12/17/2016 20:30:57'!
 p
 	^ self integers p! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/7/2019 17:10:44'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/7/2019 17:10:44'!
 power: anInteger
 	^ self integers power: anInteger! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:25:32'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:25:32'!
 precision
 	^ self integers precision! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:24:21'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 05:24:21'!
 primeSubfield
 	^ self! !
 
-!AdicRationalField methodsFor: 'as yet unclassified' stamp: 'len 6/10/2019 14:08:15'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 6/10/2019 14:08:15'!
 uniformizer
 	"A uniformizer (or uniformizing parameter, uniformizer element or prime element) is any irreducible element of a DVR, or equivalently a generator of the maximal ideal. All non-zero ideals are generated by some power of the uniformizer."
 	^ self !! self integers uniformizer! !
@@ -18959,10 +18948,6 @@ generators
 integers
 	^ self localizationIdeal scalars! !
 
-!LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:08:37'!
-localizationIdeal
-	^ self propertyAt: #localizationIdeal! !
-
 !LocalizationRing methodsFor: 'accessing' stamp: 'len 6/6/2019 11:09:55'!
 maximalIdeal
 	"Answer the unique maximal ideal in the receiver."
@@ -19004,10 +18989,14 @@ over: aRing
 	"Change the base ring."
 	^ self class at: (self localizationIdeal over: aRing)! !
 
-!LocalizationRing methodsFor: 'elements' stamp: 'len 5/25/2018 17:36:46'!
+!LocalizationRing methodsFor: 'elements' stamp: 'len 6/29/2019 18:18:07'!
 !! anObject
-	(self integers includes: anObject) ifTrue: [^ self embed: anObject].
-	anObject isEvaluable ifTrue: [self integers !! anObject]. "assuming integral elements are the same objects as for the integers ring, just like Smalltalk Integer and Fraction."
+	(self fractions includes: anObject) ifTrue:
+		[(self localizationIdeal includes: anObject denominator)
+			ifTrue: [DomainError signal].
+		^ Germ new parent: self; fraction: anObject].
+	(self integers includes: anObject) ifTrue:
+		[^ self embed: anObject].
 	^ super !! anObject! !
 
 !LocalizationRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:11:10'!
@@ -19028,15 +19017,20 @@ primeIdealsDo: aBlock
 	P _ self localizationIdeal.
 	self integers primeIdealsDo: [:each| each <= P ifTrue: [aBlock value: (each apply: embedding)]]! !
 
-!LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/25/2018 17:53:41'!
+!LocalizationRing methodsFor: 'morphisms' stamp: 'len 6/29/2019 18:17:25'!
 embed: anObject
-	^ anObject! !
+	^ Germ new parent: self; fraction: (self fractions !! anObject)! !
 
 !LocalizationRing methodsFor: 'morphisms' stamp: 'len 5/13/2019 19:00:12'!
 from: aDomain
 	aDomain = self integers ifTrue: [^ self addMap: ((self integers to: self evaluating: [:x| self embed: x]) name: 'i')].
 	aDomain -> self integers ifNotNil: [:aMorphism| ^ aMorphism -> self].
 	^ super from: aDomain! !
+
+!LocalizationRing methodsFor: 'morphisms' stamp: 'len 6/29/2019 18:13:41'!
+to: aCodomain
+	aCodomain = self fractions ifTrue: [^ self addMap: ((self onto: self fractions evaluating: [:each| (self fractions !! each numerator) / (self fractions !! each denominator)]) name: 'i')].
+	^ super to: aCodomain! !
 
 !LocalizationRing methodsFor: 'operations' stamp: 'len 1/19/2017 07:19:45'!
 fractions
@@ -19049,21 +19043,21 @@ atRandom: aRandom
 	[b _ self integers atRandom: aRandom. self localizationIdeal includes: b] whileTrue.
 	^ (self embed: a) / (self embed: b)! !
 
-!LocalizationRing methodsFor: 'random' stamp: 'len 6/6/2019 11:07:07'!
+!LocalizationRing methodsFor: 'random' stamp: 'len 6/29/2019 18:16:11'!
 atRandom: aRandom bits: bitSize
 	| a b |
-	bitSize < 2 ifTrue: [^ self embed: (self integers atRandom: aRandom bits: bitSize)].
+	bitSize < 2 ifTrue: [^ self !! (self integers atRandom: aRandom bits: bitSize)].
 	a _ self integers atRandom: aRandom bits: bitSize/2.
 	[b _ self integers atRandom: aRandom bits: bitSize/2. self localizationIdeal includes: b] whileTrue.
-	^ (self embed: a) / (self embed: b)! !
+	^ self !! ((self fractions !! a) / (self fractions !! b))! !
 
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/6/2019 11:08:13'!
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/29/2019 18:21:33'!
 includes: anObject
-	^ (self integers includes: anObject) or: [anObject isFractional and: [(self integers includes: anObject numerator) and: [(self localizationIdeal includes: anObject denominator) not]]]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
-!LocalizationRing methodsFor: 'testing' stamp: 'len 6/21/2019 18:05:09'!
+!LocalizationRing methodsFor: 'testing' stamp: 'len 6/26/2019 08:13:48'!
 isArtinian
-	"Answer true if the receiver is an Artinian ring, i.e. it satisfied the descending chain condition on ideals."
+	"Answer true if the receiver is an Artinian ring, i.e. it satisfies the descending chain condition on ideals."
 	self integers isArtinian ifTrue: [^ true].
 	^ super isArtinian! !
 
@@ -19124,6 +19118,10 @@ isUnit: anElement
 	"Answer true if the argument is invertible."
 	^ (self localizationIdeal includes: anElement numerator) not! !
 
+!LocalizationRing methodsFor: 'private' stamp: 'len 6/6/2019 11:08:37'!
+localizationIdeal
+	^ self propertyAt: #localizationIdeal! !
+
 !LocalizationRing methodsFor: 'private' stamp: 'len 6/6/2019 11:07:48'!
 localizationIdeal: anIdeal
 	self propertyAt: #localizationIdeal put: anIdeal! !
@@ -19149,6 +19147,11 @@ at: anInteger
 !ProductRing methodsFor: 'accessing' stamp: 'len 5/3/2018 01:54:47'!
 characteristic
 	^ components inject: 1 into: [:result :each| result lcm: each characteristic]! !
+
+!ProductRing methodsFor: 'accessing' stamp: 'len 6/23/2019 04:21:21'!
+dimension
+	"Answer the Krull dimension of the receiver. This is the length of the longest ascending chain of prime ideals."
+	^ (components ifEmpty: [^ -1]) max: [:each| each dimension]! !
 
 !ProductRing methodsFor: 'accessing' stamp: 'len 2/26/2017 09:47:23'!
 size
@@ -19208,6 +19211,11 @@ isZeroDivisor: anElement
 !ProductRing methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:15:22'!
 do: aBlock
 	self asCartesianProduct do: [:each| aBlock value: (self compose: each)]! !
+
+!ProductRing methodsFor: 'enumerating' stamp: 'len 6/23/2019 04:29:12'!
+primeIdealsDo: aBlock
+	"TODO: the prime ideals of a product ring R x S is of the form I x S for I a prime ideal of R or R x I for I a prime ideal of S."
+	^ super primeIdealsDo: aBlock! !
 
 !ProductRing methodsFor: 'morphisms' stamp: 'len 6/19/2019 13:53:11'!
 compose: anArray
@@ -19374,6 +19382,11 @@ associatedUnit: anElement
 invert: anElement
 	^ self project: ((self relations invert: anElement representative) ifNil: [^ nil])! !
 
+!QuotientRing methodsFor: 'elements-testing' stamp: 'len 6/18/2019 09:11:50'!
+isUnit: anElement
+	"Answer true if the argument is invertible."
+	^ (self invert: anElement) notNil! !
+
 !QuotientRing methodsFor: 'enumerating' stamp: 'len 6/5/2019 19:57:24'!
 do: aBlock
 	| visited |
@@ -19404,11 +19417,6 @@ from: aDomain
 	aDomain -> self base ifNotNil: [:aMorphism| ^ aMorphism -> self].
 	^ super from: aDomain! !
 
-!QuotientRing methodsFor: 'morphisms' stamp: 'len 6/18/2019 09:11:50'!
-isUnit: anElement
-	"Answer true if the argument is invertible."
-	^ (self invert: anElement) notNil! !
-
 !QuotientRing methodsFor: 'morphisms' stamp: 'len 5/7/2018 22:52:32'!
 lifting
 	"Answer the map from the receiver to the base ring lifting the canonical projection."
@@ -19422,6 +19430,11 @@ project: anElement
 projection
 	"Answer the natural projection, or quotient map, or canonical homomorphism. This takes elements from the base ring to the corresponding residue class in the quotient ring."
 	^ self propertyAt: #projection ifAbsentPut: [self buildProjection]! !
+
+!QuotientRing methodsFor: 'operations' stamp: 'len 6/9/2019 15:24:45'!
+span: aCollection
+	"Answer the ideal generated by the argument."
+	^ QuotientIdeal new scalars: self; generators: aCollection! !
 
 !QuotientRing methodsFor: 'random' stamp: 'len 2/27/2017 20:56:13'!
 atRandom: aRandom
@@ -19507,11 +19520,6 @@ buildProjection
 !QuotientRing methodsFor: 'private' stamp: 'len 4/24/2019 11:50:53'!
 elementClass
 	^ Residue! !
-
-!QuotientRing methodsFor: 'private' stamp: 'len 6/9/2019 15:24:45'!
-span: aCollection
-	"Answer the ideal generated by the argument."
-	^ QuotientIdeal new scalars: self; generators: aCollection! !
 
 !QuotientRing class methodsFor: 'examples' stamp: 'len 10/29/2016 10:25'!
 exampleZ6
@@ -19782,9 +19790,9 @@ maximalIdeal
 p
 	^ self propertyAt: #p ifAbsentPut: [self modulusFactors anyOne]! !
 
-!PrimePowerRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:56:46'!
+!PrimePowerRing methodsFor: 'accessing' stamp: 'len 6/25/2019 03:57:04'!
 primeSubfield
-	^ self propertyAt: #primeSubfield ifAbsentPut: [PrimeField new: self p]! !
+	^ self residueField! !
 
 !PrimePowerRing methodsFor: 'accessing' stamp: 'len 6/4/2019 18:34:10'!
 residueField
@@ -19860,10 +19868,10 @@ zeroDivisors
 	"The zero-divisors of a Galois ring Z/<p^k> constitute the unique maximal ideal <p>."
 	^ self maximalIdeal! !
 
-!PrimePowerRing methodsFor: 'testing' stamp: 'len 9/16/2018 23:16:07'!
+!PrimePowerRing methodsFor: 'testing' stamp: 'len 6/25/2019 02:19:48'!
 isChainRing
 	"A chain ring is a ring whose ideals form a chain under inclusion.
-	Prime rings, and more generally Galois rings, are chain rings."
+	Prime power rings, and more generally Galois rings, are chain rings."
 	^ true! !
 
 !PrimePowerRing methodsFor: 'testing' stamp: 'len 6/16/2019 13:21:52'!
@@ -20357,6 +20365,11 @@ teichmuller
 	self characteristic - 2 timesRepeat: [answer add: (answer last * w)].
 	^ answer! !
 
+!GaloisRing methodsFor: 'elements-operations' stamp: 'len 6/25/2019 02:27:56'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	^ self representative: anElement representative primitive! !
+
 !GaloisRing methodsFor: 'elements-testing' stamp: 'len 9/16/2018 17:58:11'!
 isUnit: anElement
 	"Answer true if the argument is invertible."
@@ -20409,10 +20422,10 @@ isChainRing
 	Galois rings are chain rings."
 	^ true! !
 
-!GaloisRing methodsFor: 'testing' stamp: 'len 6/16/2019 13:22:06'!
+!GaloisRing methodsFor: 'testing' stamp: 'len 6/25/2019 02:19:04'!
 isEuclidean
 	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
-	"Galois rings are euclidean."
+	"Galois rings are Euclidean."
 	^ true! !
 
 !GaloisRing methodsFor: 'testing' stamp: 'len 5/21/2018 05:07:00'!
@@ -20430,6 +20443,10 @@ isGaloisRing
 !GaloisRing methodsFor: 'testing' stamp: 'len 5/21/2018 16:54:03'!
 isLocal
 	^ true! !
+
+!GaloisRing methodsFor: 'private' stamp: 'len 6/25/2019 02:36:54'!
+elementClass
+	^ GaloisRingElement! !
 
 !GaloisRing class methodsFor: 'class initialization' stamp: 'len 5/15/2019 10:35:45'!
 initialize
@@ -21530,6 +21547,10 @@ associatedUnit: anElement
 "	self scalars isField ifTrue: [^ self constant: anElement leadingCoefficient]."
 	^ self constant: (self scalars associatedUnit: anElement leadingCoefficient)! !
 
+!PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/25/2019 04:01:15'!
+isIrreducible: anElement
+	^ anElement isIrreducible! !
+
 !PolynomialRing methodsFor: 'elements-testing' stamp: 'len 6/4/2019 19:22:30'!
 isNilpotent: aPolynomial
 	"Answer true if aPolynomial^n = 0 for some integer n >= 1."
@@ -21829,10 +21850,10 @@ isCoherent
 	self scalars isPruferDomain ifTrue: [^ true].
 	^ super isCoherent! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 9/21/2018 16:02:23'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 6/26/2019 11:03:09'!
 isEuclidean
 	"Answer true if the receiver is an Euclidean ring, i.e. it has division with remainder."
-	^ self scalars isEuclidean! !
+	^ self scalars isField! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 6/22/2019 03:17:46'!
 isExtension
@@ -21951,41 +21972,127 @@ new: anInteger over: aRing
 new: anInteger over: aRing ordering: aMonomialOrdering
 	^ self monomials: (FreeAbelianMonoid new: anInteger ordering: aMonomialOrdering) over: aRing! !
 
-!LocalRing methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:29:07'!
-isIntegral: anElement
-	^ anElement valuation >= 0! !
-
-!LocalRing methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:28:58'!
-isUnit: anElement
-	^ anElement valuation = 0! !
-
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:20:58'!
-fractions
-	^ self propertyAt: #fractions! !
-
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:21:14'!
-fractions: aFractionField
-	^ self propertyAt: #fractions put: aFractionField! !
-
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:34:28'!
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/3/2019 05:34:28'!
 integers
 	^ self fractions integers! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:40'!
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/26/2019 11:09:29'!
+maximalIdeal
+	"Answer the unique maximal ideal in the receiver."
+	^ self * self uniformizer! !
+
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/26/2019 11:12:07'!
+one
+	^ self !! self fractions one! !
+
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/3/2019 05:22:40'!
 p
 	^ self propertyAt: #p! !
 
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:46'!
-p: aPrime
-	self propertyAt: #p put: aPrime! !
-
-!ValuationRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:40:25'!
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/3/2019 05:40:25'!
 uniformizer
 	^ self !! self p! !
 
-!ValuationRing class methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:22:25'!
-on: aFractionsField p: aPrime
-	^ self new fractions: aFractionsField; p: aPrime! !
+!LocalRing methodsFor: 'accessing' stamp: 'len 6/26/2019 11:12:12'!
+zero
+	^ self !! self fractions zero! !
+
+!LocalRing methodsFor: 'elements' stamp: 'len 6/26/2019 12:00:18'!
+!! anObject
+	| p u v |
+	(self fractions includes: anObject) ifFalse: [^ super !! anObject].
+	anObject isZero ifTrue: [^ self valuation: 0 unit: anObject].
+	p _ self p.
+	u _ anObject.
+	p | u denominator ifTrue: [self error: 'element not in the valuation ring'].
+	v _ 0.
+	[p | u numerator] whileTrue:
+		[v _ v + 1.
+		u _ u / p].
+	^ self valuation: v unit: u! !
+
+!LocalRing methodsFor: 'elements' stamp: 'len 6/28/2019 13:24:04'!
+valuation: anInteger unit: aFraction
+	^ (Germ2 new valuation: anInteger unit: aFraction) parent: self! !
+
+!LocalRing methodsFor: 'elements-operations' stamp: 'len 6/26/2019 11:31:51'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	anElement isZero ifTrue: [^ self one].
+	anElement valuation = 0 ifTrue: [^ anElement].
+	^ self valuation: 0 unit: anElement unit! !
+
+!LocalRing methodsFor: 'elements-testing' stamp: 'len 6/29/2019 17:51:48'!
+isNilpotent: anElement
+	^ self integers isNilpotent: anElement numerator! !
+
+!LocalRing methodsFor: 'elements-testing' stamp: 'len 6/28/2019 13:48:50'!
+isUnit: anElement
+	^ (self p | anElement numerator) not
+"	^ anElement valuation = 0"! !
+
+!LocalRing methodsFor: 'elements-testing' stamp: 'len 6/29/2019 17:51:27'!
+isZeroDivisor: anElement
+	^ self integers isZeroDivisor: anElement numerator! !
+
+!LocalRing methodsFor: 'morphisms' stamp: 'len 6/27/2019 09:14:19'!
+to: aCodomain
+	aCodomain = self fractions ifTrue: [^ self addMap: ((self onto: self fractions evaluating: [:each| (self fractions !! each numerator) / (self fractions !! each denominator)]) name: 'i')].
+	^ super to: aCodomain! !
+
+!LocalRing methodsFor: 'operations' stamp: 'len 6/3/2019 05:20:58'!
+fractions
+	^ self propertyAt: #fractions! !
+
+!LocalRing methodsFor: 'random' stamp: 'len 6/26/2019 12:59:40'!
+atRandom: aRandom bits: bitSize
+	| p u |
+	u _ self fractions atRandom: aRandom bits: bitSize.
+	u isZero ifTrue: [^ self zero].
+	p _ self p.
+	[p | u denominator] whileTrue: [u _ u * p].
+	^ self !! u! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 11:11:25'!
+includes: anObject
+	^ anObject isElement and: [anObject parent = self]! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/24/2019 08:56:32'!
+isDVR
+	"Answer true if the receiver is a discrete valuation ring, i.e. a local PID that is not a field."
+	^ true! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 12:56:20'!
+isEuclidean
+	^ true! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 12:55:43'!
+isIntegralDomain
+	^ true! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 08:17:59'!
+isLocal
+	^ true! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 08:18:28'!
+isPID
+	^ true! !
+
+!LocalRing methodsFor: 'testing' stamp: 'len 6/26/2019 13:03:42'!
+isTrivial
+	^ false! !
+
+!LocalRing methodsFor: 'private' stamp: 'len 6/29/2019 18:01:16'!
+localizationIdeal
+	^ self propertyAt: #localizationIdeal! !
+
+!LocalRing methodsFor: 'private' stamp: 'len 6/29/2019 18:00:54'!
+localizationIdeal: aPrimeIdeal
+	self propertyAt: #localizationideal put: aPrimeIdeal! !
+
+!LocalRing class methodsFor: 'instance creation' stamp: 'len 6/29/2019 17:58:59'!
+at: aPrimeIdeal
+	^ self new localizationIdeal: aPrimeIdeal! !
 
 !Module methodsFor: 'accessing' stamp: 'len 12/16/2016 13:26:11'!
 addition
@@ -22165,6 +22272,18 @@ support
 	"this is not very useful, it's only for finite rings:"
 	^ self scalars spectrum reject: [:each| (self localizationAt: each) isTrivial]! !
 
+!Module methodsFor: 'random' stamp: 'len 6/26/2019 03:46:31'!
+atRandom: aRandom
+	self isTrivial ifTrue: [^ self zero].
+	^ self generators sum: [:each| each * (self scalars atRandom: aRandom)]! !
+
+!Module methodsFor: 'random' stamp: 'len 6/26/2019 03:47:44'!
+atRandom: aRandom bits: bitSize
+	| n |
+	self isTrivial ifTrue: [^ self zero].
+	n _ bitSize / self generators size.
+	^ self generators sum: [:each| each * (self scalars atRandom: aRandom bits: n)]! !
+
 !Module methodsFor: 'testing' stamp: 'len 4/25/2019 18:32:30'!
 contains: anObject
 	^ (self reduce: anObject) isZero! !
@@ -22228,6 +22347,68 @@ relationMatrix: aMatrix
 scalars: aRing
 	self propertyAt: #scalars put: aRing! !
 
+!FractionalIdeal methodsFor: 'accessing' stamp: 'len 1/15/2018 18:44:25'!
+ambient
+	^ self scalars fractions asSelfModule! !
+
+!FractionalIdeal methodsFor: 'accessing' stamp: 'len 6/26/2019 03:51:47'!
+denominator
+	^ self propertyAt: #denominator ifAbsentPut: [self generators collect: [:each| each denominator] andFold: [:a :b| a lcm: b]]! !
+
+!FractionalIdeal methodsFor: 'accessing' stamp: 'len 6/26/2019 03:51:16'!
+denominator2
+	"Answer the denominator ideal of the receiver, which is an integral ideal."
+	^ (self + self ambient oneIdeal) inverse! !
+
+!FractionalIdeal methodsFor: 'accessing' stamp: 'len 7/2/2019 09:40:48'!
+numerator
+	"Answer the numerator ideal of the receiver, which is an integral ideal."
+	self propertyAt: #numerator ifAbsentPut:
+		[| denominator |
+		denominator _ self denominator.
+		^ self scalars * (self generators collect: [:each| (each * denominator) numerator])]! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 7/2/2019 09:41:28'!
+contains: anElement
+	self isTrivial ifTrue: [^ anElement isZero].
+	^ self numerator includes: (anElement * self denominator) numerator
+"	^ (self reduce: anObject) isZero"! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 6/26/2019 03:43:14'!
+includes: anElement
+	^ (self scalars includes: anElement) and: [self contains: anElement]! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 1/19/2018 20:21:40'!
+isIntegral
+	^ self scalars isUnit: self denominator! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 1/19/2018 23:43:12'!
+isMaximal
+	^ self isPrime and: [self isZero not]! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 5/5/2018 17:02:22'!
+isPrime
+	^ self factors size = 1! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 6/6/2019 11:50:21'!
+isPrincipal
+	"Answer true if the receiver is generated by a single element."
+	self generators size <= 1 ifTrue: [^ true].
+	self scalars isPID ifTrue: [^ true].
+	^ self propertyAt: #isPrincipal! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 6/26/2019 03:53:25'!
+isTrivial
+	^ self numerator isTrivial! !
+
+!FractionalIdeal methodsFor: 'testing' stamp: 'len 6/26/2019 03:53:32'!
+isZero
+	^ self numerator isZero! !
+
+!FractionalIdeal class methodsFor: 'instance creation' stamp: 'len 1/15/2018 18:43:33'!
+over: aRing generators: aCollection
+	^ self new scalars: aRing; generators: aCollection! !
+
 !Ideal methodsFor: 'accessing' stamp: 'len 6/9/2019 15:20:16'!
 ambient
 	^ self scalars asSelfModule! !
@@ -22254,6 +22435,12 @@ height
 !Ideal methodsFor: 'accessing' stamp: 'len 5/5/2018 16:40:06'!
 numerator
 	^ self! !
+
+!Ideal methodsFor: 'accessing' stamp: 'len 7/1/2019 09:07:25'!
+stalk
+	"Assuming the receiver is a prime ideal, answer the localization of the ambient ring at the receiver.
+	This is the stalk of the structure sheaf of the spectrum of the ambient ring at the receiver considered as point."
+	^ self scalars localizationAt: self! !
 
 !Ideal methodsFor: 'accessing-private' stamp: 'len 1/15/2018 18:48:36'!
 generators: aCollection
@@ -23091,49 +23278,6 @@ isSquareFree
 !MonomialIdeal methodsFor: 'private' stamp: 'len 7/7/2016 07:39'!
 species
 	^ PolynomialIdeal! !
-
-!FractionalIdeal methodsFor: 'accessing' stamp: 'len 1/15/2018 18:44:25'!
-ambient
-	^ self scalars fractions asSelfModule! !
-
-!FractionalIdeal methodsFor: 'accessing' stamp: 'len 1/19/2018 20:34:49'!
-denominator
-	"Answer the denominator ideal of the receiver, which is an integral ideal."
-	^ (self + self ambient oneIdeal) inverse! !
-
-!FractionalIdeal methodsFor: 'accessing' stamp: 'len 1/19/2018 20:34:29'!
-denominator2
-	^ self propertyAt: #denominator ifAbsentPut: [self generators collect: [:each| each denominator] andFold: [:a :b| a lcm: b]]! !
-
-!FractionalIdeal methodsFor: 'accessing' stamp: 'len 5/5/2018 05:13:53'!
-numerator
-	"Answer the numerator ideal of the receiver, which is an integral ideal."
-	| denominator |
-	denominator _ self denominator.
-	^ self scalars * (self generators collect: [:each| each * denominator])! !
-
-!FractionalIdeal methodsFor: 'testing' stamp: 'len 1/19/2018 20:21:40'!
-isIntegral
-	^ self scalars isUnit: self denominator! !
-
-!FractionalIdeal methodsFor: 'testing' stamp: 'len 1/19/2018 23:43:12'!
-isMaximal
-	^ self isPrime and: [self isZero not]! !
-
-!FractionalIdeal methodsFor: 'testing' stamp: 'len 5/5/2018 17:02:22'!
-isPrime
-	^ self factors size = 1! !
-
-!FractionalIdeal methodsFor: 'testing' stamp: 'len 6/6/2019 11:50:21'!
-isPrincipal
-	"Answer true if the receiver is generated by a single element."
-	self generators size <= 1 ifTrue: [^ true].
-	self scalars isPID ifTrue: [^ true].
-	^ self propertyAt: #isPrincipal! !
-
-!FractionalIdeal class methodsFor: 'instance creation' stamp: 'len 1/15/2018 18:43:33'!
-over: aRing generators: aCollection
-	^ self new scalars: aRing; generators: aCollection! !
 
 !HomModule methodsFor: 'accessing' stamp: 'len 10/2/2018 01:15:09'!
 codomain
@@ -26214,7 +26358,7 @@ components: anArray
 new: anArray over: aRing
 	^ self components: (anArray collect: [:each| AffineSpace new: each over: aRing])! !
 
-!ProjectiveScheme methodsFor: 'as yet unclassified' stamp: 'len 5/19/2018 16:32:56'!
+!ProjectiveScheme methodsFor: 'enumerating' stamp: 'len 5/19/2018 16:32:56'!
 do: aBlock
 	self coordinateRing relevantPrimeIdealsDo: aBlock! !
 
@@ -31542,11 +31686,6 @@ ideal
 	R _ self codomain ambient coordinateRing.
 	^ R * (R generators - self coordinates)! !
 
-!AffinePoint methodsFor: 'accessing' stamp: 'len 2/8/2017 07:00:30'!
-localRing
-	"Answer the local ring at this point."
-	^ self neighborhood coordinateRing localization! !
-
 !AffinePoint methodsFor: 'accessing' stamp: 'len 4/12/2018 04:17:19'!
 multiplicity
 	^ self codomain multiplicityAt: coordinates
@@ -31560,6 +31699,11 @@ neighborhood
 !AffinePoint methodsFor: 'accessing' stamp: 'len 11/7/2016 13:31'!
 scalars
 	^ coordinates scalars! !
+
+!AffinePoint methodsFor: 'accessing' stamp: 'len 7/1/2019 09:08:58'!
+stalk
+	"Answer the local ring at this point. This is the stalk of the structure sheaf at the receiver, i.e. the ring of germs."
+	^ self neighborhood coordinateRing localization! !
 
 !AffinePoint methodsFor: 'accessing' stamp: 'len 4/12/2018 04:17:39'!
 tangentCone
@@ -31636,11 +31780,6 @@ ideal
 		generators add: (R x: i)].
 	^ R * generators! !
 
-!ProjectivePoint methodsFor: 'accessing' stamp: 'len 2/8/2017 07:21:43'!
-localRing
-	"Answer the local ring at this point."
-	^ self dehomogenized localRing! !
-
 !ProjectivePoint methodsFor: 'accessing' stamp: 'len 2/13/2017 07:53:19'!
 multiplicity
 	^ self dehomogenized multiplicity "assuming none of the components of the projective variety lies on the hyperplane at infinity"! !
@@ -31653,6 +31792,11 @@ neighborhood
 !ProjectivePoint methodsFor: 'accessing' stamp: 'len 11/7/2016 13:30'!
 scalars
 	^ coordinates scalars! !
+
+!ProjectivePoint methodsFor: 'accessing' stamp: 'len 7/1/2019 09:09:11'!
+stalk
+	"Answer the local ring at this point. This is the stalk of the structure sheaf at the receiver, i.e. the ring of germs."
+	^ self dehomogenized stalk! !
 
 !ProjectivePoint methodsFor: 'accessing' stamp: 'len 2/9/2017 10:41:07'!
 tangentCone
@@ -32966,6 +33110,11 @@ isReducible
 	"A nonzero nonunit element is called 'reducible' if it is not irreducible."
 	^ self isZero not and: [self isUnit not and: [self isIrreducible not]]! !
 
+!RingElement methodsFor: 'testing' stamp: 'len 6/25/2019 04:17:52'!
+isRegular
+	"Answer true if the receiver is not a zero-divisor."
+	^ self isZeroDivisor not! !
+
 !RingElement methodsFor: 'testing' stamp: 'len 9/24/2018 02:12:34'!
 isUnit
 	"Answer true if the receiver is invertible."
@@ -32979,6 +33128,86 @@ isZero
 isZeroDivisor
 	^ self parent isZeroDivisor: self! !
 
+!Germ methodsFor: 'accessing' stamp: 'len 6/28/2019 13:25:42'!
+denominator
+	^ fraction denominator! !
+
+!Germ methodsFor: 'accessing' stamp: 'len 6/28/2019 13:25:48'!
+numerator
+	^ fraction numerator! !
+
+!Germ methodsFor: 'accessing' stamp: 'len 6/29/2019 18:19:48'!
+parent
+	^ parent! !
+
+!Germ methodsFor: 'comparing' stamp: 'len 6/29/2019 17:42:21'!
+= anObject
+	^ self class = anObject class and: [fraction = anObject fraction]! !
+
+!Germ methodsFor: 'comparing' stamp: 'len 6/29/2019 17:42:29'!
+hash
+	^ fraction hash! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 18:28:03'!
+* anElement
+	anElement isInteger ifTrue: [^ self class new parent: parent; fraction: fraction * anElement].
+	parent = anElement parent ifFalse: [^ DomainError signal].
+	^ self class new parent: parent; fraction: fraction * anElement fraction! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 18:25:11'!
++ anElement
+	parent = anElement parent ifFalse: [^ DomainError signal].
+	^ self class new parent: parent; fraction: fraction + anElement fraction! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:45:53'!
+// anElement
+	| v |
+	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
+	self isZero ifTrue: [^ self].
+	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ parent zero].
+	^ self associatedUnit / anElement associatedUnit * (parent uniformizer ^ v)! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:46:18'!
+gcd: anElement
+	self isZero ifTrue: [^ anElement normalized].
+	anElement isZero ifTrue: [^ self normalized].
+	^ parent uniformizer ^ (self valuation min: anElement valuation)! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:46:38'!
+lcm: anElement
+	self isZero ifTrue: [^ self].
+	anElement isZero ifTrue: [^ anElement].
+	^ parent uniformizer ^ (self valuation max: anElement valuation)! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 18:25:31'!
+negated
+	^ self class new parent: parent; fraction: fraction negated! !
+
+!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 18:25:26'!
+reciprocal
+	self isUnit ifFalse: [^ self error: 'not a unit'].
+	^ self class new parent: parent; fraction: fraction reciprocal! !
+
+!Germ methodsFor: 'testing' stamp: 'len 6/29/2019 17:47:03'!
+isZero
+	^ fraction isZero! !
+
+!Germ methodsFor: 'private' stamp: 'len 6/28/2019 13:27:00'!
+fraction
+	^ fraction! !
+
+!Germ methodsFor: 'private' stamp: 'len 6/28/2019 13:25:12'!
+fraction: aFraction
+	fraction _ aFraction! !
+
+!Germ methodsFor: 'private' stamp: 'len 6/28/2019 13:24:53'!
+parent: aLocalRing
+	parent _ aLocalRing! !
+
+!Germ methodsFor: 'as yet unclassified' stamp: 'len 6/29/2019 18:24:40'!
+asFraction
+	^ fraction! !
+
 !ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:21'!
 at: anInteger
 	^ components at: anInteger! !
@@ -32991,13 +33220,13 @@ parent
 size
 	^ components size! !
 
-!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/20/2019 14:52:58'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/24/2019 01:35:47'!
 valuation
 	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
 	| answer |
 	self isZero ifTrue: [^ Infinity positive].
 	answer _ 0.
-	components do: [:each| each isZero ifFalse: [answer _ answer + each valuation]].
+	components do: [:each| answer _ answer + each valuation].
 	^ answer
 
 "	| p v |
@@ -33108,8 +33337,9 @@ negated
 		numerator: numerator negated
 		denominator: denominator! !
 
-!Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 00:37:00'!
+!Ratio methodsFor: 'operations' stamp: 'len 6/29/2019 17:44:02'!
 reciprocal
+	numerator isZeroDivisor ifTrue: [^ self error: 'not an unit'].
 	^ self class numerator: denominator denominator: numerator! !
 
 !Ratio methodsFor: 'operations' stamp: 'len 4/7/2018 00:37:15'!
@@ -33118,9 +33348,9 @@ squared
 		numerator: numerator squared
 		denominator: denominator squared! !
 
-!Ratio methodsFor: 'comparing' stamp: 'len 4/7/2018 01:03:54'!
+!Ratio methodsFor: 'comparing' stamp: 'len 6/29/2019 17:39:14'!
 = anObject
-	^ anObject class == self class and: [numerator * anObject denominator = (denominator * anObject numerator)] "this is wrong unless the units don't contain any zerodivisor, for example localizations of integral domains"! !
+	^ anObject class == self class and: [numerator * anObject denominator = (denominator * anObject numerator)]! !
 
 !Ratio methodsFor: 'comparing' stamp: 'len 11/28/2015 06:36'!
 hash
@@ -33162,14 +33392,6 @@ numerator: anObject denominator: anotherObject
 !Ratio class methodsFor: 'instance creation' stamp: 'len 4/7/2018 00:41:16'!
 reducedNumerator: anObject denominator: anotherObject
 	^ self new setNumerator: anObject denominator: anotherObject! !
-
-!RationalNumber methodsFor: 'as yet unclassified' stamp: 'len 6/14/2019 03:52:07'!
-isRational
-	^ true! !
-
-!RationalNumber methodsFor: 'as yet unclassified' stamp: 'len 6/14/2019 03:44:41'!
-parent
-	^ QQ! !
 
 !RationalFunction methodsFor: 'accessing' stamp: 'len 4/7/2018 01:07:24'!
 indeterminates
@@ -33285,11 +33507,6 @@ reduce
 	numerator _ num * mult.
 	denominator _ den * mult! !
 
-!RationalFunction methodsFor: 'private' stamp: 'len 9/15/2018 20:36:44'!
-setNumerator: f denominator: g
-"	g parent isLocal ifFalse: [self halt]."
-	super setNumerator: f denominator: g! !
-
 !RationalFunction class methodsFor: 'instance creation' stamp: 'len 5/18/2018 18:47:25'!
 numerator: aPolynomial denominator: anotherPolynomial
 	| numerator denominator gcd c |
@@ -33304,27 +33521,6 @@ numerator: aPolynomial denominator: anotherPolynomial
 	denominator _ denominator * c.
 	denominator = denominator one ifTrue: [^ numerator].
 	^ self reducedNumerator: numerator denominator: denominator! !
-
-!ValuationRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:38:50'!
-gcd: anElement
-	^ self parent uniformizer ^ (self valuation min: anElement valuation)! !
-
-!ValuationRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:28:22'!
-isFractional
-	^ true! !
-
-!ValuationRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:37:43'!
-valuation
-	| p a answer |
-	p _ self parent p.
-	a _ self numerator.
-	answer _ 0.
-	[p | a] whileTrue: [a _ a // p. answer _ answer + 1].
-	^ answer! !
-
-!ValuationRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 05:39:33'!
-xgcd: anElement
-	^ self notYetImplemented! !
 
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
 bitSize
@@ -33420,9 +33616,9 @@ zero
 	"Answer the exact division of the receiver by the argument."
 	^ parent project: representative /// aResidueClass representative! !
 
-!Residue methodsFor: 'operations' stamp: 'len 6/17/2019 04:33:01'!
+!Residue methodsFor: 'operations' stamp: 'len 6/24/2019 01:52:27'!
 gcd: anElement
-	^ parent representative: (self normalized representative gcd: anElement normalized representative)! !
+	^ parent representative: (self normalized lift gcd: anElement normalized lift)! !
 
 !Residue methodsFor: 'operations' stamp: 'len 10/16/2016 15:57'!
 negated
@@ -33573,9 +33769,9 @@ asRationalMaxNumerator: N maxDenominator: D
 	x _ (a reciprocalModulo: m) * b.
 	^ Iterator on: [:aBlock| 0 to: d-1 do: [:i| aBlock value: (parent project: i*m + x)]]! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 6/8/2019 12:06:56'!
+!ModularInteger methodsFor: 'operations' stamp: 'len 6/24/2019 06:43:57'!
 ^ anInteger
-	^ parent representative: (representative raisedTo: anInteger modulo: parent modulus)
+	^ parent representative: (representative raisedTo: (anInteger isInteger ifTrue: [anInteger] ifFalse: [anInteger representative]) modulo: parent modulus)
 "	anInteger = 1 ifTrue: [^ self].
 	anInteger = 0 ifTrue: [^ self one].
 	anInteger < 0 ifTrue: [^ self reciprocal ^ anInteger negated].
@@ -33631,19 +33827,15 @@ squareRoot
 	self isZero ifTrue: [^ self].
 	^ parent project: (representative quotientBy: anElement representative modulo: parent modulus)! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/16/2019 07:37:33'!
-\\ anElement
-	^ self - (self // anElement * anElement)! !
-
 !ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/18/2019 03:06:16'!
 gcd: anElement
 	^ parent project: (self normalized lift gcd: anElement normalized lift)! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/19/2019 04:22:37'!
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/24/2019 01:53:31'!
 valuation
 	"Answer the Euclidean valuation of the receiver."
 	self isZero ifTrue: [^ Infinity negative].
-	^ (representative gcd: parent modulus) - 1! !
+	^ (representative gcd: parent modulus)! !
 
 !ModularInteger methodsFor: 'testing' stamp: 'len 6/19/2019 15:10:07'!
 isPrimitiveRoot
@@ -33739,31 +33931,21 @@ value: anObject
 valueWithArguments: anArray
 	^ representative valueWithArguments: anArray! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 9/16/2018 16:11:19'!
-= anObject
-	(self class = anObject class and: [parent = anObject parent])
-		ifTrue: [^ representative = anObject representative].
-	^ self = (parent !! anObject)! !
-
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:19:20'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/4/2018 17:19:20'!
 characteristicPolynomial
 	^ self representation characteristicPolynomial! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 4/6/2018 23:44:03'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 4/6/2018 23:44:03'!
 characteristicPolynomial2
 	| x |
 	x _ QQ algebraicClosure polynomials x.
 	^ self parent base !! (self parent embeddings product: [:each| x - (each value: self)])! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 1/17/2019 03:22:33'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 6/25/2019 02:08:46'!
 denominator
-	^ self * self minimalPolynomial coefficients denominator! !
+	^ self minimalPolynomial coefficients denominator! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 9/16/2018 16:11:22'!
-hash
-	^ representative hash! !
-
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:18:20'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/4/2018 17:18:20'!
 minimalPolynomial
 	^ self representation minimalPolynomial
 
@@ -33771,11 +33953,11 @@ minimalPolynomial
 	x _ self parent x.
 	^ self conjugates product: [:each| x - each] :: as: self parent base"! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 11/3/2016 04:41'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 11/3/2016 04:41'!
 minimalPolynomial2
 	^ (self parent preferedEmbedding value: self) minimalPolynomial! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:20:53'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/4/2018 17:20:53'!
 norm
 	| f |
 	f _ self minimalPolynomial.
@@ -33784,21 +33966,21 @@ norm
 "alternatively:
 	^ self representation determinant"! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 1/17/2019 03:22:20'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 1/17/2019 03:22:20'!
 numerator
 	^ self * self denominator! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 5/7/2019 16:49:53'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/7/2019 16:49:53'!
 representation
 	"Answer the representation map defined by multiplication by the receiver."
 	| V |
 	^ (V _ self parent asVectorSpace) endomorphisms evaluating: [:x| V !! ((self parent !! x) * self)]! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 11/3/2016 04:41'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 11/3/2016 04:41'!
 symmetricFunction: i
 	^ self notYetImplemented! !
 
-!AlgebraicElement methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:20:34'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/4/2018 17:20:34'!
 trace
 	"Answer the absolute trace of the receiver."
 	| f |
@@ -33807,6 +33989,40 @@ trace
 	
 "alternatively:
 	^ self representation trace"! !
+
+!AlgebraicElement methodsFor: 'comparing' stamp: 'len 9/16/2018 16:11:19'!
+= anObject
+	(self class = anObject class and: [parent = anObject parent])
+		ifTrue: [^ representative = anObject representative].
+	^ self = (parent !! anObject)! !
+
+!AlgebraicElement methodsFor: 'comparing' stamp: 'len 9/16/2018 16:11:22'!
+hash
+	^ representative hash! !
+
+!GaloisRingElement methodsFor: 'accessing' stamp: 'len 6/25/2019 02:34:22'!
+valuation
+	^ representative content valuation! !
+
+!GaloisRingElement methodsFor: 'operations' stamp: 'len 6/25/2019 02:32:15'!
+// anElement
+	| v |
+	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
+	self isZero ifTrue: [^ self].
+	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
+	^ self associatedUnit / anElement associatedUnit * (parent p ^ v)! !
+
+!GaloisRingElement methodsFor: 'operations' stamp: 'len 6/25/2019 02:33:31'!
+gcd: anElement
+	self isZero ifTrue: [^ anElement normalized].
+	anElement isZero ifTrue: [^ self normalized].
+	^ parent representative: (parent base constant: (representative content gcd: anElement representative content))! !
+
+!GaloisRingElement methodsFor: 'operations' stamp: 'len 6/25/2019 02:34:03'!
+lcm: anElement
+	self isZero ifTrue: [^ self].
+	anElement isZero ifTrue: [^ anElement].
+	^ parent representative: (parent base constant: (representative content lcm: anElement representative content))! !
 
 !AdicInteger methodsFor: 'accessing' stamp: 'len 6/3/2019 17:26:18'!
 << anInteger
@@ -34814,10 +35030,10 @@ is: aSymbol
 isAffineLinear
 	^ self degree < 2! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 5/15/2019 06:45:14'!
+!Polynomial methodsFor: 'testing' stamp: 'len 6/25/2019 05:13:16'!
 isBasicIrreducible
-	(self scalars isKindOf: PrimePowerRing) ifFalse: [DomainError signal].
-	^ (self apply: self scalars -> self scalars primeSubfield) isIrreducible! !
+	self scalars isLocal ifFalse: [DomainError signal: 'not over a local ring'].
+	^ (self apply: self scalars -> self scalars residueField) isIrreducible! !
 
 !Polynomial methodsFor: 'testing' stamp: 'len 2/17/2017 08:07:02'!
 isBinomial
@@ -34852,15 +35068,18 @@ isMonic
 isMonomial
 	^ self monomials size = 1! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 3/9/2016 02:55'!
+!Polynomial methodsFor: 'testing' stamp: 'len 6/25/2019 03:11:40'!
 isPrimitive
 	"A polynomial is primitive if it has content unity."
-	^ self content = self scalars one! !
+	^ self scalars isUnit: self content! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 1/10/2016 23:22'!
+!Polynomial methodsFor: 'testing' stamp: 'len 6/25/2019 05:15:56'!
 isSeparable
 	"A polynomial over a field K is separable if it's roots are distinct in an algebraic closure of K."
-	^ (self gcd: self derivative) isConstant! !
+	self scalars isField ifTrue: [^ (self gcd: self derivative) isConstant].
+	"Over a local ring, separable is equivalent to basic irreducible, which in turn is equivalent to irreducible in the residue field:"
+	self scalars isLocal ifTrue: [^ self isBasicIrreducible].
+	^ self notYetImplemented! !
 
 !Polynomial methodsFor: 'testing' stamp: 'len 2/18/2017 20:33:52'!
 isSquareFree
@@ -36058,7 +36277,7 @@ isInertial
 	coefficients last valuation = 0 ifFalse: [^ false].
 	^ (self apply: self scalars -> self scalars residueField) isIrreducible! !
 
-!UnivariatePolynomial methodsFor: 'testing' stamp: 'len 9/22/2018 19:00:42'!
+!UnivariatePolynomial methodsFor: 'testing' stamp: 'len 6/25/2019 04:07:17'!
 isIrreducible
 	| R |
 	self isConstant ifTrue: [^ false]. "constant polynomials are not reducible nor irreducible"
@@ -36072,6 +36291,8 @@ isIrreducible
 		ifTrue: [^ self isIrreducibleRabin].
 "	(R isKindOf: RationalField)
 		ifTrue: [^ self isIrreducibleHeuristic: ...]."
+	R isLocal "f irreducible in R[x] <=> mu(f(x)) = k*(g(x))^n, where k is unit and mu is the canonical projection to the residue field K"
+		ifTrue: [^ (self apply: R -> R residueField) factors asSet size = 1].
 	^ self factors size = 1! !
 
 !UnivariatePolynomial methodsFor: 'testing' stamp: 'len 4/16/2018 20:26:51'!
@@ -36610,89 +36831,112 @@ zero
 		unit: 0
 		precision: precision! !
 
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 13:55:40'!
-absolutePrecision
-	^ self parent precision! !
+!Germ2 methodsFor: 'accessing' stamp: 'len 6/27/2019 11:22:18'!
+denominator
+	^ unit denominator! !
 
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:27:00'!
-isIntegral
-	^ self valuation >= 0! !
+!Germ2 methodsFor: 'accessing' stamp: 'len 6/24/2019 08:47:54'!
+normalized
+	^ parent valuation: valuation unit: parent fractions one! !
 
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:26:54'!
-isUnit
-	^ self valuation = 0! !
+!Germ2 methodsFor: 'accessing' stamp: 'len 6/27/2019 11:22:07'!
+numerator
+	^ unit numerator * (parent p ^ valuation)! !
 
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:27:52'!
-precision
-	^ self subclassResponsibility! !
-
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:31:56'!
-relativePrecision
-	^ self absolutePrecision - self valuation! !
-
-!LocalRingElement methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:26:46'!
-valuation
-	^ self subclassResponsibility! !
-
-!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 12:46:22'!
-digits
-	| x p answer |
-	x _ unit.
-	p _ self parent p.
-	answer _ OrderedCollection new.
-	[x = 0]
-		whileFalse:
-			[answer add: x \\ p.
-			x _ x // p].
-	^ answer! !
-
-!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:25'!
-precision
-	^ precision! !
-
-!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:19'!
-unit
-	^ unit! !
-
-!TruncatedAdicNumber methodsFor: 'as yet unclassified' stamp: 'len 6/1/2019 11:49:09'!
-valuation
-	^ valuation! !
-
-!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
-opposite
-	^ opposite! !
-
-!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:41:34'!
+!Germ2 methodsFor: 'accessing' stamp: 'len 6/24/2019 08:46:58'!
 parent
-	^ opposite parent opposite! !
+	^ parent! !
 
-!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:41:57'!
-* anElement
-	^ self class opposite: anElement opposite * opposite! !
+!Germ2 methodsFor: 'accessing' stamp: 'len 6/24/2019 07:51:06'!
+valuation
+	^ valuation
+"	| p a answer |
+	self isZero ifTrue: [^ Infinity positive].
+	p _ self parent p.
+	a _ self numerator.
+	answer _ 0.
+	[p | a] whileTrue: [a _ a // p. answer _ answer + 1].
+	^ answer"! !
 
-!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:18'!
-+ anElement
-	^ self class opposite: opposite + anElement opposite! !
+!Germ2 methodsFor: 'comparing' stamp: 'len 6/26/2019 13:02:09'!
+= anObject
+	^ anObject class == self class and: [valuation = anObject valuation and: [unit = anObject unit]]! !
 
-!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:29'!
-negated
-	^ self class opposite: opposite negated! !
-
-!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:04:24'!
-= anElement
-	^ self class = anElement class and: [opposite = anElement opposite]! !
-
-!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:03:56'!
+!Germ2 methodsFor: 'comparing' stamp: 'len 6/26/2019 13:02:18'!
 hash
-	^ opposite hash! !
+	^ valuation hash + unit hash! !
 
-!OppositeAlgebraElement methodsFor: 'private' stamp: 'len 5/8/2019 14:43:50'!
-opposite: anElement
-	opposite _ anElement! !
+!Germ2 methodsFor: 'operations' stamp: 'len 6/26/2019 11:53:46'!
+* anElement
+	^ parent valuation: valuation + anElement valuation unit: unit * anElement unit! !
 
-!OppositeAlgebraElement class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:01'!
-opposite: anElement
-	^ self new opposite: anElement! !
+!Germ2 methodsFor: 'operations' stamp: 'len 6/27/2019 11:28:36'!
++ anElement
+	| v u |
+	v _ anElement valuation.
+	u _ anElement unit.
+	^ v < valuation
+		ifTrue:
+			[parent valuation: valuation - v unit: unit * (parent p ^ (valuation - v)) + u]
+		ifFalse:
+			[parent valuation: v - valuation unit: u * (parent p ^ (v - valuation)) + unit]! !
+
+!Germ2 methodsFor: 'operations' stamp: 'len 6/24/2019 02:08:36'!
+// anElement
+	| v |
+	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
+	self isZero ifTrue: [^ self].
+	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
+	^ self associatedUnit / anElement associatedUnit * (self parent uniformizer ^ v)! !
+
+!Germ2 methodsFor: 'operations' stamp: 'len 6/24/2019 02:07:03'!
+gcd: anElement
+	self isZero ifTrue: [^ anElement normalized].
+	anElement isZero ifTrue: [^ self normalized].
+	^ self parent uniformizer ^ (self valuation min: anElement valuation)! !
+
+!Germ2 methodsFor: 'operations' stamp: 'len 6/24/2019 02:07:32'!
+lcm: anElement
+	self isZero ifTrue: [^ self].
+	anElement isZero ifTrue: [^ anElement].
+	^ self parent uniformizer ^ (self valuation max: anElement valuation)! !
+
+!Germ2 methodsFor: 'operations' stamp: 'len 6/26/2019 11:52:56'!
+negated
+	^ parent valuation: valuation unit: unit negated! !
+
+!Germ2 methodsFor: 'operations' stamp: 'len 6/24/2019 08:58:40'!
+reciprocal
+	valuation = 0 ifFalse: [^ (ZeroDivide dividend: self) signal].
+	^ parent valuation: 0 unit: unit reciprocal! !
+
+!Germ2 methodsFor: 'testing' stamp: 'len 6/3/2019 05:28:22'!
+isFractional
+	^ true! !
+
+!Germ2 methodsFor: 'testing' stamp: 'len 6/26/2019 11:13:26'!
+isZero
+	^ unit isZero! !
+
+!Germ2 methodsFor: 'private' stamp: 'len 6/24/2019 08:46:51'!
+parent: aValuationRing
+	parent _ aValuationRing! !
+
+!Germ2 methodsFor: 'private' stamp: 'len 6/26/2019 11:32:19'!
+unit
+	^ unit
+"	| p a answer |
+	self isZero ifTrue: [^ Infinity positive].
+	p _ self parent p.
+	a _ self numerator.
+	answer _ 0.
+	[p | a] whileTrue: [a _ a // p. answer _ answer + 1].
+	^ answer"! !
+
+!Germ2 methodsFor: 'private' stamp: 'len 6/26/2019 11:54:44'!
+valuation: anInteger unit: aFraction
+	unit _ aFraction.
+	valuation _ unit isZero ifTrue: [0] ifFalse: [anInteger]! !
 
 !ModuleElement methodsFor: 'converting' stamp: 'len 5/11/2019 08:31:05'!
 adaptToFraction: rcvr andSend: selector
@@ -40071,6 +40315,42 @@ newFrom: aMatrix
 rows: anArray
 	^ self basicNew rows: anArray! !
 
+!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
+opposite
+	^ opposite! !
+
+!OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:41:34'!
+parent
+	^ opposite parent opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:41:57'!
+* anElement
+	^ self class opposite: anElement opposite * opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:18'!
++ anElement
+	^ self class opposite: opposite + anElement opposite! !
+
+!OppositeAlgebraElement methodsFor: 'arithmetic' stamp: 'len 5/8/2019 14:42:29'!
+negated
+	^ self class opposite: opposite negated! !
+
+!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:04:24'!
+= anElement
+	^ self class = anElement class and: [opposite = anElement opposite]! !
+
+!OppositeAlgebraElement methodsFor: 'comparing' stamp: 'len 5/9/2019 08:03:56'!
+hash
+	^ opposite hash! !
+
+!OppositeAlgebraElement methodsFor: 'private' stamp: 'len 5/8/2019 14:43:50'!
+opposite: anElement
+	opposite _ anElement! !
+
+!OppositeAlgebraElement class methodsFor: 'instance creation' stamp: 'len 5/8/2019 14:44:01'!
+opposite: anElement
+	^ self new opposite: anElement! !
+
 !MonomialOrdering methodsFor: 'accessing' stamp: 'len 7/4/2016 00:40'!
 indeterminates
 	^ indeterminates! !
@@ -43177,27 +43457,6 @@ coefficients: aSequence
 zeta
 	^ self coefficients: (CFiniteSequence constant: 1)! !
 
-!GraphNode methodsFor: 'comparing' stamp: 'timestamp) (no'!
-= anObject
-	"Comparison is delegated to the value of the node.
-	Argument and receiver are reversed to dereference through other GraphNodes."
-	^anObject = value! !
-
-!GraphNode methodsFor: 'comparing' stamp: 'timestamp) (no'!
-hash
-	^value hash! !
-
-!GraphNode methodsFor: 'statistics' stamp: 'len 5/7/2016 04:09'!
-clusteringCoefficient
-	| links k |
-	links _ Set new.
-	self neighborsDo: [:n1 |
-		self neighborsDo: [:n2 |
-			(n1 ~= n2 and: [n1 hasEdgeTo: n2])
-				ifTrue: [links add: {n1 value. n2 value}]]].
-	k _ self neighbors size.
-	^ links size / (k * (k - 1))! !
-
 !GraphNode methodsFor: 'accessing edges' stamp: 'timestamp) (no'!
 degree
 	"How many edges does this node have?"
@@ -43219,37 +43478,23 @@ neighborsDo: aBlock
 	"Evaluate aBlock for each node connected to an outgoing edge."
 	self subclassResponsibility! !
 
-!GraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
-hasEdgeTo: anObject
-	"Is there an edge from this node to anObject?"
-	self subclassResponsibility! !
+!GraphNode methodsFor: 'accessing value' stamp: 'timestamp) (no'!
+value
+	^value! !
 
-!GraphNode methodsFor: 'testing edges' stamp: 'len 2/26/2016 20:20'!
-hasLoop
-	^ self hasEdgeTo: self! !
+!GraphNode methodsFor: 'accessing value' stamp: 'len 2/14/2016 22:31'!
+value: anObject
+	value _ anObject! !
 
-!GraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
-isLeaf
-	^self degree = 0! !
+!GraphNode methodsFor: 'comparing' stamp: 'timestamp) (no'!
+= anObject
+	"Comparison is delegated to the value of the node.
+	Argument and receiver are reversed to dereference through other GraphNodes."
+	^anObject = value! !
 
-!GraphNode methodsFor: 'testing edges' stamp: 'len 2/16/2016 03:39'!
-isReflexive
-	^ self hasEdgeTo: self! !
-
-!GraphNode methodsFor: 'testing edges' stamp: 'len 5/7/2016 04:09'!
-isSimple
-	^ self neighbors asSet size = self neighbors size and: [self hasLoop not]! !
-
-!GraphNode methodsFor: 'testing edges' stamp: 'len 2/16/2016 03:40'!
-isSymmetric
-	self neighborsDo: [:each| (each hasEdgeTo: self) ifFalse: [^ false]].
-	^ true! !
-
-!GraphNode methodsFor: 'testing edges' stamp: 'len 2/17/2016 03:37'!
-isTransitive
-	self neighborsDo: [:each|
-		each neighborsDo: [:other| (other hasEdgeTo: self) ifFalse: [^ false]]].
-	^ true! !
+!GraphNode methodsFor: 'comparing' stamp: 'timestamp) (no'!
+hash
+	^value hash! !
 
 !GraphNode methodsFor: 'enumerating' stamp: 'len 11/30/2016 14:43:32'!
 markDo: aBlock
@@ -43285,57 +43530,48 @@ span
 	self markDo: [:each| tree add: each].
 	^ tree! !
 
-!GraphNode methodsFor: 'accessing value' stamp: 'timestamp) (no'!
-value
-	^value! !
+!GraphNode methodsFor: 'statistics' stamp: 'len 5/7/2016 04:09'!
+clusteringCoefficient
+	| links k |
+	links _ Set new.
+	self neighborsDo: [:n1 |
+		self neighborsDo: [:n2 |
+			(n1 ~= n2 and: [n1 hasEdgeTo: n2])
+				ifTrue: [links add: {n1 value. n2 value}]]].
+	k _ self neighbors size.
+	^ links size / (k * (k - 1))! !
 
-!GraphNode methodsFor: 'accessing value' stamp: 'len 2/14/2016 22:31'!
-value: anObject
-	value _ anObject! !
+!GraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
+hasEdgeTo: anObject
+	"Is there an edge from this node to anObject?"
+	self subclassResponsibility! !
 
-!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/26/2016 22:44'!
-addInNeighborNoCheck: aNode
-	^ inNeighbors add: aNode! !
+!GraphNode methodsFor: 'testing edges' stamp: 'len 2/26/2016 20:20'!
+hasLoop
+	^ self hasEdgeTo: self! !
 
-!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/28/2016 17:02'!
-setInNeighbors: aCollection
-	inNeighbors _ aCollection! !
+!GraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
+isLeaf
+	^self degree = 0! !
 
-!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/28/2016 17:02'!
-setNeighbors: aCollection
-	outNeighbors _ aCollection! !
+!GraphNode methodsFor: 'testing edges' stamp: 'len 2/16/2016 03:39'!
+isReflexive
+	^ self hasEdgeTo: self! !
 
-!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 5/9/2016 17:10'!
-addNeighbor: aNode 
-	outNeighbors add: aNode.
-	aNode addInNeighborNoCheck: self.
-	^ aNode
-"	self flag: #fix.
-	(outNeighbors includes: aNode)
-		ifFalse: 
-			[outNeighbors add: aNode.
-			aNode addInNeighborNoCheck: self].
-	^aNode"! !
+!GraphNode methodsFor: 'testing edges' stamp: 'len 5/7/2016 04:09'!
+isSimple
+	^ self neighbors asSet size = self neighbors size and: [self hasLoop not]! !
 
-!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 5/7/2016 04:19'!
-addNeighbor: aNode at: index 
-	"pre: self isOrdered"
-	outNeighbors at: index put: aNode.
-	aNode addInNeighborNoCheck: self.
-	^aNode! !
+!GraphNode methodsFor: 'testing edges' stamp: 'len 2/16/2016 03:40'!
+isSymmetric
+	self neighborsDo: [:each| (each hasEdgeTo: self) ifFalse: [^ false]].
+	^ true! !
 
-!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 2/26/2016 22:46'!
-removeInNeighbor: aNode 
-	^ inNeighbors remove: aNode ifAbsent: [aNode]! !
-
-!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 2/26/2016 22:54'!
-removeNeighbor: aNode
-	aNode removeInNeighbor: self.
-	^outNeighbors remove: aNode! !
-
-!ExplicitGraphNode methodsFor: 'copying' stamp: 'len 2/28/2016 17:02'!
-copy
-	^ super copy setNeighbors: outNeighbors copy; setInNeighbors: inNeighbors copy! !
+!GraphNode methodsFor: 'testing edges' stamp: 'len 2/17/2016 03:37'!
+isTransitive
+	self neighborsDo: [:each|
+		each neighborsDo: [:other| (other hasEdgeTo: self) ifFalse: [^ false]]].
+	^ true! !
 
 !ExplicitGraphNode methodsFor: 'accessing edges' stamp: 'len 5/7/2016 04:03'!
 degree
@@ -43375,21 +43611,49 @@ strictNeighbors
 	(outNeighbors includes: self) ifTrue: [^ outNeighbors copyWithout: self].
 	^ outNeighbors! !
 
-!ExplicitGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
-hasEdgeTo: anObject 
-	^outNeighbors includes: anObject! !
+!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 5/9/2016 17:10'!
+addNeighbor: aNode 
+	outNeighbors add: aNode.
+	aNode addInNeighborNoCheck: self.
+	^ aNode
+"	self flag: #fix.
+	(outNeighbors includes: aNode)
+		ifFalse: 
+			[outNeighbors add: aNode.
+			aNode addInNeighborNoCheck: self].
+	^aNode"! !
 
-!ExplicitGraphNode methodsFor: 'initialize' stamp: 'len 7/14/2016 00:12'!
+!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 5/7/2016 04:19'!
+addNeighbor: aNode at: index 
+	"pre: self isOrdered"
+	outNeighbors at: index put: aNode.
+	aNode addInNeighborNoCheck: self.
+	^aNode! !
+
+!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 2/26/2016 22:46'!
+removeInNeighbor: aNode 
+	^ inNeighbors remove: aNode ifAbsent: [aNode]! !
+
+!ExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 2/26/2016 22:54'!
+removeNeighbor: aNode
+	aNode removeInNeighbor: self.
+	^outNeighbors remove: aNode! !
+
+!ExplicitGraphNode methodsFor: 'copying' stamp: 'len 2/28/2016 17:02'!
+copy
+	^ super copy setNeighbors: outNeighbors copy; setInNeighbors: inNeighbors copy! !
+
+!ExplicitGraphNode methodsFor: 'initialization' stamp: 'len 7/14/2016 00:12'!
 initializeFixed: arity 
 	outNeighbors _ Array new: arity.
 	inNeighbors _ Bag new! !
 
-!ExplicitGraphNode methodsFor: 'initialize' stamp: 'len 7/14/2016 00:12'!
+!ExplicitGraphNode methodsFor: 'initialization' stamp: 'len 7/14/2016 00:12'!
 initializeOrdered
 	outNeighbors _ OrderedCollection new.
 	inNeighbors _ Bag new! !
 
-!ExplicitGraphNode methodsFor: 'initialize' stamp: 'len 7/14/2016 00:12'!
+!ExplicitGraphNode methodsFor: 'initialization' stamp: 'len 7/14/2016 00:12'!
 initializeUnordered
 	outNeighbors _ Bag new.
 	inNeighbors _ Bag new! !
@@ -43422,6 +43686,22 @@ isMiddle
 !ExplicitGraphNode methodsFor: 'testing' stamp: 'timestamp) (no'!
 isOrdered
 	^outNeighbors isSequenceable! !
+
+!ExplicitGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
+hasEdgeTo: anObject 
+	^outNeighbors includes: anObject! !
+
+!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/26/2016 22:44'!
+addInNeighborNoCheck: aNode
+	^ inNeighbors add: aNode! !
+
+!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/28/2016 17:02'!
+setInNeighbors: aCollection
+	inNeighbors _ aCollection! !
+
+!ExplicitGraphNode methodsFor: 'private' stamp: 'len 2/28/2016 17:02'!
+setNeighbors: aCollection
+	outNeighbors _ aCollection! !
 
 !ExplicitGraphNode class methodsFor: 'instance creation' stamp: 'timestamp) (no'!
 arity: n
@@ -43463,42 +43743,6 @@ ordered: value
 	"Create a new ordered node, and given value."
 	^super new initializeOrdered; value: value! !
 
-!LabeledExplicitGraphNode methodsFor: 'comparing' stamp: 'len 7/25/2016 08:25'!
-= anObject
-	anObject class = self class ifTrue: [^ value = anObject value and: [label = anObject label]].
-	^ super = anObject! !
-
-!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
-addNeighbor: aNode
-	self shouldNotImplement! !
-
-!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
-addNeighbor: aNode at: index
-	self shouldNotImplement! !
-
-!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 6/12/2019 11:07:56'!
-addNeighbor: aNode at: index label: anObject
-	"pre: self isOrdered"
-	outNeighbors at: index put: aNode -> anObject.
-	^ aNode! !
-
-!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 6/12/2019 11:07:48'!
-addNeighbor: aNode label: anObject
-	self flag: #fix.
-	(outNeighbors includes: aNode) "inefficient"
-		ifFalse: 
-			[outNeighbors add: aNode -> anObject.
-			aNode addInNeighborNoCheck: self].
-	^aNode! !
-
-!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
-removeNeighbor: aNode 
-	outNeighbors remove: (outNeighbors detect: [:assoc | assoc key = aNode])! !
-
-!LabeledExplicitGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
-hasEdgeTo: anObject 
-	^outNeighbors anySatisfy: [:assoc | assoc key = anObject]! !
-
 !LabeledExplicitGraphNode methodsFor: 'accessing' stamp: 'len 2/19/2016 18:49'!
 label
 	^ label! !
@@ -43534,6 +43778,42 @@ neighborsAndLabelsDo: aBlock
 neighborsDo: aBlock 
 	^outNeighbors do: [:assoc | aBlock value: assoc key]! !
 
+!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
+addNeighbor: aNode
+	self shouldNotImplement! !
+
+!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
+addNeighbor: aNode at: index
+	self shouldNotImplement! !
+
+!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 6/12/2019 11:07:56'!
+addNeighbor: aNode at: index label: anObject
+	"pre: self isOrdered"
+	outNeighbors at: index put: aNode -> anObject.
+	^ aNode! !
+
+!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'len 6/12/2019 11:07:48'!
+addNeighbor: aNode label: anObject
+	self flag: #fix.
+	(outNeighbors includes: aNode) "inefficient"
+		ifFalse: 
+			[outNeighbors add: aNode -> anObject.
+			aNode addInNeighborNoCheck: self].
+	^aNode! !
+
+!LabeledExplicitGraphNode methodsFor: 'changing edges' stamp: 'timestamp) (no'!
+removeNeighbor: aNode 
+	outNeighbors remove: (outNeighbors detect: [:assoc | assoc key = aNode])! !
+
+!LabeledExplicitGraphNode methodsFor: 'comparing' stamp: 'len 7/25/2016 08:25'!
+= anObject
+	anObject class = self class ifTrue: [^ value = anObject value and: [label = anObject label]].
+	^ super = anObject! !
+
+!LabeledExplicitGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
+hasEdgeTo: anObject 
+	^outNeighbors anySatisfy: [:assoc | assoc key = anObject]! !
+
 !ImplicitGraphNode methodsFor: 'accessing edges' stamp: 'len 5/7/2016 04:09'!
 neighbors
 	^OrderedCollection accumulate: [:incBlock | self neighborsDo: incBlock]! !
@@ -43554,10 +43834,6 @@ on: aValue iterator: anIterator
 on: aValue iteratorBlock: iteratorBlock
 	^ImplicitIteratorGraphNode on: aValue iteratorBlock: iteratorBlock! !
 
-!ImplicitCollectionGraphNode methodsFor: 'initialisation' stamp: 'len 2/28/2016 20:32'!
-collectionBlock: aBlock
-	collectionBlock _ aBlock! !
-
 !ImplicitCollectionGraphNode methodsFor: 'accessing edges' stamp: 'len 5/7/2016 04:10'!
 degree
 	^self neighbors size! !
@@ -43565,6 +43841,10 @@ degree
 !ImplicitCollectionGraphNode methodsFor: 'accessing edges' stamp: 'len 5/7/2016 04:10'!
 neighbors
 	^collectionBlock value! !
+
+!ImplicitCollectionGraphNode methodsFor: 'initialisation' stamp: 'len 2/28/2016 20:32'!
+collectionBlock: aBlock
+	collectionBlock _ aBlock! !
 
 !ImplicitCollectionGraphNode methodsFor: 'testing edges' stamp: 'len 5/7/2016 04:10'!
 hasEdgeTo: anObject 
@@ -43582,13 +43862,13 @@ degree
 neighborsDo: aBlock
 	iterator do: aBlock! !
 
-!ImplicitIteratorGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
-hasEdgeTo: anObject
-	^iterator includes: anObject! !
-
 !ImplicitIteratorGraphNode methodsFor: 'initialisation' stamp: 'len 2/28/2016 20:32'!
 iterator: anIterator
 	iterator _ anIterator! !
+
+!ImplicitIteratorGraphNode methodsFor: 'testing edges' stamp: 'timestamp) (no'!
+hasEdgeTo: anObject
+	^iterator includes: anObject! !
 
 !ImplicitIteratorGraphNode class methodsFor: 'instance creation' stamp: 'timestamp) (no'!
 on: aValue iterator: anIterator
@@ -45329,31 +45609,6 @@ hexagonal
 on: aVectorSpace roots: aCollection
 	^ self new ambient: aVectorSpace; roots: aCollection! !
 
-!Product methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 03:02:55'!
-components
-	^ projections collect: [:each| each codomain]! !
-
-!Product methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 02:47:43'!
-projections
-	^ projections! !
-
-!Product methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 02:48:04'!
-projections: anArray
-	projections _ anArray! !
-
-!DirectSum methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 03:20:06'!
-coprojections
-	^ coprojections! !
-
-!DirectSum methodsFor: 'as yet unclassified' stamp: 'len 4/21/2019 03:20:15'!
-coprojections: anArray
-	coprojections _ anArray! !
-
-!TensorProduct methodsFor: 'as yet unclassified' stamp: 'len 4/23/2019 17:27:55'!
-compose: anArray
-	"Answer the tensor product composition."
-	^ self subclassResponsibility! !
-
 !Object methodsFor: '*domains' stamp: 'len 11/6/2016 09:07'!
 adaptToCollection: rcvr andSend: selector
 	"If I am involved in arithmetic with a Collection, return a Collection of
@@ -46284,6 +46539,16 @@ printElementsOn: aStream
 	aStream nextPut: $(.
 	self do: [:element| aStream print: element] separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $)! !
+
+!Collection methodsFor: '*domains' stamp: 'len 6/23/2019 04:34:56'!
+upTo: max do: aBlock
+	"Iterate over the elements of the receiver, just like #do:, but stop after max elements."
+	| k |
+	k _ 1.
+	self do: [:each|
+		k > max ifTrue: [^ self].
+		aBlock value: each.
+		k _ k+1]! !
 
 !Collection class methodsFor: '*domains-instance creation'!
 accumulate: iteratorBlock
