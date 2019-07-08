@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 7 July 2019 at 4:44:35 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 8 July 2019 at 12:55:40 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 535!
+!provides: 'Domains' 1 536!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -5100,8 +5100,8 @@ Number Theoretic Transforms, the analog of DFTs for the field of integers modulo
 
 The (pseudo) number theoretic transform may be meaningful in the ring Z/<m> even when the modulo m is not prime, provided a principal root of order n exists.!
 
-!TonelliShanks commentStamp: 'len 12/29/2016 08:02:15' prior: 0!
-This is the Tonelli-Shanks algorithm for computing square roots in a prime field Z/pZ.
+!TonelliShanks commentStamp: '<historical>' prior: 0!
+This is the Tonelli-Shanks algorithm for computing square roots in a prime field Z/pZ (with odd p).
 
 Reference: Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 1.5.1.!
 
@@ -20029,10 +20029,6 @@ p: aPrime to: anInteger
 invert: anElement
 	^ self representative: ((self inverseOfRepresentative: anElement representative) ifNil: [^ nil])! !
 
-!PrimeField methodsFor: 'elements-operations' stamp: 'len 12/29/2016 08:04:45'!
-squareRootOf: anElement
-	^ self representative: ((self squareRootOfRepresentative: anElement representative) ifNil: [^ nil])! !
-
 !PrimeField methodsFor: 'enumerating' stamp: 'len 5/4/2018 20:12:15'!
 primeIdealsDo: aBlock
 	aBlock value: self zeroIdeal! !
@@ -20082,9 +20078,10 @@ inverseOfRepresentative: anInteger
 	result _ anInteger xgcd: modulus.
 	^ (result at: 2) \\ modulus! !
 
-!PrimeField methodsFor: 'private' stamp: 'len 12/29/2016 08:05:44'!
+!PrimeField methodsFor: 'private' stamp: 'len 7/8/2019 02:32:52'!
 squareRootOfRepresentative: anInteger
 	| algorithm |
+	modulus = 2 ifTrue: [^ anInteger].
 	algorithm _ self propertyAt: #squareRootAlgorithm ifAbsentPut: [TonelliShanks new modulus: self modulus].
 	^ algorithm squareRootOf: anInteger! !
 
@@ -33901,15 +33898,10 @@ reciprocal
 	representative == 1 ifTrue: [^ self].
 	^ (parent invert: self) ifNil: [(ZeroDivide dividend: self one) signal]! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 12/29/2016 08:26:24'!
+!ModularInteger methodsFor: 'operations' stamp: 'len 7/8/2019 02:15:33'!
 squareRoot
 	"Assuming the receiver is a quadratic residue, answer a square root."
-	| p |
-	representative == 0 ifTrue: [^ self].
-	p _ self modulus.
-	p == 2 ifTrue: [^ self].
-	(p bitAnd: 3) == 3 ifTrue: [^ self ^ (p + 1 // 4)].
-	^ self parent squareRootOf: self! !
+	^ self notYetImplemented! !
 
 !ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/19/2019 04:30:04'!
 // anElement
@@ -33941,6 +33933,23 @@ isQuadraticResidue
 isZero
 	^ representative == 0! !
 
+!PrimePowerResidue methodsFor: 'operations' stamp: 'len 7/8/2019 12:53:17'!
+squareRoot
+	"Assuming the receiver is a quadratic residue, answer a square root."
+	| p a v x q r e |
+	(representative == 0 or: [representative == 1]) ifTrue: [^ self].
+	p _ parent p.
+	p == 2 ifTrue: [^ self notYetImplemented].
+	a _ representative.
+	v _ 0.
+	[p | a] whileTrue: [v _ v + 1. a _ a // p].
+	v odd ifTrue: [^ nil].
+	x _ parent residueField squareRootOfRepresentative: a \\ p.
+	q _ parent modulus.
+	r _ q // p.
+	e _ q - (2*r) + 1 // 2.
+	^ ((parent representative: x) ^ r * ((parent representative: a) ^ e)) * ((parent representative: p) ^ (v // 2))! !
+
 !PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/18/2019 09:03:42'!
 // anElement
 	| v |
@@ -33967,21 +33976,39 @@ valuation
 	We define it as infinity at 0; although this is undefined for an Euclidean function, it makes it compatible with the p-adic valuation."
 	^ representative valuation: parent p! !
 
-!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/17/2019 04:25:10'!
-gcd: anElement
-	representative = 0 ifTrue: [^ anElement normalized].
-	^ parent one! !
-
-!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/17/2019 04:26:04'!
-lcm: anElement
-	representative = 0 ifTrue: [^ parent zero].
-	^ anElement normalized! !
-
-!PrimeResidue methodsFor: 'as yet unclassified' stamp: 'len 6/18/2019 09:08:09'!
+!PrimeResidue methodsFor: 'accessing' stamp: 'len 6/18/2019 09:08:09'!
 normalized
 	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
 	representative = 0 ifTrue: [^ self].
 	^ parent one! !
+
+!PrimeResidue methodsFor: 'operations' stamp: 'len 7/8/2019 03:40:28'!
+allSquareRoots
+	"Answer all square roots of the receiver."
+	| x |
+	representative == 0 ifTrue: [^ {self}].
+	x _ self squareRoot ifNil: [^ #()].
+	^ {x. x negated}! !
+
+!PrimeResidue methodsFor: 'operations' stamp: 'len 7/8/2019 02:28:37'!
+squareRoot
+	"Assuming the receiver is a quadratic residue, answer a square root."
+	| p |
+	(representative == 0 or: [representative == 1]) ifTrue: [^ self].
+	p _ parent modulus.
+	p == 2 ifTrue: [^ self].
+	(p bitAnd: 3) == 3 ifTrue: [^ self ^ (p + 1 // 4)].
+	^ parent representative: ((parent squareRootOfRepresentative: representative) ifNil: [^ nil])! !
+
+!PrimeResidue methodsFor: 'operations-euclidean' stamp: 'len 6/17/2019 04:25:10'!
+gcd: anElement
+	representative = 0 ifTrue: [^ anElement normalized].
+	^ parent one! !
+
+!PrimeResidue methodsFor: 'operations-euclidean' stamp: 'len 6/17/2019 04:26:04'!
+lcm: anElement
+	representative = 0 ifTrue: [^ parent zero].
+	^ anElement normalized! !
 
 !SmallPrimeResidue methodsFor: 'operations' stamp: 'len 9/2/2018 21:50:50'!
 * aModularInteger
@@ -43509,10 +43536,10 @@ modulo: anInteger
 	"anInteger must be prime"
 	^ self new modulus: anInteger! !
 
-!TonelliShanks methodsFor: 'as yet unclassified' stamp: 'len 12/29/2016 08:22:11'!
+!TonelliShanks methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 04:16:30'!
 modulus: anInteger
 	| n |
-	anInteger == 2 ifTrue: [self error: 'the modulus should be not 2'].
+	anInteger == 2 ifTrue: [self error: 'modulus must be odd'].
 	p _ anInteger.
 	e _ (p - 1) lowBit - 1.
 	q _ p - 1 bitShift: e negated.
