@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 8 July 2019 at 12:55:40 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 July 2019 at 8:19:50 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 536!
+!provides: 'Domains' 1 537!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2743,36 +2743,6 @@ Matrix subclass: #RowMatrix
 RowMatrix class
 	instanceVariableNames: ''!
 
-!classDefinition: #TopologicalPoint category: #'Domains-Schemes'!
-Element subclass: #TopologicalPoint
-	instanceVariableNames: 'parent'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Schemes'!
-!classDefinition: 'TopologicalPoint class' category: #'Domains-Schemes'!
-TopologicalPoint class
-	instanceVariableNames: ''!
-
-!classDefinition: #AffineTopologicalPoint category: #'Domains-Schemes'!
-TopologicalPoint subclass: #AffineTopologicalPoint
-	instanceVariableNames: 'ideal'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Schemes'!
-!classDefinition: 'AffineTopologicalPoint class' category: #'Domains-Schemes'!
-AffineTopologicalPoint class
-	instanceVariableNames: ''!
-
-!classDefinition: #ProjectiveTopologicalPoint category: #'Domains-Schemes'!
-TopologicalPoint subclass: #ProjectiveTopologicalPoint
-	instanceVariableNames: 'ideal'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Schemes'!
-!classDefinition: 'ProjectiveTopologicalPoint class' category: #'Domains-Schemes'!
-ProjectiveTopologicalPoint class
-	instanceVariableNames: ''!
-
 !classDefinition: #OppositeAlgebraElement category: #'Domains-Etc-Algebras'!
 Element subclass: #OppositeAlgebraElement
 	instanceVariableNames: 'opposite'
@@ -4810,7 +4780,7 @@ Tuples are commonly created by sending a message to the ring where the coefficie
 	ZZ tuple: 4 evaluating: [:i| i squared].
 
 It is also handy to create tuples by sending the message #, to a number. For example:
-  (1,2,4,8)
+	(1,2,4,8)
 However, when created in this way, even if all the coefficients are Integers, the tuple will be considered a rational tuple (with coefficients in the field of rational numbers QQ), so the above example is equivalent to:
 	QQ tuple: #(1 2 4 8)
 !
@@ -6287,14 +6257,6 @@ printOn: aStream
 		pad timesRepeat: [aStream space]]
 			separatedBy: [aStream nextPut: $]; lf; nextPutAll: ' ['].
 	aStream nextPut: $]! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/3/2019 10:31:52'!
-printOn: aStream
-	ideal printOn: aStream! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:33:30'!
-printOn: aStream
-	ideal printOn: aStream! !
 
 !OppositeAlgebraElement methodsFor: 'printing' stamp: 'len 5/8/2019 14:42:55'!
 printOn: aStream
@@ -22662,9 +22624,19 @@ contains: anObject
 includes: anElement
 	^ (self scalars includes: anElement) and: [self contains: anElement]! !
 
+!Ideal methodsFor: 'testing' stamp: 'len 7/9/2019 08:02:45'!
+isClosedPoint
+	"Answer true if the receiver is a closed point in the Zariski topology."
+	^ self isMaximal! !
+
 !Ideal methodsFor: 'testing' stamp: 'len 2/6/2017 08:23:37'!
 isComaximalWith: anIdeal
 	^ (self + anIdeal) isOne! !
+
+!Ideal methodsFor: 'testing' stamp: 'len 7/9/2019 08:03:19'!
+isGenericPoint
+	"Answer true if the receiver is a generic point in the Zariski topology."
+	^ self isMinimalPrime! !
 
 !Ideal methodsFor: 'testing' stamp: 'len 5/5/2018 18:59:14'!
 isIntegral
@@ -25849,7 +25821,7 @@ new: anInteger over: aSpace
 ambient
 	^ self propertyAt: #ambient ifAbsent: [self coordinateRing isQuotient ifTrue: [self coordinateRing base spec] ifFalse: [self]]! !
 
-!AffineScheme methodsFor: 'accessing' stamp: 'len 5/17/2018 18:44:19'!
+!AffineScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:17:49'!
 base
 	"Answer the base scheme of the receiver."
 	^ self scalars spec! !
@@ -25876,14 +25848,9 @@ ideal
 	"Answer the defining ideal of the receiver."
 	^ self coordinateRing isQuotient ifTrue: [self coordinateRing relations] ifFalse: [self coordinateRing zeroIdeal]! !
 
-!AffineScheme methodsFor: 'accessing' stamp: 'len 5/17/2018 18:43:51'!
+!AffineScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:18:31'!
 scalars
-	"Answer the base ring of the receiver."
 	^ self coordinateRing scalars! !
-
-!AffineScheme methodsFor: 'accessing-private' stamp: 'len 1/13/2017 16:08:53'!
-coordinateRing: aCommutativeRing
-	self propertyAt: #coordinateRing put: aCommutativeRing! !
 
 !AffineScheme methodsFor: 'comparing' stamp: 'len 5/15/2018 17:20:11'!
 < aScheme
@@ -25908,6 +25875,18 @@ over: aRing
 !AffineScheme methodsFor: 'enumerating' stamp: 'len 5/4/2018 19:34:21'!
 do: aBlock
 	self coordinateRing primeIdealsDo: aBlock! !
+
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 7/3/2019 10:18:03'!
+from: aCodomain
+	(aCodomain isKindOf: AffineScheme) ifTrue:
+		[(aCodomain coordinateRing from: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
+	^ super from: aCodomain! !
+
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 7/3/2019 10:17:36'!
+to: aCodomain
+	(aCodomain isKindOf: AffineScheme) ifTrue:
+		[(aCodomain coordinateRing to: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
+	^ super to: aCodomain! !
 
 !AffineScheme methodsFor: 'operations' stamp: 'len 5/10/2019 04:24:04'!
 /\ aScheme
@@ -25969,27 +25948,13 @@ isReduced
 isTerminal
 	^ self coordinateRing isInitial! !
 
+!AffineScheme methodsFor: 'private' stamp: 'len 1/13/2017 16:08:53'!
+coordinateRing: aCommutativeRing
+	self propertyAt: #coordinateRing put: aCommutativeRing! !
+
 !AffineScheme methodsFor: 'private' stamp: 'len 2/13/2017 07:44:36'!
 species
 	^ AffineScheme! !
-
-!AffineScheme methodsFor: 'as yet unclassified' stamp: 'len 7/4/2019 03:47:45'!
-!! anObject
-	(anObject isKindOf: Ideal) "assume it's a prime ideal"
-		ifTrue: [^ AffineTopologicalPoint new parent: self; ideal: anObject].
-	^ super !! anObject! !
-
-!AffineScheme methodsFor: 'as yet unclassified' stamp: 'len 7/3/2019 10:18:03'!
-from: aCodomain
-	(aCodomain isKindOf: AffineScheme) ifTrue:
-		[(aCodomain coordinateRing from: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
-	^ super from: aCodomain! !
-
-!AffineScheme methodsFor: 'as yet unclassified' stamp: 'len 7/3/2019 10:17:36'!
-to: aCodomain
-	(aCodomain isKindOf: AffineScheme) ifTrue:
-		[(aCodomain coordinateRing to: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
-	^ super to: aCodomain! !
 
 !AffineScheme class methodsFor: 'examples' stamp: 'len 5/22/2018 22:31:28'!
 example1
@@ -26453,14 +26418,31 @@ components: anArray
 new: anArray over: aRing
 	^ self components: (anArray collect: [:each| AffineSpace new: each over: aRing])! !
 
+!ProjectiveScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:09:51'!
+affineCone
+	"If the receiver is defined by an homogeneous ideal I, the affine cone is the affine variety defined by I."
+	^ self coordinateRing spec! !
+
+!ProjectiveScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:18:09'!
+base
+	^ self scalars spec! !
+
+!ProjectiveScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:10:21'!
+coordinateRing
+	"Answer the homogeneous coordinate ring."
+	^ self propertyAt: #coordinateRing! !
+
+!ProjectiveScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:18:19'!
+scalars
+	^ self coordinateRing scalars! !
+
 !ProjectiveScheme methodsFor: 'enumerating' stamp: 'len 7/5/2019 13:36:31'!
 do: aBlock
 	self coordinateRing relevantHomogeneousPrimeIdealsDo: aBlock! !
 
-!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 5/17/2018 19:16:43'!
-affineCone
-	"If the receiver is defined by an homogeneous ideal I, the affine cone is the affine variety defined by I."
-	^ self coordinateRing spec! !
+!ProjectiveScheme methodsFor: 'private' stamp: 'len 7/9/2019 08:13:08'!
+coordinateRing: aCommutativeRing
+	self propertyAt: #coordinateRing put: aCommutativeRing! !
 
 !ProjectiveVariety methodsFor: 'accessing' stamp: 'len 2/10/2017 07:46:27'!
 ambient
@@ -26480,11 +26462,6 @@ arithmeticGenus
 base
 	"Answer the base scheme of the receiver."
 	^ self scalars spec! !
-
-!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 1/13/2017 17:01:55'!
-coordinateRing
-	"Answer the homogeneous coordinate ring."
-	^ self propertyAt: #coordinateRing! !
 
 !ProjectiveVariety methodsFor: 'accessing' stamp: 'len 10/27/2016 21:44'!
 degree
@@ -26536,10 +26513,6 @@ patches
 scalars
 	"Answer the base ring of the receiver."
 	^ self coordinateRing scalars! !
-
-!ProjectiveVariety methodsFor: 'accessing-private' stamp: 'len 1/13/2017 17:02:28'!
-coordinateRing: aCommutativeRing
-	self propertyAt: #coordinateRing put: aCommutativeRing! !
 
 !ProjectiveVariety methodsFor: 'comparing' stamp: 'len 1/13/2017 17:03:23'!
 = anObject
@@ -27280,14 +27253,15 @@ from: aDomain
 pointAt: aTuple
 	^ ProjectiveLinePoint on: self coordinates: aTuple! !
 
-!ProjectiveLine methodsFor: 'points-private' stamp: 'len 5/2/2019 10:07:26'!
+!ProjectiveLine methodsFor: 'points-private' stamp: 'len 7/8/2019 13:24:39'!
 pointsOverRing: aRing do: aBlock
 	| visited |
 	visited _ Set new.
-	aRing do: [:a| aRing do: [:b|
-		| point |
-		(aRing anySatisfy: [:c| aRing anySatisfy: [:d| aRing isUnit: a*d - (c*b)]])
-			ifTrue: [visited add: (point _ self pointAt: (aRing tuple: {a. b})) ifAbsent: [aBlock value: point]]]]! !
+	aRing do: [:a|
+		aRing do: [:b|
+			| point |
+			(aRing anySatisfy: [:c| aRing anySatisfy: [:d| aRing isUnit: a*d - (c*b)]])
+				ifTrue: [visited add: (point _ self pointAt: (aRing tuple: {a. b})) ifAbsent: [aBlock value: point]]]]! !
 
 !ProjectiveLine class methodsFor: 'instance creation' stamp: 'len 12/4/2016 22:07:23'!
 over: aRing
@@ -31918,11 +31892,11 @@ tangentCone
 coordinates: aTuple
 	coordinates _ aTuple! !
 
-!ProjectivePoint methodsFor: 'comparing' stamp: 'len 4/11/2018 06:48:55'!
+!ProjectivePoint methodsFor: 'comparing' stamp: 'len 7/8/2019 13:20:39'!
 = aProjectivePoint
 	self class = aProjectivePoint class ifFalse: [^ super = aProjectivePoint].
 	coordinates size = aProjectivePoint coordinates size ifFalse: [^ false].
-	^ self coordinates ~ aProjectivePoint coordinates! !
+	^ coordinates ~ aProjectivePoint coordinates! !
 
 !ProjectivePoint methodsFor: 'comparing' stamp: 'len 5/3/2018 04:28:40'!
 hash
@@ -37664,7 +37638,7 @@ zero
 		(self at: i) = (anObject at: i) ifFalse: [^ false]].
 	^ true! !
 
-!Tuple methodsFor: 'comparing' stamp: 'len 5/2/2019 09:49:14'!
+!Tuple methodsFor: 'comparing' stamp: 'len 7/8/2019 13:17:38'!
 ~ aTuple
 	"Answer true if the receiver and the argument are equivalent as homogeneous tuples."
 	| index x y |
@@ -37674,8 +37648,7 @@ zero
 	x _ self at: index.
 	y _ aTuple at: index.
 	y isZero ifTrue: [^ false].
-	1 to: self size do: [:i|
-		(self at: i) * y = ((aTuple at: i) * x) ifFalse: [^ false]].
+	1 to: self size do: [:i| (self at: i) * y = ((aTuple at: i) * x) ifFalse: [^ false]].
 	^ true! !
 
 !Tuple methodsFor: 'comparing' stamp: 'len 11/5/2016 09:41'!
@@ -40431,64 +40404,6 @@ newFrom: aMatrix
 !RowMatrix class methodsFor: 'instance creation' stamp: 'len 7/15/2016 05:12'!
 rows: anArray
 	^ self basicNew rows: anArray! !
-
-!TopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:11:04'!
-parent
-	^ parent! !
-
-!TopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:10:59'!
-parent: aScheme
-	parent _ aScheme! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:12:32'!
-closure
-	^ ideal quotientRing spec! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:11:19'!
-ideal
-	^ ideal! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:11:15'!
-ideal: aPrimeIdeal
-	ideal _ aPrimeIdeal! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/3/2019 10:03:33'!
-isClosed
-	^ self ideal isMaximal! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:42:37'!
-isGeneric
-	^ self ideal isMinimalPrime! !
-
-!AffineTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/2/2019 17:44:09'!
-stalk
-	"Answer the local ring at this point. This is the stalk of the structure sheaf at the receiver, i.e. the ring of germs."
-	^ parent coordinateRing localizationAt: ideal! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:34:12'!
-closure
-	^ ideal quotientRing proj! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:32:42'!
-ideal
-	^ ideal! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:33:08'!
-ideal: anHomogeneousPrimeIdeal
-	ideal _ anHomogeneousPrimeIdeal! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:33:20'!
-isClosed
-	^ self ideal isMaximal! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:34:23'!
-isGeneric
-	^ self ideal isMinimalPrime! !
-
-!ProjectiveTopologicalPoint methodsFor: 'as yet unclassified' stamp: 'len 7/5/2019 13:33:51'!
-stalk
-	"Answer the local ring at this point. This is the stalk of the structure sheaf at the receiver, i.e. the ring of germs."
-	^ parent coordinateRing localizationAt: ideal! !
 
 !OppositeAlgebraElement methodsFor: 'accessing' stamp: 'len 5/8/2019 14:43:41'!
 opposite
