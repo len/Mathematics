@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 July 2019 at 8:19:50 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 July 2019 at 4:53:53 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 537!
+!provides: 'Domains' 1 538!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4323,10 +4323,10 @@ An important class of schemes are those defined by polynomial equations in some 
 !Grassmannian commentStamp: 'len 11/3/2016 09:19' prior: 0!
 The Grassmannian Gr(r,V) is the set of r-dimensional subspaces of the vector space V.!
 
-!AffineScheme commentStamp: '<historical>' prior: 0!
+!AffineScheme commentStamp: 'len 7/9/2019 08:55:20' prior: 0!
 An affine scheme is the prime spectrum Spec(R) of a commutative ring R, equipped with a sheaf of local rings (which makes it a locally ringed space). As a set, its elements are the prime ideals of the associated coordinate ring R.
 
-In scheme theory, affine schemes are the fundamental building blocks of general schemes. Any scheme can be constructed by gluing together finitely many affine schemes, and conversely schemes that are not affine can be covered by a finite number of affine patches.!
+Affine schemes are the fundamental building blocks of general schemes. Any scheme can be constructed by gluing together finitely many affine schemes, and conversely schemes that are not affine can be covered by a finite number of affine patches.!
 
 !AffineVariety commentStamp: '<historical>' prior: 0!
 Closed subschemes of an affine space (see AffineSpace). Their coordinate rings are quotients of multivariate polynomial rings by an ideal (also called affine rings or affine algebras, see AffineRing). Their rational points are AffinePoints.
@@ -4354,10 +4354,10 @@ Note also that the dimension of an affine space as scheme is the Krull dimension
 Cartesian products of affine spaces.
 !
 
-!ProjectiveScheme commentStamp: '<historical>' prior: 0!
+!ProjectiveScheme commentStamp: 'len 7/9/2019 08:56:03' prior: 0!
 A projective scheme is the projective (or homogeneous) spectrum Proj(R) of a graded commutative ring R, equipped with a sheaf of local rings (which makes it a locally ringed space). As a set, its elements are the relevant prime ideals of the associated homogeneous coordinate ring R.
 
-Proj(R) is contained in its affine cone Spec(R).!
+Proj(R) is contained in its affine cone Spec(R). See also AffineScheme.!
 
 !ProjectiveVariety commentStamp: '<historical>' prior: 0!
 Projective closed subschemes of a projective space (see ProjectiveSpace). Their homogeneous coordinate rings are quotient rings of multivariate polynomial rings by a homogeneous ideal, i.e. graded affine algebras. Their rational points are ProjectivePoints.
@@ -18727,11 +18727,11 @@ automorphisms
 embed: anInteger
 	^ anInteger "because in Smalltalk Fractions of denominator 1 are always reduced to their Integer numerator"! !
 
-!RationalField methodsFor: 'morphisms' stamp: 'len 9/25/2018 14:39:28'!
+!RationalField methodsFor: 'morphisms' stamp: 'len 7/10/2019 15:39:45'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
-	(aCodomain isRing and: [aCodomain characteristic = 0])
-		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain one * x numerator / (aCodomain one * x denominator)]].
+"	(aCodomain isRing and: [aCodomain characteristic = 0])
+		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain one * x numerator / (aCodomain one * x denominator)]]."
 	^ super to: aCodomain! !
 
 !RationalField methodsFor: 'operations' stamp: 'len 9/23/2018 01:37:20'!
@@ -33361,6 +33361,10 @@ lift
 numerator
 	^ numerator! !
 
+!Ratio methodsFor: 'accessing' stamp: 'len 7/10/2019 10:45:14'!
+parent
+	^ numerator parent fractions! !
+
 !Ratio methodsFor: 'accessing' stamp: 'len 4/23/2018 20:39:56'!
 representative
 	^ self numerator representative / self denominator representative! !
@@ -33568,10 +33572,10 @@ reduce
 	numerator _ num * mult.
 	denominator _ den * mult! !
 
-!RationalFunction class methodsFor: 'instance creation' stamp: 'len 5/18/2018 18:47:25'!
+!RationalFunction class methodsFor: 'instance creation' stamp: 'len 7/10/2019 10:36:38'!
 numerator: aPolynomial denominator: anotherPolynomial
 	| numerator denominator gcd c |
-	(numerator _ aPolynomial) isZero ifTrue: [^ numerator].
+	(numerator _ aPolynomial) isZero ifTrue: [^ self reducedNumerator: numerator denominator: numerator one].
 	denominator _ anotherPolynomial.
 	gcd _ numerator gcd: denominator.
 	numerator _ numerator /// gcd.
@@ -33580,7 +33584,6 @@ numerator: aPolynomial denominator: anotherPolynomial
 	c _ denominator leadingCoefficient reciprocal.
 	numerator _ numerator * c.
 	denominator _ denominator * c.
-	denominator = denominator one ifTrue: [^ numerator].
 	^ self reducedNumerator: numerator denominator: denominator! !
 
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
@@ -36244,7 +36247,7 @@ signature
 			h _ h ^ (1 - d) * (g ^ d)].
 	^ {r1. n - r1 / 2}! !
 
-!UnivariatePolynomial methodsFor: 'roots' stamp: 'len 5/13/2019 19:02:07'!
+!UnivariatePolynomial methodsFor: 'roots' stamp: 'len 7/10/2019 15:40:05'!
 zeroAddition: aPolynomial
 	"Answer a polynomial whose zeros are the addition of the receiver zeros with the zeros of the argument."
 	| f g R S X Y C |
@@ -37888,7 +37891,7 @@ apply: aMorphism
 conjugated
 	^ self collect: [:each| each conjugated]! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 9/22/2018 19:00:32'!
+!Tuple methodsFor: 'operations' stamp: 'len 7/10/2019 03:53:48'!
 content
 	"Answer the GCD of the coefficients of the receiver.
 	In a field, it is convenient to define the content as 1."
@@ -37902,7 +37905,7 @@ content
 					(self coefficients inject: self scalars zero into: [:gcd :each| gcd gcd: each * c]) / c]
 				ifFalse: [self scalars one]].
 	answer _ self scalars zero.
-	self coefficients do: [:each| answer _ answer gcd: each].
+	self do: [:each| answer _ answer gcd: each].
 	^ answer! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 11/12/2016 08:18'!
@@ -39163,12 +39166,12 @@ comatrix
 conjugated
 	^ self collect: [:each| each conjugated]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 2/28/2017 21:04:03'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 15:04:25'!
 determinant
 	self scalars isField
 		ifTrue: [^ (GaussianElimination on: self) determinant].
-	([self scalars isIntegralDomain] ifError: [false])
-		ifFalse: [self characteristicPolynomial independentCoefficient].
+"	([self scalars isIntegralDomain] ifError: [false])
+		ifFalse: [self characteristicPolynomial independentCoefficient]."
 	"^ self determinant2"
 	^ self characteristicPolynomial independentCoefficient! !
 
@@ -39395,7 +39398,7 @@ solveRight2: aMatrix
 		X _ X over: R].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 6/14/2019 01:50:47'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 04:16:26'!
 solveRight3: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	The argument can also be a tuple, in which case it is considered
@@ -39404,32 +39407,36 @@ solveRight3: aMatrix
 	A _ self.
 	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
 	R _ self scalars.
+"	((R isKindOf: RationalIntegerRing) and: [B width = 1])
+		ifTrue: [^ A solveRightInteger: B]."
 	X _ A solveRightGeneral: B.
 "	A * X = B ifFalse: [^ nil]."
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 6/14/2019 01:51:02'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 15:46:44'!
 solveRight: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	The argument can also be a tuple, in which case it is considered
 	as a column matrix and the returned value is also a tuple."
-	| R K A B M X |
+	| R A B X |
 	A _ self.
 	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
 	R _ self scalars.
-	R isIntegralDomain ifFalse: [self notYetImplemented].
-	R isField ifTrue: [K _ R] ifFalse: [K _ R fractions. A _ A over: K. B _ B over: K].
-	(A isSquare and: [A isFullRank])
-		ifTrue: [M _ A columnAugmented: B.
-				X _ M echelon copyFrom: 1@(self width + 1) to: M extent]
-		ifFalse: [X _ A solveRightGeneral: B].
-	A * X = B ifFalse: [^ nil "no solution"].
-	R = K ifFalse:
-		[(X allSatisfy: [:each| R isUnit: each denominator]) ifFalse: [^ nil "no solutions in R"].
-		X _ X over: R].
+	X _ R isField ifTrue: [A solveRightGeneral: B] ifFalse: [A solveRightByHNF: B].
+	A * X = B ifFalse: [^ nil].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 6/14/2019 01:51:19'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 16:53:40'!
+solveRightByHNF: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	Reference: Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
+	| G P n |
+	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((ZZ zeroMatrix: self width @ aMatrix width) rowAugmented: (ZZ identityMatrix: aMatrix width)).
+	P _ G HNFAndTransformation second.
+	n _ (P lastColumn findFirst: [:each| each isZero not]) - aMatrix width + 1.
+	^ (P copyFrom: n @ 1 to: n + aMatrix width - 1 @ self width) transposed negated! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 09:54:11'!
 solveRightGeneral: aMatrix
 	| n m reduction rows |
 	m _ aMatrix width.
@@ -41847,7 +41854,7 @@ matrix: aMatrix
 	matrix _ ColumnMatrix newFrom: aMatrix.
 	self run! !
 
-!HermiteColumnReduction methodsFor: 'as yet unclassified' stamp: 'len 5/30/2019 07:11:36'!
+!HermiteColumnReduction methodsFor: 'as yet unclassified' stamp: 'len 7/10/2019 16:42:08'!
 reduceStep: k row: i
 	| j0 b |
 	"2. Row finished?"
@@ -41855,7 +41862,7 @@ reduceStep: k row: i
 		detect: [:j| (matrix at: i@j) ~= 0]
 		ifNone: [(matrix at: i@k) < 0 ifTrue: [matrix multiplyColumn: k by: -1]. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
-	j0 _ ((j0 to: k) select: [:j| (matrix at: i@j) ~= 0]) detectMin: [:j| (matrix at: i@j) abs].
+	j0 _ ((k to: j0 by: -1) select: [:j| (matrix at: i@j) ~= 0]) detectMin: [:j| (matrix at: i@j) abs].
 	j0 < k ifTrue: [matrix swapColumn: j0 with: k].
 	(matrix at: i@k) < 0 ifTrue: [matrix multiplyColumn: k by: -1].
 	b _ matrix at: i@k.
@@ -41895,31 +41902,6 @@ run
 !HermiteColumnReduction class methodsFor: 'instance creation' stamp: 'len 9/28/2018 19:47:06'!
 on: aMatrix
 	^ self new matrix: aMatrix! !
-
-!MatrixReduction methodsFor: 'operations' stamp: 'len 5/30/2019 07:21:15'!
-addRow: i0 times: aNumber toRow: i1
-	self addRow: i0 times: aNumber toRow: i1 startingAt: 1! !
-
-!MatrixReduction methodsFor: 'operations' stamp: 'len 5/30/2019 07:20:22'!
-addRow: i0 times: aNumber toRow: i1 startingAt: startIndex
-	matrix addRow: i0 times: aNumber toRow: i1 startingAt: startIndex.
-	extension notNil ifTrue: [extension addRow: i0 times: aNumber toRow: i1]! !
-
-!MatrixReduction methodsFor: 'operations' stamp: 'len 1/19/2018 21:38:21'!
-multiplyRow: i by: aNumber
-	self multiplyRow: i by: aNumber startingAt: 1! !
-
-!MatrixReduction methodsFor: 'operations' stamp: 'len 1/19/2018 21:38:50'!
-multiplyRow: i by: aNumber startingAt: startIndex
-	matrix multiplyRow: i by: aNumber startingAt: startIndex.
-	extension notNil ifTrue: [extension multiplyRow: i by: aNumber].
-	determinantFactor _ determinantFactor * aNumber! !
-
-!MatrixReduction methodsFor: 'operations' stamp: 'len 12/27/2015 03:04'!
-swapRow: i with: j
-	matrix swapRow: i with: j.
-	extension notNil ifTrue: [extension swapRow: i with: j].
-	determinantFactor _ determinantFactor negated! !
 
 !MatrixReduction methodsFor: 'accessing' stamp: 'len 4/5/2018 15:35:51'!
 dependentColumns
@@ -41979,6 +41961,34 @@ matrix: aMatrix extension: anotherMatrix
 	extension _ anotherMatrix ifNotNil: [RowMatrix newFrom: anotherMatrix].
 	determinantFactor _ aMatrix scalars one.
 	self run! !
+
+!MatrixReduction methodsFor: 'operations' stamp: 'len 5/30/2019 07:21:15'!
+addRow: i0 times: aNumber toRow: i1
+	self addRow: i0 times: aNumber toRow: i1 startingAt: 1! !
+
+!MatrixReduction methodsFor: 'operations' stamp: 'len 7/10/2019 16:34:23'!
+addRow: i0 times: aNumber toRow: i1 startingAt: startIndex
+	"Transcript cr; show: 'addRow: ', i0 printString, ' toRow: ', i1 printString, ' startingAt: ', startIndex printString."
+	matrix addRow: i0 times: aNumber toRow: i1 startingAt: startIndex.
+	extension notNil ifTrue: [extension addRow: i0 times: aNumber toRow: i1]! !
+
+!MatrixReduction methodsFor: 'operations' stamp: 'len 1/19/2018 21:38:21'!
+multiplyRow: i by: aNumber
+	self multiplyRow: i by: aNumber startingAt: 1! !
+
+!MatrixReduction methodsFor: 'operations' stamp: 'len 7/10/2019 16:34:29'!
+multiplyRow: i by: aNumber startingAt: startIndex
+	"Transcript cr; show: 'multiplyRow: ', i printString, ' by: ', aNumber printString, ' startingAt: ', startIndex printString."
+	matrix multiplyRow: i by: aNumber startingAt: startIndex.
+	extension notNil ifTrue: [extension multiplyRow: i by: aNumber].
+	determinantFactor _ determinantFactor * aNumber! !
+
+!MatrixReduction methodsFor: 'operations' stamp: 'len 7/10/2019 16:34:36'!
+swapRow: i with: j
+	"Transcript cr; show: 'swapRow: ', i printString, ' with: ', j printString."
+	matrix swapRow: i with: j.
+	extension notNil ifTrue: [extension swapRow: i with: j].
+	determinantFactor _ determinantFactor negated! !
 
 !MatrixReduction class methodsFor: 'instance creation' stamp: 'len 12/26/2015 05:41'!
 on: aMatrix
@@ -42084,7 +42094,7 @@ oldreduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 6/18/2019 09:03:30'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 7/10/2019 16:32:43'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -42093,7 +42103,7 @@ reduceStep: k column: j
 		detect: [:i| (matrix at: i@j) isZero not]
 		ifNone: [self multiplyRow: k by: (matrix at: k@j) associatedUnit reciprocal. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
-	i0 _ ((i0 to: k by: -1) select: [:i| (matrix at: i@j) isZero not]) detectMin: [:i| (matrix at: i@j) valuation].
+	i0 _ ((k to: i0) select: [:i| (matrix at: i@j) isZero not]) detectMin: [:i| (matrix at: i@j) valuation].
 	i0 > k ifTrue: [self swapRow: i0 with: k].
 	self multiplyRow: k by: (matrix at: k@j) associatedUnit reciprocal.
 	b _ matrix at: k@j.
@@ -42102,7 +42112,7 @@ reduceStep: k column: j
 		q _ (matrix at: i@j) // b.
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 6/9/2019 09:39:23'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 7/10/2019 16:04:00'!
 run
 	| n m k j l b |
 	m _ matrix height.
