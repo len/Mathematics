@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 20 June 2019 at 7:23:34 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 July 2019 at 4:56:05 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 147!
+!provides: 'MathematicsTests' 1 148!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -132,6 +132,16 @@ TestCase subclass: #MatrixTest
 	category: 'MathematicsTests'!
 !classDefinition: 'MatrixTest class' category: #MathematicsTests!
 MatrixTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #ModularIntegersTest category: #MathematicsTests!
+TestCase subclass: #ModularIntegersTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MathematicsTests'!
+!classDefinition: 'ModularIntegersTest class' category: #MathematicsTests!
+ModularIntegersTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #ModularTest category: #MathematicsTests!
@@ -1456,7 +1466,7 @@ testLinearSubspaceAsAlgebraicVariety
 	self assert: (V satisfies: (S e: 1)).
 	self assert: (V satisfies: (S e: 2))! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 2/10/2017 19:10:14'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 7/1/2019 09:04:27'!
 testLocalAndGlobalDimension
 	"'A Singluar Introduction to Commutative Algebra', Example A.8.4 (local and global dimension)."
 	| R I X |
@@ -1464,9 +1474,9 @@ testLocalAndGlobalDimension
 	I _ R * (R generate: [:x :y :z| {x*z. y*z}]).
 	X _ (R / I) spec.
 	self assert: X dimension = 2. "global dimension of X"
-	self assert: (X !! (0,0,0)) localRing dimension = 2. "dimension of X at (0,0,0)"
-	self assert: (X !! (1,0,0)) localRing dimension = 2. "dimension of X at (1,0,0)"
-	self assert: (X !! (0,0,1)) localRing dimension = 1. "dimension of X at (0,0,1)"! !
+	self assert: (X !! (0,0,0)) stalk dimension = 2. "dimension of X at (0,0,0)"
+	self assert: (X !! (1,0,0)) stalk dimension = 2. "dimension of X at (1,0,0)"
+	self assert: (X !! (0,0,1)) stalk dimension = 1. "dimension of X at (0,0,1)"! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 6/10/2019 14:54:26'!
 testMorphismsOfProjectiveVarieties
@@ -1779,6 +1789,17 @@ testProjectiveSpaceOverFiniteField
 	S _ P pointsOver: (ZZ/3 extensionDegree: 2).
 	self assert: S size = 10.
 	self assert: S asSet size = 10! !
+
+!AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 7/8/2019 13:37:55'!
+testProjectiveSpaceOverModularIntegers
+	| N n P numberOfPoints |
+	N _ (2 to: 12) atRandom.
+	n _ (1 to: 3) atRandom.
+	P _ ProjectiveSpace new: n over: ZZ/N.
+	"formula from Cohen's 'A course in computational algebraic number theory' page 486:"
+	numberOfPoints _ N^n * (N factors asSet product: [:p| (0 to: n) sum: [:i| 1/(p^i)]]).
+	self assert: P points asSet size = numberOfPoints.
+	self assert: P points size = numberOfPoints! !
 
 !AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 10/17/2016 11:30'!
 testRationalMap
@@ -3786,20 +3807,6 @@ testFundamentalDiscriminant
 	self assert: ((0 to: -31 by: -1) select: [:each| each isFundamentalDiscriminant]) = #(-3 -4 -7 -8 -11 -15 -19 -20 -23 -24 -31) 
 ! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/16/2016 13:35:43'!
-testGaloisFields
-	| GF pi x one a |
-	GF _ GaloisField new: 3^3.
-	self assert: GF isField.
-	self assert: GF characteristic = 3.
-	pi _ GF projection.
-	x _ pi domain x.
-	one _ pi domain one.
-	a _ pi value: x^2 + one.
-	self assert: a * a reciprocal = GF one.
-	[(a _ GF atRandom) isZero] whileTrue.
-	self assert: a * a reciprocal = GF one! !
-
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2016 21:56'!
 testInfinity
 	self assert: Infinity positive > Infinity negative.
@@ -3883,22 +3890,6 @@ testKroneckerSymbol
 testLegendreSymbol
 	self assert: ((1 to: 10) collect: [:k| k legendre: 43]) = #(1 -1 -1 1 -1 1 -1 -1 1 1)! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/23/2018 20:55:15'!
-testModularIntegerLift
-	self assert: (2 to: 100 :: allSatisfy: [:m| 1 to: m :: allSatisfy: [:x| x % m :: lift % m = (x % m)]])! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:17:48'!
-testModularIntegersField
-	| F a b |
-	F _ ZZ / 7.
-	self assert: F isField.
-	self assert: F characteristic = 7.
-	a _ F projection value: 3.
-	b _ F projection value: 5.
-	self assert: a * a reciprocal = F one.
-	self assert: a * 7 = F zero.
-	self assert: b ^ (F size - 1) = F one "Euler's theorem"! !
-
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 7/2/2016 21:04'!
 testPartitions
 	self assert: 42 partitions size =  53174! !
@@ -3951,13 +3942,6 @@ testPrimeSignature
 	self assert: 42 primeSignature = #(1 1 1).
 	self assert: 16 primeSignature = #(4)! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/29/2016 07:26:17'!
-testQuadraticResiduesModp
-	| F |
-	F _ PrimeField new: 1000 atRandom nextPrime.
-	self assert: F atRandom squared isQuadraticResidue.
-	self assert: ((1000 count: [F atRandom isQuadraticResidue]) between: 400 and: 600)! !
-
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/21/2016 20:21:11'!
 testRadicalAndIsSquareFree
 	| n |
@@ -3974,41 +3958,6 @@ testRealIntervalIntersects
 	self assert: (I intersects: J).
 	J _ RealInterval closed: -2 closed: -1.
 	self assert: (I intersects: J) not! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/9/2018 23:36:44'!
-testSmallPrimeField
-	| p F E |
-	p _ 20 atRandom nextPrime.
-	F _ ZZ/p.
-	E _ SmallPrimeField new: p.
-	F do: [:a|
-		F do: [:b| | c d |
-			c _ E !! a representative.
-			d _ E !! b representative.
-			self assert: (a+b) representative = (c+d) representative.
-			self assert: (a-b) representative = (c-d) representative.
-			self assert: (a*b) representative = (c*d) representative.
-			b isZero ifFalse:
-				[self assert: (a/b) representative = (c/d) representative.
-				self assert: b reciprocal representative = d reciprocal representative]]]! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 9/2/2018 21:43:27'!
-testSmallPrimeFieldTables
-	| p F g |
-	p _ 20 atRandom nextPrime.
-	F _ SmallPrimeField new: p.
-	g _ F primitiveRoot.
-	1 to: p-1 do: [:n| self assert: (F expTable at: n) = (g^n) representative].
-	0 to: p-2 do: [:n| self assert: (F logTable at: (g^n) representative) = n]! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/29/2016 08:24:12'!
-testSquareRootModp
-	| F a |
-	100 timesRepeat:
-		[F _ PrimeField new: (1000 atRandom + 1) nextPrime.
-		a _ F atRandom.
-		a _ a squared.
-		self assert: a squareRoot * a squareRoot = a]! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 3/3/2016 23:22'!
 testWord
@@ -4048,10 +3997,6 @@ testYoungTableauxStandard
 	self assert: T isStandard.
 	self assert: T weight = #(1 1 1 1 1 1 1 1).
 	self assert: T shape = #(4 3 1)! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 2/28/2017 19:31:13'!
-testZ6IsNotPID
-	self assert: (ZZ/6) isPID not! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/1/2017 17:10:52'!
 newRandomMatrix: dim over: aRing
@@ -4275,6 +4220,43 @@ testBacklash
 	self assert: X = (QQ matrix: 3@2 coefficients: {-1/7. -11/7. 4/7. 23/7. 0. 0}).
 	self assert: A * X = B! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:07:38'!
+testBacklashIntegerTuple
+	"Example from Sage documentation."
+	| A v x |
+	A _ ZZ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
+	v _ ZZ tuple: #(-1 -2).
+	x _ A \ v.
+"	self assert: x = (ZZ tuple: #(-1 0 0))."
+	self assert: A * x = v! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:04:45'!
+testBacklashIntegerTuple2
+	"Example from GAP manual."
+	| A b |
+	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transposed.
+	b _ ZZ tuple: #(95 115 182).
+"	x _ ZZ tuple: #(2285 -5854 4888 -1299 0)." "<- GAP comes up with this solution, but this is not very small"
+	self assert: A * (A \ b) = b! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:07:09'!
+testBacklashIntegerTuple3
+	| A b |
+	A _ ZZ matrix: #((-8 1 -7 -9 -2 -1) (5 -2 3 -3 1 1) (7 0 6 4 -5 -8) (-7 -10 5 9 -4 4) (3 -4 1 -2 3 -8) (-7 3 2 6 7 -1) (4 8 5 1 -8 -9) (9 5 0 -10 -8 8) (-6 2 -6 -9 -5 6)).
+	A _ A transposed.
+	b _ ZZ tuple: #(3 -1 -1 -7 9 8).
+	"x _ ZZ tuple: #(38 25 -6 1 -34 -12 3 -3 -44)." "shortest solution"
+	self assert: A * (A \ b) = b! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:04:22'!
+testBacklashIntegerTupleBug
+	| A b x |
+	A _ ZZ matrix: 3@3 coefficients: #(1 0 0 0 1 0 0 0 10).
+	b _ ZZ tuple: #(0 0 10).
+	x _ A \ b.
+	self assert: A * x = b! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/7/2017 08:48:20'!
 testBacklashNoSolution
 	"Example from Sage documentation."
@@ -4321,6 +4303,24 @@ testBacklashPascal3Magic3
 	self assert: X = (ZZ matrix: 3 coefficients: #(19 -3 -1 -17 4 13 6 0 -6)).
 	self assert: A * X = B! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:05:10'!
+testBacklashRationalTuple
+	"Example from Sage documentation."
+	| A v x |
+	A _ QQ matrix: 3 coefficients: #(1 2 3 -1 2 5 2 3 1).
+	v _ (1,2,3).
+	x _ A \ v.
+	self assert: x = (-13/12,(23/12),(-7/12)).
+	self assert: A * x = v! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:05:22'!
+testBacklashRationalTuple2
+	"Example from GAP manual."
+	| A |
+	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
+! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:38:35'!
 testBacklashSingular
 	"Example from Sage documentation."
@@ -4331,34 +4331,6 @@ testBacklashSingular
 	self assert: X = (QQ matrix: 3@2 coefficients: (6, -6, 0, 0, 0, 0)).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:29:12'!
-testBacklashTuple
-	"Example from Sage documentation."
-	| A v x |
-	A _ QQ matrix: 3 coefficients: #(1 2 3 -1 2 5 2 3 1).
-	v _ (1,2,3).
-	x _ A \ v.
-	self assert: x = (-13/12,(23/12),(-7/12)).
-	self assert: A * x = v! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2019 12:12:57'!
-testBacklashTuple2OverQ
-	"Example from GAP manual."
-	| A |
-	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
-! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 23:40:42'!
-testBacklashTuple2OverZ
-	"Example from GAP manual."
-	| A b x |
-	A _ ZZ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
-	b _ ZZ tuple: #(95 115 182).
-	x _ ZZ tuple: #(2285 -5854 4888 -1299 0).
-	self assert: A \ b = x! !
-
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:30:12'!
 testBacklashTupleNonSquare
 	"Example from Sage documentation."
@@ -4368,24 +4340,6 @@ testBacklashTupleNonSquare
 	x _ A \ v.
 	self assert: x = (-1/2, 0, 0).
 	self assert: A * x = v! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:32:09'!
-testBacklashTupleOverZ
-	"Example from Sage documentation."
-	| A v x |
-	A _ ZZ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
-	v _ ZZ tuple: #(-1 -2).
-	x _ A \ v.
-	self assert: x = (ZZ tuple: #(-1 0 0)).
-	self assert: A * x = v! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/19/2018 20:41:45'!
-testBacklashTupleOverZBug
-	| A b x |
-	A _ ZZ matrix: 3@3 coefficients: #(1 0 0 0 1 0 0 0 10).
-	b _ ZZ tuple: #(0 0 10).
-	x _ A \ b.
-	self assert: A * x = b! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
 testCokernelMatrix
@@ -4568,6 +4522,14 @@ testHermiteNormalForm
 	M _ ZZ ^ (4@4).
 	A _ M rows: { (3,3,1,4). (0,1,0,0). (0,0,19,16). (0,0,0,3) }.
 	H _ M rows: { (3,0,1,1). (0,1,0,0). (0,0,19,1). (0,0,0,3) }.
+	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/10/2019 15:58:34'!
+testHermiteNormalForm10
+	"Bug."
+	| A H |
+	A _ ZZ matrix: #((1 2 3 0) (1 2 3 1)).
+	H _ ZZ matrix: #((1 2 3 0) (0 0 0 1)).
 	self assert: A HNF = H! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/15/2016 23:54'!
@@ -4838,6 +4800,98 @@ testSmithNormalFormOverPolynomialsOverPrimeField2
 	ax _ a identity * x - a.
 	self assert: ax SNF = (P diagonalMatrix: {P one. P one. x - 1. x^2 - 1. x^2 - 1}).
 	self assert: ax elementaryDivisors = {P one. P one. x - 1. x^2 - 1. x^2 - 1}! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:20:49'!
+testGaloisFields
+	| GF pi x one a |
+	GF _ GaloisField new: 3^3.
+	self assert: GF isField.
+	self assert: GF characteristic = 3.
+	pi _ GF projection.
+	x _ pi domain x.
+	one _ pi domain one.
+	a _ pi value: x^2 + one.
+	self assert: a * a reciprocal = GF one.
+	[(a _ GF atRandom) isZero] whileTrue.
+	self assert: a * a reciprocal = GF one! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:16'!
+testModularIntegerLift
+	self assert: (2 to: 100 :: allSatisfy: [:m| 1 to: m :: allSatisfy: [:x| x % m :: lift % m = (x % m)]])! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:24'!
+testModularIntegersField
+	| F a b |
+	F _ ZZ / 7.
+	self assert: F isField.
+	self assert: F characteristic = 7.
+	a _ F projection value: 3.
+	b _ F projection value: 5.
+	self assert: a * a reciprocal = F one.
+	self assert: a * 7 = F zero.
+	self assert: b ^ (F size - 1) = F one "Euler's theorem"! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:40'!
+testQuadraticResiduesModp
+	| F |
+	F _ PrimeField new: 1000 atRandom nextPrime.
+	self assert: F atRandom squared isQuadraticResidue.
+	self assert: ((1000 count: [F atRandom isQuadraticResidue]) between: 400 and: 600)! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:54'!
+testSmallPrimeField
+	| p F E |
+	p _ 20 atRandom nextPrime.
+	F _ ZZ/p.
+	E _ SmallPrimeField new: p.
+	F do: [:a|
+		F do: [:b| | c d |
+			c _ E !! a representative.
+			d _ E !! b representative.
+			self assert: (a+b) representative = (c+d) representative.
+			self assert: (a-b) representative = (c-d) representative.
+			self assert: (a*b) representative = (c*d) representative.
+			b isZero ifFalse:
+				[self assert: (a/b) representative = (c/d) representative.
+				self assert: b reciprocal representative = d reciprocal representative]]]! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:22:01'!
+testSmallPrimeFieldTables
+	| p F g |
+	p _ 20 atRandom nextPrime.
+	F _ SmallPrimeField new: p.
+	g _ F primitiveRoot.
+	1 to: p-1 do: [:n| self assert: (F expTable at: n) = (g^n) representative].
+	0 to: p-2 do: [:n| self assert: (F logTable at: (g^n) representative) = n]! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:29:37'!
+testSquareRootModulo2
+	| F |
+	F _ PrimeField new: 2.
+	self assert: F zero squareRoot = F zero.
+	self assert: F one squareRoot = F one! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:26:30'!
+testSquareRootModuloPrime
+	| F a x |
+	100 timesRepeat:
+		[F _ PrimeField new: (1000 atRandom + 1) nextPrime.
+		a _ F atRandom squared.
+		x _ a squareRoot.
+		self assert: x squared = a]! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 12:54:16'!
+testSquareRootModuloPrimePower
+	| F a x |
+	100 timesRepeat:
+		[F _ PrimePowerRing new: 10 atRandom nextPrime to: 3 atRandom.
+		a _ F atRandom squared.
+		x _ a squareRoot.
+		self assert: x squared = a]! !
+
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:22:18'!
+testZ6IsNotPID
+	self assert: (ZZ/6) isPID not! !
 
 !ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
 testGamma0Index
@@ -5244,18 +5298,25 @@ testSubmoduleInclusionOverRationalPolynomials
 testSubmoduleInclusionOverZ
 	self testSubmoduleInclusionOver: ZZ! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 19:38:30'!
+!ModuleTest methodsFor: 'other' stamp: 'len 7/10/2019 16:45:30'!
 testSubmoduleIntersection
 	| V S T T2 |
 	V _ ZZ ^ 3.
 	S _ V span: {(1, 1, 1). (2, 0, -2)}.
-	self assert: S /\ S ambientSpace = S. "intersection with the ambient vector space Q^3"
+"	self assert: S /\ S ambientSpace = S." "intersection with the ambient vector space Q^3"
 	self assert: S /\ V = S. "intersection with over lattice Z^3"
 	self assert: S /\ S = S.
 	T _ V span: {(3,1,-1)}.
 	self assert: S /\ T = T.
 	T2 _ V span: {(3,1,-1). (0,1,0)}.
 	self assert: S /\ T2 = T! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 7/10/2019 16:45:16'!
+testSubmoduleIntersectionWithAmbientSpace
+	| V S |
+	V _ ZZ ^ 3.
+	S _ V span: {(1, 1, 1). (2, 0, -2)}.
+	self assert: S /\ S ambientSpace = S "intersection with the ambient vector space Q^3"! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 4/10/2018 16:32:42'!
 testSubmoduleSum
@@ -7624,20 +7685,52 @@ testLocalizationInclusions
 	self deny: Z2 >= Z3.
 	self deny: Z2 >= Z6! !
 
-!RingTest methodsFor: 'localizations' stamp: 'len 1/23/2018 21:20:02'!
+!RingTest methodsFor: 'localizations' stamp: 'len 6/29/2019 18:20:30'!
 testLocalizationMaximalIdeal
 	| Z2 |
 	Z2 _ ZZ localizationAt: 2.
-	self assert: Z2 maximalIdeal = (Z2 * 2)! !
+	self assert: Z2 maximalIdeal = (Z2 * (Z2 !! 2))! !
 
-!RingTest methodsFor: 'localizations' stamp: 'len 5/13/2019 18:12:46'!
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:16:41'!
+testLocalizationOfModularIntegers1
+	| R |
+	R _ ZZ/60.
+	self assert: (R localizationAt: (R*2)) = (ZZ/4).
+	self assert: (R localizationAt: (R*3)) = (ZZ/3).
+	self assert: (R localizationAt: (R*5)) = (ZZ/5)! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:47'!
+testLocalizationOfModularIntegers2
+	| R P L phi |
+	R _ ZZ/60.
+	P _ R*2.
+	L _ R localizationAt: P. "the localization is actually the prime power ring Z/4Z"
+	"localization map:"
+	phi _ R -> L.
+	self testRingHomomorphism: phi.
+	"everything not in P maps to a unit:"
+	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:56'!
+testLocalizationOfModularIntegers3
+	| R P L phi |
+	R _ ZZ/60.
+	P _ R*3.
+	L _ R localizationAt: P. "the localization is actually the field GF(3)"
+	"localization map:"
+	phi _ R -> L.
+	self testRingHomomorphism: phi.
+	"everything not in P maps to a unit:"
+	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 6/29/2019 18:24:23'!
 testLocalizationOfZAt2
 	| L |
 	L _ ZZ localizationAt: 2.
-	self assert: (L includes: 1/3).
-	self assert: (L includes: 3/2) not.
-	self assert: (L includes: 2).
-	self assert: (L includes: 3).
+	self assert: (L !! (1/3)) asFraction = (1/3).
+	self should: [L !! (3/2)] raise: Error.
+	self assert: (L !! 2) asFraction = 2.
+	self assert: (L !! 3) asFraction = 3.
 	self assert: (L atRandomBits: 10) denominator odd.
 	self testRing: L.
 	self testRingHomomorphism: ZZ -> L! !
@@ -7710,12 +7803,39 @@ testQuotientRingWhichIsAField
 	R _ R / (R x^2 + (R x * 2) + 2).
 	self assert: R isField! !
 
+!RingTest methodsFor: 'local rings' stamp: 'len 6/26/2019 13:00:09'!
+testDVR: V
+	| a b p |
+	self assert: V isLocal.
+	self assert: V isIntegralDomain.
+	self assert: V isEuclidean.
+	self assert: V one valuation = 0.
+	p _ V uniformizer.
+	self assert: p valuation = 1.
+	a _ V atRandomBits: 100.
+	self assert: (a*p) valuation = (a valuation + 1).
+	b _ V atRandomBits: 100.
+	self assert: (a*b) valuation = (a valuation + b valuation)! !
+
 !RingTest methodsFor: 'local rings' stamp: 'len 6/4/2019 18:28:31'!
 testLocalHomomorphism
 	| f |
 	f _ ZZ/4 to: ZZ/2 evaluating: [:x| ZZ/2 !! x representative].
 	self assert: f isLocal
 ! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:28'!
+testValuationRing1
+	| V |
+	V _ ZZ localizationAt: 5.
+	self testRing: V.
+	self testRingHomomorphism: V -> QQ! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:37'!
+testValuationRing2
+	| V |
+	V _ ZZ localizationAt: 5.
+	self testDVR: V! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 01:27:43'!
 testCongruenceSolving1
@@ -8017,6 +8137,20 @@ testProductOfEuclideanRingsIsEuclidean3
 	R _ A × B × C.
 	self testEuclideanRing: R! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/20/2019 19:30:36'!
+testProductRingGCD
+	| A B |
+	A _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
+	B _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
+	self testGCD: A × B! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/20/2019 19:30:46'!
+testProductRingLCM
+	| A B |
+	A _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
+	B _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
+	self testLCM: A × B! !
+
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:17:02'!
 testRationalIntegerRingGCDAndLCM
 	self testGCD: ZZ.
@@ -8025,6 +8159,24 @@ testRationalIntegerRingGCDAndLCM
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:46:15'!
 testRationalIntegerRingIsEuclidean
 	self testEuclideanRing: ZZ! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/29/2019 18:02:47'!
+testValuationRingGCD
+	| R |
+	R _ ZZ localizationAt: 5.
+	self testGCD: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/29/2019 18:02:57'!
+testValuationRingIsEuclidean
+	| R |
+	R _ ZZ localizationAt: 5.
+	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 6/29/2019 18:03:06'!
+testValuationRingLCM
+	| R |
+	R _ ZZ localizationAt: 5.
+	self testLCM: R! !
 
 !RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
 rootSystem1
