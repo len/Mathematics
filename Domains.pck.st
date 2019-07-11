@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 July 2019 at 4:53:53 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 11 July 2019 at 9:15:42 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 538!
+!provides: 'Domains' 1 539!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -35720,11 +35720,11 @@ equalDegreeFactorization2: d
 			h _ h << 2].
 	^ factors! !
 
-!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 4/25/2018 16:52:42'!
+!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 7/11/2019 05:34:11'!
 factorizationFiniteField
 	| answer |
 	answer _ Bag new.
-	self squareFreeFactorizationFiniteField withOccurrencesDo: [:f :r|
+	self monic squareFreeFactorizationFiniteField withOccurrencesDo: [:f :r|
 		f distinctDegreeFactorization keysAndValuesDo: [:d :g|
 			(g equalDegreeFactorization: d) do: [:each| answer add: each withOccurrences: r]]].
 	^ answer! !
@@ -35866,11 +35866,12 @@ landauMignotteBound
 	h _ d // 2.
 	^ (d - 1 choose: h) * self norm2 + (d - 1 choose: h - 1)! !
 
-!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 4/26/2018 00:04:16'!
+!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 7/11/2019 09:08:36'!
 squareFreeFactorizationFiniteField
 	"Answer the square-free decomposition of a monic polynomial."
 	"NOTE: this only works on prime fields. For non-prime fields, after substituting x^p by x we must also apply the inverse of the Frobenius automorphism to the coefficients."
 	| answer f one p i g c w y z |
+	self isMonic ifFalse: [self error: 'not monic'].
 	answer _ Bag new.
 	f _ self.
 	one _ f one.
@@ -39530,6 +39531,12 @@ LLL
 	"Answer the LLL reduced form of the receiver."
 	^ Matrix rows: (LLL basis: self rows) reducedBasis! !
 
+!Matrix methodsFor: 'reduction' stamp: 'len 7/11/2019 06:01:09'!
+PRCF
+	"Answer the primary rational canonical form of the receiver, assuming it's a square matrix over a field.
+	The PRCF reflects a decomposition of the vector space into a maximal number of cyclic subspaces. Unlike the RCF, finding this form requires factorization of polynomials over the coefficients field, and as a consequence the primary rational canonical form may change when the same matrix is considered over an extension field of the coefficients field."
+	^ self primaryInvariantFactors inject: (self scalars matrix: #()) into: [:matrix :each| matrix  each companion]! !
+
 !Matrix methodsFor: 'reduction' stamp: 'len 3/18/2018 14:44:50'!
 Q
 	"Perform the Gram-Schmidt orthonormalization process on the columns of the receiver and answer Q (from the QR factorization)."
@@ -39543,16 +39550,11 @@ QR
 	R _ Q transposed * self.
 	^ {Q. R}! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 6/9/2019 11:17:35'!
+!Matrix methodsFor: 'reduction' stamp: 'len 7/11/2019 06:05:41'!
 RCF
-	"Answer the Frobenius normal form (or rational canonical form) of the receiver, assuming it's a square matrix over a field."
-	| R P a ax x |
-	R _ self scalars.
-	P _ R polynomials.
-	x _ P x.
-	a _ self over: P.
-	ax _ a identity * x - a.
-	^ ax elementaryDivisors inject: (self scalars matrix: #()) into: [:matrix :each| matrix  each companion]! !
+	"Answer the Frobenius normal form (or rational canonical form) of the receiver, assuming it's a square matrix over a field.
+	The RCF of a matrix A reflects a minimal decomposition of the vector space into subspaces that are cyclic for A (i.e., spanned by some vector and its repeated images under A). A matrix B is similar to A iff it has the same rational canonical form as A. Unlike the PRCF, finding this form doesn't require factorization of polynomials or any operation that might change when extending the coefficients field (hence the 'rational'), showing that matrix similarity does not change upon field extensions."
+	^ self invariantFactors inject: (self scalars matrix: #()) into: [:matrix :each| matrix  each companion]! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 6/12/2019 12:02:37'!
 SNF
@@ -39723,6 +39725,17 @@ elementaryDivisors
 	self scalars isField ifTrue: [^ (1 to: self rank) collect: [:each| self scalars one]].
 	^ self SNF diagonal asArray select: [:each| each isZero not]! !
 
+!Matrix methodsFor: 'reduction' stamp: 'len 7/11/2019 05:44:53'!
+invariantFactors
+	"Answer the invariant factors of the receiver, corresponding to the Frobenius normal form (or rational canonical form), assuming it's a square matrix over a field."
+	| R P a ax x |
+	R _ self scalars.
+	P _ R polynomials.
+	x _ P x.
+	a _ self over: P.
+	ax _ a identity * x - a.
+	^ ax elementaryDivisors select: [:each| each degree > 0]! !
+
 !Matrix methodsFor: 'reduction' stamp: 'len 4/7/2018 06:26:26'!
 jordan
 	"Answer the Jordan blocks of the receiver's Jordan normal form."
@@ -39766,6 +39779,10 @@ orthogonalized
 orthonormalized
 	"Perform the Gram-Schmidt orthonormalization process on the rows of the receiver."
 	^ Matrix rows: (self orthogonalized rows collect: [:each| each / each norm])! !
+
+!Matrix methodsFor: 'reduction' stamp: 'len 7/11/2019 05:53:11'!
+primaryInvariantFactors
+	^ self characteristicPolynomial factors! !
 
 !Matrix methodsFor: 'reduction' stamp: 'len 1/19/2018 22:15:38'!
 reduction
