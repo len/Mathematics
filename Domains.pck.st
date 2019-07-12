@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 11 July 2019 at 9:15:42 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 5:09:58 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 539!
+!provides: 'Domains' 1 540!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -39007,10 +39007,12 @@ adjoint
 	self scalars isComplex ifTrue: [^ self transposed conjugated].
 	^ self error: 'not real or complex matrix'! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 12/22/2015 21:12'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 05:04:20'!
 adjugate
 	"Answer the adjugate matrix (or classical adjoint matrix) of the receiver. This is the matrix such that multiplicated at the left by the receiver equals the scalar matrix with the determinant of the receiver in the diagonal."
-	^ (self characteristicPolynomial shift: -1) negated value: self! !
+	| f |
+	f _ self characteristicPolynomial shift: -1.
+	^ (self height odd ifTrue: [f] ifFalse: [f negated]) value: self! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 3/3/2017 11:39:21'!
 antitransposed
@@ -39023,12 +39025,12 @@ apply: aMorphism
 		ifTrue: [^ aMorphism codomain matrix: self extent evaluating: [:i :j| aMorphism value: (self at: i@j)]].
 	^ DomainError signal! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/29/2019 10:21:27'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 05:04:53'!
 berkowitz
 	"Answer the coefficients of the characteristic polynomial of the receiver. It's computed by the Berkowitz algorithm, using small space in comparision with classic gaussian elimination."
 	| vect C Ar R S Q one |
 	one _ self scalars one.
-	self height = 1 ifTrue: [^ self scalars tuple: { one negated. (self at: 1@1) }].
+	self height = 1 ifTrue: [^ self scalars tuple: {one. (self at: 1@1) negated}].
 	self height = 2 ifTrue:
 			[^ self scalars tuple:
 				{one.
@@ -39041,7 +39043,7 @@ berkowitz
 		(self at: 2@2) * (self at: 1@1) - ((self at: 1@2) * (self at: 2@1))}.
 
 	3 to: self height do: [:r|
-		C _ (self scalars ^ (r+1 @ r)) zero.
+		C _ self scalars zeroMatrix: r+1 @ r.
 		Ar _ self copyFrom: 1@1 to: r-1 @ (r-1).
 
 		R _ (self rowAt: r) copyFrom: 1 to: r-1.
@@ -39055,7 +39057,7 @@ berkowitz
 
 		C at: 4@1 put: (R · Q).
 
-		3 to: r-1 do: [ :i |
+		3 to: r-1 do: [:i|
 			Q _ Ar * Q.
 			C at: i+2 @ 1 put: (R · Q)].
 
@@ -39065,33 +39067,32 @@ berkowitz
 
 		vect _ C * vect].
 
-	^ vect! !
+	^ self height even ifTrue: [vect] ifFalse: [vect negated]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:39:48'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 05:06:04'!
 berkowitz: x
+	"Answer the evaluation of the characteristic polynomial at x by Berkowitz algorithm."
 	| polcar vect r power |
-
 	r _ self height + 1.
 	vect _ self berkowitz.
 	polcar _ x zero.
 	power _ x one.
-	r to: 1 by: -1 do: [ :i |
+	r to: 1 by: -1 do: [:i|
 		polcar _ power * (vect at: i) + polcar.
 		power _ power * x].
+	^ polcar! !
 
-	^ r odd ifTrue: [polcar] ifFalse: [polcar negated]! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 4/7/2018 06:23:36'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 03:31:20'!
 characteristicMatrix
-	"Answer the characteristic matrix A - xI."
+	"Answer the characteristic matrix xI - A."
 	| P x |
 	P _ self scalars polynomials.
 	x _ P x.
 	^ P matrix: self extent
 		evaluating: [:i :j|
 			i == j
-				ifTrue: [(P constant: (self at: i @ j)) - x]
-				ifFalse: [P constant: (self at: i @ j)]]! !
+				ifTrue: [x - (P constant: (self at: i @ j))]
+				ifFalse: [P constant: (self at: i @ j) negated]]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:49:16'!
 characteristicPolynomial
@@ -39167,18 +39168,20 @@ comatrix
 conjugated
 	^ self collect: [:each| each conjugated]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 15:04:25'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 04:52:39'!
 determinant
+	| a0 |
 	self scalars isField
 		ifTrue: [^ (GaussianElimination on: self) determinant].
-"	([self scalars isIntegralDomain] ifError: [false])
-		ifFalse: [self characteristicPolynomial independentCoefficient]."
 	"^ self determinant2"
-	^ self characteristicPolynomial independentCoefficient! !
+	a0 _ self characteristicPolynomial independentCoefficient.
+	^ self height even ifTrue: [a0] ifFalse: [a0 negated]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 12/27/2015 02:25'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 04:58:17'!
 determinant1
-	^ self characteristicPolynomial independentCoefficient! !
+	| a0 |
+	a0 _ self characteristicPolynomial independentCoefficient.
+	^ self height even ifTrue: [a0] ifFalse: [a0 negated]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:41:59'!
 determinant2
