@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 5:11:17 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 12:33:03 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 149!
+!provides: 'MathematicsTests' 1 150!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -4220,6 +4220,10 @@ testBacklash
 	self assert: X = (QQ matrix: 3@2 coefficients: {-1/7. -11/7. 4/7. 23/7. 0. 0}).
 	self assert: A * X = B! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:38:48'!
+testBacklashIntegerMatrixRandom
+	self testBacklashMatrixRandomOver: ZZ! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:07:38'!
 testBacklashIntegerTuple
 	"Example from Sage documentation."
@@ -4256,6 +4260,22 @@ testBacklashIntegerTupleBug
 	b _ ZZ tuple: #(0 0 10).
 	x _ A \ b.
 	self assert: A * x = b! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:33'!
+testBacklashIntegerTupleRandom
+	self testBacklashTupleRandomOver: ZZ! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:38:20'!
+testBacklashMatrixRandomOver: R
+	| n m n2 A v b x |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ R^(m@n) atRandomBits: m*n*5.
+	n2 _ 5 atRandom.
+	v _ R^(n@n2) atRandomBits: n*n2*5.
+	b _ A*v.
+	x _ A \ b.
+	self assert: A*x = b! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/7/2017 08:48:20'!
 testBacklashNoSolution
@@ -4303,6 +4323,18 @@ testBacklashPascal3Magic3
 	self assert: X = (ZZ matrix: 3 coefficients: #(19 -3 -1 -17 4 13 6 0 -6)).
 	self assert: A * X = B! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:39:10'!
+testBacklashPolynomialMatrixRandom
+	self testBacklashMatrixRandomOver: QQ polynomials! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:32:16'!
+testBacklashPolynomialTupleRandom
+	self testBacklashTupleRandomOver: QQ polynomials! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:38:58'!
+testBacklashRationalMatrixRandom
+	self testBacklashMatrixRandomOver: QQ! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:05:10'!
 testBacklashRationalTuple
 	"Example from Sage documentation."
@@ -4320,6 +4352,10 @@ testBacklashRationalTuple2
 	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
 	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
 ! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:43'!
+testBacklashRationalTupleRandom
+	self testBacklashTupleRandomOver: QQ! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:38:35'!
 testBacklashSingular
@@ -4340,6 +4376,17 @@ testBacklashTupleNonSquare
 	x _ A \ v.
 	self assert: x = (-1/2, 0, 0).
 	self assert: A * x = v! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:03'!
+testBacklashTupleRandomOver: R
+	| n m A v b x |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ R^(m@n) atRandomBits: m*n*5.
+	v _ R^n atRandomBits: n*5.
+	b _ A*v.
+	x _ A \ b.
+	self assert: A*x = b! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
 testCokernelMatrix
