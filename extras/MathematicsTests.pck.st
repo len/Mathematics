@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 July 2019 at 4:56:05 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 5:11:17 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 148!
+!provides: 'MathematicsTests' 1 149!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -4427,6 +4427,68 @@ testCharacteristicPolynomial
 	B _ M atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
 
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 04:15:48'!
+testCharacteristicPolynomialExample1x1
+	| A x |
+	A _ ZZ matrix: #((42)).
+	x _ ZZ polynomials x.
+	self assert: A characteristicPolynomial = (x - 42)! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 04:12:36'!
+testCharacteristicPolynomialExample2x2
+	| A x |
+	A _ ZZ matrix: #((1 2) (3 4)).
+	x _ ZZ polynomials x.
+	self assert: A characteristicPolynomial = (x^2 - (x*5) - 2)! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 04:13:40'!
+testCharacteristicPolynomialExample3x3
+	| A x |
+	A _ ZZ matrix: #((1 2 3) (4 5 6) (7 8 9)).
+	x _ ZZ polynomials x.
+	self assert: A characteristicPolynomial = (x^3 - (x^2*15) - (x*18))! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 04:15:12'!
+testCharacteristicPolynomialExample4x4
+	| A x |
+	A _ ZZ matrix: #((1 2 3 4) (5 6 7 8) (9 10 11 12) (13 14 15 16)).
+	x _ ZZ polynomials x.
+	self assert: A characteristicPolynomial = (x^4 - (x^3*34) - (x^2*80))! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:28:20'!
+testCharacteristicPolynomialOver: R
+	| n M A p B |
+	n _ 5 atRandom.
+	M _ R ^ (n@n).
+	A _ M atRandomBits: 100.
+	p _ A characteristicPolynomial.
+	self assert: (p value: A) isZero.
+	self assert: p degree = n.
+	self assert: p isMonic.
+	self assert: A transposed characteristicPolynomial = p.
+	B _ M atRandomBits: 100.
+	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:21:21'!
+testCharacteristicPolynomialOverIntegers
+	^ self testCharacteristicPolynomialOver: ZZ! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:21:52'!
+testCharacteristicPolynomialOverModularIntegers
+	^ self testCharacteristicPolynomialOver: ZZ/(2 to: 256) atRandom! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:23:15'!
+testCharacteristicPolynomialOverMultivariatePolynomials
+	^ self testCharacteristicPolynomialOver: (ZZ polynomialsIn: 3)! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:22:21'!
+testCharacteristicPolynomialOverRationals
+	^ self testCharacteristicPolynomialOver: QQ! !
+
+!MatrixTest methodsFor: 'invariants' stamp: 'len 7/12/2019 03:22:53'!
+testCharacteristicPolynomialOverUnivariatePolynomials
+	^ self testCharacteristicPolynomialOver: ZZ polynomials! !
+
 !MatrixTest methodsFor: 'invariants' stamp: 'len 8/26/2016 06:05'!
 testDeterminant
 	| M m |
@@ -4691,6 +4753,18 @@ testRCF2
 		(0 0 0 0 0 1 0 4)
 		(0 0 0 0 0 0 1 0)).
 	self assert: A RCF = C! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 7/11/2019 05:46:45'!
+testRCFAndInvariantFactors
+	"Example from Magma documentation."
+	| K A R x |
+	K _ ZZ/5.
+	A _ K matrix: 5 coefficients: (#(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0) apply: ZZ -> K).
+	R _ K matrix: 5 coefficients: (#(1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0) apply: ZZ -> K).
+	self assert: A RCF = R.
+	x _ K polynomials x.
+	self assert: A invariantFactors = {x - 1. x^2 - 1. x^2 - 1}
+	"TODO: test transformation T such that T*A*T inverse = R"! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 06:11:28'!
 testReducerPivots
