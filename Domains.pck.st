@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 5:09:58 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 12:32:11 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 540!
+!provides: 'Domains' 1 541!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -39430,10 +39430,11 @@ solveRight: aMatrix
 	A * X = B ifFalse: [^ nil].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 16:53:40'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 11:25:33'!
 solveRightByHNF: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	Reference: Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
+	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
+	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
 	| G P n |
 	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((ZZ zeroMatrix: self width @ aMatrix width) rowAugmented: (ZZ identityMatrix: aMatrix width)).
 	P _ G HNFAndTransformation second.
@@ -42114,7 +42115,7 @@ oldreduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 7/10/2019 16:32:43'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 7/12/2019 12:27:22'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -42132,15 +42133,14 @@ reduceStep: k column: j
 		q _ (matrix at: i@j) // b.
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 7/10/2019 16:04:00'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 7/12/2019 12:29:57'!
 run
-	| n m k j l b |
+	| n m k j b |
 	m _ matrix height.
 	n _ matrix width.
 	"1. Initialize:"
 	k _ 1.
 	j _ 1.
-	l _ m min: n.
 	[self reduceStep: k column: j.
 	"5. Final reductions:"
 	b _ matrix at: k@j.
@@ -42152,8 +42152,8 @@ run
 				q _ (matrix at: i@j) // b.
 				self addRow: k times: q negated toRow: i]].
 	"6. Finished?"
-	j = l] whileFalse: [j _ j + 1. k _ k + 1].
-	^ matrix "copyFrom: 1@k to: m@n"! !
+	j = n or: [k = m]] whileFalse: [j _ j + 1. k _ k + 1].
+	^ matrix! !
 
 !ModularHermiteReduction methodsFor: 'as yet unclassified' stamp: 'len 4/5/2018 15:36:20'!
 addColumn: a to: B
@@ -46498,6 +46498,11 @@ bitParity
 	n _ n bitAnd: 16rF.
 	^ (16r6996 bitShift: n negated) bitAnd: 1
 "! !
+
+!SmallInteger methodsFor: '*domains' stamp: 'len 7/12/2019 05:24:51'!
+raisedToInteger: anInteger
+	self == -1 ifTrue: [^ anInteger odd ifTrue: [-1] ifFalse: [1]].
+	^ super raisedToInteger: anInteger! !
 
 !Complex methodsFor: '*domains' stamp: 'len 1/22/2017 08:13:12'!
 ^ aNumber
