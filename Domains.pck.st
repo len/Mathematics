@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 12:32:11 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 13 July 2019 at 2:43:18 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 541!
+!provides: 'Domains' 1 542!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4940,8 +4940,9 @@ The algorithm performs O(n^3) ring operations for nxn matrices. While the standa
 !HermiteReduction commentStamp: '<historical>' prior: 0!
 This is the Hermite row reduction algorithm. Given a matrix with coefficients in a computable Euclidean domain, it reduces the matrix to its row-style Hermite normal form.
 
-Reference: Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 2.4.4 (modified to do row reduction instead of column reduction and generalized to Euclidean domains).
-!
+The algorithm is essentially [1] but modified to do row reduction instead of column reduction and generalized to Euclidean domains.
+
+[1] Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 2.4.4.!
 
 !SmithReduction commentStamp: '<historical>' prior: 0!
 This is the Smith reduction algorithm. Given a matrix with coefficients in a PID, it reduces the matrix to its Smith normal form.
@@ -39025,9 +39026,11 @@ apply: aMorphism
 		ifTrue: [^ aMorphism codomain matrix: self extent evaluating: [:i :j| aMorphism value: (self at: i@j)]].
 	^ DomainError signal! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 05:04:53'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 04:24:09'!
 berkowitz
-	"Answer the coefficients of the characteristic polynomial of the receiver. It's computed by the Berkowitz algorithm, using small space in comparision with classic gaussian elimination."
+	"Answer the coefficients of the characteristic polynomial of the receiver.
+	It's computed by the Berkowitz division-free algorithm and works over any commutative ring with unit.
+	It uses small space in comparision with classic gaussian elimination and performs O(n^4) scalar operations."
 	| vect C Ar R S Q one |
 	one _ self scalars one.
 	self height = 1 ifTrue: [^ self scalars tuple: {one. (self at: 1@1) negated}].
@@ -39094,9 +39097,13 @@ characteristicMatrix
 				ifTrue: [x - (P constant: (self at: i @ j))]
 				ifFalse: [P constant: (self at: i @ j) negated]]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:49:16'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 04:27:47'!
 characteristicPolynomial
 	self isSquare ifFalse: [DomainError signal: 'not a square matrix'].
+	"TODO: best algorithms choices are:
+	- for Z use modular algorithm: compute modulo p for many primes p, then CRT;
+	- for finite fields (fields with no coefficient explosion) use Hessenberg form with O(n^3);
+	- for general ring, use Berkowitz"
 	^ self scalars polynomials coefficients: self berkowitz reversed! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/7/2018 06:23:46'!
@@ -39417,32 +39424,43 @@ solveRight3: aMatrix
 "	A * X = B ifFalse: [^ nil]."
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 15:46:44'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 04:14:30'!
 solveRight: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	The argument can also be a tuple, in which case it is considered
 	as a column matrix and the returned value is also a tuple."
-	| R A B X |
+	| A B X |
 	A _ self.
 	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
-	R _ self scalars.
-	X _ R isField ifTrue: [A solveRightGeneral: B] ifFalse: [A solveRightByHNF: B].
-	A * X = B ifFalse: [^ nil].
+	X _ A solveRightGeneral: B.
+	(X notNil and: [A * X = B]) ifFalse: [^ nil].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 11:25:33'!
-solveRightByHNF: aMatrix
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:26:54'!
+solveRightGeneral: aMatrix
+	| R |
+	R _ self scalars.
+	R isField ifTrue: [^ self solveRightOverField: aMatrix].
+	R isEuclideanDomain ifTrue: [^ self solveRightOverEuclideanDomain: aMatrix].
+	(R isKindOf: ModularIntegerRing) ifTrue: [^ self solveRightOverModularIntegers: aMatrix].
+	^ self notYetImplemented! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 08:54:01'!
+solveRightOverEuclideanDomain: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
 	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
 	| G P n |
-	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((ZZ zeroMatrix: self width @ aMatrix width) rowAugmented: (ZZ identityMatrix: aMatrix width)).
+	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((self scalars zeroMatrix: self width @ aMatrix width) rowAugmented: (self scalars identityMatrix: aMatrix width)).
 	P _ G HNFAndTransformation second.
 	n _ (P lastColumn findFirst: [:each| each isZero not]) - aMatrix width + 1.
 	^ (P copyFrom: n @ 1 to: n + aMatrix width - 1 @ self width) transposed negated! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 09:54:11'!
-solveRightGeneral: aMatrix
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:31:57'!
+solveRightOverField: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	The algorithm performs gaussian elimination in essentially O(n^3) scalar operations.
+	It is can produce coefficient explosion unless the scalar field is finite."
 	| n m reduction rows |
 	m _ aMatrix width.
 	n _ self width.
@@ -39453,6 +39471,22 @@ solveRightGeneral: aMatrix
 		rows add: (reduction extension rowAt: i)].
 	n - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
 	^ Matrix rows: rows! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:40:09'!
+solveRightOverModularIntegers: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	In order to find a solution over Z/mZ, the algorithm solves the system over Z/pZ for each prime factor p of m, and then reconstructs a solution over Z/mZ by Chinese remaindering.
+	TODO: implement Hensel lifting to cover the case of m not square-free."
+	| R factors moduli solutions F crt |
+	R _ self scalars.
+	factors _ R modulusFactors.
+	factors asSet size = factors size ifFalse: [^ self notYetImplemented].
+	moduli _ factors asArray.
+	solutions _ moduli collect: [:p|
+		F _ PrimeField new: p.
+		(self over: F) solveRightOverField: (aMatrix over: F)].
+	crt _ CRT mod: moduli.
+	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R project: (crt solve: (solutions collect: [:each| (each at: i@j) representative]))]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 11/3/2015 20:35'!
 squared
@@ -39729,6 +39763,11 @@ elementaryDivisors
 	self scalars isField ifTrue: [^ (1 to: self rank) collect: [:each| self scalars one]].
 	^ self SNF diagonal asArray select: [:each| each isZero not]! !
 
+!Matrix methodsFor: 'reduction' stamp: 'len 7/13/2019 04:31:49'!
+hessenberg
+	"Answer the matrix similar to the receiver but in upper Hessenberg form (zeroes below the first subdiagonal)."
+	^ self notYetImplemented! !
+
 !Matrix methodsFor: 'reduction' stamp: 'len 7/11/2019 05:44:53'!
 invariantFactors
 	"Answer the invariant factors of the receiver, corresponding to the Frobenius normal form (or rational canonical form), assuming it's a square matrix over a field."
@@ -39792,11 +39831,11 @@ primaryInvariantFactors
 reduction
 	^ self reductionWith: nil! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 6/12/2019 10:04:52'!
+!Matrix methodsFor: 'reduction' stamp: 'len 7/13/2019 14:26:26'!
 reductionWith: aMatrix
 	self scalars isField
 		ifTrue: [^ GaussianElimination on: self extension: aMatrix].
-	(self scalars isKindOf: RationalIntegerRing)
+	self scalars isEuclideanDomain
 		ifTrue: [^ HermiteReduction on: self extension: aMatrix].
 	self scalars isIntegralDomain
 		ifTrue: [^ GaussBareiss on: self extension: aMatrix].
