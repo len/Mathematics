@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 13 July 2019 at 2:43:18 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 16 July 2019 at 5:07:12 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 542!
+!provides: 'Domains' 1 543!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2991,6 +2991,16 @@ MatrixReduction subclass: #GaussianElimination
 	category: 'Domains-Modules-Matrices-Algorithms'!
 !classDefinition: 'GaussianElimination class' category: #'Domains-Modules-Matrices-Algorithms'!
 GaussianElimination class
+	instanceVariableNames: ''!
+
+!classDefinition: #EuclideanGaussianElimination category: #'Domains-Modules-Matrices-Algorithms'!
+GaussianElimination subclass: #EuclideanGaussianElimination
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'EuclideanGaussianElimination class' category: #'Domains-Modules-Matrices-Algorithms'!
+EuclideanGaussianElimination class
 	instanceVariableNames: ''!
 
 !classDefinition: #GaussBareiss category: #'Domains-Modules-Matrices-Algorithms'!
@@ -19243,6 +19253,10 @@ projection: i
 	"Answer the canonical projection to the i-th component."
 	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
 
+!ProductRing methodsFor: 'morphisms' stamp: 'len 7/14/2019 08:20:51'!
+projections
+	^ (1 to: self arity) collect: [:i| self projection: i]! !
+
 !ProductRing methodsFor: 'random' stamp: 'len 9/16/2018 16:15:07'!
 atRandom: aRandom
 	^ self compose: (self asCartesianProduct atRandom: aRandom)! !
@@ -19699,13 +19713,19 @@ lifting
 project: anInteger
 	^ self representative: anInteger \\ modulus! !
 
-!ModularIntegerRing methodsFor: 'operations' stamp: 'len 6/21/2019 03:41:14'!
+!ModularIntegerRing methodsFor: 'operations' stamp: 'len 7/14/2019 08:33:36'!
 decomposition
 	"Answer the decomposition of the receiver as product of prime power rings."
-	| components |
-	components _ OrderedCollection new.
-	self modulusFactors withOccurrencesDo: [:p :k| components add: (PrimePowerRing new: p to: k)].
-	^ ProductRing components: components asArray! !
+	^ self propertyAt: #decomposition ifAbsentPut:
+		[| components answer crt |
+		components _ OrderedCollection new.
+		self modulusFactors withOccurrencesDo: [:p :k| components add: (PrimePowerRing new: p to: k)].
+		components _ components asArray.
+		crt _ CRT mod: (components collect: [:each| each modulus]).
+		(answer _ ProductRing components: components)
+			addMap: (answer to: self evaluating: [:x| self project: (crt solve: (x components collect: [:each| each representative]))]);
+			addMap: (self to: answer evaluating: [:x| answer compose: (components collect: [:each| each project: x representative])]);
+			yourself]! !
 
 !ModularIntegerRing methodsFor: 'operations' stamp: 'len 7/5/2019 15:26:18'!
 localizationAt: aPrimeIdeal
@@ -37893,7 +37913,7 @@ apply: aMorphism
 conjugated
 	^ self collect: [:each| each conjugated]! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 7/10/2019 03:53:48'!
+!Tuple methodsFor: 'operations' stamp: 'len 7/14/2019 15:19:03'!
 content
 	"Answer the GCD of the coefficients of the receiver.
 	In a field, it is convenient to define the content as 1."
@@ -37903,8 +37923,8 @@ content
 			[^ self scalars isFractionRing
 				ifTrue:
 					[| c |
-					c _ self coefficients inject: self scalars one into: [:lcm :each| lcm lcm: each denominator].
-					(self coefficients inject: self scalars zero into: [:gcd :each| gcd gcd: each * c]) / c]
+					c _ self inject: self scalars one into: [:lcm :each| lcm lcm: each denominator].
+					(self inject: self scalars zero into: [:gcd :each| gcd gcd: each * c]) / c]
 				ifFalse: [self scalars one]].
 	answer _ self scalars zero.
 	self do: [:each| answer _ answer gcd: each].
@@ -38906,6 +38926,13 @@ do: aBlock
 		1 to: self width do: [:j|
 			aBlock value: (self at: i@j)]]! !
 
+!Matrix methodsFor: 'enumerating' stamp: 'len 7/14/2019 15:19:46'!
+inject: thisValue into: binaryBlock 
+	| nextValue |
+	nextValue _ thisValue.
+	self do: [:each | nextValue _ binaryBlock value: nextValue value: each].
+	^ nextValue! !
+
 !Matrix methodsFor: 'enumerating' stamp: 'len 3/7/2017 08:34:58'!
 pivotsDo: aBlock
 	"Enumerate the row-style pivot indices. These are the pairs i@j corresponding to the first nonzero entry of each row."
@@ -39175,6 +39202,23 @@ comatrix
 conjugated
 	^ self collect: [:each| each conjugated]! !
 
+!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 15:19:21'!
+content
+	"Answer the GCD of the coefficients of the receiver.
+	In a field, it is convenient to define the content as 1."
+	| answer |
+	self scalars isField
+		ifTrue:
+			[^ self scalars isFractionRing
+				ifTrue:
+					[| c |
+					c _ self inject: self scalars one into: [:lcm :each| lcm lcm: each denominator].
+					(self inject: self scalars zero into: [:gcd :each| gcd gcd: each * c]) / c]
+				ifFalse: [self scalars one]].
+	answer _ self scalars zero.
+	self do: [:each| answer _ answer gcd: each].
+	^ answer! !
+
 !Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 04:52:39'!
 determinant
 	| a0 |
@@ -39436,12 +39480,14 @@ solveRight: aMatrix
 	(X notNil and: [A * X = B]) ifFalse: [^ nil].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:26:54'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 09:22:41'!
 solveRightGeneral: aMatrix
 	| R |
 	R _ self scalars.
+	(R isKindOf: ProductRing) ifTrue: [^ self solveRightOverProductRing: aMatrix].
 	R isField ifTrue: [^ self solveRightOverField: aMatrix].
 	R isEuclideanDomain ifTrue: [^ self solveRightOverEuclideanDomain: aMatrix].
+	(R isKindOf: PrimePowerRing) ifTrue: [^ self solveRightOverPrimePowerRing: aMatrix].
 	(R isKindOf: ModularIntegerRing) ifTrue: [^ self solveRightOverModularIntegers: aMatrix].
 	^ self notYetImplemented! !
 
@@ -39472,21 +39518,49 @@ solveRightOverField: aMatrix
 	n - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
 	^ Matrix rows: rows! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:40:09'!
+!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 08:43:08'!
 solveRightOverModularIntegers: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	In order to find a solution over Z/mZ, the algorithm solves the system over Z/pZ for each prime factor p of m, and then reconstructs a solution over Z/mZ by Chinese remaindering.
-	TODO: implement Hensel lifting to cover the case of m not square-free."
-	| R factors moduli solutions F crt |
+	In order to find a solution over Z/mZ, the algorithm solves the system over Z/(p^k)Z for each prime factor p of m (where p appears with power k in the factorization of m), and then reconstructs a solution over Z/mZ by CRT."
+	| R P phi |
 	R _ self scalars.
-	factors _ R modulusFactors.
-	factors asSet size = factors size ifFalse: [^ self notYetImplemented].
-	moduli _ factors asArray.
-	solutions _ moduli collect: [:p|
-		F _ PrimeField new: p.
-		(self over: F) solveRightOverField: (aMatrix over: F)].
-	crt _ CRT mod: moduli.
-	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R project: (crt solve: (solutions collect: [:each| (each at: i@j) representative]))]! !
+	P _ R decomposition.
+	phi _ R -> P.
+	^ ((self apply: phi) \ (aMatrix apply: phi)) apply: P -> R! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 7/16/2019 05:05:27'!
+solveRightOverPrimePowerRing: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	In order to find a solution over Z/(p^k)Z, the algorithm solves the system over the residue field Z/pZ and then lifts the solution by Hensel's lemma."
+	self notYetImplemented
+"	| R p g A B X m |
+	R _ self scalars.
+	p _ R p.
+	A _ self lift.
+	B _ aMatrix lift.
+	g _ A content gcd: B content.
+	g isZero ifFalse:
+		[A _ A collect: [:each| each // g].
+		B _ B collect: [:each| each // g]].
+	m _ p.
+	X _ ((A % p) \ (B % p)) lift.
+	self assert: ((A*X - B) % m) isZero.
+	2 to: R exponent do: [:k|
+		| C |
+		C _ B - (A*X) collect: [:each| each // m].
+		X _ (A % p \ (C % p)) lift * m + X.
+		m _ m * p.
+		self assert: ((A*X - B) % m) isZero].
+	^ X over: R"! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 08:36:56'!
+solveRightOverProductRing: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	The algorithm solves the system for each projection and then composes back to the product ring."
+	| R X |
+	R _ self scalars.
+	X _ R projections collect: [:p| (self apply: p) \ (aMatrix apply: p)].
+	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R compose: (X collect: [:each| each at: i@j])]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 11/3/2015 20:35'!
 squared
@@ -39552,9 +39626,9 @@ alternative:
 	^ self antitransposed CHNF antitransposed
 "! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 6/12/2019 12:11:21'!
+!Matrix methodsFor: 'reduction' stamp: 'len 7/14/2019 03:57:40'!
 HNFAndTransformation
-	"Answer the (row-style) Hermite normal form H of the receiver A and an invertible matrix T such that T*A = H."
+	"Answer the (row-style) Hermite normal form H of the receiver A and the unique unimodular matrix T such that T*A = H."
 	| reduction |
 	self isEmpty ifTrue: [^ {self. self}].
 	self scalars isLocalization ifTrue:
@@ -39636,9 +39710,9 @@ SNFAfterHNF
 	n _ H diagonal findLast: [:each| each isZero not].
 	^ (H copyFrom: 1@1 to: n@n) SNF ê (self scalars zeroMatrix: (H width max: H height) - n)! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 6/12/2019 12:11:03'!
+!Matrix methodsFor: 'reduction' stamp: 'len 7/14/2019 03:24:57'!
 SNFAndTransformations
-	"Answer the Smith normal form S of the receiver A and unimodular matrices P and Q such that P*A*Q = S.
+	"Answer the Smith normal form S of the receiver A and the unique unimodular matrices P and Q such that P*A*Q = S.
 	This is a naive implementation of Kannan-Bachem algorithm."
 	| HT S a n P Q |
 	self isEmpty ifTrue: [^ {self. self. self}].
@@ -40233,6 +40307,10 @@ collect: aBlock
 columnsDo: aBlock
 	columns do: aBlock! !
 
+!ColumnMatrix methodsFor: 'enumerating' stamp: 'len 7/14/2019 15:20:19'!
+do: aBlock
+	columns do: [:each| each do: aBlock]! !
+
 !ColumnMatrix methodsFor: 'operations' stamp: 'len 11/5/2016 03:43'!
 % anInteger
 	^ self class columns: (self columns collect: [:each| each % anInteger])! !
@@ -40384,9 +40462,9 @@ allSatisfy: aBlock
 collect: aBlock
 	^ self class rows: (rows collect: [:each| each collect: aBlock])! !
 
-!RowMatrix methodsFor: 'enumerating' stamp: 'len 11/27/2016 13:23:25'!
+!RowMatrix methodsFor: 'enumerating' stamp: 'len 7/14/2019 15:20:53'!
 do: aBlock
-	self rowsDo: [:each| each do: aBlock]! !
+	rows do: [:each| each do: aBlock]! !
 
 !RowMatrix methodsFor: 'enumerating' stamp: 'len 3/23/2016 00:18'!
 rowsDo: aBlock
@@ -42122,6 +42200,29 @@ matrix: aMatrix extension: anotherMatrix
 	pivots _ OrderedCollection new: aMatrix height.
 	currentPivot _ 0 @ 0.
 	super matrix: aMatrix extension: anotherMatrix! !
+
+!EuclideanGaussianElimination methodsFor: 'private' stamp: 'len 7/15/2019 03:19:43'!
+reduceStep
+	"Perform one step in the reduction of the matrix using the current pivot."
+	| row j |
+	row _ currentPivot x.
+	j _ currentPivot y.
+	self assert: row = j.
+	1 to: matrix height do: [:i|
+		(i = j or: [matrix isZeroAt: i @ j])
+			ifFalse:
+				[| ajj aij euclid g bi bj ri rj |
+				ajj _ matrix at: j @ j.
+				aij _ matrix at: i @ j.
+				euclid _ ExtendedEuclid on: {aij. ajj}.
+				g _ euclid gcd.
+				bi _ euclid bezout first.
+				bj _ euclid bezout last.
+				euclid verify ifFalse: [self halt].
+				ri _ matrix rowAt: i.
+				rj _ matrix rowAt: j.
+				matrix rowAt: j put: ri * bi + (rj * bj).
+				matrix rowAt: i put: rj * (aij // g) - (ri * (ajj // g))]]! !
 
 !GaussBareiss methodsFor: 'private' stamp: 'len 5/30/2019 07:18:55'!
 reduceStep
