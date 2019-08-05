@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 12 July 2019 at 12:33:03 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 5 August 2019 at 12:18:30 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 150!
+!provides: 'MathematicsTests' 1 151!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1217,12 +1217,12 @@ testTorsionAbelianGroup
 	self assert: G isMixed not.
 	self assert: G torsionFree isTrivial! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 1/22/2017 08:21:59'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 15:44:25'!
 testAffineHull
 	| V v1 v2 H |
 	V _ QQ ^ 3.
-	v1 _ (1,0,0).
-	v2 _ (2,2,2).
+	v1 _ V !! (1,0,0).
+	v2 _ V !! (2,2,2).
 	H _ V hull: {v1. v2}.
 	self assert: H isLine.
 	self assert: (H includes: v1).
@@ -1263,11 +1263,11 @@ testAffineMapComposition
 	self assert: (g · f value: x) = (g value: (f value: x)).
 	self should: [f · g] raise: DomainError! !
 
-!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2018 19:19:18'!
+!AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 15:43:58'!
 testAffineMapEvaluating
 	| V f |
 	V _ QQ^3.
-	f _ AffineMap from: V to: V evaluating: [:p| p*2 - (1,0,0)].
+	f _ AffineMap from: V to: V evaluating: [:p| p*2 - (V !! (1,0,0))].
 	self assert: (f value: (1,2,3)) = (1,4,6)! !
 
 !AffineGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:29:23'!
@@ -1367,13 +1367,13 @@ testConicCoefficients
 	self assert: (Conic coefficients: (1,2,3,4,5,6)) coefficients = (1,2,3,4,5,6).
 	self assert: (Conic polynomial: (QQ polynomialsIn: 3) !! [:x :y :z| x^2 + (x*y*5) + (y^2) + (z^2)]) coefficients = (1,5,0,1,0,1)! !
 
-!AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 9/3/2018 21:37:52'!
+!AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 7/20/2019 08:23:09'!
 testConicDeterminant
-	self assert: (Conic coefficients: (1,2,3,4,5,6)) determinant = (41/4)! !
+	self assert: (Conic coefficients: ((1,2,3,4,5,6) over: QQ)) determinant = (41/4)! !
 
-!AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 9/3/2018 20:32:51'!
+!AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 7/20/2019 08:26:46'!
 testConicIsSmooth
-	self assert: (Conic coefficients: (1,-1,0)) isSmooth not.
+	self assert: (Conic coefficients: ((1,-1,0) over: QQ)) isSmooth not.
 	self assert: (Conic coefficients: (1,1,1,1,1,0) % 2) isSmooth! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 1/12/2017 15:40:09'!
@@ -1499,14 +1499,14 @@ testMorphismsOfProjectiveVarieties
 	self assert: Z isCurve.
 	self assert: Z degree = 6! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 2/9/2017 11:13:57'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 7/20/2019 08:28:18'!
 testMultiplicity
 	"Example from Sage documentation."
 	| A X q1 q2 |
 	A _ AffineSpace new: 4 over: QQ.
 	X _ A subscheme: (A coordinateRing !! [:x :y :z :w| {z*y - (x^7). w - (2*z)}]).
-	q1 _ X !! (1,(1/3),3,6).
-	q2 _ X !! (0,0,0,0).
+	q1 _ X !! (QQ tuple: {1. (1/3). 3. 6}).
+	q2 _ X !! (QQ zeroTuple: 4).
 	self assert: q1 multiplicity = 1.
 	self assert: q2 multiplicity = 2! !
 
@@ -1732,11 +1732,11 @@ testProjectivePlaneOverFiniteRing
 	self assert: P points size = 28
 	"this plane has 28 points and 28 lines (falling into 7 neighbour classes of size 4), each line has 6 points and each point is on 6 lines"! !
 
-!AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 1/12/2017 14:45:07'!
+!AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 7/20/2019 08:31:26'!
 testProjectiveSchemeAffinePatches
 	| E p a |
 	E _ EllipticCurve cremona37a.
-	p _ E !! (2,-3).
+	p _ E !! ((2,-3) over: QQ).
 	a _ p dehomogenizedIn: 2.
 	"the affine point is in the second standard affine patch:"
 	self assert: (E patch: 2) == a codomain.
@@ -1953,22 +1953,19 @@ testTwistedCubic
 	self assert: C dimension = 1.
 	self assert: C isSmooth! !
 
-!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 2/4/2017 07:50:26'!
+!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 8/5/2019 11:08:42'!
 testTwistedCubicDegree
 	"Twisted cubic in P^3 with homogeneous coordinates x,y,w,z."
-	| A x y z w X |
+	| A X |
 	A _ QQ polynomialsIn: #(x y z w).
-	x _ A x.
-	y _ A y.
-	z _ A z.
-	w _ A x: #w.
-	X _ A / {x^2 - (y*w). x*z - (y^2)} :: proj.
+	X _ (A / [:x :y :z :w| {x^2 - (y*w). x*z - (y^2)}]) proj.
 	"At this point X is still reducible, it is the union of a line x=y=0 and the twisted cubic:"
 	self assert: X degree = 4.
 	"To cut out X, we impose an additional equation x^3 - (z * (w^2)) = 0:"
-	X _ A / {x^2 - (y*w). x*z - (y^2). x^3 - (z*(w^2))} :: proj.
-	"But we get the twisted cubic (in some sense) 'counted with multiplicity 2', so the degree is 6"
-	self assert: X degree = 6! !
+	X _ (A / [:x :y :z :w| {x^2 - (y*w). x*z - (y^2). x^3 - (z*(w^2))}]) proj.
+	"But we get the twisted cubic (in some sense) 'counted with multiplicity 2', so the degree is 6
+	(BUT NOT REALLY, MAGMA GIVES 3 LIKE US, I DONT REMEMBER WHERE I GOT THIS EXAMPLE FROM BUT THE CORRECT ANSWER IS 3)"
+	self assert: X degree = 3! !
 
 !AlgebraicGeometryTest methodsFor: 'tangent cone' stamp: 'len 2/9/2017 10:27:04'!
 testTangentCone
@@ -2577,7 +2574,7 @@ testHilbertSeriesOfPolynomialQuotient
 	H _ (R/I) hilbertSeriesAt: t.
 	self assert: H = (1 + (2*t) / (1 - t) squared)! !
 
-!CommutativeAlgebraTest methodsFor: 'hilbert series' stamp: 'len 2/4/2017 07:57:44'!
+!CommutativeAlgebraTest methodsFor: 'hilbert series' stamp: 'len 7/20/2019 05:56:09'!
 testHilbertSeriesOfPolynomialQuotient2
 	"Derksen, Kemper 'Computational Invariant Theory', Example 1.4.9."
 	| t R x y z w I H dim deg |
@@ -2591,7 +2588,7 @@ testHilbertSeriesOfPolynomialQuotient2
 	H _ (R/I) hilbertSeriesAt: t.
 	dim _ (H orderAt: 1) negated.
 	self assert: (R/I) dimension = dim.
-	deg _ H * ((1 - H numerator parent x) ^ dim) value: 1. "should be limit from below"
+	deg _ (H * ((1 - H numerator parent x) ^ dim) value: 1) asInteger. "should be limit from below"
 	self assert: (R/I) degree = deg! !
 
 !CommutativeAlgebraTest methodsFor: 'hilbert series' stamp: 'len 10/27/2016 18:41'!
@@ -3542,19 +3539,19 @@ testTrivial
 	self assert: G size = 1.
 	self assert: G isTrivial! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2018 18:06:30'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:09'!
 testE8
 	| E8 a |
 	E8 _ Lattice E8.
 	a _ E8 atRandomBits: 100.
-	self assert: ((a allSatisfy: [:x| x isInteger]) or: [a allSatisfy: [:x| x isInteger not and: [(x*2) isInteger]]]).
-	self assert: (a sum isInteger and: [a sum even]).
+	self assert: ((a allSatisfy: [:x| x isIntegral]) or: [a allSatisfy: [:x| x isIntegral not and: [(x*2) isIntegral]]]).
+	self assert: (a sum isIntegral and: [a sum even]).
 	self assert: E8 isIntegral.
 	self assert: E8 isUnimodular.
 	self assert: E8 isEven.
 	self assert: E8 isSelfDual! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 12/7/2017 20:45:47'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:49'!
 testLLL
 	| b1 b2 b3 lll |
 	b1 _ (1, 1, 1).
@@ -3595,7 +3592,7 @@ testLatticeDual
 	self assert: L determinant = (1 / R determinant).
 	self assert: R matrix * L matrix transposed = I! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:41'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:22'!
 testLatticeDual2
 	| L R |
 	L _ Lattice basis: {(-1,0,0). (0,1,2)}. "not full rank"
@@ -3634,7 +3631,7 @@ testOrthogonalAtRandom
 	self assert: (G atRandomBits: 100) isOrthogonal.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 22:03:03'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:33'!
 testRotationsBy90Degrees
 	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
 	| V G |
@@ -3646,7 +3643,7 @@ testRotationsBy90Degrees
 	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
 	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 11/3/2016 04:39'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:08:00'!
 testAlgebraicExtension
 	| x E a b |
 	x _ QQ polynomials x.
@@ -4265,19 +4262,20 @@ testBacklashIntegerTupleBug
 testBacklashIntegerTupleRandom
 	self testBacklashTupleRandomOver: ZZ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:38:20'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/13/2019 09:40:55'!
 testBacklashMatrixRandomOver: R
 	| n m n2 A v b x |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ R^(m@n) atRandomBits: m*n*5.
-	n2 _ 5 atRandom.
-	v _ R^(n@n2) atRandomBits: n*n2*5.
-	b _ A*v.
-	x _ A \ b.
-	self assert: A*x = b! !
+	100 timesRepeat:
+		[n _ 5 atRandom.
+		m _ 5 atRandom.
+		A _ R^(m@n) atRandomBits: m*n*5.
+		n2 _ 5 atRandom.
+		v _ R^(n@n2) atRandomBits: n*n2*5.
+		b _ A*v.
+		x _ A \ b.
+		self assert: A*x = b]! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/7/2017 08:48:20'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:08:20'!
 testBacklashNoSolution
 	"Example from Sage documentation."
 	| A v |
@@ -4285,14 +4283,14 @@ testBacklashNoSolution
 	v _ (1,1).
 	self assert: (A \ v) isNil! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:13:12'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/21/2019 04:52:41'!
 testBacklashNonSquare
 	"Example from Sage documentation."
 	| A B X |
 	A _ QQ matrix: 2@4 coefficients: #(0 -1 1 0 -2 2 1 0).
 	B _ QQ matrix: 2@2 coefficients: #(1 0 1 -1).
 	X _ A \ B.
-	self assert: X = (QQ matrix: 4@2 coefficients: (-3/2, (1/2), -1, 0, 0, 0, 0, 0)).
+	self assert: X = (QQ matrix: 4@2 coefficients: {-3/2. 1/2. -1. 0. 0. 0. 0. 0}).
 	self assert: A * X = B! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/9/2017 08:31:55'!
@@ -4331,27 +4329,36 @@ testBacklashPolynomialMatrixRandom
 testBacklashPolynomialTupleRandom
 	self testBacklashTupleRandomOver: QQ polynomials! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/13/2019 14:19:50'!
+testBacklashPrimeFieldMatrixRandom
+	self testBacklashMatrixRandomOver: ZZ/256 atRandom nextPrime! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/13/2019 14:19:39'!
+testBacklashPrimeFieldTupleRandom
+	self testBacklashTupleRandomOver: ZZ/256 atRandom nextPrime! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:38:58'!
 testBacklashRationalMatrixRandom
 	self testBacklashMatrixRandomOver: QQ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:05:10'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:09:08'!
 testBacklashRationalTuple
 	"Example from Sage documentation."
 	| A v x |
 	A _ QQ matrix: 3 coefficients: #(1 2 3 -1 2 5 2 3 1).
 	v _ (1,2,3).
 	x _ A \ v.
-	self assert: x = (-13/12,(23/12),(-7/12)).
+	self assert: x = (-13/12, (23/12), (-7/12)).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 7/10/2019 10:05:22'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:09:34'!
 testBacklashRationalTuple2
 	"Example from GAP manual."
-	| A |
+	| A b x |
 	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	self assert: A transposed \ (95,115,182) = (47/4,(-17/2),(67/4),0,0) 
-! !
+	b _ (95,115,182).
+	x _ (47/4, (-17/2), (67/4), 0, 0).
+	self assert: A transposed \ b = x! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:43'!
 testBacklashRationalTupleRandom
@@ -4367,26 +4374,26 @@ testBacklashSingular
 	self assert: X = (QQ matrix: 3@2 coefficients: (6, -6, 0, 0, 0, 0)).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/5/2017 18:30:12'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:09:56'!
 testBacklashTupleNonSquare
 	"Example from Sage documentation."
 	| A v x |
 	A _ QQ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
 	v _ (-1/2, -1).
-	x _ A \ v.
-	self assert: x = (-1/2, 0, 0).
-	self assert: A * x = v! !
+	x _ (-1/2, 0, 0).
+	self assert: A \ v = x! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:03'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/13/2019 09:39:57'!
 testBacklashTupleRandomOver: R
 	| n m A v b x |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ R^(m@n) atRandomBits: m*n*5.
-	v _ R^n atRandomBits: n*5.
-	b _ A*v.
-	x _ A \ b.
-	self assert: A*x = b! !
+	100 timesRepeat:
+		[n _ 5 atRandom.
+		m _ 5 atRandom.
+		A _ R^(m@n) atRandomBits: m*n*5.
+		v _ R^n atRandomBits: n*5.
+		b _ A*v.
+		x _ A \ b.
+		self assert: A*x = b]! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 4/4/2018 00:29:48'!
 testCokernelMatrix
@@ -4394,6 +4401,14 @@ testCokernelMatrix
 	| A B |
 	A _ QQ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
 	B _ QQ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
+	self assert: A cokernelMatrix "echelon" = B! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 7/30/2019 02:58:09'!
+testCokernelMatrixInteger
+	"From Sage."
+	| A B |
+	A _ ZZ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
+	B _ ZZ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
 	self assert: A cokernelMatrix "echelon" = B! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 11/4/2016 10:26'!
@@ -4430,7 +4445,7 @@ testSlashWithMatrix
 	self assert: X = (QQ matrix: 1@3 coefficients: #(1 2 3)).
 	self assert: X * A = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/15/2019 23:43:56'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:10:27'!
 testSlashWithTuple
 	| A b x  |
 	A _ QQ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
@@ -4936,9 +4951,9 @@ testGaloisFields
 	[(a _ GF atRandom) isZero] whileTrue.
 	self assert: a * a reciprocal = GF one! !
 
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:16'!
+!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2019 09:04:06'!
 testModularIntegerLift
-	self assert: (2 to: 100 :: allSatisfy: [:m| 1 to: m :: allSatisfy: [:x| x % m :: lift % m = (x % m)]])! !
+	self assert: ((2 to: 100) allSatisfy: [:m| (1 to: m) allSatisfy: [:x| (x % m) lift % m = (x % m)]])! !
 
 !ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:24'!
 testModularIntegersField
@@ -5354,13 +5369,13 @@ testQuotientModuleInvariants
 	W _ QQ^3 span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4} over: ZZ.
 	self assert: (V/W) invariants = #(1 4 12)! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:36:42'!
+!ModuleTest methodsFor: 'other' stamp: 'len 7/31/2019 05:24:27'!
 testQuotientModuleInvariants2
 	"Example from Sage"
 	| V W |
 	V _ ZZ^3.
 	W _ V span: {(1,2,0). (0,1,0). (0,2,0)}.
-	self assert: (V/W) invariants = #(1 1 0) "from example in sage fpg_module.py"! !
+	self assert: (V/W) invariants = #(1 1 0) "from example in sage fgp_module.py"! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 5/20/2018 18:39:57'!
 testQuotientModuleIsFinite
@@ -6490,7 +6505,7 @@ testCompanionMatrix
 	self assert: p companion characteristicPolynomial = p.
 	self assert: p companion minimalPolynomial = p! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:50'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:49:56'!
 testContentAndPrimitive
 	| Zx Zxy x y f |
 	Zx _ ZZ polynomialsIn: #(x).
@@ -6498,14 +6513,14 @@ testContentAndPrimitive
 	x _ Zx x.
 	y _ Zxy x.
 	f _ 2*x*y + (2*(x^2)).
-	self assert: f primitive * f content = f! !
+	self assert: f primitivePart * f content = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:50'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:05'!
 testContentAndPrimitiveAtRandom
 	| Zx f |
 	Zx _ ZZ polynomials.
 	f _ Zx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
-	self assert: f primitive * f content = f! !
+	self assert: f primitivePart * f content = f! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:50'!
 testDiscriminant
@@ -6809,15 +6824,15 @@ testGCD
 	g _ x^6 - 1.
 	self assert: (f gcd: g) = (x^2 - 1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:52'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/20/2019 04:59:20'!
 testGCDMultivariate
 	| Zxy x y f g |
-	Zxy _ ZZ polynomialsIn: #(x y).
+	Zxy _ ZZ polynomialsIn: #(x y) ordering: #lex.
 	x _ Zxy x.
 	y _ Zxy y.
 	f _ (x+y)*(y-x).
 	g _ (y-x)^2.
-	self assert: (f gcd: g) = (y-x)! !
+	self assert: (f gcd: g) = (x-y)! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 22:13:05'!
 testGCDMultivariate2
@@ -6873,14 +6888,14 @@ testGCDOverZ2
 	g _ h * (x + 1) * (x^2 + 1).
 	self assert: (f gcd: g) = (h * (x + 1))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:52'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:27'!
 testGaussLemma
 	"Lemma (Gauss): The product of two primitive polynomials is primitive."
 	| Zx f g |
 	Zx _ ZZ polynomials.
 	f _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
 	g _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
-	self assert: (f primitive * g primitive) isPrimitive! !
+	self assert: (f primitivePart * g primitivePart) isPrimitive! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2018 16:35:46'!
 testHeight
@@ -7284,7 +7299,7 @@ testSquareFreeMultivariate
 	f _ f1*f1*f2*f2.
 	self assert: f squareFree = (f1 * f2)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:54'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:36'!
 testSubresultant
 	"deg(gcd(f,g)) = d iff subresultant(f,g,k) = 0 for all k < d and subresultant(f,g,d) ~= 0, and the d-th subresultant coefficient is in fact a gcd of f and g."
 	| x f g |
@@ -7295,7 +7310,7 @@ testSubresultant
 	self assert: (f subresultant: 0 with: g) isZero.
 	self assert: (f subresultant: 1 with: g) isZero.
 	self assert: (f subresultant: 2 with: g) isZero not.
-	self assert: (f subresultant: 2 with: g) primitive = (x^2 - 1)! !
+	self assert: (f subresultant: 2 with: g) primitivePart = (x^2 - 1)! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:54'!
 testSubresultant0
@@ -7407,13 +7422,13 @@ newRing
 	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
 	^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom! !
 
-!RingTest methodsFor: 'general' stamp: 'len 4/19/2019 04:55:55'!
+!RingTest methodsFor: 'general' stamp: 'len 7/17/2019 03:19:17'!
 testCanonicalMorphisms
 	| R x Q |
 	R _ QQ polynomials.
 	x _ R x.
 	Q _ R / (x^2 + 1).
-	self assert: (ZZ -> R value: 4) = (R embed: 4). "canonical morphism from initial object"
+	self assert: (ZZ -> R value: 4) = (R !! 4). "canonical morphism from initial object"
 	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
 
 !RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
@@ -7844,14 +7859,14 @@ testLocalizationOfModularIntegers3
 	"everything not in P maps to a unit:"
 	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
 
-!RingTest methodsFor: 'localizations' stamp: 'len 6/29/2019 18:24:23'!
+!RingTest methodsFor: 'localizations' stamp: 'len 7/30/2019 04:56:29'!
 testLocalizationOfZAt2
 	| L |
 	L _ ZZ localizationAt: 2.
-	self assert: (L !! (1/3)) asFraction = (1/3).
+	self assert: QQ !! (L !! (1/3)) = (1/3).
 	self should: [L !! (3/2)] raise: Error.
-	self assert: (L !! 2) asFraction = 2.
-	self assert: (L !! 3) asFraction = 3.
+	self assert: QQ !! (L !! 2) = 2.
+	self assert: QQ !! (L !! 3) = 3.
 	self assert: (L atRandomBits: 10) denominator odd.
 	self testRing: L.
 	self testRingHomomorphism: ZZ -> L! !
