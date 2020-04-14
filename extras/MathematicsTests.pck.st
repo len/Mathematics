@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 4:41:34 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 8:41:25 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 153!
+!provides: 'MathematicsTests' 1 154!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -4176,6 +4176,10 @@ testBacklashTupleRandomOver: R
 		x _ A \ b.
 		self assert: A*x = b]! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 4/14/2020 05:39:45'!
+testBacklashZnMatrixRandom
+	self testBacklashMatrixRandomOver: ZZ/(64 atRandom + 1)! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 3/4/2020 19:02:34'!
 testCokernelMatrix
 	"From Sage."
@@ -5604,14 +5608,14 @@ testPerpZ2
 	self assert: (V innerProduct value: {S basis first. perp basis first}) isZero.
 	self assert: (V innerProduct value: {S basis first. perp basis second}) isZero! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/12/2020 17:05:03'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/14/2020 05:01:03'!
 testQuotientGolay1
 	"Construct the quotient (Z/3Z)^11 by the Golay code.
 	(Example from Magma H28E10.)"
 	| V S Q |
 	V _ ZZ/3 ^ 11.
 	S _ V span: {(1,0,0,0,0,0,1,1,1,1,1). (0,1,0,0,0,0,0,1,2,2,1). (0,0,1,0,0,0,1,0,1,2,2). (0,0,0,1,0,0,2,1,0,1,2). (0,0,0,0,1,0,2,2,1,0,1). (0,0,0,0,0,1,1,2,2,1,0)}.
-	Q _ V/S.
+	Q _ (V/S) base. "free vector space equipped with embedding into (Z/3Z)^11"
 	self assert: Q rank = 5.
 	self assert: Q degree = 5! !
 

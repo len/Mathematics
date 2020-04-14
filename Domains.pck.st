@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 4:41:28 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 8:41:22 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 547!
+!provides: 'Domains' 1 548!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -5555,11 +5555,12 @@ printOn: aStream
 		ifTrue: [aStream nextPutAll: self rank printString super]
 		ifFalse: [aStream nextPutAll: '^'; print: self rank]! !
 
-!HomModule methodsFor: 'printing' stamp: 'len 10/2/2018 01:19:34'!
+!HomModule methodsFor: 'printing' stamp: 'len 4/14/2020 07:22:38'!
 printOn: aStream
 	self isEndomorphisms
-		ifTrue: [aStream nextPutAll: 'End'; nextPutAll: self scalars printText sub; nextPut: $(; print: self domain; nextPut: $)]
-		ifFalse: [aStream nextPutAll: 'Hom'; nextPutAll: self scalars printText sub; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
+		ifTrue:
+			[aStream nextPutAll: 'End'; "aStream nextPutAll: self scalars printText sub;" nextPut: $(; print: self domain; nextPut: $)]
+		ifFalse: [aStream nextPutAll: 'Hom'; "nextPutAll: self scalars printText sub;" nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
 
 !QuotientModule methodsFor: 'printing' stamp: 'len 1/24/2018 21:54:55'!
 printOn: aStream
@@ -18223,6 +18224,10 @@ maximalIdeal
 one
 	^ self embed: self integers one! !
 
+!LocalRing methodsFor: 'accessing' stamp: 'len 4/14/2020 08:31:57'!
+p
+	^ self localizationIdeal generator! !
+
 !LocalRing methodsFor: 'accessing' stamp: 'len 8/11/2019 07:58:45'!
 scalars
 	^ self integers scalars! !
@@ -18273,6 +18278,16 @@ adapt: anObject
 	(self integers includes: anObject) ifTrue:
 		[^ self embed: anObject].
 	^ super adapt: anObject! !
+
+!LocalRing methodsFor: 'elements-operations' stamp: 'len 4/14/2020 08:34:09'!
+associatedUnit: anElement
+	"Answer a choice for associated unit of anElement."
+	| p q |
+	anElement isZero ifTrue: [^ self one].
+	p _ self p.
+	q _ anElement numerator.
+	[p | q] whileTrue: [q _ q // p].
+	^ Germ new parent: self; ratio: q : anElement denominator! !
 
 !LocalRing methodsFor: 'elements-testing' stamp: 'len 6/21/2019 18:11:01'!
 isZeroDivisor: anElement
@@ -23513,7 +23528,7 @@ projection: i
 rotations
 	^ SpecialOrthogonalGroup on: self! !
 
-!FreeModule methodsFor: 'operations' stamp: 'len 4/14/2020 04:04:42'!
+!FreeModule methodsFor: 'operations' stamp: 'len 4/14/2020 04:57:55'!
 / aSubmodule
 	"Answer the quotient of the receiver by aSubmodule."
 	((aSubmodule isKindOf: Module) and: [aSubmodule ambient = self])
@@ -23522,6 +23537,8 @@ rotations
 	aSubmodule = self ifTrue: [^ self null].
 	self isVectorSpace
 		ifTrue:
+			"return the complement equipped with orthogonal projection,
+			but this is not canonical unless we're in an inner product space:"
 			[| p answer |
 			answer _ aSubmodule complement.
 			p _ answer orthogonalProjection.
@@ -39679,13 +39696,13 @@ rowsDo: aBlock
 	anInteger < 0 ifTrue: [^ self reciprocal ^ anInteger negated].
 	^ anInteger even ifTrue: [self squared ^ (anInteger // 2)] ifFalse: [self squared ^ (anInteger // 2) * self]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/29/2019 10:17:26'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:06:19'!
 · aMatrix
 	"Product of matrices."
 	| rows columns |
 	self isEmpty ifTrue: [^ self].
 	aMatrix isEmpty ifTrue: [^ aMatrix].
-	self width = aMatrix height ifFalse: [^ DomainError signal: 'matrices dimensions don''t match'].
+	self width = aMatrix height ifFalse: [^ DomainError signal: 'matrices shapes don''t match'].
 	self checkScalarsMatch: aMatrix.
 	rows _ self rows.
 	columns _ aMatrix columns.
@@ -40109,49 +40126,13 @@ solveLeft: aMatrix
 	aMatrix isTuple ifTrue: [^ self transposed solveRight: aMatrix].
 	^ ((self transposed solveRight: aMatrix transposed) ifNil: [^ nil]) transposed! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 8/16/2019 13:20:02'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:08:44'!
 solveLeft: aMatrix modulo: aRelationsMatrix
 	"Answer X such that X * A = B modulo L, where A is self, B is aMatrix and L is aRelationsMatrix."
 	^ ((self rowAugmented: aRelationsMatrix) solveLeft: aMatrix)
-		copyFromColumn: 1 to: self width! !
+		ifNotNil: [:X| X copyFromColumn: 1 to: self height]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 6/13/2019 04:37:01'!
-solveRight2: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The argument can also be a tuple, in which case it is considered
-	as a column matrix and the returned value is also a tuple."
-	| R K A B M X |
-	A _ self.
-	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
-	R _ self scalars.
-	R isIntegralDomain ifFalse: [self notYetImplemented].
-	R isField ifTrue: [K _ R] ifFalse: [K _ R fractions. A _ A over: K. B _ B over: K].
-	(A isSquare and: [A isFullRank])
-		ifTrue: [M _ A columnAugmented: B.
-				X _ M echelon copyFrom: 1@(self width + 1) to: M extent]
-		ifFalse: [X _ A solveRightGeneral: B].
-	A * X = B ifFalse: [^ nil "no solution"].
-	R = K ifFalse:
-		[(X allSatisfy: [:each| R isUnit: each denominator]) ifFalse: [^ nil "no solutions in R"].
-		X _ X over: R].
-	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/10/2019 04:16:26'!
-solveRight3: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The argument can also be a tuple, in which case it is considered
-	as a column matrix and the returned value is also a tuple."
-	| R A B X |
-	A _ self.
-	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
-	R _ self scalars.
-"	((R isKindOf: RationalIntegerRing) and: [B width = 1])
-		ifTrue: [^ A solveRightInteger: B]."
-	X _ A solveRightGeneral: B.
-"	A * X = B ifFalse: [^ nil]."
-	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 3/11/2020 16:20:15'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:06:37'!
 solveRight: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	The argument can also be a tuple, in which case it is considered
@@ -40160,97 +40141,16 @@ solveRight: aMatrix
 	| A B X |
 	A _ self.
 	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
+	A height = B height ifFalse: [DomainError signal: 'matrix shapes don''t match'].
 	X _ A solveRightGeneral: B.
 	(X notNil and: [A * X = B]) ifFalse: [^ nil].
 	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 8/16/2019 13:19:06'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:08:55'!
 solveRight: aMatrix modulo: aRelationsMatrix
 	"Answer X such that A * X = B modulo L, where A is self, B is aMatrix and aRelationsMatrix is L."
 	^ ((self columnAugmented: aRelationsMatrix) solveRight: aMatrix)
-		copyFromRow: 1 to: self height! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 09:22:41'!
-solveRightGeneral: aMatrix
-	| R |
-	R _ self scalars.
-	(R isKindOf: ProductRing) ifTrue: [^ self solveRightOverProductRing: aMatrix].
-	R isField ifTrue: [^ self solveRightOverField: aMatrix].
-	R isEuclideanDomain ifTrue: [^ self solveRightOverEuclideanDomain: aMatrix].
-	(R isKindOf: PrimePowerRing) ifTrue: [^ self solveRightOverPrimePowerRing: aMatrix].
-	(R isKindOf: ModularIntegerRing) ifTrue: [^ self solveRightOverModularIntegers: aMatrix].
-	^ self notYetImplemented! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 08:54:01'!
-solveRightOverEuclideanDomain: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
-	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
-	| G P n |
-	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((self scalars zeroMatrix: self width @ aMatrix width) rowAugmented: (self scalars identityMatrix: aMatrix width)).
-	P _ G HNFAndTransformation second.
-	n _ (P lastColumn findFirst: [:each| each isZero not]) - aMatrix width + 1.
-	^ (P copyFrom: n @ 1 to: n + aMatrix width - 1 @ self width) transposed negated! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/13/2019 14:31:57'!
-solveRightOverField: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The algorithm performs gaussian elimination in essentially O(n^3) scalar operations.
-	It is can produce coefficient explosion unless the scalar field is finite."
-	| n m reduction rows |
-	m _ aMatrix width.
-	n _ self width.
-	reduction _ self reductionWith: aMatrix.
-	rows _ OrderedCollection new.
-	reduction independentColumns withIndexDo: [:column :i|
-		column - 1 - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
-		rows add: (reduction extension rowAt: i)].
-	n - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
-	^ Matrix rows: rows! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 08:43:08'!
-solveRightOverModularIntegers: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	In order to find a solution over Z/mZ, the algorithm solves the system over Z/(p^k)Z for each prime factor p of m (where p appears with power k in the factorization of m), and then reconstructs a solution over Z/mZ by CRT."
-	| R P phi |
-	R _ self scalars.
-	P _ R decomposition.
-	phi _ R -> P.
-	^ ((self apply: phi) \ (aMatrix apply: phi)) apply: P -> R! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/16/2019 05:05:27'!
-solveRightOverPrimePowerRing: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	In order to find a solution over Z/(p^k)Z, the algorithm solves the system over the residue field Z/pZ and then lifts the solution by Hensel's lemma."
-	self notYetImplemented
-"	| R p g A B X m |
-	R _ self scalars.
-	p _ R p.
-	A _ self lift.
-	B _ aMatrix lift.
-	g _ A content gcd: B content.
-	g isZero ifFalse:
-		[A _ A collect: [:each| each // g].
-		B _ B collect: [:each| each // g]].
-	m _ p.
-	X _ ((A % p) \ (B % p)) lift.
-	self assert: ((A*X - B) % m) isZero.
-	2 to: R exponent do: [:k|
-		| C |
-		C _ B - (A*X) collect: [:each| each // m].
-		X _ (A % p \ (C % p)) lift * m + X.
-		m _ m * p.
-		self assert: ((A*X - B) % m) isZero].
-	^ X over: R"! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 7/14/2019 08:36:56'!
-solveRightOverProductRing: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The algorithm solves the system for each projection and then composes back to the product ring."
-	| R X |
-	R _ self scalars.
-	X _ R projections collect: [:p| (self apply: p) \ (aMatrix apply: p)].
-	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R compose: (X collect: [:each| each at: i@j])]! !
+		ifNotNil: [:X| X copyFromRow: 1 to: self width]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 11/3/2015 20:35'!
 squared
@@ -40873,13 +40773,92 @@ hadamardBound
 	Assume the coefficients are real."
 	^ (self rows sum: [:row| (row sum: [:each| each squared])]) log2 min: (self columns sum: [:column| (column sum: [:each| each squared])]) log2! !
 
-!Matrix methodsFor: 'as yet unclassified' stamp: 'len 3/4/2020 19:00:28'!
-relativeSyzygiesModulo: aMatrix
-	^ (self columnAugmented: aMatrix) kernel copyFromRow: 1 to: self height! !
+!Matrix methodsFor: 'private-solving' stamp: 'len 4/14/2020 06:22:56'!
+solveRightGeneral: aMatrix
+	| R |
+	R _ self scalars.
+	(R isKindOf: ProductRing) ifTrue: [^ self solveRightOverProductRing: aMatrix].
+	R isField ifTrue: [^ self solveRightOverField: aMatrix].
+	R isEuclideanDomain ifTrue: [^ self solveRightOverEuclideanDomain: aMatrix].
+"	(R isKindOf: PrimePowerRing) ifTrue: [^ self solveRightOverPrimePowerRing: aMatrix]."
+	(R isKindOf: ModularIntegerRing) ifTrue: [^ self solveRightOverModularIntegers: aMatrix].
+	^ self notYetImplemented! !
 
-!Matrix methodsFor: 'as yet unclassified' stamp: 'len 3/4/2020 19:00:35'!
-syzygies
-	^ self kernel! !
+!Matrix methodsFor: 'private-solving' stamp: 'len 7/13/2019 08:54:01'!
+solveRightOverEuclideanDomain: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
+	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
+	| G P n |
+	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((self scalars zeroMatrix: self width @ aMatrix width) rowAugmented: (self scalars identityMatrix: aMatrix width)).
+	P _ G HNFAndTransformation second.
+	n _ (P lastColumn findFirst: [:each| each isZero not]) - aMatrix width + 1.
+	^ (P copyFrom: n @ 1 to: n + aMatrix width - 1 @ self width) transposed negated! !
+
+!Matrix methodsFor: 'private-solving' stamp: 'len 7/13/2019 14:31:57'!
+solveRightOverField: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	The algorithm performs gaussian elimination in essentially O(n^3) scalar operations.
+	It is can produce coefficient explosion unless the scalar field is finite."
+	| n m reduction rows |
+	m _ aMatrix width.
+	n _ self width.
+	reduction _ self reductionWith: aMatrix.
+	rows _ OrderedCollection new.
+	reduction independentColumns withIndexDo: [:column :i|
+		column - 1 - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
+		rows add: (reduction extension rowAt: i)].
+	n - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
+	^ Matrix rows: rows! !
+
+!Matrix methodsFor: 'private-solving' stamp: 'len 4/14/2020 07:10:53'!
+solveRightOverModularIntegers: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix."
+	"NOTE: this can be generalized to other quotient rings."
+	^ (self lift solveRight: aMatrix lift modulo: (ZZ matrix: self height scalar: self scalars modulus)) ifNotNil: [:X| X apply: self scalars projection]
+
+"alternative:
+	In order to find a solution over Z/mZ, the algorithm solves the system over Z/(p^k)Z for each prime factor p of m (where p appears with power k in the factorization of m), and then reconstructs a solution over Z/mZ by CRT.:
+	| R P phi |
+	R _ self scalars.
+	P _ R decomposition.
+	phi _ R -> P.
+	^ ((self apply: phi) \ (aMatrix apply: phi)) apply: P -> R
+"! !
+
+!Matrix methodsFor: 'private-solving' stamp: 'len 7/16/2019 05:05:27'!
+solveRightOverPrimePowerRing: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	In order to find a solution over Z/(p^k)Z, the algorithm solves the system over the residue field Z/pZ and then lifts the solution by Hensel's lemma."
+	self notYetImplemented
+"	| R p g A B X m |
+	R _ self scalars.
+	p _ R p.
+	A _ self lift.
+	B _ aMatrix lift.
+	g _ A content gcd: B content.
+	g isZero ifFalse:
+		[A _ A collect: [:each| each // g].
+		B _ B collect: [:each| each // g]].
+	m _ p.
+	X _ ((A % p) \ (B % p)) lift.
+	self assert: ((A*X - B) % m) isZero.
+	2 to: R exponent do: [:k|
+		| C |
+		C _ B - (A*X) collect: [:each| each // m].
+		X _ (A % p \ (C % p)) lift * m + X.
+		m _ m * p.
+		self assert: ((A*X - B) % m) isZero].
+	^ X over: R"! !
+
+!Matrix methodsFor: 'private-solving' stamp: 'len 7/14/2019 08:36:56'!
+solveRightOverProductRing: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	The algorithm solves the system for each projection and then composes back to the product ring."
+	| R X |
+	R _ self scalars.
+	X _ R projections collect: [:p| (self apply: p) \ (aMatrix apply: p)].
+	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R compose: (X collect: [:each| each at: i@j])]! !
 
 !Matrix class methodsFor: 'instance creation' stamp: 'len 1/17/2017 08:12:11'!
 columns: anArray
