@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 11 April 2020 at 1:52:27 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 4:41:28 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 546!
+!provides: 'Domains' 1 547!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -47,8 +47,8 @@ SystemOrganization addCategory: #'Domains-Etc-Lie'!
 SystemOrganization addCategory: #'Domains-Etc-Algebras'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Abelian'!
 SystemOrganization addCategory: #'Domains-Etc-Modules-Old'!
-SystemOrganization addCategory: #'Domains-Etc-Modules-Lattices'!
 SystemOrganization addCategory: #'Domains-Etc-Modules-Tensors'!
+SystemOrganization addCategory: #'Domains-Etc-Lattices'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Linear'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Affine'!
 
@@ -1813,13 +1813,13 @@ Algebra subclass: #OppositeAlgebra
 OppositeAlgebra class
 	instanceVariableNames: ''!
 
-!classDefinition: #Lattice category: #'Domains-Etc-Modules-Lattices'!
+!classDefinition: #Lattice category: #'Domains-Etc-Lattices'!
 Domain subclass: #Lattice
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Etc-Modules-Lattices'!
-!classDefinition: 'Lattice class' category: #'Domains-Etc-Modules-Lattices'!
+	category: 'Domains-Etc-Lattices'!
+!classDefinition: 'Lattice class' category: #'Domains-Etc-Lattices'!
 Lattice class
 	instanceVariableNames: ''!
 
@@ -2053,16 +2053,6 @@ Function subclass: #AffineMap
 AffineMap class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuadraticForm category: #'Domains-Etc-Modules-Lattices'!
-Function subclass: #QuadraticForm
-	instanceVariableNames: 'coefficients'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc-Modules-Lattices'!
-!classDefinition: 'QuadraticForm class' category: #'Domains-Etc-Modules-Lattices'!
-QuadraticForm class
-	instanceVariableNames: ''!
-
 !classDefinition: #MultilinearMap category: #'Domains-Etc-Modules-Tensors'!
 Function subclass: #MultilinearMap
 	instanceVariableNames: ''
@@ -2091,6 +2081,16 @@ BilinearMap subclass: #BilinearForm
 	category: 'Domains-Etc-Modules-Tensors'!
 !classDefinition: 'BilinearForm class' category: #'Domains-Etc-Modules-Tensors'!
 BilinearForm class
+	instanceVariableNames: ''!
+
+!classDefinition: #QuadraticForm category: #'Domains-Etc-Lattices'!
+Function subclass: #QuadraticForm
+	instanceVariableNames: 'coefficients'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Lattices'!
+!classDefinition: 'QuadraticForm class' category: #'Domains-Etc-Lattices'!
+QuadraticForm class
 	instanceVariableNames: ''!
 
 !classDefinition: #SchemeMap category: #'Domains-Schemes'!
@@ -3453,14 +3453,54 @@ Object subclass: #RootSystem
 RootSystem class
 	instanceVariableNames: ''!
 
-!classDefinition: #LLL category: #'Domains-Etc-Modules-Lattices'!
+!classDefinition: #RootSystemTest category: #'Domains-Etc-Lie'!
+Object subclass: #RootSystemTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Lie'!
+!classDefinition: 'RootSystemTest class' category: #'Domains-Etc-Lie'!
+RootSystemTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #LLL category: #'Domains-Etc-Lattices'!
 Object subclass: #LLL
 	instanceVariableNames: 'basis delta orthogonalBasis mu'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Etc-Modules-Lattices'!
-!classDefinition: 'LLL class' category: #'Domains-Etc-Modules-Lattices'!
+	category: 'Domains-Etc-Lattices'!
+!classDefinition: 'LLL class' category: #'Domains-Etc-Lattices'!
 LLL class
+	instanceVariableNames: ''!
+
+!classDefinition: #LatticeTest category: #'Domains-Etc-Lattices'!
+Object subclass: #LatticeTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Lattices'!
+!classDefinition: 'LatticeTest class' category: #'Domains-Etc-Lattices'!
+LatticeTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #QuadraticFormTest category: #'Domains-Etc-Lattices'!
+Object subclass: #QuadraticFormTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Lattices'!
+!classDefinition: 'QuadraticFormTest class' category: #'Domains-Etc-Lattices'!
+QuadraticFormTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #LinearGroupsTest category: #'Domains-Etc-Groups-Linear'!
+Object subclass: #LinearGroupsTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Groups-Linear'!
+!classDefinition: 'LinearGroupsTest class' category: #'Domains-Etc-Groups-Linear'!
+LinearGroupsTest class
 	instanceVariableNames: ''!
 
 
@@ -3598,7 +3638,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: '<historical>' prior: 0!
+!Domain commentStamp: 'len 4/13/2020 04:16:35' prior: 0!
 Domains are algebraic structures (such as Groups, Rings, Modules, Schemes, etc), connected by the corresponding Morphisms. In terms of category theory, Domains are objects of concrete categories, i.e. they are realized as sets of elements endowed with certain algebraic structure, and their morphisms are structure-preserving Functions.
 
 The underlying set of a domain can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
@@ -3613,7 +3653,7 @@ Domains can be equipped with canonical morphisms. For example, field extensions 
 
 More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms.
 
-There's also a very simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any unital ring 'R' can be performed simply as 'R !! n'. Although available canonical morphisms will be used automatically for coercion, subclasses can also extend the message #!!.
+There's also a very simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any unital ring 'R' can be performed simply as 'R !! n'. Although available canonical morphisms will be used automatically for coercion, subclasses can also extend the messages #adapt: and #newFrom:.
 
 References:
 	https://ncatlab.org/nlab/show/category+theory
@@ -3939,7 +3979,7 @@ These are Euclidean rings, and the simplest examples of Galois rings, GR(p^n,1).
 
 These are also the simplest examples of 'chain rings', rings whose ideals form a chain under inclusion. A finite-chain ring is a principal ideal ring, and its maximal ideal is the nilradical (the set of nilpotent elements).
 
-There are canonical projections from Z/(p^n)Z to Z/(p^m)Z for any 1 <= m <= n. These projections form a projective system (or inverse system), and the projective limit is the ring of p-adic integers Zp. There is a canonical projection from Zp to Z/(p^n)Z, and in this sense Z/(p^n)Z can be thought of as a truncation or an approximation of precision n of Zp (see AdicIntegerRing).!
+There are canonical projections from Z/(p^n)Z to Z/(p^m)Z for any 1 <= m <= n. These projections form a projective system (or inverse system), and the projective limit is the ring of p-adic integers Zp. There is a canonical projection from Zp to Z/(p^n)Z, and in this sense Z/(p^n)Z can be thought of as a truncation or an approximation of precision n of Zp (see AdicRing).!
 
 !PrimeField commentStamp: '<historical>' prior: 0!
 Residue class fields Z/pZ of integers modulo a prime p.
@@ -4054,7 +4094,9 @@ Completion of a given commutative ring R at a given maximal ideal I. This is the
 !Module commentStamp: '<historical>' prior: 0!
 Finitely-presented R-modules.
 
-Most functionality is implemented for the cases where R is a field (vector spaces, relying on gaussian elimination), or a PID such as Z or Q[x] (relying on the Hermite normal form or computing in the field of fractions), or a multivariate polynomial ring (relying on Groebner bases). In general, the algorithms rely on the ability to solve (in)homogeneous systems of linear equations over the coefficient ring.!
+Most functionality is implemented for the cases where R is a field (vector spaces, relying on gaussian elimination), or a PID such as Z or Q[x] (relying on the Hermite normal form or computing in the field of fractions), or a multivariate polynomial ring (relying on Groebner bases). In general, the algorithms rely on the ability to solve (in)homogeneous systems of linear equations over the coefficient ring.
+
+See also ModuleMap and HomModule.!
 
 !Ideal commentStamp: '<historical>' prior: 0!
 Finitely-generated ideals of a commutative ring R, i.e. a R-submodules of R.
@@ -4104,7 +4146,7 @@ The elements of a quotient module M/S are cosets S + x with x in M. See ModuleCo
 !
 
 !ScalarModule commentStamp: '<historical>' prior: 0!
-Rank 1 free module of scalars, i.e. a ring R viewed as R-module.!
+Rank 1 free module of scalars, i.e. a ring R viewed as R-module. Submodules of this module are Ideals.!
 
 !TensorProductModule commentStamp: '<historical>' prior: 0!
 Tensor product over R of a list of free R-modules. This is a free R-module with basis given by elementary tensors on the choice of basis of the component modules.
@@ -4118,7 +4160,7 @@ See AffineScheme for affine schemes corresponding to the spectrum Spec(R) of a c
 
 An important class of schemes are those defined by polynomial equations in some ambient space. See subclasses AffineVariety and ProjectiveVariety, which are closed subschemes of affine and projective space respectively. See also RationalPoint and subclasses.!
 
-!Grassmannian commentStamp: 'len 11/3/2016 09:19' prior: 0!
+!Grassmannian commentStamp: '<historical>' prior: 0!
 The Grassmannian Gr(r,V) is the set of r-dimensional subspaces of the vector space V.!
 
 !AffineScheme commentStamp: 'len 7/9/2019 08:55:20' prior: 0!
@@ -4350,12 +4392,14 @@ Additionally, when R and S are unital K-algebras (for a field or commutative rin
 Homomorphisms of polynomial rings.!
 
 !ModuleMap commentStamp: '<historical>' prior: 0!
-Homomorphisms of modules. See Module and HomModule.!
+Homomorphisms of modules. They are internally represented by a matrix (assuming a choice of finite presentations for the domain and codomain, or more concretely a choice of an ordered set of generators).
+
+See Module and HomModule.!
 
 !FreeModuleMap commentStamp: '<historical>' prior: 0!
-Linear transformations between finite-rank free modules (or finite-dimensional vector spaces). They are homomorphisms of free modules, and are internally represented by a matrix and a choice of bases for the domain and codomain.
+Linear maps between finite-rank free modules (or finite-dimensional vector spaces). They are homomorphisms of free modules, and are internally represented by a matrix (assuming a choice of bases for the domain and codomain).
 
-See FreeModule and FreeHomModule.!
+See FreeModule and HomModule.!
 
 !RationalMap commentStamp: '<historical>' prior: 0!
 Rational maps between varieties (closed subschemes of affine or projective space). They are defined by a tuple of rational functions.
@@ -4440,9 +4484,6 @@ Affine maps are defined by a linear map and a translation (a vector of the codom
 References:
 	https://en.wikipedia.org/wiki/Affine_transformation!
 
-!QuadraticForm commentStamp: '<historical>' prior: 0!
-Quadratic forms as homogeneous quadratic functions M->R from a finite-rank free R-module to R. Given a basis of M, they can be represented as homogeneous quadratic polynomials or as symmetric matrices that define symmetric bilinear forms MxM->R.!
-
 !MultilinearMap commentStamp: '<historical>' prior: 0!
 MultilinearMaps are functions from a cartesian product of R-modules to another R-module, that are linear when fixing all but one of the arguments.!
 
@@ -4451,6 +4492,9 @@ Bilinear forms are functions from MxM to R (where M is a R-module) that satisfy:
 	B(v+cv', w) = B(v, w) + cB(v', w)
 	B(v, w+cw') = B(v, w) + cB(v, w')
 !
+
+!QuadraticForm commentStamp: '<historical>' prior: 0!
+Quadratic forms as homogeneous quadratic functions M->R from a finite-rank free R-module to R. Given a basis of M, they can be represented as homogeneous quadratic polynomials or as symmetric matrices that define symmetric bilinear forms MxM->R.!
 
 !SchemeMap commentStamp: '<historical>' prior: 0!
 Morphisms of schemes are morphisms of locally ringed spaces.
@@ -4504,6 +4548,9 @@ Elements of the opposite group of a given group. See OppositeGroup.!
 !Permutation commentStamp: '<historical>' prior: 0!
 Permutations are bijective functions on a finite set. Permutations under composition form groups (see SymmetricGroup and PermutationGroup).!
 
+!RingElement commentStamp: '<historical>' prior: 0!
+Elements of a Ring.!
+
 !Germ commentStamp: '<historical>' prior: 0!
 Elements of localizations of rings at a prime ideal. See LocalRing.!
 
@@ -4519,7 +4566,7 @@ They are elements of the fraction field or total ring of fractions Frac(R). See 
 Rational functions are fractions of polynomials. They are elements of the field of fractions of a polynomial ring over a field (see RationalFunctionField).!
 
 !Residue commentStamp: '<historical>' prior: 0!
-Element of a quotient ring (see QuotientRing). This is a residue class of elements of a ring modulo an ideal.!
+Elements of a quotient ring (see QuotientRing). These are residue classes of elements of a ring modulo an ideal.!
 
 !ModularInteger commentStamp: '<historical>' prior: 0!
 Residue classes of integers modulo an integer m, i.e. elements of the quotient ring Z/mZ (see ModularIntegerRing).!
@@ -5636,12 +5683,28 @@ printOn: aStream
 		separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $)! !
 
-!ModuleMap methodsFor: 'printing' stamp: 'len 11/2/2016 08:00'!
+!ModuleMap methodsFor: 'printing' stamp: 'len 4/13/2020 01:23:38'!
 printOn: aStream
+	| A B f |
 	self isIdentity ifTrue: [aStream nextPutAll: 'id'. ^ self].
 	self negated isIdentity ifTrue: [aStream nextPutAll: '-id'. ^ self].
 	self isZero ifTrue: [aStream nextPut: $0. ^ self].
-	super printOn: aStream! !
+	self isLinearForm ifTrue: [aStream print: self asPolynomial. ^ self].
+	"If the codomain is tuples, print the linear map as a tuple of linear forms:"
+	(self codomain isKindOf: FreeModule) ifTrue:
+		[aStream nextPut: $(.
+		matrix rows
+			do: [:each| aStream print: (self domain dual elementAt: each)]
+			separatedBy: [aStream nextPutAll: ', '].
+		aStream nextPut: $).
+		^ self].
+	"Print it as a linear combination of the generators of the codomain:"
+	A _ self domain coordinateRing.
+	B _ A polynomialsIn: self codomain base names.
+	f _ B zero.
+	matrix rows
+		withIndexDo: [:each :i| f _ (B x: i) * (self domain dual elementAt: each) asPolynomial + f].
+	aStream print: f! !
 
 !FreeModuleMap methodsFor: 'printing' stamp: 'len 3/19/2020 19:05:45'!
 printOn: aStream
@@ -5722,11 +5785,11 @@ printOn: aStream
 	"aStream print: linearPart; nextPutAll: ' + '; print: self translation"
 	aStream print: self asRationalMap! !
 
-!QuadraticForm methodsFor: 'printing' stamp: 'len 4/21/2016 00:22'!
+!BilinearForm methodsFor: 'printing' stamp: 'len 3/18/2018 18:42:28'!
 printOn: aStream
 	aStream print: self asPolynomial! !
 
-!BilinearForm methodsFor: 'printing' stamp: 'len 3/18/2018 18:42:28'!
+!QuadraticForm methodsFor: 'printing' stamp: 'len 4/21/2016 00:22'!
 printOn: aStream
 	aStream print: self asPolynomial! !
 
@@ -17077,7 +17140,7 @@ additionTable
 multiplicationTable
 	^ MultiplicationTableMorph elements: self elements asArray operation: [:x :y| x*y]! !
 
-!Ring methodsFor: 'accessing' stamp: 'len 6/9/2019 12:29:58'!
+!Ring methodsFor: 'accessing' stamp: 'len 4/13/2020 09:41:49'!
 dimension
 	"Answer the Krull dimension of the receiver. This is the length of the longest ascending chain of prime ideals."
 	self isField ifTrue: [^ 0].
@@ -17085,6 +17148,7 @@ dimension
 	self isIntegralDomain ifTrue: [^ 1].
 	self isDedekindDomain ifTrue: [^ 1]. "<- because it's not a field"
 	self isTrivial ifTrue: [^ -1].
+	self isFinite ifTrue: [^ 0].
 	^ self propertyAt: #dimension! !
 
 !Ring methodsFor: 'accessing' stamp: 'len 8/10/2019 08:40:36'!
@@ -17540,13 +17604,13 @@ zeroIdeal
 isAlgebraicallyClosed
 	^ self propertyAt: #isAlgebraicallyClosed ifAbsent: [false]! !
 
-!Ring methodsFor: 'testing' stamp: 'len 6/10/2019 17:01:41'!
+!Ring methodsFor: 'testing' stamp: 'len 4/13/2020 09:42:46'!
 isArtinian
 	"Answer true if the receiver is an Artinian ring, i.e. it satisfied the descending chain condition on ideals.
 	In the non-commutative case, one should talk about 'left Artinian' or 'right Artinian' rings."
-	self isIntegralDomain ifTrue: [^ self isField].
 	self isFinite ifTrue: [^ true].
-	^ self propertyAt: #isArtinian! !
+	self isIntegralDomain ifTrue: [^ self isField].
+	^ self isNoetherian and: [self dimension = 0]! !
 
 !Ring methodsFor: 'testing' stamp: 'len 6/16/2019 13:28:08'!
 isBezout
@@ -17806,6 +17870,11 @@ one
 !FractionRing methodsFor: 'accessing' stamp: 'len 8/11/2019 07:58:07'!
 scalars
 	^ self integers scalars! !
+
+!FractionRing methodsFor: 'accessing' stamp: 'len 4/13/2020 04:59:38'!
+size
+	self integers isFinite ifFalse: [^ self integers size].
+	^ super size! !
 
 !FractionRing methodsFor: 'accessing' stamp: 'len 6/10/2019 14:08:19'!
 uniformizer
@@ -18157,6 +18226,11 @@ one
 !LocalRing methodsFor: 'accessing' stamp: 'len 8/11/2019 07:58:45'!
 scalars
 	^ self integers scalars! !
+
+!LocalRing methodsFor: 'accessing' stamp: 'len 4/13/2020 04:59:56'!
+size
+	self integers isFinite ifFalse: [^ self integers size].
+	^ super size! !
 
 !LocalRing methodsFor: 'accessing' stamp: 'len 6/21/2019 05:12:24'!
 uniformizer
@@ -18879,10 +18953,12 @@ isZeroDivisor: anElement
 	anElement isZero ifTrue: [^ self isTrivial not].
 	^ (anElement representative gcd: self modulus) ~= 1! !
 
-!ModularIntegerRing methodsFor: 'elements-tuples' stamp: 'len 3/9/2020 20:15:11'!
+!ModularIntegerRing methodsFor: 'elements-tuples' stamp: 'len 4/12/2020 17:04:41'!
 tuple: anArray
+	| components |
 	(anArray isTuple and: [anArray scalars == self]) ifTrue: [^ anArray].
-	^ modulus = 2 ifTrue: [BitTuple components: anArray] ifFalse: [ModularTuple components: anArray over: self]! !
+	components _ (anArray collect: [:each| self !! each]) asArray.
+	^ modulus = 2 ifTrue: [BitTuple components: components] ifFalse: [ModularTuple components: components over: self]! !
 
 !ModularIntegerRing methodsFor: 'elements-tuples' stamp: 'len 5/4/2019 07:47:29'!
 tupleClass
@@ -21854,12 +21930,13 @@ gramian
 		evaluating:
 			[:i :j| f value: {(self basis at: i). (self basis at: j)}]! !
 
-!Module methodsFor: 'accessing' stamp: 'len 4/8/2020 14:48:42'!
+!Module methodsFor: 'accessing' stamp: 'len 4/14/2020 02:01:19'!
 invariants
-	| M |
-	M _ Matrix rows: (self relators collect: [:each| (self base coordinatesOf: each)]).
-"	M _ (self relations -> self base) matrix."
-	^ M elementaryDivisors! !
+	^ self propertyAt: #invariants ifAbsentPut:
+		[| M elementaryDivisors |
+		M _ (self relations -> self base) matrix.
+		elementaryDivisors _ M elementaryDivisors.
+		((elementaryDivisors size + 1 to: self base rank) collect: [:each| self scalars zero]), (elementaryDivisors copyWithout: self scalars one)]! !
 
 !Module methodsFor: 'accessing' stamp: 'len 4/3/2018 06:34:35'!
 null
@@ -21927,18 +22004,28 @@ zero
 	^ (self generators allSatisfy: [:each| anObject includes: each])
 		and: [anObject generators allSatisfy: [:each| self includes: each]]! !
 
-!Module methodsFor: 'comparing' stamp: 'len 3/11/2020 06:12:32'!
+!Module methodsFor: 'comparing' stamp: 'len 4/14/2020 02:04:57'!
 ~ aModule
 	"Answer true if the receiver is isomorphic to the argument."
 	self == aModule ifTrue: [^ true].
 	self scalars = aModule scalars ifFalse: [^ false].
-	self isFree ifTrue: [^ aModule isFree].
-	aModule isFree ifTrue: [^ false].
+	self scalars isPID ifTrue: [^ self invariants = aModule invariants].
 	self notYetImplemented! !
 
 !Module methodsFor: 'comparing' stamp: 'len 1/13/2018 22:42:28'!
 hash
 	^ self scalars hash! !
+
+!Module methodsFor: 'converting' stamp: 'len 4/14/2020 04:32:17'!
+asAbelianGroup
+	^ self base asAbelianGroup / self relators! !
+
+!Module methodsFor: 'converting' stamp: 'len 4/13/2020 03:03:16'!
+asAlgebraicVariety
+	| R generators |
+	R _ self scalars polynomialsIn: self ambient rank.
+	generators _ R tuple: R generators.
+	^ (R * (self annihilatorSpace basis asArray collect: [:each| (each matrix over: R) * generators at: 1])) variety! !
 
 !Module methodsFor: 'converting' stamp: 'len 12/18/2016 12:41:32'!
 over: aRing
@@ -22014,14 +22101,14 @@ into: aModule matrix: aMatrix
 onto: aModule matrix: aMatrix
 	^ self to: aModule matrix: aMatrix! !
 
-!Module methodsFor: 'morphisms' stamp: 'len 4/10/2020 08:58:48'!
+!Module methodsFor: 'morphisms' stamp: 'len 4/12/2020 18:46:02'!
 orthogonalProjection
 	"Answer an orthogonal projection onto the receiver (with respect to the standard inner product)."
 	| F T |
-	"self isTrivial ifTrue: [^ self ambient endomorphisms zero]."
-	F _ (self base -> self ambient) matrix transposed.
+	self isTrivial ifTrue: [^ self ambient endomorphisms zero].
+	F _ (self base -> self ambient) matrix.
 	T _ F transposed.
-	^ self ambient endomorphisms !! (T * (F * T) inverse * F)
+	^ self ambient endomorphisms !! (F * (T * F) inverse * T)
 
 "	^ self propertyAt: #orthogonalProjection ifAbsentPut:
 		[| F T |
@@ -22044,11 +22131,11 @@ to: aCodomain
 		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain zero]].
 	^ super to: aCodomain! !
 
-!Module methodsFor: 'morphisms' stamp: 'len 3/10/2020 18:34:41'!
+!Module methodsFor: 'morphisms' stamp: 'len 4/13/2020 13:44:58'!
 to: aModule evaluating: aBlock
 	aModule isModule ifFalse: [^ super to: aModule evaluating: aBlock].
 	aModule scalars = self scalars ifFalse: [DomainError signal].
-	^ (self isFree ifTrue: [FreeModuleMap] ifFalse: [ModuleMap]) from: self to: aModule evaluating: aBlock! !
+	^ ((self isFree and: aModule isFree) ifTrue: [FreeModuleMap] ifFalse: [ModuleMap]) from: self to: aModule evaluating: aBlock! !
 
 !Module methodsFor: 'morphisms' stamp: 'len 3/11/2020 18:01:50'!
 to: aModule mapping: aBlock
@@ -22058,10 +22145,10 @@ to: aModule mapping: aBlock
 	matrix _ Matrix rows: ((1 to: self generators size) collect: [:i| aModule coordinatesOf: aModule !! (aBlock value: i)]).
 	^ self to: aModule matrix: matrix transposed! !
 
-!Module methodsFor: 'morphisms' stamp: 'len 3/10/2020 18:34:17'!
+!Module methodsFor: 'morphisms' stamp: 'len 4/13/2020 13:45:10'!
 to: aModule matrix: aMatrix
 	aModule isModule ifFalse: [^ DomainError signal].
-	^ (self isFree ifTrue: [FreeModuleMap] ifFalse: [ModuleMap]) from: self to: aModule matrix: aMatrix! !
+	^ ((self isFree and: [aModule isFree]) ifTrue: [FreeModuleMap] ifFalse: [ModuleMap]) from: self to: aModule matrix: aMatrix! !
 
 !Module methodsFor: 'operations' stamp: 'len 3/5/2020 17:35:47'!
 * anIdeal
@@ -22088,7 +22175,7 @@ to: aModule matrix: aMatrix
 "alternately:
 	^ (self base -> self ambient coproduct: aSubmodule base -> self ambient) image"! !
 
-!Module methodsFor: 'operations' stamp: 'len 4/10/2020 06:12:23'!
+!Module methodsFor: 'operations' stamp: 'len 4/13/2020 04:43:01'!
 / aSubmodule
 	"Answer the quotient of the receiver by aSubmodule,
 	i.e. the module obtained by 'collapsing' the submodule to zero.
@@ -22102,16 +22189,22 @@ to: aModule matrix: aMatrix
 	- the syzygy matrix S of M modulo N is the desired presentation.
 	See GAP4 homalg SubfactorModule(M1,M2)."
 
-	(self ambient scalars includes: aSubmodule) ifTrue: [^ self * aSubmodule reciprocal].
+	| answer |
+	(self scalars includes: aSubmodule) ifTrue: [^ self * aSubmodule reciprocal].
 	(self ambient includes: aSubmodule) ifTrue: [^ self / (self ambient span: {aSubmodule})].
 	aSubmodule isCollection ifTrue: [^ self / (self ambient span: aSubmodule)].
-	aSubmodule isFree ifFalse: [^ self notYetImplemented].
+"	aSubmodule isFree ifFalse: [^ self notYetImplemented]."
 	(self ambient = aSubmodule ambient and: [self >= aSubmodule])
 		ifFalse: [^ DomainError signal].
 	self isAmbient ifFalse: [^ self apply: self ambient -> (self ambient / aSubmodule)].
 	aSubmodule isTrivial ifTrue: [^ self].
 	aSubmodule = self ifTrue: [^ self null].
-	self isVectorSpace ifTrue:
+"	^ (aSubmodule -> self) cokernel"
+	^ (answer _ self base / (aSubmodule generators collect: [:each| self coordinatesOf: each]))
+"		addMap: self -> self base -> answer;"
+		yourself
+
+"	self isVectorSpace ifTrue:
 		[| perp answer projection |
 		perp _ aSubmodule complement.
 		answer _ self scalars ^ (self rank - aSubmodule rank).
@@ -22119,9 +22212,9 @@ to: aModule matrix: aMatrix
 		projection propertyAt: #section put: (answer into: self evaluating: [:each| perp elementAt: each]).
 		answer addMap: projection.
 		^ answer].
-	self notYetImplemented! !
+	self notYetImplemented"! !
 
-!Module methodsFor: 'operations' stamp: 'len 4/8/2020 17:24:55'!
+!Module methodsFor: 'operations' stamp: 'len 4/12/2020 19:19:50'!
 /\ aSubmodule
 	"Answer the intersection of the receiver and the argument."
 	| M N |
@@ -22130,7 +22223,7 @@ to: aModule matrix: aMatrix
 	self isTrivial ifTrue: [^ self].
 	aSubmodule isTrivial ifTrue: [^ aSubmodule].
 	M _ (self base -> self ambient) matrix.
-	N _ (M columnAugmented: (aSubmodule base -> self ambient) matrix) kernel.
+	N _ (M columnAugmented: (aSubmodule base -> aSubmodule ambient) matrix) kernel.
 	N isEmpty ifTrue: [^ self ambient null].
 	N _ N copyFrom: 1@1 to: N height @ M width.
 	^ self ambient span: (N * M transposed) rows
@@ -22157,12 +22250,12 @@ to: aModule matrix: aMatrix
 		ifTrue: [self  aModule]
 		ifFalse: [super × aModule]! !
 
-!Module methodsFor: 'operations' stamp: 'len 8/17/2019 09:18:52'!
+!Module methodsFor: 'operations' stamp: 'len 4/13/2020 01:58:27'!
  aModule
 	| answer n |
 	aModule isModule ifFalse: [^ super  aModule].
 	n _ self generators size.
-	^ (answer _ (self relationMap  aModule relationMap) cokernel)
+	^ (answer _ (self relations -> self base  (aModule relations -> aModule base)) cokernel)
 		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
 			aModule into: answer mapping: [:i| answer x: i+n]};
@@ -22181,11 +22274,18 @@ to: aModule matrix: aMatrix
 		addMap: (self, aModule to: answer evaluatingWithArguments: [:f :g| answer evaluating: [:h| f * (h value: g)]]);
 		yourself! !
 
-!Module methodsFor: 'operations' stamp: 'len 3/10/2020 10:52:54'!
+!Module methodsFor: 'operations' stamp: 'len 4/14/2020 03:52:12'!
 annihilator
 	"Answer the ideal of the scalars ring that annihilates all the elements in the receiver.
 	For an R-module M, Ann(M) is the kernel of the natural map R -> End(M), and can also be computed as the colon quotient {0} : M."
-	^ self null : self! !
+	self scalars isPID ifTrue:
+		[self isFinite ifFalse: [^ self scalars zeroIdeal].
+		^ self scalars * (self invariants inject: self scalars one into: [:result :each| result lcm: each])].
+	^ self null : self
+
+"alternatively:
+	^ (self base -> self ambient) adjoint kernel
+"! !
 
 !Module methodsFor: 'operations' stamp: 'len 3/17/2020 16:31:24'!
 annihilatorSpace
@@ -22323,9 +22423,11 @@ isDual
 	"Answer true if the receiver is the module of linear forms Hom(M,R) for an R-module M."
 	^ false! !
 
-!Module methodsFor: 'testing' stamp: 'len 3/5/2020 17:43:59'!
+!Module methodsFor: 'testing' stamp: 'len 4/14/2020 01:54:38'!
 isFinite
-	^ self generators isEmpty or: [self scalars isFinite]! !
+	self isFree ifTrue: [self generators isEmpty or: [self scalars isFinite]].
+	(self scalars isKindOf: RationalIntegerRing) ifTrue: [^ (self invariants includes: self scalars zero) not and: [self invariants isEmpty not]].
+	^ self notYetImplemented! !
 
 !Module methodsFor: 'testing' stamp: 'len 3/10/2020 11:42:41'!
 isFree
@@ -22420,22 +22522,6 @@ stalk
 	"Assuming the receiver is a prime ideal, answer the localization of the ambient ring at the receiver.
 	This is the stalk of the structure sheaf of the spectrum of the ambient ring at the receiver considered as point."
 	^ self scalars localizationAt: self! !
-
-!Ideal methodsFor: 'private' stamp: 'len 1/15/2018 18:48:36'!
-generators: aCollection
-	| generators |
-	generators _ aCollection asSet reject: [:each| each isZero].
-"	generators size = aCollection size ifTrue: [generators _ aCollection]." "keep order if possible"
-	(generators size > 1 and: [[self scalars isPID] ifError: [false]])
-		ifTrue:
-			[| generator |
-			generators do: [:each| generator _ generator isNil ifTrue: [each] ifFalse: [generator gcd: each]].
-			generators _ {generator}].
-	super generators: generators! !
-
-!Ideal methodsFor: 'private' stamp: 'len 3/9/2020 12:35:41'!
-scalars: aRing
-	self ambient: aRing asSelfModule! !
 
 !Ideal methodsFor: 'converting' stamp: 'len 10/23/2016 21:09'!
 asIdeal
@@ -22551,6 +22637,10 @@ squared
 	"Answer true if the receiver divides anIdeal."
 	^ self >= anIdeal! !
 
+!Ideal methodsFor: 'testing' stamp: 'len 4/13/2020 02:58:05'!
+contains: anElement
+	^ (self reduce: anElement) isZero! !
+
 !Ideal methodsFor: 'testing' stamp: 'len 7/9/2019 08:02:45'!
 isClosedPoint
 	"Answer true if the receiver is a closed point in the Zariski topology."
@@ -22637,6 +22727,22 @@ isSquareFree
 isZero
 	"Answer true if the receiver is the zero ideal {0}."
 	^ self isTrivial! !
+
+!Ideal methodsFor: 'private' stamp: 'len 1/15/2018 18:48:36'!
+generators: aCollection
+	| generators |
+	generators _ aCollection asSet reject: [:each| each isZero].
+"	generators size = aCollection size ifTrue: [generators _ aCollection]." "keep order if possible"
+	(generators size > 1 and: [[self scalars isPID] ifError: [false]])
+		ifTrue:
+			[| generator |
+			generators do: [:each| generator _ generator isNil ifTrue: [each] ifFalse: [generator gcd: each]].
+			generators _ {generator}].
+	super generators: generators! !
+
+!Ideal methodsFor: 'private' stamp: 'len 3/9/2020 12:35:41'!
+scalars: aRing
+	self ambient: aRing asSelfModule! !
 
 !Ideal class methodsFor: 'examples' stamp: 'len 5/11/2018 20:52:37'!
 example1
@@ -22846,14 +22952,14 @@ invert: aPolynomial
 	aPolynomial = self scalars one ifTrue: [^ aPolynomial].
 	^ super invert: aPolynomial! !
 
-!PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 3/10/2020 18:26:25'!
+!PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 4/13/2020 02:41:54'!
 reduce: aPolynomial
 	"Answer the normal form of anElement with respect to the receiver."
 	| f |
 	f _ aPolynomial.
 	f parent == self scalars ifFalse: [f _ self scalars !! f].
 	(f isZero or: [self isZero]) ifTrue: [^ f].
-	self scalars isUnivariate ifTrue: [^ f \\ self generator].
+	self scalars isUnivariate ifTrue: [^ f  \\ self generator].
 	^ self basis reduce: f! !
 
 !PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/10/2019 04:28:52'!
@@ -23141,6 +23247,12 @@ generatingMonomials
 		answer _ answer /\ (self class new scalars: self scalars; generators: (self generators collect: [:each| each /// (each gcd: g)]))].
 	^ answer! !
 
+!MonomialIdeal methodsFor: 'operations' stamp: 'len 4/14/2020 03:28:19'!
+alexanderDual
+	"Answer the Alexander dual of the receiver.
+	If I is the Stanley-Reisner ideal of a simplicial complex S, the Alexander dual of I is defined as the Stanley-Reisner ideal of the dual of S."
+	^ self asSimplicialComplex dual stanleyReisnerIdealIn: self scalars! !
+
 !MonomialIdeal methodsFor: 'operations' stamp: 'len 1/15/2018 18:52:38'!
 asSimplicialComplex
 	"Answer the Stanley-Reisner simplicial complex associated to the receiver.
@@ -23148,12 +23260,6 @@ asSimplicialComplex
 	Fail if this ideal is not squarefree."
 	self isSquareFree ifFalse: [^ self error: 'not squarefree'].
 	^ (SimplicialComplex on: self scalars indeterminates facets: (self generatingMonomials collect: [:each| each indeterminates])) complement dual! !
-
-!MonomialIdeal methodsFor: 'operations' stamp: 'len 1/15/2018 18:52:44'!
-dual
-	"Answer the Alexander dual of the receiver.
-	If I is the Stanley-Reisner ideal of a simplicial complex S, the Alexander dual of I is defined as the Stanley-Reisner ideal of the dual of S."
-	^ self asSimplicialComplex dual stanleyReisnerIdealIn: self scalars! !
 
 !MonomialIdeal methodsFor: 'operations' stamp: 'len 8/10/2019 08:35:21'!
 hilbertSeriesAt: t
@@ -23322,9 +23428,9 @@ ordering: aModuleMonomialOrdering
 			ifTrue: [ModuleMonomialOrdering perform: aModuleMonomialOrdering]
 			ifFalse: [aModuleMonomialOrdering])! !
 
-!FreeModule methodsFor: 'comparing' stamp: 'len 4/7/2020 11:29:40'!
+!FreeModule methodsFor: 'comparing' stamp: 'len 4/14/2020 00:20:46'!
 = anObject
-	^ self == anObject or: [self class == anObject class and: [scalars = anObject scalars and: [rank = anObject rank]]]! !
+	^ self == anObject "or: [self class == anObject class and: [scalars = anObject scalars and: [rank = anObject rank]]]"! !
 
 !FreeModule methodsFor: 'converting' stamp: 'len 3/11/2020 05:37:16'!
 asAbelianGroup
@@ -23344,13 +23450,6 @@ asAbelianGroup
 	(ZZ^2) asAbelianGroup
 	(ZZ/2^2) asAbelianGroup
 "! !
-
-!FreeModule methodsFor: 'converting' stamp: 'len 7/17/2019 05:05:28'!
-asAlgebraicVariety
-	| R generators |
-	R _ self scalars polynomialsIn: self ambient rank.
-	generators _ R tuple: R generators.
-	^ (R * (self annihilatorSpace basis asArray collect: [:each| (each matrix over: R) * generators at: 1])) variety! !
 
 !FreeModule methodsFor: 'converting' stamp: 'len 5/26/2019 12:18:23'!
 asElementaryAbelianGroup
@@ -23381,8 +23480,9 @@ adapt: anElement
 coordinatesOf: anElement
 	^ anElement coordinates! !
 
-!FreeModule methodsFor: 'elements' stamp: 'len 3/19/2020 19:04:44'!
+!FreeModule methodsFor: 'elements' stamp: 'len 4/13/2020 03:57:32'!
 elementAt: aTuple
+	aTuple size = rank ifFalse: [^ super elementAt: aTuple].
 	^ FreeModuleElement new parent: self; coordinates: aTuple! !
 
 !FreeModule methodsFor: 'elements' stamp: 'len 4/9/2020 07:14:49'!
@@ -23413,17 +23513,32 @@ projection: i
 rotations
 	^ SpecialOrthogonalGroup on: self! !
 
-!FreeModule methodsFor: 'operations' stamp: 'len 4/8/2020 11:32:51'!
-/ anObject
-	"Answer the quotient of the receiver by the submodule anObject,
-	i.e. the module obtained by 'collapsing' the submodule to zero.
-	Alternatively, if anObject is an scalar, scale down the receiver by it."
-	(self scalars includes: anObject) ifTrue: [^ self * anObject reciprocal].
-	(self ambient includes: anObject) ifTrue: [^ self / (self ambient span: {anObject})].
-	anObject isCollection ifTrue: [^ self / (self ambient span: anObject)].
-	((anObject isKindOf: Module) and: [anObject ambient = self])
-		ifFalse: [^ DomainError signal].
-	^ QuotientModule relations: anObject! !
+!FreeModule methodsFor: 'operations' stamp: 'len 4/14/2020 04:04:42'!
+/ aSubmodule
+	"Answer the quotient of the receiver by aSubmodule."
+	((aSubmodule isKindOf: Module) and: [aSubmodule ambient = self])
+		ifFalse: [^ super / aSubmodule].
+	aSubmodule isTrivial ifTrue: [^ self].
+	aSubmodule = self ifTrue: [^ self null].
+	self isVectorSpace
+		ifTrue:
+			[| p answer |
+			answer _ aSubmodule complement.
+			p _ answer orthogonalProjection.
+			answer addMap: (self onto: answer evaluating: [:x| p value: x]).
+			^ answer].
+	^ QuotientModule relations: aSubmodule
+	
+"alternatively, could return an abstract vector space:
+	self isVectorSpace
+		ifTrue:
+			[| complement p answer |
+			complement _ aSubmodule complement.
+			p _ complement orthogonalProjection.
+			^ (answer _ self scalars ^ complement rank)
+				addMap: (self onto: answer evaluating: [:x| complement coordinatesOf: (p value: x)]);
+				yourself].
+"! !
 
 !FreeModule methodsFor: 'operations' stamp: 'len 3/10/2020 20:19:45'!
  aModule
@@ -23452,9 +23567,9 @@ atRandom: aRandom bits: bitSize
 	n _ bitSize / rank.
 	^ self elementAt: (scalars tuple: rank evaluating: [:i| scalars atRandom: aRandom bits: n])! !
 
-!FreeModule methodsFor: 'testing' stamp: 'len 3/3/2020 18:26:16'!
+!FreeModule methodsFor: 'testing' stamp: 'len 4/14/2020 00:37:56'!
 includes: anObject
-	^ anObject isElement and: [anObject parent == self]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !FreeModule methodsFor: 'testing' stamp: 'len 3/8/2020 16:36:29'!
 isFree
@@ -23520,10 +23635,11 @@ over: aRing
 	"Answer the change of base ring of the receiver."
 	^ self class from: (self domain over: aRing) to: (self codomain over: aRing)! !
 
-!HomModule methodsFor: 'elements' stamp: 'len 4/9/2020 18:11:00'!
+!HomModule methodsFor: 'elements' stamp: 'len 4/14/2020 04:13:19'!
 adapt: anElement
 	(self scalars includes: anElement) ifTrue: [^ self scalar: anElement].
 	anElement isInteger ifTrue: [^ self scalar: self scalars !! anElement].
+	(self isDual and: [anElement isKindOf: Polynomial]) ifTrue: [^ self evaluating: [:x| anElement value: (self domain coordinatesOf: x)]].
 	^ super adapt: anElement! !
 
 !HomModule methodsFor: 'elements' stamp: 'len 3/6/2020 21:03:13'!
@@ -23560,11 +23676,11 @@ scalar: aNumber
 zero
 	^ self evaluating: [:x| codomain zero]! !
 
-!HomModule methodsFor: 'morphisms' stamp: 'len 3/15/2020 16:49:26'!
+!HomModule methodsFor: 'morphisms' stamp: 'len 4/13/2020 00:54:37'!
 from: aDomain
 	self isEndomorphisms ifTrue:
 		[aDomain == self scalars asSelfModule ifTrue: [^ self addMap: (aDomain to: self evaluating: [:x| self scalar: x])]. "inclusion of scalars"
-		aDomain -> self scalars asSelfModule ifNotNil: [:aMorphism| ^ aMorphism -> self]].
+		"aDomain -> self scalars asSelfModule ifNotNil: [:aMorphism| ^ aMorphism -> self]"].
 	(self isDual and: [self domain isDual and: [self domain domain == aDomain]])
 		ifTrue: [^ self addMap: (aDomain to: self mapping: [:i| self x: i])].
 	^ super from: aDomain! !
@@ -23689,19 +23805,9 @@ projection
 	self = aSubmodule ambient ifFalse: [^ DomainError signal].
 	^ self base / (self relations + (aSubmodule apply: (self base -> self) section))! !
 
-!QuotientModule methodsFor: 'operations' stamp: 'len 3/2/2020 08:15:12'!
-annihilator
-	"Answer the ideal of the scalars ring that annihilates all the elements in the receiver."
-	self isFinite ifFalse: [^ self scalars zeroIdeal].
-	^ self scalars * (self invariants inject: self scalars one into: [:result :each| result lcm: each])! !
-
-!QuotientModule methodsFor: 'testing' stamp: 'len 8/17/2019 16:22:01'!
+!QuotientModule methodsFor: 'testing' stamp: 'len 4/14/2020 00:39:17'!
 includes: anObject
-	^ anObject isElement and: [anObject parent == self]! !
-
-!QuotientModule methodsFor: 'testing' stamp: 'len 9/15/2018 05:43:12'!
-isFinite
-	^ (self invariants includes: 0) not and: [self invariants isEmpty not]! !
+	^ anObject isElement and: [anObject parent = self]! !
 
 !QuotientModule methodsFor: 'testing' stamp: 'len 5/20/2018 13:37:28'!
 isNoetherian
@@ -24616,9 +24722,9 @@ origin
 pointsCountOver: aRing
 	^ aRing size ^ self rank! !
 
-!AffineSpace methodsFor: 'points' stamp: 'len 1/22/2017 08:23:01'!
+!AffineSpace methodsFor: 'points' stamp: 'len 4/13/2020 03:00:26'!
 pointsOver: aRing do: aBlock
-	^ aRing ^ self rank do: [:each| aBlock value: (self pointAt: each)]! !
+	^ aRing tuples: self rank do: [:each| aBlock value: (self pointAt: each)]! !
 
 !AffineSpace methodsFor: 'testing' stamp: 'len 2/22/2017 07:54:37'!
 isPlane
@@ -25427,12 +25533,12 @@ pointsOver: aRing do: aBlock
 		ifTrue: [^ self pointsOverIntegersDo: aBlock].
 	self pointsOverRing: aRing do: aBlock! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 8/17/2019 08:51:51'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 4/13/2020 03:00:57'!
 pointsOverField: aRing do: aBlock
 	| one zero |
 	one _ aRing one.
 	zero _ aRing zero.
-	aRing ^ (self rank - 1) do: [:each|
+	aRing tuples: self rank - 1 do: [:each|
 		(each isZero not and: [(each at: each depth) = one])
 			ifTrue: [aBlock value: (self pointAt: each, zero)].
 		aBlock value: (self pointAt: (each, one))].! !
@@ -25577,14 +25683,16 @@ distance
 	V _ self ambient.
 	^ (V, V) to: ZZ evaluating: [:xy| | x y | x _ V coordinatesOf: xy first. y _ V coordinatesOf: xy second. (1 to: k) count: [:i| (x at: i) ~= (y at: i)]]! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 3/19/2018 19:37:35'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:18:47'!
 generatorMatrix
-	^ self asVectorSpace matrix! !
+	| V |
+	V _ self asVectorSpace.
+	^ (V base -> V ambient) matrix transposed! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2016 04:38'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:13:54'!
 length
 	"Answer the length of a codeword."
-	^ self ambient dimension! !
+	^ self ambient rank! !
 
 !LinearCode methodsFor: 'accessing' stamp: 'len 12/28/2016 11:32:15'!
 minimumDistance
@@ -25633,7 +25741,7 @@ weightDistribution: aCodeword
 	"Answer the weight distribution wrt aCodeword."
 	self notYetImplemented! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 7/15/2016 18:27'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:14:01'!
 weightEnumerator
 	"Answer the Hamming weight enumerator polynomial."
 	| P x y weights answer n |
@@ -25641,7 +25749,7 @@ weightEnumerator
 	x _ P x.
 	y _ P y.
 	answer _ P zero.
-	n _ self ambient dimension.
+	n _ self ambient rank.
 	weights _ self weightDistribution.
 	weights asSet do: [:i| answer _ x ^ (n - i) * (y ^ i) * (weights occurrencesOf: i) + answer].
 	^ answer! !
@@ -25745,10 +25853,10 @@ isMaximumDistanceSeparable
 	d _ self minimumDistance.
 	^ k + d = (n + 1)! !
 
-!LinearCode methodsFor: 'testing' stamp: 'len 5/23/2016 04:38'!
+!LinearCode methodsFor: 'testing' stamp: 'len 4/13/2020 08:13:41'!
 isSelfDual
-	self ambient dimension even ifFalse: [^ false].
-	self dimension = (self ambient dimension / 2) ifFalse: [^ false].
+	self ambient rank even ifFalse: [^ false].
+	self dimension = (self ambient rank / 2) ifFalse: [^ false].
 	^ self = self dual! !
 
 !LinearCode methodsFor: 'testing' stamp: 'len 4/3/2016 23:20'!
@@ -25838,10 +25946,12 @@ tetracode
 	"Answer the tetracode, a self dual code of minimum distance 3."
 	^ self subspace: ((ZZ/3)^4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3})! !
 
-!LinearCode class methodsFor: 'instance creation' stamp: 'len 3/2/2020 17:20:18'!
+!LinearCode class methodsFor: 'instance creation' stamp: 'len 4/13/2020 08:16:36'!
 matrix: aMatrix
 	"Answer a linear code with generator matrix aMatrix."
-	^ self subspace: aMatrix coimage! !
+	| M |
+	M _ aMatrix coimage.
+	^ self subspace: (M scalars ^ M width span: M rows)! !
 
 !LinearCode class methodsFor: 'instance creation' stamp: 'len 1/1/2016 06:34'!
 subspace: aLinearSubspace
@@ -27459,9 +27569,10 @@ retraction
 section
 	^ self propertyAt: #section ifAbsent: [self inverse]! !
 
-!Function methodsFor: 'operations' stamp: 'len 4/9/2020 19:44:18'!
+!Function methodsFor: 'operations' stamp: 'len 4/13/2020 09:06:18'!
 value: anElement
-	^ self codomain !! ((self propertyAt: #expression) value: self domain !! anElement)! !
+	^ (self propertyAt: #expression) value: anElement
+"	^ self codomain !! ((self propertyAt: #expression) value: self domain !! anElement)"! !
 
 !Function methodsFor: 'operations' stamp: 'len 11/5/2016 09:33'!
 valueWithArguments: anArray
@@ -28218,6 +28329,14 @@ asAbelianGroupMap
 	B _ self codomain asAbelianGroup.
 	^ A to: B evaluating: [:x| B !! (self value: self domain !! x)]! !
 
+!ModuleMap methodsFor: 'converting' stamp: 'len 4/13/2020 01:25:02'!
+asPolynomial
+	"If the receiver is a linear form, answer the receiver as a polynomial in the coordinate ring of the domain."
+	| P |
+	self isLinearForm ifFalse: [DomainError signal: 'not a linear form'].
+	P _ self domain coordinateRing.
+	^ (P tuple: P rank evaluating: [:i| P x: i]) · (matrix asTuple over: P)! !
+
 !ModuleMap methodsFor: 'operations' stamp: 'len 5/16/2019 20:57:03'!
 * anObject
 	^ domain to: codomain matrix: matrix * anObject! !
@@ -28240,11 +28359,13 @@ asAbelianGroupMap
 - aModuleMap
 	^ self + aModuleMap negated! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/11/2020 13:04:58'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 19:27:41'!
 / aModuleMap
-	"If the receiver is a monomorphism i:A->X, and the argument is f:A->Y, answer f':X->Y such that the diagram commutes. This is a 'colift (or extension) of f along i'."
+	"If the argument is a monomorphism i:A->X, and the receiver is f:A->Y, answer f':X->Y such that the diagram commutes. This is a 'colift (or extension) of f along i'."
+	| M |
 	(self scalars includes: aModuleMap) ifTrue: [^ self * aModuleMap reciprocal].
-	^ codomain to: aModuleMap domain matrix: matrix / aModuleMap matrix! !
+	M _ self domain isFree ifTrue: [matrix / aModuleMap matrix] ifFalse: [aModuleMap matrix solveLeft: matrix modulo: (self domain relations -> self domain base) matrix].
+	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/10/2020 17:49:06'!
 /\ aModuleMap
@@ -28253,10 +28374,12 @@ asAbelianGroupMap
 	self codomain = aModuleMap codomain ifFalse: [^ DomainError signal: 'pushout is defined for morphisms with the same codomain'].
 	self notYetImplemented! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/11/2020 13:05:52'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 19:25:49'!
 \ aModuleMap
 	"If the receiver is an epimorphism p:X->B, and the argument is f:Y->B, answer f':Y->X such that the diagram commutes. This is a 'lift of f along p'."
-	^ aModuleMap domain to: domain matrix: matrix \ aModuleMap matrix! !
+	| M |
+	M _ self codomain isFree ifTrue: [matrix \ aModuleMap matrix] ifFalse: [matrix solveRight: aModuleMap matrix modulo: (self codomain relations -> self codomain base) matrix].
+	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/10/2020 17:43:10'!
 \/ aModuleMap
@@ -28289,9 +28412,12 @@ asAbelianGroupMap
 	"Answer the tensor product of the receiver with the argument."
 	^ domain ‘ aModuleMap domain to: codomain ‘ aModuleMap codomain matrix: matrix ‘ aModuleMap matrix! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 5/16/2019 20:42:31'!
-cokernel
-	self notYetImplemented! !
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/14/2020 00:07:04'!
+adjoint
+	"Answer the transpose (or dual, or adjoint) of the receiver.
+	The assignment of a linear map f:V->W to its dual f*:W*->V* produces an injective linear map between Hom(V,W) and Hom(W*,V*).
+	This is the 'operator adjoint', not to be confused with the 'Hilbert adjoint' that is defined for an operator in an inner product space."
+	^ codomain dual to: domain dual matrix: matrix adjoint! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 3/15/2020 05:58:23'!
 coproduct: aModuleMap
@@ -28303,7 +28429,7 @@ coproduct: aModuleMap
 image
 	^ self propertyAt: #image ifAbsentPut: [codomain span: (domain generators collect: [:each| self value: each])]! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 3/23/2020 16:14:40'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 13:44:25'!
 kernel
 	^ self propertyAt: #kernel ifAbsentPut: [self isTrivial ifTrue: [self domain] ifFalse: [self domain span: (matrix kernelModulo: (self codomain relations -> self codomain base) matrix) rows]]! !
 
@@ -28311,12 +28437,13 @@ kernel
 negated
 	^ domain to: codomain matrix: matrix negated! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 3/11/2020 12:37:19'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 16:40:54'!
 preimage: anObject
 	"When anObject is an element of the codomain, answer a preimage (a single element in the preimage) or nil if anObject is not in the image of the receiver.
 	If anObject is a submodule of the codomain, answer the preimage as a submodule of the domain."
 	(self codomain ambient includes: anObject)
 		ifTrue: [^ self preimageRepresentative: anObject].
+	(anObject isKindOf: Module) ifFalse: [^ DomainError signal].
 	^ self domain ambient span: (anObject generators collect: [:each| self preimageRepresentative: each])! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 3/11/2020 18:41:44'!
@@ -28455,7 +28582,7 @@ from: anFPModule to: anotherFPModule matrix: aMatrix
 hash
 	^ matrix hash! !
 
-!FreeModuleMap methodsFor: 'converting' stamp: 'len 3/7/2020 12:47:13'!
+!FreeModuleMap methodsFor: 'converting' stamp: 'len 4/13/2020 01:24:29'!
 asPolynomial
 	"If the receiver is a linear form, answer the receiver as a polynomial in the coordinate ring of the domain."
 	| P |
@@ -28463,12 +28590,11 @@ asPolynomial
 	P _ self domain coordinateRing.
 	^ (P tuple: P rank evaluating: [:i| P x: i]) · (matrix asTuple over: P)! !
 
-!FreeModuleMap methodsFor: 'converting' stamp: 'len 1/3/2017 08:31:26'!
+!FreeModuleMap methodsFor: 'converting' stamp: 'len 4/13/2020 01:45:42'!
 asRationalMap
 	| P polynomials |
 	P _ self domain coordinateRing.
-	"use matrix in the standard basis:"
-	polynomials _ ((self class from: self domain to: self codomain evaluating: self) matrix over: P) * (P tuple: P rank evaluating: [:i| P x: i]).
+	polynomials _ (matrix over: P) * (P tuple: P rank evaluating: [:i| P x: i]).
 	^ RationalMap from: P spec to: self codomain coordinateRing spec polynomials: polynomials asArray! !
 
 !FreeModuleMap methodsFor: 'converting' stamp: 'len 5/14/2019 20:46:13'!
@@ -29891,175 +30017,6 @@ linearMap: aLinearMap translation: aVector
 		ifFalse: [^ DomainError signal: 'translation vector is outside of the codomain'].
 	^ self new linearMap: aLinearMap; translation: aVector! !
 
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 02:47:11'!
-at: aPoint
-	| i j n |
-	i _ aPoint x - 1.
-	j _ aPoint y - 1.
-	i > j ifTrue: [i _ j. j _ aPoint x - 1].
-	n _ self rank.
-	^ self coefficients at: i * n - (i-1*i//2) + j - i + 1! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:01:03'!
-bitSize
-	^ self coefficients bitSize! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 12/30/2015 21:16'!
-codomain
-	^ self scalars! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:00:51'!
-coefficients
-	"Answer the coefficients of the receiver in lexicographical order."
-	^ coefficients! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/22/2018 18:57:55'!
-content
-	^ self coefficients content! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:12:29'!
-determinant
-	"Answer the determinant of the Hessian matrix of the receiver. This is the determinant of the Gram matrix of twice the receiver."
-	^ self hessian determinant! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/22/2018 18:57:51'!
-discriminant
-	"Note: this invariant is defined differently by different authors."
-	self rank odd ifTrue: [^ self determinant / 2].
-	(self rank // 2) odd ifTrue: [self determinant negated].
-	^ self determinant! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/2/2018 20:54:02'!
-gramian
-	"Answer the Gramian matrix G for the receiver Q.
-	This is a matrix G such that Q(x) = x^t * G * x."
-	^ self hessian collect: [:each| each / 2] "assuming we can divide by 2"! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 6/3/2018 19:06:09'!
-hessian
-	"Answer the Hessian matrix H for the receiver Q.
-	This is a matrix H such that Q(x) = x^t * H * x / 2."
-	^ self scalars matrix: self domain rank evaluating: [:i :j| i = j ifTrue: [(self at: i@j)*2] ifFalse: [self at: i@j]]! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/27/2018 23:58:26'!
-rank
-	^ self domain rank! !
-
-!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/19/2018 20:00:15'!
-scalars
-	^ self domain scalars! !
-
-!QuadraticForm methodsFor: 'accessing-private' stamp: 'len 3/28/2018 03:06:18'!
-coefficients: aTuple
-	coefficients _ aTuple! !
-
-!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 02:59:45'!
-* anObject
-	^ self class from: self domain coefficients: self coefficients * anObject! !
-
-!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 15:18:01'!
-+ aQuadraticForm
-	self domain = aQuadraticForm domain ifFalse: [^ self error: 'domains don''t match'].
-	self domain matrix = aQuadraticForm domain matrix ifFalse: [self notYetImplemented].
-	^ self class
-		from: self domain
-		coefficients: self coefficients + aQuadraticForm coefficients! !
-
-!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 03:00:18'!
- aQuadraticForm
-	"Answer the direct sum of the receiver and the argument."
-	(aQuadraticForm isKindOf: QuadraticForm) ifFalse: [^ DomainError signal].
-	^ self notYetImplemented! !
-
-!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 02:59:58'!
-negated
-	^ self class from: self domain coefficients: self coefficients negated! !
-
-!QuadraticForm methodsFor: 'comparing' stamp: 'len 3/28/2018 03:12:11'!
-= aQuadraticForm
-	(aQuadraticForm isKindOf: QuadraticForm) ifFalse: [^ false].
-	^ self coefficients = aQuadraticForm coefficients! !
-
-!QuadraticForm methodsFor: 'comparing' stamp: 'len 9/22/2018 18:57:58'!
-~ aQuadraticForm
-	"Answer true if the receiver and the argument are integrally equivalent."
-	^ self hessian ~ aQuadraticForm hessian! !
-
-!QuadraticForm methodsFor: 'comparing' stamp: 'len 3/28/2018 03:12:33'!
-hash
-	^ self coefficients hash! !
-
-!QuadraticForm methodsFor: 'converting' stamp: 'len 8/6/2019 15:41:15'!
-asPolynomial
-	| n P answer |
-	n _ self rank.
-	P _ self domain coordinateRing.
-	answer _ P zero.
-	1 to: n do: [:i|
-		| vi |
-		vi _ P x: i.
-		i to: n do: [:j|
-			answer _ (self at: i@j) * vi * (P x: j) + answer]].
-	^ answer! !
-
-!QuadraticForm methodsFor: 'converting' stamp: 'len 6/3/2018 18:44:48'!
-associatedBilinearForm
-	"Answer the associated symmetric bilinear form (assuming the characteristic is not 2).
-	This is, via the polarization identity: B(v,w) := (Q(v+w) - Q(v-w)) / 4."
-	^ BilinearForm fromHalf: self domain matrix: self gramian! !
-
-!QuadraticForm methodsFor: 'operations' stamp: 'len 3/28/2018 18:46:47'!
-adjoint
-	"Answer the adjoint (integral) quadratic form associated to the receiver."
-	| A |
-	A _ self hessian adjoint.
-	self rank odd ifTrue: [A _ A*2].
-	^ self class from: self domain hessian: A! !
-
-!QuadraticForm methodsFor: 'operations' stamp: 'len 7/17/2019 10:51:12'!
-primitivePart
-	^ self class from: self domain coefficients: self coefficients primitivePart! !
-
-!QuadraticForm methodsFor: 'operations' stamp: 'len 7/17/2019 10:51:22'!
-reciprocal
-	^ self adjoint primitivePart * self content! !
-
-!QuadraticForm methodsFor: 'operations' stamp: 'len 3/28/2018 02:53:34'!
-value: aVector
-	| v n answer |
-	v _ self domain coordinatesOf: aVector.
-	n _ self rank.
-	answer _ self scalars zero.
-	1 to: n do: [:i|
-		| vi |
-		vi _ v at: i.
-		i to: n do: [:j|
-			answer _ (self at: i@j) * vi * (v at: j) + answer]].
-	^ answer! !
-
-!QuadraticForm methodsFor: 'testing' stamp: 'len 3/28/2018 03:12:40'!
-isDiagonal
-	"Answer true if the receiver is in diagonal form."
-	^ self hessian isDiagonal! !
-
-!QuadraticForm methodsFor: 'testing' stamp: 'len 3/28/2018 01:03:53'!
-isPrimitive
-	^ self content = self scalars one! !
-
-!QuadraticForm methodsFor: 'testing' stamp: 'len 6/3/2018 18:34:21'!
-isRegular
-	^ self associatedBilinearForm isNonDegenerate! !
-
-!QuadraticForm class methodsFor: 'instance creation' stamp: 'len 3/28/2018 03:14:10'!
-coefficients: aTuple
-	"Answer the quadratic form with the given coefficients (in lexicographical order)."
-	^ self from: aTuple scalars ^ (aTuple size * 2) sqrtFloor coefficients: aTuple! !
-
-!QuadraticForm class methodsFor: 'instance creation' stamp: 'len 3/28/2018 02:57:27'!
-from: aModule coefficients: aTuple
-	"Answer the quadratic form associated with the given coefficients (in lexicographical order) in the distinguished basis of the given free module."
-	^ self new domain: aModule; coefficients: aTuple! !
-
 !MultilinearMap methodsFor: 'as yet unclassified' stamp: 'len 9/22/2018 21:51:57'!
 asTensorMap
 	^ self propertyAt: #tensorMap! !
@@ -30283,6 +30240,175 @@ fromHalf: aVectorSpace evaluating: aBlock
 fromHalf: aFreeModule matrix: aMatrix
 	"Answer a new instance of the receiver representing the bilinear form associated to aMatrix in the given bases."
 	^ self new halfDomain: aFreeModule; matrix: aMatrix! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 02:47:11'!
+at: aPoint
+	| i j n |
+	i _ aPoint x - 1.
+	j _ aPoint y - 1.
+	i > j ifTrue: [i _ j. j _ aPoint x - 1].
+	n _ self rank.
+	^ self coefficients at: i * n - (i-1*i//2) + j - i + 1! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:01:03'!
+bitSize
+	^ self coefficients bitSize! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 12/30/2015 21:16'!
+codomain
+	^ self scalars! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:00:51'!
+coefficients
+	"Answer the coefficients of the receiver in lexicographical order."
+	^ coefficients! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/22/2018 18:57:55'!
+content
+	^ self coefficients content! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/28/2018 03:12:29'!
+determinant
+	"Answer the determinant of the Hessian matrix of the receiver. This is the determinant of the Gram matrix of twice the receiver."
+	^ self hessian determinant! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/22/2018 18:57:51'!
+discriminant
+	"Note: this invariant is defined differently by different authors."
+	self rank odd ifTrue: [^ self determinant / 2].
+	(self rank // 2) odd ifTrue: [self determinant negated].
+	^ self determinant! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 9/2/2018 20:54:02'!
+gramian
+	"Answer the Gramian matrix G for the receiver Q.
+	This is a matrix G such that Q(x) = x^t * G * x."
+	^ self hessian collect: [:each| each / 2] "assuming we can divide by 2"! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 6/3/2018 19:06:09'!
+hessian
+	"Answer the Hessian matrix H for the receiver Q.
+	This is a matrix H such that Q(x) = x^t * H * x / 2."
+	^ self scalars matrix: self domain rank evaluating: [:i :j| i = j ifTrue: [(self at: i@j)*2] ifFalse: [self at: i@j]]! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/27/2018 23:58:26'!
+rank
+	^ self domain rank! !
+
+!QuadraticForm methodsFor: 'accessing' stamp: 'len 3/19/2018 20:00:15'!
+scalars
+	^ self domain scalars! !
+
+!QuadraticForm methodsFor: 'accessing-private' stamp: 'len 3/28/2018 03:06:18'!
+coefficients: aTuple
+	coefficients _ aTuple! !
+
+!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 02:59:45'!
+* anObject
+	^ self class from: self domain coefficients: self coefficients * anObject! !
+
+!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 15:18:01'!
++ aQuadraticForm
+	self domain = aQuadraticForm domain ifFalse: [^ self error: 'domains don''t match'].
+	self domain matrix = aQuadraticForm domain matrix ifFalse: [self notYetImplemented].
+	^ self class
+		from: self domain
+		coefficients: self coefficients + aQuadraticForm coefficients! !
+
+!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 03:00:18'!
+ aQuadraticForm
+	"Answer the direct sum of the receiver and the argument."
+	(aQuadraticForm isKindOf: QuadraticForm) ifFalse: [^ DomainError signal].
+	^ self notYetImplemented! !
+
+!QuadraticForm methodsFor: 'arithmetic' stamp: 'len 3/28/2018 02:59:58'!
+negated
+	^ self class from: self domain coefficients: self coefficients negated! !
+
+!QuadraticForm methodsFor: 'comparing' stamp: 'len 3/28/2018 03:12:11'!
+= aQuadraticForm
+	(aQuadraticForm isKindOf: QuadraticForm) ifFalse: [^ false].
+	^ self coefficients = aQuadraticForm coefficients! !
+
+!QuadraticForm methodsFor: 'comparing' stamp: 'len 9/22/2018 18:57:58'!
+~ aQuadraticForm
+	"Answer true if the receiver and the argument are integrally equivalent."
+	^ self hessian ~ aQuadraticForm hessian! !
+
+!QuadraticForm methodsFor: 'comparing' stamp: 'len 3/28/2018 03:12:33'!
+hash
+	^ self coefficients hash! !
+
+!QuadraticForm methodsFor: 'converting' stamp: 'len 8/6/2019 15:41:15'!
+asPolynomial
+	| n P answer |
+	n _ self rank.
+	P _ self domain coordinateRing.
+	answer _ P zero.
+	1 to: n do: [:i|
+		| vi |
+		vi _ P x: i.
+		i to: n do: [:j|
+			answer _ (self at: i@j) * vi * (P x: j) + answer]].
+	^ answer! !
+
+!QuadraticForm methodsFor: 'converting' stamp: 'len 6/3/2018 18:44:48'!
+associatedBilinearForm
+	"Answer the associated symmetric bilinear form (assuming the characteristic is not 2).
+	This is, via the polarization identity: B(v,w) := (Q(v+w) - Q(v-w)) / 4."
+	^ BilinearForm fromHalf: self domain matrix: self gramian! !
+
+!QuadraticForm methodsFor: 'operations' stamp: 'len 3/28/2018 18:46:47'!
+adjoint
+	"Answer the adjoint (integral) quadratic form associated to the receiver."
+	| A |
+	A _ self hessian adjoint.
+	self rank odd ifTrue: [A _ A*2].
+	^ self class from: self domain hessian: A! !
+
+!QuadraticForm methodsFor: 'operations' stamp: 'len 7/17/2019 10:51:12'!
+primitivePart
+	^ self class from: self domain coefficients: self coefficients primitivePart! !
+
+!QuadraticForm methodsFor: 'operations' stamp: 'len 7/17/2019 10:51:22'!
+reciprocal
+	^ self adjoint primitivePart * self content! !
+
+!QuadraticForm methodsFor: 'operations' stamp: 'len 3/28/2018 02:53:34'!
+value: aVector
+	| v n answer |
+	v _ self domain coordinatesOf: aVector.
+	n _ self rank.
+	answer _ self scalars zero.
+	1 to: n do: [:i|
+		| vi |
+		vi _ v at: i.
+		i to: n do: [:j|
+			answer _ (self at: i@j) * vi * (v at: j) + answer]].
+	^ answer! !
+
+!QuadraticForm methodsFor: 'testing' stamp: 'len 3/28/2018 03:12:40'!
+isDiagonal
+	"Answer true if the receiver is in diagonal form."
+	^ self hessian isDiagonal! !
+
+!QuadraticForm methodsFor: 'testing' stamp: 'len 3/28/2018 01:03:53'!
+isPrimitive
+	^ self content = self scalars one! !
+
+!QuadraticForm methodsFor: 'testing' stamp: 'len 6/3/2018 18:34:21'!
+isRegular
+	^ self associatedBilinearForm isNonDegenerate! !
+
+!QuadraticForm class methodsFor: 'instance creation' stamp: 'len 3/28/2018 03:14:10'!
+coefficients: aTuple
+	"Answer the quadratic form with the given coefficients (in lexicographical order)."
+	^ self from: aTuple scalars ^ (aTuple size * 2) sqrtFloor coefficients: aTuple! !
+
+!QuadraticForm class methodsFor: 'instance creation' stamp: 'len 3/28/2018 02:57:27'!
+from: aModule coefficients: aTuple
+	"Answer the quadratic form associated with the given coefficients (in lexicographical order) in the distinguished basis of the given free module."
+	^ self new domain: aModule; coefficients: aTuple! !
 
 !AffineSchemeMap methodsFor: 'accessing' stamp: 'len 7/3/2019 10:22:00'!
 adjoint
@@ -31964,6 +32090,11 @@ gcd: anElement
 	anElement isZero ifTrue: [^ self normalized].
 	^ parent uniformizer ^ (self valuation min: anElement valuation)! !
 
+!Germ methodsFor: 'operations' stamp: 'len 4/13/2020 05:01:48'!
+inverse
+	self isUnit ifFalse: [^ DomainError signal: 'not a unit'].
+	^ self class new parent: parent; ratio: ratio inverse! !
+
 !Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:46:38'!
 lcm: anElement
 	self isZero ifTrue: [^ self].
@@ -31973,11 +32104,6 @@ lcm: anElement
 !Germ methodsFor: 'operations' stamp: 'len 7/17/2019 03:26:41'!
 negated
 	^ self class new parent: parent; ratio: ratio negated! !
-
-!Germ methodsFor: 'operations' stamp: 'len 7/17/2019 03:28:08'!
-reciprocal
-	self isUnit ifFalse: [^ DomainError signal: 'not a unit'].
-	^ self class new parent: parent; ratio: ratio reciprocal! !
 
 !Germ methodsFor: 'testing' stamp: 'len 7/30/2019 05:27:44'!
 isNilpotent
@@ -33003,11 +33129,11 @@ norm
 numerator
 	^ self * self denominator! !
 
-!AlgebraicElement methodsFor: 'accessing' stamp: 'len 3/3/2020 10:56:24'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 4/13/2020 03:41:28'!
 representation
 	"Answer the representation map defined by multiplication by the receiver."
 	| V |
-	^ (V _ self parent asVectorSpace) endomorphisms !! [:x| V !! (self parent !! x * self)]! !
+	^ (V _ self parent asVectorSpace) endomorphisms evaluating: [:x| V !! (self parent !! x * self)]! !
 
 !AlgebraicElement methodsFor: 'accessing' stamp: 'len 11/3/2016 04:41'!
 symmetricFunction: i
@@ -33802,11 +33928,6 @@ asBilinearForm
 asIdeal
 	"Answer the ideal generated by the receiver."
 	^ self parent * self! !
-
-!Polynomial methodsFor: 'converting' stamp: 'len 3/13/2020 17:08:33'!
-asLinearForm
-	self isLinear ifFalse: [^ DomainError signal: 'not a linear polynomial'].
-	^ (self scalars ^ self parent rank) dual evaluating: [:x| self value: x coordinates]! !
 
 !Polynomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:21:02'!
 asMultivariate
@@ -36184,6 +36305,29 @@ normalized
 	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
 	^ self * self associatedUnit inverse! !
 
+!ModuleElement methodsFor: 'comparing' stamp: 'len 3/30/2020 07:36:59'!
+= anObject
+	^ self class == anObject class and: [self parent == anObject parent and: [(self - anObject) isZero]]! !
+
+!ModuleElement methodsFor: 'comparing' stamp: 'len 3/30/2020 07:36:18'!
+hash
+	^ 0! !
+
+!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:23'!
+adaptToFraction: rcvr andSend: selector
+	selector = #* ifTrue: [^ self * rcvr].
+	^ super adaptToNumber: rcvr andSend: selector! !
+
+!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:28'!
+adaptToInteger: rcvr andSend: selector
+	selector = #* ifTrue: [^ self * rcvr].
+	^ super adaptToInteger: rcvr andSend: selector! !
+
+!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:32'!
+adaptToRealAlgebraic: rcvr andSend: selector
+	(selector = #* and: [self scalars includes: rcvr]) ifTrue: [^ self * rcvr].
+	^ super adaptToNumber: rcvr andSend: selector! !
+
 !ModuleElement methodsFor: 'operations' stamp: 'len 3/13/2020 17:34:41'!
 * aNumber
 	^ self subclassResponsibility! !
@@ -36204,32 +36348,9 @@ normalized
 negated
 	^ self subclassResponsibility! !
 
-!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:23'!
-adaptToFraction: rcvr andSend: selector
-	selector = #* ifTrue: [^ self * rcvr].
-	^ super adaptToNumber: rcvr andSend: selector! !
-
-!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:28'!
-adaptToInteger: rcvr andSend: selector
-	selector = #* ifTrue: [^ self * rcvr].
-	^ super adaptToInteger: rcvr andSend: selector! !
-
-!ModuleElement methodsFor: 'converting' stamp: 'len 3/13/2020 17:32:32'!
-adaptToRealAlgebraic: rcvr andSend: selector
-	(selector = #* and: [self scalars includes: rcvr]) ifTrue: [^ self * rcvr].
-	^ super adaptToNumber: rcvr andSend: selector! !
-
 !ModuleElement methodsFor: 'testing' stamp: 'len 3/13/2020 17:35:09'!
 isZero
 	^ self subclassResponsibility! !
-
-!ModuleElement methodsFor: 'as yet unclassified' stamp: 'len 3/30/2020 07:36:59'!
-= anObject
-	^ self class == anObject class and: [self parent == anObject parent and: [(self - anObject) isZero]]! !
-
-!ModuleElement methodsFor: 'as yet unclassified' stamp: 'len 3/30/2020 07:36:18'!
-hash
-	^ 0! !
 
 !FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:41'!
 at: anInteger
@@ -36299,6 +36420,10 @@ hash
 !FreeModuleElement methodsFor: 'operations' stamp: 'len 3/1/2020 18:14:09'!
 negated
 	^ self class new parent: parent; coordinates: coordinates negated! !
+
+!FreeModuleElement methodsFor: 'operations' stamp: 'len 4/13/2020 08:20:44'!
+wrap: n
+	^ self class new parent: parent; coordinates: (coordinates wrap: n)! !
 
 !FreeModuleElement methodsFor: 'testing' stamp: 'len 3/1/2020 18:23:50'!
 isZero
@@ -38395,9 +38520,9 @@ withIndexDo: aBlock
 - aTuple
 	^ self + aTuple negated! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 3/13/2020 16:59:57'!
+!Tuple methodsFor: 'operations' stamp: 'len 4/13/2020 01:48:58'!
 / anObject
-	"Answer X such that X * A = B, where B is self and A is the argument.
+	"Answer X such that X * A = B, where B is self and A is the argument.  X is called a lift of B along A.
 	If the argument is a scalar, just divide each element of the tuple by it."
 	anObject isMatrix ifTrue: [^ anObject solveLeft: self].
 	^ self * anObject reciprocal! !
@@ -39526,9 +39651,9 @@ rowsDo: aBlock
 - aMatrix
 	^ self + aMatrix negated! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 3/8/2020 08:11:27'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 18:40:08'!
 / anObject
-	"Answer X such that X * A = B, where B is self and A is the argument. X is called a lift of B along A.
+	"Answer X such that X * A = B, where B is self and A is the argument. X is called a colift (or extension) of B along A.
 	If the argument is a scalar, just divide each element of the matrix by the scalar."
 	anObject isMatrix ifTrue: [^ anObject solveLeft: self].
 	^ self * anObject reciprocal! !
@@ -39538,9 +39663,9 @@ rowsDo: aBlock
 	"Answer the receiver augmented with the columns of aMatrix."
 	^ self columnAugmented: aMatrix! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 3/11/2020 16:20:39'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 18:40:34'!
 \ aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
+	"Answer X such that A * X = B, where A is self and B is aMatrix. X is called a lift of B along A.
 	The argument can also be a tuple, in which case it is considered as a column matrix and the returned value is also a tuple.
 	Answer nil if there's no solution.
 	This is the 'backlash' operator, as implemented in MATLAB, Octave and Sage."
@@ -39581,16 +39706,27 @@ rowsDo: aBlock
 	z2 _ self scalars zeroTuple: self width.
 	^ self class rows: (self rows collect: [:each| each, z1]), (aMatrix rows collect: [:each| z2, each])! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 5/14/2019 20:49:47'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 01:03:51'!
 ‘ aMatrix
-	^ self kronecker: aMatrix! !
+	"Answer the Kronecker product of the receiver by the argument."
+	| m n p q |
+	self checkScalarsMatch: aMatrix.
+	m _ self height.
+	n _ self width.
+	p _ aMatrix height.
+	q _ aMatrix width.
+	^ self scalars
+		matrix: (m*p) @ (n*q)
+		evaluating: [:i :j|
+			(self at: (i-1)*m//(m*p)+1 @ ((j-1)*n//(n*q)+1)) *
+			(aMatrix at: (i-1)\\p+1 @ ((j-1)\\q+1))]! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 3/14/2020 18:06:10'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/12/2020 19:14:59'!
 adjoint
 	"Answer the conjugate transpose A* of the receiver A (also called Hermitian conjugate, bedaggered matrix, adjoint matrix or transjugate)."
 	self scalars isReal ifTrue: [^ self transposed].
 	self scalars isComplex ifTrue: [^ self transposed conjugated].
-"	^ self error: 'not real or complex matrix'"
+"	^ DomainError signal: 'not real or complex matrix'"
 	^ self transposed! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 7/12/2019 05:04:20'!
@@ -39847,28 +39983,14 @@ hadamard: aMatrix
 immanant
 	^ self notYetImplemented! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:49:34'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/12/2020 19:02:34'!
 inverse
 	"Answer the multiplicative inverse of the receiver."
+	self isEmpty ifTrue: [^ self].
 	self isSquare ifFalse: [^ DomainError signal: 'not a square matrix'].
 	self scalars isField
 		ifTrue: [^ (self reductionWith: self identity) extension].
 	^ self adjugate / self determinant! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:32:26'!
-kronecker: aMatrix
-	"Answer the Kronecker product of the receiver by the argument."
-	| m n p q |
-	self checkScalarsMatch: aMatrix.
-	m _ self height.
-	n _ self width.
-	p _ aMatrix height.
-	q _ aMatrix width.
-	^ self scalars
-		matrix: (m*p) @ (n*q)
-		evaluating: [:i :j|
-			(self at: (i-1)*m//(m*p)+1 @ ((j-1)*n//(n*q)+1)) *
-			(aMatrix at: (i-1)\\p+1 @ ((j-1)\\q+1))]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:42:49'!
 minimal: aTuple
@@ -39947,10 +40069,11 @@ rank
 reciprocal
 	^ self inverse! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 5/16/2019 12:27:57'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/12/2020 19:02:22'!
 retraction
 	"Answer a left inverse of the receiver."
 	| T |
+	self isEmpty ifTrue: [^ self].
 	T _ self transposed.
 	^ (T * self) inverse * T! !
 
@@ -39968,10 +40091,11 @@ rowAugmented: aMatrix
 	aMatrix width = m ifFalse: [^ DomainError signal: 'dimensions don''t match'].
 	^ Matrix rows: self rows, aMatrix rows! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 5/16/2019 12:28:31'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/12/2020 19:02:10'!
 section
 	"Answer a right inverse of the receiver."
 	| T |
+	self isEmpty ifTrue: [^ self].
 	T _ self transposed.
 	^ T * (self * T) inverse! !
 
@@ -40535,9 +40659,12 @@ kernel
 	If the receiver is A, the output is X such that A*X = 0."
 	^ self transposed cokernel! !
 
-!Matrix methodsFor: 'subobjects' stamp: 'len 3/23/2020 16:10:44'!
+!Matrix methodsFor: 'subobjects' stamp: 'len 4/13/2020 18:02:33'!
 kernelModulo: aMatrix
-	^ (self columnAugmented: aMatrix) kernel copyFromRow: 1 to: self height! !
+	| K |
+	K _ (self columnAugmented: aMatrix) kernel.
+	K isEmpty ifTrue: [^ K].
+	^ K copyFromColumn: 1 to: self width! !
 
 !Matrix methodsFor: 'testing' stamp: 'len 11/26/2015 01:40'!
 is: aSymbol
@@ -44804,6 +44931,70 @@ hexagonal
 on: aVectorSpace roots: aCollection
 	^ self new ambient: aVectorSpace; roots: aCollection! !
 
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 09:02:37'!
+rootSystem1
+	| V roots |
+	V _ QQ ^ 3.
+	roots _ Set new.
+	1 to: 3 do: [:i| 1 to: i-1 do: [:j| |r| roots add: (r _ (V x: i) - (V x: j)); add: r negated]].
+	^ RootSystem on: V roots: roots! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 09:02:58'!
+rootSystem2
+	| V roots |
+	V _ QQ ^ 3.
+	roots _ Set new.
+	1 to: 3 do: [:i|
+		1 to: i-1 do: [:j|
+			roots
+				add: (V x: i) - (V x: j);
+				add: (V x: j) - (V x: i);
+				add: (V x: i) + (V x: j);
+				add: ((V x: i) + (V x: j)) negated]].
+	^ RootSystem on: V roots: roots! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/23/2016 07:26'!
+testBaseSignCondition
+	| R |
+	R _ self rootSystem1.
+	R roots do: [:each| | coordinates |
+		coordinates _ R simpleRoots coordinatesOf: each :: asArray.
+		self assert: (coordinates allSatisfy: [:xi| xi >= 0]) | (coordinates allSatisfy: [:xi| xi <= 0])]! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 6/25/2016 23:09'!
+testPositiveRoots
+	| V R |
+	R _ self rootSystem1.
+	V _ R ambient.
+	R positiveRoots do: [:each|
+		self assert: (V innerProduct value: {each. (1,1,1)}) > 0] "the point must be in the positive Weyl chamber"! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/11/2016 01:39'!
+testWeylGroup
+	| R W |
+	R _ self rootSystem1.
+	W _ R weylGroup.
+	"The Weyl group of this root system is isomorphic to Sym(3), so we test some properties of Sym(3):"
+	self assert: W order = 6.
+	self assert: W center isTrivial.
+	self assert: W isSolvable.
+	self assert: W isCyclic not! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/10/2016 22:43'!
+testWeylGroup2
+	| R W |
+	R _ self rootSystem2.
+	W _ R weylGroup. "this is an index 2 subgroup of the hyperoctahedral group"
+	self assert: W order = 24! !
+
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/10/2016 22:56'!
+testWeylGroupAndSimpleRoots
+	"For every root, there exists an transformation in the Weyl group that makes it a simple root."
+	| R W |
+	R _ self rootSystem1.
+	W _ R weylGroup.
+	R roots do: [:r| self assert: (W anySatisfy: [:w| R simpleRoots includes: (w value: r)])]! !
+
 !LLL methodsFor: 'initialization' stamp: 'len 7/19/2019 06:52:38'!
 basis: aCollection
 	| d |
@@ -44892,6 +45083,166 @@ example2
 	b3 _ (0, 0, 1, 10000).
 	lll _ self basis: { b1. b2. b3 }.
 	^ lll reducedBasis! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:09'!
+testE8
+	| E8 a |
+	E8 _ Lattice E8.
+	a _ E8 atRandomBits: 100.
+	self assert: ((a allSatisfy: [:x| x isIntegral]) or: [a allSatisfy: [:x| x isIntegral not and: [(x*2) isIntegral]]]).
+	self assert: (a sum isIntegral and: [a sum even]).
+	self assert: E8 isIntegral.
+	self assert: E8 isUnimodular.
+	self assert: E8 isEven.
+	self assert: E8 isSelfDual! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:49'!
+testLLL
+	| b1 b2 b3 lll |
+	b1 _ (1, 1, 1).
+	b2 _ (-1, 0, 2).
+	b3 _ (3, 5, 6).
+	lll _ LLL basis: { b1. b2. b3 }.
+	self assert: lll reducedBasis = {(0,1,0). (1,0,1). (-1,0,2)}! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:59:01'!
+testLatticeAnDual
+	| A3 D |
+	A3 _ Lattice A: 3.
+	D _ Lattice Adual: 3.
+	self assert: A3 reciprocal = D.
+	self assert: A3 = D reciprocal! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:52'!
+testLatticeD4SelfDual
+	| D4 |
+	D4 _ Lattice D4.
+	self assert: D4 isSelfDual! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:35'!
+testLatticeDnDual
+	| D R |
+	D _ Lattice D: 5.
+	R _ Lattice Ddual: 5.
+	self assert: D reciprocal = R.
+	self assert: D = R reciprocal! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:46'!
+testLatticeDual
+	| L R I |
+	L _ Lattice basis: {(-1,0,0). (0,1,2). (0,1,1)}.
+	R _ L reciprocal.
+	I _ L matrix identity.
+	self assert: (L ambient span: L basis) = (R ambient span: R basis).
+	self assert: L determinant = (1 / R determinant).
+	self assert: R matrix * L matrix transposed = I! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:22'!
+testLatticeDual2
+	| L R |
+	L _ Lattice basis: {(-1,0,0). (0,1,2)}. "not full rank"
+	R _ L reciprocal.
+	self assert: (L ambient span: L basis) = (R ambient span: R basis).
+	self assert: L determinant = (1 / R determinant).
+	self assert: (R matrix * L matrix transposed) isIdentity! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:58:30'!
+testLeech
+	| L |
+	L _ Lattice leech.
+"	a _ L atRandomBits: 100.
+	self assert: ((a allSatisfy: [:x| x isInteger]) or: [a allSatisfy: [:x| x isInteger not and: [(x*2) isInteger]]]).
+	self assert: (a sum isInteger and: [a sum even])."
+	self assert: L determinant = 1.
+"	self assert: L kissingNumber = 196560."
+"	self assert: L minimalNorm = 4."
+	self assert: L isIntegral.
+	self assert: L isUnimodular.
+	self assert: L isEven! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:13:47'!
+newQuadraticForm
+	^ self newQuadraticForm: (2 to: 5) atRandom! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:13:29'!
+newQuadraticForm: n
+	| V |
+	V _ QQ^n.
+	^ QuadraticForm from: V coefficients: (QQ^(n + 1 * n / 2) atRandomBits: 100)! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:17:28'!
+testArithmetic
+	| n Q1 Q2 p a |
+	n _ (1 to: 5) atRandom.
+	Q1 _ self newQuadraticForm: n.
+	Q2 _ self newQuadraticForm: n.
+	p _ Q1 domain atRandomBits: 100.
+	a _ QQ atRandomBits: 100.
+	self assert: (Q1 value: p) + (Q2 value: p) = (Q1 + Q2 value: p).
+	self assert: (Q1 * a value: p) = ((Q1 value: p) * a).
+	self assert: Q1 + Q2 + Q2 negated = Q1! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/27/2018 23:52:45'!
+testAsPolynomial
+	| Q f p |
+	Q _ self newQuadraticForm.
+	f _ Q asPolynomial.
+	p _ Q domain atRandomBits: 100.
+	self assert: (Q value: p) = (f value: p).
+	self assert: (f degree = 2 and: [f isHomogeneous])! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:33'!
+testAssociatedBilinearForm
+	"Example from Sage."
+	| Q B |
+	Q _ QuadraticForm coefficients: ((1,4,0,1,4,1) over: ZZ).
+	B _ Q associatedBilinearForm.
+	self assert: (B value: {(1,2,0) over: ZZ. (0,1,1) over: ZZ}) = 8! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:42'!
+testAssociatedBilinearForm2
+	"Example from Sage."
+	| Q B |
+	Q _ QuadraticForm coefficients: (1/2, 2, 1).
+	B _ Q associatedBilinearForm.
+	self assert: (B value: {(1,1). (1/2,2)}) = (19/4)! !
+
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/27/2018 23:47:33'!
+testEvaluation
+	"Example from Sage."
+	| Q |
+	Q _ QuadraticForm from: QQ^3 coefficients: (0 to: 5).
+	self assert: (Q value: (1,2,3)) = 89.
+	self assert: (Q value: (1,0,0)) = 0.
+	self assert: (Q value: (1,1,1)) = 15! !
+
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:40:05'!
+testGeneralLinearAtRandom
+	| V G |
+	V _ QQ ^ 3.
+	G _ V automorphisms.
+	self assert: (G atRandomBits: 100) isAutomorphism.
+	self assert: (G includes: (G atRandomBits: 100))! !
+
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:54:15'!
+testOrthogonalAtRandom
+	| V G |
+	V _ QQ ^ 3.
+	G _ V automorphisms orthogonal.
+	self assert: (G atRandomBits: 100) isOrthogonal.
+	self assert: (G includes: (G atRandomBits: 100))! !
+
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:33'!
+testRotationsBy90Degrees
+	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
+	| V G |
+	V _ QQ ^ 2.
+	G _ LinearGroup on: V generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
+	self assert: G size = 4.
+	self assert: G isCyclic.
+	self flag: #todo.
+	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
+	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
 
 !Object methodsFor: '*domains' stamp: 'len 11/6/2016 09:07'!
 adaptToCollection: rcvr andSend: selector

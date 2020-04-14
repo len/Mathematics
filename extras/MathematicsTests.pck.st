@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 11 April 2020 at 1:52:33 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 4:41:34 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 152!
+!provides: 'MathematicsTests' 1 153!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -82,26 +82,6 @@ TestCase subclass: #GroupTest
 	category: 'MathematicsTests'!
 !classDefinition: 'GroupTest class' category: #MathematicsTests!
 GroupTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #LatticeTest category: #MathematicsTests!
-TestCase subclass: #LatticeTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'LatticeTest class' category: #MathematicsTests!
-LatticeTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #LinearGroupsTest category: #MathematicsTests!
-TestCase subclass: #LinearGroupsTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'LinearGroupsTest class' category: #MathematicsTests!
-LinearGroupsTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #MathematicsTest category: #MathematicsTests!
@@ -204,16 +184,6 @@ TestCase subclass: #PowerSeriesTest
 PowerSeriesTest class
 	instanceVariableNames: ''!
 
-!classDefinition: #QuadraticFormTest category: #MathematicsTests!
-TestCase subclass: #QuadraticFormTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'QuadraticFormTest class' category: #MathematicsTests!
-QuadraticFormTest class
-	instanceVariableNames: ''!
-
 !classDefinition: #RingTest category: #MathematicsTests!
 TestCase subclass: #RingTest
 	instanceVariableNames: ''
@@ -222,16 +192,6 @@ TestCase subclass: #RingTest
 	category: 'MathematicsTests'!
 !classDefinition: 'RingTest class' category: #MathematicsTests!
 RingTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #RootSystemTest category: #MathematicsTests!
-TestCase subclass: #RootSystemTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'RootSystemTest class' category: #MathematicsTests!
-RootSystemTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #SequenceTest category: #MathematicsTests!
@@ -1386,14 +1346,14 @@ testIntersection
 	self assert: (W satisfies: (1, 0)).
 	self assert: (W satisfies: (0, 1)) not! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 1/13/2017 17:29:15'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 4/14/2020 04:18:45'!
 testLinearSubspaceAsAlgebraicVariety
 	| S V |
 	S _ QQ ^ 3 grassmannian: 2 :: atRandomBits: 10.
 	V _ S asAlgebraicVariety.
-	self assert: V dimension + 1 = S dimension. "because it's projective"
-	self assert: (V satisfies: (S e: 1)).
-	self assert: (V satisfies: (S e: 2))! !
+	self assert: V dimension + 1 = S rank. "because it's projective"
+	self assert: (V satisfies: (S x: 1) coordinates).
+	self assert: (V satisfies: (S x: 2) coordinates)! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 7/1/2019 09:04:27'!
 testLocalAndGlobalDimension
@@ -2049,14 +2009,14 @@ testTrace
 	a _ ComplexAlgebraicNumber phi.
 	self assert: a trace = a conjugates sum! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:42:02'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 03:25:32'!
 testDual
 	| C |
 	C _ LinearCode subspace: (ZZ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
 	self assert: C dual size = (C ambient size / C size).
 	C dual do: [:v|
 		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
-		self assert: (v count: [:each| each = (1 % 2)]) even]
+		self assert: (v coordinates count: [:each| each = (1 % 2)]) even]
 ! !
 
 !CodesTest methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:52:38'!
@@ -2102,12 +2062,12 @@ testMacWilliamsTheorem
 	y _ Wperp parent y.
 	self assert: Wperp = ((W value: {x+y. x-y}) / C size)! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 09:57'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 08:19:16'!
 testParityCheckMatrix
 	| H7 M |
 	H7 _ LinearCode H7.
 	M _ H7 parityCheckMatrix.
-	self assert: (M * H7 atRandom) isZero! !
+	self assert: (M * H7 atRandom coordinates) isZero! !
 
 !CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:58'!
 testSelfDual
@@ -2296,14 +2256,14 @@ testExtendedBuchberger
 	self assert: G reduced = G2 reduced.
 	self assert: algorithm matrix * (I scalars tuple: I generators) = (I scalars tuple: G)! !
 
-!CommutativeAlgebraTest methodsFor: 'groebner' stamp: 'len 5/10/2018 07:53:18'!
+!CommutativeAlgebraTest methodsFor: 'groebner' stamp: 'len 4/14/2020 00:53:45'!
 testGroebnerBasis: G ideal: I
 	"Test G is a Groebner basis of the ideal I."
 	| g division |
 	self assert: G verify.
 	I generators do: [:each| self assert: (G reduces: each)].
 	G do: [:each| self assert: (I includes: each)]. "but this will use Groebner bases.."
-	g _ I atRandomBits: 200.
+	[g _ I atRandomBits: 200. g isZero] whileTrue.
 	self assert: (G reduces: g).
 	"The leading term of any polynomial in I is divisible by the leading term of some polynomial in G:"
 	self assert: (G anySatisfy: [:any| any leadingMonomial | g leadingMonomial]).
@@ -3478,110 +3438,6 @@ testTrivial
 	self assert: G size = 1.
 	self assert: G isTrivial! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:09'!
-testE8
-	| E8 a |
-	E8 _ Lattice E8.
-	a _ E8 atRandomBits: 100.
-	self assert: ((a allSatisfy: [:x| x isIntegral]) or: [a allSatisfy: [:x| x isIntegral not and: [(x*2) isIntegral]]]).
-	self assert: (a sum isIntegral and: [a sum even]).
-	self assert: E8 isIntegral.
-	self assert: E8 isUnimodular.
-	self assert: E8 isEven.
-	self assert: E8 isSelfDual! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:49'!
-testLLL
-	| b1 b2 b3 lll |
-	b1 _ (1, 1, 1).
-	b2 _ (-1, 0, 2).
-	b3 _ (3, 5, 6).
-	lll _ LLL basis: { b1. b2. b3 }.
-	self assert: lll reducedBasis = {(0,1,0). (1,0,1). (-1,0,2)}! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:59:01'!
-testLatticeAnDual
-	| A3 D |
-	A3 _ Lattice A: 3.
-	D _ Lattice Adual: 3.
-	self assert: A3 reciprocal = D.
-	self assert: A3 = D reciprocal! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:52'!
-testLatticeD4SelfDual
-	| D4 |
-	D4 _ Lattice D4.
-	self assert: D4 isSelfDual! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:35'!
-testLatticeDnDual
-	| D R |
-	D _ Lattice D: 5.
-	R _ Lattice Ddual: 5.
-	self assert: D reciprocal = R.
-	self assert: D = R reciprocal! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:46'!
-testLatticeDual
-	| L R I |
-	L _ Lattice basis: {(-1,0,0). (0,1,2). (0,1,1)}.
-	R _ L reciprocal.
-	I _ L matrix identity.
-	self assert: (L ambient span: L basis) = (R ambient span: R basis).
-	self assert: L determinant = (1 / R determinant).
-	self assert: R matrix * L matrix transposed = I! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:06:22'!
-testLatticeDual2
-	| L R |
-	L _ Lattice basis: {(-1,0,0). (0,1,2)}. "not full rank"
-	R _ L reciprocal.
-	self assert: (L ambient span: L basis) = (R ambient span: R basis).
-	self assert: L determinant = (1 / R determinant).
-	self assert: (R matrix * L matrix transposed) isIdentity! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:58:30'!
-testLeech
-	| L |
-	L _ Lattice leech.
-"	a _ L atRandomBits: 100.
-	self assert: ((a allSatisfy: [:x| x isInteger]) or: [a allSatisfy: [:x| x isInteger not and: [(x*2) isInteger]]]).
-	self assert: (a sum isInteger and: [a sum even])."
-	self assert: L determinant = 1.
-"	self assert: L kissingNumber = 196560."
-"	self assert: L minimalNorm = 4."
-	self assert: L isIntegral.
-	self assert: L isUnimodular.
-	self assert: L isEven! !
-
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:40:05'!
-testGeneralLinearAtRandom
-	| V G |
-	V _ QQ ^ 3.
-	G _ V automorphisms.
-	self assert: (G atRandomBits: 100) isAutomorphism.
-	self assert: (G includes: (G atRandomBits: 100))! !
-
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:54:15'!
-testOrthogonalAtRandom
-	| V G |
-	V _ QQ ^ 3.
-	G _ V automorphisms orthogonal.
-	self assert: (G atRandomBits: 100) isOrthogonal.
-	self assert: (G includes: (G atRandomBits: 100))! !
-
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:33'!
-testRotationsBy90Degrees
-	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
-	| V G |
-	V _ QQ ^ 2.
-	G _ LinearGroup on: V generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
-	self assert: G size = 4.
-	self assert: G isCyclic.
-	self flag: #todo.
-	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
-	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
-
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:08:00'!
 testAlgebraicExtension
 	| x E a b |
@@ -4044,13 +3900,13 @@ testKernelImageTheorem
 	A _ self newRandomMatrix: n@n over: QQ.
 	self assert: A kernel rank + A image rank = n! !
 
-!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/9/2020 12:50:37'!
+!MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 01:03:20'!
 testKroneckerProduct
 	| A B C |
 	A _ ZZ matrix: #((1 2) (3 4)).
 	B _ ZZ matrix: #((0 5) (6 7)).
 	C _ ZZ matrix: #((0 5 0 10) (6 7 12 14) (0 15 0 20) (18 21 24 28)).
-	self assert: (A kronecker: B) = C! !
+	self assert: A ‘ B = C! !
 
 !MatrixTest methodsFor: 'as yet unclassified' stamp: 'len 3/9/2020 11:59:32'!
 testLeftInverse
@@ -5049,7 +4905,7 @@ testAnnihilatorProperties
 	self assert: V annihilatorSpace isTrivial.
 "	self assert: S annihilator annihilator = S dual dual"! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 3/14/2020 17:35:32'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/13/2020 17:41:43'!
 testAnnihilatorZ2
 	| V v S S0 |
 	V _ (ZZ / 2) ^ 4.
@@ -5057,7 +4913,7 @@ testAnnihilatorZ2
 	S _ V span: {v}.
 	S0 _ S annihilatorSpace.
 	self assert: S0 rank = S corank.
-	S0 basis do: [:f| self assert: (f value: v) isZero]! !
+	S0 generators do: [:f| self assert: (f value: v) isZero]! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 3/11/2020 05:54:31'!
 testCanonicalMorphisms
@@ -5116,14 +4972,14 @@ testGrassmannRelation
 	T _ (V grassmannian: V rank atRandom) atRandomBits: 20.
 	self assert: S rank + T rank = ((S + T) rank + (S /\ T) rank)! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 3/14/2020 17:36:01'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/14/2020 03:33:52'!
 testGrassmannian
 	| G S |
 	G _ QQ^3 grassmannian: 2.
 	S _ G atRandomBits: 20.
 	self assert: S rank = 2.
 	self assert: (G includes: S).
-	self assert: (G dual includes: S complement dual)! !
+	self assert: (G dual includes: S complement)! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:51:08'!
 testSubmoduleInclusionOver: aRing
@@ -5399,14 +5255,14 @@ testLinearForm2
 	self assert: f kernel rank = 2.
 	self assert: f image rank = 1! !
 
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/13/2020 17:07:48'!
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/14/2020 04:13:30'!
 testLinearFormAsPolynomial
 	| V f x |
 	V _ QQ ^ 5 atRandom.
 	f _ V dual atRandomBits: 100.
 	x _ V atRandomBits: 100.
 	self assert: (f value: x) = (f asPolynomial value: x coordinates).
-	self assert: f asPolynomial asLinearForm = f! !
+	self assert: f parent !! f asPolynomial = f! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 3/14/2020 19:13:38'!
 testLinearFormZ2
@@ -5553,6 +5409,22 @@ testLinearMapSection
 	s _ f section.
 	self assert: s isInjective.
 	self assert: f · s = W id! !
+
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/12/2020 18:05:40'!
+testLinearMapToBiggerDimensionIsNotSurjective
+	| V W f |
+	 V _ QQ^4 atRandom.
+	W _ QQ^(V rank atRandom - 1).
+	f _ (W => V) atRandomBits: 100.
+	self assert: f isSurjective not! !
+
+!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/12/2020 18:05:05'!
+testLinearMapToSmallerDimensionIsNotInjective
+	| V W f |
+	 V _ QQ^4 atRandom.
+	W _ QQ^(V rank atRandom - 1).
+	f _ (V => W) atRandomBits: 100.
+	self assert: f isInjective not! !
 
 !ModuleTest methodsFor: 'linear maps' stamp: 'len 11/2/2016 04:01'!
 testLinearMapZ2
@@ -5732,13 +5604,13 @@ testPerpZ2
 	self assert: (V innerProduct value: {S basis first. perp basis first}) isZero.
 	self assert: (V innerProduct value: {S basis first. perp basis second}) isZero! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 8/17/2019 12:56:23'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/12/2020 17:05:03'!
 testQuotientGolay1
 	"Construct the quotient (Z/3Z)^11 by the Golay code.
 	(Example from Magma H28E10.)"
 	| V S Q |
 	V _ ZZ/3 ^ 11.
-	S _ V span: ({(1,0,0,0,0,0,1,1,1,1,1). (0,1,0,0,0,0,0,1,2,2,1). (0,0,1,0,0,0,1,0,1,2,2). (0,0,0,1,0,0,2,1,0,1,2). (0,0,0,0,1,0,2,2,1,0,1). (0,0,0,0,0,1,1,2,2,1,0)} collect: [:each| each over: V scalars]).
+	S _ V span: {(1,0,0,0,0,0,1,1,1,1,1). (0,1,0,0,0,0,0,1,2,2,1). (0,0,1,0,0,0,1,0,1,2,2). (0,0,0,1,0,0,2,1,0,1,2). (0,0,0,0,1,0,2,2,1,0,1). (0,0,0,0,0,1,1,2,2,1,0)}.
 	Q _ V/S.
 	self assert: Q rank = 5.
 	self assert: Q degree = 5! !
@@ -5767,71 +5639,68 @@ testQuotientMaps
 	self assert: (V includes: (pi section value: s)).
 	self assert: s = (pi value: (pi section value: s))! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 5/20/2018 18:36:29'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/13/2020 00:07:37'!
 testQuotientModuleAnnihilator
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
-	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
-	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
-	self assert: (V/W) annihilator = (ZZ*16)! !
-
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 3/21/2020 12:53:21'!
-testQuotientModuleAnnihilatorNoDenominators
-	"Example from Sage"
+	"Example from Sage (removed denominators)"
 	| v1 v2 v3 V W |
 	v1 _ (1,0,0). v2 _ (3,4,2). v3 _ (0,0,2).
 	V _ ZZ^3 span: {v1. v2. v3}.
 	W _ V ambient span: {v1 + (v2*2). v1*9 + (v2*2). v3*4}.
-	self assert: (V/W) annihilator = (ZZ*16)! !
+	self assert: (V/W) annihilator = (ZZ*16)
+	
+"original with denominators:
+	| v1 v2 v3 V W |
+	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
+	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
+	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
+	self assert: (V/W) annihilator = (ZZ*16)
+"! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 5/20/2018 18:36:36'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/14/2020 02:15:18'!
 testQuotientModuleInvariants
-	"Example from Sage"
+	"Example from Sage (removed denominators)"
+	| v1 v2 v3 V W |
+	v1 _ (1,2,2). v2 _ (3,4,2). v3 _ (0,0,2).
+	V _ ZZ^3 span: {v1. v2. v3}.
+	W _ V ambient span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4}.
+	self assert: (V/W) invariants = #(4 12)
+
+"original with denominators:
 	| v1 v2 v3 V W |
 	v1 _ (1/2,1,1). v2 _ (3/2,2,1). v3 _ (0,0,1).
 	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
 	W _ QQ^3 span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4} over: ZZ.
-	self assert: (V/W) invariants = #(1 4 12)! !
+	self assert: (V/W) invariants = #(4 12)
+"! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 7/31/2019 05:24:27'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/14/2020 02:15:05'!
 testQuotientModuleInvariants2
 	"Example from Sage"
 	| V W |
 	V _ ZZ^3.
 	W _ V span: {(1,2,0). (0,1,0). (0,2,0)}.
-	self assert: (V/W) invariants = #(1 1 0) "from example in sage fgp_module.py"! !
+	self assert: (V/W) invariants = #(0) "from example in sage fgp_module.py"! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 3/21/2020 12:53:34'!
-testQuotientModuleInvariantsNoDenominators
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1,2,2). v2 _ (3,4,2). v3 _ (0,0,2).
-	V _ ZZ^3 span: {v1. v2. v3}.
-	W _ V ambient span: {v1*2 + (v2*4). v1*9 + (v2*12). v3*4}.
-	self assert: (V/W) invariants = #(1 4 12)! !
-
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 5/20/2018 18:39:57'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 4/13/2020 00:08:57'!
 testQuotientModuleIsFinite
-	"Example from Sage"
-	| v1 v2 v3 V W |
-	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
-	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
-	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
-	self assert: (V/W) isFinite.
-	W _ V null.
-	self assert: (V/W) isFinite not! !
-
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 3/21/2020 12:53:44'!
-testQuotientModuleIsFiniteNoDenominators
-	"Example from Sage"
+	"Example from Sage (removed denominators)"
 	| v1 v2 v3 V W |
 	v1 _ (1,0,0). v2 _ (3,4,2). v3 _ (0,0,2).
 	V _ ZZ^3 span: {v1. v2. v3}.
 	W _ V ambient span: {v1 + (v2*2). v1*9 + (v2*2). v3*4}.
 	self assert: (V/W) isFinite.
 	W _ V null.
-	self assert: (V/W) isFinite not! !
+	self assert: (V/W) isFinite not
+
+"original with denominators:
+	| v1 v2 v3 V W |
+	v1 _ (1/2,0,0). v2 _ (3/2,2,1). v3 _ (0,0,1).
+	V _ QQ^3 span: {v1. v2. v3} over: ZZ.
+	W _ QQ^3 span: {v1 + (v2*2). v1*9 + (v2*2). v3*4} over: ZZ.
+	self assert: (V/W) isFinite.
+	W _ V null.
+	self assert: (V/W) isFinite not
+"! !
 
 !ModuleTest methodsFor: 'quotient and complement' stamp: 'len 8/17/2019 12:46:13'!
 testQuotientSpace
@@ -7329,62 +7198,6 @@ testPowerSeriesReciprocal
 	cos _ self cos.
 	self assert: ((cos * cos reciprocal) coefficients beginsWith: #(1 0 0 0 0 0 0 0 0))! !
 
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:13:47'!
-newQuadraticForm
-	^ self newQuadraticForm: (2 to: 5) atRandom! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:13:29'!
-newQuadraticForm: n
-	| V |
-	V _ QQ^n.
-	^ QuadraticForm from: V coefficients: (QQ^(n + 1 * n / 2) atRandomBits: 100)! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:17:28'!
-testArithmetic
-	| n Q1 Q2 p a |
-	n _ (1 to: 5) atRandom.
-	Q1 _ self newQuadraticForm: n.
-	Q2 _ self newQuadraticForm: n.
-	p _ Q1 domain atRandomBits: 100.
-	a _ QQ atRandomBits: 100.
-	self assert: (Q1 value: p) + (Q2 value: p) = (Q1 + Q2 value: p).
-	self assert: (Q1 * a value: p) = ((Q1 value: p) * a).
-	self assert: Q1 + Q2 + Q2 negated = Q1! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/27/2018 23:52:45'!
-testAsPolynomial
-	| Q f p |
-	Q _ self newQuadraticForm.
-	f _ Q asPolynomial.
-	p _ Q domain atRandomBits: 100.
-	self assert: (Q value: p) = (f value: p).
-	self assert: (f degree = 2 and: [f isHomogeneous])! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:33'!
-testAssociatedBilinearForm
-	"Example from Sage."
-	| Q B |
-	Q _ QuadraticForm coefficients: ((1,4,0,1,4,1) over: ZZ).
-	B _ Q associatedBilinearForm.
-	self assert: (B value: {(1,2,0) over: ZZ. (0,1,1) over: ZZ}) = 8! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:42'!
-testAssociatedBilinearForm2
-	"Example from Sage."
-	| Q B |
-	Q _ QuadraticForm coefficients: (1/2, 2, 1).
-	B _ Q associatedBilinearForm.
-	self assert: (B value: {(1,1). (1/2,2)}) = (19/4)! !
-
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/27/2018 23:47:33'!
-testEvaluation
-	"Example from Sage."
-	| Q |
-	Q _ QuadraticForm from: QQ^3 coefficients: (0 to: 5).
-	self assert: (Q value: (1,2,3)) = 89.
-	self assert: (Q value: (1,0,0)) = 0.
-	self assert: (Q value: (1,1,1)) = 15! !
-
 !RingTest methodsFor: 'private' stamp: 'len 12/2/2016 11:13:56'!
 newQuotientRing
 	| R I |
@@ -8294,70 +8107,6 @@ testValuationRingLCM
 	| R |
 	R _ ZZ localizationAt: 5.
 	self testLCM: R! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
-rootSystem1
-	| V roots |
-	V _ QQ ^ 3.
-	roots _ Set new.
-	1 to: 3 do: [:i| 1 to: i-1 do: [:j| |r| roots add: (r _ (V e: i) - (V e: j)); add: r negated]].
-	^ RootSystem on: V roots: roots! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:37'!
-rootSystem2
-	| V roots |
-	V _ QQ ^ 3.
-	roots _ Set new.
-	1 to: 3 do: [:i|
-		1 to: i-1 do: [:j|
-			roots
-				add: (V e: i) - (V e: j);
-				add: (V e: j) - (V e: i);
-				add: (V e: i) + (V e: j);
-				add: ((V e: i) + (V e: j)) negated]].
-	^ RootSystem on: V roots: roots! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/23/2016 07:26'!
-testBaseSignCondition
-	| R |
-	R _ self rootSystem1.
-	R roots do: [:each| | coordinates |
-		coordinates _ R simpleRoots coordinatesOf: each :: asArray.
-		self assert: (coordinates allSatisfy: [:xi| xi >= 0]) | (coordinates allSatisfy: [:xi| xi <= 0])]! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 6/25/2016 23:09'!
-testPositiveRoots
-	| V R |
-	R _ self rootSystem1.
-	V _ R ambient.
-	R positiveRoots do: [:each|
-		self assert: (V innerProduct value: {each. (1,1,1)}) > 0] "the point must be in the positive Weyl chamber"! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/11/2016 01:39'!
-testWeylGroup
-	| R W |
-	R _ self rootSystem1.
-	W _ R weylGroup.
-	"The Weyl group of this root system is isomorphic to Sym(3), so we test some properties of Sym(3):"
-	self assert: W order = 6.
-	self assert: W center isTrivial.
-	self assert: W isSolvable.
-	self assert: W isCyclic not! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/10/2016 22:43'!
-testWeylGroup2
-	| R W |
-	R _ self rootSystem2.
-	W _ R weylGroup. "this is an index 2 subgroup of the hyperoctahedral group"
-	self assert: W order = 24! !
-
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 2/10/2016 22:56'!
-testWeylGroupAndSimpleRoots
-	"For every root, there exists an transformation in the Weyl group that makes it a simple root."
-	| R W |
-	R _ self rootSystem1.
-	W _ R weylGroup.
-	R roots do: [:r| self assert: (W anySatisfy: [:w| R simpleRoots includes: (w value: r)])]! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 18:09:49'!
 testBellNumbers
