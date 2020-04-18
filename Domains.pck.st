@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 18 April 2020 at 3:22:05 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 18 April 2020 at 11:10:49 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 550!
+!provides: 'Domains' 1 551!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -29,7 +29,6 @@ SystemOrganization addCategory: #'Domains-Polynomials-Algorithms'!
 SystemOrganization addCategory: #'Domains-Series'!
 SystemOrganization addCategory: #'Domains-Schemes'!
 SystemOrganization addCategory: #'Domains-Varieties'!
-SystemOrganization addCategory: #'Domains-Codes'!
 SystemOrganization addCategory: #'Domains-Algorithms'!
 SystemOrganization addCategory: #'Domains-Sequences'!
 SystemOrganization addCategory: #'Domains-Graphs'!
@@ -51,6 +50,7 @@ SystemOrganization addCategory: #'Domains-Etc-Modules-Tensors'!
 SystemOrganization addCategory: #'Domains-Etc-Lattices'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Linear'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Affine'!
+SystemOrganization addCategory: #'Domains-Etc-Codes'!
 
 
 !classDefinition: #RealAlgebraicNumber category: #'Domains-Fields'!
@@ -1533,16 +1533,6 @@ AffineVariety subclass: #AffineSpace
 AffineSpace class
 	instanceVariableNames: ''!
 
-!classDefinition: #ProductAffineSpace category: #'Domains-Varieties'!
-AffineSpace subclass: #ProductAffineSpace
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Varieties'!
-!classDefinition: 'ProductAffineSpace class' category: #'Domains-Varieties'!
-ProductAffineSpace class
-	instanceVariableNames: ''!
-
 !classDefinition: #ProjectiveScheme category: #'Domains-Schemes'!
 Scheme subclass: #ProjectiveScheme
 	instanceVariableNames: ''
@@ -1651,46 +1641,6 @@ ProjectiveSpace subclass: #ProjectivePlane
 	category: 'Domains-Varieties'!
 !classDefinition: 'ProjectivePlane class' category: #'Domains-Varieties'!
 ProjectivePlane class
-	instanceVariableNames: ''!
-
-!classDefinition: #LinearCode category: #'Domains-Codes'!
-Domain subclass: #LinearCode
-	instanceVariableNames: 'subspace'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Codes'!
-!classDefinition: 'LinearCode class' category: #'Domains-Codes'!
-LinearCode class
-	instanceVariableNames: ''!
-
-!classDefinition: #CyclicCode2 category: #'Domains-Codes'!
-LinearCode subclass: #CyclicCode2
-	instanceVariableNames: 'generator'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Codes'!
-!classDefinition: 'CyclicCode2 class' category: #'Domains-Codes'!
-CyclicCode2 class
-	instanceVariableNames: ''!
-
-!classDefinition: #PolynomialCode category: #'Domains-Codes'!
-LinearCode subclass: #PolynomialCode
-	instanceVariableNames: 'generator'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Codes'!
-!classDefinition: 'PolynomialCode class' category: #'Domains-Codes'!
-PolynomialCode class
-	instanceVariableNames: ''!
-
-!classDefinition: #CyclicCode category: #'Domains-Codes'!
-PolynomialCode subclass: #CyclicCode
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Codes'!
-!classDefinition: 'CyclicCode class' category: #'Domains-Codes'!
-CyclicCode class
 	instanceVariableNames: ''!
 
 !classDefinition: #SemistandardTableaux category: #'Domains-Tableaux'!
@@ -1821,6 +1771,46 @@ Domain subclass: #Lattice
 	category: 'Domains-Etc-Lattices'!
 !classDefinition: 'Lattice class' category: #'Domains-Etc-Lattices'!
 Lattice class
+	instanceVariableNames: ''!
+
+!classDefinition: #LinearCode category: #'Domains-Etc-Codes'!
+Domain subclass: #LinearCode
+	instanceVariableNames: 'subspace'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Codes'!
+!classDefinition: 'LinearCode class' category: #'Domains-Etc-Codes'!
+LinearCode class
+	instanceVariableNames: ''!
+
+!classDefinition: #CyclicCode2 category: #'Domains-Etc-Codes'!
+LinearCode subclass: #CyclicCode2
+	instanceVariableNames: 'generator'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Codes'!
+!classDefinition: 'CyclicCode2 class' category: #'Domains-Etc-Codes'!
+CyclicCode2 class
+	instanceVariableNames: ''!
+
+!classDefinition: #PolynomialCode category: #'Domains-Etc-Codes'!
+LinearCode subclass: #PolynomialCode
+	instanceVariableNames: 'generator'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Codes'!
+!classDefinition: 'PolynomialCode class' category: #'Domains-Etc-Codes'!
+PolynomialCode class
+	instanceVariableNames: ''!
+
+!classDefinition: #CyclicCode category: #'Domains-Etc-Codes'!
+PolynomialCode subclass: #CyclicCode
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Codes'!
+!classDefinition: 'CyclicCode class' category: #'Domains-Etc-Codes'!
+CyclicCode class
 	instanceVariableNames: ''!
 
 !classDefinition: #Element category: #'Domains-Kernel'!
@@ -2263,14 +2253,14 @@ RingElement subclass: #Germ
 Germ class
 	instanceVariableNames: ''!
 
-!classDefinition: #Product category: #'Domains-Rings'!
-RingElement subclass: #Product
+!classDefinition: #ProductRingElement category: #'Domains-Rings'!
+RingElement subclass: #ProductRingElement
 	instanceVariableNames: 'parent components'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Rings'!
-!classDefinition: 'Product class' category: #'Domains-Rings'!
-Product class
+!classDefinition: 'ProductRingElement class' category: #'Domains-Rings'!
+ProductRingElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #Ratio category: #'Domains-Rings'!
@@ -3503,6 +3493,16 @@ Object subclass: #LinearGroupsTest
 LinearGroupsTest class
 	instanceVariableNames: ''!
 
+!classDefinition: #CodesTest category: #'Domains-Etc-Codes'!
+Object subclass: #CodesTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Etc-Codes'!
+!classDefinition: 'CodesTest class' category: #'Domains-Etc-Codes'!
+CodesTest class
+	instanceVariableNames: ''!
+
 
 !RealAlgebraicNumber commentStamp: '<historical>' prior: 0!
 Real algebraic numbers, i.e. real zeros of polynomials with integer (or rational) coefficients, in 'minimal polynomial' representation. See also ComplexAlgebraicNumber.!
@@ -4190,10 +4190,6 @@ Note that affine spaces defined as schemes differ from the classical affine spac
 
 Note also that the dimension of an affine space as scheme is the Krull dimension of its coordinate ring, and this can be bigger than the number of indeterminates (see >>dimension and >>rank). For affine spaces over fields, the dimension and the rank are equal (because fields have Krull dimension 0).!
 
-!ProductAffineSpace commentStamp: '<historical>' prior: 0!
-Cartesian products of affine spaces.
-!
-
 !ProjectiveScheme commentStamp: 'len 7/9/2019 08:56:03' prior: 0!
 A projective scheme is the projective (or homogeneous) spectrum Proj(R) of a graded commutative ring R, equipped with a sheaf of local rings (which makes it a locally ringed space). As a set, its elements are the relevant prime ideals of the associated homogeneous coordinate ring R.
 
@@ -4237,20 +4233,6 @@ Projective spaces P^nR as schemes, i.e. Proj R[x1,...,xn] for some commutative r
 
 !ProjectiveLine commentStamp: '<historical>' prior: 0!
 Projective lines are P^1(R) for some commutative ring R. They are essentially the underlying ring R extended with an additional point at infinity. For example, the complex projective line is the Riemann sphere: the extended complex plane that includes the point at infinity. See also ProjectiveLinePoint.!
-
-!LinearCode commentStamp: '<historical>' prior: 0!
-In coding theory, a linear code is an error-correcting code for which any linear combination of codewords is also a codeword. Thus, linear codes can be seen as a vector space (or more precisely as a subspace of a vector space).
-
-References:
-	https://en.wikipedia.org/wiki/Linear_code
-!
-
-!PolynomialCode commentStamp: '<historical>' prior: 0!
-In coding theory, a polynomial code is a type of linear code whose set of valid codewords consists of those polynomials (usually of some fixed length) that are divisible by some fixed polynomial (of shorter length, called the generator polynomial).
-
-References:
-	https://en.wikipedia.org/wiki/Polynomial_code
-!
 
 !CellComplex commentStamp: '<historical>' prior: 0!
 Abstract cell complexes. See subclasses.!
@@ -4304,6 +4286,20 @@ See also OppositeAlgebraElement.!
 A lattice is the set of integer linear combinations of a basis of a rational vector space. This is a discrete subgroup of the ambient Q-vector space (as abelian group) isomorphic to Z^n, and a free Z-module.
 
 Lattice coordinates are in Z, while the elements of the receiver live in the ambient Q-vector space.!
+
+!LinearCode commentStamp: '<historical>' prior: 0!
+In coding theory, a linear code is an error-correcting code for which any linear combination of codewords is also a codeword. Thus, linear codes can be seen as a vector space (or more precisely as a subspace of a vector space).
+
+References:
+	https://en.wikipedia.org/wiki/Linear_code
+!
+
+!PolynomialCode commentStamp: '<historical>' prior: 0!
+In coding theory, a polynomial code is a type of linear code whose set of valid codewords consists of those polynomials (usually of some fixed length) that are divisible by some fixed polynomial (of shorter length, called the generator polynomial).
+
+References:
+	https://en.wikipedia.org/wiki/Polynomial_code
+!
 
 !Element commentStamp: '<historical>' prior: 0!
 Elements are members of the underlying set of a Domain (the *parent*). They are, for example, numbers in a field or ring, permutations in a permutation group, morphisms in a hom-set, polynomials in a polynomial ring, vectors in a vector space, points in a topological space, etc.!
@@ -4554,7 +4550,7 @@ Elements of a Ring.!
 !Germ commentStamp: '<historical>' prior: 0!
 Elements of localizations of rings at a prime ideal. See LocalRing.!
 
-!Product commentStamp: 'len 5/22/2018 16:08:11' prior: 0!
+!ProductRingElement commentStamp: 'len 5/22/2018 16:08:11' prior: 0!
 Elements of direct products of rings. See ProductRing.!
 
 !Ratio commentStamp: '<historical>' prior: 0!
@@ -5586,10 +5582,6 @@ printOn: aStream
 printOn: aStream
 	aStream print: self scalars; nextPutAll: self rank printString super! !
 
-!ProductAffineSpace methodsFor: 'printing' stamp: 'len 2/10/2017 08:48:52'!
-printOn: aStream
-	self components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
-
 !ProjectiveScheme methodsFor: 'printing' stamp: 'len 7/1/2019 17:04:20'!
 printOn: aStream
 	aStream nextPutAll: 'Proj '; print: self coordinateRing! !
@@ -5605,13 +5597,6 @@ printOn: aStream
 !ProjectiveSpace methodsFor: 'printing' stamp: 'len 1/1/2017 21:29:13'!
 printOn: aStream
 	aStream nextPut: Character PP; nextPutAll: (self rank - 1) printString super; print: self scalars! !
-
-!LinearCode methodsFor: 'printing' stamp: 'len 6/7/2016 21:45'!
-printOn: aStream
-	aStream nextPut: $[; print: self length; nextPut: $,; print: self rank; nextPut: $,; print: self minimumDistance; nextPut: $].
-	aStream isText
-		ifTrue: [aStream nextPutAll: self ambient scalars size printString sub]
-		ifFalse: [aStream nextPut: $-; print: self ambient scalars size]! !
 
 !CellComplex methodsFor: 'printing' stamp: 'len 2/18/2017 21:21:19'!
 printOn: aStream
@@ -5649,6 +5634,13 @@ printOn: aStream
 !OppositeAlgebra methodsFor: 'printing' stamp: 'len 5/8/2019 14:52:19'!
 printOn: aStream
 	aStream print: opposite; nextPutAll: 'op' super! !
+
+!LinearCode methodsFor: 'printing' stamp: 'len 6/7/2016 21:45'!
+printOn: aStream
+	aStream nextPut: $[; print: self length; nextPut: $,; print: self rank; nextPut: $,; print: self minimumDistance; nextPut: $].
+	aStream isText
+		ifTrue: [aStream nextPutAll: self ambient scalars size printString sub]
+		ifFalse: [aStream nextPut: $-; print: self ambient scalars size]! !
 
 !Morphism methodsFor: 'printing' stamp: 'len 11/16/2016 18:08'!
 name
@@ -5886,7 +5878,7 @@ printOn: aStream
 			ifTrue: [aStream nextPut: $(; print: u; nextPut: $)]
 			ifFalse: [aStream print: u]]"! !
 
-!Product methodsFor: 'printing' stamp: 'len 5/22/2018 16:12:57'!
+!ProductRingElement methodsFor: 'printing' stamp: 'len 5/22/2018 16:12:57'!
 printOn: aStream
 	aStream print: components! !
 
@@ -12180,6 +12172,16 @@ ambient
 	Answer the ambient domain of which the receiver is a subobject."
 	^ self propertyAt: #ambient ifAbsent: [self]! !
 
+!Domain methodsFor: 'accessing' stamp: 'len 4/18/2020 22:49:47'!
+arity
+	(self isProduct or: [self isCoproduct]) ifFalse: [^ DomainError signal: 'not a product or coproduct'].
+	^ self components size! !
+
+!Domain methodsFor: 'accessing' stamp: 'len 4/18/2020 22:55:43'!
+at: anInteger
+	(self isProduct or: [self isCoproduct]) ifFalse: [^ DomainError signal: 'not a product or coproduct'].
+	^ self components at: anInteger! !
+
 !Domain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:23:04'!
 elements
 	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain].
@@ -12406,25 +12408,26 @@ upTo: max do: aBlock
 		aBlock value: each.
 		k _ k+1]! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/14/2020 21:05:57'!
--< anInteger
-	"Answer the anInteger-th canonical projections from the receiver.
-	See also Integer's message >-."
-	^ self projection: anInteger! !
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 22:21:52'!
+-< anArray
+	"Answer the canonical projections from the receiver into the components of anArray.
+	See also Array's message >-."
+	self propertyAt: #projections ifPresent: [:aDictionary| aDictionary at: anArray ifPresent: [:anArrayOfMorphisms| ^ anArrayOfMorphisms]].
+	^ self toAll: anArray! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 3/13/2020 06:16:23'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:29:32'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
 	If the argument is a morphism, answer the composition with a canonical morphism to its domain. See also Morphism>>->."
 	(aCodomain isKindOf: Morphism) ifTrue:
-		[self == aCodomain domain ifTrue: [^ aCodomain].
+		[self = aCodomain domain ifTrue: [^ aCodomain].
 		^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain ∑ aMorphism]].
-	self propertyAt: #outputMaps ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
-	aCodomain propertyAt: #inputMaps ifPresent: [:aDictionary| aDictionary at: self ifPresent: [:aMorphism| ^ aMorphism]].
+	self propertyAt: #outputs ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
+	aCodomain propertyAt: #inputs ifPresent: [:aDictionary| aDictionary at: self ifPresent: [:aMorphism| ^ aMorphism]].
 	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	(aCodomain from: self) ifNotNil: [:aMorphism| ^ aMorphism].
-	self propertyAt: #outputMaps ifPresent: [:aDictionary| aDictionary do: [:each| each -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism]]].
-	aCodomain propertyAt: #inputMaps ifPresent: [:aDictionary| aDictionary do: [:each| self -> each ifNotNil: [:aMorphism| ^ aMorphism]]].
+	self propertyAt: #outputs ifPresent: [:aDictionary| aDictionary do: [:each| each -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism]]].
+	aCodomain propertyAt: #inputs ifPresent: [:aDictionary| aDictionary do: [:each| self -> each ifNotNil: [:aMorphism| ^ aMorphism]]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:08:41'!
@@ -12452,13 +12455,25 @@ upTo: max do: aBlock
 	self assert: answer isInjective.
 	^ answer! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:09:30'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:34:06'!
+addCoprojections: anArray
+	anArray do: [:each| each codomain == self ifFalse: [^ DomainError signal]].
+	^ (self propertyAt: #coprojections ifAbsentPut: [Dictionary new])
+		at: (anArray collect: [:each| each domain]) put: anArray! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:27:22'!
 addMap: aMorphism
 	aMorphism domain == self
-		ifTrue: [^ (self propertyAt: #outputMaps ifAbsentPut: [Dictionary new]) at: aMorphism codomain put: aMorphism].
+		ifTrue: [^ (self propertyAt: #outputs ifAbsentPut: [Dictionary new]) at: aMorphism codomain put: aMorphism].
 	aMorphism codomain == self
-		ifTrue: [^ (self propertyAt: #inputMaps ifAbsentPut: [Dictionary new]) at: aMorphism domain put: aMorphism].
+		ifTrue: [^ (self propertyAt: #inputs ifAbsentPut: [Dictionary new]) at: aMorphism domain put: aMorphism].
 	^ DomainError signal! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:33:44'!
+addProjections: anArray
+	anArray do: [:each| each domain == self ifFalse: [^ DomainError signal]].
+	^ (self propertyAt: #projections ifAbsentPut: [Dictionary new])
+		at: (anArray collect: [:each| each codomain]) put: anArray! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/13/2019 17:12:18'!
 apply: aMorphism
@@ -12470,22 +12485,6 @@ automorphisms
 	self flag: #fix. "this shouldn't be here for all subclasses to inherit, maybe Domain should be abstract, and we could consider Collections as finite sets and implement these things in Collection; same with #to:evaluating:, etc."
 	^ SymmetricGroup on: self! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/14/2020 21:07:39'!
-coprojection: anInteger
-	"Answer the anInteger-th canonical coprojection to the receiver."
-	^ (self propertyAt: #coprojections) at: anInteger! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/14/2020 21:19:01'!
-coprojections
-	^ self propertyAt: #coprojections ifAbsentPut:
-		[self isCoproduct ifFalse: [DomainError signal].
-		(1 to: self arity) collect: [:i| self coprojection: i]]! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:32:28'!
-coprojections: anArray
-	self isCoproduct ifTrue: [^ self error: 'already endowed with coprojection maps'].
-	self propertyAt: #coprojections put: anArray! !
-
 !Domain methodsFor: 'morphisms' stamp: 'len 4/19/2019 04:36:41'!
 endomorphisms
 	^ self => self! !
@@ -12494,6 +12493,13 @@ endomorphisms
 from: aDomain
 	"Answer the canonical morphism from aDomain to the receiver."
 	self = aDomain ifTrue: [^ self id].
+	^ nil! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 22:23:51'!
+fromAll: anArray
+	"Answer the canonical coprojections from the components of anArray to the receiver."
+	(self isCoproduct and: [self components = self])
+		ifTrue: [^ self addCoprojections: ((1 to: self arity) collect: [:i| self coprojection: i])].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 3/13/2020 06:16:49'!
@@ -12537,22 +12543,6 @@ onto: aCodomain evaluating: aBlock
 onto: aCodomain mapping: aBlock
 	^ self to: aCodomain mapping: aBlock! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/14/2020 21:07:48'!
-projection: anInteger
-	"Answer the anInteger-th canonical projection from the receiver."
-	^ (self propertyAt: #projections) at: anInteger! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/14/2020 21:18:38'!
-projections
-	^ self propertyAt: #projections ifAbsentPut:
-		[self isProduct ifFalse: [DomainError signal].
-		(1 to: self arity) collect: [:i| self projection: i]]! !
-
-!Domain methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:33:02'!
-projections: anArray
-	self isProduct ifTrue: [^ self error: 'already endowed with projection maps'].
-	self propertyAt: #projections put: anArray! !
-
 !Domain methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:14:41'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
@@ -12578,6 +12568,14 @@ to: aCodomain mapping: aBlock
 	"Answer a morphism defined by images of generators.
 	aBlock takes indices i and evaluates to the image of the i-th generator."
 	^ self subclassResponsibility! !
+
+!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 22:22:20'!
+toAll: anArray
+	"Answer the canonical projections from the receiver to the components of anArray."
+	(self isProduct and: [anArray = self components])
+		ifTrue: [^ self addProjections: ((1 to: self arity) collect: [:i| self projection: i])].
+	self isAmbient ifFalse: [self ambient -< anArray ifNotNil: [:anArrayOfMorphisms| ^ anArrayOfMorphisms collect: [:each| self -> self ambient -> each]]].
+	^ nil! !
 
 !Domain methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
 * aDomain
@@ -12715,9 +12713,9 @@ isAmbient
 isApproximate
 	^ false! !
 
-!Domain methodsFor: 'testing' stamp: 'len 4/14/2020 21:04:26'!
+!Domain methodsFor: 'testing' stamp: 'len 4/18/2020 18:51:01'!
 isCoproduct
-	^ self hasProperty: #coprojections! !
+	^ false! !
 
 !Domain methodsFor: 'testing' stamp: 'len 11/2/2016 08:54'!
 isEmpty
@@ -12737,9 +12735,9 @@ isInitial
 	The empty set is the initial object in the category of sets. Subclasses can override."
 	^ self propertyAt: #isInitial ifAbsent: [self isEmpty]! !
 
-!Domain methodsFor: 'testing' stamp: 'len 4/14/2020 21:04:18'!
+!Domain methodsFor: 'testing' stamp: 'len 4/18/2020 18:50:42'!
 isProduct
-	^ self hasProperty: #projections! !
+	^ false! !
 
 !Domain methodsFor: 'testing' stamp: 'len 12/28/2016 11:19:37'!
 isTerminal
@@ -13563,13 +13561,9 @@ open: left open: right
 
 	^ self new setLeftBound: left rightBound: right leftOpen: true rightOpen: true! !
 
-!CartesianProduct methodsFor: 'accessing' stamp: 'len 2/16/2016 07:29'!
-arity
-	^ components size! !
-
-!CartesianProduct methodsFor: 'accessing' stamp: 'len 2/12/2016 04:11'!
-at: anInteger
-	^ components at: anInteger! !
+!CartesianProduct methodsFor: 'accessing' stamp: 'len 11/10/2015 22:13'!
+components
+	^ components! !
 
 !CartesianProduct methodsFor: 'accessing' stamp: 'len 2/26/2017 09:47:17'!
 size
@@ -13609,10 +13603,10 @@ upTo: max rank: n do: aBlock
 			"(self at: n) upTo: k-1 do: [:t| (p includes: s) ifTrue: [aBlock value: (p,t)]]"].
 		k _ k + 1]! !
 
-!CartesianProduct methodsFor: 'enumerating' stamp: 'len 5/2/2018 18:14:01'!
+!CartesianProduct methodsFor: 'enumerating' stamp: 'len 4/18/2020 22:53:48'!
 upToComponent: k do: aBlock
 	k = 0 ifTrue: [aBlock value: Array new. ^ self].
-	self upToComponent: k-1 do: [:each| (self at: k) do: [:last| aBlock value: (each copyWith: last)]]! !
+	self upToComponent: k-1 do: [:each| (self components at: k) do: [:last| aBlock value: (each copyWith: last)]]! !
 
 !CartesianProduct methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:41'!
 projection: i
@@ -13646,10 +13640,6 @@ includes: anObject
 !CartesianProduct methodsFor: 'testing' stamp: 'len 4/14/2020 21:09:33'!
 isProduct
 	^ true! !
-
-!CartesianProduct methodsFor: 'private' stamp: 'len 11/10/2015 22:13'!
-components
-	^ components! !
 
 !CartesianProduct methodsFor: 'private' stamp: 'len 11/5/2016 06:40'!
 components: anArray
@@ -13793,10 +13783,6 @@ base
 relation
 	^ self propertyAt: #relation! !
 
-!QuotientSet methodsFor: 'accessing-private' stamp: 'len 12/28/2016 11:25:44'!
-relation: anEquivalenceRelation
-	self propertyAt: #relation put: anEquivalenceRelation! !
-
 !QuotientSet methodsFor: 'enumerating' stamp: 'len 8/14/2016 06:17'!
 do: aBlock
 	| visited |
@@ -13819,6 +13805,10 @@ project: anElement
 !QuotientSet methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:52'!
 projection
 	^ (Function from: self base to: self evaluating: [:v| self project: v]) name: Character pi asString! !
+
+!QuotientSet methodsFor: 'private' stamp: 'len 12/28/2016 11:25:44'!
+relation: anEquivalenceRelation
+	self propertyAt: #relation put: anEquivalenceRelation! !
 
 !QuotientSet class methodsFor: 'instance creation' stamp: 'len 7/31/2019 08:22:57'!
 relation: anEquivalenceRelation
@@ -14131,7 +14121,7 @@ do: aBlock
 	(aMonoid isKindOf: FreeAbelianMonoid) ifTrue: [^ self ê aMonoid].
 	^ super ◊ aMonoid! !
 
-!FreeAbelianMonoid methodsFor: 'operations' stamp: 'len 4/15/2020 08:33:25'!
+!FreeAbelianMonoid methodsFor: 'operations' stamp: 'len 4/18/2020 18:22:06'!
 ê aMonoid
 	"Answer the direct sum of the receiver and the argument as abelian monoid."
 	| answer n n0 m0 |
@@ -14150,12 +14140,13 @@ do: aBlock
 	m0 _ (1 to: aMonoid rank) collect: [:i| 0].
 	n0 _ (1 to: n) collect: [:i| 0].
 	^ answer
-		coprojections:
+		addCoprojections:
 			{self into: answer evaluating: [:x| answer exponents: x exponents, m0].
 			aMonoid into: answer evaluating: [:x| answer exponents: n0, x exponents]};
-		projections:
+		addProjections:
 			{answer onto: self evaluating: [:x| self exponents: (x exponents copyFrom: 1 to: n)].
-			answer onto: aMonoid evaluating: [:x| aMonoid exponents: (x exponents copyFrom: n+1 to: x exponents size)]}! !
+			answer onto: aMonoid evaluating: [:x| aMonoid exponents: (x exponents copyFrom: n+1 to: x exponents size)]};
+		yourself! !
 
 !FreeAbelianMonoid methodsFor: 'random' stamp: 'len 5/13/2019 11:59:34'!
 atRandom: aRandom bits: bitSize
@@ -14821,13 +14812,9 @@ schnorr: q
 ambient
 	^ self propertyAt: #ambient ifAbsentPut: [(components allSatisfy: [:each| each isAmbient]) ifTrue: [self] ifFalse: [self class components: (components collect: [:each| each ambient])]]! !
 
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/16/2016 07:30'!
-arity
-	^ components size! !
-
-!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:02'!
-at: anInteger
-	^ components at: anInteger! !
+!DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:00'!
+components
+	^ components! !
 
 !DirectProductGroup methodsFor: 'accessing' stamp: 'len 4/22/2016 20:49'!
 identity
@@ -14836,14 +14823,6 @@ identity
 !DirectProductGroup methodsFor: 'accessing' stamp: 'len 2/12/2016 20:10'!
 size
 	^ components product: [:each| each size]! !
-
-!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 2/12/2016 20:00'!
-components
-	^ components! !
-
-!DirectProductGroup methodsFor: 'accessing-private' stamp: 'len 11/5/2016 06:40'!
-components: anArray
-	components _ anArray! !
 
 !DirectProductGroup methodsFor: 'comparing' stamp: 'len 2/12/2016 20:05'!
 = anObject
@@ -14891,6 +14870,10 @@ isCoproduct
 !DirectProductGroup methodsFor: 'testing' stamp: 'len 4/14/2020 21:09:49'!
 isProduct
 	^ true! !
+
+!DirectProductGroup methodsFor: 'private' stamp: 'len 11/5/2016 06:40'!
+components: anArray
+	components _ anArray! !
 
 !DirectProductGroup methodsFor: 'private' stamp: 'len 12/30/2017 15:11:22'!
 computeGenerators
@@ -15269,18 +15252,19 @@ to: aGroup evaluating: aBlock
 	(aGroup isKindOf: AbelianGroup) ifTrue: [^ self ê aGroup].
 	^ super ◊ aGroup! !
 
-!AbelianGroup methodsFor: 'operations' stamp: 'len 4/15/2020 08:33:17'!
+!AbelianGroup methodsFor: 'operations' stamp: 'len 4/18/2020 18:21:36'!
 ê anAbelianGroup
 	"Answer the direct sum of the receiver and the argument as abelian groups."
 	| n answer |
 	n _ self orders size.
 	^ (answer _ self species orders: self orders, anAbelianGroup orders)
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
 			anAbelianGroup into: answer mapping: [:i| answer x: i+n]};
-		projections:
+		addProjections:
 			{answer onto: self mapping: [:i| i <= n ifTrue: [self x: i] ifFalse: [self identity]].
-			answer onto: anAbelianGroup mapping: [:i| i > n ifTrue: [anAbelianGroup x: i-n] ifFalse: [anAbelianGroup identity]]}! !
+			answer onto: anAbelianGroup mapping: [:i| i > n ifTrue: [anAbelianGroup x: i-n] ifFalse: [anAbelianGroup identity]]};
+		yourself! !
 
 !AbelianGroup methodsFor: 'operations' stamp: 'len 5/14/2019 20:48:55'!
 ë anAbelianGroup
@@ -15545,13 +15529,14 @@ to: aGroup evaluating: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup evaluating: aBlock].
 	^ self to: aGroup mapping: [:i| aBlock value: (self generators at: i)]! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 4/14/2020 21:22:51'!
+!FPGroup methodsFor: 'operations' stamp: 'len 4/18/2020 22:12:23'!
 * aGroup
 	"Answer the free product of the receiver with the argument."
-	| F |
+	| F coprojections |
 	(aGroup isKindOf: FPGroup) ifFalse: [^ super * aGroup].
 	F _ self base * aGroup base.
-	^ F / ((self relators apply: F -< 1), (aGroup relators apply: F -< 2))! !
+	coprojections _ {self base. aGroup base} >- F.
+	^ F / ((self relators apply: coprojections first), (aGroup relators apply: coprojections second))! !
 
 !FPGroup methodsFor: 'operations' stamp: 'len 5/15/2019 05:57:45'!
 / anObject
@@ -15567,14 +15552,15 @@ to: aGroup evaluating: aBlock
 		addMap: (self onto: answer mapping: [:i| answer x: i]);
 		yourself! !
 
-!FPGroup methodsFor: 'operations' stamp: 'len 4/14/2020 21:23:12'!
+!FPGroup methodsFor: 'operations' stamp: 'len 4/18/2020 22:12:41'!
 ◊  aGroup
 	"Answer the direct product of the receiver with the argument."
-	| F commutators relatorsLeft relatorsRight |
+	| F coprojections commutators relatorsLeft relatorsRight |
 	(aGroup isKindOf: FPGroup) ifFalse: [^ super * aGroup].
 	F _ self base * aGroup base.
-	relatorsLeft _ self relators apply: F -< 1.
-	relatorsRight _ aGroup relators apply: F -< 2.
+	coprojections _ {self base. aGroup base} >- F.
+	relatorsLeft _ self relators apply: coprojections first.
+	relatorsRight _ aGroup relators apply: coprojections second.
 	commutators _ OrderedCollection new.
 	relatorsLeft do: [:x| relatorsRight do: [:y| commutators add: (x commutator: y)]].
 	^ F / (relatorsLeft, relatorsRight, commutators)! !
@@ -15761,13 +15747,13 @@ size
 hash
 	^ self rank + self class hash! !
 
-!FreeGroup methodsFor: 'operations' stamp: 'len 4/14/2020 21:03:46'!
+!FreeGroup methodsFor: 'operations' stamp: 'len 4/18/2020 18:22:34'!
 * aGroup
 	"Answer the free product of the receiver with the argument."
 	| answer |
 	(aGroup isKindOf: FreeGroup) ifFalse: [^ super * aGroup].
 	^ (answer _ self class new: self rank + aGroup rank)
-		projections:
+		addProjections:
 			{(self into: answer mapping: [:i| answer x: i]) name: Character pi asText, '1' sub.
 			(aGroup into: answer mapping: [:i| answer x: self rank + i]) name: Character pi asText, '2' sub};
 		yourself! !
@@ -15875,7 +15861,7 @@ asMatrixGroup
 copyEmpty
 	^ self species new ambient: self ambient! !
 
-!PermutationGroup methodsFor: 'operations' stamp: 'len 4/15/2020 08:34:12'!
+!PermutationGroup methodsFor: 'operations' stamp: 'len 4/18/2020 18:23:32'!
 ◊ aGroup
 	"Answer the direct product of the receiver and the argument."
 	| S n m G1 G2 k answer |
@@ -15887,12 +15873,13 @@ copyEmpty
 	G2 _ aGroup generators collect: [:g| S !! ((1 to: n), (g asArray collect: [:i| i+n]))].
 	k _ G1 size.
 	^ (answer _ S span: G1, G2) "<- assumes the order of the generators is kept"
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
 			aGroup into: answer mapping: [:i| answer x: i+k]};
-		projections:
+		addProjections:
 			{answer onto: self mapping: [:i| i <= k ifTrue: [self x: i] ifFalse: [self identity]].
-			answer onto: aGroup mapping: [:i| i > k ifTrue: [aGroup x: i-k] ifFalse: [aGroup identity]]}! !
+			answer onto: aGroup mapping: [:i| i > k ifTrue: [aGroup x: i-k] ifFalse: [aGroup identity]]};
+		yourself! !
 
 !PermutationGroup methodsFor: 'operations' stamp: 'len 5/26/2019 11:26:50'!
 reduced
@@ -18480,17 +18467,13 @@ at: anIdeal
 rank
 	^ self integers rank! !
 
-!ProductRing methodsFor: 'accessing' stamp: 'len 8/29/2016 04:09'!
-arity
-	^ components size! !
-
-!ProductRing methodsFor: 'accessing' stamp: 'len 8/29/2016 04:09'!
-at: anInteger
-	^ components at: anInteger! !
-
 !ProductRing methodsFor: 'accessing' stamp: 'len 5/3/2018 01:54:47'!
 characteristic
 	^ components inject: 1 into: [:result :each| result lcm: each characteristic]! !
+
+!ProductRing methodsFor: 'accessing' stamp: 'len 8/29/2016 04:10'!
+components
+	^ components! !
 
 !ProductRing methodsFor: 'accessing' stamp: 'len 6/23/2019 04:21:21'!
 dimension
@@ -18500,14 +18483,6 @@ dimension
 !ProductRing methodsFor: 'accessing' stamp: 'len 2/26/2017 09:47:23'!
 size
 	^ components product: [:each| each size]! !
-
-!ProductRing methodsFor: 'accessing-private' stamp: 'len 8/29/2016 04:10'!
-components
-	^ components! !
-
-!ProductRing methodsFor: 'accessing-private' stamp: 'len 11/5/2016 06:41'!
-components: anArray
-	components _ anArray! !
 
 !ProductRing methodsFor: 'comparing' stamp: 'len 9/16/2018 16:15:02'!
 = anObject
@@ -18561,18 +18536,18 @@ primeIdealsDo: aBlock
 	"TODO: the prime ideals of a product ring R x S is of the form I x S for I a prime ideal of R or R x I for I a prime ideal of S."
 	^ super primeIdealsDo: aBlock! !
 
-!ProductRing methodsFor: 'morphisms' stamp: 'len 8/10/2019 06:07:52'!
+!ProductRing methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:02:02'!
 compose: anArray
-	^ Product new parent: self; components: anArray asArray! !
+	^ ProductRingElement new parent: self; components: anArray asArray! !
 
 !ProductRing methodsFor: 'morphisms' stamp: 'len 9/16/2018 16:15:19'!
 composition
 	^ (Function from: self asCartesianProduct to: self evaluating: [:each| self compose: each]) name: Character times asString! !
 
-!ProductRing methodsFor: 'morphisms' stamp: 'len 5/22/2018 16:13:43'!
+!ProductRing methodsFor: 'morphisms' stamp: 'len 4/18/2020 22:54:32'!
 projection: i
 	"Answer the canonical projection to the i-th component."
-	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
+	^ (self to: (self components at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
 
 !ProductRing methodsFor: 'random' stamp: 'len 9/16/2018 16:15:07'!
 atRandom: aRandom
@@ -18582,9 +18557,9 @@ atRandom: aRandom
 atRandom: aRandom bits: bits
 	^ self compose: (self asCartesianProduct atRandom: aRandom bits: bits)! !
 
-!ProductRing methodsFor: 'testing' stamp: 'len 8/10/2019 06:07:52'!
+!ProductRing methodsFor: 'testing' stamp: 'len 4/18/2020 18:02:02'!
 includes: anObject
-	(anObject isKindOf: Product) ifFalse: [^ false].
+	(anObject isKindOf: ProductRingElement) ifFalse: [^ false].
 	anObject size = components size ifFalse: [^ false].
 	components with: anObject do: [:R :x| (R includes: x) ifFalse: [^ false]].
 	^ true! !
@@ -18624,6 +18599,10 @@ isReduced
 	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0."
 	(components allSatisfy: [:each| each isReduced]) ifTrue: [^ true]. "is it iff?"
 	^ super isReduced! !
+
+!ProductRing methodsFor: 'private' stamp: 'len 11/5/2016 06:41'!
+components: anArray
+	components _ anArray! !
 
 !ProductRing class methodsFor: 'examples' stamp: 'len 5/22/2018 21:56:13'!
 example1
@@ -19526,7 +19505,15 @@ from: aDomain
 	aDomain -> self scalars ifNotNil: [:aMorphism| ^ aMorphism -> self].
 	^ super from: aDomain! !
 
-!AffineRing methodsFor: 'operations' stamp: 'len 4/15/2020 08:37:47'!
+!AffineRing methodsFor: 'morphisms' stamp: 'len 4/18/2020 19:14:49'!
+to: aCodomain mapping: aBlock
+	"Answer a morphism defined by images of generators.
+	aBlock takes indices i and evaluates to the image of the i-th generator."
+	| images |
+	images _ (1 to: self rank) collect: [:i| aBlock value: i].
+	^ self to: aCodomain evaluating: [:f| f value: images]! !
+
+!AffineRing methodsFor: 'operations' stamp: 'len 4/18/2020 18:24:06'!
 ë aRing
 	"Answer the tensor product of the receiver with the argument.
 	This is the coproduct in the category of commutative R-algebras."
@@ -19538,9 +19525,10 @@ from: aDomain
 	self relations generators do: [:f| relations add: R !! f].
 	aRing relations generators do: [:g| relations add: (R !! g substitute: [:i| i + self base rank])].
 	^ (answer _ R / relations)
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
-			aRing into: answer mapping: [:i| answer x: self rank+i]}! !
+			aRing into: answer mapping: [:i| answer x: self rank+i]};
+		yourself! !
 
 !AffineRing methodsFor: 'operations' stamp: 'len 2/27/2017 20:57:29'!
 hilbertSeriesAt: t
@@ -21370,7 +21358,7 @@ to: aCodomain mapping: aBlock
 	images _ (1 to: self rank) collect: [:i| aBlock value: i].
 	^ self to: aCodomain evaluating: [:f| f value: images]! !
 
-!PolynomialRing methodsFor: 'operations' stamp: 'len 4/15/2020 08:37:04'!
+!PolynomialRing methodsFor: 'operations' stamp: 'len 4/18/2020 18:24:17'!
 ë aRing
 	"Answer the tensor product of the receiver and the argument.
 	This is implemented for the special case of the argument being another polynomial ring over the same coefficients ring. This is the coproduct in the category of commutative R-algebras."
@@ -21379,9 +21367,10 @@ to: aCodomain mapping: aBlock
 	((aRing isKindOf: PolynomialRing) and: [aRing scalars = self scalars])
 		ifFalse: [^ super ë aRing].
 	^ (answer _ self class monomials: self monomials ◊ aRing monomials over: self scalars)
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
-			aRing into: answer mapping: [:i| answer x: self rank+i]}! !
+			aRing into: answer mapping: [:i| answer x: self rank+i]};
+		yourself! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 4/14/2020 18:46:10'!
 completion
@@ -22298,18 +22287,19 @@ to: aModule matrix: aMatrix
 		ifTrue: [self ê aModule]
 		ifFalse: [super ◊ aModule]! !
 
-!Module methodsFor: 'operations' stamp: 'len 4/15/2020 08:33:56'!
+!Module methodsFor: 'operations' stamp: 'len 4/18/2020 18:23:20'!
 ê aModule
 	| answer n |
 	aModule isModule ifFalse: [^ super ê aModule].
 	n _ self generators size.
 	^ (answer _ (self relations -> self base ê (aModule relations -> aModule base)) cokernel copy)
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
 			aModule into: answer mapping: [:i| answer x: i+n]};
-		projections:
+		addProjections:
 			{answer onto: self mapping: [:i| i <= n ifTrue: [self x: i] ifFalse: [self zero]].
-			answer onto: aModule mapping: [:i| i > n ifTrue: [aModule x: i-n] ifFalse: [aModule zero]]}! !
+			answer onto: aModule mapping: [:i| i > n ifTrue: [aModule x: i-n] ifFalse: [aModule zero]]};
+		yourself! !
 
 !Module methodsFor: 'operations' stamp: 'len 3/6/2020 17:09:00'!
 ë aModule
@@ -23584,19 +23574,20 @@ rotations
 				yourself].
 "! !
 
-!FreeModule methodsFor: 'operations' stamp: 'len 4/15/2020 08:33:45'!
+!FreeModule methodsFor: 'operations' stamp: 'len 4/18/2020 18:23:07'!
 ê aModule
 	"Answer the direct sum of the receiver and the argument."
 	| answer |
 	scalars = aModule scalars ifFalse: [DomainError signal: 'scalars don''t match'].
 	aModule isFree ifFalse: [^ super ê aModule].
 	^ (answer _ scalars ^ (rank + aModule rank))
-		coprojections:
+		addCoprojections:
 			{self into: answer mapping: [:i| answer x: i].
 			aModule into: answer mapping: [:i| answer x: i+rank]};
-		projections:
+		addProjections:
 			{answer onto: self mapping: [:i| i <= rank ifTrue: [self x: i] ifFalse: [self zero]].
-			answer onto: aModule mapping: [:i| i > rank ifTrue: [aModule x: i-rank] ifFalse: [aModule zero]]}! !
+			answer onto: aModule mapping: [:i| i > rank ifTrue: [aModule x: i-rank] ifFalse: [aModule zero]]};
+		yourself! !
 
 !FreeModule methodsFor: 'random' stamp: 'len 3/3/2020 11:15:52'!
 atRandom: aRandom
@@ -23664,6 +23655,11 @@ generators
 			1 to: m do: [:j|
 				gens add: (self matrix: (self scalars tuple: n e: i) ë (self scalars tuple: m e: j))]].
 		gens asArray]! !
+
+!HomModule methodsFor: 'accessing' stamp: 'len 4/18/2020 22:34:27'!
+rank
+	self isFree ifFalse: [^ DomainError signal].
+	^ self domain rank * self codomain rank! !
 
 !HomModule methodsFor: 'accessing' stamp: 'len 3/6/2020 19:58:27'!
 scalars
@@ -23951,13 +23947,13 @@ scalars: aRing
 over: aRing
 	^ self new scalars: aRing! !
 
-!TensorProductModule methodsFor: 'accessing' stamp: 'len 6/3/2018 20:15:35'!
-arity
-	^ components size! !
-
 !TensorProductModule methodsFor: 'accessing' stamp: 'len 6/3/2018 20:15:48'!
 at: anInteger
 	^ components at: anInteger! !
+
+!TensorProductModule methodsFor: 'accessing' stamp: 'len 6/3/2018 20:15:26'!
+components
+	^ components! !
 
 !TensorProductModule methodsFor: 'accessing' stamp: 'len 9/16/2018 16:18:35'!
 indices
@@ -24021,10 +24017,6 @@ composition
 !TensorProductModule methodsFor: 'testing' stamp: 'len 8/17/2019 16:21:16'!
 includes: anObject
 	^ anObject isElement and: [anObject parent == self]! !
-
-!TensorProductModule methodsFor: 'private' stamp: 'len 6/3/2018 20:15:26'!
-components
-	^ components! !
 
 !TensorProductModule methodsFor: 'private' stamp: 'len 9/16/2018 16:17:53'!
 components: anArray
@@ -24305,17 +24297,29 @@ over: aRing
 do: aBlock
 	self coordinateRing primeIdealsDo: aBlock! !
 
-!AffineScheme methodsFor: 'morphisms' stamp: 'len 7/3/2019 10:18:03'!
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 4/18/2020 23:04:15'!
 from: aCodomain
 	(aCodomain isKindOf: AffineScheme) ifTrue:
-		[(aCodomain coordinateRing from: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
+		[self coordinateRing -> aCodomain coordinateRing ifNotNil: [:aMorphism| aMorphism spec]].
 	^ super from: aCodomain! !
 
-!AffineScheme methodsFor: 'morphisms' stamp: 'len 7/3/2019 10:17:36'!
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 4/18/2020 23:03:17'!
+fromAll: anArray
+	(anArray allSatisfy: [:each| each isKindOf: AffineScheme]) ifTrue:
+		[self coordinateRing -< (anArray collect: [:each| each coordinateRing]) ifNotNil: [:anArrayOfMorphisms| ^ anArrayOfMorphisms collect: [:each| each spec]]].
+	^ super fromAll: anArray! !
+
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 4/18/2020 23:03:56'!
 to: aCodomain
 	(aCodomain isKindOf: AffineScheme) ifTrue:
-		[(aCodomain coordinateRing to: self coordinateRing) ifNotNil: [:aMorphism| aMorphism spec]].
+		[aCodomain coordinateRing -> self coordinateRing ifNotNil: [:aMorphism| aMorphism spec]].
 	^ super to: aCodomain! !
+
+!AffineScheme methodsFor: 'morphisms' stamp: 'len 4/18/2020 23:02:37'!
+toAll: anArray
+	(anArray allSatisfy: [:each| each isKindOf: AffineScheme]) ifTrue:
+		[(anArray collect: [:each| each coordinateRing]) >- self coordinateRing ifNotNil: [:anArrayOfMorphisms| ^ anArrayOfMorphisms collect: [:each| each spec]]].
+	^ super toAll: anArray! !
 
 !AffineScheme methodsFor: 'operations' stamp: 'len 5/10/2019 04:24:04'!
 /\ aScheme
@@ -24471,14 +24475,12 @@ to: aScheme representatives: anArrayOfRationalFunctions
 	self ambient = aScheme ambient ifFalse: [^ DomainError signal: 'ambients don''t match'].
 	^ self ambient subscheme: (self ideal saturation: aScheme ideal)! !
 
-!AffineVariety methodsFor: 'operations' stamp: 'len 5/14/2019 20:45:37'!
+!AffineVariety methodsFor: 'operations' stamp: 'len 4/18/2020 22:59:49'!
 ◊ anAffineVariety
 	"Answer the cartesian product of the receiver and the argument."
-	self scalars = anAffineVariety scalars ifFalse: [self error: 'scalars don''t match'].
+	self scalars = anAffineVariety scalars ifFalse: [^ DomainError signal: 'scalars don''t match'].
 	(anAffineVariety isKindOf: AffineVariety) ifFalse: [self notYetImplemented].
-	^ (self coordinateRing ë anAffineVariety coordinateRing) spec
-		propertyAt: #ambient put: self ambient ◊ anAffineVariety ambient;
-		yourself! !
+	^ (self coordinateRing ë anAffineVariety coordinateRing) spec! !
 
 !AffineVariety methodsFor: 'operations' stamp: 'len 1/13/2017 16:14:11'!
 decomposition
@@ -24742,13 +24744,6 @@ projectiveEmbedding
 	P propertyAt: #affinePatches put: patches.
 	^ self propertyAt: #projectiveEmbedding put: map! !
 
-!AffineSpace methodsFor: 'operations' stamp: 'len 12/31/2017 13:41:22'!
-◊ anAffineSpace
-	"Answer the cartesian product of the receiver and the argument."
-	(anAffineSpace isKindOf: AffineSpace)
-		ifFalse: [^ super ◊ anAffineSpace].
-	^ ProductAffineSpace components: {self. anAffineSpace}! !
-
 !AffineSpace methodsFor: 'operations' stamp: 'len 2/10/2017 07:20:37'!
 subscheme: anObject
 	| I |
@@ -24792,60 +24787,14 @@ example3
 	"And equivalently:"
 	^ (QQ polynomialsIn: #(x y)) spec! !
 
+!AffineSpace class methodsFor: 'examples' stamp: 'len 4/18/2020 22:58:39'!
+example4
+	"Product of affine spaces:"
+	^ (AffineSpace new: #(x y z) over: QQ) ◊ (AffineSpace new: #(a b) over: QQ)! !
+
 !AffineSpace class methodsFor: 'instance creation' stamp: 'len 10/28/2016 10:39'!
 new: rank over: aRing
 	^ self coordinateRing: (aRing polynomialsIn: rank)! !
-
-!ProductAffineSpace methodsFor: 'accessing' stamp: 'len 2/10/2017 08:52:19'!
-arity
-	^ self components size! !
-
-!ProductAffineSpace methodsFor: 'accessing' stamp: 'len 2/10/2017 08:52:13'!
-at: anInteger
-	^ self components at: anInteger! !
-
-!ProductAffineSpace methodsFor: 'accessing' stamp: 'len 5/14/2019 20:48:00'!
-coordinateRing
-	^ self propertyAt: #coordinateRing ifAbsentPut: [self components fold: [:A :B| A coordinateRing ë B coordinateRing]]! !
-
-!ProductAffineSpace methodsFor: 'accessing-private' stamp: 'len 2/10/2017 08:48:42'!
-components
-	^ self propertyAt: #components! !
-
-!ProductAffineSpace methodsFor: 'accessing-private' stamp: 'len 2/10/2017 08:48:38'!
-components: anArray
-	self propertyAt: #components put: anArray! !
-
-!ProductAffineSpace methodsFor: 'morphisms' stamp: 'len 1/5/2018 09:36:19'!
-projection: i
-	| shift |
-	shift _ 0.
-	1 to: i-1 do: [:each| shift _ shift + (self at: each) rank].
-	^ RationalMap from: self to: (self at: i) polynomials: ((1 to: (self at: i) rank) collect: [:j| self coordinateRing x: j+shift])! !
-
-!ProductAffineSpace methodsFor: 'testing' stamp: 'len 4/14/2020 21:10:07'!
-isProduct
-	^ true! !
-
-!ProductAffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 18:55:22'!
-example1
-	^ ProductAffineSpace new: #((x y z) (a b)) over: QQ! !
-
-!ProductAffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 18:56:00'!
-example2
-	^ (AffineSpace new: #(x y z) over: QQ) ◊ (AffineSpace new: #(a b) over: QQ)! !
-
-!ProductAffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 18:56:23'!
-example3
-	^ ((AffineSpace new: #(x y z) over: QQ) ◊ (AffineSpace new: #(a b) over: QQ)) coordinateRing! !
-
-!ProductAffineSpace class methodsFor: 'instance creation' stamp: 'len 2/10/2017 08:47:57'!
-components: anArray
-	^ self new components: anArray! !
-
-!ProductAffineSpace class methodsFor: 'instance creation' stamp: 'len 2/10/2017 08:47:44'!
-new: anArray over: aRing
-	^ self components: (anArray collect: [:each| AffineSpace new: each over: aRing])! !
 
 !ProjectiveScheme methodsFor: 'accessing' stamp: 'len 7/9/2019 08:09:51'!
 affineCone
@@ -25707,450 +25656,6 @@ order
 !ProjectivePlane class methodsFor: 'instance creation' stamp: 'len 9/16/2018 16:07:45'!
 over: aRing
 	^ self coordinateRing: (aRing polynomialsIn: #(x y z))! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2016 19:28'!
-ambient
-	"Answer the ambient vector space."
-	^ self asVectorSpace ambient! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 11/21/2016 14:00:50'!
-completeWeightEnumerator
-	"Answer the complete weight enumerator polynomial."
-	| F P |
-	F _ self ambient scalars elements asArray.
-	P _ ZZ polynomialsIn: F size.
-	^ self elements sum: [:each| P monomial: (P monomials exponents: (F collect: [:i| each occurrencesOf: i]))]! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:19'!
-dimension
-	^ self rank! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 10/9/2016 09:06'!
-distance
-	"Answer the Hamming distance function."
-	| k V |
-	k _ self dimension.
-	V _ self ambient.
-	^ (V, V) to: ZZ evaluating: [:xy| | x y | x _ V coordinatesOf: xy first. y _ V coordinatesOf: xy second. (1 to: k) count: [:i| (x at: i) ~= (y at: i)]]! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:18:47'!
-generatorMatrix
-	| V |
-	V _ self asVectorSpace.
-	^ (V base -> V ambient) matrix transposed! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:13:54'!
-length
-	"Answer the length of a codeword."
-	^ self ambient rank! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 12/28/2016 11:32:15'!
-minimumDistance
-	"Answer the minimum Hamming distance between codewords.
-	If the minimum distance is d, the code can correct (d-1)/2 errors."
-	^ self propertyAt: #minimumDistance ifAbsentPut: [self computeMinimumDistance]! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 10:12'!
-parityCheckMatrix
-	^ self dual generatorMatrix! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 3/14/2020 17:33:33'!
-rank
-	^ self asVectorSpace rank! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 4/3/2016 23:08'!
-rate
-	^ (self size log: 2) / self length! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:33'!
-relativeDistance
-	^ self minimumDistance / self length! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:08'!
-size
-	"Answer the number of codewords."
-	^ self asVectorSpace size! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 12/3/2016 09:12:28'!
-weight
-	"Answer the Hamming weight function."
-	| V |
-	V _ self ambient.
-	^ Function from: V to: ZZ evaluating: [:x| (V coordinatesOf: x) weight]! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:44'!
-weightDistribution
-	| answer w |
-	w _ self weight.
-	answer _ Bag new.
-	self do: [:each| answer add: (w value: each)].
-	^ answer! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 1/1/2016 00:06'!
-weightDistribution: aCodeword
-	"Answer the weight distribution wrt aCodeword."
-	self notYetImplemented! !
-
-!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:14:01'!
-weightEnumerator
-	"Answer the Hamming weight enumerator polynomial."
-	| P x y weights answer n |
-	P _ ZZ polynomialsIn: #(x y).
-	x _ P x.
-	y _ P y.
-	answer _ P zero.
-	n _ self ambient rank.
-	weights _ self weightDistribution.
-	weights asSet do: [:i| answer _ x ^ (n - i) * (y ^ i) * (weights occurrencesOf: i) + answer].
-	^ answer! !
-
-!LinearCode methodsFor: 'accessing-private' stamp: 'len 1/1/2016 06:35'!
-subspace: aLinearSubspace
-	subspace _ aLinearSubspace! !
-
-!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:27'!
-<= aLinearCode
-	^ self asVectorSpace <= aLinearCode asVectorSpace! !
-
-!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:25'!
-= aLinearCode
-	^ (aLinearCode isKindOf: LinearCode) and: [self asVectorSpace = aLinearCode asVectorSpace]! !
-
-!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:25'!
-hash
-	^ self asVectorSpace hash! !
-
-!LinearCode methodsFor: 'converting' stamp: 'len 5/20/2018 15:59:14'!
-asLattice
-	"A linear code in a finite field or ring can be lifted to a lattice."
-	| S F lift |
-	S _ self asVectorSpace.
-	F _ S scalars.
-	lift _ S to: (S apply: F projection section) evaluating: [:each| each apply: F section].
-	^ Lattice basis: (S basis apply: lift)! !
-
-!LinearCode methodsFor: 'converting' stamp: 'len 3/31/2016 02:33'!
-asVectorSpace
-	^ subspace! !
-
-!LinearCode methodsFor: 'enumerating' stamp: 'len 5/12/2016 07:08'!
-do: aBlock
-	self asVectorSpace do: aBlock! !
-
-!LinearCode methodsFor: 'graphs' stamp: 'len 11/16/2016 10:08'!
-distanceGraph: d
-	"Answer the graph of the codewords of the receiver, with two codewords adjacent if their Hamming distance is d."
-	| h G |
-	h _ self distance. "the Hamming distance function"
-	G _ Graph unordered.
-	self elements do: [:x|
-		self elements do: [:y|
-			(h value: {x.y}) = d
-				ifTrue: [G addEdgeFrom: x to: y]]].
-	^ G! !
-
-!LinearCode methodsFor: 'graphs' stamp: 'len 4/5/2018 15:27:59'!
-tannerGraph
-	| matrix G |
-	matrix _ self parityCheckMatrix.
-	G _ Graph unordered.
-	1 to: matrix height do: [:i|
-		1 to: matrix width do: [:j|
-			(matrix at: i@j) isZero not
-				ifTrue:
-					[| subcode digit |
-					subcode _ matrix rowAt: i.
-					digit _ matrix columnAt: j.
-					G addEdgeFrom: subcode to: digit]]].
-	^ G! !
-
-!LinearCode methodsFor: 'morphisms' stamp: 'len 4/20/2016 20:56'!
-automorphisms
-	"Answer the subgroup of Perm(F^k) (permutation of coordinates) that leave the receiver invariant.
-	The automorphisms of a code and it's dual are the same."
-	self notYetImplemented! !
-
-!LinearCode methodsFor: 'morphisms' stamp: 'len 2/15/2016 20:26'!
-isometries
-	"Answer the subgroup of Iso(F^k) that leave the receiver invariant."
-	self notYetImplemented! !
-
-!LinearCode methodsFor: 'operations' stamp: 'len 8/22/2019 10:30:23'!
-dual
-	"Answer the dual or orthogonal code of the receiver."
-	^ LinearCode subspace: self asVectorSpace complement! !
-
-!LinearCode methodsFor: 'random' stamp: 'len 5/12/2016 09:59'!
-atRandom: aRandom bits: bitSize
-	^ self asVectorSpace atRandom: aRandom bits: bitSize! !
-
-!LinearCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:08'!
-includes: aCodeword
-	^ self asVectorSpace includes: aCodeword! !
-
-!LinearCode methodsFor: 'testing' stamp: 'len 5/18/2016 06:28'!
-isCyclic
-	"A code is called a cylic code if for each codeword (c1,...,cn) it also contains the cyclic right shifted word (cn,c1,c2,...,cn-1), i.e. the code is invariant under cylic shifts."
-	self do: [:each| (self includes: (each wrap: 1)) ifFalse: [^ false]].
-	^ true! !
-
-!LinearCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:30'!
-isMaximumDistanceSeparable
-	"Any linear [n,k,d] code satisfies k + d <= n + 1 (Singleton bound). If a code satisfies k + d = n + 1 it's called Maximum Distance Separable (MDS)."
-	| n k d |
-	n _ self length.
-	k _ self rank.
-	d _ self minimumDistance.
-	^ k + d = (n + 1)! !
-
-!LinearCode methodsFor: 'testing' stamp: 'len 4/13/2020 08:13:41'!
-isSelfDual
-	self ambient rank even ifFalse: [^ false].
-	self dimension = (self ambient rank / 2) ifFalse: [^ false].
-	^ self = self dual! !
-
-!LinearCode methodsFor: 'testing' stamp: 'len 4/3/2016 23:20'!
-isSelfOrthogonal
-	^ self asVectorSpace <= self dual asVectorSpace! !
-
-!LinearCode methodsFor: 'private' stamp: 'len 2/15/2016 20:35'!
-computeMinimumDistance
-	| answer w |
-	answer _ Infinity positive.
-	w _ self weight.
-	self do: [:each| each isZero ifFalse: [answer _ answer min: (w value: each)]].
-	^ answer! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:40:25'!
-G11
-	"Answer the perfect ternary Golary code [11,6,5]."
-	^ self matrix:
-		(Matrix rows: {
-			(1,0,0,0,0,0, 1,1,1,1,1) % 3.
-			(0,1,0,0,0,0, 0,1,2,2,1) % 3.
-			(0,0,1,0,0,0, 1,0,1,2,2) % 3.
-			(0,0,0,1,0,0, 2,1,0,1,2) % 3.
-			(0,0,0,0,1,0, 2,2,1,0,1) % 3.
-			(0,0,0,0,0,1, 1,2,2,1,0) % 3})! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:41:28'!
-G12
-	"Answer the extended ternary Golary code [12,6,6]."
-	^ self matrix:
-		(Matrix rows: {
-			(1,0,0,0,0,0, 0,1,1,1,1,1) % 3.
-			(0,1,0,0,0,0, 1,0,1,2,2,1) % 3.
-			(0,0,1,0,0,0, 1,1,0,1,2,2) % 3.
-			(0,0,0,1,0,0, 1,2,1,0,1,2) % 3.
-			(0,0,0,0,1,0, 1,2,2,1,0,1) % 3.
-			(0,0,0,0,0,1, 1,1,2,2,1,0) % 3})! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 5/30/2019 07:04:04'!
-G24
-	"Answer the extended binary Golary code [24,12,8].
-	Its generator matrix is I|A, where I is the 12x12 identity matrix and A is the complement of the adjacency matrix of the icosahedron."
-	| F A |
-	F _ ZZ/2.
-	A _ Graph icosahedron adjacencyMatrix: (1 to: 12).
-	A _ A apply: (Function from: A scalars to: F evaluating: [:x| x = 0 ifTrue: [F one] ifFalse: [F zero]]).
-	^ self matrix: (A identity columnAugmented: A)! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:42:38'!
-H7
-	"Answer the [7,4,3] Hamming code, which is the binary cyclic code of length 7 with generator polynomial 1 + x + x^3."
-	| generators c |
-	generators _ OrderedCollection with: (c _ (1,1,0,1,0,0,0) % 2).
-	3 timesRepeat: [generators add: (c _ c >> 1)].
-	^ self matrix: (Matrix rows: generators)! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:43:18'!
-H8
-	"Answer the extended Hamming code [8,4,4]."
-	^ self matrix:
-		(Matrix rows: {
-			(1,0,0,0, 0,1,1,1) % 2.
-			(0,1,0,0, 1,0,1,1) % 2.
-			(0,0,1,0, 1,1,0,1) % 2.
-			(0,0,0,1, 1,1,1,0) % 2})! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:43:55'!
-hadamard8
-	"Answer the [8,3,4] Hadamard code."
-	^ self matrix:
-		(Matrix rows: {
-			(0,0,0,0,1,1,1,1) % 2.
-			(0,0,1,1,0,0,1,1) % 2.
-			(0,1,0,1,0,1,0,1) % 2})! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:44:29'!
-simplex
-	"Answer the [7,3,4] simplex code, which is the dual code of the Hamming code."
-	^ self matrix:
-		(Matrix rows: {
-			(0,0,0,1,1,1,1) % 2.
-			(0,1,1,0,0,1,1) % 2.
-			(1,0,1,0,1,0,1) % 2})! !
-
-!LinearCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:44:12'!
-tetracode
-	"Answer the tetracode, a self dual code of minimum distance 3."
-	^ self subspace: ((ZZ/3)^4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3})! !
-
-!LinearCode class methodsFor: 'instance creation' stamp: 'len 4/13/2020 08:16:36'!
-matrix: aMatrix
-	"Answer a linear code with generator matrix aMatrix."
-	| M |
-	M _ aMatrix coimage.
-	^ self subspace: (M scalars ^ M width span: M rows)! !
-
-!LinearCode class methodsFor: 'instance creation' stamp: 'len 1/1/2016 06:34'!
-subspace: aLinearSubspace
-	^ self new subspace: aLinearSubspace! !
-
-!CyclicCode2 methodsFor: 'accessing' stamp: 'len 1/23/2017 11:31:35'!
-checkPolynomial
-	| x one |
-	x _ generator parent x.
-	one _ generator parent one.
-	^ x ^ self length - one / generator! !
-
-!CyclicCode2 methodsFor: 'accessing' stamp: 'len 5/18/2016 07:21'!
-dimension
-	^ self length - generator degree! !
-
-!CyclicCode2 methodsFor: 'accessing' stamp: 'len 5/17/2016 21:02'!
-generator
-	^ generator! !
-
-!CyclicCode2 methodsFor: 'accessing-private' stamp: 'len 5/18/2016 07:21'!
-generator: aPolynomial
-	generator _ aPolynomial.
-"
-	| n V g x |
-	generator _ aPolynomialResidue.
-	n _ generator modulus degree.
-	V _ generator ispecies asVectorSpaceMaxDegree: n.
-	basis _ LinearBasis on: V.
-	g _ generator.
-	x _ generator representative species x mod: generator modulus.
-	[basis includes: g] whileFalse: [basis add: g. g _ g * x].
-	self subspace: basis span"! !
-
-!CyclicCode2 methodsFor: 'converting' stamp: 'len 10/29/2016 08:28'!
-asIdeal
-	^ generator asIdeal! !
-
-!CyclicCode2 methodsFor: 'enumerating' stamp: 'len 5/18/2016 06:30'!
-do: aBlock
-	self asIdeal do: aBlock! !
-
-!CyclicCode2 methodsFor: 'operations' stamp: 'len 5/18/2016 07:30'!
-dual
-	^ self class new: self length generator: self generator reversed! !
-
-!CyclicCode2 methodsFor: 'testing' stamp: 'len 5/15/2019 01:42:52'!
-includes: aCodeword
-	| x |
-	x _ generator parent x.
-	^ (self checkPolynomial * aCodeword \\ (x ^ self length - x one)) isZero! !
-
-!CyclicCode2 methodsFor: 'testing' stamp: 'len 5/18/2016 07:22'!
-isIrreducible
-	^ generator isIrreducible! !
-
-!CyclicCode2 class methodsFor: 'examples-todo' stamp: 'len 5/25/2018 18:47:57'!
-H7
-	"Answer the Hamming code of length 7."
-	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
-
-!CyclicCode2 class methodsFor: 'instance creation' stamp: 'len 5/18/2016 07:20'!
-new: n generator: aPolynomial
-	| F |
-	F _ aPolynomial scalars.
-	^ (self new subspace: (F extension: aPolynomial) asVectorSpace) generator: aPolynomial! !
-
-!PolynomialCode methodsFor: 'accessing' stamp: 'len 4/4/2016 20:19'!
-generator
-	^ generator! !
-
-!PolynomialCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:20'!
-rank
-	^ self length - generator degree! !
-
-!PolynomialCode methodsFor: 'accessing' stamp: 'len 1/23/2017 11:44:09'!
-size
-	^ generator parent scalars size ^ (self length - generator degree)! !
-
-!PolynomialCode methodsFor: 'accessing-private' stamp: 'len 4/4/2016 20:19'!
-generator: aPolynomial
-	generator _ aPolynomial! !
-
-!PolynomialCode methodsFor: 'encoding/decoding' stamp: 'len 5/12/2016 09:33'!
-decode: aPolynomial
-	self flag: #fix. "add error-detection and correction"
-	^ aPolynomial // generator! !
-
-!PolynomialCode methodsFor: 'encoding/decoding' stamp: 'len 5/12/2016 09:31'!
-encode: aPolynomial
-	| f |
-	f _ aPolynomial shift: generator degree.
-	^ f - (f \\ generator)! !
-
-!PolynomialCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:17'!
-includes: aCodeword
-	^ aCodeword | generator! !
-
-!PolynomialCode methodsFor: 'testing' stamp: 'len 1/23/2017 11:44:04'!
-isCyclic
-	| n x |
-	n _ self length.
-	x _ generator parent x.
-	^ generator | (x ^ n - x parent one)! !
-
-!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:46:50'!
-G23
-	"Answer the perfect binary Golay code [23,12,7]."
-	| g |
-	g _ (ZZ/2) polynomials !! [:x| x^11 + (x^10) + (x^6) + (x^5) + (x^4) + (x^2) + 1].
-	^ self new: 23 generator: g! !
-
-!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:47:12'!
-H7
-	"Answer the Hamming code [7,4,3]."
-	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
-
-!PolynomialCode class methodsFor: 'instance creation' stamp: 'len 5/12/2016 07:42'!
-generator: aPolynomial
-	^ self new: aPolynomial degree generator: aPolynomial! !
-
-!PolynomialCode class methodsFor: 'instance creation' stamp: 'len 3/29/2018 16:43:50'!
-new: n generator: aPolynomial
-	| V W subspace |
-	V _ aPolynomial parent filtrationAt: n - 1.
-	W _ aPolynomial parent filtrationAt: n - aPolynomial degree - 1.
-	subspace _ V span: (W asArray collect: [:f| aPolynomial * f]).
-	^ (self subspace: subspace) generator: aPolynomial! !
-
-!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:31:24'!
-checkPolynomial
-	| x one |
-	x _ generator parent x.
-	one _ generator parent one.
-	^ x ^ self length - one / generator! !
-
-!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 6/29/2016 22:18'!
-dual
-	^ self class new: self length generator: self generator reversed! !
-
-!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:42:35'!
-includes: aCodeword
-	| x |
-	x _ generator parent x.
-	^ (self checkPolynomial * aCodeword \\ (x ^ self length - x one)) isZero! !
-
-!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 6/29/2016 22:18'!
-isIrreducible
-	^ generator isIrreducible! !
 
 !SemistandardTableaux methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 02:31'!
 alphabet
@@ -27322,6 +26827,450 @@ gramian: aMatrix
 	"Answer the lattice with the given Gram matrix."
 	^ self notYetImplemented! !
 
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2016 19:28'!
+ambient
+	"Answer the ambient vector space."
+	^ self asVectorSpace ambient! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 11/21/2016 14:00:50'!
+completeWeightEnumerator
+	"Answer the complete weight enumerator polynomial."
+	| F P |
+	F _ self ambient scalars elements asArray.
+	P _ ZZ polynomialsIn: F size.
+	^ self elements sum: [:each| P monomial: (P monomials exponents: (F collect: [:i| each occurrencesOf: i]))]! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:19'!
+dimension
+	^ self rank! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 10/9/2016 09:06'!
+distance
+	"Answer the Hamming distance function."
+	| k V |
+	k _ self dimension.
+	V _ self ambient.
+	^ (V, V) to: ZZ evaluating: [:xy| | x y | x _ V coordinatesOf: xy first. y _ V coordinatesOf: xy second. (1 to: k) count: [:i| (x at: i) ~= (y at: i)]]! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:18:47'!
+generatorMatrix
+	| V |
+	V _ self asVectorSpace.
+	^ (V base -> V ambient) matrix transposed! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:13:54'!
+length
+	"Answer the length of a codeword."
+	^ self ambient rank! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 12/28/2016 11:32:15'!
+minimumDistance
+	"Answer the minimum Hamming distance between codewords.
+	If the minimum distance is d, the code can correct (d-1)/2 errors."
+	^ self propertyAt: #minimumDistance ifAbsentPut: [self computeMinimumDistance]! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 10:12'!
+parityCheckMatrix
+	^ self dual generatorMatrix! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 3/14/2020 17:33:33'!
+rank
+	^ self asVectorSpace rank! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/3/2016 23:08'!
+rate
+	^ (self size log: 2) / self length! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:33'!
+relativeDistance
+	^ self minimumDistance / self length! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:08'!
+size
+	"Answer the number of codewords."
+	^ self asVectorSpace size! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 12/3/2016 09:12:28'!
+weight
+	"Answer the Hamming weight function."
+	| V |
+	V _ self ambient.
+	^ Function from: V to: ZZ evaluating: [:x| (V coordinatesOf: x) weight]! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:44'!
+weightDistribution
+	| answer w |
+	w _ self weight.
+	answer _ Bag new.
+	self do: [:each| answer add: (w value: each)].
+	^ answer! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 1/1/2016 00:06'!
+weightDistribution: aCodeword
+	"Answer the weight distribution wrt aCodeword."
+	self notYetImplemented! !
+
+!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:14:01'!
+weightEnumerator
+	"Answer the Hamming weight enumerator polynomial."
+	| P x y weights answer n |
+	P _ ZZ polynomialsIn: #(x y).
+	x _ P x.
+	y _ P y.
+	answer _ P zero.
+	n _ self ambient rank.
+	weights _ self weightDistribution.
+	weights asSet do: [:i| answer _ x ^ (n - i) * (y ^ i) * (weights occurrencesOf: i) + answer].
+	^ answer! !
+
+!LinearCode methodsFor: 'accessing-private' stamp: 'len 1/1/2016 06:35'!
+subspace: aLinearSubspace
+	subspace _ aLinearSubspace! !
+
+!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:27'!
+<= aLinearCode
+	^ self asVectorSpace <= aLinearCode asVectorSpace! !
+
+!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:25'!
+= aLinearCode
+	^ (aLinearCode isKindOf: LinearCode) and: [self asVectorSpace = aLinearCode asVectorSpace]! !
+
+!LinearCode methodsFor: 'comparing' stamp: 'len 4/3/2016 23:25'!
+hash
+	^ self asVectorSpace hash! !
+
+!LinearCode methodsFor: 'converting' stamp: 'len 5/20/2018 15:59:14'!
+asLattice
+	"A linear code in a finite field or ring can be lifted to a lattice."
+	| S F lift |
+	S _ self asVectorSpace.
+	F _ S scalars.
+	lift _ S to: (S apply: F projection section) evaluating: [:each| each apply: F section].
+	^ Lattice basis: (S basis apply: lift)! !
+
+!LinearCode methodsFor: 'converting' stamp: 'len 3/31/2016 02:33'!
+asVectorSpace
+	^ subspace! !
+
+!LinearCode methodsFor: 'enumerating' stamp: 'len 5/12/2016 07:08'!
+do: aBlock
+	self asVectorSpace do: aBlock! !
+
+!LinearCode methodsFor: 'graphs' stamp: 'len 11/16/2016 10:08'!
+distanceGraph: d
+	"Answer the graph of the codewords of the receiver, with two codewords adjacent if their Hamming distance is d."
+	| h G |
+	h _ self distance. "the Hamming distance function"
+	G _ Graph unordered.
+	self elements do: [:x|
+		self elements do: [:y|
+			(h value: {x.y}) = d
+				ifTrue: [G addEdgeFrom: x to: y]]].
+	^ G! !
+
+!LinearCode methodsFor: 'graphs' stamp: 'len 4/5/2018 15:27:59'!
+tannerGraph
+	| matrix G |
+	matrix _ self parityCheckMatrix.
+	G _ Graph unordered.
+	1 to: matrix height do: [:i|
+		1 to: matrix width do: [:j|
+			(matrix at: i@j) isZero not
+				ifTrue:
+					[| subcode digit |
+					subcode _ matrix rowAt: i.
+					digit _ matrix columnAt: j.
+					G addEdgeFrom: subcode to: digit]]].
+	^ G! !
+
+!LinearCode methodsFor: 'morphisms' stamp: 'len 4/20/2016 20:56'!
+automorphisms
+	"Answer the subgroup of Perm(F^k) (permutation of coordinates) that leave the receiver invariant.
+	The automorphisms of a code and it's dual are the same."
+	self notYetImplemented! !
+
+!LinearCode methodsFor: 'morphisms' stamp: 'len 2/15/2016 20:26'!
+isometries
+	"Answer the subgroup of Iso(F^k) that leave the receiver invariant."
+	self notYetImplemented! !
+
+!LinearCode methodsFor: 'operations' stamp: 'len 8/22/2019 10:30:23'!
+dual
+	"Answer the dual or orthogonal code of the receiver."
+	^ LinearCode subspace: self asVectorSpace complement! !
+
+!LinearCode methodsFor: 'random' stamp: 'len 5/12/2016 09:59'!
+atRandom: aRandom bits: bitSize
+	^ self asVectorSpace atRandom: aRandom bits: bitSize! !
+
+!LinearCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:08'!
+includes: aCodeword
+	^ self asVectorSpace includes: aCodeword! !
+
+!LinearCode methodsFor: 'testing' stamp: 'len 5/18/2016 06:28'!
+isCyclic
+	"A code is called a cylic code if for each codeword (c1,...,cn) it also contains the cyclic right shifted word (cn,c1,c2,...,cn-1), i.e. the code is invariant under cylic shifts."
+	self do: [:each| (self includes: (each wrap: 1)) ifFalse: [^ false]].
+	^ true! !
+
+!LinearCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:30'!
+isMaximumDistanceSeparable
+	"Any linear [n,k,d] code satisfies k + d <= n + 1 (Singleton bound). If a code satisfies k + d = n + 1 it's called Maximum Distance Separable (MDS)."
+	| n k d |
+	n _ self length.
+	k _ self rank.
+	d _ self minimumDistance.
+	^ k + d = (n + 1)! !
+
+!LinearCode methodsFor: 'testing' stamp: 'len 4/13/2020 08:13:41'!
+isSelfDual
+	self ambient rank even ifFalse: [^ false].
+	self dimension = (self ambient rank / 2) ifFalse: [^ false].
+	^ self = self dual! !
+
+!LinearCode methodsFor: 'testing' stamp: 'len 4/3/2016 23:20'!
+isSelfOrthogonal
+	^ self asVectorSpace <= self dual asVectorSpace! !
+
+!LinearCode methodsFor: 'private' stamp: 'len 2/15/2016 20:35'!
+computeMinimumDistance
+	| answer w |
+	answer _ Infinity positive.
+	w _ self weight.
+	self do: [:each| each isZero ifFalse: [answer _ answer min: (w value: each)]].
+	^ answer! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:40:25'!
+G11
+	"Answer the perfect ternary Golary code [11,6,5]."
+	^ self matrix:
+		(Matrix rows: {
+			(1,0,0,0,0,0, 1,1,1,1,1) % 3.
+			(0,1,0,0,0,0, 0,1,2,2,1) % 3.
+			(0,0,1,0,0,0, 1,0,1,2,2) % 3.
+			(0,0,0,1,0,0, 2,1,0,1,2) % 3.
+			(0,0,0,0,1,0, 2,2,1,0,1) % 3.
+			(0,0,0,0,0,1, 1,2,2,1,0) % 3})! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:41:28'!
+G12
+	"Answer the extended ternary Golary code [12,6,6]."
+	^ self matrix:
+		(Matrix rows: {
+			(1,0,0,0,0,0, 0,1,1,1,1,1) % 3.
+			(0,1,0,0,0,0, 1,0,1,2,2,1) % 3.
+			(0,0,1,0,0,0, 1,1,0,1,2,2) % 3.
+			(0,0,0,1,0,0, 1,2,1,0,1,2) % 3.
+			(0,0,0,0,1,0, 1,2,2,1,0,1) % 3.
+			(0,0,0,0,0,1, 1,1,2,2,1,0) % 3})! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 5/30/2019 07:04:04'!
+G24
+	"Answer the extended binary Golary code [24,12,8].
+	Its generator matrix is I|A, where I is the 12x12 identity matrix and A is the complement of the adjacency matrix of the icosahedron."
+	| F A |
+	F _ ZZ/2.
+	A _ Graph icosahedron adjacencyMatrix: (1 to: 12).
+	A _ A apply: (Function from: A scalars to: F evaluating: [:x| x = 0 ifTrue: [F one] ifFalse: [F zero]]).
+	^ self matrix: (A identity columnAugmented: A)! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:42:38'!
+H7
+	"Answer the [7,4,3] Hamming code, which is the binary cyclic code of length 7 with generator polynomial 1 + x + x^3."
+	| generators c |
+	generators _ OrderedCollection with: (c _ (1,1,0,1,0,0,0) % 2).
+	3 timesRepeat: [generators add: (c _ c >> 1)].
+	^ self matrix: (Matrix rows: generators)! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:43:18'!
+H8
+	"Answer the extended Hamming code [8,4,4]."
+	^ self matrix:
+		(Matrix rows: {
+			(1,0,0,0, 0,1,1,1) % 2.
+			(0,1,0,0, 1,0,1,1) % 2.
+			(0,0,1,0, 1,1,0,1) % 2.
+			(0,0,0,1, 1,1,1,0) % 2})! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:43:55'!
+hadamard8
+	"Answer the [8,3,4] Hadamard code."
+	^ self matrix:
+		(Matrix rows: {
+			(0,0,0,0,1,1,1,1) % 2.
+			(0,0,1,1,0,0,1,1) % 2.
+			(0,1,0,1,0,1,0,1) % 2})! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 1/25/2018 22:44:29'!
+simplex
+	"Answer the [7,3,4] simplex code, which is the dual code of the Hamming code."
+	^ self matrix:
+		(Matrix rows: {
+			(0,0,0,1,1,1,1) % 2.
+			(0,1,1,0,0,1,1) % 2.
+			(1,0,1,0,1,0,1) % 2})! !
+
+!LinearCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:44:12'!
+tetracode
+	"Answer the tetracode, a self dual code of minimum distance 3."
+	^ self subspace: ((ZZ/3)^4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3})! !
+
+!LinearCode class methodsFor: 'instance creation' stamp: 'len 4/13/2020 08:16:36'!
+matrix: aMatrix
+	"Answer a linear code with generator matrix aMatrix."
+	| M |
+	M _ aMatrix coimage.
+	^ self subspace: (M scalars ^ M width span: M rows)! !
+
+!LinearCode class methodsFor: 'instance creation' stamp: 'len 1/1/2016 06:34'!
+subspace: aLinearSubspace
+	^ self new subspace: aLinearSubspace! !
+
+!CyclicCode2 methodsFor: 'accessing' stamp: 'len 1/23/2017 11:31:35'!
+checkPolynomial
+	| x one |
+	x _ generator parent x.
+	one _ generator parent one.
+	^ x ^ self length - one / generator! !
+
+!CyclicCode2 methodsFor: 'accessing' stamp: 'len 5/18/2016 07:21'!
+dimension
+	^ self length - generator degree! !
+
+!CyclicCode2 methodsFor: 'accessing' stamp: 'len 5/17/2016 21:02'!
+generator
+	^ generator! !
+
+!CyclicCode2 methodsFor: 'accessing-private' stamp: 'len 5/18/2016 07:21'!
+generator: aPolynomial
+	generator _ aPolynomial.
+"
+	| n V g x |
+	generator _ aPolynomialResidue.
+	n _ generator modulus degree.
+	V _ generator ispecies asVectorSpaceMaxDegree: n.
+	basis _ LinearBasis on: V.
+	g _ generator.
+	x _ generator representative species x mod: generator modulus.
+	[basis includes: g] whileFalse: [basis add: g. g _ g * x].
+	self subspace: basis span"! !
+
+!CyclicCode2 methodsFor: 'converting' stamp: 'len 10/29/2016 08:28'!
+asIdeal
+	^ generator asIdeal! !
+
+!CyclicCode2 methodsFor: 'enumerating' stamp: 'len 5/18/2016 06:30'!
+do: aBlock
+	self asIdeal do: aBlock! !
+
+!CyclicCode2 methodsFor: 'operations' stamp: 'len 5/18/2016 07:30'!
+dual
+	^ self class new: self length generator: self generator reversed! !
+
+!CyclicCode2 methodsFor: 'testing' stamp: 'len 5/15/2019 01:42:52'!
+includes: aCodeword
+	| x |
+	x _ generator parent x.
+	^ (self checkPolynomial * aCodeword \\ (x ^ self length - x one)) isZero! !
+
+!CyclicCode2 methodsFor: 'testing' stamp: 'len 5/18/2016 07:22'!
+isIrreducible
+	^ generator isIrreducible! !
+
+!CyclicCode2 class methodsFor: 'examples-todo' stamp: 'len 5/25/2018 18:47:57'!
+H7
+	"Answer the Hamming code of length 7."
+	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
+
+!CyclicCode2 class methodsFor: 'instance creation' stamp: 'len 5/18/2016 07:20'!
+new: n generator: aPolynomial
+	| F |
+	F _ aPolynomial scalars.
+	^ (self new subspace: (F extension: aPolynomial) asVectorSpace) generator: aPolynomial! !
+
+!PolynomialCode methodsFor: 'accessing' stamp: 'len 4/4/2016 20:19'!
+generator
+	^ generator! !
+
+!PolynomialCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:20'!
+rank
+	^ self length - generator degree! !
+
+!PolynomialCode methodsFor: 'accessing' stamp: 'len 1/23/2017 11:44:09'!
+size
+	^ generator parent scalars size ^ (self length - generator degree)! !
+
+!PolynomialCode methodsFor: 'accessing-private' stamp: 'len 4/4/2016 20:19'!
+generator: aPolynomial
+	generator _ aPolynomial! !
+
+!PolynomialCode methodsFor: 'encoding/decoding' stamp: 'len 5/12/2016 09:33'!
+decode: aPolynomial
+	self flag: #fix. "add error-detection and correction"
+	^ aPolynomial // generator! !
+
+!PolynomialCode methodsFor: 'encoding/decoding' stamp: 'len 5/12/2016 09:31'!
+encode: aPolynomial
+	| f |
+	f _ aPolynomial shift: generator degree.
+	^ f - (f \\ generator)! !
+
+!PolynomialCode methodsFor: 'testing' stamp: 'len 5/12/2016 07:17'!
+includes: aCodeword
+	^ aCodeword | generator! !
+
+!PolynomialCode methodsFor: 'testing' stamp: 'len 1/23/2017 11:44:04'!
+isCyclic
+	| n x |
+	n _ self length.
+	x _ generator parent x.
+	^ generator | (x ^ n - x parent one)! !
+
+!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:46:50'!
+G23
+	"Answer the perfect binary Golay code [23,12,7]."
+	| g |
+	g _ (ZZ/2) polynomials !! [:x| x^11 + (x^10) + (x^6) + (x^5) + (x^4) + (x^2) + 1].
+	^ self new: 23 generator: g! !
+
+!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:47:12'!
+H7
+	"Answer the Hamming code [7,4,3]."
+	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
+
+!PolynomialCode class methodsFor: 'instance creation' stamp: 'len 5/12/2016 07:42'!
+generator: aPolynomial
+	^ self new: aPolynomial degree generator: aPolynomial! !
+
+!PolynomialCode class methodsFor: 'instance creation' stamp: 'len 3/29/2018 16:43:50'!
+new: n generator: aPolynomial
+	| V W subspace |
+	V _ aPolynomial parent filtrationAt: n - 1.
+	W _ aPolynomial parent filtrationAt: n - aPolynomial degree - 1.
+	subspace _ V span: (W asArray collect: [:f| aPolynomial * f]).
+	^ (self subspace: subspace) generator: aPolynomial! !
+
+!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:31:24'!
+checkPolynomial
+	| x one |
+	x _ generator parent x.
+	one _ generator parent one.
+	^ x ^ self length - one / generator! !
+
+!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 6/29/2016 22:18'!
+dual
+	^ self class new: self length generator: self generator reversed! !
+
+!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:42:35'!
+includes: aCodeword
+	| x |
+	x _ generator parent x.
+	^ (self checkPolynomial * aCodeword \\ (x ^ self length - x one)) isZero! !
+
+!CyclicCode methodsFor: 'as yet unclassified' stamp: 'len 6/29/2016 22:18'!
+isIrreducible
+	^ generator isIrreducible! !
+
 !Element methodsFor: 'accessing' stamp: 'len 9/24/2018 02:08:20'!
 parent
 	^ self subclassResponsibility! !
@@ -28411,15 +28360,15 @@ asPolynomial
 	M _ self domain isFree ifTrue: [matrix / aModuleMap matrix] ifFalse: [aModuleMap matrix solveLeft: matrix modulo: (self domain relations -> self domain base) matrix].
 	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/15/2020 01:00:15'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/18/2020 22:30:56'!
 /\ aModuleMap
 	"Answer the pullback (or fibered product, cartesian square) of the receiver and the argument. The pullback is the limit of a cospan Y -> X <- Z and it is the categorical dual of the pushout (see >>\/).
 	The pullback of a morphism f and a monomorphism g can be thought of as the 'preimage' under f of the subobject specified by g. Similarly, pullbacks of two monomorphisms can be thought of as the 'intersection' of the two subobjects."
-	| answer |
-	^ (answer _ (self coproduct: aModuleMap negated) kernel)
-		addMap: answer -> (answer ambient -< 1);
-		addMap: answer -> (answer ambient -< 2);
-		yourself! !
+	| coproduct answer |
+	coproduct _ self coproduct: aModuleMap negated.
+	answer _ coproduct kernel.
+	coproduct domain -< {self domain. aModuleMap domain} do: [:each| answer addMap: answer -> each].
+	^ answer! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 19:25:49'!
 \ aModuleMap
@@ -28428,15 +28377,14 @@ asPolynomial
 	M _ self codomain isFree ifTrue: [matrix \ aModuleMap matrix] ifFalse: [matrix solveRight: aModuleMap matrix modulo: (self codomain relations -> self codomain base) matrix].
 	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/15/2020 01:07:48'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/18/2020 22:33:15'!
 \/ aModuleMap
 	"Answer the pushout (or fibered coproduct, fibered sum, cocartesian square, amalgamated sum) of the receiver and the argument. The pushout is the colimit of a span Y <- X -> Z, and it is the categorical dual of the pullback (see >>/\)."
 	| answer product |
 	product _ self product: aModuleMap negated.
-	^ (answer _ product cokernel)
-		addMap: 1 >- product codomain -> answer;
-		addMap: 2 >- product codomain -> answer;
-		yourself! !
+	answer _ product cokernel.
+	{self codomain. aModuleMap codomain} >- product codomain do: [:each| answer addMap: each -> answer].
+	^ answer! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 3/13/2020 06:15:23'!
 ∑ aModuleMap
@@ -28764,10 +28712,6 @@ isUnimodular
 !FreeModuleMap methodsFor: 'testing' stamp: 'len 1/8/2016 06:34'!
 isZero
 	^ matrix isZero! !
-
-!FreeModuleMap methodsFor: 'private' stamp: 'len 5/13/2019 14:00:48'!
-species
-	^ FreeModuleMap! !
 
 !RationalMap methodsFor: 'accessing' stamp: 'len 12/28/2016 21:54:27'!
 at: anInteger
@@ -32162,58 +32106,58 @@ parent: aLocalRing
 ratio: aRatio
 	ratio _ aRatio! !
 
-!Product methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:21'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:21'!
 at: anInteger
 	^ components at: anInteger! !
 
-!Product methodsFor: 'accessing' stamp: 'len 6/19/2019 13:48:30'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/19/2019 13:48:30'!
 parent
 	^ parent! !
 
-!Product methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:29'!
+!ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:29'!
 size
 	^ components size! !
 
-!Product methodsFor: 'operations' stamp: 'len 8/14/2019 05:01:51'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 8/14/2019 05:01:51'!
 * anElement
 	anElement isInteger ifTrue: [^ parent compose: components * anElement].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
 	^ parent compose: components * anElement components! !
 
-!Product methodsFor: 'operations' stamp: 'len 8/14/2019 05:02:08'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 8/14/2019 05:02:08'!
 + anElement
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
 	^ parent compose: components + anElement components! !
 
-!Product methodsFor: 'operations' stamp: 'len 8/12/2019 10:58:13'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 8/12/2019 10:58:13'!
 inverse
 	^ parent compose: (components collect: [:each| each reciprocal ifNil: [^ nil]])! !
 
-!Product methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:33'!
+!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:33'!
 negated
 	^ parent compose: (components collect: [:each| each negated])! !
 
-!Product methodsFor: 'comparing' stamp: 'len 6/19/2019 13:51:19'!
+!ProductRingElement methodsFor: 'comparing' stamp: 'len 6/19/2019 13:51:19'!
 = anObject
 	^ anObject isElement and: [parent = anObject parent and: [components = anObject components]]! !
 
-!Product methodsFor: 'comparing' stamp: 'len 5/25/2018 18:50:35'!
+!ProductRingElement methodsFor: 'comparing' stamp: 'len 5/25/2018 18:50:35'!
 hash
 	^ components hash! !
 
-!Product methodsFor: 'testing' stamp: 'len 5/22/2018 16:24:16'!
+!ProductRingElement methodsFor: 'testing' stamp: 'len 5/22/2018 16:24:16'!
 isZero
 	^ components allSatisfy: [:each| each isZero]! !
 
-!Product methodsFor: 'private' stamp: 'len 5/22/2018 16:24:43'!
+!ProductRingElement methodsFor: 'private' stamp: 'len 5/22/2018 16:24:43'!
 components
 	^ components! !
 
-!Product methodsFor: 'private' stamp: 'len 5/22/2018 16:10:02'!
+!ProductRingElement methodsFor: 'private' stamp: 'len 5/22/2018 16:10:02'!
 components: anArray
 	components _ anArray! !
 
-!Product methodsFor: 'private' stamp: 'len 6/19/2019 13:48:20'!
+!ProductRingElement methodsFor: 'private' stamp: 'len 6/19/2019 13:48:20'!
 parent: aProductRing
 	parent _ aProductRing! !
 
@@ -40858,13 +40802,13 @@ solveRightOverPrimePowerRing: aMatrix
 		self assert: ((A*X - B) % m) isZero].
 	^ X over: R"! !
 
-!Matrix methodsFor: 'private-solving' stamp: 'len 7/14/2019 08:36:56'!
+!Matrix methodsFor: 'private-solving' stamp: 'len 4/18/2020 22:10:03'!
 solveRightOverProductRing: aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix.
 	The algorithm solves the system for each projection and then composes back to the product ring."
 	| R X |
 	R _ self scalars.
-	X _ R projections collect: [:p| (self apply: p) \ (aMatrix apply: p)].
+	X _ R -< R components collect: [:p| (self apply: p) \ (aMatrix apply: p)].
 	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R compose: (X collect: [:each| each at: i@j])]! !
 
 !Matrix class methodsFor: 'instance creation' stamp: 'len 1/17/2017 08:12:11'!
@@ -45229,6 +45173,118 @@ testRotationsBy90Degrees
 	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
 	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
 
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 03:25:32'!
+testDual
+	| C |
+	C _ LinearCode subspace: (ZZ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
+	self assert: C dual size = (C ambient size / C size).
+	C dual do: [:v|
+		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
+		self assert: (v coordinates count: [:each| each = (1 % 2)]) even]
+! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:52:38'!
+testGolay24
+	| C W x y |
+	C _ LinearCode G24.
+	self assert: C isSelfDual.
+	W _ C weightEnumerator.
+	x _ W parent x.
+	y _ W parent y.
+	self assert: W = (x^24 + (x^16*(y^8)*759) + (x^12*(y^12)*2576) + (x^8*(y^16)*759) + (y^24)) "typo in neil's video 22:20"! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 09:47'!
+testHamming743
+	| H7 |
+	H7 _ LinearCode H7.
+	self assert: H7 isCyclic.
+	self assert: H7 minimumDistance = 3.
+	self assert: H7 weightDistribution = #(0 3 3 3 3 3 3 3 4 4 4 4 4 4 4 7) asBag.
+	self assert: H7 dual minimumDistance = 4! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:24'!
+testHamming844
+	| C P x y |
+	C _ LinearCode H8.
+	self assert: C isSelfDual.
+	self assert: C isSelfOrthogonal.
+	self assert: C minimumDistance = 4.
+	self assert: C dual minimumDistance = 4.
+	P _ ZZ polynomialsIn: 2.
+	x _ P x. y _ P y.
+	self assert: C weightEnumerator = (x^8 + (x*y^4*14) + (y^8))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:52:21'!
+testMacWilliamsTheorem
+	"(MacWilliams, 1962) the theorem relates the weight enumerator of a linear code to the weight enumerator of its dual."
+	"From youtube, Neil Sloane 'Error Correcting Codes, Group Theory and Invariant Theory, Part 1' 20:30."
+	| C W Wperp x y |
+	C _ LinearCode H7.
+	W _ C weightEnumerator.
+	Wperp _ C dual weightEnumerator.
+	x _ Wperp parent x.
+	y _ Wperp parent y.
+	self assert: Wperp = ((W value: {x+y. x-y}) / C size)! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 08:19:16'!
+testParityCheckMatrix
+	| H7 M |
+	H7 _ LinearCode H7.
+	M _ H7 parityCheckMatrix.
+	self assert: (M * H7 atRandom coordinates) isZero! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:58'!
+testSelfDual
+	| F C |
+	F _ ZZ/2.
+	"{00,11} is the smallest self-dual code"
+	C _ LinearCode subspace: (F^2 span: {(0,0) % 2. (1,1) % 2}).
+	self assert: C isSelfDual.
+	self assert: C isSelfOrthogonal.
+	"TODO: test other examples of self-dual codes: H8, G24"! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 07:28'!
+testSingletonBound: C
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	| n k d |
+	n _ C length.
+	k _ C rank.
+	d _ C minimumDistance.
+	self assert: k + d <= (n + 1).! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 07:30'!
+testSingletonBoundH7
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	self testSingletonBound: LinearCode H7! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:31'!
+testSingletonBoundTetracode
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	self testSingletonBound: LinearCode tetracode! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:20'!
+testTetracode
+	| C P x y |
+	C _ LinearCode subspace: (ZZ/3 ^ 4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3}).
+	self assert: C isSelfDual.
+	self assert: C minimumDistance = 3.
+	P _ ZZ polynomialsIn: #(x y).
+	x _ P x.
+	y _ P y.
+	self assert: C weightEnumerator = (x^4 + (x*(y^3)*8))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:41:19'!
+testWeightEnumerator
+	"From youtube, Neil Sloane 'error correcting codes, group theory and invariant theory part 1' 19:30."
+	| F C w x y |
+	F _ ZZ/2.
+	C _ LinearCode subspace: (F^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
+	w _ C weightEnumerator.
+	x _ w parent x.
+	y _ w parent y.
+	self assert: w = (x^5 + (y^5)).
+	self assert: C dual weightEnumerator = (x^5 + (x^3*(y^2)*10) + (y^4*x*5))! !
+
 !Object methodsFor: '*domains' stamp: 'len 11/6/2016 09:07'!
 adaptToCollection: rcvr andSend: selector
 	"If I am involved in arithmetic with a Collection, return a Collection of
@@ -45474,12 +45530,6 @@ valuation: p
 "	anObject isInteger ifTrue: [^ RationalNumber numerator: self denominator: anObject].
 	(anObject isKindOf: RationalNumber) ifTrue: [^ anObject denominator * self : anObject numerator]."
 	^ DomainError signal! !
-
-!Integer methodsFor: '*domains' stamp: 'len 4/14/2020 21:09:20'!
->- aCodomain
-	"Answer the n-th canonical coprojection to the argument.
-	See also Domain's message -<."
-	^ aCodomain coprojection: self! !
 
 !Integer methodsFor: '*domains' stamp: 'len 8/6/2019 06:18:27'!
 | anInteger
@@ -46321,6 +46371,13 @@ sum
 	answer _ self at: 1.
 	2 to: self size do: [:i| answer _ answer + (self at: i)].
 	^ answer! !
+
+!Array methodsFor: '*domains' stamp: 'len 4/18/2020 22:23:18'!
+>- aCodomain
+	"Answer the canonical coprojections from the components of the receiver to the argument.
+	See also Domain's message -<."
+	aCodomain propertyAt: #coprojections ifPresent: [:aDictionary| aDictionary at: self ifPresent: [:anArrayOfMorphisms| ^ anArrayOfMorphisms]].
+	^ aCodomain fromAll: self! !
 
 !Array methodsFor: '*domains' stamp: 'len 11/6/2016 09:26'!
 printOn: aStream
