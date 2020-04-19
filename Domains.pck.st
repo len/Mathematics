@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 18 April 2020 at 11:10:49 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 April 2020 at 12:23:01 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 551!
+!provides: 'Domains' 1 552!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -12415,7 +12415,7 @@ upTo: max do: aBlock
 	self propertyAt: #projections ifPresent: [:aDictionary| aDictionary at: anArray ifPresent: [:anArrayOfMorphisms| ^ anArrayOfMorphisms]].
 	^ self toAll: anArray! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:29:32'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/19/2020 00:21:59'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
 	If the argument is a morphism, answer the composition with a canonical morphism to its domain. See also Morphism>>->."
@@ -12426,8 +12426,6 @@ upTo: max do: aBlock
 	aCodomain propertyAt: #inputs ifPresent: [:aDictionary| aDictionary at: self ifPresent: [:aMorphism| ^ aMorphism]].
 	(self to: aCodomain) ifNotNil: [:aMorphism| ^ aMorphism].
 	(aCodomain from: self) ifNotNil: [:aMorphism| ^ aMorphism].
-	self propertyAt: #outputs ifPresent: [:aDictionary| aDictionary do: [:each| each -> aCodomain ifNotNil: [:aMorphism| ^ aMorphism]]].
-	aCodomain propertyAt: #inputs ifPresent: [:aDictionary| aDictionary do: [:each| self -> each ifNotNil: [:aMorphism| ^ aMorphism]]].
 	^ nil! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 5/11/2019 02:08:41'!
@@ -22260,14 +22258,14 @@ to: aModule matrix: aMatrix
 		^ answer].
 	self notYetImplemented"! !
 
-!Module methodsFor: 'operations' stamp: 'len 4/18/2020 15:21:31'!
+!Module methodsFor: 'operations' stamp: 'len 4/19/2020 00:10:51'!
 /\ aSubmodule
 	"Answer the intersection of the receiver and the argument."
 	(aSubmodule isModule and: [self ambient = aSubmodule ambient])
 		ifFalse: [^ super /\ aSubmodule].
 	self isTrivial ifTrue: [^ self].
 	aSubmodule isTrivial ifTrue: [^ aSubmodule].
-	^ (self -> self ambient /\ (aSubmodule -> self ambient) -> self ambient) image! !
+	^ (self -> self ambient /\ (aSubmodule -> self ambient) -> self -> self ambient) image! !
 
 !Module methodsFor: 'operations' stamp: 'len 8/14/2019 17:42:10'!
 : aModuleOrIdeal
