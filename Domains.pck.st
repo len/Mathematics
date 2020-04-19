@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 April 2020 at 12:23:01 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 April 2020 at 1:29:55 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 552!
+!provides: 'Domains' 1 553!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -26075,19 +26075,19 @@ isVoid
 	"Answer true if this is the void complex, that has no faces."
 	^ self facets isEmpty! !
 
-!SimplicialComplex methodsFor: 'private' stamp: 'len 12/29/2017 09:44:46'!
+!SimplicialComplex methodsFor: 'private' stamp: 'len 4/19/2020 01:28:53'!
 pathsFrom: A to: B do: aBlock
 	| x |
-	A isEmpty ifTrue: [^ aBlock value: {A}].
-	B isEmpty ifTrue: [^ aBlock value: {B}].
+	A isEmpty ifTrue: [^ aBlock value: A].
+	B isEmpty ifTrue: [^ aBlock value: B].
 	A size = 1 ifTrue:
 		[| v |
 		v _ A at: 1.
-		^ B do: [:w| aBlock value: {{v. w}}]].
+		^ aBlock value: (B collect: [:w| {v. w}])].
 	B size = 1 ifTrue:
 		[| w |
 		w _ B at: 1.
-		^ A do: [:v| aBlock value: {{v. w}}]].
+		^ aBlock value: (A collect: [:v| {v. w}])].
 	x _ {A last. B last}.
 	self pathsFrom: A allButLast to: B do: [:each| aBlock value: (each copyWith: x)].
 	self pathsFrom: A to: B allButLast do: [:each| aBlock value: (each copyWith: x)]! !
