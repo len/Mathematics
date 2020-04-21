@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 7:41:40 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 9:39:03 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 555!
+!provides: 'Domains' 1 556!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -44,8 +44,6 @@ SystemOrganization addCategory: #'Domains-Morphic'!
 SystemOrganization addCategory: #'Domains-Etc'!
 SystemOrganization addCategory: #'Domains-Etc-Lie'!
 SystemOrganization addCategory: #'Domains-Etc-Algebras'!
-SystemOrganization addCategory: #'Domains-Etc-Groups-Abelian'!
-SystemOrganization addCategory: #'Domains-Etc-Modules-Old'!
 SystemOrganization addCategory: #'Domains-Etc-Modules-Tensors'!
 SystemOrganization addCategory: #'Domains-Etc-Lattices'!
 SystemOrganization addCategory: #'Domains-Etc-Groups-Linear'!
@@ -2003,13 +2001,13 @@ ModularForm subclass: #EisensteinSeries
 EisensteinSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineMap category: #'Domains-Etc-Modules-Old'!
+!classDefinition: #AffineMap category: #'Domains-Etc'!
 Function subclass: #AffineMap
 	instanceVariableNames: 'linearMap translation'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Etc-Modules-Old'!
-!classDefinition: 'AffineMap class' category: #'Domains-Etc-Modules-Old'!
+	category: 'Domains-Etc'!
+!classDefinition: 'AffineMap class' category: #'Domains-Etc'!
 AffineMap class
 	instanceVariableNames: ''!
 
@@ -2221,16 +2219,6 @@ RingElement subclass: #Germ
 	category: 'Domains-Rings'!
 !classDefinition: 'Germ class' category: #'Domains-Rings'!
 Germ class
-	instanceVariableNames: ''!
-
-!classDefinition: #ProductRingElement category: #'Domains-Rings'!
-RingElement subclass: #ProductRingElement
-	instanceVariableNames: 'parent components'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings'!
-!classDefinition: 'ProductRingElement class' category: #'Domains-Rings'!
-ProductRingElement class
 	instanceVariableNames: ''!
 
 !classDefinition: #Ratio category: #'Domains-Rings'!
@@ -2453,16 +2441,6 @@ Element subclass: #ModuleElement
 ModuleElement class
 	instanceVariableNames: ''!
 
-!classDefinition: #FreeModuleElement category: #'Domains-Modules'!
-ModuleElement subclass: #FreeModuleElement
-	instanceVariableNames: 'parent coordinates'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Modules'!
-!classDefinition: 'FreeModuleElement class' category: #'Domains-Modules'!
-FreeModuleElement class
-	instanceVariableNames: ''!
-
 !classDefinition: #ModuleCoset category: #'Domains-Modules'!
 ModuleElement subclass: #ModuleCoset
 	instanceVariableNames: 'representative parent'
@@ -2471,6 +2449,16 @@ ModuleElement subclass: #ModuleCoset
 	category: 'Domains-Modules'!
 !classDefinition: 'ModuleCoset class' category: #'Domains-Modules'!
 ModuleCoset class
+	instanceVariableNames: ''!
+
+!classDefinition: #Vector category: #'Domains-Modules'!
+ModuleElement subclass: #Vector
+	instanceVariableNames: 'parent coordinates'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Modules'!
+!classDefinition: 'Vector class' category: #'Domains-Modules'!
+Vector class
 	instanceVariableNames: ''!
 
 !classDefinition: #Sum category: #'Domains-Etc'!
@@ -3903,7 +3891,7 @@ The localization of R at the prime ideal P is equipped with a canonical map (the
 The localization of R at the prime ideal P is a local ring, with maximal ideal equal to the extension of the ideal P by the localization map. The quotient by the maximal ideal is called the 'residue field'.!
 
 !ProductRing commentStamp: '<historical>' prior: 0!
-Direct products of rings. Elements are tuples where the i-th component corresponds to an element in the i-th ring of the direct product ring, and multiplication and addition are defined component wise. See Product.!
+Direct products of rings. Elements are tuples where the i-th component corresponds to an element in the i-th ring of the direct product ring, and multiplication and addition are defined component wise.!
 
 !QuotientRing commentStamp: '<historical>' prior: 0!
 Quotient rings (also called factor rings, difference rings or residue class rings). Their elements are residue classes (see Residue and subclasses).
@@ -4427,7 +4415,7 @@ References:
 	https://en.wikipedia.org/wiki/Affine_transformation!
 
 !MultilinearMap commentStamp: '<historical>' prior: 0!
-MultilinearMaps are functions from a cartesian product of R-modules to another R-module, that are linear when fixing all but one of the arguments.!
+MultilinearMaps are functions from a cartesian product of R-modules to an R-module, that are linear when fixing all but one of the arguments.!
 
 !BilinearForm commentStamp: '<historical>' prior: 0!
 Bilinear forms are functions from MxM to R (where M is a R-module) that satisfy:
@@ -4496,9 +4484,6 @@ Elements of a Ring.!
 !Germ commentStamp: '<historical>' prior: 0!
 Elements of localizations of rings at a prime ideal. See LocalRing.!
 
-!ProductRingElement commentStamp: 'len 5/22/2018 16:08:11' prior: 0!
-Elements of direct products of rings. See ProductRing.!
-
 !Ratio commentStamp: '<historical>' prior: 0!
 Elements of the form 'a / b', with a and b in a commutative ring R, and satisfying the equivalence relation: (a / b) = (c / d) iff a*d = c*b.
 
@@ -4555,6 +4540,9 @@ Module cosets or affine subspaces contained in a given vector space, i.e. flats,
 
 They appear when considering the solutions of non-homogeneous linear systems, or the set of all the vectors in the domain of a linear map that are mapped to a given vector in the codomain of the transformation (the 'fiber' of the vector). They are also the elements of quotient modules. See QuotientModule.
 !
+
+!Vector commentStamp: '<historical>' prior: 0!
+Elements of free R-modules. See FreeModule.!
 
 !Sum commentStamp: '<historical>' prior: 0!
 Formal sums (or formal linear combinations) of arbitrary symbols with coefficients over a given ring R. They can be thought of as Tuples indexed not by positive integers but by arbitrary symbols. They form free R-modules (see FreeSumsModule).
@@ -5804,10 +5792,6 @@ printOn: aStream
 			ifTrue: [aStream nextPut: $(; print: u; nextPut: $)]
 			ifFalse: [aStream print: u]]"! !
 
-!ProductRingElement methodsFor: 'printing' stamp: 'len 5/22/2018 16:12:57'!
-printOn: aStream
-	aStream print: components! !
-
 !Ratio methodsFor: 'printing' stamp: 'len 7/16/2019 16:40:18'!
 printOn: aStream
 	| string |
@@ -5919,13 +5903,19 @@ printOn: aStream
 	f _ (P coefficients: (coefficients first: n)) orderedBy: #llex.
 	aStream print: f; nextPutAll: ' + ', 'O' italic, '('; print: P x ^ (n+1); nextPut: $)! !
 
-!FreeModuleElement methodsFor: 'printing' stamp: 'len 3/13/2020 10:16:48'!
-printOn: aStream
-	aStream print: coordinates! !
-
 !ModuleCoset methodsFor: 'printing' stamp: 'len 3/18/2020 17:22:25'!
 printOn: aStream
 	aStream print: representative! !
+
+!Vector methodsFor: 'printing' stamp: 'len 4/21/2020 10:00:15'!
+printOn: aStream
+	| names P f |
+	names _ parent propertyAt: #names ifAbsent: [aStream print: coordinates. ^ self.].
+	coordinates isZero ifTrue: [aStream print: 0. ^ self].
+	P _ coordinates scalars polynomialsIn: names.
+	f _ P zero.
+	coordinates withIndexDo: [:each :i| f _ (P x: i) * each + f].
+	aStream print: f! !
 
 !Sum methodsFor: 'copying' stamp: 'len 11/18/2016 17:34:33'!
 postCopy
@@ -9600,10 +9590,9 @@ vertices: aCollection
 	"Answer true if the receiver is contained in aSimplex as a face."
 	^ aSimplex >= self! !
 
-!Simplex methodsFor: 'comparing' stamp: 'len 2/24/2017 11:41:54'!
-= aSimplex
-	"Answer true if the receiver equals the argument."
-	^ self vertices = aSimplex vertices
+!Simplex methodsFor: 'comparing' stamp: 'len 4/21/2020 11:16:56'!
+= anObject
+	^ self class == anObject class and: [self vertices = anObject vertices]
 
 "before we didn't keep vertices sorted, so we could check of two differently oriented simplices were equal:
 	| iv v |
@@ -13543,13 +13532,11 @@ atRandom: aRandom bits: bitSize
 	n _ bitSize / components size.
 	^ components collect: [:each| each atRandom: aRandom bits: n]! !
 
-!CartesianProduct methodsFor: 'testing' stamp: 'len 5/22/2018 16:54:11'!
+!CartesianProduct methodsFor: 'testing' stamp: 'len 4/21/2020 15:16:12'!
 includes: anObject
 	anObject isSequenceable ifFalse: [^ false].
 	components size = anObject size ifFalse: [^ false].
-	1 to: components size do: [:i|
-		((components at: i) includes: (anObject at: i))
-			ifFalse: [^ false]].
+	components with: anObject do: [:X :x| (X includes: x) ifFalse: [^ false]].
 	^ true! !
 
 !CartesianProduct methodsFor: 'testing' stamp: 'len 4/14/2020 21:09:33'!
@@ -16989,6 +16976,57 @@ uniformizer
 	self isDVR ifFalse: [^ self error: 'not a DVR'].
 	^ self propertyAt: #uniformizer ifAbsentPut: [self maximalIdeal generator normalized]! !
 
+!Ring methodsFor: 'comparing' stamp: 'len 8/10/2019 09:23:45'!
+< aRing
+	aRing isRing ifFalse: [^ false].
+	(aRing isLocalization and: [self <= aRing integers]) ifTrue: [^ true].
+	(aRing isCompletion and: [self <= aRing base]) ifTrue: [^ true].
+	^ aRing scalars ~= aRing and: [self <= aRing scalars]! !
+
+!Ring methodsFor: 'comparing' stamp: 'len 6/22/2019 03:36:22'!
+<= aRing
+	self = aRing ifTrue: [^ true].
+	^ self < aRing! !
+
+!Ring methodsFor: 'computing' stamp: 'len 4/21/2020 18:11:52'!
+matrixCokernel: aMatrix
+	"Solve the syzygies problem, answer X * A = 0 where A is aMatrix."
+	self notYetImplemented! !
+
+!Ring methodsFor: 'computing' stamp: 'len 4/21/2020 20:37:00'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	self isEuclideanDomain ifTrue: [^ self matrixOverEuclideanDomainLift: B along: A].
+	self notYetImplemented! !
+
+!Ring methodsFor: 'computing-private' stamp: 'len 4/21/2020 20:31:37'!
+matrixOverEuclideanDomainLift: B along: A
+	"Answer X such that A * X = B, where A is anotherMatrix and B is aMatrix.
+	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
+	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
+	| G P n |
+	self isField ifTrue: [^ self matrixOverFieldLift: B along: A].
+	G _ (A transposed rowAugmented: B transposed) columnAugmented: ((self zeroMatrix: A width @ B width) rowAugmented: (self identityMatrix: B width)).
+	P _ G HNFAndTransformation second.
+	n _ (P lastColumn findFirst: [:each| each isZero not]) - B width + 1.
+	^ (P copyFrom: n @ 1 to: n + B width - 1 @ A width) transposed negated! !
+
+!Ring methodsFor: 'computing-private' stamp: 'len 4/21/2020 20:29:45'!
+matrixOverFieldLift: B along: A
+	"Answer X such that A * X = B, where A is anotherMatrix and B is aMatrix.
+	The algorithm performs gaussian elimination in essentially O(n^3) scalar operations.
+	It is can produce coefficient explosion unless the scalar field is finite."
+	| n m reduction rows |
+	m _ B width.
+	n _ A width.
+	reduction _ A reductionWith: B.
+	rows _ OrderedCollection new.
+	reduction independentColumns withIndexDo: [:column :i|
+		column - 1 - rows size timesRepeat: [rows add: (self zeroTuple: m)].
+		rows add: (reduction extension rowAt: i)].
+	n - rows size timesRepeat: [rows add: (self zeroTuple: m)].
+	^ Matrix rows: rows! !
+
 !Ring methodsFor: 'converting' stamp: 'len 8/29/2016 16:30'!
 asIdeal
 	"Answer the receiver R viewed as an ideal of itself."
@@ -17272,11 +17310,6 @@ freeAlgebraIn: anIntegerOrCollection
 	anIntegerOrCollection isInteger ifTrue: [^ FreeAlgebra new: anIntegerOrCollection over: self].
 	^ (FreeAlgebra new: anIntegerOrCollection size over: self) names: anIntegerOrCollection! !
 
-!Ring methodsFor: 'operations' stamp: 'len 3/1/2020 16:29:32'!
-freeModuleIn: aCollection
-	"Answer the free module in the given indeterminates over the receiver."
-	^ self notYetImplemented! !
-
 !Ring methodsFor: 'operations' stamp: 'len 4/30/2019 04:17:37'!
 ideals
 	^ Iterator on: self performing: #idealsDo:! !
@@ -17415,6 +17448,42 @@ zeroDivisors
 !Ring methodsFor: 'operations' stamp: 'len 10/13/2016 20:05'!
 zeroIdeal
 	^ self * #()! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:15'!
+atRandom: aRandom matrix: shape
+	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:32'!
+atRandom: aRandom matrix: shape bits: bitSize
+	| bitsPerCoefficient |
+	bitsPerCoefficient _ bitSize / (shape isInteger ifTrue: [shape squared] ifFalse: [shape x * shape y]).
+	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom bits: bitsPerCoefficient]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:35'!
+atRandom: aRandom tuple: anInteger
+	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:33:30'!
+atRandom: aRandom tuple: anInteger bits: bitSize
+	| bitsPerCoefficient |
+	bitsPerCoefficient _ bitSize / anInteger.
+	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom bits: bitsPerCoefficient]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:40'!
+atRandomMatrix: shape
+	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:49'!
+atRandomMatrix: shape bits: bitSize
+	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape bits: bitSize]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:05'!
+atRandomTuple: anInteger
+	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger]! !
+
+!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:31:52'!
+atRandomTuple: anInteger bits: bitSize
+	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger bits: bitSize]! !
 
 !Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:09:46'!
 isAlgebraicallyClosed
@@ -17618,54 +17687,6 @@ isUFD
 !Ring methodsFor: 'private' stamp: 'len 1/20/2018 18:12:11'!
 fractionalIdealClass
 	^ FractionalIdeal! !
-
-!Ring methodsFor: 'as yet unclassified' stamp: 'len 8/10/2019 09:23:45'!
-< aRing
-	aRing isRing ifFalse: [^ false].
-	(aRing isLocalization and: [self <= aRing integers]) ifTrue: [^ true].
-	(aRing isCompletion and: [self <= aRing base]) ifTrue: [^ true].
-	^ aRing scalars ~= aRing and: [self <= aRing scalars]! !
-
-!Ring methodsFor: 'as yet unclassified' stamp: 'len 6/22/2019 03:36:22'!
-<= aRing
-	self = aRing ifTrue: [^ true].
-	^ self < aRing! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:15'!
-atRandom: aRandom matrix: shape
-	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:32'!
-atRandom: aRandom matrix: shape bits: bitSize
-	| bitsPerCoefficient |
-	bitsPerCoefficient _ bitSize / (shape isInteger ifTrue: [shape squared] ifFalse: [shape x * shape y]).
-	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom bits: bitsPerCoefficient]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:35'!
-atRandom: aRandom tuple: anInteger
-	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:33:30'!
-atRandom: aRandom tuple: anInteger bits: bitSize
-	| bitsPerCoefficient |
-	bitsPerCoefficient _ bitSize / anInteger.
-	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom bits: bitsPerCoefficient]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:40'!
-atRandomMatrix: shape
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:49'!
-atRandomMatrix: shape bits: bitSize
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape bits: bitSize]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:05'!
-atRandomTuple: anInteger
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:31:52'!
-atRandomTuple: anInteger bits: bitSize
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger bits: bitSize]! !
 
 !FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:07'!
 characteristic
@@ -18289,6 +18310,14 @@ size
 hash
 	^ components hash! !
 
+!ProductRing methodsFor: 'computing' stamp: 'len 4/21/2020 21:26:57'!
+matrixLift: B along: A
+	"Answer X such that A * X = B.
+	The algorithm solves the system for each projection and then composes back to the product ring."
+	| X |
+	X _ self -< self components collect: [:p| (A apply: p) \ (B apply: p)].
+	^ self matrix: A width @ B width evaluating: [:i :j| self compose: (X collect: [:each| each at: i@j])]! !
+
 !ProductRing methodsFor: 'converting' stamp: 'len 8/29/2016 04:11'!
 asCartesianProduct
 	^ CartesianProduct components: components! !
@@ -18333,9 +18362,9 @@ primeIdealsDo: aBlock
 	"TODO: the prime ideals of a product ring R x S is of the form I x S for I a prime ideal of R or R x I for I a prime ideal of S."
 	^ super primeIdealsDo: aBlock! !
 
-!ProductRing methodsFor: 'morphisms' stamp: 'len 4/18/2020 18:02:02'!
+!ProductRing methodsFor: 'morphisms' stamp: 'len 4/21/2020 15:14:36'!
 compose: anArray
-	^ ProductRingElement new parent: self; components: anArray asArray! !
+	^ anArray asArray! !
 
 !ProductRing methodsFor: 'morphisms' stamp: 'len 9/16/2018 16:15:19'!
 composition
@@ -18354,9 +18383,9 @@ atRandom: aRandom
 atRandom: aRandom bits: bits
 	^ self compose: (self asCartesianProduct atRandom: aRandom bits: bits)! !
 
-!ProductRing methodsFor: 'testing' stamp: 'len 4/18/2020 18:02:02'!
+!ProductRing methodsFor: 'testing' stamp: 'len 4/21/2020 15:15:35'!
 includes: anObject
-	(anObject isKindOf: ProductRingElement) ifFalse: [^ false].
+	anObject isSequenceable ifFalse: [^ false].
 	anObject size = components size ifFalse: [^ false].
 	components with: anObject do: [:R :x| (R includes: x) ifFalse: [^ false]].
 	^ true! !
@@ -18469,6 +18498,13 @@ zero
 !QuotientRing methodsFor: 'comparing' stamp: 'len 2/27/2017 20:53:58'!
 hash
 	^ self relations hash! !
+
+!QuotientRing methodsFor: 'computing' stamp: 'len 4/21/2020 20:52:03'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	^ ((A apply: self lifting)
+		lift: (B apply: self lifting)
+		modulo: (self relators inject: (Matrix rows: #()) into: [:matrix :each| matrix rowAugmented: (self base matrix: A height scalar: each)])) ifNotNil: [:X| X apply: self projection]! !
 
 !QuotientRing methodsFor: 'converting' stamp: 'len 8/12/2019 19:03:17'!
 over: aRing
@@ -19104,6 +19140,11 @@ p: aPrime to: anInteger
 	"Any two finite fields of the same cardinality are isomorphic."
 	^ aRing isField and: [self size = aRing size]! !
 
+!PrimeField methodsFor: 'computing' stamp: 'len 4/21/2020 20:36:05'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	^ self matrixOverFieldLift: B along: A! !
+
 !PrimeField methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:12:46'!
 invert: anElement
 	^ self representative: ((self inverseOfRepresentative: anElement representative) ifNil: [^ nil])! !
@@ -19640,6 +19681,11 @@ universalPolynomial
 	"Any two finite fields of the same cardinality are isomorphic."
 	^ aRing isField and: [self size = aRing size]! !
 
+!GaloisField methodsFor: 'computing' stamp: 'len 4/21/2020 20:35:36'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	^ self matrixOverFieldLift: B along: A! !
+
 !GaloisField methodsFor: 'morphisms' stamp: 'len 5/6/2019 03:35:29'!
 automorphisms
 	"Answer the Galous group of the receiver."
@@ -19709,6 +19755,11 @@ new: p to: r to: n
 genus
 	^ self notYetImplemented! !
 
+!FunctionField methodsFor: 'computing' stamp: 'len 4/21/2020 20:49:45'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	^ self matrixOverFieldLift: B along: A! !
+
 !FunctionField methodsFor: 'testing' stamp: 'len 6/9/2019 09:35:47'!
 isField
 	^ true! !
@@ -19753,10 +19804,10 @@ signature
 	"Answer the signature (r1,r2) of the receiver, i.e. r1 the number of embeddings whose image is real, and 2*r2 the number of non-real complex embeddings."
 	^ self polynomial signature! !
 
-!NumberField methodsFor: 'accessing-private' stamp: 'len 12/28/2016 12:12:50'!
-adjoint: anAlgebraicNumber
-	self propertyAt: #adjoint put: anAlgebraicNumber.
-	self polynomial: anAlgebraicNumber minimalPolynomial! !
+!NumberField methodsFor: 'computing' stamp: 'len 4/21/2020 20:49:06'!
+matrixLift: B along: A
+	"Answer X such that A * X = B."
+	^ self matrixOverFieldLift: B along: A! !
 
 !NumberField methodsFor: 'morphisms' stamp: 'len 12/23/2016 08:51:42'!
 isomorphismTo: aNumberField
@@ -19825,6 +19876,11 @@ isQuadratic
 isReal
 	"Answer true if every embedding into the complex numbers has image contained in the real numbers."
 	^ self signature second = 0! !
+
+!NumberField methodsFor: 'private' stamp: 'len 12/28/2016 12:12:50'!
+adjoint: anAlgebraicNumber
+	self propertyAt: #adjoint put: anAlgebraicNumber.
+	self polynomial: anAlgebraicNumber minimalPolynomial! !
 
 !NumberField class methodsFor: 'examples' stamp: 'len 2/22/2017 08:50:36'!
 example
@@ -23203,10 +23259,18 @@ innerProduct
 			from: (self, self)
 			evaluating: [:each| (self coordinatesOf: each first) · (self coordinatesOf: each second)]]! !
 
-!FreeModule methodsFor: 'accessing' stamp: 'len 9/16/2018 16:13:05'!
+!FreeModule methodsFor: 'accessing' stamp: 'len 4/21/2020 09:52:23'!
 names
 	"Answer a list of names for use instead of the elements of the basis when printing linear maps, tensors, etc."
-	^ self propertyAt: #names ifAbsentPut: [(1 to: self rank) collect: [:i| 'e', i printString sub]]! !
+	^ self propertyAt: #names ifAbsent: [(1 to: self rank) collect: [:i| 'e', i printString sub]]! !
+
+!FreeModule methodsFor: 'accessing' stamp: 'len 4/21/2020 11:03:52'!
+names: anArray
+	| nameToIndex |
+	self propertyAt: #names put: anArray.
+	nameToIndex _ Dictionary new.
+	anArray withIndexDo: [:name :i| nameToIndex at: name put: i].
+	self propertyAt: #nameToIndex put: nameToIndex! !
 
 !FreeModule methodsFor: 'accessing' stamp: 'len 12/28/2016 12:08:05'!
 norm
@@ -23315,13 +23379,14 @@ adapt: anElement
 coordinatesOf: anElement
 	^ anElement coordinates! !
 
-!FreeModule methodsFor: 'elements' stamp: 'len 4/13/2020 03:57:32'!
+!FreeModule methodsFor: 'elements' stamp: 'len 4/21/2020 14:41:53'!
 elementAt: aTuple
 	aTuple size = rank ifFalse: [^ super elementAt: aTuple].
-	^ FreeModuleElement new parent: self; coordinates: aTuple! !
+	^ Vector new parent: self; coordinates: aTuple! !
 
-!FreeModule methodsFor: 'elements' stamp: 'len 4/9/2020 07:14:49'!
+!FreeModule methodsFor: 'elements' stamp: 'len 4/21/2020 11:15:32'!
 newFrom: anObject
+	self propertyAt: #nameToIndex ifPresent: [:aDictionary| aDictionary at: anObject ifPresent: [:anInteger| ^ self x: anInteger]].
 	(anObject isSequenceable and: [anObject size = rank])
 		ifTrue: [^ self elementAt: (scalars tuple: anObject)].
 	^ super newFrom: anObject! !
@@ -23333,6 +23398,10 @@ do: aBlock
 !FreeModule methodsFor: 'morphisms' stamp: 'len 9/25/2018 17:14:33'!
 automorphisms
 	^ GeneralLinearGroup on: self! !
+
+!FreeModule methodsFor: 'morphisms' stamp: 'len 4/21/2020 12:35:48'!
+projection: anInteger
+	^ self to: self scalars asSelfModule evaluating: [:x| x coordinates at: anInteger]! !
 
 !FreeModule methodsFor: 'morphisms' stamp: 'len 9/25/2018 17:17:02'!
 rotations
@@ -23410,6 +23479,10 @@ isTrivial
 !FreeModule methodsFor: 'testing' stamp: 'len 12/18/2016 11:13:59'!
 torsion
 	^ self null! !
+
+!FreeModule methodsFor: 'private' stamp: 'len 4/21/2020 11:02:59'!
+indexFromName: anObject
+	^ (self propertyAt: #nameToIndex ifAbsent: [^ anObject]) at: anObject! !
 
 !FreeModule methodsFor: 'private' stamp: 'len 3/1/2020 18:31:01'!
 rank: n
@@ -25514,11 +25587,11 @@ boundaryMap: k over: aRing
 chainComplexOver: aRing
 	^ ChainComplex differentials: ((self dimension+1 to: 0 by: -1) collect: [:i| self boundaryMap: i over: aRing])! !
 
-!CellComplex methodsFor: 'homology' stamp: 'len 12/31/2017 13:36:42'!
+!CellComplex methodsFor: 'homology' stamp: 'len 4/21/2020 10:57:15'!
 chains: k over: aRing
-	"Answer the group of k-chains."
-	k < 0 ifTrue: [^ aRing freeModuleIn: #()].
-	^ aRing freeModuleIn: (self cells: k) asArray! !
+	"Answer the free module of k-chains over the given ring."
+	k < 0 ifTrue: [^ aRing ^ #()].
+	^ aRing ^ (self cells: k)! !
 
 !CellComplex methodsFor: 'invariants' stamp: 'len 2/19/2017 18:25:22'!
 dimension
@@ -25621,14 +25694,6 @@ support
 	"Answer the collection of vertices that belong to any face in the receiver."
 	^ self vertices select: [:each| self facets anySatisfy: [:any| any includes: each]]! !
 
-!SimplicialComplex methodsFor: 'accessing-private' stamp: 'len 2/15/2017 16:10:03'!
-facets: aCollection
-	self propertyAt: #facets put: aCollection! !
-
-!SimplicialComplex methodsFor: 'accessing-private' stamp: 'len 2/24/2017 11:38:54'!
-vertices: aCollection
-	self propertyAt: #vertices put: aCollection asSet! !
-
 !SimplicialComplex methodsFor: 'enumerating' stamp: 'len 2/15/2017 11:20:19'!
 cells: n do: aBlock
 	"Iterate over the n-cells of the receiver, possibly with repetitions."
@@ -25651,7 +25716,7 @@ faces: n do: aBlock
 select: aBlock
 	^ self species on: self vertices faces: (self elements select: aBlock)! !
 
-!SimplicialComplex methodsFor: 'homology' stamp: 'len 4/19/2019 04:45:04'!
+!SimplicialComplex methodsFor: 'homology' stamp: 'len 4/21/2020 11:13:30'!
 boundaryMap: k over: aRing
 	"The k-th boundary map or differential d(k) goes from C(k) to C(k-1).
 	Its image is the group of (k-1)-boundaries B(k-1), a subgroup of C(k-1).
@@ -25666,21 +25731,47 @@ boundaryMap: k over: aRing
 	^ domain to: codomain evaluating: [:x|
 		| answer |
 		answer _ codomain zero.
-		x keysAndValuesDo: [:key :value|
+		x withNameDo: [:value :name|
 			| V |
-			V _ key vertices asArray.
+			V _ name vertices asArray.
 			1 to: V size do: [:i| | F f |
 				"F is the facet opposite the i-th vertex:"
 				F _ Simplex vertices: (V copyWithoutIndex: i).
-				f _ (codomain x: F) * value.
+				f _ (codomain !! F) * value.
 				i odd ifTrue: [answer _ answer + f] ifFalse: [answer _ answer - f]]].
 		answer]! !
 
-!SimplicialComplex methodsFor: 'homology' stamp: 'len 5/4/2019 03:50:32'!
-chains: k over: aRing
-	"Answer the group of k-chains."
-	k < 0 ifTrue: [^ aRing freeModuleIn: #()].
-	^ aRing freeModuleIn: (self cells: k) asArray! !
+!SimplicialComplex methodsFor: 'homology' stamp: 'len 4/21/2020 21:15:11'!
+chainComplexOver: aRing
+	
+	
+	"The k-th boundary map or differential d(k) goes from C(k) to C(k-1).
+	Its image is the group of (k-1)-boundaries B(k-1), a subgroup of C(k-1).
+	Its kernel is the group of k-cycles Z(k), a subgroup of C(k)."
+
+	"The boundary of a chain is the linear combination of the boundary of the simplices in the chain. The boundary of a k-chain is a (k-1)-chain."
+
+	| differentials domain codomain |
+	domain _ self chains: -1 over: aRing.
+	differentials _ (0 to: self dimension+1) collect: [:k|
+		codomain _ domain.
+		domain _ self chains: k over: aRing.
+		k = 0
+			ifTrue: [(domain => codomain) zero]
+			ifFalse:
+				[domain to: codomain evaluating: [:x|
+					| answer |
+					answer _ codomain zero.
+					x withNameDo: [:value :name|
+						| V |
+						V _ name vertices asArray.
+						1 to: V size do: [:i| | F f |
+							"F is the facet opposite the i-th vertex:"
+							F _ Simplex vertices: (V copyWithoutIndex: i).
+							f _ (codomain !! F) * value.
+							i odd ifTrue: [answer _ answer + f] ifFalse: [answer _ answer - f]]].
+					answer]]].
+	^ ChainComplex differentials: differentials reversed! !
 
 !SimplicialComplex methodsFor: 'invariants' stamp: 'len 2/19/2017 18:24:25'!
 dimension
@@ -25866,6 +25957,10 @@ isVoid
 	"Answer true if this is the void complex, that has no faces."
 	^ self facets isEmpty! !
 
+!SimplicialComplex methodsFor: 'private' stamp: 'len 2/15/2017 16:10:03'!
+facets: aCollection
+	self propertyAt: #facets put: aCollection! !
+
 !SimplicialComplex methodsFor: 'private' stamp: 'len 4/19/2020 01:28:53'!
 pathsFrom: A to: B do: aBlock
 	| x |
@@ -25886,6 +25981,10 @@ pathsFrom: A to: B do: aBlock
 !SimplicialComplex methodsFor: 'private' stamp: 'len 2/15/2017 11:20:53'!
 species
 	^ SimplicialComplex! !
+
+!SimplicialComplex methodsFor: 'private' stamp: 'len 2/24/2017 11:38:54'!
+vertices: aCollection
+	self propertyAt: #vertices put: aCollection asSet! !
 
 !SimplicialComplex class methodsFor: 'examples' stamp: 'len 2/14/2017 20:39:44'!
 kleinBottle
@@ -28143,12 +28242,12 @@ asPolynomial
 - aModuleMap
 	^ self + aModuleMap negated! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/19/2020 08:11:40'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/21/2020 19:39:59'!
 / aModuleMap
 	"If the argument is a monomorphism i:A->X, and the receiver is f:A->Y, answer f':X->Y such that the diagram commutes. This is a 'colift (or extension) of f along i'."
 	| M |
 	(self domain scalars includes: aModuleMap) ifTrue: [^ self * aModuleMap reciprocal].
-	M _ self domain isFree ifTrue: [matrix / aModuleMap matrix] ifFalse: [aModuleMap matrix solveLeft: matrix modulo: (self domain relations -> self domain base) matrix].
+	M _ self domain isFree ifTrue: [matrix / aModuleMap matrix] ifFalse: [aModuleMap matrix colift: matrix modulo: (self domain relations -> self domain base) matrix].
 	^ M ifNotNil: [aModuleMap codomain to: codomain matrix: M]! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/18/2020 22:30:56'!
@@ -28161,11 +28260,11 @@ asPolynomial
 	coproduct domain -< {self domain. aModuleMap domain} do: [:each| answer addMap: answer -> each].
 	^ answer! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 19:25:49'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/21/2020 19:43:04'!
 \ aModuleMap
 	"If the receiver is an epimorphism p:X->B, and the argument is f:Y->B, answer f':Y->X such that the diagram commutes. This is a 'lift of f along p'."
 	| M |
-	M _ self codomain isFree ifTrue: [matrix \ aModuleMap matrix] ifFalse: [matrix solveRight: aModuleMap matrix modulo: (self codomain relations -> self codomain base) matrix].
+	M _ self codomain isFree ifTrue: [matrix \ aModuleMap matrix] ifFalse: [matrix lift: aModuleMap matrix modulo: (self codomain relations -> self codomain base) matrix].
 	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/18/2020 22:33:15'!
@@ -31901,61 +32000,6 @@ parent: aLocalRing
 !Germ methodsFor: 'private' stamp: 'len 7/17/2019 03:25:28'!
 ratio: aRatio
 	ratio _ aRatio! !
-
-!ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:21'!
-at: anInteger
-	^ components at: anInteger! !
-
-!ProductRingElement methodsFor: 'accessing' stamp: 'len 6/19/2019 13:48:30'!
-parent
-	^ parent! !
-
-!ProductRingElement methodsFor: 'accessing' stamp: 'len 5/22/2018 16:10:29'!
-size
-	^ components size! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 8/14/2019 05:01:51'!
-* anElement
-	anElement isInteger ifTrue: [^ parent compose: components * anElement].
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
-	^ parent compose: components * anElement components! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 8/14/2019 05:02:08'!
-+ anElement
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
-	^ parent compose: components + anElement components! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 8/12/2019 10:58:13'!
-inverse
-	^ parent compose: (components collect: [:each| each reciprocal ifNil: [^ nil]])! !
-
-!ProductRingElement methodsFor: 'operations' stamp: 'len 6/19/2019 13:50:33'!
-negated
-	^ parent compose: (components collect: [:each| each negated])! !
-
-!ProductRingElement methodsFor: 'comparing' stamp: 'len 6/19/2019 13:51:19'!
-= anObject
-	^ anObject isElement and: [parent = anObject parent and: [components = anObject components]]! !
-
-!ProductRingElement methodsFor: 'comparing' stamp: 'len 5/25/2018 18:50:35'!
-hash
-	^ components hash! !
-
-!ProductRingElement methodsFor: 'testing' stamp: 'len 5/22/2018 16:24:16'!
-isZero
-	^ components allSatisfy: [:each| each isZero]! !
-
-!ProductRingElement methodsFor: 'private' stamp: 'len 5/22/2018 16:24:43'!
-components
-	^ components! !
-
-!ProductRingElement methodsFor: 'private' stamp: 'len 5/22/2018 16:10:02'!
-components: anArray
-	components _ anArray! !
-
-!ProductRingElement methodsFor: 'private' stamp: 'len 6/19/2019 13:48:20'!
-parent: aProductRing
-	parent _ aProductRing! !
 
 !Ratio methodsFor: 'accessing' stamp: 'len 12/28/2015 20:31'!
 bitSize
@@ -36115,91 +36159,6 @@ negated
 isZero
 	^ self subclassResponsibility! !
 
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:41'!
-at: anInteger
-	^ coordinates at: anInteger! !
-
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/1/2020 18:17:41'!
-coordinates
-	^ coordinates! !
-
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/1/2020 18:25:29'!
-parent
-	^ parent! !
-
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:27'!
-x
-	^ coordinates at: 1! !
-
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:30'!
-y
-	^ coordinates at: 2! !
-
-!FreeModuleElement methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:32'!
-z
-	^ coordinates at: 3! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:33'!
-coefficientAt: aModuleMonomial
-	^ (self at: aModuleMonomial position) at: aModuleMonomial monomial! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:40'!
-leadingCoefficient
-	^ self coefficientAt: self leadingMonomial! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:45'!
-leadingMonomial
-	^ self ordering leadingMonomialOf: self! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:49'!
-leadingTerm
-	^ self termAt: self leadingMonomial! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:55'!
-ordering
-	^ parent ordering! !
-
-!FreeModuleElement methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:55:02'!
-termAt: aModuleMonomial
-	^ (self at: aModuleMonomial position) termAt: aModuleMonomial monomial! !
-
-!FreeModuleElement methodsFor: 'comparing' stamp: 'len 3/30/2020 07:35:32'!
-= anObject
-	^ self class == anObject class and: [coordinates = anObject coordinates]! !
-
-!FreeModuleElement methodsFor: 'comparing' stamp: 'len 3/19/2020 19:00:29'!
-hash
-	^ coordinates hash! !
-
-!FreeModuleElement methodsFor: 'operations' stamp: 'len 3/1/2020 18:14:28'!
-* aNumber
-	^ self class new parent: parent; coordinates: coordinates * aNumber! !
-
-!FreeModuleElement methodsFor: 'operations' stamp: 'len 3/2/2020 17:05:28'!
-+ anElement
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
-	^ self class new parent: parent; coordinates: coordinates + anElement coordinates! !
-
-!FreeModuleElement methodsFor: 'operations' stamp: 'len 3/1/2020 18:14:09'!
-negated
-	^ self class new parent: parent; coordinates: coordinates negated! !
-
-!FreeModuleElement methodsFor: 'operations' stamp: 'len 4/13/2020 08:20:44'!
-wrap: n
-	^ self class new parent: parent; coordinates: (coordinates wrap: n)! !
-
-!FreeModuleElement methodsFor: 'testing' stamp: 'len 3/1/2020 18:23:50'!
-isZero
-	^ coordinates isZero! !
-
-!FreeModuleElement methodsFor: 'private' stamp: 'len 3/1/2020 18:17:50'!
-coordinates: aTuple
-	coordinates _ aTuple! !
-
-!FreeModuleElement methodsFor: 'private' stamp: 'len 3/1/2020 18:18:06'!
-parent: aModule
-	parent _ aModule! !
-
 !ModuleCoset methodsFor: 'accessing' stamp: 'len 3/18/2020 17:40:47'!
 parent
 	^ parent! !
@@ -36265,6 +36224,95 @@ parent: aQuotientModule
 !ModuleCoset methodsFor: 'private' stamp: 'len 6/4/2016 04:30'!
 representative: aPoint
 	representative _ aPoint! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 4/21/2020 11:04:06'!
+at: anObject
+	^ coordinates at: (parent indexFromName: anObject)! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 3/1/2020 18:17:41'!
+coordinates
+	^ coordinates! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 3/1/2020 18:25:29'!
+parent
+	^ parent! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:27'!
+x
+	^ coordinates at: 1! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:30'!
+y
+	^ coordinates at: 2! !
+
+!Vector methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:32'!
+z
+	^ coordinates at: 3! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:33'!
+coefficientAt: aModuleMonomial
+	^ (self at: aModuleMonomial position) at: aModuleMonomial monomial! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:40'!
+leadingCoefficient
+	^ self coefficientAt: self leadingMonomial! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:45'!
+leadingMonomial
+	^ self ordering leadingMonomialOf: self! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:49'!
+leadingTerm
+	^ self termAt: self leadingMonomial! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:54:55'!
+ordering
+	^ parent ordering! !
+
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:55:02'!
+termAt: aModuleMonomial
+	^ (self at: aModuleMonomial position) termAt: aModuleMonomial monomial! !
+
+!Vector methodsFor: 'comparing' stamp: 'len 3/30/2020 07:35:32'!
+= anObject
+	^ self class == anObject class and: [coordinates = anObject coordinates]! !
+
+!Vector methodsFor: 'comparing' stamp: 'len 3/19/2020 19:00:29'!
+hash
+	^ coordinates hash! !
+
+!Vector methodsFor: 'enumerating' stamp: 'len 4/21/2020 11:05:38'!
+withNameDo: aBlock
+	coordinates with: parent names do: aBlock! !
+
+!Vector methodsFor: 'operations' stamp: 'len 3/1/2020 18:14:28'!
+* aNumber
+	^ self class new parent: parent; coordinates: coordinates * aNumber! !
+
+!Vector methodsFor: 'operations' stamp: 'len 3/2/2020 17:05:28'!
++ anElement
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
+	^ self class new parent: parent; coordinates: coordinates + anElement coordinates! !
+
+!Vector methodsFor: 'operations' stamp: 'len 3/1/2020 18:14:09'!
+negated
+	^ self class new parent: parent; coordinates: coordinates negated! !
+
+!Vector methodsFor: 'operations' stamp: 'len 4/13/2020 08:20:44'!
+wrap: n
+	^ self class new parent: parent; coordinates: (coordinates wrap: n)! !
+
+!Vector methodsFor: 'testing' stamp: 'len 3/1/2020 18:23:50'!
+isZero
+	^ coordinates isZero! !
+
+!Vector methodsFor: 'private' stamp: 'len 3/1/2020 18:17:50'!
+coordinates: aTuple
+	coordinates _ aTuple! !
+
+!Vector methodsFor: 'private' stamp: 'len 3/1/2020 18:18:06'!
+parent: aModule
+	parent _ aModule! !
 
 !Sum methodsFor: 'accessing' stamp: 'len 1/10/2018 21:04:34'!
 at: anObject
@@ -36588,15 +36636,15 @@ dimension
 	self keysDo: [:any| ^ any dimension].
 	^ -1! !
 
-!SimplicialChain methodsFor: 'operations' stamp: 'len 2/25/2017 09:26:29'!
+!SimplicialChain methodsFor: 'operations' stamp: 'len 4/21/2020 11:06:55'!
 boundary
 	"The boundary of a chain is the linear combination of the boundary of the simplices in the chain. The boundary of a k-chain is a (k-1)-chain."
 	| answer |
 	self dimension <= 0 ifTrue: [^ self zero].
 	answer _ self class over: self scalars.
-	self keysAndValuesDo: [:key :value|
+	self withNameDo: [:value :name|
 		| V minusValue |
-		V _ key vertices asArray.
+		V _ name vertices asArray.
 		minusValue _ value negated.
 		1 to: V size do: [:i| | F |
 			"F is the facet opposite the i-th vertex:"
@@ -38283,11 +38331,11 @@ withIndexDo: aBlock
 - aTuple
 	^ self + aTuple negated! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 4/13/2020 01:48:58'!
+!Tuple methodsFor: 'operations' stamp: 'len 4/21/2020 19:39:32'!
 / anObject
 	"Answer X such that X * A = B, where B is self and A is the argument.  X is called a lift of B along A.
 	If the argument is a scalar, just divide each element of the tuple by it."
-	anObject isMatrix ifTrue: [^ anObject solveLeft: self].
+	anObject isMatrix ifTrue: [^ anObject colift: self].
 	^ self * anObject reciprocal! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 3/29/2016 18:50'!
@@ -39414,11 +39462,11 @@ rowsDo: aBlock
 - aMatrix
 	^ self + aMatrix negated! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 18:40:08'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 19:39:26'!
 / anObject
 	"Answer X such that X * A = B, where B is self and A is the argument. X is called a colift (or extension) of B along A.
 	If the argument is a scalar, just divide each element of the matrix by the scalar."
-	anObject isMatrix ifTrue: [^ anObject solveLeft: self].
+	anObject isMatrix ifTrue: [^ anObject colift: self].
 	^ self * anObject reciprocal! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 5/24/2019 08:32:40'!
@@ -39426,13 +39474,13 @@ rowsDo: aBlock
 	"Answer the receiver augmented with the columns of aMatrix."
 	^ self columnAugmented: aMatrix! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 18:40:34'!
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 19:41:08'!
 \ aMatrix
 	"Answer X such that A * X = B, where A is self and B is aMatrix. X is called a lift of B along A.
 	The argument can also be a tuple, in which case it is considered as a column matrix and the returned value is also a tuple.
 	Answer nil if there's no solution.
 	This is the 'backlash' operator, as implemented in MATLAB, Octave and Sage."
-	^ self solveRight: aMatrix! !
+	^ self lift: aMatrix! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 6/8/2019 02:30:21'!
 ^ anInteger
@@ -39636,6 +39684,20 @@ cofactor: aPoint
 		ifTrue: [self minor: aPoint]
 		ifFalse: [(self minor: aPoint) negated]! !
 
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 19:38:35'!
+colift: aMatrix
+	"Answer X such that X * A = B, where A is self and B is aMatrix. X is called a colift (or extension) of B along A.
+	The argument can also be a tuple, in which case it is considered as a row matrix and the returned value is also a tuple.
+	Answer nil if there's no solution."
+	aMatrix isTuple ifTrue: [^ self transposed lift: aMatrix].
+	^ ((self transposed lift: aMatrix transposed) ifNil: [^ nil]) transposed! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 19:39:12'!
+colift: aMatrix modulo: aRelationsMatrix
+	"Answer X such that X * A = B modulo L, i.e. X such that there exists Y with X * A + Y * L = B,where A is self, B is aMatrix and L is aRelationsMatrix."
+	^ ((self rowAugmented: aRelationsMatrix) colift: aMatrix)
+		ifNotNil: [:X| X copyFromColumn: 1 to: self height]! !
+
 !Matrix methodsFor: 'operations' stamp: 'len 5/18/2018 20:17:30'!
 columnAugmented: aMatrix
 	"Answer the receiver augmented with the columns of aMatrix."
@@ -39755,6 +39817,25 @@ inverse
 		ifTrue: [^ (self reductionWith: self identity) extension].
 	^ self adjugate / self determinant! !
 
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 20:28:20'!
+lift: aMatrix
+	"Answer X such that A * X = B, where A is self and B is aMatrix. X is called a lift of B along A.
+	The argument can also be a tuple, in which case it is considered as a column matrix and the returned value is also a tuple.
+	Answer nil if there's no solution."
+	| A B X |
+	A _ self.
+	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
+	A height = B height ifFalse: [DomainError signal: 'matrix shapes don''t match'].
+	X _ self scalars matrixLift: B along: A.
+	(X notNil and: [A * X = B]) ifFalse: [^ nil].
+	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
+
+!Matrix methodsFor: 'operations' stamp: 'len 4/21/2020 19:41:34'!
+lift: aMatrix modulo: aRelationsMatrix
+	"Answer X such that A * X = B modulo L, i.e. X such that there exists Y with A * X + L * Y = B, where A is self, B is aMatrix and aRelationsMatrix is L."
+	^ ((self columnAugmented: aRelationsMatrix) lift: aMatrix)
+		ifNotNil: [:X| X copyFromRow: 1 to: self width]! !
+
 !Matrix methodsFor: 'operations' stamp: 'len 4/5/2018 15:42:49'!
 minimal: aTuple
 	"Answer the minimal polynomial of aTuple with respect to the receiver."
@@ -39861,42 +39942,6 @@ section
 	self isEmpty ifTrue: [^ self].
 	T _ self transposed.
 	^ T * (self * T) inverse! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 3/11/2020 16:21:44'!
-solveLeft: aMatrix
-	"Answer X such that X * A = B, where A is self and B is aMatrix.
-	X is called a lift of B along A.
-	The argument can also be a tuple, in which case it is considered
-	as a row matrix and the returned value is also a tuple.
-	Answer nil if there's no solution."
-	aMatrix isTuple ifTrue: [^ self transposed solveRight: aMatrix].
-	^ ((self transposed solveRight: aMatrix transposed) ifNil: [^ nil]) transposed! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 09:53:41'!
-solveLeft: aMatrix modulo: aRelationsMatrix
-	"Answer X such that X * A = B modulo L, i.e. X such that there exists Y with X * A + Y * L = B,where A is self, B is aMatrix and L is aRelationsMatrix."
-	^ ((self rowAugmented: aRelationsMatrix) solveLeft: aMatrix)
-		ifNotNil: [:X| X copyFromColumn: 1 to: self height]! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:06:37'!
-solveRight: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The argument can also be a tuple, in which case it is considered
-	as a column matrix and the returned value is also a tuple.
-	Answer nil if there's no solution."
-	| A B X |
-	A _ self.
-	B _ aMatrix isTuple ifTrue: [Matrix columns: {aMatrix}] ifFalse: [aMatrix].
-	A height = B height ifFalse: [DomainError signal: 'matrix shapes don''t match'].
-	X _ A solveRightGeneral: B.
-	(X notNil and: [A * X = B]) ifFalse: [^ nil].
-	^ aMatrix isTuple ifTrue: [X asTuple] ifFalse: [X]! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 09:52:53'!
-solveRight: aMatrix modulo: aRelationsMatrix
-	"Answer X such that A * X = B modulo L, i.e. X such that there exists Y with A * X + L * Y = B, where A is self, B is aMatrix and aRelationsMatrix is L."
-	^ ((self columnAugmented: aRelationsMatrix) solveRight: aMatrix)
-		ifNotNil: [:X| X copyFromRow: 1 to: self width]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 11/3/2015 20:35'!
 squared
@@ -40518,93 +40563,6 @@ hadamardBound
 	"Answer a bound N on the determinant of the receiver such that |det A| < 2^N.
 	Assume the coefficients are real."
 	^ (self rows sum: [:row| (row sum: [:each| each squared])]) log2 min: (self columns sum: [:column| (column sum: [:each| each squared])]) log2! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 4/14/2020 06:22:56'!
-solveRightGeneral: aMatrix
-	| R |
-	R _ self scalars.
-	(R isKindOf: ProductRing) ifTrue: [^ self solveRightOverProductRing: aMatrix].
-	R isField ifTrue: [^ self solveRightOverField: aMatrix].
-	R isEuclideanDomain ifTrue: [^ self solveRightOverEuclideanDomain: aMatrix].
-"	(R isKindOf: PrimePowerRing) ifTrue: [^ self solveRightOverPrimePowerRing: aMatrix]."
-	(R isKindOf: ModularIntegerRing) ifTrue: [^ self solveRightOverModularIntegers: aMatrix].
-	^ self notYetImplemented! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 7/13/2019 08:54:01'!
-solveRightOverEuclideanDomain: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	This is based on [1] but extended to work over any Euclidean domain and also to cover the case of B having more than 1 column.
-	[1] Keith Matthews, 'Solving AX=B using the Hermite normal form' (2011)."
-	| G P n |
-	G _ (self transposed rowAugmented: aMatrix transposed) columnAugmented: ((self scalars zeroMatrix: self width @ aMatrix width) rowAugmented: (self scalars identityMatrix: aMatrix width)).
-	P _ G HNFAndTransformation second.
-	n _ (P lastColumn findFirst: [:each| each isZero not]) - aMatrix width + 1.
-	^ (P copyFrom: n @ 1 to: n + aMatrix width - 1 @ self width) transposed negated! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 7/13/2019 14:31:57'!
-solveRightOverField: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The algorithm performs gaussian elimination in essentially O(n^3) scalar operations.
-	It is can produce coefficient explosion unless the scalar field is finite."
-	| n m reduction rows |
-	m _ aMatrix width.
-	n _ self width.
-	reduction _ self reductionWith: aMatrix.
-	rows _ OrderedCollection new.
-	reduction independentColumns withIndexDo: [:column :i|
-		column - 1 - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
-		rows add: (reduction extension rowAt: i)].
-	n - rows size timesRepeat: [rows add: (self scalars zeroTuple: m)].
-	^ Matrix rows: rows! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 4/14/2020 07:10:53'!
-solveRightOverModularIntegers: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix."
-	"NOTE: this can be generalized to other quotient rings."
-	^ (self lift solveRight: aMatrix lift modulo: (ZZ matrix: self height scalar: self scalars modulus)) ifNotNil: [:X| X apply: self scalars projection]
-
-"alternative:
-	In order to find a solution over Z/mZ, the algorithm solves the system over Z/(p^k)Z for each prime factor p of m (where p appears with power k in the factorization of m), and then reconstructs a solution over Z/mZ by CRT.:
-	| R P phi |
-	R _ self scalars.
-	P _ R decomposition.
-	phi _ R -> P.
-	^ ((self apply: phi) \ (aMatrix apply: phi)) apply: P -> R
-"! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 7/16/2019 05:05:27'!
-solveRightOverPrimePowerRing: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	In order to find a solution over Z/(p^k)Z, the algorithm solves the system over the residue field Z/pZ and then lifts the solution by Hensel's lemma."
-	self notYetImplemented
-"	| R p g A B X m |
-	R _ self scalars.
-	p _ R p.
-	A _ self lift.
-	B _ aMatrix lift.
-	g _ A content gcd: B content.
-	g isZero ifFalse:
-		[A _ A collect: [:each| each // g].
-		B _ B collect: [:each| each // g]].
-	m _ p.
-	X _ ((A % p) \ (B % p)) lift.
-	self assert: ((A*X - B) % m) isZero.
-	2 to: R exponent do: [:k|
-		| C |
-		C _ B - (A*X) collect: [:each| each // m].
-		X _ (A % p \ (C % p)) lift * m + X.
-		m _ m * p.
-		self assert: ((A*X - B) % m) isZero].
-	^ X over: R"! !
-
-!Matrix methodsFor: 'private-solving' stamp: 'len 4/18/2020 22:10:03'!
-solveRightOverProductRing: aMatrix
-	"Answer X such that A * X = B, where A is self and B is aMatrix.
-	The algorithm solves the system for each projection and then composes back to the product ring."
-	| R X |
-	R _ self scalars.
-	X _ R -< R components collect: [:p| (self apply: p) \ (aMatrix apply: p)].
-	^ R matrix: self width @ aMatrix width evaluating: [:i :j| R compose: (X collect: [:each| each at: i@j])]! !
 
 !Matrix class methodsFor: 'instance creation' stamp: 'len 1/17/2017 08:12:11'!
 columns: anArray
