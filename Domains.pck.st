@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 19 April 2020 at 1:29:55 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 5:47:18 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 553!
+!provides: 'Domains' 1 554!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -503,26 +503,6 @@ Domain subclass: #CartesianProduct
 CartesianProduct class
 	instanceVariableNames: ''!
 
-!classDefinition: #EquivalenceClass category: #'Domains-Sets'!
-Domain subclass: #EquivalenceClass
-	instanceVariableNames: 'representative'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sets'!
-!classDefinition: 'EquivalenceClass class' category: #'Domains-Sets'!
-EquivalenceClass class
-	instanceVariableNames: ''!
-
-!classDefinition: #EquivalenceRelation category: #'Domains-Sets'!
-Domain subclass: #EquivalenceRelation
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sets'!
-!classDefinition: 'EquivalenceRelation class' category: #'Domains-Sets'!
-EquivalenceRelation class
-	instanceVariableNames: ''!
-
 !classDefinition: #Naturals category: #'Domains-Sets'!
 Domain subclass: #Naturals
 	instanceVariableNames: ''
@@ -531,16 +511,6 @@ Domain subclass: #Naturals
 	category: 'Domains-Sets'!
 !classDefinition: 'Naturals class' category: #'Domains-Sets'!
 Naturals class
-	instanceVariableNames: ''!
-
-!classDefinition: #QuotientSet category: #'Domains-Sets'!
-Domain subclass: #QuotientSet
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sets'!
-!classDefinition: 'QuotientSet class' category: #'Domains-Sets'!
-QuotientSet class
 	instanceVariableNames: ''!
 
 !classDefinition: #Semigroup category: #'Domains-Monoids'!
@@ -3715,32 +3685,8 @@ References:
 	https://en.wikipedia.org/wiki/Cartesian_product
 !
 
-!EquivalenceClass commentStamp: '<historical>' prior: 0!
-Given a set X and an equivalence relation ~, the equivalence class of an element x is the set of elements equivalent to x: [x] = {y in X such that x ~ y}. An member of an equivalence class is called a 'representative'.
-
-Elements of quotient objects (elements of QuotientRings, QuotientModules, etc) are polymorphic with EquivalenceClass.
-
-See EquivalenceRelation.
-
-References:
-	https://en.wikipedia.org/wiki/Equivalence_class!
-
-!EquivalenceRelation commentStamp: '<historical>' prior: 0!
-An equivalence relation on X is a binary relation ~ on X with the following properties:
-- For every element a in X, a ~ a (reflexivity);
-- For every two elements a, b in X, if a ~ b then b ~ a (symmetry);
-- For every three elements a, b, c in X, if a ~ b and b ~ c then a ~ c (transitivity).
-
-See EquivalenceClass.
-
-References:
-	https://en.wikipedia.org/wiki/Equivalence_relation!
-
 !Naturals commentStamp: '<historical>' prior: 0!
-The singletion global instance NN is the set of natural numbers 1, 2, 3, ...!
-
-!QuotientSet commentStamp: '<historical>' prior: 0!
-Quotient of a set by an equivalence relation. The elements are equivalence classes. See EquivalenceRelation and EquivalenceClass.!
+The singleton global instance NN is the set of natural numbers 1, 2, 3, ...!
 
 !Semigroup commentStamp: '<historical>' prior: 0!
 Semigroups consist of a set and an associative binary operation. They are like monoids except that they don't necessarily have an identity element.!
@@ -5185,29 +5131,9 @@ printOn: aStream
 printOn: aStream
 	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
 
-!EquivalenceClass methodsFor: 'printing' stamp: 'len 4/24/2016 04:37'!
-printOn: aStream
-	aStream nextPut: $[; print: self representative; nextPut: $]! !
-
-!EquivalenceRelation methodsFor: 'printing' stamp: 'len 12/28/2016 12:27:26'!
-printOn: aStream
-	((self hasProperty: #name) or: [self hasProperty: #elements])
-		ifTrue: [^ super printOn: aStream].
-	aStream nextPut: $~! !
-
 !Naturals methodsFor: 'printing' stamp: 'len 6/8/2016 21:05'!
 printOn: aStream
 	aStream nextPut: Character NN! !
-
-!QuotientSet methodsFor: 'printing' stamp: 'len 4/25/2016 09:25'!
-printOn: aStream
-	aStream print: self relation domain; nextPut: $/; print: self relation
-"	| domain |
-	domain _ self relation domain.
-	(domain printString allSatisfy: [:each|each isAlphaNumeric])
-		ifTrue: [aStream print: domain]
-		ifFalse: [aStream nextPut: $(; print: domain; nextPut: $)].
-	aStream nextPut: $/; print: self relation"! !
 
 !FreeAbelianSemigroup methodsFor: 'printing' stamp: 'len 5/13/2019 12:23:53'!
 printOn: aStream
@@ -12220,11 +12146,11 @@ null
 size
 	^ self propertyAt: #size ifAbsentPut: [self elements size]! !
 
-!Domain methodsFor: 'comparing' stamp: 'len 9/15/2019 09:52:00'!
+!Domain methodsFor: 'comparing' stamp: 'len 4/19/2020 07:04:52'!
 < aDomain
 	"Answer true if the receiver is a proper subset of aDomain (strict inclusion)."
-	aDomain isFinite ifTrue: [^ self size < aDomain size and: [self elements allSatisfy: [:each| aDomain includes: each]]].
-	self isFinite ifTrue: [self do: [:each| (aDomain includes: each) ifFalse: [^ false]]. ^ true].
+	aDomain isFinite ifTrue: [^ self size < aDomain size and: [self allSatisfy: [:each| aDomain includes: each]]].
+	self isFinite ifTrue: [^ self allSatisfy: [:each| aDomain includes: each]].
 	^ self subclassResponsibility! !
 
 !Domain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:21'!
@@ -12260,15 +12186,13 @@ size
 hash
 	^ self isFinite ifTrue: [self size hash] ifFalse: [super hash]! !
 
-!Domain methodsFor: 'converting' stamp: 'len 12/28/2016 11:19:21'!
+!Domain methodsFor: 'converting' stamp: 'len 4/19/2020 07:08:55'!
 asArray
-	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain asArray].
-	^ (Iterator on: self performing: #do:) asArray! !
+	^ self elements asArray! !
 
-!Domain methodsFor: 'converting' stamp: 'len 2/20/2017 08:32:16'!
+!Domain methodsFor: 'converting' stamp: 'len 4/19/2020 07:09:10'!
 asSet
-	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain asSet].
-	^ Set accumulate: [:aBlock| self do: aBlock]! !
+	^ self elements asSet! !
 
 !Domain methodsFor: 'copying' stamp: 'len 5/1/2016 23:35'!
 copyEmpty
@@ -12590,13 +12514,6 @@ toAll: anArray
 	"Answer the cartesian set product of the receiver with the argument."
 	^ CartesianProduct components: {self. aDomain}! !
 
-!Domain methodsFor: 'operations' stamp: 'len 7/31/2019 08:21:18'!
-/ anEquivalenceRelation
-	"Answer the categorical quotient of the receiver by an equivalence relation."
-	| relation |
-	relation _ anEquivalenceRelation isBlock ifTrue: [EquivalenceRelation on: self evaluating: anEquivalenceRelation] ifFalse: [anEquivalenceRelation].
-	^ QuotientSet relation: relation! !
-
 !Domain methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:29'!
 /\ aCollection
 	"Answer the intersection of the receiver and the argument."
@@ -12659,16 +12576,16 @@ atRandom
 	"Answer an element in the receiver choosen at random. This will fail if the receiver is not finite."
 	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom]! !
 
-!Domain methodsFor: 'random' stamp: 'len 12/28/2016 11:19:04'!
+!Domain methodsFor: 'random' stamp: 'len 4/19/2020 07:12:07'!
 atRandom: aRandom
 	"Answer an element in the receiver choosen at random. This will fail if the receiver is not finite."
-	self propertyAt: #elements ifPresent: [:aCollection| aCollection atRandom: aRandom].
+	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain atRandom: aRandom].
 	^ self atRandom: aRandom bits: Infinity positive! !
 
-!Domain methodsFor: 'random' stamp: 'len 5/25/2018 18:12:30'!
+!Domain methodsFor: 'random' stamp: 'len 4/19/2020 07:12:35'!
 atRandom: aRandom bits: bitSize
 	"Answer an element of the receiver of at most n bits (as measured by #bitSize). The total number of elements that could be returned shouldn't exceed 2^n."
-	self propertyAt: #elements ifPresent: [:aCollection| ^ aCollection atRandom: aRandom bits: bitSize].
+	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain atRandom: aRandom bits: bitSize].
 	^ self subclassResponsibility! !
 
 !Domain methodsFor: 'random' stamp: 'len 7/5/2016 02:29'!
@@ -13654,81 +13571,6 @@ example
 components: anArray
 	^ self new components: anArray! !
 
-!EquivalenceClass methodsFor: 'accessing' stamp: 'len 12/28/2016 11:24:38'!
-relation
-	^ self propertyAt: #relation! !
-
-!EquivalenceClass methodsFor: 'accessing' stamp: 'len 4/25/2016 08:40'!
-representative
-	^ representative! !
-
-!EquivalenceClass methodsFor: 'accessing-private' stamp: 'len 12/28/2016 11:24:32'!
-relation: anEquivalenceRelation
-	self propertyAt: #relation put: anEquivalenceRelation! !
-
-!EquivalenceClass methodsFor: 'accessing-private' stamp: 'len 4/25/2016 08:40'!
-representative: anElement
-	representative _ anElement! !
-
-!EquivalenceClass methodsFor: 'comparing' stamp: 'len 4/25/2016 09:14'!
-= anEquivalenceClass
-	^ anEquivalenceClass includes: self representative! !
-
-!EquivalenceClass methodsFor: 'comparing' stamp: 'len 4/25/2016 09:13'!
-hash
-	^ self class hash! !
-
-!EquivalenceClass methodsFor: 'enumerating' stamp: 'len 4/25/2016 09:33'!
-do: aBlock
-	self relation domain do: [:each| (self relation includes: {each. self representative}) ifTrue: [aBlock value: each]]! !
-
-!EquivalenceClass methodsFor: 'testing' stamp: 'len 4/24/2016 04:40'!
-includes: anElement
-	^ self relation includes: {anElement. self representative}! !
-
-!EquivalenceClass class methodsFor: 'instance creation' stamp: 'len 4/25/2016 09:23'!
-representative: anElement relation: anEquivalenceRelation
-	^ self new representative: anElement; relation: anEquivalenceRelation! !
-
-!EquivalenceRelation methodsFor: 'accessing' stamp: 'len 12/28/2016 11:25:39'!
-domain
-	^ self propertyAt: #domain! !
-
-!EquivalenceRelation methodsFor: 'accessing-private' stamp: 'len 12/28/2016 11:24:43'!
-block: aBlock
-	self propertyAt: #block put: aBlock! !
-
-!EquivalenceRelation methodsFor: 'accessing-private' stamp: 'len 12/28/2016 11:25:32'!
-domain: aDomain
-	self propertyAt: #domain put: aDomain! !
-
-!EquivalenceRelation methodsFor: 'enumerating' stamp: 'len 4/25/2016 08:55'!
-do: aBlock
-	self domain do: [:x|
-		self domain do: [:y|
-			| r |
-			(self includes: (r _ {x.y})) ifTrue: [aBlock value: r]]]! !
-
-!EquivalenceRelation methodsFor: 'testing' stamp: 'len 12/28/2016 11:25:26'!
-includes: anArray
-	^ (self propertyAt: #block) valueWithArguments: anArray! !
-
-!EquivalenceRelation methodsFor: 'testing' stamp: 'len 4/24/2016 04:25'!
-isReflexive
-	^ true! !
-
-!EquivalenceRelation methodsFor: 'testing' stamp: 'len 4/24/2016 04:24'!
-isSymmetric
-	^ true! !
-
-!EquivalenceRelation methodsFor: 'testing' stamp: 'len 4/24/2016 04:25'!
-isTransitive
-	^ true! !
-
-!EquivalenceRelation class methodsFor: 'instance creation' stamp: 'len 4/25/2016 08:48'!
-on: aDomain evaluating: aBlock
-	^ self new domain: aDomain; block: aBlock! !
-
 !Naturals methodsFor: 'accessing' stamp: 'len 2/13/2016 20:41'!
 identity
 	^ 1! !
@@ -13772,45 +13614,6 @@ isReal
 initialize
 	super initialize.
 	Smalltalk at: #NN put: self new! !
-
-!QuotientSet methodsFor: 'accessing' stamp: 'len 4/26/2016 07:26'!
-base
-	^ self relation domain! !
-
-!QuotientSet methodsFor: 'accessing' stamp: 'len 12/28/2016 11:25:49'!
-relation
-	^ self propertyAt: #relation! !
-
-!QuotientSet methodsFor: 'enumerating' stamp: 'len 8/14/2016 06:17'!
-do: aBlock
-	| visited |
-	visited _ Set new.
-	self base do: [:each|
-		| x |
-		x _ self project: each.
-		visited add: x ifAbsent: [aBlock value: x]]! !
-
-!QuotientSet methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:18:38'!
-from: aDomain
-	aDomain = self base ifTrue: [^ self projection].
-	aDomain -> self base ifNotNil: [:aMorphism| ^ aMorphism -> self].
-	^ super from: aDomain! !
-
-!QuotientSet methodsFor: 'morphisms' stamp: 'len 4/24/2016 04:46'!
-project: anElement
-	^ EquivalenceClass representative: anElement relation: self relation! !
-
-!QuotientSet methodsFor: 'morphisms' stamp: 'len 10/10/2016 08:52'!
-projection
-	^ (Function from: self base to: self evaluating: [:v| self project: v]) name: Character pi asString! !
-
-!QuotientSet methodsFor: 'private' stamp: 'len 12/28/2016 11:25:44'!
-relation: anEquivalenceRelation
-	self propertyAt: #relation put: anEquivalenceRelation! !
-
-!QuotientSet class methodsFor: 'instance creation' stamp: 'len 7/31/2019 08:22:57'!
-relation: anEquivalenceRelation
-	^ self new relation: anEquivalenceRelation! !
 
 !Semigroup methodsFor: 'morphic' stamp: 'len 3/7/2020 16:44:16'!
 multiplicationTable
@@ -14445,9 +14248,9 @@ to: aGroup mapping: aBlock
 	aGroup isGroup ifFalse: [^ super to: aGroup mapping: aBlock].
 	^ GroupMap from: self to: aGroup mapping: aBlock! !
 
-!Group methodsFor: 'operations' stamp: 'len 5/9/2019 11:24:34'!
+!Group methodsFor: 'operations' stamp: 'len 4/19/2020 06:27:44'!
 * anElementOrGroup
-	(anElementOrGroup isKindOf: Group) ifTrue: [^ self freeProduct: anElementOrGroup].
+	(anElementOrGroup isKindOf: Group) ifTrue: [^ self notYetImplemented]. "free product"
 	^ Coset representative: anElementOrGroup relations: self! !
 
 !Group methodsFor: 'operations' stamp: 'len 10/10/2018 06:29:35'!
@@ -14919,10 +14722,6 @@ base
 !QuotientGroup methodsFor: 'accessing' stamp: 'len 12/22/2016 21:16:13'!
 identity
 	^ self project: self base identity! !
-
-!QuotientGroup methodsFor: 'accessing' stamp: 'len 5/5/2019 18:15:42'!
-relation
-	^ EquivalenceRelation on: self base evaluating: [:x :y| self relations includes: x · y inverse]! !
 
 !QuotientGroup methodsFor: 'accessing' stamp: 'len 2/28/2017 10:14:05'!
 relations
@@ -18644,10 +18443,6 @@ modulus
 !QuotientRing methodsFor: 'accessing' stamp: 'len 6/19/2019 15:18:48'!
 one
 	^ self propertyAt: #one ifAbsentPut: [self project: self base one] "becomes 0 when the receiver is trivial"! !
-
-!QuotientRing methodsFor: 'accessing' stamp: 'len 2/27/2017 20:53:26'!
-relation
-	^ EquivalenceRelation on: self base evaluating: [:a :b| self relations includes: a - b]! !
 
 !QuotientRing methodsFor: 'accessing' stamp: 'len 2/27/2017 20:46:50'!
 relations
@@ -23783,10 +23578,6 @@ base
 generators
 	^ self base generators collect: [:each| self project: each]! !
 
-!QuotientModule methodsFor: 'accessing' stamp: 'len 1/16/2018 18:34:25'!
-relation
-	^ EquivalenceRelation on: self base evaluating: [:x :y| self relations includes: x - y]! !
-
 !QuotientModule methodsFor: 'accessing' stamp: 'len 2/27/2017 21:31:05'!
 relations
 	^ self propertyAt: #relations! !
@@ -27700,12 +27491,14 @@ isRingHomomorphism
 isSurjective
 	^ self section notNil! !
 
-!Function methodsFor: 'private' stamp: 'len 12/28/2016 11:12:01'!
+!Function methodsFor: 'private' stamp: 'len 4/19/2020 06:03:11'!
 codomain: aDomain
+"	(aDomain isKindOf: Domain) ifFalse: [^ DomainError signal: 'not a Domain']."
 	self propertyAt: #codomain put: aDomain! !
 
-!Function methodsFor: 'private' stamp: 'len 12/28/2016 11:11:13'!
+!Function methodsFor: 'private' stamp: 'len 4/19/2020 06:03:18'!
 domain: aDomain
+"	(aDomain isKindOf: Domain) ifFalse: [^ DomainError signal: 'not a Domain']."
 	self propertyAt: #domain put: aDomain! !
 
 !Function methodsFor: 'private' stamp: 'len 12/28/2016 11:11:02'!
@@ -28350,13 +28143,13 @@ asPolynomial
 - aModuleMap
 	^ self + aModuleMap negated! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 4/13/2020 19:27:41'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 4/19/2020 08:11:40'!
 / aModuleMap
 	"If the argument is a monomorphism i:A->X, and the receiver is f:A->Y, answer f':X->Y such that the diagram commutes. This is a 'colift (or extension) of f along i'."
 	| M |
-	(self scalars includes: aModuleMap) ifTrue: [^ self * aModuleMap reciprocal].
+	(self domain scalars includes: aModuleMap) ifTrue: [^ self * aModuleMap reciprocal].
 	M _ self domain isFree ifTrue: [matrix / aModuleMap matrix] ifFalse: [aModuleMap matrix solveLeft: matrix modulo: (self domain relations -> self domain base) matrix].
-	^ M ifNotNil: [aModuleMap domain to: domain matrix: M]! !
+	^ M ifNotNil: [aModuleMap codomain to: codomain matrix: M]! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 4/18/2020 22:30:56'!
 /\ aModuleMap
