@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 14 April 2020 at 8:41:25 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 8:55:13 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 154!
+!provides: 'MathematicsTests' 1 155!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -32,16 +32,6 @@ TestCase subclass: #AlgebraicNumbersTest
 	category: 'MathematicsTests'!
 !classDefinition: 'AlgebraicNumbersTest class' category: #MathematicsTests!
 AlgebraicNumbersTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #CodesTest category: #MathematicsTests!
-TestCase subclass: #CodesTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'CodesTest class' category: #MathematicsTests!
-CodesTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #CommutativeAlgebraTest category: #MathematicsTests!
@@ -1037,17 +1027,15 @@ testAsPermutationGroup
 	A _ AbelianGroup orders: #(2 5 4 2).
 	self assert: A asPermutationGroup asAbelianGroup invariants = A invariants! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 3/10/2020 20:11:02'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/18/2020 22:09:29'!
 testDirectSum
 	| A B C |
 	A _ ZZ asAbelianGroup.
 	B _ (ZZ / (2 to: 10) atRandom) asAbelianGroup.
 	C _ A ê B.
 	self testAbelianGroup: C.
-	self testAbelianGroupHomomorphism: (C -< (A, B)) first.
-	self testAbelianGroupHomomorphism: (C -< (A, B)) second.
-	self testAbelianGroupHomomorphism: ((A, B) >- C) first.
-	self testAbelianGroupHomomorphism: ((A, B) >- C) second! !
+	C -< {A. B} do: [:each| self testAbelianGroupHomomorphism: each].
+	{A. B} >- C do: [:each| self testAbelianGroupHomomorphism: each]! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
 testExponent
@@ -1187,14 +1175,13 @@ testAffinePlaneCurveMultiplicity
 	self assert: (C multiplicityAt: (1,1)) = 1.
 	self assert: (C multiplicityAt: (0,0)) = 2! !
 
-!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 1/5/2018 10:16:11'!
+!AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 4/18/2020 23:06:09'!
 testAffineSchemeCartesianProduct
 	| X1 X2 P |
 	X1 _ AffineVariety circle.
 	X2 _ AffineVariety romanSurface.
 	P _ X1 ◊ X2.
-	self assert: (P apply: (P ambient projection: 1)) = X1.
-	self assert: (P apply: (P ambient projection: 2)) = X2.
+	self assert: (P ambient -< {X1 ambient. X2 ambient} collect: [:each| P apply: each]) = {X1. X2}.
 	self assert: X1 dimension + X2 dimension = P dimension.
 	self assert: X1 ambient dimension + X2 ambient dimension = P ambient dimension.
 	self assert: (X1 pointsCountOver: ZZ/3) * (X2 pointsCountOver: ZZ/3) = (P pointsCountOver: ZZ/3).
@@ -2008,118 +1995,6 @@ testTrace
 	| a |
 	a _ ComplexAlgebraicNumber phi.
 	self assert: a trace = a conjugates sum! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 03:25:32'!
-testDual
-	| C |
-	C _ LinearCode subspace: (ZZ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
-	self assert: C dual size = (C ambient size / C size).
-	C dual do: [:v|
-		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
-		self assert: (v coordinates count: [:each| each = (1 % 2)]) even]
-! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:52:38'!
-testGolay24
-	| C W x y |
-	C _ LinearCode G24.
-	self assert: C isSelfDual.
-	W _ C weightEnumerator.
-	x _ W parent x.
-	y _ W parent y.
-	self assert: W = (x^24 + (x^16*(y^8)*759) + (x^12*(y^12)*2576) + (x^8*(y^16)*759) + (y^24)) "typo in neil's video 22:20"! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 09:47'!
-testHamming743
-	| H7 |
-	H7 _ LinearCode H7.
-	self assert: H7 isCyclic.
-	self assert: H7 minimumDistance = 3.
-	self assert: H7 weightDistribution = #(0 3 3 3 3 3 3 3 4 4 4 4 4 4 4 7) asBag.
-	self assert: H7 dual minimumDistance = 4! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:24'!
-testHamming844
-	| C P x y |
-	C _ LinearCode H8.
-	self assert: C isSelfDual.
-	self assert: C isSelfOrthogonal.
-	self assert: C minimumDistance = 4.
-	self assert: C dual minimumDistance = 4.
-	P _ ZZ polynomialsIn: 2.
-	x _ P x. y _ P y.
-	self assert: C weightEnumerator = (x^8 + (x*y^4*14) + (y^8))! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 1/23/2017 11:52:21'!
-testMacWilliamsTheorem
-	"(MacWilliams, 1962) the theorem relates the weight enumerator of a linear code to the weight enumerator of its dual."
-	"From youtube, Neil Sloane 'Error Correcting Codes, Group Theory and Invariant Theory, Part 1' 20:30."
-	| C W Wperp x y |
-	C _ LinearCode H7.
-	W _ C weightEnumerator.
-	Wperp _ C dual weightEnumerator.
-	x _ Wperp parent x.
-	y _ Wperp parent y.
-	self assert: Wperp = ((W value: {x+y. x-y}) / C size)! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 08:19:16'!
-testParityCheckMatrix
-	| H7 M |
-	H7 _ LinearCode H7.
-	M _ H7 parityCheckMatrix.
-	self assert: (M * H7 atRandom coordinates) isZero! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:58'!
-testSelfDual
-	| F C |
-	F _ ZZ/2.
-	"{00,11} is the smallest self-dual code"
-	C _ LinearCode subspace: (F^2 span: {(0,0) % 2. (1,1) % 2}).
-	self assert: C isSelfDual.
-	self assert: C isSelfOrthogonal.
-	"TODO: test other examples of self-dual codes: H8, G24"! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 07:28'!
-testSingletonBound: C
-	"Any linear [n,k,d] code satisfies k + d <= n + 1."
-	| n k d |
-	n _ C length.
-	k _ C rank.
-	d _ C minimumDistance.
-	self assert: k + d <= (n + 1).! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 07:30'!
-testSingletonBoundH7
-	"Any linear [n,k,d] code satisfies k + d <= n + 1."
-	self testSingletonBound: LinearCode H7! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:31'!
-testSingletonBoundTetracode
-	"Any linear [n,k,d] code satisfies k + d <= n + 1."
-	self testSingletonBound: LinearCode tetracode! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:20'!
-testTetracode
-	| C P x y |
-	C _ LinearCode subspace: (ZZ/3 ^ 4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3}).
-	self assert: C isSelfDual.
-	self assert: C minimumDistance = 3.
-	P _ ZZ polynomialsIn: #(x y).
-	x _ P x.
-	y _ P y.
-	self assert: C weightEnumerator = (x^4 + (x*(y^3)*8))! !
-
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:41:19'!
-testWeightEnumerator
-	"From youtube, Neil Sloane 'error correcting codes, group theory and invariant theory part 1' 19:30."
-	| F C w x y |
-	F _ ZZ/2.
-	C _ LinearCode subspace: (F^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
-	w _ C weightEnumerator.
-	x _ w parent x.
-	y _ w parent y.
-	self assert: w = (x^5 + (y^5)).
-	self assert: C dual weightEnumerator = (x^5 + (x^3*(y^2)*10) + (y^4*x*5))! !
 
 !CommutativeAlgebraTest methodsFor: 'affine ring' stamp: 'len 2/14/2017 08:11:31'!
 testAffineRingElementOperations
@@ -3273,7 +3148,7 @@ testD3
 	self assert: D commutator = A.
 	self assert: D center isTrivial! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 8/17/2019 16:12:34'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/21/2020 06:11:42'!
 testDirectProduct
 	| S A G g |
 	S _ self smallGroupAtRandom.
@@ -3282,8 +3157,8 @@ testDirectProduct
 	g _ G atRandom.
 	self assert: g ∑ g inverse = G identity.
 	self testGroup: G.
-	self testGroupHomomorphism: ((S, A) >- G at: 1).
-	self testGroupHomomorphism: ((S, A) >- G at: 2)! !
+	{S. A} >- G do: [:each| self testGroupHomomorphism: each].
+	G -< {S. A} do: [:each| self testGroupHomomorphism: each]! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:14:45'!
 testGroup: G
@@ -4816,48 +4691,411 @@ testIndexOf
 	H _ PrincipalCongruenceSubgroup new: 8.
 	self assert: (G indexOf: H) = 32 "according to GAP manual chap. 2, Gamma(2) has index 12"! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 12/2/2016 11:11:38'!
-newFreeModule
-	^ self newFreeModuleOver: {ZZ. QQ. ZZ / (10 atRandom + 1)} atRandom! !
+!ModuleTest methodsFor: 'bugs' stamp: 'len 4/21/2020 05:55:42'!
+testPIDCoordinatesOfBug
+	| M S |
+	M _ self newFreeModuleOver: self newScalarsPID.
+	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
+	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 3/13/2020 17:26:13'!
-newFreeModuleOver: scalars
-	| M N |
-	M _ 3 atRandom = 1 ifTrue: [scalars asSelfModule] ifFalse: [scalars ^ 3 atRandom].
-	3 atRandom = 1 ifTrue:
-		[N _ self newFreeModuleOver: scalars.
-		2 atRandom = 1 ifTrue: [^ M => N].
-		^ M ë N].
-	3 atRandom = 1 ifTrue: [^ M endomorphisms].
-	3 atRandom = 1 ifTrue: [^ M dual].
-	^ M! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:39:14'!
+testFirstIsomorphismTheorem: f
+	self assert: f codomain >= f image.
+	self assert: f domain >= f kernel.
+	self assert: f domain / f kernel ~ f image! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 1/16/2018 19:07:14'!
-newFreeModuleOverPID
-	^ self newFreeModuleOver: {QQ. ZZ/2. ZZ. QQ polynomials} atRandom! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:10'!
+testFirstIsomorphismTheoremOver: aRing
+	| M N f |
+	M _ self newFreeModuleOver: aRing.
+	N _ self newFreeModuleOver: aRing.
+	f _ M => N atRandomBits: 100.
+	self testFirstIsomorphismTheorem: f
+! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:41:09'!
-newLinearMap
-	| K V W |
-	K _ {QQ. ZZ / #(2 3 5 7) atRandom} atRandom.
-	V _ self newFreeModuleOver: K.
-	W _ self newFreeModuleOver: K.
-	^ V => W !! (self newMatrix: W rank @ V rank over: K)! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:54'!
+testFirstIsomorphismTheoremOverCyclotomicField
+	self testFirstIsomorphismTheoremOver: (CyclotomicField new: 7)! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 3/9/2020 20:42:07'!
-newMatrix: shape over: aRing
-	| samples |
-	2 atRandom = 1 ifTrue: [^ aRing atRandomMatrix: shape bits: 100].
-	samples _ {aRing zero. aRing one. aRing one negated}.
-	^ aRing matrix: shape evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:05'!
+testFirstIsomorphismTheoremOverGaloisField
+	self testFirstIsomorphismTheoremOver: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1)! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 3/11/2020 06:29:31'!
-newSmallVectorSpace
-	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom} atRandom! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:14'!
+testFirstIsomorphismTheoremOverPolynomials
+	self testFirstIsomorphismTheoremOver: QQ polynomials! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 9/27/2018 04:44:48'!
-newVectorSpace
-	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom. QQ polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:34'!
+testFirstIsomorphismTheoremOverQ
+	self testFirstIsomorphismTheoremOver: QQ! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:25'!
+testFirstIsomorphismTheoremOverQuadraticField
+	self testFirstIsomorphismTheoremOver: (QuadraticField sqrt: -5)! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:32'!
+testFirstIsomorphismTheoremOverZ
+	self testFirstIsomorphismTheoremOver: ZZ! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 17:20:25'!
+testSecondIsomorphismTheorem: M
+	| S T |
+	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	T _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	self assert: S+T <= M.
+	self assert: S /\ T <= M.
+	self assert: (S+T)/T ~ (S/(S /\ T))! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:35'!
+testSecondIsomorphismTheoremOverCyclotomicField
+	self testSecondIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:03'!
+testSecondIsomorphismTheoremOverGaloisField
+	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:47'!
+testSecondIsomorphismTheoremOverPolynomials
+	self testSecondIsomorphismTheorem: QQ polynomials ^ 2! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:46'!
+testSecondIsomorphismTheoremOverQ
+	self testSecondIsomorphismTheorem: QQ ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:41'!
+testSecondIsomorphismTheoremOverQuadraticField
+	self testSecondIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:13'!
+testSecondIsomorphismTheoremOverZ
+	self testSecondIsomorphismTheorem: ZZ^3! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:15'!
+testThirdIsomorphismTheorem: M
+	| S T |
+	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
+	T _ S grassmannian: (0 to: S rank) atRandom :: atRandomBits: 50.
+	self assert: S/T <= (M/T).
+	self assert: (M/T)/(S/T) ~ (M/S)! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:44'!
+testThirdIsomorphismTheoremOverCyclotomicField
+	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:16'!
+testThirdIsomorphismTheoremOverGaloisField
+	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:57'!
+testThirdIsomorphismTheoremOverPolynomials
+	self testThirdIsomorphismTheorem: QQ polynomials ^ 2! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:45'!
+testThirdIsomorphismTheoremOverQ
+	self testThirdIsomorphismTheorem: QQ ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
+testThirdIsomorphismTheoremOverQuadraticField
+	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:20'!
+testThirdIsomorphismTheoremOverZ
+	self testThirdIsomorphismTheorem: ZZ^3! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 07:59:07'!
+testAdjoint
+	| V W f fAdjoint phi |
+	V _ self newFreeModuleOver: QQ.
+	W _ self newFreeModuleOver: QQ.
+	f _ V => W atRandomBits: 50.
+	fAdjoint _ f adjoint.
+	self assert: fAdjoint domain = f codomain dual.
+	self assert: fAdjoint codomain = f domain dual.
+	phi _ W dual atRandomBits: 20.
+	self assert: (fAdjoint value: phi) = (phi ∑ f)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 07:59:20'!
+testAdjointAndHomFunctor
+	"Given a R-linear map f, applying the Hom(-, R) produces the adjoint (the dual map).
+	Example from 'A Singular Introduction To Commutative Algebra, pp. 115, procedure kontraHom."
+	| f |
+	f _ QQ^3 => (QQ^4) :: atRandomBits: 100.
+	self assert: (f => QQ asSelfModule) = f adjoint! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/18/2020 15:30:53'!
+testCoequalizer
+	| A B f g coeq |
+	A _ self newFreeModule.
+	B _ self newFreeModuleOver: A scalars.
+	f _ (A => B) atRandomBits: 100 atRandom.
+	g _ (A => B) atRandomBits: 100 atRandom.
+	coeq _ f coequalizer: g.
+	self assert: (f -> coeq) notNil.
+	self assert: f -> coeq = (g -> coeq)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:12:27'!
+testColift
+	| M X A i Y f g |
+	M _ QQ^3.
+	X _ QQ^4.
+	A _ (X => M atRandomBits: 20) kernel.
+	i _ A >-> X.
+	Y _ QQ^5.
+	f _ A => Y atRandomBits: 20.
+	g _ f / i.
+	self assert: (X => Y includes: g).
+	self assert: i -> g = f
+
+"	| M N phi cokernel L eta eta0 |
+	M _ QQ^3.
+	N _ QQ^4.
+	phi _ (M => N) atRandomBits: 20.
+	cokernel _ phi cokernel.
+	L _ QQ^5.
+	eta _ N to: L evaluating: [:x| L atRandomBits: 20]. ???
+	self assert: (phi -> eta) isZero.
+	eta0 _ eta / (M ->> cokernel).
+	self assert: (cokernel => L includes: eta0).
+	self assert: M ->> cokernel -> eta0 = eta"! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:02:42'!
+testComposition
+	| X Y Z f g x |
+	X _ QQ ^ 3.
+	Y _ QQ ^ 5.
+	Z _ QQ ^ 4.
+	f _ X => Y atRandomBits: 1000.
+	g _ Y => Z atRandomBits: 1000.
+	x _ X atRandomBits: 1000.
+	self assert: (X => Z includes: g ∑ f).
+	self assert: (g ∑ f value: x) = (g value: (f value: x)).
+	self should: [f ∑ g] raise: DomainError! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:02:52'!
+testCompositionError
+	| X Y Z f g |
+	X _ QQ ^ 3.
+	Y _ QQ ^ 5.
+	Z _ QQ ^ 4.
+	f _ X => Y atRandomBits: 1000.
+	g _ Y => Z atRandomBits: 1000.
+	self should: [f ∑ g] raise: DomainError! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/18/2020 15:31:09'!
+testEqualizer
+	| A B f g eq |
+	A _ self newFreeModule.
+	B _ self newFreeModuleOver: A scalars.
+	f _ (A => B) atRandomBits: 100 atRandom.
+	g _ (A => B) atRandomBits: 100 atRandom.
+	eq _ f equalizer: g.
+	self assert: (eq -> f) notNil.
+	self assert: eq -> f = (eq -> g)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:01:52'!
+testImage
+	| f image v w |
+	f _ self newLinearMap.
+	image _ f image.
+	v _ f domain atRandomBits: 100.
+	w _ f value: v.
+	self assert: (image includes: w)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:01'!
+testInverse
+	| V f |
+	V _ QQ ^ 3.
+	f _ V automorphisms atRandomBits: 1000.
+	self assert: (f ∑ f inverse) isIdentity.
+	self assert: (f inverse ∑ f) isIdentity! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:08'!
+testKernel
+	| f kernel v |
+	f _ self newLinearMap.
+	kernel _ f kernel.
+	v _ kernel atRandomBits: 100.
+	self assert: (f value: v) isZero! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:17'!
+testKernelZ2
+	| V f kernel |
+	V _ (PrimeField new: 2) ^ 3.
+	f _ V dual evaluating: [:v| v coordinates sum].
+	kernel _ f kernel.
+	self assert: (kernel apply: f) isTrivial.
+	self assert: kernel rank = 2.
+	self assert: (kernel includes: V !! (0,1,1))! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:06:15'!
+testLift
+	| M X B Y p f g |
+	M _ QQ^3.
+	X _ QQ^4.
+	B _ (M => X atRandomBits: 20) cokernel.
+	p _ X ->> B.
+	Y _ QQ^5.
+	f _ Y => B atRandomBits: 20.
+	g _ p \ f.
+	self assert: (Y => X includes: g).
+	self assert: g -> p = f
+
+"	| M N phi kernel L tau tau0 |
+	M _ QQ^3.
+	N _ QQ^4.
+	phi _ (M => N) atRandomBits: 20.
+	kernel _ phi kernel.
+	L _ QQ^5.
+	tau _ L to: M evaluating: [:x| kernel atRandomBits: 20].
+	self assert: (tau -> phi) isZero.
+	tau0 _ kernel >-> M \ tau.
+	self assert: (L => kernel includes: tau0).
+	self assert: tau0 -> (kernel >-> M) = tau"! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 3/9/2020 20:28:38'!
+testLinearForm1
+	| V f |
+	V _ QQ ^ 3.
+	f _ V dual evaluating: [:v| v x + v y - v z].
+	self assert: (f value: (1,1,1)) = 1.
+	self assert: (f value: (2,2,1)) = 3.
+	self assert: (f value: (3,1, -1)) = 5! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 3/9/2020 20:33:46'!
+testLinearForm2
+	| V f |
+	V _ QQ ^ 3.
+	f _ V dual evaluating: [:v| v x + v y - v z].
+	self assert: f domain = V.
+	self assert: f kernel rank = 2.
+	self assert: f image rank = 1! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/14/2020 04:13:30'!
+testLinearFormAsPolynomial
+	| V f x |
+	V _ QQ ^ 5 atRandom.
+	f _ V dual atRandomBits: 100.
+	x _ V atRandomBits: 100.
+	self assert: (f value: x) = (f asPolynomial value: x coordinates).
+	self assert: f parent !! f asPolynomial = f! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 3/14/2020 19:13:38'!
+testLinearFormZ2
+	| V f |
+	V _ (PrimeField new: 2) ^ 4.
+	f _ V dual evaluating: [:v| v coordinates sum].
+	self assert: f domain = V.
+	self assert: f kernel rank = 3.
+	self assert: f image rank = 1.
+	self assert: (f kernel includes: V !! (1,1,1,1))! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 3/2/2017 04:46:35'!
+testLinearMap
+	| f |
+	f _ self newLinearMap.
+	self testLinearMap: f! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 10/16/2016 09:17'!
+testLinearMap: f
+	| a1 a2 b1 b2 x |
+	a1 _ f domain atRandomBits: 20.
+	a2 _ f domain atRandomBits: 20.
+	b1 _ f value: a1.
+	b2 _ f value: a2.
+	self assert: (f value: f domain zero) isZero.
+	x _ f domain scalars atRandomBits: 20.
+	self assert: (f value: a1 * x + a2) = (b1 * x + b2)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 11/2/2016 04:01'!
+testLinearMapZ2
+	| V f kernel v |
+	V _ (PrimeField new: 2) ^ (5 atRandom + 1).
+	[f _ V endomorphisms atRandom.
+	(kernel _ f kernel) isTrivial or: [kernel = V]] whileTrue. "find one with non-trivial kernel"
+	[v _ V atRandom. kernel includes: v] whileTrue.
+	self assert: (f value: v) isZero not.
+	v _ kernel atRandom.
+	self assert: (f value: v) isZero! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:04:37'!
+testMapToBiggerDimensionIsNotSurjective
+	| V W f |
+	 V _ QQ^4 atRandom.
+	W _ QQ^(V rank atRandom - 1).
+	f _ (W => V) atRandomBits: 100.
+	self assert: f isSurjective not! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:04:44'!
+testMapToSmallerDimensionIsNotInjective
+	| V W f |
+	 V _ QQ^4 atRandom.
+	W _ QQ^(V rank atRandom - 1).
+	f _ (V => W) atRandomBits: 100.
+	self assert: f isInjective not! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:33'!
+testPreimage
+	| f w v |
+	f _ self newLinearMap.
+	w _ f image atRandomBits: 100.
+	v _ f preimage: w.
+	self assert: (f value: v) = w! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/18/2018 19:43:10'!
+testProjection: f
+	| v |
+	self testLinearMap: f.
+	v _ f domain atRandomBits: 20.
+	self assert: (f value: v) = (f value: (f value: v)). "idempotent at v"
+	self assert: f isIdempotent.
+	self assert: (f image apply: f) = f image.
+	self assert: (f codomain apply: f) = f image! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:44'!
+testPullback
+	| X Y Z f g P p1 p2 |
+	Z _ self newFreeModule.
+	X _ self newFreeModuleOver: Z scalars.
+	Y _ self newFreeModuleOver: Z scalars.
+	f _ (X => Z) atRandomBits: 20.
+	g _ (Y => Z) atRandomBits: 20.
+	P _ f /\ g.
+	p1 _ P -> X.
+	p2 _ P -> Y.
+	self assert: p1 -> f = (p2 -> g)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:53'!
+testPushout
+	| X Y Z f g P i1 i2 |
+	Z _ self newFreeModule.
+	X _ self newFreeModuleOver: Z scalars.
+	Y _ self newFreeModuleOver: Z scalars.
+	f _ (Z => X) atRandomBits: 20.
+	g _ (Z => Y) atRandomBits: 20.
+	P _ f \/ g.
+	i1 _ X -> P.
+	i2 _ Y -> P.
+	self assert: f -> i1 = (g -> i2)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:04:00'!
+testRetraction
+	| V W f r |
+	V _ QQ^3.
+	W _ QQ^4.
+	[f _ V => W atRandomBits: 100. f isInjective] whileFalse.
+	r _ f retraction.
+	self assert: r isSurjective.
+	self assert: r ∑ f = V id! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:04:08'!
+testSection
+	| V W f s |
+	V _ QQ^4.
+	W _ QQ^3.
+	[f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
+	s _ f section.
+	self assert: s isInjective.
+	self assert: f ∑ s = W id! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 5/28/2019 07:55:20'!
 testAdjointMap
@@ -4929,15 +5167,15 @@ testCanonicalMorphisms
 	self assert: ((W -> W null) value: (V !! (1,2,3))) isZero.
 	self assert: (W -> V value: (V !! (2,4,6))) = (V !! (2,4,6)). "canonical morphism to overobject"! !
 
-!ModuleTest methodsFor: 'other' stamp: 'len 4/23/2019 02:20:30'!
+!ModuleTest methodsFor: 'other' stamp: 'len 4/18/2020 22:10:36'!
 testDirectSum
 	| M N S |
 	M _ self newFreeModule.
 	N _ self newFreeModuleOver: M scalars.
 	S _ M ê N.
 	self testFreeModule: S.
-	self testLinearMap: (S ambient projection: 2 atRandom).
-	self testLinearMap: (S ambient coprojection: 2 atRandom)! !
+	{M. N} >- S do: [:each| self testLinearMap: each].
+	S -< {M. N} do: [:each| self testLinearMap: each]! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 9/16/2018 23:30:32'!
 testDiscriminant
@@ -5137,415 +5375,6 @@ testTuplesZ2
 testTuplesZ4
 	self testFreeModule: ((ZZ / 4) ^ 5 atRandom)! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:39:14'!
-testFirstIsomorphismTheorem: f
-	self assert: f codomain >= f image.
-	self assert: f domain >= f kernel.
-	self assert: f domain / f kernel ~ f image! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:10'!
-testFirstIsomorphismTheoremOver: aRing
-	| M N f |
-	M _ self newFreeModuleOver: aRing.
-	N _ self newFreeModuleOver: aRing.
-	f _ M => N atRandomBits: 100.
-	self testFirstIsomorphismTheorem: f
-! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:54'!
-testFirstIsomorphismTheoremOverCyclotomicField
-	self testFirstIsomorphismTheoremOver: (CyclotomicField new: 7)! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:05'!
-testFirstIsomorphismTheoremOverGaloisField
-	self testFirstIsomorphismTheoremOver: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1)! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:14'!
-testFirstIsomorphismTheoremOverPolynomials
-	self testFirstIsomorphismTheoremOver: QQ polynomials! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:41:34'!
-testFirstIsomorphismTheoremOverQ
-	self testFirstIsomorphismTheoremOver: QQ! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:25'!
-testFirstIsomorphismTheoremOverQuadraticField
-	self testFirstIsomorphismTheoremOver: (QuadraticField sqrt: -5)! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:32'!
-testFirstIsomorphismTheoremOverZ
-	self testFirstIsomorphismTheoremOver: ZZ! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 17:20:25'!
-testSecondIsomorphismTheorem: M
-	| S T |
-	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	T _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	self assert: S+T <= M.
-	self assert: S /\ T <= M.
-	self assert: (S+T)/T ~ (S/(S /\ T))! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:35'!
-testSecondIsomorphismTheoremOverCyclotomicField
-	self testSecondIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:03'!
-testSecondIsomorphismTheoremOverGaloisField
-	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:47'!
-testSecondIsomorphismTheoremOverPolynomials
-	self testSecondIsomorphismTheorem: QQ polynomials ^ 2! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:35:46'!
-testSecondIsomorphismTheoremOverQ
-	self testSecondIsomorphismTheorem: QQ ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:41'!
-testSecondIsomorphismTheoremOverQuadraticField
-	self testSecondIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:13'!
-testSecondIsomorphismTheoremOverZ
-	self testSecondIsomorphismTheorem: ZZ^3! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:15'!
-testThirdIsomorphismTheorem: M
-	| S T |
-	S _ M grassmannian: (0 to: M rank) atRandom :: atRandomBits: 50.
-	T _ S grassmannian: (0 to: S rank) atRandom :: atRandomBits: 50.
-	self assert: S/T <= (M/T).
-	self assert: (M/T)/(S/T) ~ (M/S)! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:44'!
-testThirdIsomorphismTheoremOverCyclotomicField
-	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:16'!
-testThirdIsomorphismTheoremOverGaloisField
-	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:56:57'!
-testThirdIsomorphismTheoremOverPolynomials
-	self testThirdIsomorphismTheorem: QQ polynomials ^ 2! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:33:45'!
-testThirdIsomorphismTheoremOverQ
-	self testThirdIsomorphismTheorem: QQ ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
-testThirdIsomorphismTheoremOverQuadraticField
-	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
-
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 9/23/2018 00:57:20'!
-testThirdIsomorphismTheoremOverZ
-	self testThirdIsomorphismTheorem: ZZ^3! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/9/2020 20:28:38'!
-testLinearForm1
-	| V f |
-	V _ QQ ^ 3.
-	f _ V dual evaluating: [:v| v x + v y - v z].
-	self assert: (f value: (1,1,1)) = 1.
-	self assert: (f value: (2,2,1)) = 3.
-	self assert: (f value: (3,1, -1)) = 5! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/9/2020 20:33:46'!
-testLinearForm2
-	| V f |
-	V _ QQ ^ 3.
-	f _ V dual evaluating: [:v| v x + v y - v z].
-	self assert: f domain = V.
-	self assert: f kernel rank = 2.
-	self assert: f image rank = 1! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/14/2020 04:13:30'!
-testLinearFormAsPolynomial
-	| V f x |
-	V _ QQ ^ 5 atRandom.
-	f _ V dual atRandomBits: 100.
-	x _ V atRandomBits: 100.
-	self assert: (f value: x) = (f asPolynomial value: x coordinates).
-	self assert: f parent !! f asPolynomial = f! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/14/2020 19:13:38'!
-testLinearFormZ2
-	| V f |
-	V _ (PrimeField new: 2) ^ 4.
-	f _ V dual evaluating: [:v| v coordinates sum].
-	self assert: f domain = V.
-	self assert: f kernel rank = 3.
-	self assert: f image rank = 1.
-	self assert: (f kernel includes: V !! (1,1,1,1))! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:46:35'!
-testLinearMap
-	| f |
-	f _ self newLinearMap.
-	self testLinearMap: f! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 10/16/2016 09:17'!
-testLinearMap: f
-	| a1 a2 b1 b2 x |
-	a1 _ f domain atRandomBits: 20.
-	a2 _ f domain atRandomBits: 20.
-	b1 _ f value: a1.
-	b2 _ f value: a2.
-	self assert: (f value: f domain zero) isZero.
-	x _ f domain scalars atRandomBits: 20.
-	self assert: (f value: a1 * x + a2) = (b1 * x + b2)! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:36'!
-testLinearMapAdjoint
-	| V W f fAdjoint phi |
-	V _ self newFreeModuleOver: QQ.
-	W _ self newFreeModuleOver: QQ.
-	f _ V => W atRandomBits: 50.
-	fAdjoint _ f adjoint.
-	self assert: fAdjoint domain = f codomain dual.
-	self assert: fAdjoint codomain = f domain dual.
-	phi _ W dual atRandomBits: 20.
-	self assert: (fAdjoint value: phi) = (phi ∑ f)! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 8/14/2019 15:32:22'!
-testLinearMapAdjointAndHomFunctor
-	"Given a R-linear map f, applying the Hom(-, R) produces the adjoint (the dual map).
-	Example from 'A Singular Introduction To Commutative Algebra, pp. 115, procedure kontraHom."
-	| f |
-	f _ QQ^3 => (QQ^4) :: atRandomBits: 100.
-	self assert: (f => QQ asSelfModule) = f adjoint! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:47'!
-testLinearMapComposition
-	| X Y Z f g x |
-	X _ QQ ^ 3.
-	Y _ QQ ^ 5.
-	Z _ QQ ^ 4.
-	f _ X => Y atRandomBits: 1000.
-	g _ Y => Z atRandomBits: 1000.
-	x _ X atRandomBits: 1000.
-	self assert: (X => Z includes: g ∑ f).
-	self assert: (g ∑ f value: x) = (g value: (f value: x)).
-	self should: [f ∑ g] raise: DomainError! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:32:52'!
-testLinearMapCompositionError
-	| X Y Z f g |
-	X _ QQ ^ 3.
-	Y _ QQ ^ 5.
-	Z _ QQ ^ 4.
-	f _ X => Y atRandomBits: 1000.
-	g _ Y => Z atRandomBits: 1000.
-	self should: [f ∑ g] raise: DomainError! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:53:31'!
-testLinearMapImage
-	| f image v w |
-	f _ self newLinearMap.
-	image _ f image.
-	v _ f domain atRandomBits: 100.
-	w _ f value: v.
-	self assert: (image includes: w)! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:02'!
-testLinearMapInverse
-	| V f |
-	V _ QQ ^ 3.
-	f _ V automorphisms atRandomBits: 1000.
-	self assert: (f ∑ f inverse) isIdentity.
-	self assert: (f inverse ∑ f) isIdentity! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/2/2017 04:53:46'!
-testLinearMapKernel
-	| f kernel v |
-	f _ self newLinearMap.
-	kernel _ f kernel.
-	v _ kernel atRandomBits: 100.
-	self assert: (f value: v) isZero! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/14/2020 19:14:01'!
-testLinearMapKernelZ2
-	| V f kernel |
-	V _ (PrimeField new: 2) ^ 3.
-	f _ V dual evaluating: [:v| v coordinates sum].
-	kernel _ f kernel.
-	self assert: (kernel apply: f) isTrivial.
-	self assert: kernel rank = 2.
-	self assert: (kernel includes: V !! (0,1,1))! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/11/2020 13:06:22'!
-testLinearMapLift
-	| M N phi kernel L rho rho0 |
-	M _ QQ^3.
-	N _ QQ^4.
-	phi _ (M => N) atRandomBits: 20.
-	kernel _ phi kernel.
-	L _ QQ^5.
-	rho _ L to: M evaluating: [:x| kernel atRandomBits: 20].
-	self assert: (rho -> phi) isZero.
-	rho0 _ kernel -> M \ rho.
-	self assert: rho0 -> (kernel -> M) = rho! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/11/2020 12:22:59'!
-testLinearMapPreimage
-	| f w v |
-	f _ self newLinearMap.
-	w _ f image atRandomBits: 100.
-	v _ f preimage: w.
-	self assert: (f value: v) = w! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/5/2019 18:33:13'!
-testLinearMapRetraction
-	| V W f r |
-	V _ QQ^3.
-	W _ QQ^4.
-	[f _ V => W atRandomBits: 100. f isInjective] whileFalse.
-	r _ f retraction.
-	self assert: r isSurjective.
-	self assert: r ∑ f = V id! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 3/13/2020 06:17:13'!
-testLinearMapSection
-	| V W f s |
-	V _ QQ^4.
-	W _ QQ^3.
-	[f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
-	s _ f section.
-	self assert: s isInjective.
-	self assert: f ∑ s = W id! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/12/2020 18:05:40'!
-testLinearMapToBiggerDimensionIsNotSurjective
-	| V W f |
-	 V _ QQ^4 atRandom.
-	W _ QQ^(V rank atRandom - 1).
-	f _ (W => V) atRandomBits: 100.
-	self assert: f isSurjective not! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 4/12/2020 18:05:05'!
-testLinearMapToSmallerDimensionIsNotInjective
-	| V W f |
-	 V _ QQ^4 atRandom.
-	W _ QQ^(V rank atRandom - 1).
-	f _ (V => W) atRandomBits: 100.
-	self assert: f isInjective not! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 11/2/2016 04:01'!
-testLinearMapZ2
-	| V f kernel v |
-	V _ (PrimeField new: 2) ^ (5 atRandom + 1).
-	[f _ V endomorphisms atRandom.
-	(kernel _ f kernel) isTrivial or: [kernel = V]] whileTrue. "find one with non-trivial kernel"
-	[v _ V atRandom. kernel includes: v] whileTrue.
-	self assert: (f value: v) isZero not.
-	v _ kernel atRandom.
-	self assert: (f value: v) isZero! !
-
-!ModuleTest methodsFor: 'linear maps' stamp: 'len 5/18/2018 19:43:10'!
-testProjection: f
-	| v |
-	self testLinearMap: f.
-	v _ f domain atRandomBits: 20.
-	self assert: (f value: v) = (f value: (f value: v)). "idempotent at v"
-	self assert: f isIdempotent.
-	self assert: (f image apply: f) = f image.
-	self assert: (f codomain apply: f) = f image! !
-
-!ModuleTest methodsFor: 'bugs' stamp: 'len 3/13/2018 18:38:37'!
-testPIDCoordinatesOfBug
-	| M S |
-	M _ self newFreeModuleOverPID.
-	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
-	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 3/11/2020 06:29:16'!
-testTensorHomAdjunction
-	| V W U A B |
-	V _ self newSmallVectorSpace.
-	W _ self newFreeModuleOver: V scalars.
-	U _ self newFreeModuleOver: V scalars.
-	A _ VëW => U.
-	B _ V => (W => U).
-	self assert: A ~ B.
-"	phi _ A to: B evaluating: [:f| B evaluating: [:v| (W to: U) evaluating: [:w| f value: víw]]].
-	self testLinearMap: phi.
-	self assert: phi isIsomorphism"! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:46:56'!
-testTensorProductAssociativity
-	| V1 V2 V3 |
-	V1 _ QQ ^ 2.
-	V2 _ QQ ^ 3.
-	V3 _ QQ ^ 4.
-	self assert: (V1 ë V2) ë V3 ~ (V1 ë (V2 ë V3))! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:05'!
-testTensorProductCommutativity
-	| V W |
-	V _ QQ ^ 3.
-	W _ QQ ^ 4.
-	self assert: V ë W ~ (W ë V)! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 3/11/2020 06:32:58'!
-testTensorProductDimension
-	| V1 V2 |
-	V1 _ QQ ^ 5 atRandom.
-	V2 _ QQ ^ 5 atRandom.
-	self assert: (V1 ë V2) rank = (V1 rank * V2 rank)! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:21'!
-testTensorProductDualHomIsomorphism
-	| V W A B |
-	V _ self newVectorSpace.
-	W _ self newFreeModuleOver: V scalars.
-	A _ V dual ë W.
-	B _ V => W.
-	self assert: A ~ B
-"	phi _ A to: B evaluating: [:t| B evaluating: [:v| t second * (t first value: v)]].
-	self testLinearMap: phi.
-	self assert: phi isIsomorphism"! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:33'!
-testTensorProductDualIsomorphism
-	| V W A B |
-	V _ self newVectorSpace.
-	W _ self newFreeModuleOver: V scalars.
-	A _ V dual ë W dual.
-	B _ (V ë W) dual.
-	self assert: A ~ B
-"	phi _ A to: B evaluating: [:s| B evaluating: [:t| (s first value: t first) * (s second value: t second)]].
-	self testLinearMap: phi.
-	self assert: phi isIsomorphism"! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:39'!
-testTensorProductOfLinearForms
-	| V f g t v w |
-	V _ QQ ^ 3.
-	f _ V dual atRandomBits: 10.
-	g _ V dual atRandomBits: 10.
-	t _ f ë g.
-	v _ V atRandomBits: 10.
-	w _ V atRandomBits: 10.
-	self assert: (t value: t domain !! {v. w}) = (t codomain !! {f value: v. g value: w})! !
-
-!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:47'!
-testTensorProductRelations
-	| V W T v v1 v2 w w1 w2 c |
-	V _ self newVectorSpace.
-	W _ self newFreeModuleOver: V scalars.
-	T _ V ë W.
-	v _ V atRandomBits: 40.
-	v1 _ V atRandomBits: 40.
-	v2 _ V atRandomBits: 40.
-	w _ W atRandomBits: 40.
-	w1 _ W atRandomBits: 40.
-	w2 _ W atRandomBits: 40.
-	c _ V scalars atRandomBits: 40.
-	self assert: (T !! {v1. w}) + (T !! {v2. w}) = (T !! {v1 + v2. w}).
-	self assert: (T !! {v. w1}) + (T !! {v. w2}) = (T !! {v. w1 + w2}).
-	self assert: (T !! {v. w})*c = (T !! {v*c. w}).
-	self assert: (T !! {v. w})*c = (T !! {v. w*c})! !
-
 !ModuleTest methodsFor: 'quotient and complement' stamp: 'len 8/22/2019 10:30:36'!
 testOrthogonalProjection
 	| V S p v |
@@ -5725,6 +5554,149 @@ testQuotientSpace2
 	x _ V -> M value: (1,2,3).
 	self assert: x isZero.
 "	self assert: (M lifting value: x) = (0,0,0)"! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 3/11/2020 06:29:16'!
+testTensorHomAdjunction
+	| V W U A B |
+	V _ self newSmallVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	U _ self newFreeModuleOver: V scalars.
+	A _ VëW => U.
+	B _ V => (W => U).
+	self assert: A ~ B.
+"	phi _ A to: B evaluating: [:f| B evaluating: [:v| (W to: U) evaluating: [:w| f value: víw]]].
+	self testLinearMap: phi.
+	self assert: phi isIsomorphism"! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:46:56'!
+testTensorProductAssociativity
+	| V1 V2 V3 |
+	V1 _ QQ ^ 2.
+	V2 _ QQ ^ 3.
+	V3 _ QQ ^ 4.
+	self assert: (V1 ë V2) ë V3 ~ (V1 ë (V2 ë V3))! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:05'!
+testTensorProductCommutativity
+	| V W |
+	V _ QQ ^ 3.
+	W _ QQ ^ 4.
+	self assert: V ë W ~ (W ë V)! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 3/11/2020 06:32:58'!
+testTensorProductDimension
+	| V1 V2 |
+	V1 _ QQ ^ 5 atRandom.
+	V2 _ QQ ^ 5 atRandom.
+	self assert: (V1 ë V2) rank = (V1 rank * V2 rank)! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:21'!
+testTensorProductDualHomIsomorphism
+	| V W A B |
+	V _ self newVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	A _ V dual ë W.
+	B _ V => W.
+	self assert: A ~ B
+"	phi _ A to: B evaluating: [:t| B evaluating: [:v| t second * (t first value: v)]].
+	self testLinearMap: phi.
+	self assert: phi isIsomorphism"! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 5/14/2019 20:47:33'!
+testTensorProductDualIsomorphism
+	| V W A B |
+	V _ self newVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	A _ V dual ë W dual.
+	B _ (V ë W) dual.
+	self assert: A ~ B
+"	phi _ A to: B evaluating: [:s| B evaluating: [:t| (s first value: t first) * (s second value: t second)]].
+	self testLinearMap: phi.
+	self assert: phi isIsomorphism"! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/21/2020 08:52:32'!
+testTensorProductOfLinearForms
+	| V W f g t v w |
+	V _ QQ ^ 3.
+	W _ QQ ^ 4.
+	f _ V dual atRandomBits: 10.
+	g _ W dual atRandomBits: 10.
+	t _ f ë g.
+	self assert: t domain = (V ë W).
+	self assert: t codomain = (f codomain ë g codomain).
+	v _ V atRandomBits: 10.
+	w _ W atRandomBits: 10.
+	self assert: (t value: ((V, W) -> t domain value: {v. w})) = ( (f codomain, g codomain) -> t codomain value: {f value: v. g value: w})! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/21/2020 08:46:15'!
+testTensorProductRelations
+	| V W T v v1 v2 w w1 w2 c composition |
+	V _ self newVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	T _ V ë W.
+	composition _ (V, W) -> T.
+	v _ V atRandomBits: 40.
+	v1 _ V atRandomBits: 40.
+	v2 _ V atRandomBits: 40.
+	w _ W atRandomBits: 40.
+	w1 _ W atRandomBits: 40.
+	w2 _ W atRandomBits: 40.
+	c _ V scalars atRandomBits: 40.
+	self assert: (composition value: {v1. w}) + (composition value: {v2. w}) = (composition value: {v1 + v2. w}).
+	self assert: (composition value: {v. w1}) + (composition value: {v. w2}) = (composition value: {v. w1 + w2}).
+	self assert: (composition value: {v. w})*c = (composition value: {v*c. w}).
+	self assert: (composition value: {v. w})*c = (composition value: {v. w*c})! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:52:54'!
+newFreeModule
+	^ self newFreeModuleOver: self newScalarsRing! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 06:00:23'!
+newFreeModuleOver: scalars
+	| M N |
+	M _ 3 atRandom = 1 ifTrue: [scalars asSelfModule] ifFalse: [scalars ^ 3 atRandom].
+	4 atRandom = 1 ifTrue:
+		[N _ self newFreeModuleOver: scalars.
+		2 atRandom = 1 ifTrue: [^ M => N].
+		^ M ë N].
+	4 atRandom = 1 ifTrue: [^ M endomorphisms].
+	4 atRandom = 1 ifTrue: [^ M dual].
+	^ M! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/19/2019 04:41:09'!
+newLinearMap
+	| K V W |
+	K _ {QQ. ZZ / #(2 3 5 7) atRandom} atRandom.
+	V _ self newFreeModuleOver: K.
+	W _ self newFreeModuleOver: K.
+	^ V => W !! (self newMatrix: W rank @ V rank over: K)! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 3/9/2020 20:42:07'!
+newMatrix: shape over: aRing
+	| samples |
+	2 atRandom = 1 ifTrue: [^ aRing atRandomMatrix: shape bits: 100].
+	samples _ {aRing zero. aRing one. aRing one negated}.
+	^ aRing matrix: shape evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:56:33'!
+newScalarsField
+	^ {QQ. ZZ/10 atRandom nextPrime. QQ polynomials fractions. (ZZ/10 atRandom nextPrime) polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:55:06'!
+newScalarsPID
+	^ {QQ. ZZ/2. ZZ. QQ polynomials} atRandom! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:53:54'!
+newScalarsRing
+	^ {ZZ. QQ. ZZ/10 atRandom nextPrime. QQ polynomials. (ZZ/10 atRandom nextPrime) polynomials. QQ polynomials fractions. (ZZ/10 atRandom nextPrime) polynomials fractions} atRandom! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 3/11/2020 06:29:31'!
+newSmallVectorSpace
+	^ self newFreeModuleOver: {QQ. ZZ / #(2 3 5 7) atRandom} atRandom! !
+
+!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:57:02'!
+newVectorSpace
+	^ self newFreeModuleOver: self newScalarsField! !
 
 !MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/26/2017 09:25:17'!
 testAntigradedLexOrdering
@@ -6137,7 +6109,7 @@ testTotallyReal
 	E _ NumberField polynomial: x^4 - 2.
 	self assert: E isReal not! !
 
-!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 12:33:33'!
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:08:49'!
 testAddition
 	| R a b c |
 	R _ ZZ adic: 5.
@@ -6145,6 +6117,8 @@ testAddition
 	b _ R !! -445.
 	c _ R !! (123 - 445).
 	self assert: a+b = c.
+	self assert: {c precision. c absolutePrecision. c relativePrecision} = #(20 20 20).
+	c _ a+b.
 	self assert: {c precision. c absolutePrecision. c relativePrecision} = #(20 20 20)! !
 
 !PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 12:32:35'!
@@ -6164,6 +6138,15 @@ testAddition3
 	b _ Z7 !! 123.
 	c _ Z7 !! (-676+123).
 	self assert: a+b = c! !
+
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:15:14'!
+testAdditiveInverse
+	| R a b |
+	R _ ZZ adic: 7.
+	a _ R !! -676.
+	b _ R !! 676.
+	self assert: a = b negated.
+	self assert: a negated negated = a! !
 
 !PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 6/2/2019 11:12:51'!
 testFractionsField
@@ -6209,14 +6192,12 @@ testMultiplication3
 	self assert: a * b = c.
 	self assert: {c precision. c absolutePrecision. c relativePrecision} = #(20 20 20)! !
 
-!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 13:03:19'!
-testNegation
-	| R a b |
-	R _ ZZ adic: 7.
-	a _ R !! -676.
-	b _ R !! 676.
-	self assert: a = b negated.
-	self assert: a negated negated = a! !
+!PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:25:18'!
+testMultiplicationBug
+	| R zero |
+	R _ ZZ adic: 5.
+	zero _ R zero.
+	self assert: zero * zero = zero! !
 
 !PAdicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 13:03:51'!
 testNormAndValuation
@@ -7189,18 +7170,48 @@ sin
 	^ QQ powerSeries
 		coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
 
-!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 8/11/2019 12:11:01'!
-testPowerSeries
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:10:55'!
+testAddition
+	| a b c |
+	a _ self cos.
+	b _ self sin.
+	c _ a+b.
+	self assert: c-a = b.
+	self assert: c-b = a.
+	self assert: (c + c negated) isZero.
+	self assert: {c precision. c absolutePrecision. c relativePrecision} = #(20 20 20)! !
+
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:14:48'!
+testAdditiveInverse
+	| a zero |
+	a _ self cos.
+	self assert: a negated negated = a.
+	self assert: (a + a negated) isZero.
+	zero _ a - a.
+	self assert: zero isZero.
+	self assert: zero negated = zero! !
+
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:12:39'!
+testLocalProperties
+	| R |
+	R _ QQ powerSeries.
+	self assert: R isLocal.
+	self assert: R maximalIdeal = (R * R x)! !
+
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:16:02'!
+testMultiplicativeInverse
+	| a one |
+	a _ self cos.
+	one _ a parent one.
+	self assert: a * a reciprocal = one.
+	self assert: one reciprocal = one! !
+
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:11:21'!
+testSinSquaredPlusCosSquared
 	| cos sin |
 	sin _ self sin.
 	cos _ self cos.
-	self assert: ((cos squared + sin squared) coefficients beginsWith: #(1 0 0 0 0 0 0 0 0))! !
-
-!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 8/11/2019 12:10:49'!
-testPowerSeriesReciprocal
-	| cos |
-	cos _ self cos.
-	self assert: ((cos * cos reciprocal) coefficients beginsWith: #(1 0 0 0 0 0 0 0 0))! !
+	self assert: cos squared + sin squared = cos parent one! !
 
 !RingTest methodsFor: 'private' stamp: 'len 12/2/2016 11:13:56'!
 newQuotientRing
@@ -8047,43 +8058,6 @@ testPrimePowerRingIsEuclidean
 	k _ 10 atRandom.
 	R _ PrimePowerRing new: p to: k.
 	self testEuclideanRing: R! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:05:59'!
-testProductOfEuclideanRingsIsEuclidean1
-	| R |
-	R _ ZZ ◊ ZZ.
-	self testEuclideanRing: R! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:05:40'!
-testProductOfEuclideanRingsIsEuclidean2
-	| A B R |
-	A _ ZZ/(2 to: 32) atRandom.
-	B _ ZZ/(2 to: 32) atRandom.
-	R _ A ◊ B.
-	self testEuclideanRing: R! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:06:44'!
-testProductOfEuclideanRingsIsEuclidean3
-	| A B C R |
-	A _ ZZ.
-	B _ ZZ/(2 to: 32) atRandom.
-	C _ ZZ/(2 to: 32) atRandom.
-	R _ A ◊ B ◊ C.
-	self testEuclideanRing: R! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/20/2019 19:30:36'!
-testProductRingGCD
-	| A B |
-	A _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
-	B _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
-	self testGCD: A ◊ B! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/20/2019 19:30:46'!
-testProductRingLCM
-	| A B |
-	A _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
-	B _ 2 atRandom = 1 ifTrue: [ZZ] ifFalse: [ZZ/(2 to: 256) atRandom].
-	self testLCM: A ◊ B! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:17:02'!
 testRationalIntegerRingGCDAndLCM
