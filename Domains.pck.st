@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 5:47:18 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 21 April 2020 at 7:41:40 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 554!
+!provides: 'Domains' 1 555!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -12417,10 +12417,10 @@ from: aDomain
 	self = aDomain ifTrue: [^ self id].
 	^ nil! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/18/2020 22:23:51'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/21/2020 06:11:25'!
 fromAll: anArray
 	"Answer the canonical coprojections from the components of anArray to the receiver."
-	(self isCoproduct and: [self components = self])
+	(self isCoproduct and: [self components = anArray])
 		ifTrue: [^ self addCoprojections: ((1 to: self arity) collect: [:i| self coprojection: i])].
 	^ nil! !
 
@@ -31859,6 +31859,11 @@ asRatio
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ parent zero].
 	^ self associatedUnit / anElement associatedUnit * (parent uniformizer ^ v)! !
 
+!Germ methodsFor: 'operations' stamp: 'len 4/21/2020 07:24:27'!
+factors
+	"If the parent of the receiver is a DVR, and this means it is an UFD with unique irreducible element up to multiplication by units."
+	^ Bag new add: parent uniformizer withOccurrences: self valuation; yourself! !
+
 !Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:46:18'!
 gcd: anElement
 	self isZero ifTrue: [^ anElement normalized].
@@ -35665,10 +35670,9 @@ derivative
 derivativeIn: anIndeterminate
 	^ parent representative: (representative derivativeIn: anIndeterminate) precision: precision - 1! !
 
-!PowerSeries methodsFor: 'operations' stamp: 'len 8/12/2019 13:15:28'!
+!PowerSeries methodsFor: 'operations' stamp: 'len 4/21/2020 07:23:03'!
 factors
 	"If the parent of the receiver is a DVR, and this means it is an UFD with unique irreducible element up to multiplication by units."
-	parent isDVR ifFalse: [^ DomainError signal: 'not an DVR'].
 	^ Bag new add: parent uniformizer withOccurrences: self valuation; yourself! !
 
 !PowerSeries methodsFor: 'operations' stamp: 'len 8/12/2019 16:28:59'!
