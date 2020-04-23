@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 22 April 2020 at 10:13:31 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 23 April 2020 at 12:43:56 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 558!
+!provides: 'Domains' 1 559!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4173,12 +4173,12 @@ References:
 	https://en.wikipedia.org/wiki/Polynomial_code
 !
 
-!ChainComplex commentStamp: 'len 5/14/2019 16:24:42' prior: 0!
+!ChainComplex commentStamp: '<historical>' prior: 0!
 (Bounded) chain complexes.
 
-A chain complex is a sequence of abelian groups or modules C(k) (called k-chains) conected by homomorphisms d(k):C(k)->C(k-1) (called boundary operators or differentials) such that the composition between any two consecutive differentials is the trivial map: d(k)d{k+1} = 0.
+A chain complex is a sequence of abelian groups or modules C(k) (called k-chains) indexed by integers k, conected by homomorphisms d(k):C(k)->C(k-1) (called boundary operators or differentials) such that the composition between any two consecutive differentials is the trivial map: d(k)d(k+1) = 0.
 
-A bounded chain complex is one where only a finite number of C(k) are not {0}.
+A bounded chain complex is one where only a finite number of C(k) are not 0.
 
 Chain complexes form a cateogory with chain maps as morphisms. See ChainMap.!
 
@@ -26520,15 +26520,23 @@ isIrreducible
 	"Answer the complex with degrees shifted by n."
 	^ self >> n negated! !
 
-!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 17:40:06'!
+!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 22:46:06'!
 at: k
 	"Answer the k-th differential or boundary map d(k):C(k)->C(k-1)."
-	^ differentials at: differentials size - k + degree ifAbsent: [(self termAt: k) -> (self termAt: k-1)]! !
+	^ differentials at: differentials size - k + degree ifAbsent: [(self chains: k) -> (self chains: k-1)]! !
 
-!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 14:15:30'!
+!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 22:47:36'!
+chains
+	^ Iterator on: self performing: #chainsDo:! !
+
+!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 22:45:46'!
 chains: k
-	"Answer the k-chains group or module."
-	^ (self at: k) domain! !
+	| i |
+	i _ differentials size - k + degree.
+	i < 1 ifTrue: [^ differentials first domain null].
+	i = (differentials size + 1) ifTrue: [^ differentials last codomain].
+	i > differentials size ifTrue: [^ differentials last codomain null].
+	^ (differentials at: i) domain! !
 
 !ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 02:58:35'!
 degree
@@ -26547,26 +26555,13 @@ indices
 maxDegree
 	^ differentials size - 2 + degree! !
 
-!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 18:42:13'!
+!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 22:46:12'!
 null
-	^ (self termAt: self degree) null asChainComplex! !
+	^ (self chains: self degree) null asChainComplex! !
 
 !ChainComplex methodsFor: 'accessing' stamp: 'len 5/14/2019 16:38:03'!
 scalars
 	^ differentials anyOne domain scalars! !
-
-!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 17:44:51'!
-termAt: k
-	| i |
-	i _ differentials size - k + degree.
-	i < 1 ifTrue: [^ differentials first domain null].
-	i > differentials size ifTrue: [^ differentials last codomain null].
-	^ (differentials at: i) domain! !
-
-!ChainComplex methodsFor: 'accessing' stamp: 'len 4/22/2020 21:47:07'!
-terms
-	"Answer the terms, starting with the domain of the first differential and ending with the codomain of the last differential."
-	^ Iterator on: self performing: #termsDo:! !
 
 !ChainComplex methodsFor: 'comparing' stamp: 'len 4/22/2020 22:04:30'!
 = anObject
@@ -26586,8 +26581,8 @@ hash
 	differentials do: [:each| each isZero ifFalse: [answer _ answer hashMultiply + each hash]].
 	^ answer! !
 
-!ChainComplex methodsFor: 'enumerating' stamp: 'len 4/22/2020 18:44:55'!
-termsDo: aBlock
+!ChainComplex methodsFor: 'enumerating' stamp: 'len 4/22/2020 22:47:53'!
+chainsDo: aBlock
 	differentials do: [:each| aBlock value: each domain].
 	aBlock value: differentials last codomain! !
 
@@ -26620,10 +26615,10 @@ homology: k
 	This is the quotient of the k-cycles Z(k) modulo the k-boundaries B(k)."
 	^ (self cycles: k) / (self boundaries: k)! !
 
-!ChainComplex methodsFor: 'morphisms' stamp: 'len 4/22/2020 21:40:41'!
+!ChainComplex methodsFor: 'morphisms' stamp: 'len 4/22/2020 22:46:53'!
 id
 	"Answer the identity morphism."
-	^ ChainMap from: self to: self components: (self terms collect: [:each| each id])! !
+	^ ChainMap from: self to: self components: (self chains collect: [:each| each id])! !
 
 !ChainComplex methodsFor: 'morphisms' stamp: 'len 4/22/2020 21:34:46'!
 to: aCodomain
@@ -26661,9 +26656,9 @@ isExact
 isExactAt: anInteger
 	^ (self at: anInteger) image = (self at: anInteger+1) kernel! !
 
-!ChainComplex methodsFor: 'testing' stamp: 'len 4/22/2020 18:42:46'!
+!ChainComplex methodsFor: 'testing' stamp: 'len 4/22/2020 22:47:01'!
 isTrivial
-	^ self terms allSatisfy: [:each| each isTrivial]! !
+	^ self chains allSatisfy: [:each| each isTrivial]! !
 
 !ChainComplex methodsFor: 'private' stamp: 'len 5/14/2019 16:35:47'!
 differentials: anArray degree: anInteger
@@ -29789,12 +29784,12 @@ from: aModule coefficients: aTuple
 	"Answer the quadratic form associated with the given coefficients (in lexicographical order) in the distinguished basis of the given free module."
 	^ self new domain: aModule; coefficients: aTuple! !
 
-!ChainMap methodsFor: 'accessing' stamp: 'len 4/22/2020 21:20:45'!
+!ChainMap methodsFor: 'accessing' stamp: 'len 4/22/2020 22:46:21'!
 at: anInteger
 	^ components at: components size - anInteger + self domain degree ifAbsent:
 		[| X Y |
-		X _ self domain termAt: anInteger.
-		Y _ self codomain termAt: anInteger.
+		X _ self domain chains: anInteger.
+		Y _ self codomain chains: anInteger.
 		self assert: (X isTrivial or: [Y isTrivial]).
 		X -> Y]! !
 
@@ -29824,9 +29819,9 @@ cycles: k
 homology: k
 	^ self notYetImplemented! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:06:15'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:23:25'!
 * anElement
-	^ self from: self domain to: self codomain components: components * anElement! !
+	^ self class from: self domain to: self codomain components: components * anElement! !
 
 !ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:05:42'!
 + aChainMap
@@ -29837,38 +29832,45 @@ homology: k
 - aChainMap
 	^ self + aChainMap negated! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:08:44'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:23:33'!
 � aChainMap
 	(aChainMap isKindOf: ChainMap) ifFalse: [^ super � aChainMap].
-	^ self from: aChainMap domain to: self codomain components: (components with: aChainMap components collect: [:f :g| f � g])! !
+	^ self class from: aChainMap domain to: self codomain components: (components with: aChainMap components collect: [:f :g| f � g])! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 21:49:20'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:11:18'!
+cokernel
+	| chains |
+	chains _ components collect: [:each| each cokernel].
+"	^ ChainComplex differentials:  (self domain differentials withIndexCollect: [:each :i| (terms at: i) to: (terms at: i+1) evaluating: each])"
+	self notYetImplemented! !
+
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:11:38'!
 image
-	| terms |
-	terms _ components collect: [:each| each image].
-	^ ChainComplex differentials:  (self codomain differentials withIndexCollect: [:each :i| (terms at: i) to: (terms at: i+1) evaluating: each])! !
+	| chains |
+	chains _ components collect: [:each| each image].
+	^ ChainComplex differentials:  (self codomain differentials withIndexCollect: [:each :i| (chains at: i) to: (chains at: i+1) evaluating: each])! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:05:03'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:22:25'!
 inverse
-	^ self class from: self domain to: self codomain components: (components collect: [:each| each inverse])! !
+	^ self class from: self codomain to: self domain components: (components collect: [:each| each inverse ifNil: [^ nil]])! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 21:49:35'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:11:55'!
 kernel
-	| terms |
-	terms _ components collect: [:each| each kernel].
-	^ ChainComplex differentials:  (self domain differentials withIndexCollect: [:each :i| (terms at: i) to: (terms at: i+1) evaluating: each])! !
+	| chains |
+	chains _ components collect: [:each| each kernel].
+	^ ChainComplex differentials:  (self domain differentials withIndexCollect: [:each :i| (chains at: i) to: (chains at: i+1) evaluating: each])! !
 
 !ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:03:57'!
 negated
 	^ self class from: self domain to: self codomain components: components negated! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:04:57'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:22:45'!
 retraction
-	^ self class from: self domain to: self codomain components: (components collect: [:each| each retraction])! !
+	^ self class from: self codomain to: self domain components: (components collect: [:each| each retraction ifNil: [^ nil]])! !
 
-!ChainMap methodsFor: 'operations' stamp: 'len 4/22/2020 20:04:37'!
+!ChainMap methodsFor: 'operations' stamp: 'len 4/23/2020 00:22:52'!
 section
-	^ self class from: self domain to: self codomain components: (components collect: [:each| each section])! !
+	^ self class from: self codomain to: self domain components: (components collect: [:each| each section ifNil: [^ nil]])! !
 
 !ChainMap methodsFor: 'testing' stamp: 'len 4/22/2020 19:23:14'!
 isIdentity
