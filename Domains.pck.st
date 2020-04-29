@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 27 April 2020 at 2:54:52 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 29 April 2020 at 12:09:40 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 560!
+!provides: 'Domains' 1 561!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -4045,7 +4045,7 @@ This is the completion of the polynomial ring R[x1,...,xn] at the maximal ideal 
 Completion of a given commutative ring R at a given maximal ideal I. This is the inverse limit of the quotient rings R / I^n.!
 
 !Module commentStamp: '<historical>' prior: 0!
-Finitely-presented R-modules.
+Finitely presented R-modules.
 
 Most functionality is implemented for the cases where R is a field (vector spaces, relying on gaussian elimination), or a PID such as Z or Q[x] (relying on the Hermite normal form or computing in the field of fractions), or a multivariate polynomial ring (relying on Groebner bases). In general, the algorithms rely on the ability to solve (in)homogeneous systems of linear equations over the coefficient ring.
 
@@ -4276,14 +4276,14 @@ References:
 	https://en.wikipedia.org/wiki/Polynomial_code
 !
 
-!ChainComplex commentStamp: '<historical>' prior: 0!
+!ChainComplex commentStamp: 'len 4/29/2020 10:07:27' prior: 0!
 (Bounded) chain complexes.
 
-A chain complex is a sequence of abelian groups or modules C(k) (called k-chains) indexed by integers k, conected by homomorphisms d(k):C(k)->C(k-1) (called boundary operators or differentials) such that the composition between any two consecutive differentials is the trivial map: d(k)d(k+1) = 0.
+A chain complex is a sequence of objects of an abelian category (such as abelian groups, modules or other chain complexes) C(k) (called k-chains) indexed by integers k, conected by homomorphisms d(k):C(k)->C(k-1) (called boundary operators or differentials) such that the composition between any two consecutive differentials is the trivial map: d(k)d(k+1) = 0.
 
 A bounded chain complex is one where only a finite number of C(k) are not 0.
 
-Chain complexes form a cateogory with chain maps as morphisms. See ChainMap.!
+Chain complexes form an abelian cateogory with chain maps as morphisms. See ChainMap.!
 
 !Morphism commentStamp: '<historical>' prior: 0!
 Morphisms of a given category. See Function and other subclasses, and Domain and HomSet.
@@ -21309,9 +21309,10 @@ null
 	"Answer the trivial submodule, i.e. the zero object in the category of R-modules."
 	^ self ambient span: #()! !
 
-!Module methodsFor: 'accessing' stamp: 'len 4/22/2020 15:29:51'!
+!Module methodsFor: 'accessing' stamp: 'len 4/29/2020 12:07:12'!
 presentation
-	^ ChainComplex differentials: {self null -> self relations. self relations -> self base. self base -> self ambient. self ambient -> self ambient null}! !
+	"Answer a free presentation of the receiver."
+	^ ChainComplex differentials: {self null relations base null -> self relations base. self relations base -> self base. self base -> self ambient. self ambient -> self ambient null}! !
 
 !Module methodsFor: 'accessing' stamp: 'len 4/22/2020 07:23:18'!
 rank
@@ -21331,6 +21332,22 @@ relations
 !Module methodsFor: 'accessing' stamp: 'len 3/17/2020 16:26:45'!
 relators
 	^ self relations generators! !
+
+!Module methodsFor: 'accessing' stamp: 'len 4/29/2020 12:03:49'!
+resolution
+	"Answer a free resolution of the receiver."
+	| differentials M |
+	differentials _ OrderedCollection new.
+	differentials add: self ambient -> self ambient null.
+	differentials add: self base -> self ambient.
+	M _ self.
+	[M relations isTrivial]
+		whileFalse:
+			[
+			differentials add: M relations base -> M base.
+			M _ M relations].
+	differentials add: differentials last domain null -> differentials last domain.
+	^ ChainComplex differentials: differentials reversed! !
 
 !Module methodsFor: 'accessing' stamp: 'len 3/6/2020 21:17:54'!
 scalars
