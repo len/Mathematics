@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 6:35:13 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 2:58:01 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 563!
+!provides: 'Domains' 1 564!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -3646,7 +3646,7 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: 'len 4/29/2020 21:14:49' prior: 0!
+!Domain commentStamp: '<historical>' prior: 0!
 Objects of a given Category, connected by the corresponding Morphisms. They don't necessarily have an underlying set of elements. Concrete examples are algebraic structures such as Groups, Rings and Modules.
 
 Domains can be derived from other domains, for example by taking products or coproducts, quotients, extensions, localizations, completions, duals, etc. These operations are implemented as Smalltalk messages.
@@ -3657,7 +3657,7 @@ Given two domains A and B in the same category, the set Hom(A,B) of morphisms be
 
 Domains can be equipped with canonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and quotient objects have canonical projections (epimorphisms). Products have projection maps to their components, and coproducts have coprojection maps from their components.
 
-More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms, and #toAll: and #fromAll: to answer projections and coprojections.
+More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This is used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms, and #toAll: and #fromAll: to answer projections and coprojections.
 
 References:
 	https://ncatlab.org/nlab/show/category+theory
@@ -12270,13 +12270,15 @@ null
 	self assert: answer isSurjective.
 	^ answer! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:48:08'!
+!Domain methodsFor: 'morphisms' stamp: 'len 4/30/2020 14:23:38'!
 => anObject
 	"This is the internal hom(A,-) functor, where A is the receiver:
 	- if the argument is a domain X, answer hom(A,X), the domain of morphisms from A to X;
 	- if the argument is a morphism g:X->Y, answer the morphism hom(A,g):hom(A,X)->hom(A,Y) that sends the morphism f to g∑f.
 	See #hom: for the external Hom functor."
 	(anObject isKindOf: Morphism) ifTrue: [^ self => anObject domain to: self => anObject codomain evaluating: [:f| anObject ∑ f]].
+	(anObject isKindOf: ChainComplex)
+		ifTrue: [^ ChainComplex differentials: (anObject differentials collect: [:each| self => each]) degree: anObject degree].
 	^ self hom: anObject! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:48:14'!
@@ -13036,6 +13038,14 @@ codomain: aDomain
 !HomSet methodsFor: 'private' stamp: 'len 3/11/2020 11:21:58'!
 domain: aDomain
 	domain _ aDomain! !
+
+!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:13:30'!
+= anObject
+	^ self class == anObject class and: [self domain = anObject domain and: [self codomain = anObject codomain]]! !
+
+!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:14:39'!
+hash
+	^ self domain hash hashMultiply + self codomain hash! !
 
 !HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:23:45'!
 example1
@@ -21480,11 +21490,11 @@ do: aBlock
 		each withIndexDo: [:ai :i| x _ (self x: i) * ai + x].
 		visited add: x ifAbsent: [aBlock value: x]]! !
 
-!Module methodsFor: 'morphisms' stamp: 'len 4/25/2020 19:11:01'!
-=> aModule
-	(aModule isKindOf: Module) ifFalse: [^ super => aModule].
-	aModule scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
-	^ HomModule from: self to: aModule! !
+!Module methodsFor: 'morphisms' stamp: 'len 4/30/2020 14:18:22'!
+=> aCodomain
+	(aCodomain isKindOf: Module) ifFalse: [^ super => aCodomain].
+	aCodomain scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
+	^ HomModule from: self to: aCodomain! !
 
 !Module methodsFor: 'morphisms' stamp: 'len 4/22/2020 21:23:30'!
 apply: aMorphism
@@ -21890,6 +21900,36 @@ isTrivial
 !Module methodsFor: 'testing' stamp: 'len 3/5/2020 17:45:29'!
 isVectorSpace
 	^ self scalars isField or: [self isTrivial]! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:44:51'!
+example1
+	"The Z-module Z^3."
+	^ ZZ^3! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:47:08'!
+example2Dual
+	"The dual of Z^3, i.e. the Z-module of linear forms in Z^3."
+	^ (ZZ^3) dual! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:47:20'!
+example3HomSpace
+	"The vector space of linear maps from Q^3 to Q^2."
+	^ QQ^3 => (QQ^2)! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:48:43'!
+example4Quotient
+	"The quotient module Z^3 / <(1,2,3), (2,2,2)>."
+	^ ZZ^3 / {(1,2,3). (2,2,2)}! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:51:14'!
+example5QuotientInvariants
+	"Invariants of the Z-module Z^3 / <(1,2,3), (2,2,2)>."
+	^ (ZZ^3 / {(1,2,3). (2,2,2)}) invariants! !
+
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:51:30'!
+example6QuotientPresentation
+	"A free presentation of the quotient module Z^3 / <(1,2,3), (2,2,2)>."
+	^ (ZZ^3 / {(1,2,3). (2,2,2)}) presentation! !
 
 !Ideal methodsFor: 'accessing' stamp: 'len 5/5/2018 16:40:17'!
 denominator
@@ -23061,8 +23101,9 @@ adapt: anElement
 	(self isDual and: [anElement isKindOf: Polynomial]) ifTrue: [^ self evaluating: [:x| anElement value: (self domain coordinatesOf: x)]].
 	^ super adapt: anElement! !
 
-!HomModule methodsFor: 'elements' stamp: 'len 3/6/2020 21:03:13'!
+!HomModule methodsFor: 'elements' stamp: 'len 4/30/2020 10:54:39'!
 coordinatesOf: anElement
+	self isTrivial ifTrue: [^ anElement isZero ifTrue: [self scalars tuple: #()]].
 	^ anElement matrix asTuple! !
 
 !HomModule methodsFor: 'elements' stamp: 'len 10/2/2018 01:17:40'!
@@ -27083,11 +27124,10 @@ to: aCodomain
 	"Answer the complex with degrees shifted by n."
 	^ self >> n negated! !
 
-!ChainComplex methodsFor: 'operations' stamp: 'len 4/27/2020 02:38:24'!
+!ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 14:25:13'!
 => aCodomain
-	(self category chains includes: aCodomain id) ifFalse: [^ DomainError signal].
-	"shouldn't reverse arrows?"
-	^ self class differentials: (differentials collect: [:each| each => aCodomain]) degree: degree! !
+	(aCodomain isKindOf: Morphism) ifTrue: [^ super => aCodomain].
+	^ self class differentials: (differentials collect: [:each| each => aCodomain]) reversed degree: degree! !
 
 !ChainComplex methodsFor: 'operations' stamp: 'len 4/23/2020 01:27:47'!
 ê aChainComplex
@@ -27155,8 +27195,8 @@ verify
 		(self at: i) image <= (self at: i-1) kernel ifFalse: [^ false halt]].
 	^ true! !
 
-!ChainComplex class methodsFor: 'examples' stamp: 'len 4/23/2020 02:44:49'!
-kleinBottleChainComplex
+!ChainComplex class methodsFor: 'examples' stamp: 'len 4/30/2020 10:42:15'!
+kleinBottle
 	"The chain complex associated to a triangulation of the Klein bottle:"
 	^ SimplicialComplex kleinBottle chainComplexOver: ZZ! !
 
@@ -27451,7 +27491,7 @@ parent
 	"A function f:A->B is conceptually defined on the underlying sets of A and B and it is not necessarily a morphism in the category of A or B, so it belongs to the set of functions from A to B and not to Hom(A,B)."
 	^ FunctionSet from: self domain to: self codomain! !
 
-!Function methodsFor: 'comparing' stamp: 'len 8/6/2019 06:10:42'!
+!Function methodsFor: 'comparing' stamp: 'len 4/30/2020 09:40:07'!
 = aFunction
 	self == aFunction ifTrue: [^ true].
 	(self domain = aFunction domain and: [self codomain = aFunction codomain]) ifFalse: [^ false].
@@ -47016,6 +47056,10 @@ add: newObject ifPresent: aBlock
 		ifTrue: [self atNewIndex: index put: newObject]
 		ifFalse: [aBlock value].
 	^ newObject! !
+
+!Set methodsFor: '*domains' stamp: 'len 4/30/2020 09:01:23'!
+asDomain
+	^ self as: Structure! !
 
 !Set methodsFor: '*domains' stamp: 'len 6/13/2016 01:03'!
 powerset
