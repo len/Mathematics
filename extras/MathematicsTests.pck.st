@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 23 April 2020 at 12:43:52 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 2:55:52 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 156!
+!provides: 'MathematicsTests' 1 157!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -2033,6 +2033,10 @@ newChainComplexOver: aRing
 	X _ SimplicialComplex perform: #(kleinBottle realProjectivePlane torus) atRandom.
 	^ X chainComplexOver: aRing! !
 
+!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 4/29/2020 12:43:53'!
+testChainComplexExample
+	self assert: self newChainComplex verify! !
+
 !ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 4/23/2020 00:38:24'!
 testIdentity
 	| C id |
@@ -2053,6 +2057,27 @@ testIdentityKernel
 	C _ self newChainComplex.
 	id _ C id.
 	self assert: id kernel isTrivial! !
+
+!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 4/29/2020 12:40:33'!
+testModulePresentationExample
+	| M C |
+	M _ ZZ^2 / {(1,2)}.
+	C _ M presentation.
+	self assert: C verify.
+	self assert: C isExact! !
+
+!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 4/26/2020 00:06:38'!
+testShift
+	| C k i |
+	C _ self newChainComplex.
+	self assert: C >> 0 = C.
+	k _ (-5 to: 5) atRandom.
+	self assert: (C >> k) verify.
+	self assert: C >> k << k = C.
+	self assert: C >> k = (C << k negated).
+	self assert: (C >> k) degree = (C degree + k).
+	i _ (-5 to: 5) atRandom.
+	self assert: (C >> k at: i+k) = ((C at: i) * ((-1)^k))! !
 
 !CommutativeAlgebraTest methodsFor: 'affine ring' stamp: 'len 2/14/2017 08:11:31'!
 testAffineRingElementOperations
@@ -3151,11 +3176,11 @@ testActionStabilizerOf
 	self assert: (H action stabilizerOf: 1) asSet = {id. g3} asSet.
 	self assert: (H action stabilizerOf: 7) asSet = {id. g1. g2} asSet! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:02'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2020 08:59:32'!
 testAlternatingIsSymmetricCommutator
 	| S A |
 	S _ SymmetricGroup new: 3.
-	A _ AlternatingGroup new: 3.
+	A _ S alternatingSubgroup.
 	self assert: A = S commutator.
 	self assert: (S indexOf: A) = 2! !
 
@@ -3614,6 +3639,24 @@ testKroneckerSymbol
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/26/2016 23:13:26'!
 testLegendreSymbol
 	self assert: ((1 to: 10) collect: [:k| k legendre: 43]) = #(1 -1 -1 1 -1 1 -1 -1 1 1)! !
+
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:42:31'!
+testMapsInducedByHom
+	| X Y Z f g h yz zx |
+	X _ #(1 2 3) asSet asDomain.
+	Y _ {$x. $y. $z} asSet asDomain.
+	Z _ #(a b c) asSet asDomain.
+	f _ X to: Y evaluating: [:each| Y atRandom: (Random seed: each hash)].
+	g _ f => Z. "Hom(-,Z)"
+	self assert: g domain = (Y => Z). "it is contravariant"
+	self assert: g codomain = (X => Z).
+	yz _ Y to: Z evaluating: [:each| Z atRandom: (Random seed: each hash)].
+	self assert: (g value: yz) = (yz ∑ f).
+	h _ Z => f. "Hom(Z,-)"
+	self assert: h domain = (Z => X). "it is covariant"
+	self assert: h codomain = (Z => Y).
+	zx _ Z to: X evaluating: [:each| X atRandom: (Random seed: each hash)].
+	self assert: (h value: zx) = (f ∑ zx)! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 7/2/2016 21:04'!
 testPartitions
@@ -4761,6 +4804,20 @@ testIndexOf
 	H _ PrincipalCongruenceSubgroup new: 8.
 	self assert: (G indexOf: H) = 32 "according to GAP manual chap. 2, Gamma(2) has index 12"! !
 
+!ModuleTest methodsFor: 'bugs' stamp: 'len 4/26/2020 10:44:01'!
+testHomRelationsBug
+	| V |
+	V _ ZZ^1 / {5}.
+	self assert: V dual invariants = #(5)! !
+
+!ModuleTest methodsFor: 'bugs' stamp: 'len 4/26/2020 12:59:34'!
+testHomRelationsBug2
+	| V W X |
+	V _ ZZ^2 / {(2,0)}.
+	W _ ZZ^3 / {(2,2,2)}.
+	X _ V => W.
+	self assert: (X !! (X relations atRandomBits: 100) coordinates) isZero! !
+
 !ModuleTest methodsFor: 'bugs' stamp: 'len 4/21/2020 05:55:42'!
 testPIDCoordinatesOfBug
 	| M S |
@@ -5087,6 +5144,17 @@ testLinearMapZ2
 	v _ kernel atRandom.
 	self assert: (f value: v) isZero! !
 
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/25/2020 09:04:08'!
+testMapDirectSumAndTensorProductBug
+	| V W f g |
+	V _ ZZ^3.
+	W _ ZZ^2.
+	f _ V endomorphisms atRandomBits: 100.
+	g _ W endomorphisms atRandomBits: 100.
+	"doing it twice should give the same thing:"
+	self assert: (fëg) domain = (fëg) domain.
+	self assert: (fêg) domain = (fêg) domain! !
+
 !ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:04:37'!
 testMapToBiggerDimensionIsNotSurjective
 	| V W f |
@@ -5102,6 +5170,27 @@ testMapToSmallerDimensionIsNotInjective
 	W _ QQ^(V rank atRandom - 1).
 	f _ (V => W) atRandomBits: 100.
 	self assert: f isInjective not! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 4/30/2020 09:45:41'!
+testMapsInducedByHom
+	"Example from 'A Singular Introduction to Commutative Algebra', Example 2.1.7 (Maps Induced by Hom)."
+	| X Y Z f g h yz zx |
+	X _ QQ^3.
+	Y _ QQ^3.
+	Z _ QQ^2.
+	f _ X to: Y matrix: (QQ matrix: 3 coefficients: (1 to: 9)).
+	g _ f => Z. "Hom(-,Z)"
+	self assert: g domain = (Y => Z). "it is contravariant"
+	self assert: g codomain = (X => Z).
+	self assert: g matrix = ((QQ identityMatrix: 2) ë f matrix transposed).
+	yz _ Y => Z atRandomBits: 100.
+	self assert: (g value: yz) = (yz ∑ f).
+	h _ Z => f. "Hom(Z,-)"
+	self assert: h domain = (Z => X). "it is covariant"
+	self assert: h codomain = (Z => Y).
+	self assert: h matrix = (f matrix ë (QQ identityMatrix: 2)).
+	zx _ Z => X atRandomBits: 100.
+	self assert: (h value: zx) = (f ∑ zx)! !
 
 !ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:33'!
 testPreimage
@@ -5445,6 +5534,27 @@ testTuplesZ2
 testTuplesZ4
 	self testFreeModule: ((ZZ / 4) ^ 5 atRandom)! !
 
+!ModuleTest methodsFor: 'other' stamp: 'len 4/26/2020 15:54:10'!
+testZModuleInvariantsAndIsomorphismExample
+	| M |
+	M _ ZZ^3 / {(0,-2,1). (-2,0,1)}.
+	self assert: M invariants = #(0 2).
+	self assert: M ~ (ZZ^1 / {2} ê (ZZ^1))! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 4/26/2020 15:59:42'!
+testZModuleInvariantsAndIsomorphismExample2
+	| M |
+	M _ ZZ^3 / {(2,1,0)}.
+	self assert: M invariants = #(0 0).
+	self assert: M ~ (ZZ^2)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 4/26/2020 16:02:16'!
+testZModuleInvariantsAndIsomorphismExample3
+	| M |
+	M _ ZZ^1 / {2} ê (ZZ^1) / {(1,2)}.
+	self assert: M invariants = #(4).
+	self assert: M ~ (ZZ^1/{4})! !
+
 !ModuleTest methodsFor: 'quotient and complement' stamp: 'len 8/22/2019 10:30:36'!
 testOrthogonalProjection
 	| V S p v |
@@ -5691,6 +5801,10 @@ testTensorProductDualIsomorphism
 "	phi _ A to: B evaluating: [:s| B evaluating: [:t| (s first value: t first) * (s second value: t second)]].
 	self testLinearMap: phi.
 	self assert: phi isIsomorphism"! !
+
+!ModuleTest methodsFor: 'tensor product' stamp: 'len 4/26/2020 22:58:52'!
+testTensorProductExample
+	self assert: ZZ^1 ë (ZZ^1/{2}) ~ (ZZ^1/{2})! !
 
 !ModuleTest methodsFor: 'tensor product' stamp: 'len 4/21/2020 08:52:32'!
 testTensorProductOfLinearForms
