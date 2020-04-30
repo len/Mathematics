@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 29 April 2020 at 5:26:51 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 6:35:13 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 562!
+!provides: 'Domains' 1 563!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -22,8 +22,8 @@ SystemOrganization addCategory: #'Domains-Modules'!
 SystemOrganization addCategory: #'Domains-Modules-Tuples'!
 SystemOrganization addCategory: #'Domains-Modules-Matrices'!
 SystemOrganization addCategory: #'Domains-Modules-Matrices-Algorithms'!
-SystemOrganization addCategory: #'Domains-Modules-Complexes'!
 SystemOrganization addCategory: #'Domains-Modules-Multivariate'!
+SystemOrganization addCategory: #'Domains-Complexes'!
 SystemOrganization addCategory: #'Domains-Polynomials'!
 SystemOrganization addCategory: #'Domains-Polynomials-Algorithms'!
 SystemOrganization addCategory: #'Domains-Series'!
@@ -36,7 +36,7 @@ SystemOrganization addCategory: #'Domains-Graphs-Parts'!
 SystemOrganization addCategory: #'Domains-Graphs-Algorithms'!
 SystemOrganization addCategory: #'Domains-Graphs-Morphic'!
 SystemOrganization addCategory: #'Domains-Tableaux'!
-SystemOrganization addCategory: #'Domains-Complexes'!
+SystemOrganization addCategory: #'Domains-Simplices'!
 SystemOrganization addCategory: #'Domains-Elliptic Curves'!
 SystemOrganization addCategory: #'Domains-Modular Forms'!
 SystemOrganization addCategory: #'Domains-Modular Group'!
@@ -211,13 +211,13 @@ Collection subclass: #YoungTableau
 YoungTableau class
 	instanceVariableNames: ''!
 
-!classDefinition: #Simplex category: #'Domains-Complexes'!
+!classDefinition: #Simplex category: #'Domains-Simplices'!
 Collection subclass: #Simplex
 	instanceVariableNames: 'vertices'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Complexes'!
-!classDefinition: 'Simplex class' category: #'Domains-Complexes'!
+	category: 'Domains-Simplices'!
+!classDefinition: 'Simplex class' category: #'Domains-Simplices'!
 Simplex class
 	instanceVariableNames: ''!
 
@@ -411,18 +411,18 @@ Object subclass: #Domain
 Domain class
 	instanceVariableNames: ''!
 
-!classDefinition: #SetDomain category: #'Domains-Kernel'!
-Domain subclass: #SetDomain
+!classDefinition: #Structure category: #'Domains-Kernel'!
+Domain subclass: #Structure
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Kernel'!
-!classDefinition: 'SetDomain class' category: #'Domains-Kernel'!
-SetDomain class
+!classDefinition: 'Structure class' category: #'Domains-Kernel'!
+Structure class
 	instanceVariableNames: ''!
 
 !classDefinition: #Category category: #'Domains-Kernel'!
-SetDomain subclass: #Category
+Structure subclass: #Category
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -431,28 +431,28 @@ SetDomain subclass: #Category
 Category class
 	instanceVariableNames: ''!
 
-!classDefinition: #Modules category: #'Domains-Modules'!
-Category subclass: #Modules
+!classDefinition: #ModulesCategory category: #'Domains-Modules'!
+Category subclass: #ModulesCategory
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Modules'!
-!classDefinition: 'Modules class' category: #'Domains-Modules'!
-Modules class
+!classDefinition: 'ModulesCategory class' category: #'Domains-Modules'!
+ModulesCategory class
 	instanceVariableNames: ''!
 
-!classDefinition: #ChainComplexes category: #'Domains-Modules-Complexes'!
-Category subclass: #ChainComplexes
+!classDefinition: #ChainComplexesCategory category: #'Domains-Complexes'!
+Category subclass: #ChainComplexesCategory
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Modules-Complexes'!
-!classDefinition: 'ChainComplexes class' category: #'Domains-Modules-Complexes'!
-ChainComplexes class
+	category: 'Domains-Complexes'!
+!classDefinition: 'ChainComplexesCategory class' category: #'Domains-Complexes'!
+ChainComplexesCategory class
 	instanceVariableNames: ''!
 
 !classDefinition: #HomSet category: #'Domains-Kernel'!
-SetDomain subclass: #HomSet
+Structure subclass: #HomSet
 	instanceVariableNames: 'domain codomain'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -482,7 +482,7 @@ PointSet class
 	instanceVariableNames: ''!
 
 !classDefinition: #CartesianProduct category: #'Domains-Sets'!
-SetDomain subclass: #CartesianProduct
+Structure subclass: #CartesianProduct
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -492,7 +492,7 @@ CartesianProduct class
 	instanceVariableNames: ''!
 
 !classDefinition: #Naturals category: #'Domains-Sets'!
-SetDomain subclass: #Naturals
+Structure subclass: #Naturals
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -502,7 +502,7 @@ Naturals class
 	instanceVariableNames: ''!
 
 !classDefinition: #Monoid category: #'Domains-Monoids'!
-SetDomain subclass: #Monoid
+Structure subclass: #Monoid
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -892,7 +892,7 @@ SpecialEuclideanGroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #FractionalIdeal category: #'Domains-Rings'!
-SetDomain subclass: #FractionalIdeal
+Structure subclass: #FractionalIdeal
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -902,7 +902,7 @@ FractionalIdeal class
 	instanceVariableNames: ''!
 
 !classDefinition: #Ring category: #'Domains-Rings'!
-SetDomain subclass: #Ring
+Structure subclass: #Ring
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1252,7 +1252,7 @@ CompletionRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #Module category: #'Domains-Modules'!
-SetDomain subclass: #Module
+Structure subclass: #Module
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1372,7 +1372,7 @@ TensorProductModule class
 	instanceVariableNames: ''!
 
 !classDefinition: #Scheme category: #'Domains-Schemes'!
-SetDomain subclass: #Scheme
+Structure subclass: #Scheme
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1562,7 +1562,7 @@ ProjectivePlane class
 	instanceVariableNames: ''!
 
 !classDefinition: #SemistandardTableaux category: #'Domains-Tableaux'!
-SetDomain subclass: #SemistandardTableaux
+Structure subclass: #SemistandardTableaux
 	instanceVariableNames: 'shape alphabet'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1581,28 +1581,28 @@ SemistandardTableaux subclass: #StandardTableaux
 StandardTableaux class
 	instanceVariableNames: ''!
 
-!classDefinition: #CellComplex category: #'Domains-Complexes'!
-SetDomain subclass: #CellComplex
+!classDefinition: #CellComplex category: #'Domains-Simplices'!
+Structure subclass: #CellComplex
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Complexes'!
-!classDefinition: 'CellComplex class' category: #'Domains-Complexes'!
+	category: 'Domains-Simplices'!
+!classDefinition: 'CellComplex class' category: #'Domains-Simplices'!
 CellComplex class
 	instanceVariableNames: ''!
 
-!classDefinition: #SimplicialComplex category: #'Domains-Complexes'!
+!classDefinition: #SimplicialComplex category: #'Domains-Simplices'!
 CellComplex subclass: #SimplicialComplex
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Complexes'!
-!classDefinition: 'SimplicialComplex class' category: #'Domains-Complexes'!
+	category: 'Domains-Simplices'!
+!classDefinition: 'SimplicialComplex class' category: #'Domains-Simplices'!
 SimplicialComplex class
 	instanceVariableNames: ''!
 
 !classDefinition: #UpperHalfPlane category: #'Domains-Modular Forms'!
-SetDomain subclass: #UpperHalfPlane
+Structure subclass: #UpperHalfPlane
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1612,7 +1612,7 @@ UpperHalfPlane class
 	instanceVariableNames: ''!
 
 !classDefinition: #Semigroup category: #'Domains-Etc'!
-SetDomain subclass: #Semigroup
+Structure subclass: #Semigroup
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1642,7 +1642,7 @@ FreeSemigroup class
 	instanceVariableNames: ''!
 
 !classDefinition: #Semiring category: #'Domains-Etc'!
-SetDomain subclass: #Semiring
+Structure subclass: #Semiring
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1652,7 +1652,7 @@ Semiring class
 	instanceVariableNames: ''!
 
 !classDefinition: #CoxeterSystem category: #'Domains-Etc-Lie'!
-SetDomain subclass: #CoxeterSystem
+Structure subclass: #CoxeterSystem
 	instanceVariableNames: 'group generators matrix diagram'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1662,7 +1662,7 @@ CoxeterSystem class
 	instanceVariableNames: ''!
 
 !classDefinition: #Algebra category: #'Domains-Etc-Algebras'!
-SetDomain subclass: #Algebra
+Structure subclass: #Algebra
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1722,7 +1722,7 @@ OppositeAlgebra class
 	instanceVariableNames: ''!
 
 !classDefinition: #Lattice category: #'Domains-Etc-Lattices'!
-SetDomain subclass: #Lattice
+Structure subclass: #Lattice
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1732,7 +1732,7 @@ Lattice class
 	instanceVariableNames: ''!
 
 !classDefinition: #LinearCode category: #'Domains-Etc-Codes'!
-SetDomain subclass: #LinearCode
+Structure subclass: #LinearCode
 	instanceVariableNames: 'subspace'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -1771,13 +1771,13 @@ PolynomialCode subclass: #CyclicCode
 CyclicCode class
 	instanceVariableNames: ''!
 
-!classDefinition: #ChainComplex category: #'Domains-Modules-Complexes'!
+!classDefinition: #ChainComplex category: #'Domains-Complexes'!
 Domain subclass: #ChainComplex
 	instanceVariableNames: 'differentials degree'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Modules-Complexes'!
-!classDefinition: 'ChainComplex class' category: #'Domains-Modules-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'ChainComplex class' category: #'Domains-Complexes'!
 ChainComplex class
 	instanceVariableNames: ''!
 
@@ -1981,13 +1981,13 @@ Sequence subclass: #CFiniteSequence
 CFiniteSequence class
 	instanceVariableNames: ''!
 
-!classDefinition: #SimplicialMap category: #'Domains-Complexes'!
+!classDefinition: #SimplicialMap category: #'Domains-Simplices'!
 Function subclass: #SimplicialMap
 	instanceVariableNames: 'map'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Complexes'!
-!classDefinition: 'SimplicialMap class' category: #'Domains-Complexes'!
+	category: 'Domains-Simplices'!
+!classDefinition: 'SimplicialMap class' category: #'Domains-Simplices'!
 SimplicialMap class
 	instanceVariableNames: ''!
 
@@ -2061,13 +2061,13 @@ Function subclass: #QuadraticForm
 QuadraticForm class
 	instanceVariableNames: ''!
 
-!classDefinition: #ChainMap category: #'Domains-Modules-Complexes'!
+!classDefinition: #ChainMap category: #'Domains-Complexes'!
 Morphism subclass: #ChainMap
 	instanceVariableNames: 'components'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Modules-Complexes'!
-!classDefinition: 'ChainMap class' category: #'Domains-Modules-Complexes'!
+	category: 'Domains-Complexes'!
+!classDefinition: 'ChainMap class' category: #'Domains-Complexes'!
 ChainMap class
 	instanceVariableNames: ''!
 
@@ -3646,8 +3646,8 @@ Counts are currently held in a WordArray, and limited to about 4 billion counts 
 
 A good number of bins can be n^(1/2) or n^(1/3), where n is the total number of samples. See Wikipedia article for rationale.!
 
-!Domain commentStamp: '<historical>' prior: 0!
-Objects of a given Category, connected by the corresponding Morphisms. Concrete examples are algebraic structures such as Groups, Rings, Modules, Schemes, etc. Domains don't necessarily have an underlying set of elements.
+!Domain commentStamp: 'len 4/29/2020 21:14:49' prior: 0!
+Objects of a given Category, connected by the corresponding Morphisms. They don't necessarily have an underlying set of elements. Concrete examples are algebraic structures such as Groups, Rings and Modules.
 
 Domains can be derived from other domains, for example by taking products or coproducts, quotients, extensions, localizations, completions, duals, etc. These operations are implemented as Smalltalk messages.
 
@@ -3655,9 +3655,9 @@ Domains can have subobjects: groups have subgroups, vector spaces have subspaces
 
 Given two domains A and B in the same category, the set Hom(A,B) of morphisms between them is obtained by sending the message 'A hom: B' (see HomSet). The #hom: message is the external Hom(A,-) functor. The internal hom(A,-) functor is implemented as the #=> message. The identity morphism is returned by the message #id.
 
-Domains can be equipped with canonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and quotient objects have canonical projections (epimorphisms). N-ary products and coproducts have coordinate projection maps from their components, and coproducts also have coprojection maps onto their components.
+Domains can be equipped with canonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and quotient objects have canonical projections (epimorphisms). Products have projection maps to their components, and coproducts have coprojection maps from their components.
 
-More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms.
+More generally, canonical morphisms (respectively injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). This can be used for automatic coercion of elements between domains. For example, for any ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms, and #toAll: and #fromAll: to answer projections and coprojections.
 
 References:
 	https://ncatlab.org/nlab/show/category+theory
@@ -3667,12 +3667,12 @@ References:
 	https://en.wikipedia.org/wiki/Coproduct
 !
 
-!SetDomain commentStamp: '<historical>' prior: 0!
+!Structure commentStamp: 'len 4/29/2020 21:14:02' prior: 0!
 Domains with an underlying set of elements. These can be simple sets, or algebraic structures such as Groups, Rings, Modules, Schemes, etc. In terms of category theory, these are objects of concrete categories, i.e. they are realized as sets of elements endowed with certain algebraic structure, and their morphisms are structure-preserving Functions.
 
-The underlying set of a domain can have finite or infinite cardinality, and whenever makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
+The underlying set of a domain can have finite or infinite cardinality, and whenever it makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
 
-There's also a very simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any unital ring 'R' can be performed simply as 'R !! n'. Although available canonical morphisms will be used automatically for coercion, subclasses can also extend the messages #adapt: and #newFrom:.
+There's also a simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. For example, the coercion of an integer 'n' to an element of any unital ring 'R' can be performed simply as 'R !! n'. Although known canonical morphisms are used automatically for coercion, subclasses can also extend the messages #adapt: and #newFrom:.
 !
 
 !Category commentStamp: '<historical>' prior: 0!
@@ -3687,10 +3687,14 @@ References:
 !HomSet commentStamp: '<historical>' prior: 0!
 Hom-Set objects Hom(A,B) for domain A and codomain B, i.e. sets of all morphisms between two Domains. When A = B, this is the set of endomorphisms of A and it's noted End(A).
 
-Given two Domains A and B, the Hom-Set can be retrieved with 'A hom: B'. If there's an internal Hom-Set in the category of A and B, it can be retrieved with 'A => B'.
+Given two domains A and B, the Hom-Set can be retrieved with 'A hom: B'. If there's an internal Hom-Set in the category of A and B, it can be retrieved with 'A => B'.
 
 References:
 	https://ncatlab.org/nlab/show/hom-set
+!
+
+!FunctionSet commentStamp: '<historical>' prior: 0!
+Sets of functions (no necessarily morphisms) from a domain A to a codomain B.
 !
 
 !PointSet commentStamp: '<historical>' prior: 0!
@@ -4290,13 +4294,13 @@ References:
 	https://en.wikipedia.org/wiki/Morphism
 !
 
-!Function commentStamp: 'len 5/11/2019 04:25:34' prior: 0!
+!Function commentStamp: '<historical>' prior: 0!
 Maps from a set (domain) to another set (codomain). Evaluated at elements of the domain (>>#value:) they produce elements of the codomain. See Domain and HomSet.
 
 Example:
 	Function from: ZZ to: ZZ evaluating: [:x| x squared + 1].
 
-A Function is a morphism of sets. If the function preserves some mathematical structure, it is called a morphism of some category corresponding to the preserved structure. For example linear maps are morphisms of vector spaces or modules, continuous functions are morphisms of topological spaces, and group homomorphisms are morphisms of groups.
+A Function is a morphism in the category of sets. If the function preserves some mathematical structure, it is called a morphism of some category corresponding to the preserved structure. For example linear maps are morphisms of vector spaces or modules, continuous functions are morphisms of topological spaces, and group homomorphisms are morphisms of groups.
 
 Example (three equivalent ways to construct homomorphisms):
 	"These constructions are similar to the explicit construction above, but they return not arbitrary functions but homomorphisms of the corresponding category (in this case linear maps, i.e. morphisms of vector spaces):"
@@ -4317,8 +4321,8 @@ References:
 	https://en.wikipedia.org/wiki/Morphism
 !
 
-!Functor commentStamp: 'len 4/26/2020 18:58:24' prior: 0!
-A functor between two categories is a function between their morphisms that preserves composition of morphisms. They are morphisms of categories (see Category).!
+!Functor commentStamp: '<historical>' prior: 0!
+A functor between two categories is a function that preserves composition of morphisms. They are morphisms of categories (see Category).!
 
 !MonoidMap commentStamp: 'len 4/26/2020 08:57:01' prior: 0!
 Monoid homomorphisms. They can be defined by an evaluable expression or Smalltalk block, or by images of generators. See Monoid.!
@@ -5150,16 +5154,16 @@ postCopy
 category
 	^ self id category! !
 
-!SetDomain methodsFor: 'copying' stamp: 'len 3/19/2016 22:41'!
+!Structure methodsFor: 'copying' stamp: 'len 3/19/2016 22:41'!
 postCopy
 	super postCopy.
 	properties _ properties copy! !
 
-!SetDomain methodsFor: 'printing' stamp: 'len 4/29/2020 17:18:15'!
+!Structure methodsFor: 'printing' stamp: 'len 4/29/2020 18:54:12'!
 printOn: aStream
 	"Subclasses should reimplement defaultPrintOn: instead of this method."
 	self propertyAt: #elements ifPresent: [:aCollection|
-		(aCollection isKindOf: SetDomain) ifTrue: [aStream print: aCollection. ^ self].
+		(aCollection isKindOf: Structure) ifTrue: [aStream print: aCollection. ^ self].
 		aStream nextPut: ${. "Wildberger notation for unordered sets: elements separated by spaces"
 		aCollection asSet do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ' '].
 		aStream nextPut: $}.
@@ -5174,19 +5178,19 @@ name
 printOn: aStream
 	aStream nextPutAll: self name! !
 
-!Modules methodsFor: 'accessing' stamp: 'len 4/26/2020 17:51:22'!
+!ModulesCategory methodsFor: 'accessing' stamp: 'len 4/29/2020 18:27:32'!
 name
 	^ #Modules! !
 
-!Modules methodsFor: 'printing' stamp: 'len 4/26/2020 17:46:57'!
+!ModulesCategory methodsFor: 'printing' stamp: 'len 4/26/2020 17:46:57'!
 printOn: aStream
 	aStream print: self scalars; nextPut: $-; nextPutAll: self name! !
 
-!ChainComplexes methodsFor: 'accessing' stamp: 'len 4/26/2020 18:11:45'!
+!ChainComplexesCategory methodsFor: 'accessing' stamp: 'len 4/29/2020 21:05:41'!
 name
-	^ #ChainComplexes! !
+	^ #Complexes! !
 
-!ChainComplexes methodsFor: 'printing' stamp: 'len 4/26/2020 17:44:11'!
+!ChainComplexesCategory methodsFor: 'printing' stamp: 'len 4/26/2020 17:44:11'!
 printOn: aStream
 	aStream nextPutAll: self name; nextPut: $(; print: self chains; nextPut: $)! !
 
@@ -5196,9 +5200,9 @@ printOn: aStream
 		ifTrue: [aStream nextPutAll: 'End'; nextPut: $(; print: self domain; nextPut: $)]
 		ifFalse: [aStream nextPutAll: 'Hom'; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
 
-!FunctionSet methodsFor: 'printing' stamp: 'len 3/10/2020 17:08:36'!
+!FunctionSet methodsFor: 'printing' stamp: 'len 4/29/2020 21:01:51'!
 printOn: aStream
-	aStream print: self domain; space; nextPut: Character arrowRight; space; print: self codomain! !
+	aStream nextPutAll: 'Functions'; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)! !
 
 !CartesianProduct methodsFor: 'printing' stamp: 'len 6/7/2016 00:50'!
 printOn: aStream
@@ -5222,13 +5226,13 @@ printOn: aStream
 	self generators do: [:each| aStream print: each] separatedBy: [aStream nextPut: $,].
 	aStream nextPutAll: '}*'! !
 
-!Group methodsFor: 'printing' stamp: 'len 4/29/2020 17:18:15'!
+!Group methodsFor: 'printing' stamp: 'len 4/29/2020 18:54:12'!
 printOn: aStream
 	| generators |
 	((self hasProperty: #name) or: [(generators _ self generators) isNil])
 		ifTrue: [^ super printOn: aStream].
 	"use the original printOn for wrapped objects:"
-	self propertyAt: #elements ifPresent: [:elements| (elements isKindOf: SetDomain) ifTrue: [aStream print: elements. ^ self]].
+	self propertyAt: #elements ifPresent: [:elements| (elements isKindOf: Structure) ifTrue: [aStream print: elements. ^ self]].
 	generators isEmpty
 		ifTrue: [aStream nextPut: ${; print: self identity; nextPut: $}. ^ self].
 	aStream nextPut: $<.
@@ -5708,7 +5712,7 @@ printOn: aStream
 		separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $)! !
 
-!ModuleMap methodsFor: 'accessing' stamp: 'len 4/26/2020 18:09:08'!
+!ModuleMap methodsFor: 'accessing' stamp: 'len 4/29/2020 18:27:25'!
 category
 	^ self domain scalars Modules! !
 
@@ -5822,9 +5826,9 @@ printOn: aStream
 printOn: aStream
 	aStream print: self asPolynomial! !
 
-!ChainMap methodsFor: 'accessing' stamp: 'len 4/26/2020 18:12:10'!
+!ChainMap methodsFor: 'accessing' stamp: 'len 4/29/2020 21:05:47'!
 category
-	^ components anyOne category ChainComplexes! !
+	^ components anyOne category Complexes! !
 
 !ChainMap methodsFor: 'printing' stamp: 'len 4/22/2020 19:20:53'!
 printOn: aStream
@@ -12375,10 +12379,6 @@ propertyAt: aSymbol ifPresent: aBlock
 propertyAt: aSymbol put: anObject
 	^ self properties at: aSymbol put: anObject! !
 
-!Domain methodsFor: 'testing' stamp: 'len 4/22/2020 05:54:45'!
-isAmbient
-	^ self ambient == self! !
-
 !Domain methodsFor: 'testing' stamp: 'len 4/22/2020 05:55:00'!
 isCoproduct
 	^ false! !
@@ -12399,59 +12399,122 @@ isTerminal
 	Subclasses can override."
 	^ self propertyAt: #isTerminal ifAbsent: [self subclassResponsibility]! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 4/22/2020 07:02:11'!
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:28'!
+example1asSet
+	"The ring Z/5Z as a Smalltalk Set.
+	This is possible because the ring is finite."
+	^ (ZZ/5) asSet! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:32'!
+example1atRandom
+	"Taking an element at random from the Z-module of rank 10.
+	Use 50 bits to generate this element. Essentially, this can return
+	at most 2^50 different elements, and their bitsize doesn't exceed 50
+	bits (where bitsize is losely defined, in this case it's the sum
+	of bitsize of the coefficients of the coordinates)."
+	^ ZZ^10 atRandom: (Random seed: 12345) bits: 50! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:36'!
+example21VectorSpace
+	"The vector space of 3-tuples with rational coefficients."
+	^ QQ ^ 3! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:40'!
+example3DirectProductOfGroups
+	"The direct product of the group of permutations of
+	the symbols {#a, #b, #c} by the group of alternating
+	permutations of {1,2,3,4}."
+	^ (SymmetricGroup on: #(a b c)) × (AlternatingGroup new: 4)! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:46'!
+example41Polynomials
+	"Polynomials in two variables with integer coefficients."
+	^ ZZ polynomialsIn: #(a b)! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:51'!
+example42AffineRing
+	"The quotient of a polynomial ring by an ideal.
+	This is an affine ring, in particular it is the coordinate ring of the twisted cubic."
+	| R x y z I |
+	R _ CC polynomialsIn: #(x y z).
+	x _ R x: 1.
+	y _ R x: 2.
+	z _ R x: 3.
+	I _ R * {(x^2) - y. (x^3) - z}.
+	^ R / I! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:55'!
+example43AffineVariety
+	"This is the twisted cubic affine variety, parameterized by (x, x^2, x^3) in C^3."
+	| R x y z I |
+	R _ CC polynomialsIn: #(x y z).
+	x _ R x: 1.
+	y _ R x: 2.
+	z _ R x: 3.
+	I _ R * {(x^2) - y. (x^3) - z}.
+	^ (R / I) spec! !
+
+!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:59'!
+example5GL
+	"The group GL(Q^3) of invertible linear maps
+	on the vector space of 3-tuples with rational coefficients.
+	This is the automorphisms group of the vector space, and
+	its elements are linear maps, not matrices."
+	^ (QQ ^ 3) automorphisms! !
+
+!Structure methodsFor: 'accessing' stamp: 'len 4/22/2020 07:02:11'!
 ambient
 	"Domains can be subobjects of other domains, for example subspeces are subobjects of vector spaces.
 	Answer the ambient domain of which the receiver is a subobject."
 	^ self propertyAt: #ambient ifAbsent: [self]! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:23:04'!
+!Structure methodsFor: 'accessing' stamp: 'len 12/28/2016 11:23:04'!
 elements
 	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain].
 	^ Iterator on: self performing: #do:! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 10/6/2016 10:26'!
+!Structure methodsFor: 'accessing' stamp: 'len 10/6/2016 10:26'!
 generator
 	self generators size = 1 ifFalse: [self error: 'more than one generator'].
 	^ self generators anyOne! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 10/17/2016 18:53'!
+!Structure methodsFor: 'accessing' stamp: 'len 10/17/2016 18:53'!
 generator: anElement
 	self generators: {anElement}! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:22:22'!
+!Structure methodsFor: 'accessing' stamp: 'len 12/28/2016 11:22:22'!
 generators
 	"Subclases can use this or reimplement it when it makes sense."
 	^ self propertyAt: #generators ifAbsent: []! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:19:29'!
+!Structure methodsFor: 'accessing' stamp: 'len 12/28/2016 11:19:29'!
 generators: aCollection
 	"Subclases can use this or reimplement it when it makes sense."
 	self propertyAt: #generators put: aCollection asArray! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 12/28/2016 11:20:47'!
+!Structure methodsFor: 'accessing' stamp: 'len 12/28/2016 11:20:47'!
 null
 	"Answer the null or zero object in the category of the receiver, i.e. an object that is both intial and terminal. For example {id} in the case of groups (the trivial group)."
 	"The null object in the category of sets is the empty set."
 	^ self propertyAt: #null ifAbsent: [self class newFrom: (Set new: 0)]! !
 
-!SetDomain methodsFor: 'accessing' stamp: 'len 6/5/2019 19:55:56'!
+!Structure methodsFor: 'accessing' stamp: 'len 6/5/2019 19:55:56'!
 size
 	^ self propertyAt: #size ifAbsentPut: [self elements size]! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 4/19/2020 07:04:52'!
+!Structure methodsFor: 'comparing' stamp: 'len 4/19/2020 07:04:52'!
 < aDomain
 	"Answer true if the receiver is a proper subset of aDomain (strict inclusion)."
 	aDomain isFinite ifTrue: [^ self size < aDomain size and: [self allSatisfy: [:each| aDomain includes: each]]].
 	self isFinite ifTrue: [^ self allSatisfy: [:each| aDomain includes: each]].
 	^ self subclassResponsibility! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:21'!
+!Structure methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:21'!
 <= aDomain
 	"Answer true if the receiver is a subset of aDomain (inclusion)."
 	^ self = aDomain or: [self < aDomain]! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 12/28/2016 11:21:40'!
+!Structure methodsFor: 'comparing' stamp: 'len 12/28/2016 11:21:40'!
 = aDomain
 	self == aDomain ifTrue: [^ true].
 	self size = aDomain size ifFalse: [^ false].
@@ -12460,38 +12523,38 @@ size
 	aDomain propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ self = aCollectionOrDomain].
 	^ super = aDomain! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:33'!
+!Structure methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:33'!
 > aDomain
 	"Answer true if aDomain is a proper subset of the receiver (strict inclusion)."
 	^ aDomain < self! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:41'!
+!Structure methodsFor: 'comparing' stamp: 'len 6/22/2019 02:56:41'!
 >= aDomain
 	"Answer true if aDomain is a subset of the receiver (inclusion)."
 	^ aDomain <= self! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 7/16/2016 05:22'!
+!Structure methodsFor: 'comparing' stamp: 'len 7/16/2016 05:22'!
 ~ aDomain
 	"Answer true if the receiver is isomorphic to the argument."
 	^ self = aDomain "not much more we can test at this abstract level, subclasses should reimplement"! !
 
-!SetDomain methodsFor: 'comparing' stamp: 'len 4/23/2016 00:41'!
+!Structure methodsFor: 'comparing' stamp: 'len 4/23/2016 00:41'!
 hash
 	^ self isFinite ifTrue: [self size hash] ifFalse: [super hash]! !
 
-!SetDomain methodsFor: 'converting' stamp: 'len 4/19/2020 07:08:55'!
+!Structure methodsFor: 'converting' stamp: 'len 4/19/2020 07:08:55'!
 asArray
 	^ self elements asArray! !
 
-!SetDomain methodsFor: 'converting' stamp: 'len 4/19/2020 07:09:10'!
+!Structure methodsFor: 'converting' stamp: 'len 4/19/2020 07:09:10'!
 asSet
 	^ self elements asSet! !
 
-!SetDomain methodsFor: 'copying' stamp: 'len 5/1/2016 23:35'!
+!Structure methodsFor: 'copying' stamp: 'len 5/1/2016 23:35'!
 copyEmpty
 	^ self species new! !
 
-!SetDomain methodsFor: 'elements' stamp: 'len 4/9/2020 18:15:40'!
+!Structure methodsFor: 'elements' stamp: 'len 4/9/2020 18:15:40'!
 !! anObject
 	"Coerce anObject to an element of the receiver."
 	(self includes: anObject) ifTrue: [^ anObject].
@@ -12500,59 +12563,59 @@ copyEmpty
 	(anObject isBlock and: [self generators notNil and: [anObject numArgs = self generators size]]) ifTrue: [^ self generate: anObject].
 	^ DomainError signal: 'coercion failed'! !
 
-!SetDomain methodsFor: 'elements' stamp: 'len 4/9/2020 18:18:28'!
+!Structure methodsFor: 'elements' stamp: 'len 4/9/2020 18:18:28'!
 adapt: anElement
 	"Coerce anElement *not* in the receiver to an element of the receiver. Subclasses should extend."
 	self isAmbient ifFalse: [(self ambient adapt: anElement) ifNotNil: [:coerced| (self contains: coerced) ifTrue: [^ coerced]]].
 	anElement parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anElement].
 	^ nil! !
 
-!SetDomain methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
+!Structure methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
 generate: aBlock
 	"Answer the result of evaluating aBlock on the generators of the receiver."
 	^ aBlock valueWithArguments: self generators asArray! !
 
-!SetDomain methodsFor: 'elements' stamp: 'len 4/9/2020 07:28:07'!
+!Structure methodsFor: 'elements' stamp: 'len 4/9/2020 07:28:07'!
 newFrom: anObject
 	^ nil! !
 
-!SetDomain methodsFor: 'elements' stamp: 'len 5/13/2019 14:18:36'!
+!Structure methodsFor: 'elements' stamp: 'len 5/13/2019 14:18:36'!
 x: anInteger
 	"Answer the anInteger-th generator of the receiver."
 	^ self generators at: anInteger! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:22'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:22'!
 allSatisfy: aBlock
 	self do: [:each| (aBlock value: each) ifFalse: [^ false]].
 	^ true! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:21'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:21'!
 anySatisfy: aBlock
 	self do: [:each| (aBlock value: each) ifTrue: [^ true]].
 	^ false! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 4/29/2020 17:18:15'!
+!Structure methodsFor: 'enumerating' stamp: 'len 4/29/2020 18:54:12'!
 collect: aBlock
 	| elements |
 	elements _ Set new.
 	self do: [:each| elements add: (aBlock value: each)].
-	^ elements as: SetDomain! !
+	^ elements as: Structure! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:11:56'!
+!Structure methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:11:56'!
 count: aBlock
 	| answer |
 	answer _ 0.
 	self do: [:each| (aBlock value: each) ifTrue: [answer _ answer + 1]].
 	^ answer! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:45'!
+!Structure methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:45'!
 detect: aBlock
 	"Evaluate aBlock with each of the receiver's elements as the argument. 
 	Answer the first element for which aBlock evaluates to true."
 
 	^ self detect: aBlock ifNone: [self error: 'Element is not in the domain']! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 9/3/2016 07:19'!
+!Structure methodsFor: 'enumerating' stamp: 'len 9/3/2016 07:19'!
 detect: aBlock ifNone: exceptionBlock
 	"Evaluate aBlock with each of the receiver's elements as the argument. 
 	Answer the first element for which aBlock evaluates to true. If none 
@@ -12561,11 +12624,11 @@ detect: aBlock ifNone: exceptionBlock
 	self do: [:each | (aBlock value: each) ifTrue: [^each]].
 	^ exceptionBlock value! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 12/28/2016 11:21:06'!
+!Structure methodsFor: 'enumerating' stamp: 'len 12/28/2016 11:21:06'!
 do: aBlock
 	(self propertyAt: #elements ifAbsent: [self subclassResponsibility]) do: aBlock! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 4/25/2016 09:44'!
+!Structure methodsFor: 'enumerating' stamp: 'len 4/25/2016 09:44'!
 do: elementBlock separatedBy: separatorBlock
 	| beforeFirst | 
 	"Evaluate the elementBlock for all elements in the receiver,
@@ -12578,35 +12641,35 @@ do: elementBlock separatedBy: separatorBlock
 			ifFalse: [separatorBlock value].
 		elementBlock value: element]! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 2/15/2017 11:26:26'!
+!Structure methodsFor: 'enumerating' stamp: 'len 2/15/2017 11:26:26'!
 max: aBlock
 	^ self elements max: aBlock! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 2/15/2017 11:26:35'!
+!Structure methodsFor: 'enumerating' stamp: 'len 2/15/2017 11:26:35'!
 min: aBlock
 	^ self elements min: aBlock! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 4/28/2018 05:05:39'!
+!Structure methodsFor: 'enumerating' stamp: 'len 4/28/2018 05:05:39'!
 noneSatisfy: aBlock
 	self do: [:each| (aBlock value: each) ifTrue: [^ false]].
 	^ true! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:25'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:25'!
 product: aBlock
 	^ self elements product: aBlock! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 4/29/2020 17:18:15'!
+!Structure methodsFor: 'enumerating' stamp: 'len 4/29/2020 18:54:12'!
 select: aBlock
 	| elements |
 	elements _ Set new.
 	self do: [:each| (aBlock value: each) ifTrue: [elements add: each]].
-	^ elements as: SetDomain! !
+	^ elements as: Structure! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:16'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:16'!
 sum: aBlock
 	^ self elements sum: aBlock! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 8/1/2016 03:53'!
+!Structure methodsFor: 'enumerating' stamp: 'len 8/1/2016 03:53'!
 upTo: maximumNumberOfElements
 	| answer |
 	answer _ OrderedCollection new.
@@ -12615,7 +12678,7 @@ upTo: maximumNumberOfElements
 		answer add: each].
 	^ answer! !
 
-!SetDomain methodsFor: 'enumerating' stamp: 'len 7/25/2016 23:46'!
+!Structure methodsFor: 'enumerating' stamp: 'len 7/25/2016 23:46'!
 upTo: max do: aBlock
 	"Iterate over the elements of the receiver, just like #do:, but stop after max elements."
 	| k |
@@ -12625,17 +12688,17 @@ upTo: max do: aBlock
 		aBlock value: each.
 		k _ k+1]! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/13/2019 17:12:18'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/13/2019 17:12:18'!
 apply: aMorphism
 	"Answer the homomorphic image of the receiver."
 	^ (aMorphism isBlock ifTrue: [self] ifFalse: [aMorphism codomain]) span: ((self generators ifNil: [^ self collect: aMorphism]) apply: aMorphism)! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 12/30/2016 20:08:17'!
+!Structure methodsFor: 'morphisms' stamp: 'len 12/30/2016 20:08:17'!
 automorphisms
 	self flag: #fix. "this shouldn't be here for all subclasses to inherit, maybe Domain should be abstract, and we could consider Collections as finite sets and implement these things in Collection; same with #to:evaluating:, etc."
 	^ SymmetricGroup on: self! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/16/2019 12:24:00'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/16/2019 12:24:00'!
 id
 	"Answer the identity morphism."
 	| answer |
@@ -12649,25 +12712,25 @@ id
 		at: #image put: self.
 	^ self propertyAt: #id put: answer! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:31'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:31'!
 into: aCodomain evaluating: aBlock
 	"Answer an embedding (an injective morphism) into the specified codomain (in the same category), evaluating as the given block."
 	^ self to: aCodomain evaluating: aBlock! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:47:21'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:47:21'!
 into: aCodomain mapping: aBlock
 	^ self to: aCodomain mapping: aBlock! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:05'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/27/2018 03:49:05'!
 onto: aCodomain evaluating: aBlock
 	"Answer a projection (a surjective morphism) onto the specified codomain (in the same category), evaluating as the given block."
 	^ self to: aCodomain evaluating: aBlock! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:47:30'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:47:30'!
 onto: aCodomain mapping: aBlock
 	^ self to: aCodomain mapping: aBlock! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 4/22/2020 07:03:02'!
+!Structure methodsFor: 'morphisms' stamp: 'len 4/22/2020 07:03:02'!
 to: aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain."
 	self = aCodomain ifTrue: [^ self id].
@@ -12675,25 +12738,25 @@ to: aCodomain
 	self isAmbient ifFalse: [self ambient -> aCodomain ifNotNil: [:aMorphism| ^ self -> self ambient -> aMorphism]].
 	^ nil! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
+!Structure methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
 to: aCodomain evaluating: aBlock
 	"Answer a morphism to the specified codomain (in the same category), evaluating as the given block.
 	Example: ZZ to: ZZ evaluating: [:x| x squared]."
 	^ Function from: self to: aCodomain evaluating: aBlock! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:09:11'!
+!Structure methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:09:11'!
 to: aCodomain evaluatingWithArguments: aBlock
 	"When the receiver is N-ary, this method allows to define morphisms by N-ary blocks.
 	Example: ZZ × ZZ to: ZZ evaluatingWithArguments: [:a :b| a * b]."
 	^ self to: aCodomain evaluating: [:each| aBlock valueWithArguments: each asArray]! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:46:58'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:46:58'!
 to: aCodomain mapping: aBlock
 	"Answer a morphism defined by images of generators.
 	aBlock takes indices i and evaluates to the image of the i-th generator."
 	^ self subclassResponsibility! !
 
-!SetDomain methodsFor: 'morphisms' stamp: 'len 4/22/2020 07:05:41'!
+!Structure methodsFor: 'morphisms' stamp: 'len 4/22/2020 07:05:41'!
 toAll: anArray
 	"Answer the canonical projections from the receiver to the components of anArray."
 	(self isProduct and: [anArray = self components])
@@ -12701,239 +12764,176 @@ toAll: anArray
 	self isAmbient ifFalse: [self ambient -< anArray ifNotNil: [:anArrayOfMorphisms| ^ anArrayOfMorphisms collect: [:each| self -> self ambient -> each]]].
 	^ nil! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
+!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
 * aDomain
 	"This is a convenience method for doing categorical products. Subclasses can reimplement it to mean something different from the categorical product in order to match customary notation."
 	^ self × aDomain! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:35'!
+!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:35'!
 + aDomain
 	"This is a convenience method for doing coproducts. Subclasses can reimplement it to mean something different from the coproduct in order to match customary notation."
 	^ self  aDomain! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 12/30/2017 15:19:47'!
+!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 15:19:47'!
 , aDomain
 	"Answer the cartesian set product of the receiver with the argument."
 	^ CartesianProduct components: {self. aDomain}! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:29'!
+!Structure methodsFor: 'operations' stamp: 'len 5/10/2019 04:26:29'!
 /\ aCollection
 	"Answer the intersection of the receiver and the argument."
 	^ self select: [:each| aCollection includes: each]! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 1/22/2017 08:13:22'!
+!Structure methodsFor: 'operations' stamp: 'len 1/22/2017 08:13:22'!
 ^ anInteger
 	| components |
 	components _ Array new: anInteger.
 	components atAllPut: self.
 	^ CartesianProduct components: components! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:36'!
+!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:36'!
 · aDomain
 	"This is a convenience method for doing categorical products. Subclasses can reimplement it to mean something different from the categorical product in order to match customary notation."
 	^ self × aDomain! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:21'!
+!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:21'!
 × aDomain
 	"Answer the categorical product of the receiver with the argument."
 	"The product in the category of sets is the cartesian product."
 	^ self, aDomain! !
 
-!SetDomain methodsFor: 'operations' stamp: 'len 5/10/2019 04:36:08'!
+!Structure methodsFor: 'operations' stamp: 'len 5/10/2019 04:36:08'!
  aDomain
 	"Answer the categorical sum (or coproduct) of the receiver with the argument."
 	"The coproduct in the category of sets is the disjoint union."
 	^ self species newFrom: ((self elements collect: [:each| {each. 0}]) \/ (aDomain elements collect: [:each| {each. 1}]))! !
 
-!SetDomain methodsFor: 'random' stamp: 'len 6/28/2016 08:38'!
+!Structure methodsFor: 'random' stamp: 'len 6/28/2016 08:38'!
 atRandom
 	"Answer an element in the receiver choosen at random. This will fail if the receiver is not finite."
 	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom]! !
 
-!SetDomain methodsFor: 'random' stamp: 'len 4/19/2020 07:12:07'!
+!Structure methodsFor: 'random' stamp: 'len 4/19/2020 07:12:07'!
 atRandom: aRandom
 	"Answer an element in the receiver choosen at random. This will fail if the receiver is not finite."
 	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain atRandom: aRandom].
 	^ self atRandom: aRandom bits: Infinity positive! !
 
-!SetDomain methodsFor: 'random' stamp: 'len 4/19/2020 07:12:35'!
+!Structure methodsFor: 'random' stamp: 'len 4/19/2020 07:12:35'!
 atRandom: aRandom bits: bitSize
 	"Answer an element of the receiver of at most n bits (as measured by #bitSize). The total number of elements that could be returned shouldn't exceed 2^n."
 	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain atRandom: aRandom bits: bitSize].
 	^ self subclassResponsibility! !
 
-!SetDomain methodsFor: 'random' stamp: 'len 7/5/2016 02:29'!
+!Structure methodsFor: 'random' stamp: 'len 7/5/2016 02:29'!
 atRandomBits: bitSize
 	"Answer an element of the receiver of at most n bits (as measured by #bitSize). The total number of elements that could be returned shouldn't exceed 2^n."
 	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom bits: bitSize]! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 4/19/2019 07:15:03'!
+!Structure methodsFor: 'testing' stamp: 'len 4/19/2019 07:15:03'!
 contains: anElement
 	"Answer true if the receiver contains the given element of its ambient.
 	This is similar to >>includes: but less checks are needed, because the element is not an arbitrary object."
 	self isAmbient ifTrue: [^ true].
 	^ self elements includes: anElement! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 12/13/2016 07:34:43'!
+!Structure methodsFor: 'testing' stamp: 'len 12/13/2016 07:34:43'!
 containsAllOf: aCollection 
 	"Answer whether all the elements of aCollection are in the receiver."
 	aCollection do: [:each| (self contains: each) ifFalse: [^ false]].
 	^ true! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 6/23/2016 07:04'!
+!Structure methodsFor: 'testing' stamp: 'len 6/23/2016 07:04'!
 includes: anElement
 	^ self elements includes: anElement! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 6/24/2016 05:59'!
+!Structure methodsFor: 'testing' stamp: 'len 6/24/2016 05:59'!
 includesAllOf: aCollection 
 	"Answer whether all the elements of aCollection are in the receiver."
 	aCollection do: [:each| (self includes: each) ifFalse: [^ false]].
 	^ true! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 4/29/2020 17:18:15'!
-is: aSymbol
-	^ aSymbol == #Set or: [aSymbol == #SetDomain or: [super is: aSymbol]]! !
+!Structure methodsFor: 'testing' stamp: 'len 4/29/2020 21:16:49'!
+isAmbient
+	^ self ambient == self! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 8/7/2019 07:46:29'!
+!Structure methodsFor: 'testing' stamp: 'len 8/7/2019 07:46:29'!
 isApproximate
 	^ false! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 11/2/2016 08:54'!
+!Structure methodsFor: 'testing' stamp: 'len 11/2/2016 08:54'!
 isEmpty
 	^ self size = 0! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 12/28/2016 11:23:17'!
+!Structure methodsFor: 'testing' stamp: 'len 12/28/2016 11:23:17'!
 isFinite
 	^ self propertyAt: #isFinite ifAbsent: [self size isInfinite not]! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 6/17/2016 22:20'!
+!Structure methodsFor: 'testing' stamp: 'len 6/17/2016 22:20'!
 isInfinite
 	^ self isFinite not! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 12/28/2016 11:23:47'!
+!Structure methodsFor: 'testing' stamp: 'len 12/28/2016 11:23:47'!
 isInitial
 	"Answer true if the receiver is an initial object.
 	The empty set is the initial object in the category of sets. Subclasses can override."
 	^ self propertyAt: #isInitial ifAbsent: [self isEmpty]! !
 
-!SetDomain methodsFor: 'testing' stamp: 'len 12/28/2016 11:19:37'!
+!Structure methodsFor: 'testing' stamp: 'len 12/28/2016 11:19:37'!
 isTerminal
 	"Answer true if the receiver is a terminal object.
 	In the category of sets, the singletons (sets with one element) are the terminal objects. Subclasses can override."
 	^ self propertyAt: #isTerminal ifAbsent: [self size = 1]! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:11'!
+!Structure methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:11'!
 isAbelianGroup
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 2/11/2016 22:18'!
+!Structure methodsFor: 'testing-category' stamp: 'len 2/11/2016 22:18'!
 isComplex
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 2/5/2016 20:22'!
+!Structure methodsFor: 'testing-category' stamp: 'len 2/5/2016 20:22'!
 isField
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 10/31/2016 15:23'!
+!Structure methodsFor: 'testing-category' stamp: 'len 10/31/2016 15:23'!
 isFractionRing
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:32'!
+!Structure methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:32'!
 isGroup
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 10/2/2018 00:57:13'!
+!Structure methodsFor: 'testing-category' stamp: 'len 10/2/2018 00:57:13'!
 isModule
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 2/14/2016 18:08'!
+!Structure methodsFor: 'testing-category' stamp: 'len 2/14/2016 18:08'!
 isMonoid
 	^ self isGroup! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 2/11/2016 22:18'!
+!Structure methodsFor: 'testing-category' stamp: 'len 2/11/2016 22:18'!
 isReal
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:53'!
+!Structure methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:53'!
 isRing
 	^ false! !
 
-!SetDomain methodsFor: 'testing-category' stamp: 'len 3/10/2020 16:42:34'!
+!Structure methodsFor: 'testing-category' stamp: 'len 3/10/2020 16:42:34'!
 isVectorSpace
 	^ false! !
 
-!SetDomain methodsFor: 'private' stamp: 'len 4/22/2020 07:06:13'!
+!Structure methodsFor: 'private' stamp: 'len 4/22/2020 07:06:13'!
 ambient: aDomain
 	self propertyAt: #ambient put: aDomain! !
 
-!SetDomain methodsFor: 'private' stamp: 'len 12/28/2016 11:20:10'!
+!Structure methodsFor: 'private' stamp: 'len 12/28/2016 11:20:10'!
 elements: aCollection
 	self propertyAt: #elements put: aCollection! !
 
-!SetDomain class methodsFor: 'examples' stamp: 'len 12/20/2016 11:23:39'!
-example1asSet
-	"The ring Z/5Z as a Smalltalk Set.
-	This is possible because the ring is finite."
-	^ (ZZ/5) asSet! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 3/3/2020 10:54:42'!
-example1atRandom
-	"Taking an element at random from the Z-module of rank 10.
-	Use 50 bits to generate this element. Essentially, this can return
-	at most 2^50 different elements, and their bitsize doesn't exceed 50
-	bits (where bitsize is losely defined, in this case it's the sum
-	of bitsize of the coefficients of the coordinates)."
-	^ ZZ^10 atRandom: (Random seed: 12345) bits: 50! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 12/17/2016 09:27:30'!
-example21VectorSpace
-	"The vector space of 3-tuples with rational coefficients."
-	^ QQ ^ 3! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 10/29/2016 08:05'!
-example3DirectProductOfGroups
-	"The direct product of the group of permutations of
-	the symbols {#a, #b, #c} by the group of alternating
-	permutations of {1,2,3,4}."
-	^ (SymmetricGroup on: #(a b c)) × (AlternatingGroup new: 4)! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 10/29/2016 07:58'!
-example41Polynomials
-	"Polynomials in two variables with integer coefficients."
-	^ ZZ polynomialsIn: #(a b)! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 1/11/2018 21:29:20'!
-example42AffineRing
-	"The quotient of a polynomial ring by an ideal.
-	This is an affine ring, in particular it is the coordinate ring of the twisted cubic."
-	| R x y z I |
-	R _ CC polynomialsIn: #(x y z).
-	x _ R x: 1.
-	y _ R x: 2.
-	z _ R x: 3.
-	I _ R * {(x^2) - y. (x^3) - z}.
-	^ R / I! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 1/11/2018 21:29:07'!
-example43AffineVariety
-	"This is the twisted cubic affine variety, parameterized by (x, x^2, x^3) in C^3."
-	| R x y z I |
-	R _ CC polynomialsIn: #(x y z).
-	x _ R x: 1.
-	y _ R x: 2.
-	z _ R x: 3.
-	I _ R * {(x^2) - y. (x^3) - z}.
-	^ (R / I) spec! !
-
-!SetDomain class methodsFor: 'examples' stamp: 'len 1/11/2018 21:32:38'!
-example5GL
-	"The group GL(Q^3) of invertible linear maps
-	on the vector space of 3-tuples with rational coefficients.
-	This is the automorphisms group of the vector space, and
-	its elements are linear maps, not matrices."
-	^ (QQ ^ 3) automorphisms! !
-
-!SetDomain class methodsFor: 'instance creation' stamp: 'len 4/23/2016 03:40'!
+!Structure class methodsFor: 'instance creation' stamp: 'len 4/23/2016 03:40'!
 newFrom: anObject
 	^ self new elements: anObject! !
 
@@ -12958,31 +12958,35 @@ includes: aMorphism
 name: aString
 	self propertyAt: #name put: aString asSymbol! !
 
-!Modules methodsFor: 'accessing' stamp: 'len 4/26/2020 17:46:06'!
+!ModulesCategory methodsFor: 'accessing' stamp: 'len 4/26/2020 17:46:06'!
 scalars
 	^ self propertyAt: #scalars! !
 
-!Modules methodsFor: 'categories' stamp: 'len 4/26/2020 18:11:59'!
-ChainComplexes
-	^ self propertyAt: #ChainComplexes ifAbsentPut: [ChainComplexes new chains: self]! !
+!ModulesCategory methodsFor: 'categories' stamp: 'len 4/29/2020 21:05:31'!
+Complexes
+	^ self propertyAt: #Complexes ifAbsentPut: [ChainComplexesCategory new chains: self]! !
 
-!Modules methodsFor: 'comparing' stamp: 'len 4/26/2020 17:52:29'!
+!ModulesCategory methodsFor: 'comparing' stamp: 'len 4/26/2020 17:52:29'!
 = anObject
 	^ self class = anObject class and: [self scalars = anObject scalars]! !
 
-!Modules methodsFor: 'comparing' stamp: 'len 4/26/2020 17:52:39'!
+!ModulesCategory methodsFor: 'comparing' stamp: 'len 4/26/2020 17:52:39'!
 hash
 	^ self scalars hash! !
 
-!Modules methodsFor: 'private' stamp: 'len 4/26/2020 17:46:15'!
+!ModulesCategory methodsFor: 'private' stamp: 'len 4/26/2020 17:46:15'!
 scalars: aRing
 	self propertyAt: #scalars put: aRing! !
 
-!ChainComplexes methodsFor: 'accessing' stamp: 'len 4/26/2020 17:43:12'!
+!ChainComplexesCategory methodsFor: 'accessing' stamp: 'len 4/26/2020 17:43:12'!
 chains
 	^ self propertyAt: #chains! !
 
-!ChainComplexes methodsFor: 'private' stamp: 'len 4/26/2020 17:43:27'!
+!ChainComplexesCategory methodsFor: 'categories' stamp: 'len 4/29/2020 21:06:20'!
+Complexes
+	^ self propertyAt: #Complexes ifAbsentPut: [ChainComplexesCategory new chains: self]! !
+
+!ChainComplexesCategory methodsFor: 'private' stamp: 'len 4/26/2020 17:43:27'!
 chains: anAbelianCategory
 	self propertyAt: #chains put: anAbelianCategory! !
 
@@ -13211,8 +13215,9 @@ initialize
 	super initialize.
 	Smalltalk at: #NN put: self new! !
 
-!Monoid methodsFor: 'accessing' stamp: 'len 12/28/2016 11:26:45'!
+!Monoid methodsFor: 'accessing' stamp: 'len 4/29/2020 19:02:08'!
 identity
+	self isAmbient ifFalse: [^ self ambient identity].
 	^ self propertyAt: #identity! !
 
 !Monoid methodsFor: 'morphic' stamp: 'len 4/26/2020 06:22:44'!
@@ -15000,11 +15005,6 @@ action
 degree
 	^ self space size! !
 
-!PermutationGroup methodsFor: 'accessing' stamp: 'len 2/1/2018 23:44:34'!
-identity
-	self ambient == self ifTrue: [^ self halt].
-	^ self ambient identity! !
-
 !PermutationGroup methodsFor: 'accessing' stamp: 'len 1/28/2018 18:27:42'!
 polynomialActionOn: aPolynomialRing
 	"Answer the action that permutes the indeterminates."
@@ -16447,9 +16447,9 @@ uniformizer
 zero
 	^ self propertyAt: #zero ifAbsentPut: [self one - self one]! !
 
-!Ring methodsFor: 'categories' stamp: 'len 4/26/2020 17:54:05'!
+!Ring methodsFor: 'categories' stamp: 'len 4/29/2020 18:27:49'!
 Modules
-	^ self propertyAt: #Modules ifAbsentPut: [Modules new scalars: self]! !
+	^ self propertyAt: #Modules ifAbsentPut: [ModulesCategory new scalars: self]! !
 
 !Ring methodsFor: 'comparing' stamp: 'len 8/10/2019 09:23:45'!
 < aRing
@@ -17876,13 +17876,12 @@ isCoherent
 	"Answer true if the receiver is a coherent ring, i.e. if it is coherent as a module over itself."
 	^ components allSatisfy: [:each| each isCoherent]! !
 
-!ProductRing methodsFor: 'testing' stamp: 'len 9/16/2018 16:15:36'!
+!ProductRing methodsFor: 'testing' stamp: 'len 4/29/2020 18:59:41'!
 isIntegralDomain
 	"The product of two or more non-trivial rings always has non-trivial zero divisors."
 	| count |
 	count _ 0.
 	components do: [:each| each isTrivial ifFalse: [(count _ count + 1) > 1 ifTrue: [^ false]]].
-	self halt.
 	^ true! !
 
 !ProductRing methodsFor: 'testing' stamp: 'len 6/4/2019 15:12:47'!
@@ -27321,10 +27320,6 @@ propertyAt: aSymbol ifPresent: aBlock
 propertyAt: aSymbol put: anObject
 	^ self properties at: aSymbol put: anObject! !
 
-!Morphism methodsFor: 'testing' stamp: 'len 2/14/2017 08:22:36'!
-is: aSymbol
-	^ aSymbol == #Morphism or: [super is: aSymbol]! !
-
 !Morphism methodsFor: 'testing' stamp: 'len 8/8/2016 06:02'!
 isAutomorphism
 	^ self isEndomorphism and: [self isIsomorphism]! !
@@ -27398,9 +27393,9 @@ example21Embedding
 	"If we compose them we get an embedding from the rational numbers Q to the field of univariate rational functions Q(x), that sends a number to a constant rational function."
 	^ psi · phi! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/22/2019 04:47:24'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/29/2020 18:17:52'!
 example22EasierEmbedding
-	"Another way to construct the canonical embedding from Q to the rational functions over Q."
+	"Another way to obtain the canonical embedding from Q to the rational functions over Q."
 	^ QQ >-> QQ polynomials fractions! !
 
 !Morphism class methodsFor: 'examples' stamp: 'len 4/22/2019 04:48:39'!
@@ -27437,10 +27432,10 @@ example5CanonicalMorphism
 	I _ R * (x squared + 1).
 	^ phi -> (R / I)! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 5/11/2019 04:29:00'!
+!Morphism class methodsFor: 'examples' stamp: 'len 4/29/2020 18:20:54'!
 example6GLAsGroupAction
-	"The action of the group GL(3,Q) on the Q-vector space of 3-tuples.
-	The action is evaluation of a linear map at a tuple."
+	"The action of the group GL(3,Q) on the vector space of dimension 3 over the rationals.
+	The action is evaluation of a linear map at a vector."
 	^ (QQ^3) automorphisms action! !
 
 !Function methodsFor: 'accessing' stamp: 'len 12/28/2016 11:09:59'!
@@ -35796,10 +35791,6 @@ sprs: aPolynomial
 	self scalars isField ifTrue: [^ (aPolynomial \\ self) isZero].
 	^ (aPolynomial pseudoRem: self) isZero! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 11/26/2015 01:41'!
-is: aSymbol
-	^ aSymbol == #Polynomial or: [super is: aSymbol]! !
-
 !Polynomial methodsFor: 'testing' stamp: 'len 12/30/2016 20:10:56'!
 isAffineLinear
 	^ self degree < 2! !
@@ -38939,10 +38930,6 @@ includes: anObject
 	self do: [:each| each = anObject ifTrue: [^ true]].
 	^ false! !
 
-!Tuple methodsFor: 'testing' stamp: 'len 3/8/2020 16:50:47'!
-is: aSymbol
-	^ aSymbol == #Tuple or: [super is: aSymbol]! !
-
 !Tuple methodsFor: 'testing' stamp: 'len 11/5/2016 07:12'!
 isEmpty
 	^ self size = 0! !
@@ -40767,10 +40754,6 @@ kernelModulo: aMatrix
 	K _ (self columnAugmented: aMatrix) kernel.
 	K isEmpty ifTrue: [^ K].
 	^ K copyFromColumn: 1 to: self width! !
-
-!Matrix methodsFor: 'testing' stamp: 'len 11/26/2015 01:40'!
-is: aSymbol
-	^ aSymbol == #Matrix or: [super is: aSymbol]! !
 
 !Matrix methodsFor: 'testing' stamp: 'len 5/30/2019 04:43:29'!
 isDiagonal
