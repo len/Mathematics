@@ -1,10 +1,9 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 2:58:01 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 1 May 2020 at 10:36:26 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 564!
+!provides: 'Domains' 1 565!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
-SystemOrganization addCategory: #'Domains-Sets'!
 SystemOrganization addCategory: #'Domains-Monoids'!
 SystemOrganization addCategory: #'Domains-Monoids-Orderings'!
 SystemOrganization addCategory: #'Domains-Groups'!
@@ -149,6 +148,16 @@ Set subclass: #KeyedSet
 	category: 'Domains-Kernel-Support'!
 !classDefinition: 'KeyedSet class' category: #'Domains-Kernel-Support'!
 KeyedSet class
+	instanceVariableNames: ''!
+
+!classDefinition: #Family category: #'Domains-Kernel-Support'!
+Collection subclass: #Family
+	instanceVariableNames: 'keys block'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Kernel-Support'!
+!classDefinition: 'Family class' category: #'Domains-Kernel-Support'!
+Family class
 	instanceVariableNames: ''!
 
 !classDefinition: #Iterator category: #'Domains-Kernel-Support'!
@@ -451,24 +460,34 @@ Category subclass: #ChainComplexesCategory
 ChainComplexesCategory class
 	instanceVariableNames: ''!
 
+!classDefinition: #FormalSet category: #'Domains-Kernel'!
+Structure subclass: #FormalSet
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Kernel'!
+!classDefinition: 'FormalSet class' category: #'Domains-Kernel'!
+FormalSet class
+	instanceVariableNames: ''!
+
+!classDefinition: #CartesianProduct category: #'Domains-Kernel'!
+FormalSet subclass: #CartesianProduct
+	instanceVariableNames: 'components'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Kernel'!
+!classDefinition: 'CartesianProduct class' category: #'Domains-Kernel'!
+CartesianProduct class
+	instanceVariableNames: ''!
+
 !classDefinition: #HomSet category: #'Domains-Kernel'!
-Structure subclass: #HomSet
+FormalSet subclass: #HomSet
 	instanceVariableNames: 'domain codomain'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Kernel'!
 !classDefinition: 'HomSet class' category: #'Domains-Kernel'!
 HomSet class
-	instanceVariableNames: ''!
-
-!classDefinition: #FunctionSet category: #'Domains-Kernel'!
-HomSet subclass: #FunctionSet
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Kernel'!
-!classDefinition: 'FunctionSet class' category: #'Domains-Kernel'!
-FunctionSet class
 	instanceVariableNames: ''!
 
 !classDefinition: #PointSet category: #'Domains-Schemes'!
@@ -481,23 +500,13 @@ HomSet subclass: #PointSet
 PointSet class
 	instanceVariableNames: ''!
 
-!classDefinition: #CartesianProduct category: #'Domains-Sets'!
-Structure subclass: #CartesianProduct
-	instanceVariableNames: 'components'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sets'!
-!classDefinition: 'CartesianProduct class' category: #'Domains-Sets'!
-CartesianProduct class
-	instanceVariableNames: ''!
-
-!classDefinition: #Naturals category: #'Domains-Sets'!
-Structure subclass: #Naturals
+!classDefinition: #Naturals category: #'Domains-Kernel'!
+FormalSet subclass: #Naturals
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Domains-Sets'!
-!classDefinition: 'Naturals class' category: #'Domains-Sets'!
+	category: 'Domains-Kernel'!
+!classDefinition: 'Naturals class' category: #'Domains-Kernel'!
 Naturals class
 	instanceVariableNames: ''!
 
@@ -532,7 +541,7 @@ FreeMonoid class
 	instanceVariableNames: ''!
 
 !classDefinition: #Group category: #'Domains-Groups'!
-Monoid subclass: #Group
+Structure subclass: #Group
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -3411,16 +3420,6 @@ Sum subclass: #Tensor
 Tensor class
 	instanceVariableNames: ''!
 
-!classDefinition: #WuRittProcess category: #'Domains-Etc'!
-Object subclass: #WuRittProcess
-	instanceVariableNames: 'polynomials characteristicSet'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Etc'!
-!classDefinition: 'WuRittProcess class' category: #'Domains-Etc'!
-WuRittProcess class
-	instanceVariableNames: ''!
-
 !classDefinition: #CoxeterDiagram category: #'Domains-Etc-Lie'!
 Object subclass: #CoxeterDiagram
 	instanceVariableNames: 'matrix'
@@ -3667,8 +3666,8 @@ References:
 	https://en.wikipedia.org/wiki/Coproduct
 !
 
-!Structure commentStamp: 'len 4/29/2020 21:14:02' prior: 0!
-Domains with an underlying set of elements. These can be simple sets, or algebraic structures such as Groups, Rings, Modules, Schemes, etc. In terms of category theory, these are objects of concrete categories, i.e. they are realized as sets of elements endowed with certain algebraic structure, and their morphisms are structure-preserving Functions.
+!Structure commentStamp: '<historical>' prior: 0!
+Domains with an underlying set of elements. These can be simple sets, or algebraic structures such as Groups, Rings, Modules, etc. In terms of category theory, these are objects of concrete categories, i.e. they are realized as sets of elements endowed with certain algebraic structure, and their morphisms are structure-preserving Functions.
 
 The underlying set of a domain can have finite or infinite cardinality, and whenever it makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
 
@@ -3684,6 +3683,18 @@ References:
 	https://ncatlab.org/nlab/show/single-sorted+definition+of+a+category
 !
 
+!CartesianProduct commentStamp: '<historical>' prior: 0!
+Cartesian products of sets. See Domain>>,.
+
+Example:
+	(ZZ, QQ)
+
+Note that the message #◊ is often used for the direct product (of rings or groups, for example), and #, always gives the cartesian product of the underlying sets.
+
+References:
+	https://en.wikipedia.org/wiki/Cartesian_product
+!
+
 !HomSet commentStamp: '<historical>' prior: 0!
 Hom-Set objects Hom(A,B) for domain A and codomain B, i.e. sets of all morphisms between two Domains. When A = B, this is the set of endomorphisms of A and it's noted End(A).
 
@@ -3693,24 +3704,8 @@ References:
 	https://ncatlab.org/nlab/show/hom-set
 !
 
-!FunctionSet commentStamp: '<historical>' prior: 0!
-Sets of functions (no necessarily morphisms) from a domain A to a codomain B.
-!
-
 !PointSet commentStamp: '<historical>' prior: 0!
 Sets of S-points (or S-rational points) of a scheme X, noted X(S), where X and S are schemes over some base scheme or ring B. By definition, an S-point is a morphism from S to X over B. See also RationalPoint.!
-
-!CartesianProduct commentStamp: '<historical>' prior: 0!
-Cartesian products of sets. See Domain>>,.
-
-Example:
-	(ZZ, QQ)
-
-Note that the message #◊ is often used for the direct product (of rings or groups, for example), but #, always gives the cartesian product of the underlying sets.
-
-References:
-	https://en.wikipedia.org/wiki/Cartesian_product
-!
 
 !Naturals commentStamp: '<historical>' prior: 0!
 The singleton global instance NN is the set of natural numbers 1, 2, 3, ...!
@@ -4295,15 +4290,16 @@ References:
 !
 
 !Function commentStamp: '<historical>' prior: 0!
-Maps from a set (domain) to another set (codomain). Evaluated at elements of the domain (>>#value:) they produce elements of the codomain. See Domain and HomSet.
+Maps from a set (domain) to another set (codomain). Evaluated at elements of the domain (>>#value:) they produce elements of the codomain. A Function is a morphism in the category of sets.
+
+If the function preserves some mathematical structure, it is called a morphism of some category corresponding to the preserved structure. For example linear maps are morphisms of vector spaces or modules, continuous functions are morphisms of topological spaces, and group homomorphisms are morphisms of groups. Functions that are morphisms of a specific category other than sets are implemented in subclasses of Function (see for example GroupMap, RingMap, ModuleMap).
 
 Example:
-	Function from: ZZ to: ZZ evaluating: [:x| x squared + 1].
-
-A Function is a morphism in the category of sets. If the function preserves some mathematical structure, it is called a morphism of some category corresponding to the preserved structure. For example linear maps are morphisms of vector spaces or modules, continuous functions are morphisms of topological spaces, and group homomorphisms are morphisms of groups.
+	"ZZ is the ring of rational integers, and it has an underying set of elements (rational integers), that can be accessed by sending the message #carrier. We can use this to create a function on the set of integers:"
+	ZZ carrier to: ZZ carrier evaluating: [:x| x squared + 1].
 
 Example (three equivalent ways to construct homomorphisms):
-	"These constructions are similar to the explicit construction above, but they return not arbitrary functions but homomorphisms of the corresponding category (in this case linear maps, i.e. morphisms of vector spaces):"
+	"These constructions are similar to the explicit construction above, but they return not general functions but homomorphisms of the corresponding category (in this case linear maps, i.e. morphisms of vector spaces):"
 	QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)].
 	QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)].
 	(QQ^3) endomorphisms evaluating: [:v| (v x - v y, v x, v z)].
@@ -5059,13 +5055,6 @@ Elements of tensor product modules (see TensorProductModule).
 
 Tensors are represented as sparse formal sums of formal products of basis elements.!
 
-!WuRittProcess commentStamp: 'len 12/30/2015 05:43' prior: 0!
-I'm the Ritt-Wu process.
-
-Input: a set of polynomials F = {f1,...,fr} in K[x1,...,xn];
-Output: an extended characteristic set (or ascending chain, or Wu characteristic set) of F.
-!
-
 !OppositeAlgebraElement commentStamp: '<historical>' prior: 0!
 Elements of the opposite algebra of a given algebra. See OppositeAlgebra.!
 
@@ -5159,9 +5148,8 @@ postCopy
 	super postCopy.
 	properties _ properties copy! !
 
-!Structure methodsFor: 'printing' stamp: 'len 4/29/2020 18:54:12'!
+!Structure methodsFor: 'printing' stamp: 'len 5/1/2020 14:11:05'!
 printOn: aStream
-	"Subclasses should reimplement defaultPrintOn: instead of this method."
 	self propertyAt: #elements ifPresent: [:aCollection|
 		(aCollection isKindOf: Structure) ifTrue: [aStream print: aCollection. ^ self].
 		aStream nextPut: ${. "Wildberger notation for unordered sets: elements separated by spaces"
@@ -5194,19 +5182,15 @@ name
 printOn: aStream
 	aStream nextPutAll: self name; nextPut: $(; print: self chains; nextPut: $)! !
 
+!CartesianProduct methodsFor: 'printing' stamp: 'len 6/7/2016 00:50'!
+printOn: aStream
+	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
+
 !HomSet methodsFor: 'printing' stamp: 'len 12/5/2016 11:56:13'!
 printOn: aStream
 	self isEndomorphisms
 		ifTrue: [aStream nextPutAll: 'End'; nextPut: $(; print: self domain; nextPut: $)]
 		ifFalse: [aStream nextPutAll: 'Hom'; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
-
-!FunctionSet methodsFor: 'printing' stamp: 'len 4/29/2020 21:01:51'!
-printOn: aStream
-	aStream nextPutAll: 'Functions'; nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)! !
-
-!CartesianProduct methodsFor: 'printing' stamp: 'len 6/7/2016 00:50'!
-printOn: aStream
-	components do: [:each| aStream print: each] separatedBy: [aStream nextPut: Character times]! !
 
 !Naturals methodsFor: 'printing' stamp: 'len 6/8/2016 21:05'!
 printOn: aStream
@@ -5661,13 +5645,17 @@ printOn: aStream
 	aStream print: differentials first domain.
 	differentials do: [:each| aStream nextPutAll: '  '; print: each codomain].! !
 
+!Morphism methodsFor: 'accessing' stamp: 'len 5/1/2020 18:32:45'!
+category
+	^ self subclassResponsibility! !
+
 !Morphism methodsFor: 'printing' stamp: 'len 4/22/2020 14:36:36'!
 name
 	^ self propertyAt: #name ifAbsent: [String streamContents: [:aStream| super printOn: aStream]]! !
 
-!Morphism methodsFor: 'printing' stamp: 'len 4/22/2020 19:21:17'!
+!Morphism methodsFor: 'printing' stamp: 'len 5/1/2020 22:17:52'!
 printOn: aStream
-	self isIdentity ifTrue: [aStream nextPutAll: 'id'. ^ self].
+	(self propertyAt: #isIdentity ifAbsent: [false]) ifTrue: [aStream nextPutAll: 'id'. ^ self].
 	aStream nextPutAll: self name; nextPut: $:.
 	self arrowPrintOn: aStream! !
 
@@ -7582,6 +7570,51 @@ at: anObject ifAbsentPut: aBlock
 	index _ self findElementOrNil: anObject.
 	^ (array at: index) ifNil: [self atNewIndex: index put: aBlock value]! !
 
+!Family methodsFor: 'accessing' stamp: 'len 4/30/2020 17:23:38'!
+at: anObject
+	^ block value: anObject! !
+
+!Family methodsFor: 'accessing' stamp: 'len 4/30/2020 17:24:08'!
+at: anObject ifAbsent: aBlock
+	^ (keys includes: anObject) ifTrue: [self at: anObject] ifFalse: [aBlock value]! !
+
+!Family methodsFor: 'accessing' stamp: 'len 4/30/2020 17:22:26'!
+keys
+	^ keys! !
+
+!Family methodsFor: 'accessing' stamp: 'len 4/30/2020 17:28:29'!
+size
+	^ keys size! !
+
+!Family methodsFor: 'enumerating' stamp: 'len 4/30/2020 17:24:39'!
+do: aBlock
+	keys do: [:each| aBlock value: (self at: each)]! !
+
+!Family methodsFor: 'enumerating' stamp: 'len 4/30/2020 17:26:07'!
+keysAndValuesDo: aBlock  
+	keys do: [:each| aBlock value: each value: (self at: each)]! !
+
+!Family methodsFor: 'printing' stamp: 'len 4/30/2020 17:33:26'!
+printElementsOn: aStream
+	| count |
+	aStream nextPut: ${.
+	count _ 0.
+	self do: [:element| aStream print: element] separatedBy: [(count _ count + 1) > 10 ifTrue: [aStream nextPutAll: '...}'. ^ self] ifFalse: [aStream nextPutAll: ', ']].
+	aStream nextPut: $}! !
+
+!Family methodsFor: 'private' stamp: 'len 4/30/2020 17:27:38'!
+keys: aCollection block: aBlock
+	keys _ aCollection.
+	block _ aBlock! !
+
+!Family methodsFor: 'private' stamp: 'len 4/30/2020 17:26:34'!
+species
+	^ keys species! !
+
+!Family class methodsFor: 'instance creation' stamp: 'len 4/30/2020 17:28:01'!
+from: aCollection evaluating: aBlock
+	^ self new keys: aCollection block: aBlock! !
+
 !Iterator methodsFor: 'accessing'!
 identityIndexOf: anElement 
 	"Answer the identity index of anElement within the receiver.  If the receiver does
@@ -7666,6 +7699,14 @@ keysAndValuesDo: aBlock
 	index := 1.
 	self do: [:el | aBlock value: index value: el.  index := index + 1]! !
 
+!Iterator methodsFor: 'printing' stamp: 'len 7/5/2019 15:30:51'!
+printElementsOn: aStream
+	| count |
+	aStream nextPut: $(.
+	count _ 0.
+	self do: [:element| aStream print: element] separatedBy: [(count _ count + 1) > 10 ifTrue: [aStream nextPutAll: '...)'. ^ self] ifFalse: [aStream nextPutAll: ', ']].
+	aStream nextPut: $)! !
+
 !Iterator methodsFor: 'removing'!
 remove: oldObject ifAbsent: anExceptionBlock 
 	"Iterators are read-only."
@@ -7678,14 +7719,6 @@ block: aBlock
 !Iterator methodsFor: 'private'!
 species
 	^OrderedCollection! !
-
-!Iterator methodsFor: 'printing' stamp: 'len 7/5/2019 15:30:51'!
-printElementsOn: aStream
-	| count |
-	aStream nextPut: $(.
-	count _ 0.
-	self do: [:element| aStream print: element] separatedBy: [(count _ count + 1) > 10 ifTrue: [aStream nextPutAll: '...)'. ^ self] ifFalse: [aStream nextPutAll: ', ']].
-	aStream nextPut: $)! !
 
 !Iterator class methodsFor: 'instance creation' stamp: 'len 2/28/2016 20:32'!
 on: aBlock
@@ -10868,32 +10901,32 @@ morphExtent: aPoint
 palette: aComplexPalette
 	palette _ aComplexPalette! !
 
-!ComplexPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 12/18/2016 10:59:09'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:38:23'!
 exampleBlaschkeProduct
 	"This is a phase plot of the Blaschke product defined by 40 randomly choosen numbers in the unit disk."
 	| random A f |
 	random _ Random new.
 	A _ (1 to: 40) collect: [:each| Complex abs: random next arg: Float twoPi * random next].
-	f _ Function from: CC to: CC evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
+	f _ CC carrier to: CC carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
 	^ ComplexPlotMorph new box: (-1 @ -1 corner: 1 @ 1); palette: ComplexPalette phase; function: f! !
 
-!ComplexPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:41:45'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:10'!
 exampleReciprocalSinus
 	| f |
-	f _ Function from: CC to: CC evaluating: [:z| (1/z) sin].
-	^ self new box: (-2 @ -1 corner: 2 @ 1); palette: ComplexPalette default; function: f! !
+	f _ CC carrier to: CC carrier evaluating: [:z| (1/z) sin].
+	^ ComplexPlotMorph new box: (-2 @ -1 corner: 2 @ 1); palette: ComplexPalette default; function: f! !
 
-!ComplexPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:41:57'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:14'!
 exampleRiemannZetaFunction
 	| f |
-	f _ Function from: CC to: CC evaluating: [:z| (1 to: 100) sum: [:n| n^z negated]].
-	^ self new morphExtent: 300@300; box: (-5@-5 corner: 5@5); palette: (ComplexPalette grid: 1@5); function: f! !
+	f _ CC carrier to: CC carrier evaluating: [:z| (1 to: 100) sum: [:n| n^z negated]].
+	^ ComplexPlotMorph new morphExtent: 300@300; box: (-5@-5 corner: 5@5); palette: (ComplexPalette grid: 1@5); function: f! !
 
-!ComplexPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 12/7/2016 16:37:54'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:19'!
 exampleSinus
 	| f |
-	f _ Function from: CC to: CC evaluating: [:z| z sin].
-	^ self new box: (-2*Float pi @ -1.5 corner: 2*Float pi @ 1.5); palette: (ComplexPalette grid: 1@10); function: f! !
+	f _ CC carrier to: CC carrier evaluating: [:z| z sin].
+	^ ComplexPlotMorph new box: (-2*Float pi @ -1.5 corner: 2*Float pi @ 1.5); palette: (ComplexPalette grid: 1@10); function: f! !
 
 !FunctionPlotMorph methodsFor: 'private' stamp: 'len 1/2/2016 06:07'!
 computeEvaluationPoints
@@ -11042,40 +11075,33 @@ initialize
 	fillColor _ Color transparent.
 	textColor _ Color gray alpha: 0.5! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/10/2019 17:06:42'!
-example
-	"
-	FunctionPlotMorph example
-	"
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:41:45'!
+example1
+	"Plotting the sine function."
 	| sin |
-	sin _ Function from: RR to: RR evaluating: [:x| x sin].
+	sin _ RR carrier to: RR carrier evaluating: [:x| x sin].
 	^ FunctionPlotMorph new evaluationPoints: (0.0 to: Float pi * 2 count: 100); function: sin; color: (Color red alpha: 0.5)! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 4/21/2016 05:30'!
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:42:40'!
 example2
-	"
-	FunctionPlotMorph example2
-	"
+	"Plotting Euler's totient function."
 	^ FunctionPlotMorph new
-		color: (Color skyBlue alpha: 0.5);
+		color: (Color lightBlue alpha: 0.5);
 		function: Sequence phi;
 		evaluationPoints: (1 to: 150)! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 4/21/2016 05:31'!
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:43:16'!
 example3
-	"
-	FunctionPlotMorph example3
-	"
+	"Plotting the Calkin-Wilf sequence.
+	It enumerates the positive rational numbers by a breadth-first traversal of the Calkin-Wilf tree."
 	^ FunctionPlotMorph new
 		evaluationPoints: (1 to: 150);
 		function: Sequence calkinWilf;
 		color: (Color yellow alpha: 0.5)! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 4/21/2016 05:31'!
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:43:28'!
 example4
-	"
-	FunctionPlotMorph example4
-	"
+	"Plotting the primes."
 	^ FunctionPlotMorph new
 		evaluationPoints: (1 to: 5);
 		function: Sequence primes;
@@ -11372,15 +11398,19 @@ morphExtent: aPoint
 	image _ nil.
 	super morphExtent: aPoint! !
 
-!ImplicitFunctionPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 10/24/2016 21:36'!
-example
-	"
-	self example
-	"
+!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 19:47:53'!
+example1
+	"Circle of radious 1."
 	| function |
-	"Descartes folium"
-	function _ Function from: QQ^2 to: QQ evaluatingWithArguments: [:x :y| x^3 + (y^3) - (3*x*y)].
-	^ self new function: function! !
+	function _ (RR^2) carrier to: RR carrier evaluatingWithArguments: [:x :y| x^2 + (y^2) - 1].
+	^ ImplicitFunctionPlotMorph new function: function! !
+
+!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 19:47:20'!
+example2
+	"Descartes folium."
+	| function |
+	function _ (RR^2) carrier to: RR carrier evaluatingWithArguments: [:x :y| x^3 + (y^3) - (3*x*y)].
+	^ ImplicitFunctionPlotMorph new function: function! !
 
 !ImplicitSurfacePlotMorph methodsFor: 'accessing' stamp: 'len 1/22/2017 07:44:33'!
 color: aColor
@@ -11629,20 +11659,20 @@ initialize
 morphToDomain: aPoint
 	^ (aPoint x * (xMax - xMin) / extent x + xMin, (aPoint y * (yMax - yMin) / extent y + yMin))! !
 
-!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:34:05'!
+!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:53:38'!
 applyRotationBy: aPoint
 	| bounds xSpeed ySpeed rotation |
 	self dimension < 3 ifTrue: [^ self].
 	bounds _ self morphLocalBounds.
 	xSpeed _ Float pi / bounds width.
 	ySpeed _ Float pi / bounds height.
-	rotation _ (QQ^self dimension) endomorphisms evaluating: [:p|
+	rotation _ (RR^self dimension) endomorphisms evaluating: [:p|
 		| xz yz |
 		xz _ p x @ p z.
 		xz _ xz rotatedBy: aPoint x * xSpeed.
 		yz _ p y @ xz y.
 		yz _ yz rotatedBy: aPoint y * ySpeed.
-		(xz x, yz x, yz y), (p copyFrom: 4 to: p size)].
+		(xz x, yz x, yz y), (p coordinates copyFrom: 4 to: p coordinates size)].
 	transformation _ rotation ∑ (transformation ifNil: [rotation identity]).
 	self redrawNeeded! !
 
@@ -11660,7 +11690,7 @@ colorBy: aBlock
 dimension
 	^ points anyOne size! !
 
-!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 8/21/2016 07:19'!
+!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:51:04'!
 drawOn: aCanvas
 	| bounds range boxColor w |
 	bounds _ self morphLocalBounds insetBy: 1.
@@ -11679,7 +11709,7 @@ drawOn: aCanvas
 		| p xy z r shade c |
 		p _ positionBlock value: each.
 		p _ p collect: [:xi| xi - min / range - 0.5 * 2].
-		transformation ifNotNil: [p _ transformation value: p].
+		transformation ifNotNil: [p _ (transformation value: p) coordinates].
 		xy _ p x / 2 + 0.5 * w @ (p y / 2 + 0.5 * w).
 		z _ p size >= 3 ifTrue: [(p z / 2 + 0.5 max: 0.0) min: 1.0] ifFalse: [1.0].
 		r _ z * (sizeBlock value: each) :: rounded + 1.
@@ -11738,12 +11768,12 @@ mouseMove: aMouseMoveEvent localPosition: localEventPosition
 				ifFalse: [self applyRotationBy: lastMousePosition - localEventPosition]].
 	lastMousePosition _ localEventPosition! !
 
-!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 8/21/2016 07:14'!
+!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:50:24'!
 points: anArray
 	points _ anArray.
 	max _ points max: [:each| each max].
 	min _ points min: [:each| each min].
-	transformation _ QQ^self dimension :: id.
+	transformation _ RR^self dimension :: id.
 	self redrawNeeded! !
 
 !ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 8/21/2016 07:13'!
@@ -11756,36 +11786,38 @@ sizeBy: aBlock
 	sizeBlock _ aBlock.
 	self redrawNeeded! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 12/6/2016 16:39:25'!
-example
+!ScatterPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:45:16'!
+example1
+	"Plotting prime gaps."
 	| palette |
 	palette _ RealPalette default.
 	^ (self timeDelayPlot: (Sequence primes difference first: 1000))
 			colorBy: [:each| palette at: each bitSize / 40.0]! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 8/19/2016 05:21'!
+!ScatterPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:45:00'!
 example2
+	"Plotting random samples."
 	| samples |
 	samples _ 1 to: 1000 :: collect: [:i| Random new next].
-	^ self timeDelayPlot: samples! !
+	^ ScatterPlotMorph timeDelayPlot: samples! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 8/19/2016 05:22'!
+!ScatterPlotMorph class methodsFor: 'examples' stamp: 'len 8/19/2016 05:22'!
 example3
 	| samples |
 	samples _ 1 to: 1000 :: collect: [:i| | r | r _ Random new. 100 timesRepeat: [r next]. r next].
 	^ self timeDelayPlot: samples! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 8/18/2016 06:38'!
+!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 8/18/2016 06:38'!
 timeDelayPlot: anArray
 	^ self timeDelayPlot: anArray lag: 1! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 11/5/2016 06:17'!
+!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 11/5/2016 06:17'!
 timeDelayPlot: anArray dimension: m lag: r
 	^ self new
 		points: ((m*r+1 to: anArray size) collect: [:i|
 			RR tuple: m evaluating: [:j| anArray at: i-(j-1*r)]])! !
 
-!ScatterPlotMorph class methodsFor: 'as yet unclassified' stamp: 'len 8/18/2016 06:39'!
+!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 8/18/2016 06:39'!
 timeDelayPlot: anArray lag: r
 	^ self timeDelayPlot: anArray dimension: 3 lag: r! !
 
@@ -11846,13 +11878,13 @@ morphExtent: aPoint
 palette: aComplexPalette
 	palette _ aComplexPalette! !
 
-!UnitDiskPlotMorph class methodsFor: 'examples' stamp: 'len 12/18/2016 10:58:38'!
+!UnitDiskPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:55:36'!
 exampleBlaschkeProduct
 	"This is a phase plot of the Blaschke product defined by 40 randomly choosen numbers in the unit disk, plotted through a conformal mapping of the complex plane into the unit disk."
 	| random A f |
 	random _ Random new.
 	A _ (1 to: 40) collect: [:each| Complex abs: random next arg: Float twoPi * random next].
-	f _ Function from: CC to: CC evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
+	f _ CC carrier to: CC carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
 	^ UnitDiskPlotMorph new mapPlaneToUnitDisk; palette: ComplexPalette phase; function: f! !
 
 !GraphEdgeMorph methodsFor: 'private' stamp: 'len 2/19/2016 19:04'!
@@ -12470,6 +12502,15 @@ ambient
 	Answer the ambient domain of which the receiver is a subobject."
 	^ self propertyAt: #ambient ifAbsent: [self]! !
 
+!Structure methodsFor: 'accessing' stamp: 'len 5/1/2020 22:13:58'!
+carrier
+	"Answer the carrier set of the receiver. This is the forgetful functor to the category of sets."
+	^ self propertyAt: #carrier
+		ifAbsentPut:
+			[(self isProduct or: [self isCoproduct])
+				ifTrue: [CartesianProduct components: (self components collect: [:each| each carrier])]
+				ifFalse: [FormalSet newFrom: self]]! !
+
 !Structure methodsFor: 'accessing' stamp: 'len 12/28/2016 11:23:04'!
 elements
 	self propertyAt: #elements ifPresent: [:aCollectionOrDomain| ^ aCollectionOrDomain].
@@ -12565,11 +12606,12 @@ copyEmpty
 	(anObject isBlock and: [self generators notNil and: [anObject numArgs = self generators size]]) ifTrue: [^ self generate: anObject].
 	^ DomainError signal: 'coercion failed'! !
 
-!Structure methodsFor: 'elements' stamp: 'len 4/9/2020 18:18:28'!
+!Structure methodsFor: 'elements' stamp: 'len 5/1/2020 18:15:35'!
 adapt: anElement
 	"Coerce anElement *not* in the receiver to an element of the receiver. Subclasses should extend."
 	self isAmbient ifFalse: [(self ambient adapt: anElement) ifNotNil: [:coerced| (self contains: coerced) ifTrue: [^ coerced]]].
-	anElement parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anElement].
+	self category = anElement parent category ifTrue: [anElement parent -> self ifNotNil: [:aMorphism| ^ aMorphism value: anElement]].
+	anElement parent carrier -> self carrier ifNotNil: [:aMorphism| ^ aMorphism value: anElement].
 	^ nil! !
 
 !Structure methodsFor: 'elements' stamp: 'len 12/26/2016 11:31:05'!
@@ -12740,11 +12782,10 @@ to: aCodomain
 	self isAmbient ifFalse: [self ambient -> aCodomain ifNotNil: [:aMorphism| ^ self -> self ambient -> aMorphism]].
 	^ nil! !
 
-!Structure methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:08:53'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/1/2020 17:11:21'!
 to: aCodomain evaluating: aBlock
-	"Answer a morphism to the specified codomain (in the same category), evaluating as the given block.
-	Example: ZZ to: ZZ evaluating: [:x| x squared]."
-	^ Function from: self to: aCodomain evaluating: aBlock! !
+	"Answer a morphism to the specified codomain (in the same category), evaluating as the given block."
+	self subclassResponsibility! !
 
 !Structure methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:09:11'!
 to: aCodomain evaluatingWithArguments: aBlock
@@ -12766,16 +12807,6 @@ toAll: anArray
 	self isAmbient ifFalse: [self ambient -< anArray ifNotNil: [:anArrayOfMorphisms| ^ anArrayOfMorphisms collect: [:each| self -> self ambient -> each]]].
 	^ nil! !
 
-!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:42'!
-* aDomain
-	"This is a convenience method for doing categorical products. Subclasses can reimplement it to mean something different from the categorical product in order to match customary notation."
-	^ self ◊ aDomain! !
-
-!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:26:35'!
-+ aDomain
-	"This is a convenience method for doing coproducts. Subclasses can reimplement it to mean something different from the coproduct in order to match customary notation."
-	^ self ê aDomain! !
-
 !Structure methodsFor: 'operations' stamp: 'len 12/30/2017 15:19:47'!
 , aDomain
 	"Answer the cartesian set product of the receiver with the argument."
@@ -12786,29 +12817,17 @@ toAll: anArray
 	"Answer the intersection of the receiver and the argument."
 	^ self select: [:each| aCollection includes: each]! !
 
-!Structure methodsFor: 'operations' stamp: 'len 1/22/2017 08:13:22'!
+!Structure methodsFor: 'operations' stamp: 'len 5/1/2020 22:07:31'!
 ^ anInteger
 	| components |
 	components _ Array new: anInteger.
-	components atAllPut: self.
+	components atAllPut: self carrier.
 	^ CartesianProduct components: components! !
 
 !Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:36'!
 ∑ aDomain
 	"This is a convenience method for doing categorical products. Subclasses can reimplement it to mean something different from the categorical product in order to match customary notation."
 	^ self ◊ aDomain! !
-
-!Structure methodsFor: 'operations' stamp: 'len 12/30/2017 16:36:21'!
-◊ aDomain
-	"Answer the categorical product of the receiver with the argument."
-	"The product in the category of sets is the cartesian product."
-	^ self, aDomain! !
-
-!Structure methodsFor: 'operations' stamp: 'len 5/10/2019 04:36:08'!
-ê aDomain
-	"Answer the categorical sum (or coproduct) of the receiver with the argument."
-	"The coproduct in the category of sets is the disjoint union."
-	^ self species newFrom: ((self elements collect: [:each| {each. 0}]) \/ (aDomain elements collect: [:each| {each. 1}]))! !
 
 !Structure methodsFor: 'random' stamp: 'len 6/28/2016 08:38'!
 atRandom
@@ -12874,18 +12893,6 @@ isFinite
 !Structure methodsFor: 'testing' stamp: 'len 6/17/2016 22:20'!
 isInfinite
 	^ self isFinite not! !
-
-!Structure methodsFor: 'testing' stamp: 'len 12/28/2016 11:23:47'!
-isInitial
-	"Answer true if the receiver is an initial object.
-	The empty set is the initial object in the category of sets. Subclasses can override."
-	^ self propertyAt: #isInitial ifAbsent: [self isEmpty]! !
-
-!Structure methodsFor: 'testing' stamp: 'len 12/28/2016 11:19:37'!
-isTerminal
-	"Answer true if the receiver is a terminal object.
-	In the category of sets, the singletons (sets with one element) are the terminal objects. Subclasses can override."
-	^ self propertyAt: #isTerminal ifAbsent: [self size = 1]! !
 
 !Structure methodsFor: 'testing-category' stamp: 'len 12/14/2016 21:30:11'!
 isAbelianGroup
@@ -12992,105 +12999,74 @@ Complexes
 chains: anAbelianCategory
 	self propertyAt: #chains put: anAbelianCategory! !
 
-!HomSet methodsFor: 'accessing' stamp: 'len 3/11/2020 11:21:36'!
-codomain
-	^ codomain! !
+!FormalSet methodsFor: 'accessing' stamp: 'len 5/1/2020 14:46:04'!
+carrier
+	^ self! !
 
-!HomSet methodsFor: 'accessing' stamp: 'len 3/11/2020 11:21:42'!
-domain
-	^ domain! !
+!FormalSet methodsFor: 'comparing' stamp: 'len 5/1/2020 14:01:37'!
+~ aDomain
+	"Answer true if the receiver is isomorphic to the argument."
+	^ self size = aDomain size! !
 
-!HomSet methodsFor: 'elements' stamp: 'len 8/31/2016 03:37'!
-evaluating: aBlock
-	^ self domain to: self codomain evaluating: aBlock! !
+!FormalSet methodsFor: 'enumerating' stamp: 'len 5/1/2020 14:15:49'!
+collect: aBlock
+	| elements |
+	elements _ Set new.
+	self do: [:each| elements add: (aBlock value: each)].
+	^ self species newFrom: elements! !
 
-!HomSet methodsFor: 'elements' stamp: 'len 8/31/2016 03:41'!
-identity
-	^ self isEndomorphisms ifTrue: [self domain id]! !
+!FormalSet methodsFor: 'enumerating' stamp: 'len 5/1/2020 14:16:19'!
+select: aBlock
+	| elements |
+	elements _ Set new.
+	self do: [:each| (aBlock value: each) ifTrue: [elements add: each]].
+	^ self species newFrom: elements! !
 
-!HomSet methodsFor: 'elements' stamp: 'len 5/24/2019 11:28:29'!
-mapping: aBlock
-	"Answer a morphism defined by images of generators.
-	aBlock takes indices i and evaluates to the image of the i-th generator."
-	^ self domain to: self codomain mapping: aBlock! !
+!FormalSet methodsFor: 'morphisms' stamp: 'len 5/1/2020 14:17:39'!
+automorphisms
+	^ SymmetricGroup on: self! !
 
-!HomSet methodsFor: 'elements' stamp: 'len 4/9/2020 07:20:29'!
-newFrom: anObject
-	anObject isEvaluable ifTrue: [^ self evaluating: anObject].
-	^ super newFrom: anObject! !
+!FormalSet methodsFor: 'morphisms' stamp: 'len 5/1/2020 14:17:20'!
+to: aCodomain evaluating: aBlock
+	"Answer a morphism to the specified codomain (in the same category), evaluating as the given block."
+	^ Function from: self to: aCodomain evaluating: aBlock! !
 
-!HomSet methodsFor: 'operations' stamp: 'len 9/16/2018 16:14:03'!
-opposite
-	^ self class from: self codomain to: self domain! !
+!FormalSet methodsFor: 'operations' stamp: 'len 5/1/2020 14:01:23'!
+/\ aCollection
+	"Answer the intersection of the receiver and the argument."
+	^ self select: [:each| aCollection includes: each]! !
 
-!HomSet methodsFor: 'testing' stamp: 'len 6/6/2019 16:41:29'!
-includes: anObject
-	^ (anObject isKindOf: Morphism) and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
+!FormalSet methodsFor: 'operations' stamp: 'len 5/1/2020 22:08:49'!
+◊ aDomain
+	"Answer the categorical product of the receiver with the argument."
+	"The product in the category of sets is the cartesian product."
+	^ self, aDomain! !
 
-!HomSet methodsFor: 'testing' stamp: 'len 4/19/2016 04:53'!
-isEndomorphisms
-	^ self domain = self codomain! !
+!FormalSet methodsFor: 'operations' stamp: 'len 5/1/2020 14:13:27'!
+ê aDomain
+	"Answer the categorical sum (or coproduct) of the receiver with the argument."
+	"The coproduct in the category of sets is the disjoint union."
+	^ self species newFrom: ((self elements collect: [:each| {each. 0}]) \/ (aDomain elements collect: [:each| {each. 1}]))! !
 
-!HomSet methodsFor: 'private' stamp: 'len 3/11/2020 11:22:05'!
-codomain: aDomain
-	codomain _ aDomain! !
+!FormalSet methodsFor: 'testing' stamp: 'len 5/1/2020 14:19:41'!
+includes: anElement
+	^ (self propertyAt: #elements) includes: anElement! !
 
-!HomSet methodsFor: 'private' stamp: 'len 3/11/2020 11:21:58'!
-domain: aDomain
-	domain _ aDomain! !
+!FormalSet methodsFor: 'testing' stamp: 'len 5/1/2020 14:06:30'!
+isInitial
+	"Answer true if the receiver is an initial object.
+	The empty set is the initial object in the category of sets."
+	^ self isEmpty! !
 
-!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:13:30'!
-= anObject
-	^ self class == anObject class and: [self domain = anObject domain and: [self codomain = anObject codomain]]! !
+!FormalSet methodsFor: 'testing' stamp: 'len 5/1/2020 14:08:32'!
+isTerminal
+	"Answer true if the receiver is a terminal object.
+	In the category of sets, the singletons (sets with one element) are the terminal objects."
+	^ self size = 1! !
 
-!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:14:39'!
-hash
-	^ self domain hash hashMultiply + self codomain hash! !
-
-!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:23:45'!
-example1
-	"The set Hom(N,Z), the functions from the natural numbers to the integers.
-	This is the space of sequences. (See class Sequence)."
-	^ NN hom: ZZ! !
-
-!HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:42:46'!
-example2
-	"The endomorphisms of the rational integers Z.
-	This is Hom(Z,Z), the set of ring homomorphisms from Z to itself."
-	^ ZZ endomorphisms! !
-
-!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:30:14'!
-example3
-	"In some categories the Hom-Set has actually richer structure,
-	and can be seen as an object of the category.
-	Here's the vector space of linear maps from the Q^3 to Q^5.
-	This is the internal hom(Q^3,Q^5), and it is a vector space itself.
-	(It is not an instance of HomSet.)"
-	^ (QQ^3) => (QQ^5)! !
-
-!HomSet class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:53'!
-from: aDomain to: anotherDomain
-	^ self new domain: aDomain; codomain: anotherDomain! !
-
-!FunctionSet methodsFor: 'elements' stamp: 'len 3/10/2020 17:58:24'!
-evaluating: aBlock
-	^ Function from: self domain to: self codomain evaluating: aBlock! !
-
-!FunctionSet methodsFor: 'testing' stamp: 'len 3/10/2020 17:00:27'!
-includes: anObject
-	^ (anObject isKindOf: Function) and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
-
-!PointSet methodsFor: 'accessing' stamp: 'len 11/7/2016 16:25'!
-scalars
-	^ self domain coordinateRing! !
-
-!PointSet methodsFor: 'accessing' stamp: 'len 12/28/2016 11:24:20'!
-size
-	^ self propertyAt: #size ifAbsentPut: [self codomain pointsCountOver: self scalars]! !
-
-!PointSet methodsFor: 'enumerating' stamp: 'len 11/7/2016 16:25'!
-do: aBlock
-	self codomain pointsOver: self scalars do: aBlock! !
+!FormalSet methodsFor: 'private' stamp: 'len 5/1/2020 22:13:58'!
+species
+	^ FormalSet! !
 
 !CartesianProduct methodsFor: 'accessing' stamp: 'len 11/10/2015 22:13'!
 components
@@ -13181,6 +13157,98 @@ example
 components: anArray
 	^ self new components: anArray! !
 
+!HomSet methodsFor: 'accessing' stamp: 'len 3/11/2020 11:21:36'!
+codomain
+	^ codomain! !
+
+!HomSet methodsFor: 'accessing' stamp: 'len 3/11/2020 11:21:42'!
+domain
+	^ domain! !
+
+!HomSet methodsFor: 'elements' stamp: 'len 8/31/2016 03:37'!
+evaluating: aBlock
+	^ self domain to: self codomain evaluating: aBlock! !
+
+!HomSet methodsFor: 'elements' stamp: 'len 8/31/2016 03:41'!
+identity
+	^ self isEndomorphisms ifTrue: [self domain id]! !
+
+!HomSet methodsFor: 'elements' stamp: 'len 5/24/2019 11:28:29'!
+mapping: aBlock
+	"Answer a morphism defined by images of generators.
+	aBlock takes indices i and evaluates to the image of the i-th generator."
+	^ self domain to: self codomain mapping: aBlock! !
+
+!HomSet methodsFor: 'elements' stamp: 'len 4/9/2020 07:20:29'!
+newFrom: anObject
+	anObject isEvaluable ifTrue: [^ self evaluating: anObject].
+	^ super newFrom: anObject! !
+
+!HomSet methodsFor: 'operations' stamp: 'len 9/16/2018 16:14:03'!
+opposite
+	^ self class from: self codomain to: self domain! !
+
+!HomSet methodsFor: 'testing' stamp: 'len 6/6/2019 16:41:29'!
+includes: anObject
+	^ (anObject isKindOf: Morphism) and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
+
+!HomSet methodsFor: 'testing' stamp: 'len 4/19/2016 04:53'!
+isEndomorphisms
+	^ self domain = self codomain! !
+
+!HomSet methodsFor: 'private' stamp: 'len 3/11/2020 11:22:05'!
+codomain: aDomain
+	codomain _ aDomain! !
+
+!HomSet methodsFor: 'private' stamp: 'len 3/11/2020 11:21:58'!
+domain: aDomain
+	domain _ aDomain! !
+
+!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:13:30'!
+= anObject
+	^ self class == anObject class and: [self domain = anObject domain and: [self codomain = anObject codomain]]! !
+
+!HomSet methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 09:14:39'!
+hash
+	^ self domain hash hashMultiply + self codomain hash! !
+
+!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:23:45'!
+example1
+	"The set Hom(N,Z), the functions from the natural numbers to the integers.
+	This is the space of sequences. (See class Sequence)."
+	^ NN hom: ZZ! !
+
+!HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:42:46'!
+example2
+	"The endomorphisms of the rational integers Z.
+	This is Hom(Z,Z), the set of ring homomorphisms from Z to itself."
+	^ ZZ endomorphisms! !
+
+!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:30:14'!
+example3
+	"In some categories the Hom-Set has actually richer structure,
+	and can be seen as an object of the category.
+	Here's the vector space of linear maps from the Q^3 to Q^5.
+	This is the internal hom(Q^3,Q^5), and it is a vector space itself.
+	(It is not an instance of HomSet.)"
+	^ (QQ^3) => (QQ^5)! !
+
+!HomSet class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:53'!
+from: aDomain to: anotherDomain
+	^ self new domain: aDomain; codomain: anotherDomain! !
+
+!PointSet methodsFor: 'accessing' stamp: 'len 11/7/2016 16:25'!
+scalars
+	^ self domain coordinateRing! !
+
+!PointSet methodsFor: 'accessing' stamp: 'len 12/28/2016 11:24:20'!
+size
+	^ self propertyAt: #size ifAbsentPut: [self codomain pointsCountOver: self scalars]! !
+
+!PointSet methodsFor: 'enumerating' stamp: 'len 11/7/2016 16:25'!
+do: aBlock
+	self codomain pointsOver: self scalars do: aBlock! !
+
 !Naturals methodsFor: 'accessing' stamp: 'len 2/13/2016 20:41'!
 identity
 	^ 1! !
@@ -13225,10 +13293,10 @@ initialize
 	super initialize.
 	Smalltalk at: #NN put: self new! !
 
-!Monoid methodsFor: 'accessing' stamp: 'len 4/29/2020 19:02:08'!
+!Monoid methodsFor: 'accessing' stamp: 'len 5/1/2020 15:38:48'!
 identity
 	self isAmbient ifFalse: [^ self ambient identity].
-	^ self propertyAt: #identity! !
+	^ self propertyAt: #identity ifAbsent: [self do: [:each| ^ self propertyAt: #identity put: each ∑ each inverse]]! !
 
 !Monoid methodsFor: 'morphic' stamp: 'len 4/26/2020 06:22:44'!
 multiplicationTable
@@ -13517,9 +13585,10 @@ generators
 	self propertyAt: #generators ifPresent: [:aCollection| ^ aCollection].
 	^ self propertyAt: #generators put: (self computeGenerators ifNil: [^ nil])! !
 
-!Group methodsFor: 'accessing' stamp: 'len 5/5/2019 18:04:03'!
+!Group methodsFor: 'accessing' stamp: 'len 5/1/2020 15:38:44'!
 identity
 	"Answer the identity element of the receiver."
+	self isAmbient ifFalse: [^ self ambient identity].
 	^ self propertyAt: #identity ifAbsent: [self do: [:each| ^ self propertyAt: #identity put: each ∑ each inverse]]! !
 
 !Group methodsFor: 'accessing' stamp: 'len 10/1/2018 04:38:56'!
@@ -13936,11 +14005,12 @@ upperCentralSeriesQuotientsDo: aBlock
 	Z1 _ self null.
 	self upperCentralSeriesDo: [:Z| aBlock value: Z / Z1. Z1 _ Z]! !
 
-!Group methodsFor: 'testing' stamp: 'len 5/28/2019 04:23:16'!
+!Group methodsFor: 'testing' stamp: 'len 5/1/2020 15:45:26'!
 isCommutative
-	(self generators ifNil: [self]) do: [:x|
-		(self generators ifNil: [self]) do: [:y|
-			x ∑ y = (y ∑ x) ifFalse: [^ false]]].
+	| X |
+	self propertyAt: #isCommutative ifPresent: [:aBoolean| ^ aBoolean].
+	X _ self generators ifNil: [self].
+	X do: [:x| X do: [:y| x ∑ y = (y ∑ x) ifFalse: [^ false]]].
 	^ true! !
 
 !Group methodsFor: 'testing' stamp: 'len 5/28/2019 04:51:53'!
@@ -14019,6 +14089,14 @@ or:
 isTerminal
 	^ self isTrivial! !
 
+!Group methodsFor: 'testing' stamp: 'len 5/1/2020 15:44:22'!
+isTrivial
+	"Answer true if the receiver is the trivial group {id}."
+	| generators |
+	self propertyAt: #elements ifPresent: [:aCollection| ^ aCollection size = 1].
+	generators _ self generators ifNil: [^ self size = 1].
+	^ generators allSatisfy: [:each| each = self identity]! !
+
 !Group methodsFor: 'private' stamp: 'len 1/28/2018 08:23:20'!
 computeExponent
 	| answer |
@@ -14058,11 +14136,6 @@ raise: anElement to: anInteger
 species
 	^ Group! !
 
-!Group class methodsFor: 'examples' stamp: 'len 12/14/2016 11:10:52'!
-quaternions
-	"Answer the quaternionic group."
-	^ Group new generators: {Quaternion i. Quaternion j}! !
-
 !Group class methodsFor: 'examples' stamp: 'len 8/3/2019 09:01:40'!
 schnorr: q
 	"Answer a Schnorr group of the given prime order q.
@@ -14099,13 +14172,6 @@ size
 hash
 	^ components hash! !
 
-!DirectProductGroup methodsFor: 'converting' stamp: 'len 4/25/2020 06:43:05'!
-asCartesianProduct
-	| answer |
-	^ (answer _ CartesianProduct components: components)
-		addMap: (self to: answer evaluating: [:x| x components]);
-		yourself! !
-
 !DirectProductGroup methodsFor: 'elements' stamp: 'len 4/25/2020 06:55:02'!
 compose: anArray
 	^ GroupTuple new parent: self; components: anArray asArray! !
@@ -14116,9 +14182,9 @@ newFrom: anObject
 		ifTrue: [^ self compose: (components with: anObject collect: [:eachRing :eachElement| eachRing !! eachElement])].
 	^ super newFrom: anObject! !
 
-!DirectProductGroup methodsFor: 'enumerating' stamp: 'len 7/29/2016 06:51'!
+!DirectProductGroup methodsFor: 'enumerating' stamp: 'len 5/1/2020 18:23:47'!
 do: aBlock
-	self asCartesianProduct do: aBlock! !
+	self carrier do: [:each| aBlock value: (self compose: each)]! !
 
 !DirectProductGroup methodsFor: 'morphisms' stamp: 'len 4/25/2020 06:55:32'!
 coprojection: i
@@ -14128,13 +14194,13 @@ coprojection: i
 projection: i
 	^ (self to: (self at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
 
-!DirectProductGroup methodsFor: 'random' stamp: 'len 4/25/2020 07:48:41'!
+!DirectProductGroup methodsFor: 'random' stamp: 'len 5/1/2020 18:23:08'!
 atRandom: aRandom
-	^ self compose: (self asCartesianProduct atRandom: aRandom)! !
+	^ self compose: (self carrier atRandom: aRandom)! !
 
-!DirectProductGroup methodsFor: 'random' stamp: 'len 4/25/2020 07:48:48'!
+!DirectProductGroup methodsFor: 'random' stamp: 'len 5/1/2020 18:23:16'!
 atRandom: aRandom bits: bits
-	^ self compose: (self asCartesianProduct atRandom: aRandom bits: bits)! !
+	^ self compose: (self carrier atRandom: aRandom bits: bits)! !
 
 !DirectProductGroup methodsFor: 'testing' stamp: 'len 4/25/2020 06:54:01'!
 includes: anObject
@@ -16010,18 +16076,18 @@ size
 	(anObject isKindOf: LinearGroup) ifFalse: [^ super >= anObject].
 	^ self scalars >= anObject scalars and: [self degree = anObject degree]! !
 
-!GeneralLinearGroup methodsFor: 'converting' stamp: 'len 5/15/2019 01:46:22'!
-toAlgebraicVariety
+!GeneralLinearGroup methodsFor: 'converting' stamp: 'len 5/1/2020 20:02:42'!
+asAlgebraicVariety
 	| n P det V |
 	self scalars isField ifFalse: [self notYetImplemented].
 	n _ self degree.
 	P _ self scalars polynomialsIn: n squared + 1.
 	det _ (P matrix: n coefficients: P generators) determinant.
 	V _ (P * (det * (P x: n squared + 1) - P one)) variety.
-	^ Function
-		from: self to: V
-		evaluating: [:M| V !! (M asTuple, M determinant reciprocal)]
-		inverseEvaluating: [:p| p scalars matrix: n coefficients: p coordinates]! !
+	V carrier
+		addMap: (self carrier to: V carrier evaluating: [:M| V !! (M asTuple, M determinant reciprocal)]);
+		addMap: (V carrier to: self carrier evaluating: [:p| p scalars matrix: n coefficients: p coordinates]).
+	^ V! !
 
 !GeneralLinearGroup methodsFor: 'elements' stamp: 'len 4/9/2020 18:10:41'!
 adapt: anElement
@@ -17807,13 +17873,6 @@ matrixLift: B along: A
 	X _ self -< self components collect: [:p| (A apply: p) \ (B apply: p)].
 	^ self matrix: A width @ B width evaluating: [:i :j| self compose: (X collect: [:each| each at: i@j])]! !
 
-!ProductRing methodsFor: 'converting' stamp: 'len 4/25/2020 06:11:31'!
-asCartesianProduct
-	| answer |
-	^ (answer _ CartesianProduct components: components)
-		addMap: (self to: answer evaluating: [:x| x components]);
-		yourself! !
-
 !ProductRing methodsFor: 'elements' stamp: 'len 4/25/2020 06:10:29'!
 compose: anArray
 	^ RingTuple new parent: self; components: anArray asArray! !
@@ -17849,9 +17908,9 @@ isZeroDivisor: anElement
 	components with: anElement do: [:each :x| (each isZeroDivisor: x) ifTrue: [^ true]].
 	^ false! !
 
-!ProductRing methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:15:22'!
+!ProductRing methodsFor: 'enumerating' stamp: 'len 5/1/2020 18:24:11'!
 do: aBlock
-	self asCartesianProduct do: [:each| aBlock value: (self compose: each)]! !
+	self carrier do: [:each| aBlock value: (self compose: each)]! !
 
 !ProductRing methodsFor: 'enumerating' stamp: 'len 6/23/2019 04:29:12'!
 primeIdealsDo: aBlock
@@ -17863,13 +17922,13 @@ projection: i
 	"Answer the canonical projection to the i-th component."
 	^ (self to: (self components at: i) evaluating: [:x| x at: i]) name: Character pi asText, i printText sub! !
 
-!ProductRing methodsFor: 'random' stamp: 'len 9/16/2018 16:15:07'!
+!ProductRing methodsFor: 'random' stamp: 'len 5/1/2020 18:23:56'!
 atRandom: aRandom
-	^ self compose: (self asCartesianProduct atRandom: aRandom)! !
+	^ self compose: (self carrier atRandom: aRandom)! !
 
-!ProductRing methodsFor: 'random' stamp: 'len 9/16/2018 16:15:10'!
+!ProductRing methodsFor: 'random' stamp: 'len 5/1/2020 18:24:02'!
 atRandom: aRandom bits: bits
-	^ self compose: (self asCartesianProduct atRandom: aRandom bits: bits)! !
+	^ self compose: (self carrier atRandom: aRandom bits: bits)! !
 
 !ProductRing methodsFor: 'testing' stamp: 'len 4/25/2020 06:08:33'!
 includes: anObject
@@ -18218,13 +18277,14 @@ size
 hash
 	^ self modulus hash! !
 
-!ModularIntegerRing methodsFor: 'converting' stamp: 'len 5/26/2019 12:18:23'!
+!ModularIntegerRing methodsFor: 'converting' stamp: 'len 5/1/2020 18:10:17'!
 asAbelianGroup
 	| answer |
-	^ (answer _ AbelianGroup orders: {self modulus})
-		addMap: (self to: answer evaluating: [:each| answer !! {each representative}]);
-		addMap: (answer to: self evaluating: [:each| self !! (each at: 1)]);
-		yourself! !
+	answer _ AbelianGroup orders: {self modulus}.
+	answer carrier
+		addMap: (self carrier to: answer carrier evaluating: [:each| answer !! {each representative}]);
+		addMap: (answer carrier to: self carrier evaluating: [:each| self !! (each at: 1)]).
+	^ answer! !
 
 !ModularIntegerRing methodsFor: 'elements-operations' stamp: 'len 6/20/2019 04:30:43'!
 associatedUnit: anElement
@@ -18935,17 +18995,18 @@ x
 polynomial: aPolynomial
 	self relations: aPolynomial parent * aPolynomial! !
 
-!AlgebraicExtensionRing methodsFor: 'converting' stamp: 'len 3/11/2020 17:00:26'!
+!AlgebraicExtensionRing methodsFor: 'converting' stamp: 'len 5/1/2020 18:03:08'!
 asModule
 	^ self propertyAt: #asModule ifAbsentPut:
 		[| M |
 		M _ self scalars ^ self degree.
-		self addMap:
-			(self to: M evaluating:
-				[:a| M elementAt: a representative coefficients]);
+		M carrier
 			addMap:
-			(M to: self evaluating:
-				[:v| (1 to: M rank) sum: [:i| self x ^ (i-1) * (v at: i)]]).
+				(self carrier to: M carrier evaluating:
+					[:a| M elementAt: a representative coefficients]);
+			addMap:
+				(M carrier to: self carrier evaluating:
+					[:v| (1 to: M rank) sum: [:i| self x ^ (i-1) * (v at: i)]]).
 		M]
 
 "
@@ -19500,13 +19561,14 @@ size
 hash
 	^ self class hash! !
 
-!RationalIntegerRing methodsFor: 'converting' stamp: 'len 5/13/2019 15:30:07'!
+!RationalIntegerRing methodsFor: 'converting' stamp: 'len 5/1/2020 18:10:49'!
 asAbelianGroup
 	| answer |
-	^ (answer _ FreeAbelianGroup new: 1)
-		addMap: (self to: answer evaluating: [:each| answer !! {each}]);
-		addMap: (answer to: self evaluating: [:each| each at: 1]);
-		yourself! !
+	answer _ FreeAbelianGroup new: 1.
+	answer carrier
+		addMap: (self carrier to: answer carrier evaluating: [:each| answer !! {each}]);
+		addMap: (answer carrier to: self carrier evaluating: [:each| each at: 1]).
+	^ answer! !
 
 !RationalIntegerRing methodsFor: 'elements' stamp: 'len 11/5/2015 19:19'!
 one
@@ -20709,15 +20771,16 @@ completion
 	"Answer the ring of power series, i.e. the completion of the receiver at 0."
 	^ PowerSeriesRing on: self! !
 
-!PolynomialRing methodsFor: 'operations' stamp: 'len 3/13/2020 17:06:40'!
+!PolynomialRing methodsFor: 'operations' stamp: 'len 5/1/2020 18:07:53'!
 filtrationAt: anInteger
 	"Answer the submodule of polynomials of degree <= anInteger."
 	| answer |
 	self isUnivariate ifFalse: [^ self notYetImplemented].
-	^ (answer _ self scalars ^ (anInteger + 1))
-		addMap: (self to: answer evaluating: [:f| answer elementAt: (f coefficients extendedTo: anInteger)]);
-		addMap: (answer to: self evaluating: [:v| self coefficients: (answer coordinatesOf: v)]);
-		yourself! !
+	answer _ self scalars ^ (anInteger + 1).
+	answer carrier
+		addMap: (self carrier to: answer carrier evaluating: [:f| answer elementAt: (f coefficients extendedTo: anInteger)]);
+		addMap: (answer carrier to: self carrier evaluating: [:v| self coefficients: (answer coordinatesOf: v)]).
+	^ answer! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 12/24/2017 22:16:25'!
 fractions
@@ -20726,15 +20789,16 @@ fractions
 		[self scalars isField ifFalse: [^ DomainError signal: 'scalars are not a field'].
 		RationalFunctionField on: self]! !
 
-!PolynomialRing methodsFor: 'operations' stamp: 'len 3/13/2020 16:17:52'!
+!PolynomialRing methodsFor: 'operations' stamp: 'len 5/1/2020 18:09:30'!
 gradingAt: anInteger
 	"Answer the submodule of homogeneous polynomials of degree anInteger."
 	| answer monomialBasis |
 	monomialBasis _ self monomials allMonomialsOfDegree: anInteger.
-	^ (answer _ self scalars ^ monomialBasis size)
-		addMap: (self to: answer evaluating: [:f| answer !! (monomialBasis collect: [:each| f coefficientAt: each])]);
-		addMap: (answer to: self evaluating: [:v| | f | f _ self zero. v coordinates with: monomialBasis do: [:coefficient :monomial| f _ (self coefficient: coefficient monomial: monomial) + f]. f]);
-		yourself! !
+	answer _ self scalars ^ monomialBasis size.
+	answer carrier
+		addMap: (self carrier to: answer carrier evaluating: [:f| answer !! (monomialBasis collect: [:each| f coefficientAt: each])]);
+		addMap: (answer carrier to: self carrier evaluating: [:v| | f | f _ self zero. v coordinates with: monomialBasis do: [:coefficient :monomial| f _ (self coefficient: coefficient monomial: monomial) + f]. f]).
+	^ answer! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 10/27/2016 18:32'!
 hilbertSeriesAt: t
@@ -22823,17 +22887,17 @@ names: anArray
 	anArray withIndexDo: [:name :i| nameToIndex at: name put: i].
 	self propertyAt: #nameToIndex put: nameToIndex! !
 
-!FreeModule methodsFor: 'accessing' stamp: 'len 12/28/2016 12:08:05'!
+!FreeModule methodsFor: 'accessing' stamp: 'len 5/1/2020 20:08:00'!
 norm
 	^ self propertyAt: #norm ifAbsentPut:
-		[Function from: self to: self scalars "should go to the reals"
+		[self carrier to: self scalars carrier "should go to the reals"
 			evaluating: [:x| (self innerProduct value: {x. x conjugated}) squareRoot]]! !
 
-!FreeModule methodsFor: 'accessing' stamp: 'len 12/28/2016 12:07:26'!
+!FreeModule methodsFor: 'accessing' stamp: 'len 5/1/2020 20:07:44'!
 norm2
 	"Answer the squared norm."
 	^ self propertyAt: #norm2 ifAbsentPut:
-		[Function from: self to: self scalars
+		[self carrier to: self scalars carrier
 			evaluating: [:x| (self innerProduct value: {x. x conjugated})]]! !
 
 !FreeModule methodsFor: 'accessing' stamp: 'len 3/3/2020 15:53:00'!
@@ -23188,10 +23252,14 @@ codomain: aModule
 domain: aModule
 	domain _ aModule! !
 
-!HomModule methodsFor: 'as yet unclassified' stamp: 'len 4/26/2020 13:10:23'!
+!HomModule methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 10:34:06'!
 relations
-	(self domain isFree and: [self codomain isFree]) ifTrue: [^ self base null].
-	^ (self domain relations -> self domain base  => self codomain) transposed cokernel relations! !
+	self domain isFree ifTrue:
+		[self codomain isFree ifTrue: [^ self base null].
+		^ self base span: (self domain base => (self codomain relations base -> self codomain base)) matrix columns].
+	^ self notYetImplemented
+	
+"(self domain relations -> self domain base  => self codomain) transposed cokernel relations"! !
 
 !HomModule class methodsFor: 'instance creation' stamp: 'len 10/2/2018 01:14:35'!
 from: aModule to: anotherModule
@@ -23411,13 +23479,6 @@ zero
 hash
 	^ components hash! !
 
-!DirectSumModule methodsFor: 'converting' stamp: 'len 4/25/2020 07:01:32'!
-asCartesianProduct
-	| answer |
-	^ (answer _ CartesianProduct components: components)
-		addMap: (self to: answer evaluating: [:x| x components]);
-		yourself! !
-
 !DirectSumModule methodsFor: 'elements' stamp: 'len 4/25/2020 07:02:11'!
 compose: anArray
 	^ ModuleTuple new parent: self; components: anArray asArray! !
@@ -23428,9 +23489,9 @@ newFrom: anObject
 		ifTrue: [^ self compose: (components with: anObject collect: [:eachModule :eachElement| eachModule !! eachElement])].
 	^ super newFrom: anObject! !
 
-!DirectSumModule methodsFor: 'enumerating' stamp: 'len 4/25/2020 07:03:06'!
+!DirectSumModule methodsFor: 'enumerating' stamp: 'len 5/1/2020 18:24:48'!
 do: aBlock
-	self asCartesianProduct do: [:each| aBlock value: (self compose: each)]! !
+	self carrier do: [:each| aBlock value: (self compose: each)]! !
 
 !DirectSumModule methodsFor: 'morphisms' stamp: 'len 4/25/2020 07:04:35'!
 coprojection: i
@@ -26626,12 +26687,12 @@ size
 	"Answer the number of codewords."
 	^ self asVectorSpace size! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 12/3/2016 09:12:28'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/1/2020 20:21:22'!
 weight
 	"Answer the Hamming weight function."
 	| V |
 	V _ self ambient.
-	^ Function from: V to: ZZ evaluating: [:x| (V coordinatesOf: x) weight]! !
+	^ V carrier to: ZZ carrier evaluating: [:x| (V coordinatesOf: x) weight]! !
 
 !LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:44'!
 weightDistribution
@@ -27114,10 +27175,10 @@ to: aCodomain
 	"..."
 	^ super to: aCodomain! !
 
-!ChainComplex methodsFor: 'operations' stamp: 'len 4/22/2020 11:48:20'!
+!ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 22:07:14'!
 / aSubcomplex
 	"Answer the quotient of the receiver by the argument, equipped with the quotient map."
-	^ self notYetImplemented! !
+	^ self class differentials: (differentials with: aSubcomplex differentials collect: [:f :g| (f domain -> (f domain / g domain)) section -> (f codomain / g codomain)]) degree: degree "assuming they are the same degree and length"! !
 
 !ChainComplex methodsFor: 'operations' stamp: 'len 5/14/2019 16:44:49'!
 << n
@@ -27129,15 +27190,15 @@ to: aCodomain
 	(aCodomain isKindOf: Morphism) ifTrue: [^ super => aCodomain].
 	^ self class differentials: (differentials collect: [:each| each => aCodomain]) reversed degree: degree! !
 
-!ChainComplex methodsFor: 'operations' stamp: 'len 4/23/2020 01:27:47'!
+!ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 22:07:37'!
 ê aChainComplex
 	"Answer the cartesian product (direct sum) of the receiver with the argument."
-	^ self class differentials: (differentials with: aChainComplex differentials collect: [:one :another| one ê another]) degree: degree "assuming they are the same degree and length"! !
+	^ self class differentials: (differentials with: aChainComplex differentials collect: [:f :g| f ê g]) degree: degree "assuming they are the same degree and length"! !
 
-!ChainComplex methodsFor: 'operations' stamp: 'len 5/14/2019 20:48:44'!
+!ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 22:08:07'!
 ë aChainComplex
 	"Answer the tensor product of the receiver with the argument."
-	^ self notYetImplemented! !
+	^ self class differentials: (differentials with: aChainComplex differentials collect: [:f :g| f ë g]) degree: degree "assuming they are the same degree and length"! !
 
 !ChainComplex methodsFor: 'operations' stamp: 'len 5/14/2019 16:39:47'!
 dual
@@ -27320,13 +27381,9 @@ arrowPrintOn: aStream
 								ifFalse: [$]]]);
 		print: self codomain! !
 
-!Morphism methodsFor: 'printing' stamp: 'len 8/8/2016 05:52'!
-arrowPrintString
-	| limit limitedString |
-	limit _ 100.
-	limitedString _ String streamContents: [:s | self arrowPrintOn: s] limitedTo: limit.
-	limitedString size < limit ifTrue: [^ limitedString].
-	^ limitedString , '...etc...'! !
+!Morphism methodsFor: 'printing' stamp: 'len 5/1/2020 22:27:36'!
+arrowText
+	^ Text streamContents: [:s | self arrowPrintOn: s]! !
 
 !Morphism methodsFor: 'printing' stamp: 'len 4/22/2020 14:36:41'!
 name: aString
@@ -27486,11 +27543,6 @@ codomain
 domain
 	^ self propertyAt: #domain! !
 
-!Function methodsFor: 'accessing' stamp: 'len 3/10/2020 17:53:02'!
-parent
-	"A function f:A->B is conceptually defined on the underlying sets of A and B and it is not necessarily a morphism in the category of A or B, so it belongs to the set of functions from A to B and not to Hom(A,B)."
-	^ FunctionSet from: self domain to: self codomain! !
-
 !Function methodsFor: 'comparing' stamp: 'len 4/30/2020 09:40:07'!
 = aFunction
 	self == aFunction ifTrue: [^ true].
@@ -27508,22 +27560,21 @@ asBlock
 plot: aCollection
 	^ FunctionPlotMorph new evaluationPoints: aCollection; function: self! !
 
-!Function methodsFor: 'operations' stamp: 'len 12/30/2017 19:52:42'!
+!Function methodsFor: 'operations' stamp: 'len 5/1/2020 17:11:54'!
 , aFunction
 	"Answer the cartesian product of the receiver with the argument."
-	^ Function
-		from: (self domain, aFunction domain)
+	^ (self domain, aFunction domain)
 		to: (self codomain, aFunction codomain)
 		evaluating: [:each| {self value: (each at: 1). aFunction value: (each at: 2)}]! !
 
-!Function methodsFor: 'operations' stamp: 'len 3/13/2020 06:14:27'!
+!Function methodsFor: 'operations' stamp: 'len 5/1/2020 22:11:12'!
 ∑ aFunction
 	"Answer the composition of the receiver with the argument.
 	Given the argument f:X -> Y and the receiver g:Y -> Z, answer g∑f:X -> Z.
 	This is, (g∑f)(x) = g(f(x))."
-	self domain >= aFunction codomain ifFalse: [DomainError signal: 'domains don''t match'].
-	^ (self species = aFunction species ifTrue: [self species] ifFalse: [Function])
-		from: aFunction domain to: self codomain evaluating: [:x| self value: (aFunction value: x)]! !
+	self domain = aFunction codomain ifFalse: [^ DomainError signal: 'domains don''t match'].
+	"self category = aFunction category ifFalse: [^ DomainError signal: 'categories don''t match']."
+	^ aFunction domain to: self codomain evaluating: [:x| self value: (aFunction value: x)]! !
 
 !Function methodsFor: 'operations' stamp: 'len 12/30/2017 19:53:33'!
 ◊ aFunction
@@ -27636,29 +27687,43 @@ expression: anExpression
 species
 	^ Function! !
 
-!Function class methodsFor: 'examples' stamp: 'len 10/29/2016 07:39'!
-example1Function
-	"The function 'x^2 + 1' with domain the ring of rational integers
-	and codomain the set of natural numbers."
-	^ Function from: ZZ to: NN evaluating: [:x| x squared + 1]! !
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 22:32:05'!
+example1Function1
+	"The function 'x^2 + 1' from the set of integers to the set of natural numbers."
+	^ ZZ carrier to: NN evaluating: [:x| x squared + 1]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 10/29/2016 07:38'!
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 22:31:24'!
+example1Function2
+	"The function 'x^2 + 1' on the set of natural numbers.
+	This is a Sequence, i.e. function with domain the natural numbers."
+	^ NN to: NN evaluating: [:x| x squared + 1]! !
+
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 22:02:10'!
 example2Morphism1
 	"This is the most common way to define morphisms.
 	QQ^3 is the vector space of 3-tuples with rational coefficients,
 	and this defines a linear map on it (an endomorphism)
-	by sending the message #to:evaluating: to the vector space."
+	by sending the message #to:evaluating: to the vector space.
+	This creates an instance of ModuleMap."
 	^ QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 5/11/2019 04:32:05'!
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 22:02:19'!
+example2Morphism12
+	"This, on the other hand, is a function on the underlying set of
+	QQ^3. Is is a morphism in the category of sets, but is not a morphism
+	of vector spaces. This creates an instance of Function."
+	^ (QQ^3) carrier to: (QQ^3) carrier evaluating: [:v| (v x - v y, v x, v z)]! !
+
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 21:55:30'!
 example2Morphism2
 	"Here's another way to define the same morphism,
-	by creating Hom(Q^3, Q^3) and sending the message #evaluating: to it."
+	by creating vector space Hom(Q^3, Q^3) of linear maps
+	and sending the message #evaluating: to it."
 	^ QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Function class methodsFor: 'examples' stamp: 'len 5/11/2019 04:31:56'!
+!Function class methodsFor: 'examples' stamp: 'len 5/1/2020 21:56:05'!
 example2Morphism22
-	"Or equivalently, creating Hom(Q^3, Q^3) and sending coercing
+	"Or equivalently, creating Hom(Q^3, Q^3) and coercing
 	a Smalltalk block into an element of the Hom vector space."
 	^ QQ^3 => (QQ^3) !! [:v| (v x - v y, v x, v z)]! !
 
@@ -27895,12 +27960,14 @@ action
 	"If the receiver is a representation (i.e., a group homomorphism to the automorphisms group of some space), answer the associated group action on the representation space."
 	^ GroupAction from: (self domain, self space) to: self space evaluatingWithArguments: [:x :y| (self value: x) value: y]! !
 
-!GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 15:47:49'!
+!GroupMap methodsFor: 'accessing' stamp: 'len 5/1/2020 19:43:18'!
 character
 	"If the receiver is a linear representation (i.e., a group homomorphism to the general linear group), answer the character of the receiver."
 	"This is a class function, i.e. it's constant on conjugacy classes, because similar matrices (or linear maps) have the same trace."
 	self space isModule ifFalse: [^ self error: 'not a linear representation'].
-	^ Function from: self domain to: self space scalars evaluating: [:g| (self value: g) trace] "should be a GroupMap?"! !
+	^ self domain to: self space scalars units evaluating: [:g| (self value: g) trace]
+	
+"	^ self domain carrier to: self space scalars carrier evaluating: [:g| (self value: g) trace]"! !
 
 !GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 16:38:15'!
 image
@@ -28119,12 +28186,12 @@ space
 	"Answer the representation space."
 	^ self codomain space! !
 
-!GroupRepresentation methodsFor: 'invariants' stamp: 'len 3/22/2018 04:48:55'!
+!GroupRepresentation methodsFor: 'invariants' stamp: 'len 5/1/2020 19:43:51'!
 character
 	"Answer the character of the receiver, assuming it's a linear or matrix representation."
 	"This is a class function, i.e. it's constant on conjugacy classes, because similar matrices (or linear maps) have the same trace."
 	self space isModule ifFalse: [^ self error: 'not a linear or matrix representation'].
-	^ Function from: self domain to: self space scalars evaluating: [:g| (self value: g) trace] "should be a GroupMap?"! !
+	^ self domain to: self space scalars units evaluating: [:g| (self value: g) trace]! !
 
 !RingMap methodsFor: 'accessing' stamp: 'len 3/10/2020 17:56:03'!
 parent
@@ -38381,6 +38448,10 @@ coordinates
 parent
 	^ parent! !
 
+!Vector methodsFor: 'accessing' stamp: 'len 5/1/2020 18:59:09'!
+size
+	^ coordinates size! !
+
 !Vector methodsFor: 'accessing' stamp: 'len 3/9/2020 20:23:27'!
 x
 	^ coordinates at: 1! !
@@ -38868,6 +38939,20 @@ height
 	| answer |
 	answer _ 1.
 	self do: [:each| answer _ answer max: each height].
+	^ answer! !
+
+!Tuple methodsFor: 'operations' stamp: 'len 5/1/2020 18:48:04'!
+max
+	| answer |
+	answer _ self first.
+	2 to: self size do: [:i| answer _ answer max: (self at: i)].
+	^ answer! !
+
+!Tuple methodsFor: 'operations' stamp: 'len 5/1/2020 18:48:12'!
+min
+	| answer |
+	answer _ self first.
+	2 to: self size do: [:i| answer _ answer min: (self at: i)].
 	^ answer! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 1/16/2018 22:02:42'!
@@ -43910,12 +43995,12 @@ max: aNumber
 min: aNumber
 	min _ aNumber! !
 
-!RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:56'!
+!RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:46:06'!
 default
 	| blue green red |
-	red _ QQ polynomials interpolate: {"0 -> 0.0." 40 -> 0. 65 -> 0.8. "90 -> 0." 100 -> 0. 150 -> 0.5. 200 -> 0.9. 215 -> 1. 255 -> 0.95}.
-	green _ QQ polynomials interpolate: {0 -> 0.2. 50 -> 0.48. 100 -> 0.68. 150 -> 0.75. 200 -> 0.70. 255 -> 1}.
-	blue _ QQ polynomials interpolate: {0 -> 0.5. 35 -> 0.9. 85 -> 0.8. 115 -> 0.7. 150 -> 0.5. 200 -> 0.3. 255 -> 0}.
+	red _ RR polynomials interpolate: {"0 -> 0.0." 40 -> 0. 65 -> 0.8. "90 -> 0." 100 -> 0. 150 -> 0.5. 200 -> 0.9. 215 -> 1. 255 -> 0.95}.
+	green _ RR polynomials interpolate: {0 -> 0.2. 50 -> 0.48. 100 -> 0.68. 150 -> 0.75. 200 -> 0.70. 255 -> 1}.
+	blue _ RR polynomials interpolate: {0 -> 0.5. 35 -> 0.9. 85 -> 0.8. 115 -> 0.7. 150 -> 0.5. 200 -> 0.3. 255 -> 0}.
 	^ self new colors: ((0 to: 255) collect: [:x| Color fromArray: ({x < 80 ifTrue: [0] ifFalse: [red value: x]. green value: x. blue value: x} collect: [:y| y abs min: 1.0])]); min: 0.0; max: 1.0! !
 
 !RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 8/18/2016 07:30'!
@@ -45085,9 +45170,9 @@ multipliedByGroupElement: aGroupElement
 squared
 	^ self * self! !
 
-!GroupAlgebraElement methodsFor: 'converting' stamp: 'len 9/16/2018 16:13:55'!
+!GroupAlgebraElement methodsFor: 'converting' stamp: 'len 5/1/2020 19:49:06'!
 asFunction
-	^ Function from: parent group to: parent scalars evaluating: [:each| self at: each]! !
+	^ parent group carrier to: parent scalars carrier evaluating: [:each| self at: each]! !
 
 !GroupAlgebraElement methodsFor: 'operations' stamp: 'len 1/10/2018 21:42:35'!
 augmentation
@@ -45128,26 +45213,6 @@ asSimpleTensor
 !Tensor methodsFor: 'printing' stamp: 'len 9/16/2018 16:17:28'!
 printLiteral: anArray on: aStream
 	(1 to: anArray size) do: [:i| aStream nextPutAll: ((parent at: i) names at: (anArray at: i))] separatedBy: [aStream nextPut: Character otimes]! !
-
-!WuRittProcess methodsFor: 'as yet unclassified' stamp: 'len 12/30/2015 05:31'!
-characteristicSet
-	characteristicSet isNil ifTrue: [self run].
-	^ characteristicSet! !
-
-!WuRittProcess methodsFor: 'as yet unclassified' stamp: 'len 12/30/2015 05:30'!
-polynomials: aCollection
-	polynomials _ aCollection! !
-
-!WuRittProcess methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 04:36:37'!
-run
-	| F G R F2 r |
-	F _ polynomials.
-	G _ Set new. R _ Set new.
-	[F _ F \/ R. F2 _ R. R _ Set new.
-	[F2 notEmpty] whileTrue: ["..."].
-	F do: [:f| ((G includes: f) or: [(r _ G pseudoRemainderOf: f) isZero]) ifFalse: [R add: r]].
-	R isEmpty] whileFalse.
-	^ characteristicSet _ G! !
 
 !CoxeterDiagram methodsFor: 'as yet unclassified' stamp: 'len 2/11/2016 22:11'!
 gramMatrix
@@ -45975,14 +46040,6 @@ isInfinite
 			ifFalse: [^ self]].
 	^ (aNumber * self ln) exp! !
 
-!Number methodsFor: '*domains' stamp: 'len 11/19/2015 18:42'!
-adaptToQuaternion: rcvr andSend: selector
-	^ rcvr perform: selector with: self asQuaternion! !
-
-!Number methodsFor: '*domains' stamp: 'len 11/19/2015 19:41'!
-asQuaternion
-	^ Quaternion a: self b: self zero c: self zero d: self zero! !
-
 !Number methodsFor: '*domains' stamp: 'len 6/23/2016 23:27'!
 conjugated
 	"Answer the complex conjugate of the receiver."
@@ -46046,6 +46103,10 @@ root: anInteger
 !Number methodsFor: '*domains' stamp: 'len 11/19/2015 20:58'!
 zero
 	^ 0! !
+
+!Float methodsFor: '*domains' stamp: 'len 5/1/2020 18:52:54'!
+, aTuple
+	^ (RR tuple: {self}), aTuple! !
 
 !Float methodsFor: '*domains' stamp: 'len 1/13/2016 03:55'!
 adaptToAlgebraic: rcvr andSend: selector
@@ -46720,6 +46781,10 @@ raisedToInteger: anInteger
 ^ aNumber
 	^ self raisedTo: aNumber! !
 
+!Complex methodsFor: '*domains' stamp: 'len 5/1/2020 18:38:05'!
+conjugated
+	^self class real: real imaginary: imaginary negated! !
+
 !Complex methodsFor: '*domains' stamp: 'len 5/13/2019 19:49:08'!
 isElement
 	^ true! !
@@ -46970,9 +47035,9 @@ permutedBy: aPermutation
 	1 to: self size do: [:i| answer at: (aPermutation at: i) put: (self at: i)].
 	^ answer! !
 
-!SequenceableCollection methodsFor: '*domains' stamp: 'len 11/3/2019 12:50:17'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 5/1/2020 20:09:11'!
 plot
-	^ FunctionPlotMorph new evaluationPoints: (1 to: self size); function: (Function from: ZZ to: RR evaluating: [:n| self at: n])! !
+	^ FunctionPlotMorph new evaluationPoints: (1 to: self size); function: (ZZ carrier to: RR carrier evaluating: [:n| self at: n])! !
 
 !SequenceableCollection methodsFor: '*domains' stamp: 'len 11/18/2016 08:58:16'!
 sum
@@ -47057,9 +47122,9 @@ add: newObject ifPresent: aBlock
 		ifFalse: [aBlock value].
 	^ newObject! !
 
-!Set methodsFor: '*domains' stamp: 'len 4/30/2020 09:01:23'!
+!Set methodsFor: '*domains' stamp: 'len 5/1/2020 22:13:58'!
 asDomain
-	^ self as: Structure! !
+	^ self as: FormalSet! !
 
 !Set methodsFor: '*domains' stamp: 'len 6/13/2016 01:03'!
 powerset
