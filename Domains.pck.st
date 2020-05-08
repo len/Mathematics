@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 4 May 2020 at 11:10:57 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 8 May 2020 at 6:23:46 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 567!
+!provides: 'Domains' 1 571!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2562,7 +2562,7 @@ AdicInteger class
 
 !classDefinition: #AdicNumber category: #'Domains-Rings-Adic'!
 RingElement subclass: #AdicNumber
-	instanceVariableNames: 'valuation unit'
+	instanceVariableNames: 'valuation unitPart'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Rings-Adic'!
@@ -2612,7 +2612,7 @@ UnivariatePolynomial class
 
 !classDefinition: #LaurentSeries category: #'Domains-Series'!
 RingElement subclass: #LaurentSeries
-	instanceVariableNames: 'valuation unit'
+	instanceVariableNames: 'valuation unitPart'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Series'!
@@ -4875,14 +4875,14 @@ The algorithm performs O(n^2/2) multiplications; more precisely, at most 2 floor
 !CRT commentStamp: '<historical>' prior: 0!
 This is the Chinese Remainder Theorem. My instances find solutions to systems of linear Diophantine equations x = x_i (mod m_i). The algorithm works on any Euclidean domain.
 
-Input: x_1...x_k, k elements in an Euclidean domain, and m_1,...,m_k pairwise coprime, defining the Diophantine system x = x_i (mod m_i);
+Input: x_1...x_k, k elements in a Euclidean domain, and m_1,...,m_k pairwise coprime, defining the Diophantine system x = x_i (mod m_i);
 Output: x such that x = x_i (mod m_i) for 1<=i<=k.
 !
 
 !ExtendedEuclid commentStamp: '<historical>' prior: 0!
 This is the extended Euclidean algorithm.
 
-Input: an array of two elements {a,b} in an Euclidean ring
+Input: an array of two elements {a,b} in a Euclidean ring
 Output: the GCD of a with b, and a pair of Bezout coefficients {u. v} such that a*u + b*v = (a,b).
 
 In the case of integers, if |a|<=|b| the output |u| and |v| are unique and satisfy:
@@ -5936,12 +5936,12 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: $(; print: left; nextPutAll: ', '; print: right; nextPut: $)! !
 
-!Germ methodsFor: 'printing' stamp: 'len 7/17/2019 03:26:56'!
+!Germ methodsFor: 'printing' stamp: 'len 5/8/2020 18:19:02'!
 printOn: aStream
 	aStream print: ratio
 "	| n u |
 	(n _ self valuation) isZero ifTrue: [aStream print: fraction. ^ self].
-	u _ self associatedUnit.
+	u _ self unit.
 	(u numerator printString first = $-) ifTrue: [u _ u negated. aStream nextPut: $-].
 	n ~= 0 ifTrue:
 		[aStream print: parent p.
@@ -6000,9 +6000,9 @@ printOn: aStream
 printOn: aStream
 	self printOn: aStream shifted: 0! !
 
-!AdicNumber methodsFor: 'printing' stamp: 'len 8/11/2019 08:49:06'!
+!AdicNumber methodsFor: 'printing' stamp: 'len 5/8/2020 17:53:47'!
 printOn: aStream
-	unit printOn: aStream shifted: valuation! !
+	unitPart printOn: aStream shifted: valuation! !
 
 !AffineRationalFunction methodsFor: 'printing' stamp: 'len 8/12/2019 10:10:57'!
 printOn: aStream
@@ -6032,9 +6032,9 @@ printOn: aStream
 >> anInteger
 	^ self << anInteger negated! !
 
-!LaurentSeries methodsFor: 'printing' stamp: 'len 8/11/2019 11:34:56'!
+!LaurentSeries methodsFor: 'printing' stamp: 'len 5/8/2020 17:47:59'!
 printOn: aStream
-	unit printOn: aStream shifted: valuation! !
+	unitPart printOn: aStream shifted: valuation! !
 
 !PowerSeries methodsFor: 'printing' stamp: 'len 8/9/2019 13:51:02'!
 printOn: aStream
@@ -12152,11 +12152,11 @@ null
 	self propertyAt: #projections ifPresent: [:aDictionary| aDictionary at: anArray ifPresent: [:anArrayOfMorphisms| ^ anArrayOfMorphisms]].
 	^ self toAll: anArray! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:47:52'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/8/2020 15:48:21'!
 -> aCodomain
 	"Answer the canonical morphism from the receiver to aCodomain.
 	If the argument is a morphism, answer the composition with a canonical morphism to its domain. See also Morphism>>->."
-	(aCodomain isKindOf: Morphism) ifTrue:
+	aCodomain isMorphism ifTrue:
 		[self = aCodomain domain ifTrue: [^ aCodomain].
 		^ self -> aCodomain domain ifNotNil: [:aMorphism| aCodomain · aMorphism]].
 	self propertyAt: #outputs ifPresent: [:aDictionary| aDictionary at: aCodomain ifPresent: [:aMorphism| ^ aMorphism]].
@@ -12173,13 +12173,13 @@ null
 	self assert: answer isSurjective.
 	^ answer! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/30/2020 14:23:38'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/8/2020 15:47:59'!
 => anObject
 	"This is the internal hom(A,-) functor, where A is the receiver:
 	- if the argument is a domain X, answer hom(A,X), the domain of morphisms from A to X;
 	- if the argument is a morphism g:X->Y, answer the morphism hom(A,g):hom(A,X)->hom(A,Y) that sends the morphism f to g·f.
 	See #hom: for the external Hom functor."
-	(anObject isKindOf: Morphism) ifTrue: [^ self => anObject domain to: self => anObject codomain evaluating: [:f| anObject · f]].
+	anObject isMorphism ifTrue: [^ self => anObject domain to: self => anObject codomain evaluating: [:f| anObject · f]].
 	(anObject isKindOf: ChainComplex)
 		ifTrue: [^ ChainComplex differentials: (anObject differentials collect: [:each| self => each]) degree: anObject degree].
 	^ self hom: anObject! !
@@ -12229,13 +12229,13 @@ fromAll: anArray
 		ifTrue: [^ self addCoprojections: ((1 to: self arity) collect: [:i| self coprojection: i])].
 	^ nil! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:49:33'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/8/2020 15:47:28'!
 hom: anObject
 	"This is the external Hom(A,-) functor, where A is the receiver:
 	- if the argument is a domain X, answer Hom(A,X), the set of morphisms from A to X;
 	- if the argument is a morphism g:X->Y, answer the function Hom(A,f):Hom(A,X)->Hom(A,Y) that sends the morphism f to g·f.
 	See => for the internal hom functor."
-	(anObject isKindOf: Morphism) ifTrue: [^ (self hom: anObject domain) to: (self hom: anObject codomain) evaluating: [:f| anObject · f]].
+	anObject isMorphism ifTrue: [^ (self hom: anObject domain) to: (self hom: anObject codomain) evaluating: [:f| anObject · f]].
 	^ HomSet from: self to: anObject! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:50:03'!
@@ -12544,12 +12544,12 @@ anySatisfy: aBlock
 	self do: [:each| (aBlock value: each) ifTrue: [^ true]].
 	^ false! !
 
-!Structure methodsFor: 'enumerating' stamp: 'len 4/29/2020 18:54:12'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/8/2020 15:50:17'!
 collect: aBlock
 	| elements |
 	elements _ Set new.
 	self do: [:each| elements add: (aBlock value: each)].
-	^ elements as: Structure! !
+	^ FormalSet newFrom: elements! !
 
 !Structure methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:11:56'!
 count: aBlock
@@ -12608,12 +12608,12 @@ noneSatisfy: aBlock
 product: aBlock
 	^ self elements product: aBlock! !
 
-!Structure methodsFor: 'enumerating' stamp: 'len 4/29/2020 18:54:12'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/8/2020 15:50:39'!
 select: aBlock
 	| elements |
 	elements _ Set new.
 	self do: [:each| (aBlock value: each) ifTrue: [elements add: each]].
-	^ elements as: Structure! !
+	^ FormalSet newFrom: elements! !
 
 !Structure methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:16'!
 sum: aBlock
@@ -13074,9 +13074,9 @@ newFrom: anObject
 opposite
 	^ self class from: self codomain to: self domain! !
 
-!HomSet methodsFor: 'testing' stamp: 'len 6/6/2019 16:41:29'!
+!HomSet methodsFor: 'testing' stamp: 'len 5/8/2020 15:46:16'!
 includes: anObject
-	^ (anObject isKindOf: Morphism) and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
+	^ anObject isMorphism and: [anObject domain = self domain and: [anObject codomain = self codomain]]! !
 
 !HomSet methodsFor: 'testing' stamp: 'len 4/19/2016 04:53'!
 isEndomorphisms
@@ -13507,6 +13507,11 @@ asAbelianGroup
 			ranks do: [:i| 1 to: i do: [:j| powers at: j put: (powers at: j) * p]].
 			elementaryDivisors addAll: powers]].
 	^ AbelianGroup orders: elementaryDivisors sorted! !
+
+!Group methodsFor: 'converting' stamp: 'len 5/8/2020 15:53:24'!
+asMonoid
+	"Forgetful functor to the category of monoids."
+	^ self propertyAt: #asMonoid ifAbsentPut: [Monoid newFrom: (self propertyAt: #elements ifAbsent: [self])]! !
 
 !Group methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:44'!
 collect: aBlock
@@ -14559,6 +14564,11 @@ torsion
 hash
 	^ self rank + self class hash! !
 
+!FreeAbelianGroup methodsFor: 'converting' stamp: 'len 5/8/2020 15:57:01'!
+asMonoid
+	"Forgetful functor to the category of monoids."
+	^ self propertyAt: #asMonoid ifAbsentPut: [FreeAbelianMonoid new: (self propertyAt: #names ifAbsent: [rank]) ordering: ordering]! !
+
 !FreeAbelianGroup methodsFor: 'converting' stamp: 'len 5/14/2019 02:12:03'!
 orderedBy: aMonomialOrdering
 	| answer |
@@ -14893,6 +14903,11 @@ size
 !FreeGroup methodsFor: 'comparing' stamp: 'len 5/14/2019 07:09:46'!
 hash
 	^ self rank + self class hash! !
+
+!FreeGroup methodsFor: 'converting' stamp: 'len 5/8/2020 16:45:57'!
+asMonoid
+	"Forgetful functor to the category of monoids."
+	^ self propertyAt: #asMonoid ifAbsentPut: [FreeMonoid new: (self propertyAt: #names ifAbsent: [self rank])]! !
 
 !FreeGroup methodsFor: 'operations' stamp: 'len 4/18/2020 18:22:34'!
 * aGroup
@@ -15378,13 +15393,13 @@ space
 do: aBlock
 	self space unitsDo: aBlock! !
 
-!UnitGroup methodsFor: 'random' stamp: 'len 5/4/2020 10:52:28'!
+!UnitGroup methodsFor: 'random' stamp: 'len 5/8/2020 18:02:29'!
 atRandom: aRandom
-	^ (self space atRandom: aRandom) associatedUnit! !
+	^ (self space atRandom: aRandom) unit! !
 
-!UnitGroup methodsFor: 'random' stamp: 'len 5/4/2020 10:51:41'!
+!UnitGroup methodsFor: 'random' stamp: 'len 5/8/2020 18:02:34'!
 atRandom: aRandom bits: bitSize
-	^ (self space atRandom: aRandom bits: bitSize) associatedUnit! !
+	^ (self space atRandom: aRandom bits: bitSize) unit! !
 
 !UnitGroup methodsFor: 'testing' stamp: 'len 5/4/2020 10:09:03'!
 contains: anElement
@@ -16914,9 +16929,9 @@ isEuclidean
 	"Answer true if the receiver is a Euclidean ring, i.e. it has division with remainder."
 	^ self propertyAt: #isEuclidean ifAbsent: [self isField]! !
 
-!Ring methodsFor: 'testing' stamp: 'len 9/22/2018 18:59:01'!
+!Ring methodsFor: 'testing' stamp: 'len 5/8/2020 18:21:38'!
 isEuclideanDomain
-	"Answer true if the receiver is an Euclidean domain, i.e. an integral domain that has division with remainder."
+	"Answer true if the receiver is a Euclidean domain, i.e. an integral domain that has division with remainder."
 	^ self isIntegralDomain and: [self isEuclidean]! !
 
 !Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:10:52'!
@@ -19379,11 +19394,11 @@ initialize
 characteristic
 	^ 0! !
 
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 8/11/2019 11:15:32'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 5/8/2020 18:09:22'!
 embed: anAdicInteger
 	| v |
 	v _ anAdicInteger valuation.
-	^ AdicNumber new valuation: v unit: anAdicInteger associatedUnit! !
+	^ AdicNumber new valuation: v unit: anAdicInteger unit! !
 
 !AdicField methodsFor: 'as yet unclassified' stamp: 'len 8/7/2019 08:49:02'!
 fractions
@@ -19393,9 +19408,9 @@ fractions
 hash
 	^ self integers hash! !
 
-!AdicField methodsFor: 'as yet unclassified' stamp: 'len 8/11/2019 11:17:10'!
+!AdicField methodsFor: 'as yet unclassified' stamp: 'len 5/8/2020 17:54:13'!
 includes: anElement
-	^ (anElement isKindOf: AdicNumber) and: [self integers includes: anElement unit]! !
+	^ (anElement isKindOf: AdicNumber) and: [self integers includes: anElement unitPart]! !
 
 !AdicField methodsFor: 'as yet unclassified' stamp: 'len 8/7/2019 08:49:26'!
 integers
@@ -20202,6 +20217,11 @@ do: aBlock
 	k _ 1.
 	[self scalars tuples: k do: [:t| t last isZero ifFalse: [aBlock value: (self coefficients: t)]].
 	k _ k + 1] repeat! !
+
+!PolynomialRing methodsFor: 'enumerating' stamp: 'len 5/8/2020 12:14:41'!
+unitsDo: aBlock
+	self scalars isIntegralDomain ifTrue: [self scalars do: [:each| aBlock value: (self constant: each)]. ^ self].
+	super unitsDo: aBlock! !
 
 !PolynomialRing methodsFor: 'examples' stamp: 'len 10/22/2016 18:12'!
 chebyshevOfOrder: n
@@ -21171,7 +21191,7 @@ orthogonalProjection
 	self propertyAt: #orthogonalProjection put: answer.
 	^ answer"! !
 
-!Module methodsFor: 'morphisms' stamp: 'len 12/22/2016 22:01:19'!
+!Module methodsFor: 'morphisms' stamp: 'len 5/8/2020 18:00:13'!
 to: aCodomain
 	(aCodomain isModule and: [self isTrivial or: [aCodomain isTrivial]])
 		ifTrue: [^ self to: aCodomain evaluating: [:x| aCodomain zero]].
@@ -21617,11 +21637,11 @@ copy
 	"Answer a copy of the receiver."
 	^ self class new scalars: self scalars; generators: self generators copy! !
 
-!Ideal methodsFor: 'elements-operations' stamp: 'len 5/4/2020 02:37:18'!
+!Ideal methodsFor: 'elements-operations' stamp: 'len 5/8/2020 18:23:36'!
 invert: anElement
-	"This works only for ideals of an euclidean ring given by one generator."
+	"This works only for ideals of a Euclidean ring given by one generator."
 	| euclid |
-"	self scalars isEuclidean ifFalse: [^ DomainError signal: 'not an euclidean ring']."
+"	self scalars isEuclidean ifFalse: [^ DomainError signal: 'not a Euclidean ring']."
 "	euclid _ ExtendedEuclid on: {anElement. self generator}.
 	euclid gcd = self scalars one ifFalse: [^ nil].
 	^ euclid bezout first"
@@ -21765,9 +21785,10 @@ isNilIdeal
 	"An ideal is called nil-ideal if all its elements are nilpotent."
 	^ self generators allSatisfy: [:each| each isNilpotent]! !
 
-!Ideal methodsFor: 'testing' stamp: 'len 9/22/2018 18:54:52'!
+!Ideal methodsFor: 'testing' stamp: 'len 5/8/2020 15:30:19'!
 isNilpotent
 	"An ideal I is called nilpotent if there is an integer n >= 1 such that I^n = 0."
+	self generators size = 1 ifTrue: [^ self generator isNilpotent].
 	^ self notYetImplemented! !
 
 !Ideal methodsFor: 'testing' stamp: 'len 3/10/2020 18:17:18'!
@@ -26771,9 +26792,9 @@ to: aCodomain
 	"Answer the complex with degrees shifted by n."
 	^ self >> n negated! !
 
-!ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 14:25:13'!
+!ChainComplex methodsFor: 'operations' stamp: 'len 5/8/2020 15:48:32'!
 => aCodomain
-	(aCodomain isKindOf: Morphism) ifTrue: [^ super => aCodomain].
+	aCodomain isMorphism ifTrue: [^ super => aCodomain].
 	^ self class differentials: (differentials collect: [:each| each => aCodomain]) reversed degree: degree! !
 
 !ChainComplex methodsFor: 'operations' stamp: 'len 4/30/2020 22:07:37'!
@@ -27028,6 +27049,10 @@ isIdentity
 !Morphism methodsFor: 'testing' stamp: 'len 5/16/2019 12:42:32'!
 isIsomorphism
 	^ self inverse notNil! !
+
+!Morphism methodsFor: 'testing' stamp: 'len 5/8/2020 17:57:22'!
+isMorphism
+	^ true! !
 
 !Morphism methodsFor: 'testing' stamp: 'len 5/16/2019 13:08:37'!
 isSplitEpimorphism
@@ -27592,6 +27617,11 @@ inverse
 	(anObject domain = self domain and: [anObject codomain = self codomain])
 		ifFalse: [^ false].
 	^ self domain generators allSatisfy: [:each| (self value: each) = (anObject value: each)]! !
+
+!GroupMap methodsFor: 'converting' stamp: 'len 5/8/2020 15:58:22'!
+asMonoidMap
+	"Forgetful functor to the category of monoids."
+	^ self domain asMonoid to: self codomain asMonoid evaluating: self! !
 
 !GroupMap methodsFor: 'operations' stamp: 'len 5/2/2020 08:09:45'!
 value: anElement
@@ -33028,21 +33058,14 @@ annihilator
 	self parent isIntegralDomain ifTrue: [^ self parent zeroIdeal].
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 5/4/2020 08:59:29'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	self isUnit ifTrue: [^ self].
-	self isZero ifTrue: [^ self parent one].
-	^ self subclassResponsibility! !
-
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:58:07'!
 denominator
 	^ self one! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 8/17/2019 08:40:09'!
+!RingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:23'!
 normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
-	^ self * self associatedUnit inverse! !
+	"Answer a unique choice of associate. See >>unit."
+	^ self * self unit inverse! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:57:58'!
 numerator
@@ -33052,9 +33075,16 @@ numerator
 one
 	^ self parent one! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 6/14/2019 01:23:45'!
+!RingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:13:13'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	self isUnit ifTrue: [^ self].
+	self isZero ifTrue: [^ self parent one].
+	^ self subclassResponsibility! !
+
+!RingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:38'!
 valuation
-	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	"If the receiver is an element of a valuation ring or a Euclidean ring, answer its valuation or Euclidean function."
 	^ self subclassResponsibility! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 8/7/2019 09:11:23'!
@@ -33230,7 +33260,7 @@ reciprocal
 squared
 	^ self * self! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/4/2020 00:12:00'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/8/2020 18:04:01'!
 xgcd: anElement
 	"Extended Euclidean algorithm.
 	Answer an array {x. u. v} where self * u + (anElement * v) = x, and x = (self gcd: anElement)."
@@ -33250,8 +33280,8 @@ xgcd: anElement
 			temp _ r1. r1 _ r - (q * r1). r _ temp.
 			temp _ s1. s1 _ s - (q * s1). s _ temp.
 			temp _ t1. t1 _ t - (q * t1). t _ temp].
-	s _ s * b associatedUnit inverse. t _ t * a associatedUnit inverse.
-	u _ r associatedUnit inverse.
+	s _ s * b unit inverse. t _ t * a unit inverse.
+	u _ r unit inverse.
 	s _ s * u. t _ t * u. r _ r * u.
 	^ {r. t. s}! !
 
@@ -33343,16 +33373,6 @@ isZeroDivisor
 , aTuple
 	^ (self parent tuple: {self}), aTuple! !
 
-!Germ methodsFor: 'accessing' stamp: 'len 5/4/2020 09:05:52'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	| p q |
-	self isZero ifTrue: [^ parent one].
-	p _ parent p.
-	q _ self numerator.
-	[p | q] whileTrue: [q _ q // p].
-	^ self class new parent: parent; ratio: q : self denominator! !
-
 !Germ methodsFor: 'accessing' stamp: 'len 7/17/2019 03:27:06'!
 denominator
 	^ ratio denominator! !
@@ -33364,6 +33384,16 @@ numerator
 !Germ methodsFor: 'accessing' stamp: 'len 6/29/2019 18:19:48'!
 parent
 	^ parent! !
+
+!Germ methodsFor: 'accessing' stamp: 'len 5/8/2020 18:11:03'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	| p q |
+	self isZero ifTrue: [^ parent one].
+	p _ parent p.
+	q _ self numerator.
+	[p | q] whileTrue: [q _ q // p].
+	^ self class new parent: parent; ratio: q : self denominator! !
 
 !Germ methodsFor: 'accessing' stamp: 'len 5/3/2020 09:44:13'!
 valuation
@@ -33421,13 +33451,13 @@ hash
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
 	^ self class new parent: parent; ratio: ratio + anElement ratio! !
 
-!Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:45:53'!
+!Germ methodsFor: 'operations' stamp: 'len 5/8/2020 18:07:57'!
 // anElement
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ parent zero].
-	^ self associatedUnit / anElement associatedUnit * (parent uniformizer ^ v)! !
+	^ self unit / anElement unit * (parent uniformizer ^ v)! !
 
 !Germ methodsFor: 'operations' stamp: 'len 4/21/2020 07:24:27'!
 factors
@@ -33510,9 +33540,14 @@ parent
 representative
 	^ self numerator representative : self denominator representative! !
 
-!Ratio methodsFor: 'accessing' stamp: 'len 6/14/2019 01:31:28'!
+!Ratio methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:29'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ numerator unit : denominator! !
+
+!Ratio methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:25'!
 valuation
-	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	"If the receiver is an element of a valuation ring or a Euclidean ring, answer its valuation or Euclidean function."
 	^ numerator valuation - denominator valuation! !
 
 !Ratio methodsFor: 'accessing' stamp: 'len 7/31/2019 05:42:19'!
@@ -33640,17 +33675,17 @@ isUnit
 isZero
 	^ numerator isZero! !
 
-!Ratio methodsFor: 'testing' stamp: 'len 5/4/2020 09:51:43'!
+!Ratio methodsFor: 'testing' stamp: 'len 5/8/2020 16:55:23'!
 isZeroDivisor
 	"Answer true if there exists a nonzero element that multiplied by the receiver is zero."
-	^ self numerator isZeroDivisor! !
+	^ numerator isZeroDivisor! !
 
 !Ratio methodsFor: 'private' stamp: 'len 4/5/2018 17:54:53'!
 setNumerator: anObject denominator: anotherObject
 	numerator _ anObject.
 	denominator _ anotherObject! !
 
-!Ratio class methodsFor: 'instance creation' stamp: 'len 7/21/2019 12:34:37'!
+!Ratio class methodsFor: 'instance creation' stamp: 'len 5/8/2020 18:06:17'!
 numerator: anElement denominator: anotherElement
 	| numerator denominator gcd |
 	(numerator _ anElement) isZero ifTrue: [^ self reducedNumerator: numerator denominator: numerator one].
@@ -33658,7 +33693,7 @@ numerator: anElement denominator: anotherElement
 	gcd _ numerator gcd: denominator.
 	numerator _ numerator /// gcd.
 	denominator _ denominator /// gcd.
-	numerator _ numerator * denominator associatedUnit.
+	numerator _ numerator * denominator unit.
 	denominator _ denominator normalized.
 	^ self reducedNumerator: numerator denominator: denominator! !
 
@@ -33681,6 +33716,11 @@ parent
 !Rational methodsFor: 'accessing' stamp: 'len 7/21/2019 04:48:12'!
 real
 	^ self! !
+
+!Rational methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:44'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ self isZero ifTrue: [self one] ifFalse: [self]! !
 
 !Rational methodsFor: 'comparing' stamp: 'len 7/17/2019 08:41:44'!
 < anElement
@@ -33796,6 +33836,10 @@ isRational
 isReal
 	^ true! !
 
+!Rational methodsFor: 'testing' stamp: 'len 5/8/2020 17:00:34'!
+isUnit
+	^ self isZero not! !
+
 !Rational methodsFor: 'testing' stamp: 'len 7/19/2019 07:29:10'!
 negative
 	^ numerator negative! !
@@ -33908,12 +33952,6 @@ reduce
 	numerator _ num * mult.
 	denominator _ den * mult! !
 
-!Residue methodsFor: 'accessing' stamp: 'len 5/4/2020 09:09:52'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	self isUnit ifTrue: [^ self].
-	^ parent project: representative associatedUnit "<- this looks wrong"! !
-
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
 bitSize
 	^ representative bitSize! !
@@ -33934,9 +33972,15 @@ parent
 representative
 	^ representative! !
 
-!Residue methodsFor: 'accessing' stamp: 'len 6/20/2019 14:54:25'!
+!Residue methodsFor: 'accessing' stamp: 'len 5/8/2020 18:13:01'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	self isUnit ifTrue: [^ self].
+	^ parent project: representative unit "<- this looks wrong"! !
+
+!Residue methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:34'!
 valuation
-	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	"If the receiver is an element of a valuation ring or a Euclidean ring, answer its valuation or Euclidean function."
 	^ self lift valuation "assuming the lift has minimal valuation in the base ring"! !
 
 !Residue methodsFor: 'accessing-multivariate' stamp: 'len 8/14/2019 08:10:39'!
@@ -34076,9 +34120,34 @@ representative: anObject
 annihilator
 	^ parent * (parent representative: parent modulus // (representative gcd: parent modulus))! !
 
-!ModularInteger methodsFor: 'accessing' stamp: 'len 5/4/2020 09:03:56'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
+!ModularInteger methodsFor: 'accessing' stamp: 'len 4/21/2016 05:55'!
+bitSize
+	^ representative bitSize! !
+
+!ModularInteger methodsFor: 'accessing' stamp: 'len 6/16/2019 16:03:02'!
+factors
+	"Answer a collection with the irreducible factors of the receiver (with multiplicity)."
+	^ self normalized representative factors apply: [:each| parent representative: each]! !
+
+!ModularInteger methodsFor: 'accessing' stamp: 'len 6/17/2019 08:05:08'!
+lift
+	| m |
+	m _ parent modulus.
+	^ representative <= (m >> 1) ifTrue: [representative] ifFalse: [representative - m]! !
+
+!ModularInteger methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:05'!
+normalized
+	"Answer a unique choice of associate. See >>unit."
+	representative = 0 ifTrue: [^ self].
+	^ parent representative: (representative gcd: parent modulus)! !
+
+!ModularInteger methodsFor: 'accessing' stamp: 'len 3/29/2016 20:49'!
+representative
+	^ representative! !
+
+!ModularInteger methodsFor: 'accessing' stamp: 'len 5/8/2020 18:11:31'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
 	"Adapted from ModularInteger>>\. This algorithm solves the congruence ax = self (mod m) where 'a' is the canonical associate of the receiver, and then looks for a solution 'x' that is a unit."
 	| a x modulus m |
 	self isZero ifTrue: [^ parent one].
@@ -34096,31 +34165,6 @@ associatedUnit
 	| associate |
 	associate _ self normalized.
 	^ self units detect: [:u| associate * u = self]"! !
-
-!ModularInteger methodsFor: 'accessing' stamp: 'len 4/21/2016 05:55'!
-bitSize
-	^ representative bitSize! !
-
-!ModularInteger methodsFor: 'accessing' stamp: 'len 6/16/2019 16:03:02'!
-factors
-	"Answer a collection with the irreducible factors of the receiver (with multiplicity)."
-	^ self normalized representative factors apply: [:each| parent representative: each]! !
-
-!ModularInteger methodsFor: 'accessing' stamp: 'len 6/17/2019 08:05:08'!
-lift
-	| m |
-	m _ parent modulus.
-	^ representative <= (m >> 1) ifTrue: [representative] ifFalse: [representative - m]! !
-
-!ModularInteger methodsFor: 'accessing' stamp: 'len 6/18/2019 09:08:16'!
-normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
-	representative = 0 ifTrue: [^ self].
-	^ parent representative: (representative gcd: parent modulus)! !
-
-!ModularInteger methodsFor: 'accessing' stamp: 'len 3/29/2016 20:49'!
-representative
-	^ representative! !
 
 !ModularInteger methodsFor: 'comparing' stamp: 'len 9/16/2018 16:14:36'!
 = aModularInteger
@@ -34327,9 +34371,9 @@ isZeroDivisor
 representative: anInteger
 	representative _ anInteger! !
 
-!PrimePowerResidue methodsFor: 'accessing' stamp: 'len 5/4/2020 08:59:33'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
+!PrimePowerResidue methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:18'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
 	| p q |
 	self isZero ifTrue: [^ parent one].
 	p _ parent p.
@@ -34354,14 +34398,14 @@ squareRoot
 	e _ q - (2*r) + 1 // 2.
 	^ ((parent representative: x) ^ r * ((parent representative: a) ^ e)) * ((parent representative: p) ^ (v // 2))! !
 
-!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 8/11/2019 04:26:44'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 5/8/2020 18:06:37'!
 // anElement
 	| v |
 	parent = anElement parent ifFalse: [^ self adapt: anElement andSend: #//].
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self associatedUnit / anElement associatedUnit * (parent p ^ v)! !
+	^ self unit / anElement unit * (parent p ^ v)! !
 
 !PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 5/3/2020 23:17:48'!
 gcd: anElement
@@ -34377,10 +34421,10 @@ lcm: anElement
 	anElement isZero ifTrue: [^ anElement].
 	^ parent representative: parent p ^ (self valuation max: anElement valuation)! !
 
-!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 6/15/2019 09:29:40'!
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 5/8/2020 18:22:19'!
 valuation
 	"Answer the Euclidean valuation of the receiver.
-	We define it as infinity at 0; although this is undefined for an Euclidean function, it makes it compatible with the p-adic valuation."
+	We define it as infinity at 0; although this is undefined for a Euclidean function, it makes it compatible with the p-adic valuation."
 	^ representative valuation: parent p! !
 
 !PrimePowerResidue methodsFor: 'testing' stamp: 'len 7/30/2019 05:29:02'!
@@ -34393,9 +34437,9 @@ isZeroDivisor
 	"Answer true if there exists a nonzero element that multiplied by the receiver is zero."
 	^ parent p | representative! !
 
-!PrimeResidue methodsFor: 'accessing' stamp: 'len 6/18/2019 09:08:09'!
+!PrimeResidue methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:18'!
 normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
+	"Answer a unique choice of associate. See >>unit."
 	representative = 0 ifTrue: [^ self].
 	^ parent one! !
 
@@ -34525,9 +34569,9 @@ trace
 hash
 	^ representative hash! !
 
-!GaloisRingElement methodsFor: 'accessing' stamp: 'len 5/4/2020 09:06:53'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
+!GaloisRingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:10:52'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
 	self isZero ifTrue: [^ parent one].
 	^ parent representative: representative primitivePart! !
 
@@ -34535,14 +34579,14 @@ associatedUnit
 valuation
 	^ representative content valuation! !
 
-!GaloisRingElement methodsFor: 'operations' stamp: 'len 5/3/2020 10:42:45'!
+!GaloisRingElement methodsFor: 'operations' stamp: 'len 5/8/2020 18:08:09'!
 // anElement
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self associatedUnit * anElement associatedUnit inverse * (parent p ^ v)! !
+	^ self unit * anElement unit inverse * (parent p ^ v)! !
 
 !GaloisRingElement methodsFor: 'operations' stamp: 'len 9/7/2019 10:32:44'!
 gcd: anElement
@@ -34557,6 +34601,11 @@ lcm: anElement
 	self isZero ifTrue: [^ self].
 	anElement isZero ifTrue: [^ anElement].
 	^ parent representative: (parent base constant: (representative content lcm: anElement representative content))! !
+
+!GaloisRingElement methodsFor: 'testing' stamp: 'len 5/8/2020 15:27:37'!
+isNilpotent
+	"Answer true if self^n = 0 for some integer n >= 1."
+	^ self isZeroDivisor! !
 
 !GaloisRingElement methodsFor: 'testing' stamp: 'len 5/4/2020 09:41:46'!
 isUnit
@@ -34573,11 +34622,6 @@ isZeroDivisor
 	^ parent maximalIdeal contains: self
 "! !
 
-!RingTuple methodsFor: 'accessing' stamp: 'len 5/4/2020 08:59:25'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	^ parent compose: (components collect: [:each| each associatedUnit])! !
-
 !RingTuple methodsFor: 'accessing' stamp: 'len 4/23/2020 01:42:02'!
 at: anInteger
 	^ components at: anInteger! !
@@ -34589,6 +34633,11 @@ parent
 !RingTuple methodsFor: 'accessing' stamp: 'len 4/23/2020 01:41:55'!
 size
 	^ components size! !
+
+!RingTuple methodsFor: 'accessing' stamp: 'len 5/8/2020 18:13:23'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ parent compose: (components collect: [:each| each unit])! !
 
 !RingTuple methodsFor: 'comparing' stamp: 'len 4/23/2020 01:40:33'!
 = anObject
@@ -34643,17 +34692,6 @@ parent: aProductRing
 absolutePrecision
 	^ precision! !
 
-!AdicInteger methodsFor: 'accessing' stamp: 'len 5/4/2020 09:07:54'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	| p q v |
-	self isZero ifTrue: [^ parent one].
-	p _ parent p.
-	q _ representative.
-	v _ 0.
-	[p | q] whileTrue: [q _ q // p. v _ v + 1].
-	^ parent representative: q precision: precision - v! !
-
 !AdicInteger methodsFor: 'accessing' stamp: 'len 8/12/2019 11:25:18'!
 centeredRepresentative
 	| m |
@@ -34683,6 +34721,17 @@ relativePrecision
 !AdicInteger methodsFor: 'accessing' stamp: 'len 8/11/2019 02:33:28'!
 representative
 	^ representative! !
+
+!AdicInteger methodsFor: 'accessing' stamp: 'len 5/8/2020 18:10:28'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	| p q v |
+	self isZero ifTrue: [^ parent one].
+	p _ parent p.
+	q _ representative.
+	v _ 0.
+	[p | q] whileTrue: [q _ q // p. v _ v + 1].
+	^ parent representative: q precision: precision - v! !
 
 !AdicInteger methodsFor: 'accessing' stamp: 'len 8/11/2019 02:23:15'!
 valuation
@@ -34716,14 +34765,14 @@ hash
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
 	^ parent project: representative + anElement representative precision: (precision min: anElement precision)! !
 
-!AdicInteger methodsFor: 'operations' stamp: 'len 9/7/2019 10:16:49'!
+!AdicInteger methodsFor: 'operations' stamp: 'len 5/8/2020 18:09:14'!
 // anElement
 	| v |
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self associatedUnit * anElement associatedUnit inverse * (parent power: v)! !
+	^ self unit * anElement unit inverse * (parent power: v)! !
 
 !AdicInteger methodsFor: 'operations' stamp: 'len 8/11/2019 11:22:59'!
 << anInteger
@@ -34786,12 +34835,12 @@ printExpansionOn: aStream shifted: v
 				first _ false]].
 	aStream nextPutAll: ' + ', 'O' italic; nextPut: $(; print: parent p; nextPutAll: (precision + v) printString super; nextPut: $)! !
 
-!AdicInteger methodsFor: 'printing' stamp: 'len 8/12/2019 11:29:16'!
+!AdicInteger methodsFor: 'printing' stamp: 'len 5/8/2020 18:09:02'!
 printOn: aStream shifted: valuationShift
 	| v u |
 	self isZero ifTrue: [aStream nextPut: $0. ^ self].
 	v _ self valuation - valuationShift.
-	u _ self associatedUnit centeredRepresentative.
+	u _ self unit centeredRepresentative.
 	v = 0
 		ifTrue: [aStream print: u]
 		ifFalse:
@@ -34837,52 +34886,52 @@ abs
 	"Answer the p-adic absolute value (or norm) of the receiver."
 	^ self isWeaklyZero ifTrue: [0] ifFalse: [self p ^ valuation negated]! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 8/11/2019 07:45:29'!
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:50:48'!
 absolutePrecision
-	^ unit absolutePrecision! !
+	^ unitPart absolutePrecision! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 8/11/2019 11:28:11'!
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:51:10'!
 denominator
-	^ valuation < 0 ifTrue: [unit one << valuation] ifFalse: [unit one]! !
+	^ valuation < 0 ifTrue: [unitPart one << valuation] ifFalse: [unitPart one]! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 8/11/2019 11:25:48'!
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:52:01'!
 numerator
-	^ valuation <= 0 ifTrue: [unit] ifFalse: [unit >> valuation]! !
+	^ valuation <= 0 ifTrue: [unitPart] ifFalse: [unitPart >> valuation]! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 8/11/2019 11:11:02'!
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:52:23'!
 parent
-	^ unit parent fractions! !
+	^ unitPart parent fractions! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 8/11/2019 10:31:05'!
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:52:17'!
 relativePrecision
-	unit isZero ifTrue: [^ 0].
+	unitPart isZero ifTrue: [^ 0].
 	^ self absolutePrecision - valuation! !
 
-!AdicNumber methodsFor: 'accessing' stamp: 'len 6/7/2019 16:37:13'!
-unit
-	^ unit! !
+!AdicNumber methodsFor: 'accessing' stamp: 'len 5/8/2020 17:54:03'!
+unitPart
+	^ unitPart! !
 
 !AdicNumber methodsFor: 'accessing' stamp: 'len 8/7/2019 10:02:12'!
 valuation
 	^ valuation! !
 
-!AdicNumber methodsFor: 'comparing' stamp: 'len 8/11/2019 11:09:27'!
+!AdicNumber methodsFor: 'comparing' stamp: 'len 5/8/2020 17:51:51'!
 = anObject
-	^ anObject class = self class and: [valuation = anObject valuation and: [unit = anObject unit]]! !
+	^ anObject class = self class and: [valuation = anObject valuation and: [unitPart = anObject unitPart]]! !
 
-!AdicNumber methodsFor: 'comparing' stamp: 'len 8/11/2019 11:31:46'!
+!AdicNumber methodsFor: 'comparing' stamp: 'len 5/8/2020 17:53:42'!
 hash
-	^ unit hash + valuation hash! !
+	^ unitPart hash + valuation hash! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/14/2019 04:57:37'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:52:35'!
 * anElement
-	anElement isInteger ifTrue: [^ (self class new valuation: valuation unit: unit * anElement) canonicalize].
+	anElement isInteger ifTrue: [^ (self class new valuation: valuation unit: unitPart * anElement) canonicalize].
 	self isWeaklyZero ifTrue: [^ self].
 	"(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*]."
 	anElement isWeaklyZero ifTrue: [^ anElement].
-	^ self class new valuation: valuation + anElement valuation unit: unit * anElement unit! !
+	^ self class new valuation: valuation + anElement valuation unit: unitPart * anElement unitPart! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/11/2019 11:14:02'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:54:25'!
 + anElement
 	| answer v |
 	"(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*]."
@@ -34893,34 +34942,34 @@ hash
 		ifTrue:
 			[answer _ self class new
 				valuation: valuation
-				unit: unit + anElement unit.
+				unit: unitPart + anElement unitPart.
 			answer canonicalize.
 			answer isWeaklyZero ifTrue: [^ answer]]
 		ifFalse:
 			[| u |
 			u _ v > 0
-				ifTrue: [unit + (anElement unit >> v)]
-				ifFalse: [unit >> v + anElement unit].
+				ifTrue: [unitPart + (anElement unitPart >> v)]
+				ifFalse: [unitPart >> v + anElement unitPart].
 			answer _ self class new
 				valuation: (valuation min: anElement valuation)
 				unit: u].
 	^ answer! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/11/2019 08:50:31'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:52:10'!
 / anElement
 	anElement isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isWeaklyZero ifTrue: [^ self].
 	^ self class new
 		valuation: valuation - anElement valuation
-		unit: unit * anElement unit inverse! !
+		unit: unitPart * anElement unitPart inverse! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/11/2019 10:45:35'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 18:08:33'!
 // anElement
 	| v |
 	anElement isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self associatedUnit / anElement associatedUnit >> v! !
+	^ self unit / anElement unit >> v! !
 
 !AdicNumber methodsFor: 'operations' stamp: 'len 6/7/2019 11:37:35'!
 exp
@@ -34930,19 +34979,19 @@ exp
 log
 	^ self notYetImplemented! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/11/2019 08:51:05'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:50:43'!
 negated
 	^ self class new
 		valuation: valuation
-		unit: unit negated! !
+		unit: unitPart negated! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 8/11/2019 08:51:09'!
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:51:17'!
 reciprocal
 	self isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self one) signal].
 	self relativePrecision <= 0 ifTrue: [^ self zero].
 	^ self class new
 		valuation: valuation negated
-		unit: unit inverse! !
+		unit: unitPart inverse! !
 
 !AdicNumber methodsFor: 'operations' stamp: 'len 6/7/2019 15:29:53'!
 sqrt
@@ -34952,28 +35001,28 @@ sqrt
 isIntegral
 	^ self valuation >= 0! !
 
-!AdicNumber methodsFor: 'testing' stamp: 'len 6/7/2019 14:56:43'!
+!AdicNumber methodsFor: 'testing' stamp: 'len 5/8/2020 17:50:57'!
 isWeaklyZero
-	^ unit isZero! !
+	^ unitPart isZero! !
 
 !AdicNumber methodsFor: 'testing' stamp: 'len 6/7/2019 13:29:05'!
 isZero
 	self isWeaklyZero ifFalse: [^ false].
 	^ self shouldNotImplement! !
 
-!AdicNumber methodsFor: 'private' stamp: 'len 8/11/2019 11:10:49'!
+!AdicNumber methodsFor: 'private' stamp: 'len 5/8/2020 17:53:34'!
 canonicalize
-	unit = 0
+	unitPart = 0
 		ifTrue:
 			[valuation _ Infinity positive]
 		ifFalse:
-			[valuation _ unit valuation.
-			unit _ unit << valuation]! !
+			[valuation _ unitPart valuation.
+			unitPart _ unitPart << valuation]! !
 
-!AdicNumber methodsFor: 'private' stamp: 'len 8/11/2019 08:50:57'!
+!AdicNumber methodsFor: 'private' stamp: 'len 5/8/2020 17:51:02'!
 valuation: v unit: u
 	valuation _ v.
-	unit _ u! !
+	unitPart _ u! !
 
 !AffineRationalFunction methodsFor: 'accessing' stamp: 'len 8/12/2019 09:40:19'!
 parent
@@ -35010,19 +35059,6 @@ residue
 residue: aPolynomialResidue
 	residue _ aPolynomialResidue! !
 
-!Polynomial methodsFor: 'accessing' stamp: 'len 5/4/2020 10:56:07'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	| c u v |
-	self isZero ifTrue: [^ parent one].
-	parent scalars isField ifTrue: [^ parent constant: self leadingCoefficient].
-	c _ self leadingCoefficient.
-	u _ c associatedUnit.
-	self isConstant ifFalse:
-		[v _ u * self tail associatedUnit leadingCoefficient.
-		c * v inverse = (c * u inverse) ifTrue: [u _ v]].
-	^ parent constant: u! !
-
 !Polynomial methodsFor: 'accessing' stamp: 'len 4/23/2018 20:34:46'!
 lift
 	"If the coefficients ring is a quotient R/I, nswer a representative of the receiver over R. See >>%."
@@ -35041,9 +35077,22 @@ representative
 scalars
 	^ parent scalars! !
 
-!Polynomial methodsFor: 'accessing' stamp: 'len 4/14/2020 18:23:08'!
+!Polynomial methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:06'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	| c u v |
+	self isZero ifTrue: [^ parent one].
+	parent scalars isIntegralDomain ifTrue: [^ parent constant: self leadingCoefficient unit].
+	c _ self leadingCoefficient.
+	u _ c unit.
+	self isConstant ifFalse:
+		[v _ u * self tail unit leadingCoefficient.
+		c * v inverse = (c * u inverse) ifTrue: [u _ v]].
+	^ parent constant: u! !
+
+!Polynomial methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:10'!
 valuation
-	"If the receiver is an element of a valuation ring or an Euclidean ring, answer its valuation or Euclidean function."
+	"If the receiver is an element of a valuation ring or a Euclidean ring, answer its valuation or Euclidean function."
 	self isZero ifTrue: [^ Infinity negative].
 	^ self leadingMonomial degree! !
 
@@ -35383,7 +35432,7 @@ raisedTo: anInteger modulo: aPolynomial
 squared
 	^ self * self! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/4/2020 02:29:22'!
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/8/2020 18:07:00'!
 xgcd: aPolynomial
 	| a b zero one s1 t1 s t r1 r u |
 	(self parent includes: aPolynomial) ifFalse: [^ self adapt: aPolynomial andSend: #xgcd:].
@@ -35403,8 +35452,8 @@ xgcd: aPolynomial
 					temp _ r1. r1 _ r - (q * r1). r _ temp.
 					temp _ s1. s1 _ s - (q * s1). s _ temp.
 					temp _ t1. t1 _ t - (q * t1). t _ temp].
-			s _ s * b associatedUnit inverse. t _ t * a associatedUnit inverse.
-			u _ r associatedUnit inverse.
+			s _ s * b unit inverse. t _ t * a unit inverse.
+			u _ r unit inverse.
 			s _ s * u. t _ t * u. r _ r * u]
 		ifFalse:
 			[r1 _ a primitivePart normalized.
@@ -35418,8 +35467,8 @@ xgcd: aPolynomial
 					temp _ r1. r1 _ r*m - (q * r1). r _ temp.
 					temp _ s1. s1 _ s*m - (q * s1). s _ temp.
 					temp _ t1. t1 _ t*m - (q * t1). t _ temp].
-			s _ s * b associatedUnit inverse. t _ t * a associatedUnit inverse.
-			u _ (a content gcd: b content) * r associatedUnit inverse.
+			s _ s * b unit inverse. t _ t * a unit inverse.
+			u _ (a content gcd: b content) * r unit inverse.
 			s _ s * u. t _ t * u. r _ r * u].
 	^ {r. t. s}! !
 
@@ -35854,25 +35903,14 @@ isSquareFree
 	self isMonomial ifTrue: [^ self monomials anyOne isSquareFree].
 	^ self isZero not and: [(self gcd: self derivative) isConstant]! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 5/4/2020 09:40:04'!
+!Polynomial methodsFor: 'testing' stamp: 'len 5/8/2020 15:30:51'!
 isUnit
 	"Answer true if the receiver is invertible."
 	self isConstant ifTrue: [^ self leadingCoefficient isUnit].
 	parent scalars isIntegralDomain ifTrue: [^ false].
 	self independentCoefficient isUnit ifFalse: [^ false].
 	"this assumes the polynomial is univariate, can it be generalized to multivariate?"
-	^ (1 to: self degree) allSatisfy: [:i| (self atDegree: i) isNilpotent]
-
-"the above two lines generalize this:
-	((self scalars isKindOf: GaloisRing) or: [self scalars isKindOf: PrimePowerRing])
-		ifTrue:
-			[| M a |
-			M _ self scalars maximalIdeal.
-			a _ aPolynomial coefficients.
-			(M contains: (a at: 1)) ifTrue: [^ false].
-			2 to: a size do: [:i| (M contains: (a at: i)) ifFalse: [^ false]].
-			^ true].
-	^ self notYetImplemented"! !
+	^ (1 to: self degree) allSatisfy: [:i| (self atDegree: i) isNilpotent]! !
 
 !Polynomial methodsFor: 'testing' stamp: 'len 1/23/2017 11:42:42'!
 isUnivariate
@@ -37303,47 +37341,47 @@ normalize
 coefficients: aTuple
 	^ self basicNew coefficients: aTuple! !
 
-!LaurentSeries methodsFor: 'accessing' stamp: 'len 8/11/2019 11:31:09'!
+!LaurentSeries methodsFor: 'accessing' stamp: 'len 5/8/2020 17:48:59'!
 absolutePrecision
-	^ unit absolutePrecision! !
+	^ unitPart absolutePrecision! !
 
-!LaurentSeries methodsFor: 'accessing' stamp: 'len 8/11/2019 11:28:41'!
+!LaurentSeries methodsFor: 'accessing' stamp: 'len 5/8/2020 17:47:34'!
 denominator
-	^ valuation < 0 ifTrue: [unit one << valuation] ifFalse: [unit one]! !
+	^ valuation < 0 ifTrue: [unitPart one << valuation] ifFalse: [unitPart one]! !
 
-!LaurentSeries methodsFor: 'accessing' stamp: 'len 6/3/2019 18:39:52'!
+!LaurentSeries methodsFor: 'accessing' stamp: 'len 5/8/2020 17:47:47'!
 numerator
-	^ valuation <= 0 ifTrue: [unit] ifFalse: [unit >> valuation]! !
+	^ valuation <= 0 ifTrue: [unitPart] ifFalse: [unitPart >> valuation]! !
 
-!LaurentSeries methodsFor: 'accessing' stamp: 'len 8/11/2019 11:31:16'!
+!LaurentSeries methodsFor: 'accessing' stamp: 'len 5/8/2020 17:49:07'!
 relativePrecision
-	unit isZero ifTrue: [^ 0].
+	unitPart isZero ifTrue: [^ 0].
 	^ self absolutePrecision - valuation! !
 
-!LaurentSeries methodsFor: 'accessing' stamp: 'len 6/3/2019 18:36:17'!
-unit
-	^ unit! !
+!LaurentSeries methodsFor: 'accessing' stamp: 'len 5/8/2020 17:48:53'!
+unitPart
+	^ unitPart! !
 
 !LaurentSeries methodsFor: 'accessing' stamp: 'len 6/3/2019 02:33:25'!
 valuation
 	^ valuation! !
 
-!LaurentSeries methodsFor: 'comparing' stamp: 'len 8/11/2019 11:31:30'!
+!LaurentSeries methodsFor: 'comparing' stamp: 'len 5/8/2020 17:48:09'!
 = anObject
-	^ anObject class = self class and: [valuation = anObject valuation and: [unit = anObject unit]]! !
+	^ anObject class = self class and: [valuation = anObject valuation and: [unitPart = anObject unitPart]]! !
 
-!LaurentSeries methodsFor: 'comparing' stamp: 'len 8/11/2019 11:31:51'!
+!LaurentSeries methodsFor: 'comparing' stamp: 'len 5/8/2020 17:47:53'!
 hash
-	^ unit hash + valuation hash! !
+	^ unitPart hash + valuation hash! !
 
 !LaurentSeries methodsFor: 'testing' stamp: 'len 8/11/2019 11:35:18'!
 isIntegral
 	^ self valuation >= 0! !
 
-!LaurentSeries methodsFor: 'private' stamp: 'len 6/3/2019 18:40:15'!
-valuation: anInteger unit: anAdicInteger
+!LaurentSeries methodsFor: 'private' stamp: 'len 5/8/2020 17:48:40'!
+valuation: anInteger unit: aPowerSeries
 	valuation _ anInteger.
-	unit _ anAdicInteger! !
+	unitPart _ aPowerSeries! !
 
 !LaurentSeries class methodsFor: 'instance creation' stamp: 'len 6/3/2019 18:40:45'!
 valuation: anInteger unit: anAdicInteger
@@ -37858,12 +37896,12 @@ printPrecision
 	^ 0.001"
 	^ 0.00001! !
 
-!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 4/30/2018 05:14:01'!
+!ComplexAlgebraicNumber methodsFor: 'printing' stamp: 'len 5/4/2020 11:15:53'!
 printQuadraticOn: aStream base: base
 	| a b c discriminant z y x1 x2 sign |
-	a _ minimalPolynomial atDegree: 2.
-	b _ minimalPolynomial atDegree: 1.
-	c _ minimalPolynomial atDegree: 0.
+	a _ (minimalPolynomial atDegree: 2) asFraction.
+	b _ (minimalPolynomial atDegree: 1) asFraction.
+	c _ (minimalPolynomial atDegree: 0) asFraction.
 	discriminant _ b squared - (4*a*c).
 	z _ discriminant squareFree.
 	y _ (discriminant / z) sqrt.
@@ -38233,15 +38271,15 @@ sqrt: anIntegerOrFraction
 		minimalPolynomial: QQ polynomials x squared - anIntegerOrFraction
  		approximation: (anIntegerOrFraction negative ifTrue: [anIntegerOrFraction negated sqrt i] ifFalse: [anIntegerOrFraction sqrt]) radius: 0.00001! !
 
-!ModuleElement methodsFor: 'accessing' stamp: 'len 3/13/2020 17:31:11'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	^ self coordinates associatedUnit! !
-
-!ModuleElement methodsFor: 'accessing' stamp: 'len 3/13/2020 17:30:28'!
+!ModuleElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:07:20'!
 normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
-	^ self * self associatedUnit inverse! !
+	"Answer a unique choice of associate. See >>unit."
+	^ self * self unit inverse! !
+
+!ModuleElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:11:53'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ self coordinates unit! !
 
 !ModuleElement methodsFor: 'comparing' stamp: 'len 4/25/2020 09:25:18'!
 = anObject
@@ -38504,11 +38542,6 @@ parent: aDirectSumModule
 isZero
 	^ components allSatisfy: [:each| each isZero]! !
 
-!Tuple methodsFor: 'accessing' stamp: 'len 5/4/2020 08:54:10'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	^ (self at: self depth ifAbsent: [^ self scalars one]) associatedUnit! !
-
 !Tuple methodsFor: 'accessing' stamp: 'len 11/18/2016 20:21:46'!
 at: index ifAbsent: exceptionBlock
 	"Answer the element at my position index. If I do not contain an element
@@ -38552,10 +38585,10 @@ lift
 	"If the coefficients ring is a quotient R/I, answer a representative of the receiver over R. See >>%."
 	^ self apply: self scalars lifting! !
 
-!Tuple methodsFor: 'accessing' stamp: 'len 8/17/2019 08:40:19'!
+!Tuple methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:32'!
 normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
-	^ self * self associatedUnit inverse! !
+	"Answer a unique choice of associate. See >>unit."
+	^ self * self unit inverse! !
 
 !Tuple methodsFor: 'accessing' stamp: 'len 4/21/2018 23:11:10'!
 numerator
@@ -38566,6 +38599,11 @@ numerator
 scalars
 	"Answer the ring of scalars (or ring of coefficients) of the receiver."
 	^ self subclassResponsibility! !
+
+!Tuple methodsFor: 'accessing' stamp: 'len 5/8/2020 18:13:32'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ (self at: self depth ifAbsent: [^ self scalars one]) unit! !
 
 !Tuple methodsFor: 'accessing' stamp: 'len 3/29/2016 19:06'!
 x
@@ -41667,18 +41705,18 @@ oldreduceStep: k column: j
 		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/3/2020 09:55:07'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 5/8/2020 18:07:49'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
 	"2. Column finished?"
 	[i0 _ (matrix height to: k+1 by: -1)
 		detect: [:i| (matrix at: i@j) isZero not]
-		ifNone: [self multiplyRow: k by: (matrix at: k@j) associatedUnit inverse. ^ self "go to step 5"].
+		ifNone: [self multiplyRow: k by: (matrix at: k@j) unit inverse. ^ self "go to step 5"].
 	"3. Choose non-zero entry with smallest absolute value:"
 	i0 _ ((k to: i0) select: [:i| (matrix at: i@j) isZero not]) detectMin: [:i| (matrix at: i@j) valuation].
 	i0 > k ifTrue: [self swapRow: i0 with: k].
-	self multiplyRow: k by: (matrix at: k@j) associatedUnit inverse.
+	self multiplyRow: k by: (matrix at: k@j) unit inverse.
 	b _ matrix at: k@j.
 	"4. Reduce:"
 	matrix height to: k+1 by: -1 do: [:i| | q |
@@ -42748,7 +42786,7 @@ gcd
 elements: anArray
 	elements _ anArray! !
 
-!ExtendedEuclid methodsFor: 'private' stamp: 'len 5/3/2020 12:33:57'!
+!ExtendedEuclid methodsFor: 'private' stamp: 'len 5/8/2020 18:08:20'!
 run
 	| a b zero one s1 t1 s t r1 r u |
 	self assert: elements size = 2.
@@ -42766,8 +42804,8 @@ run
 			temp _ s1. s1 _ s - (q * s1). s _ temp.
 			temp _ t1. t1 _ t - (q * t1). t _ temp].
 	gcd _ r.
-	s _ s * b associatedUnit inverse. t _ t * a associatedUnit inverse.
-	u _ gcd associatedUnit inverse.
+	s _ s * b unit inverse. t _ t * a unit inverse.
+	u _ gcd unit inverse.
 	s _ s * u. t _ t * u. gcd _ gcd * u.
 	bezout _ {t. s}! !
 
@@ -45668,6 +45706,10 @@ adaptToCollection: rcvr andSend: selector
 
 	^ rcvr collect: [:element | element perform: selector with: self]! !
 
+!Object methodsFor: '*domains' stamp: 'len 5/8/2020 15:46:45'!
+isDomain
+	^ false! !
+
 !Object methodsFor: '*domains' stamp: 'len 4/22/2020 06:09:43'!
 isElement
 	"Answer true if the receiver is an element of a Domain, i.e. if it understands the message #parent and answers its parent Domain."
@@ -45683,6 +45725,10 @@ isInfinity
 
 !Object methodsFor: '*domains' stamp: 'len 4/2/2018 05:16:06'!
 isMatrix
+	^ false! !
+
+!Object methodsFor: '*domains' stamp: 'len 5/8/2020 15:46:36'!
+isMorphism
 	^ false! !
 
 !Object methodsFor: '*domains' stamp: 'len 8/5/2016 21:51'!
@@ -45936,11 +45982,6 @@ adaptToRealAlgebraic: rcvr andSend: selector
 !Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:35:53'!
 additiveOrder
 	^ self == 0 ifTrue: [1] ifFalse: [Infinity positive]! !
-
-!Integer methodsFor: '*domains' stamp: 'len 5/4/2020 08:59:40'!
-associatedUnit
-	"Answer a choice of associated unit of the receiver."
-	^ self < 0 ifTrue: [-1] ifFalse: [1]! !
 
 !Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:45'!
 bitCount
@@ -46238,9 +46279,9 @@ multichoose: anInteger
 multiplicativeOrder
 	^ self == 1 ifTrue: [1] ifFalse: [self == -1 ifTrue: [2] ifFalse: [Infinity positive]]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 6/18/2019 09:08:22'!
+!Integer methodsFor: '*domains' stamp: 'len 5/8/2020 18:04:59'!
 normalized
-	"Answer a choice of associate of the receiver such that 'self normalized * self associatedUnit = self'."
+	"Answer a unique choice of associate. See >>unit."
 	^ self abs! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/13/2015 02:00'!
@@ -46413,6 +46454,11 @@ stirling: anInteger
 	self = anInteger ifTrue: [^ self Stirling: anInteger].
 	self+1 = anInteger ifTrue: [^ self choose: 2].
 	^ (self-1) * (self-1 stirling: anInteger) + (self-1 stirling: anInteger-1)! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/8/2020 18:11:15'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	^ self < 0 ifTrue: [-1] ifFalse: [1]! !
 
 !Integer methodsFor: '*domains' stamp: 'len 6/9/2019 07:58:03'!
 valuation
