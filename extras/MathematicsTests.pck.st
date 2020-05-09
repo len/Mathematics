@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 30 April 2020 at 2:55:52 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 6:04:36 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 157!
+!provides: 'MathematicsTests' 1 158!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -102,26 +102,6 @@ TestCase subclass: #MatrixTest
 	category: 'MathematicsTests'!
 !classDefinition: 'MatrixTest class' category: #MathematicsTests!
 MatrixTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #ModularIntegersTest category: #MathematicsTests!
-TestCase subclass: #ModularIntegersTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'ModularIntegersTest class' category: #MathematicsTests!
-ModularIntegersTest class
-	instanceVariableNames: ''!
-
-!classDefinition: #ModularTest category: #MathematicsTests!
-TestCase subclass: #ModularTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MathematicsTests'!
-!classDefinition: 'ModularTest class' category: #MathematicsTests!
-ModularTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #ModuleTest category: #MathematicsTests!
@@ -2865,16 +2845,16 @@ testCInvariants
 	self assert: W c4 = 496.
 	self assert: W c6 = 20008! !
 
-!EllipticCurvesTest methodsFor: 'as yet unclassified' stamp: 'len 11/11/2016 08:29'!
+!EllipticCurvesTest methodsFor: 'as yet unclassified' stamp: 'len 5/4/2020 00:39:08'!
 testGroupLaw
 	| E P Q O |
 	E _ EllipticCurve cremona389a1.
-	P _ E pointAt: (-1,1).
-	Q _ E pointAt: (0,-1).
-	O _ E pointAt: (0,1,0).
-	self assert: P+Q = (E pointAt: (4,8)).
-	self assert: P-Q = (E pointAt: (1,0)).
-	self assert: 3*P - (5*Q) = (E pointAt: (328/361,(-2800/6859))).
+	P _ E pointAt: (QQ tuple: #(-1 1)).
+	Q _ E pointAt: (QQ tuple: #(0 -1)).
+	O _ E pointAt: (QQ tuple: #(0 1 0)).
+	self assert: P+Q = (E pointAt: (QQ tuple: #(4 8))).
+	self assert: P-Q = (E pointAt: (QQ tuple: #(1 0))).
+	self assert: 3*P - (5*Q) = (E pointAt: (QQ tuple: {328/361. -2800/6859})).
 	self assert: O+P = P.
 	self assert: P+O = P.
 	self assert: P-P = O! !
@@ -3148,13 +3128,13 @@ testUnion
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
 	self assert: (G \/ G transposed) = G symmetric! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 22:02:46'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 03:56:35'!
 smallGroupAtRandom
 	^ {[SymmetricGroup new: 3].
 	[AlternatingGroup new: 3].
 	[PermutationGroup klein].
 	[LinearGroup klein].
-	[Group quaternions]} atRandom value! !
+	[AbelianGroup orders: ((1 to: 3 atRandom) collect: [:i| (0 to: 5) atRandom])]} atRandom value! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 2/1/2018 23:02:45'!
 testActionOrbitOf
@@ -3349,14 +3329,14 @@ testLagrangeTheorem
 	H _ G span: ((1 to: 3 atRandom) collect: [:i| G atRandom]) asSet.
 	self assert: H order | G order! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:10:56'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2020 21:17:32'!
 testModularIntegersUnits
 	| m R U |
 	m _ (2 to: 100) atRandom.
 	R _ ZZ / m.
 	U _ R units.
 	self assert: U size = (Sequence phi value: m).
-"	self testGroup: U"! !
+	self testGroup: U! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:53:11'!
 testOrbitStabilizerTheorem
@@ -3458,11 +3438,11 @@ testContinuedFractionsGoldenRatio
 	x _ phi convergentAt: 20.
 	self assert: (x asFloat - 1.6180339887) abs < 0.000001! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2016 07:58'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 10:16:07'!
 testContinuedFractionsGoldenRatio2
 	| phi denominators |
 	phi _ ContinuedFraction phi.
-	denominators _ phi convergents collect: [:each| each denominator].
+	denominators _ phi convergents collect: [:each| each asRational denominator].
 	self assert: (denominators equals: Sequence fibonacci << 1 upTo: 100)! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/3/2015 02:18'!
@@ -3491,17 +3471,19 @@ testCyclotomicPolynomials2
 	n _ 100 atRandom.
 	self assert: (n divisors product: [:d| P cyclotomic: d]) = (x^n - 1)! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 4/18/2018 06:23:55'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 14:00:45'!
 testExtendedEuclid
-	| a b euclid |
+	| a b euclid g u v |
 	a _ -1000 to: 1000 :: atRandom.
 	b _ -1000 to: 1000 :: atRandom.
-	euclid _ ExtendedEuclid on: {a. b}.
-	self assert: euclid gcd | a.
-	self assert: euclid gcd | b.
-	self assert: (euclid bezout * {a. b}) sum = euclid gcd.
-	self assert: euclid gcd = (a gcd: b).
-	self assert: euclid verify! !
+	euclid _ a xgcd: b.
+	g _ euclid at: 1.
+	u _ euclid at: 2.
+	v _ euclid at: 3.
+	self assert: g | a.
+	self assert: g | b.
+	self assert: ({u. v} * {a. b}) sum = g.
+	self assert: g = (a gcd: b)! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:05'!
 testFieldAutomorphisms
@@ -3519,37 +3501,30 @@ testFreeAlgebra
 	self assert: f * A one = f.
 	self assert: A one * f = f! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:31:51'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 20:10:58'!
 testFunctionComposition
 	| f g a |
-	f _ Function from: ZZ to: ZZ evaluating: [:x| x * 2].
-	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
+	f _ ZZ carrier to: ZZ carrier evaluating: [:x| x * 2].
+	g _ ZZ carrier to: ZZ carrier evaluating: [:x| x + 1].
 	a _ 1000 atRandom.
 	self assert: (f · g value: a) = (f value: (g value: a)).
 	self assert: (g · f value: a) = (g value: (f value: a))! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:31:56'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 10:13:34'!
 testFunctionComposition2
 	| f g a |
-	f _ Function from: ZZ to: QQ evaluating: [:x| x / 2].
-	g _ Function from: QQ to: ZZ evaluating: [:x| x numerator].
+	f _ ZZ carrier to: QQ carrier evaluating: [:x| x asRatio / 2].
+	g _ QQ carrier to: ZZ carrier evaluating: [:x| x numerator].
 	a _ 1000 atRandom.
-	self assert: (f · g value: a) = (f value: (g value: a)).
+	self assert: (f · g value: a asRatio) = (f value: (g value: a asRatio)).
 	self assert: (g · f value: a) = (g value: (f value: a))! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 18:32:02'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 20:10:14'!
 testFunctionComposition3
 	| f g |
-	f _ Function from: ZZ to: QQ evaluating: [:x| x / 2].
-	g _ Function from: ZZ to: ZZ evaluating: [:x| x + 1].
+	f _ ZZ carrier to: QQ carrier evaluating: [:x| x / 2].
+	g _ ZZ carrier to: ZZ carrier evaluating: [:x| x + 1].
 	self should: [g · f] raise: DomainError! !
-
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 01:49:41'!
-testFunctionNewFrom
-	| f g |
-	f _ (QQ^3) endomorphisms atRandomBits: 1000. "f is a LinearMap"
-	g _ f as: Function. "downgrade it to a simple Function, not a LinearMap any more"
-	self assert: (g as: FreeModuleMap) = f! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/11/2016 20:01:51'!
 testFundamentalDiscriminant
@@ -4491,12 +4466,12 @@ testBacklashMatrixRandomOver: R
 		x _ A \ b.
 		self assert: A*x = b]! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:08:20'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2020 07:50:34'!
 testBacklashNoSolution
 	"Example from Sage documentation."
 	| A v |
 	A _ QQ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
-	v _ (1,1).
+	v _ QQ tuple: #(1 1).
 	self assert: (A \ v) isNil! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/21/2019 04:52:41'!
@@ -4565,23 +4540,23 @@ testBacklashProductRingMatrixRandom
 testBacklashRationalMatrixRandom
 	self testBacklashMatrixRandomOver: QQ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:09:08'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2020 07:50:56'!
 testBacklashRationalTuple
 	"Example from Sage documentation."
 	| A v x |
 	A _ QQ matrix: 3 coefficients: #(1 2 3 -1 2 5 2 3 1).
-	v _ (1,2,3).
+	v _ QQ tuple: #(1 2 3).
 	x _ A \ v.
 	self assert: x = (-13/12, (23/12), (-7/12)).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:09:34'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2020 07:51:36'!
 testBacklashRationalTuple2
 	"Example from GAP manual."
 	| A b x |
 	A _ QQ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	b _ (95,115,182).
-	x _ (47/4, (-17/2), (67/4), 0, 0).
+	b _ QQ tuple: #(95 115 182).
+	x _ QQ tuple: {47/4. -17/2. 67/4. 0. 0}.
 	self assert: A transposed \ b = x! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 7/12/2019 10:31:43'!
@@ -4673,13 +4648,13 @@ testSlashWithMatrix
 	self assert: X = (QQ matrix: 1@3 coefficients: #(1 2 3)).
 	self assert: X * A = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/5/2019 12:10:27'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/3/2020 07:52:02'!
 testSlashWithTuple
 	| A b x  |
 	A _ QQ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
-	b _ (2, 19, 8).
+	b _ QQ tuple: #(2 19 8).
 	x _ b / A.
-	self assert: x = (1, 2, 3).
+	self assert: x = (QQ tuple: #(1 2 3)).
 	self assert: x * A = b! !
 
 !MatrixTest methodsFor: 'private' stamp: 'len 3/9/2020 12:21:09'!
@@ -4688,121 +4663,6 @@ newRandomMatrix: shape over: aRing
 	2 atRandom = 1 ifTrue: [^ aRing atRandomMatrix: shape bits: 100].
 	samples _ {aRing zero. aRing one. aRing one negated}.
 	^ aRing matrix: shape evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:20:49'!
-testGaloisFields
-	| GF pi x one a |
-	GF _ GaloisField new: 3^3.
-	self assert: GF isField.
-	self assert: GF characteristic = 3.
-	pi _ GF projection.
-	x _ pi domain x.
-	one _ pi domain one.
-	a _ pi value: x^2 + one.
-	self assert: a * a reciprocal = GF one.
-	[(a _ GF atRandom) isZero] whileTrue.
-	self assert: a * a reciprocal = GF one! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2019 09:04:06'!
-testModularIntegerLift
-	self assert: ((2 to: 100) allSatisfy: [:m| (1 to: m) allSatisfy: [:x| (x % m) lift % m = (x % m)]])! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:24'!
-testModularIntegersField
-	| F a b |
-	F _ ZZ / 7.
-	self assert: F isField.
-	self assert: F characteristic = 7.
-	a _ F projection value: 3.
-	b _ F projection value: 5.
-	self assert: a * a reciprocal = F one.
-	self assert: a * 7 = F zero.
-	self assert: b ^ (F size - 1) = F one "Euler's theorem"! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:40'!
-testQuadraticResiduesModp
-	| F |
-	F _ PrimeField new: 1000 atRandom nextPrime.
-	self assert: F atRandom squared isQuadraticResidue.
-	self assert: ((1000 count: [F atRandom isQuadraticResidue]) between: 400 and: 600)! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:21:54'!
-testSmallPrimeField
-	| p F E |
-	p _ 20 atRandom nextPrime.
-	F _ ZZ/p.
-	E _ SmallPrimeField new: p.
-	F do: [:a|
-		F do: [:b| | c d |
-			c _ E !! a representative.
-			d _ E !! b representative.
-			self assert: (a+b) representative = (c+d) representative.
-			self assert: (a-b) representative = (c-d) representative.
-			self assert: (a*b) representative = (c*d) representative.
-			b isZero ifFalse:
-				[self assert: (a/b) representative = (c/d) representative.
-				self assert: b reciprocal representative = d reciprocal representative]]]! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:22:01'!
-testSmallPrimeFieldTables
-	| p F g |
-	p _ 20 atRandom nextPrime.
-	F _ SmallPrimeField new: p.
-	g _ F primitiveRoot.
-	1 to: p-1 do: [:n| self assert: (F expTable at: n) = (g^n) representative].
-	0 to: p-2 do: [:n| self assert: (F logTable at: (g^n) representative) = n]! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:29:37'!
-testSquareRootModulo2
-	| F |
-	F _ PrimeField new: 2.
-	self assert: F zero squareRoot = F zero.
-	self assert: F one squareRoot = F one! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:26:30'!
-testSquareRootModuloPrime
-	| F a x |
-	100 timesRepeat:
-		[F _ PrimeField new: (1000 atRandom + 1) nextPrime.
-		a _ F atRandom squared.
-		x _ a squareRoot.
-		self assert: x squared = a]! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 12:54:16'!
-testSquareRootModuloPrimePower
-	| F a x |
-	100 timesRepeat:
-		[F _ PrimePowerRing new: 10 atRandom nextPrime to: 3 atRandom.
-		a _ F atRandom squared.
-		x _ a squareRoot.
-		self assert: x squared = a]! !
-
-!ModularIntegersTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2019 02:22:18'!
-testZ6IsNotPID
-	self assert: (ZZ/6) isPID not! !
-
-!ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:56:12'!
-testGamma0Index
-	self assert: (1 to: 19 :: collect: [:each| Gamma0CongruenceSubgroup new: each :: index]) = #(1 3 4 6 6 12 8 12 12 18 12 24 14 24 24 24 18 36 20).
-	self assert: (Gamma0CongruenceSubgroup new: 32041) index = 32220! !
-
-!ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/10/2016 12:23:06'!
-testGamma0NumberOfCusps
-	| p |
-	self assert: (1 to: 19 :: collect: [:each| Gamma0CongruenceSubgroup new: each :: numberOfCusps]) =  #(1 2 2 3 2 4 2 4 4 4 2 6 2 4 4 6 2 8 2).
-	p _ 1.
-	100 timesRepeat: [self assert: (Gamma0CongruenceSubgroup new: (p _ p nextPrime)) numberOfCusps = 2]! !
-
-!ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/15/2016 23:02:48'!
-testGammaIndex
-	self assert: (1 to: 19 :: collect: [:each| PrincipalCongruenceSubgroup new: each :: index]) =  #(1 6 24 48 120 144 336 384 648 720 1320 1152 2184 2016 2880 3072 4896 3888 6840)! !
-
-!ModularTest methodsFor: 'as yet unclassified' stamp: 'len 12/15/2016 23:16:41'!
-testIndexOf
-	| G H |
-	G _ PrincipalCongruenceSubgroup new: 2.
-	H _ PrincipalCongruenceSubgroup new: 8.
-	self assert: (G indexOf: H) = 32 "according to GAP manual chap. 2, Gamma(2) has index 12"! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 4/26/2020 10:44:01'!
 testHomRelationsBug
@@ -4817,6 +4677,20 @@ testHomRelationsBug2
 	W _ ZZ^3 / {(2,2,2)}.
 	X _ V => W.
 	self assert: (X !! (X relations atRandomBits: 100) coordinates) isZero! !
+
+!ModuleTest methodsFor: 'bugs' stamp: 'len 5/3/2020 20:09:56'!
+testHomRelationsBug3
+	| V W |
+	V _ ZZ^1 / {2}.
+	W _ ZZ^(5 atRandom).
+	self assert: (V => W) isTrivial! !
+
+!ModuleTest methodsFor: 'bugs' stamp: 'len 5/2/2020 10:27:15'!
+testModuleMapBug
+	| M f |
+	M _ ZZ^1 / {2}.
+	f _ M dual atRandomBits: 100.
+	self testLinearMap: f! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 4/21/2020 05:55:42'!
 testPIDCoordinatesOfBug
@@ -4941,13 +4815,13 @@ testAdjoint
 	phi _ W dual atRandomBits: 20.
 	self assert: (fAdjoint value: phi) = (phi · f)! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 07:59:20'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/2/2020 17:27:06'!
 testAdjointAndHomFunctor
 	"Given a R-linear map f, applying the Hom(-, R) produces the adjoint (the dual map).
 	Example from 'A Singular Introduction To Commutative Algebra, pp. 115, procedure kontraHom."
 	| f |
 	f _ QQ^3 => (QQ^4) :: atRandomBits: 100.
-	self assert: (f => QQ asSelfModule) = f adjoint! !
+	self assert: (f => QQ asScalarModule) = f adjoint! !
 
 !ModuleTest methodsFor: 'maps' stamp: 'len 4/18/2020 15:30:53'!
 testCoequalizer
@@ -5843,10 +5717,10 @@ testTensorProductRelations
 newFreeModule
 	^ self newFreeModuleOver: self newScalarsRing! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 06:00:23'!
+!ModuleTest methodsFor: 'private' stamp: 'len 5/2/2020 17:27:00'!
 newFreeModuleOver: scalars
 	| M N |
-	M _ 3 atRandom = 1 ifTrue: [scalars asSelfModule] ifFalse: [scalars ^ 3 atRandom].
+	M _ 3 atRandom = 1 ifTrue: [scalars asScalarModule] ifFalse: [scalars ^ 3 atRandom].
 	4 atRandom = 1 ifTrue:
 		[N _ self newFreeModuleOver: scalars.
 		2 atRandom = 1 ifTrue: [^ M => N].
@@ -6200,12 +6074,12 @@ testNormAndTrace
 	self assert: (a + b) trace = (a trace + b trace).
 	self assert: (a * b) norm = (a norm * b norm)! !
 
-!NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 9/27/2018 15:44:55'!
+!NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 5/3/2020 10:27:25'!
 testNormOfAlgebraicInteger
 	| F a |
 	F _ QQ extensionDegree: (2 to: 4) atRandom.
 	a _ F integers atRandomBits: 100.
-	self assert: a norm isInteger! !
+	self assert: a norm isIntegral! !
 
 !NumberFieldTest methodsFor: 'as yet unclassified' stamp: 'len 5/4/2018 17:42:44'!
 testNormTraceAndMinimalPolynomial
@@ -6629,15 +6503,15 @@ testEvaluationMultivariate
 	a _ ZZ atRandomTuple: 3 bits: 100.
 	self assert: (f value: a) = ((a at: 1)^2 * (a at: 2) - (a at: 3))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/6/2017 03:09:32'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:04'!
 testExactDivisionBug
 	| Zx x f |
 	Zx _ ZZ polynomials.
 	x _ Zx x.
 	f _ x*2.
-	self assert: f /// f = Zx one! !
+	self assert: f ÷ f = Zx one! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/6/2017 03:10:03'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:14'!
 testExactDivisionMultivariate
 	| Qxy x y f g |
 	Qxy _ QQ polynomialsIn: #(x y).
@@ -6645,8 +6519,8 @@ testExactDivisionMultivariate
 	y _ Qxy y.
 	f _ x-y.
 	g _ x+y.
-	self assert: f * g /// g = f.
-	self assert: f * g /// f = g! !
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:33'!
 testExactDivisionMultivariate2
@@ -6659,40 +6533,40 @@ testExactDivisionMultivariate2
 	self assert: (f * g divisionBy: g) quotient = f.
 	self assert: (f * g divisionBy: f) quotient = g! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/6/2017 03:10:17'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:25'!
 testExactDivisionOverQ
 	| x f g |
 	x _ QQ polynomials x.
 	f _ x^2 + x + 1.
 	g _ 1 - x.
-	self assert: f * g /// g = f.
-	self assert: f * g /// f = g! !
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/6/2017 03:10:30'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:39'!
 testExactDivisionOverQRandom
 	| Qx f g |
 	Qx _ QQ polynomials.
 	f _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
 	g _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
-	self assert: f * g /// g = f.
-	self assert: f * g /// f = g! !
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/6/2017 03:10:42'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:50'!
 testExactDivisionOverZ
 	| x f g |
 	x _ ZZ polynomials x.
 	f _ x^2 + x + 1.
 	g _ 1 - x.
-	self assert: f * g /// g = f.
-	self assert: f * g /// f = g! !
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:08'!
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 14:01:43'!
 testExtendedEuclidBug
 	| x f1 f2 |
 	x _ QQ polynomials x.
 	f1 _ x^2 + 1.
 	f2 _ x - 1.
-	self assert: (ExtendedEuclid on: {f1. f2}) gcd = (f1 gcd: f2)! !
+	self assert: (f1 xgcd: f2) first = (f1 gcd: f2)! !
 
 !PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/9/2018 21:26:43'!
 testFiniteFieldFactorization
@@ -7384,13 +7258,13 @@ testLocalProperties
 	self assert: R isLocal.
 	self assert: R maximalIdeal = (R * R x)! !
 
-!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:16:02'!
+!PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 5/3/2020 10:09:34'!
 testMultiplicativeInverse
 	| a one |
 	a _ self cos.
 	one _ a parent one.
-	self assert: a * a reciprocal = one.
-	self assert: one reciprocal = one! !
+	self assert: a * a inverse = one.
+	self assert: one inverse = one! !
 
 !PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 4/14/2020 18:11:21'!
 testSinSquaredPlusCosSquared
@@ -7398,575 +7272,6 @@ testSinSquaredPlusCosSquared
 	sin _ self sin.
 	cos _ self cos.
 	self assert: cos squared + sin squared = cos parent one! !
-
-!RingTest methodsFor: 'private' stamp: 'len 12/2/2016 11:13:56'!
-newQuotientRing
-	| R I |
-	2 atRandom = 1 ifTrue: [^ ZZ / (2 to: 10) atRandom].
-	R _ ZZ polynomials.
-	I _ R * (R atRandomBits: 10 maxDegree: 5).
-	^ R / I! !
-
-!RingTest methodsFor: 'private' stamp: 'len 9/16/2018 23:31:05'!
-newRing
-	4 atRandom = 1 ifTrue: [^ self newQuotientRing].
-	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
-	^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom! !
-
-!RingTest methodsFor: 'general' stamp: 'len 7/17/2019 03:19:17'!
-testCanonicalMorphisms
-	| R x Q |
-	R _ QQ polynomials.
-	x _ R x.
-	Q _ R / (x^2 + 1).
-	self assert: (ZZ -> R value: 4) = (R !! 4). "canonical morphism from initial object"
-	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
-testKrullDimension
-	| R I |
-	self assert: ZZ dimension = 1.
-	self assert: QQ dimension = 0.
-	self assert: (ZZ polynomialsIn: 2) dimension = 3.
-	R _ QQ polynomialsIn: #(x y).
-	I _ R * {R x ^ 2 + (R y ^ 2) - 1}.
-	self assert: (R / I) dimension = 1! !
-
-!RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
-testNilradical
-	self assert: ZZ nilradical = (ZZ*0).
-	self assert: (ZZ/12) nilradical = (ZZ/12*6)! !
-
-!RingTest methodsFor: 'general' stamp: 'len 9/22/2018 19:03:04'!
-testProductRing
-	| R S P |
-	R _ self newRing.
-	S _ self newRing.
-	P _ R × S.
-	self testRing: P.
-	self testRingHomomorphism: (P projection: 2 atRandom)! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:30'!
-testRing: R
-	| one zero a b c |
-	one _ R one.
-	zero _ R zero.
-	a _ R atRandomBits: 100.
-	b _ R atRandomBits: 100.
-	c _ R atRandomBits: 100.
-	self assert: a * one = a.
-	self assert: one * a = a.
-	self assert: zero * a = zero.
-	self assert: a * zero = zero.
-	self assert: zero + a = a.
-	self assert: a + zero = a.
-	self assert: a + b = (b + a). "commutativity of addition"
-	self assert: (a + b + c) = (a + (b + c)). "associativity of addition"
-	self assert: (a * b * c) = (a * (b * c)). "associativity of multiplication"
-	R isCommutative ifTrue: [self assert: a * b = (b * a)]. "commutativity of multiplication"! !
-
-!RingTest methodsFor: 'general' stamp: 'len 3/13/2018 20:15:02'!
-testRingHomomorphism: phi
-	| R S a b |
-	R _ phi domain.
-	S _ phi codomain.
-	a _ R atRandomBits: 10.
-	b _ R atRandomBits: 10.
-	self assert: (phi value: R zero) = S zero.
-	self assert: (phi value: R one) = S one.
-	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
-	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:27'!
-testZZ
-	self testRing: ZZ! !
-
-!RingTest methodsFor: 'general' stamp: 'len 10/1/2018 05:41:38'!
-testZZIdeals
-	self assert: (ZZ * 3 includes: 6).
-	self deny: (ZZ * 3 includes: 7).
-	self assert: (ZZ * 0) isTrivial.
-	self assert: (ZZ * 1) isOne! !
-
-!RingTest methodsFor: 'general' stamp: 'len 5/15/2018 19:17:51'!
-testZZPrimeNotMaximalIdeal
-	| I |
-	I _ ZZ * 0.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:04:31'!
-testFiniteRing
-	| R |
-	R _ (ZZ/2) polynomials.
-	R _ R / (R x^3 - R x).
-	self assert: R isField not.
-	self assert: R size = 8.
-	self assert: R units size = 2.
-	self assert: R zeroDivisors size = 6.
-	self assert: R radical asSet = {R zero. R x^2 + R x} asSet
-	"also, this ring has two maximal ideals, and the Jacobson radical is {0, x^2 + x}"! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 17:52:20'!
-testFiniteRing2
-	| R |
-	R _ (ZZ/2) polynomials.
-	R _ R / (R x * (R x + 1)).
-	self assert: R isField not.
-	self assert: R size = 4.
-	self assert: R zeroDivisors size = 3.
-	self assert: R characteristic = 2.
-	self assert: R isLocal not
-	"more about this ring: two maximal (and princial as well) ideals (so not a local ring)"! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/23/2018 02:14:27'!
-testFiniteRing2Alternative
-	| R |
-	R _ ZZ/2 × (ZZ/2).
-	self assert: R isField not.
-	self assert: R size = 4.
-	self assert: R zeroDivisors size = 3.
-	self assert: R characteristic = 2.
-	self assert: R isLocal not.
-	"more about this ring: two maximal (and principal as well) ideals (so not a local ring)"! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:05:37'!
-testFiniteRing3
-	| R |
-	R _ ZZ/4 × (ZZ/4).
-	self assert: R characteristic = 4.
-	self assert: R isField not.
-	self assert: R size = 16.
-	self assert: R zeroDivisors size = 12.
-	self assert: R units size = 4.
-	self assert: R radical isTrivial not
-	"more about this ring: two maximal ideals (so not a local ring), and non-trivial jacobson radical"! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 19:01:44'!
-testFiniteRingJacobsonRadical
-	| R |
-	R _ ZZ/12.
-	self assert: R radical = (R*6)! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:00:10'!
-testFiniteRingLocalAndNotLocal
-	| R S |
-	R _ ZZ/6. "this is not a Galois ring, the zero-divisors dont form an ideal"
-	S _ ZZ/8. "this is a Galois ring"
-	self assert: R isLocal not.
-	self assert: S isLocal! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:02:21'!
-testFiniteRingsAreArtinian
-	| R |
-	R _ ZZ/6. "not local"
-	self assert: R isArtinian.
-	R _ ZZ/8. "local, prime power ring, Galois ring"
-	self assert: R isArtinian.
-	R _ ZZ/4 × (ZZ/4).
-	self assert: R isArtinian.
-	R _ GaloisRing new: 3 to: 2 to: 4.
-	self assert: R isArtinian! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:59:11'!
-testGaloisRing
-	| R |
-	R _ GaloisRing new: 3 to: 3 to: 2.
-	self assert: R characteristic = (3^3).
-	self assert: R size = (3^3^2).
-	self assert: R isLocal.
-	self assert: R isEuclidean.
-	self testRing: R! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:55:59'!
-testGaloisRingCanonicalEmbeddingIntoOverring
-	"Canonical homomorphism from GR(p^n,m) to GR(p^n,m*k)."
-	| p n m k A B phi |
-	p _ #(2 3 5) atRandom.
-	n _ 3 atRandom.
-	m _ 3 atRandom.
-	k _ 3 atRandom.
-	A _ GaloisRing new: p to: n to: m.
-	B _ GaloisRing new: p to: n to: m * k.
-	phi _ A -> B.
-	self testRingHomomorphism: phi! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 07:04:02'!
-testGaloisRingCanonicalProjectionOntoResidueField
-	"Canonical homomorphism from GR(p^n,m) to GF(p,m).
-	This sends 'a' in Z/(p^n)Z[x]/f to 'a mod p' in Z/pZ[x]/(f mod p) where f mod p means reducing the coefficients mod p."
-	| p n m A B phi |
-	p _ #(2 3 5) atRandom.
-	n _ 3 atRandom.
-	m _ 3 atRandom.
-	A _ GaloisRing new: p to: n to: m.
-	B _ GaloisField new: p to: m.
-	phi _ A -> B.
-	self testRingHomomorphism: phi! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:53:54'!
-testGaloisRingNilradical
-	| R |
-	R _ GaloisRing new: 3 to: 3 to: 2.
-	self assert: R nilradical = (R * 3)! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 3/7/2020 16:57:36'!
-testIntegersModuloOneIsTrivial
-	self assert: (ZZ/1) isTrivial! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:26:00'!
-testModularIntegers
-	| R |
-	R _ ZZ / (10 atRandom + 1).
-	self testRing: R.
-	self testRingHomomorphism: R projection! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 15:48:10'!
-testModularIntegersFactorization
-	| R |
-	R _ ZZ/(2 to: 1000) atRandom.
-	100 timesRepeat:
-		[| x factors |
-		x _ R atRandom.
-		factors _ x factors.
-		self assert: (factors asSet allSatisfy: [:each| each isIrreducible]).
-		self assert: (x isZero or: [x isUnit or: [x normalized = factors product]])]! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:09:29'!
-testModularIntegersPrimesExamples
-	| R |
-	R _ ZZ/6.
-	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 4) asSet.
-	R _ ZZ/12.
-	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 9 10) asSet! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 16:11:38'!
-testModularIntegersPrimitiveRoots
-	| X |
-	"number of primitive roots in Z/nZ for n=2 to 17:"
-	X _ #(1 1 1 2 1 2 0 2 2 4 0 4 2 0 0 8).
-	self assert: ((2 to: 17) collect: [:m| (ZZ/m) count: [:x| x isPrimitiveRoot]]) = X.
-	X withIndexDo: [:n :i|
-		n > 0
-			ifTrue: [self assert: (ZZ/(i+1)) primitiveRoot isPrimitiveRoot]
-			ifFalse: [self should: [(ZZ/(i+1)) primitiveRoot] raise: Error]]! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:25:01'!
-testModularIntegersProperties
-	| m R |
-	m _ (2 to: 10) atRandom.
-	R _ ZZ/m.
-	self assert: R isPIR.
-	self assert: m isPrime = R isField.
-	self assert: m isPrimePower = R isLocal.
-	self assert: R isField = R isIntegralDomain.
-	self assert: R isField = R isPID! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 15:22:23'!
-testModularIntegersTrivial
-	| R |
-	R _ ZZ/1.
-	self assert: R isTrivial.
-	self assert: R size = 1.
-	self assert: R zero = R one! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:45'!
-testModularIntegersUnitsIrreduciblesAndReducibles
-	"From 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
-	| m R factors p |
-	m _ (2 to: 100) atRandom.
-	R _ ZZ/m.
-	self assert: R units asSet size = m phi.
-	factors _ m factors.
-	self assert: R irreducibles size = (m phi * ((factors asSet select: [:each| (factors occurrencesOf: each) > 1]) sum: [:each| 1/each] ifEmpty: [0])).
-	p _ 10 atRandom nextPrime.
-	m _ p ^ (2 to: 4) atRandom.
-	R _ ZZ/m.
-	self assert: R reducibles size = (R irreducibles size / (p - 1) - 1)! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:27'!
-testModularIntegersUnitsIrreduciblesAndReduciblesExamples
-	"Examples from 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
-	| R |
-	R _ ZZ/8.
-	self assert: (R units asSet collect: [:each| each representative]) = #(1 3 5 7) asSet.
-	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 6) asSet.
-	R _ ZZ/36.
-	self assert: (R units asSet collect: [:each| each representative]) = #(1 5 7 11 13 17 19 23 25 29 31 35) asSet.
-	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 3 10 14 15 21 22 26 33 34) asSet.
-	R _ ZZ/25.
-	self assert: R irreducibles size = 4.
-	self assert: R reducibles isEmpty.
-	R _ ZZ/32.
-	self assert: R irreducibles size = 8.
-	self assert: R reducibles size = 7.
-	R _ ZZ/343.
-	self assert: R irreducibles size = 42.
-	self assert: R reducibles size = 6! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
-testPrimeFieldLogarithm
-	| F g a b p |
-	p _ 17.
-	F _ ZZ/p.
-	g _ F primitiveRoot.
-	[(a _ F atRandom) isZero] whileTrue.
-	[(b _ F atRandom) isZero] whileTrue.
-	self assert: g ^ (a log: g) = a.
-	self assert: (a log: g) + (b log: g) \\ (p-1) = ((a*b log: g) \\ (p-1)).
-	self assert: (a log: g) - (b log: g) \\ (p-1) = ((a/b log: g) \\ (p-1))! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/11/2018 06:39:22'!
-testPrimeFieldPrimitiveRoot
-	| p F g i x |
-	p _ 100 atRandom nextPrime.
-	F _ ZZ/p.
-	g _ F primitiveRoot.
-	self assert: g multiplicativeOrder = (p-1).
-	i _ 1.
-	x _ g.
-	[x = F one] whileFalse: [x _ x*g. i _ i+1].
-	self assert: i = (p-1)! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:40:55'!
-testPrimePowerRing
-	| R |
-	R _ PrimePowerRing new: 3 to: 3.
-	self assert: R characteristic = (3^3).
-	self assert: R size = (3^3).
-	self assert: R isLocal.
-	self assert: R isEuclidean.
-	self assert: R maximalIdeal = (R*3).
-	self testRing: R! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:21'!
-testPrimePowerRingCanonicalProjections
-	"Canonical homomorphism from ZZ/<p^n> to ZZ/<p^m> with 1 <= m <= n."
-	| p n m A B phi a b |
-	p _ 100 atRandom nextPrime.
-	n _ 4 atRandom.
-	A _ ZZ/(p^n).
-	m _ n atRandom.
-	B _ ZZ/(p^m).
-	phi _ A -> B.
-	a _ A atRandom.
-	b _ phi value: a.
-	self assert: (B includes: b).
-	self assert: a representative \\ (p^m) = b representative.
-	self testRingHomomorphism: phi! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:29'!
-testPrimePowerRingNilradical
-	| R |
-	R _ PrimePowerRing new: 3 to: 3.
-	self assert: R nilradical = (R * 3)! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 17:26:32'!
-testPrimePowerRingNilradicalAndUnits
-	| p n R |
-	p _ 30 atRandom nextPrime.
-	n _ 4 atRandom.
-	R _ ZZ/(p^n).
-	self assert: R units size + R nilradical size = R size! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 12:36:49'!
-testPrimePowerRingValuationAndUnit
-	| R x |
-	R _ PrimePowerRing new: 3 to: 5.
-	x _ R !! 5.
-	self assert: x valuation = 0.
-	self assert: x associatedUnit = x.
-	x _ R !! (3*3*5*2).
-	self assert: x valuation = 2.
-	self assert: x associatedUnit = (R !! 10).
-	"this is undefined for an Euclidean valuation, but we define it at 0 to be +infinity in order to make it compatible with the p-adic valuation:"
-	x _ R !! 0.
-	self assert: x valuation = Infinity positive! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/9/2019 09:29:08'!
-testQuasiGaloisRing1
-	| p r n A |
-	p _ #(2 3) atRandom.
-	r _ 3 atRandom.
-	n _ 3 atRandom+1.
-	A _ QuasiGaloisRing new: p to: r to: n.
-	self assert: A characteristic = p.
-	self assert: A size = (p^(r*n)).
-	self assert: A isLocal.
-	self assert: A isFinite.
-	self assert: A isField not! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 6/16/2019 13:48:07'!
-testZ6PrimeNeedNotBeIrreducible
-	| R a |
-	R _ ZZ/6.
-	a _ R!!2.
-	self assert: a isPrime.
-	self assert: a isIrreducible not! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 6/10/2019 14:52:03'!
-testLocalizationInclusions
-	| Z2 Z3 Z6 |
-	Z2 _ ZZ localizationAt: 2.
-	Z3 _ ZZ localizationAt: 3.
-	Z6 _ ZZ localizationAt: 6. "<- this is not a prime ideal, it shouldn't be allowed"
-	self assert: Z6 >= Z2.
-	self assert: Z6 >= Z3.
-	self deny: Z3 >= Z2.
-	self deny: Z2 >= Z3.
-	self deny: Z2 >= Z6! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 6/29/2019 18:20:30'!
-testLocalizationMaximalIdeal
-	| Z2 |
-	Z2 _ ZZ localizationAt: 2.
-	self assert: Z2 maximalIdeal = (Z2 * (Z2 !! 2))! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:16:41'!
-testLocalizationOfModularIntegers1
-	| R |
-	R _ ZZ/60.
-	self assert: (R localizationAt: (R*2)) = (ZZ/4).
-	self assert: (R localizationAt: (R*3)) = (ZZ/3).
-	self assert: (R localizationAt: (R*5)) = (ZZ/5)! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:47'!
-testLocalizationOfModularIntegers2
-	| R P L phi |
-	R _ ZZ/60.
-	P _ R*2.
-	L _ R localizationAt: P. "the localization is actually the prime power ring Z/4Z"
-	"localization map:"
-	phi _ R -> L.
-	self testRingHomomorphism: phi.
-	"everything not in P maps to a unit:"
-	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:56'!
-testLocalizationOfModularIntegers3
-	| R P L phi |
-	R _ ZZ/60.
-	P _ R*3.
-	L _ R localizationAt: P. "the localization is actually the field GF(3)"
-	"localization map:"
-	phi _ R -> L.
-	self testRingHomomorphism: phi.
-	"everything not in P maps to a unit:"
-	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
-
-!RingTest methodsFor: 'localizations' stamp: 'len 7/30/2019 04:56:29'!
-testLocalizationOfZAt2
-	| L |
-	L _ ZZ localizationAt: 2.
-	self assert: QQ !! (L !! (1/3)) = (1/3).
-	self should: [L !! (3/2)] raise: Error.
-	self assert: QQ !! (L !! 2) = 2.
-	self assert: QQ !! (L !! 3) = 3.
-	self assert: (L atRandomBits: 10) denominator odd.
-	self testRing: L.
-	self testRingHomomorphism: ZZ -> L! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/13/2019 18:12:56'!
-testMultivariatePolynomialRing
-	| R |
-	R _ ZZ polynomialsIn: #(x y z).
-	self testRing: R.
-	self testRingHomomorphism: ZZ -> R! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/13/2019 18:13:03'!
-testPolynomialRing
-	| R |
-	R _ ZZ polynomials.
-	self testRing: R.
-	self testRingHomomorphism: ZZ -> R! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:18:02'!
-testPolynomialRingPrimeNotMaximalIdeal
-	"Z[x]/<x> is isomorphic to Z, which is an integral domain but not a field. So <x> is prime but not maximal."
-	| R I |
-	R _ ZZ polynomials.
-	I _ R * R x.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:19:26'!
-testPolynomialRingPrimeNotMaximalIdeal2
-	"Q[x,y]/<x> is isomorphic to Q[y], which is an integral domain but not a field. So <x> is prime but not maximal."
-	| R I |
-	R _ QQ polynomialsIn: 2.
-	I _ R * R x.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'quotients' stamp: 'len 10/6/2016 20:32'!
-testQuotientRing
-	| Q |
-	Q _ self newQuotientRing.
-	self testRing: Q.
-	self testRingHomomorphism: Q projection! !
-
-!RingTest methodsFor: 'quotients' stamp: 'len 2/27/2017 20:51:24'!
-testQuotientRing2
-	| Q pi f g |
-	Q _ self newQuotientRing.
-	f _ Q base atRandomBits: 10.
-	g _ Q relations atRandomBits: 10.
-	pi _ Q projection.
-	self assert: (pi value: g) isZero.
-	self assert: (Q includes: (pi value: f)).
-	self testRingHomomorphism: pi.
-"	self assert: (pi value: f) = (pi value: f + g)."
-"	h _ Q atRandomBits: 100.
-	self assert: (pi value: (pi section value: h)) = h"! !
-
-!RingTest methodsFor: 'quotients' stamp: 'len 4/8/2018 17:47:19'!
-testQuotientRingNotIntegralDomain
-	| R |
-	R _ QQ polynomials.
-	R _ R / (R x^2 - 1).
-	self assert: R isField not.
-	self assert: R isIntegralDomain not! !
-
-!RingTest methodsFor: 'quotients' stamp: 'len 4/8/2018 17:48:23'!
-testQuotientRingWhichIsAField
-	| R |
-	R _ QQ polynomials.
-	R _ R / (R x^2 + (R x * 2) + 2).
-	self assert: R isField! !
-
-!RingTest methodsFor: 'local rings' stamp: 'len 6/26/2019 13:00:09'!
-testDVR: V
-	| a b p |
-	self assert: V isLocal.
-	self assert: V isIntegralDomain.
-	self assert: V isEuclidean.
-	self assert: V one valuation = 0.
-	p _ V uniformizer.
-	self assert: p valuation = 1.
-	a _ V atRandomBits: 100.
-	self assert: (a*p) valuation = (a valuation + 1).
-	b _ V atRandomBits: 100.
-	self assert: (a*b) valuation = (a valuation + b valuation)! !
-
-!RingTest methodsFor: 'local rings' stamp: 'len 6/4/2019 18:28:31'!
-testLocalHomomorphism
-	| f |
-	f _ ZZ/4 to: ZZ/2 evaluating: [:x| ZZ/2 !! x representative].
-	self assert: f isLocal
-! !
-
-!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:28'!
-testValuationRing1
-	| V |
-	V _ ZZ localizationAt: 5.
-	self testRing: V.
-	self testRingHomomorphism: V -> QQ! !
-
-!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:37'!
-testValuationRing2
-	| V |
-	V _ ZZ localizationAt: 5.
-	self testDVR: V! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 01:27:43'!
 testCongruenceSolving1
@@ -7989,12 +7294,12 @@ testCongruenceSolving2
 	self assert: solutions size = 23.
 	self assert: (solutions allSatisfy: [:x| a*x = b])! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:12:58'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/4/2020 06:15:35'!
 testEuclideanRing: R
 	"Test division on a pair of elements:"
 	| a b q r |
 	self assert: R isEuclidean.
-	R size < 300 ifTrue: [self testEuclideanRingAll: R].
+	R size < 300 ifTrue: [self testSmallEuclideanRing: R].
 	100 timesRepeat:
 		[a _ R atRandomBits: 30.
 		[b _ R atRandomBits: 30. b isZero] whileTrue.
@@ -8002,18 +7307,6 @@ testEuclideanRing: R
 		r _ a \\ b.
 		self assert: a = (q * b + r).
 		self assert: (r isZero or: [r valuation < b valuation])]! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 15:17:37'!
-testEuclideanRingAll: R
-	"Test division on all pairs of elements:"
-	R do: [:b|
-		b isZero ifFalse:
-			[R do: [:a|
-				| q r |
-				q _ a // b.
-				r _ a \\ b.
-				self assert: a = (q * b + r).
-				self assert: (r isZero or: [r valuation < b valuation])]]]! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:07'!
 testGCD: R
@@ -8050,11 +7343,23 @@ testGCDZero: R
 	self assert: gcd = a normalized.
 	self assert: (R zero gcd: R zero) = R zero! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:45:30'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/4/2020 05:30:23'!
+testGaloisRingGCD
+	| R |
+	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
+	self testGCD: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/3/2020 11:06:05'!
 testGaloisRingIsEuclidean
 	| R |
-	R _ GaloisRing new: 5 atRandom nextPrime to: 3 atRandom to: 3 atRandom.
+	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
 	self testEuclideanRing: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/4/2020 05:30:50'!
+testGaloisRingLCM
+	| R |
+	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
+	self testGCD: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:15'!
 testLCM: R
@@ -8131,7 +7436,7 @@ testModularIntegersEuclideanExample4
 	self assert: (a gcd: b) = (R !! 1).
 	self assert: (a lcm: b) = (R !! 10).! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:14:20'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/8/2020 18:03:51'!
 testModularIntegersEuclideanExample5
 	"Some random example built in Magma online calculator."
 	| R a b |
@@ -8139,7 +7444,7 @@ testModularIntegersEuclideanExample5
 	a _ R !! 4.
 	b _ R !! 8.
 	self assert: b normalized = (R !! 2).
-	self assert: b associatedUnit = (R !! 9).
+	self assert: b unit = (R !! 9).
 	self assert: (a gcd: b) = (R !! 2).
 	self assert: (a lcm: b) = (R !! 2)! !
 
@@ -8201,21 +7506,6 @@ testModularIntegersRingLCM
 	R _ ZZ/(2 to: 256) atRandom.
 	self testLCM: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:57:41'!
-testModularIntegersRingNormalizedAndAssociatedUnit
-	| R |
-	R _ ZZ/(2 to: 256) atRandom.
-	self testNormalizedAndAssociatedUnit: R! !
-
-!RingTest methodsFor: 'euclidean' stamp: 'len 6/18/2019 03:57:04'!
-testNormalizedAndAssociatedUnit: R
-	| x |
-"	R size < 300 ifTrue: [self testNormalizedAndAssociatedUnitAll: R]."
-	100 timesRepeat:
-		[x _ R atRandomBits: 100.
-		self assert: x normalized * x associatedUnit = x.
-		self assert: x associatedUnit isUnit]! !
-
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:32'!
 testPolynomialsOverFieldGCD
 	| F R |
@@ -8254,6 +7544,18 @@ testRationalIntegerRingGCDAndLCM
 testRationalIntegerRingIsEuclidean
 	self testEuclideanRing: ZZ! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/4/2020 06:16:11'!
+testSmallEuclideanRing: R
+	"Test division on all pairs of elements:"
+	R do: [:b|
+		b isZero ifFalse:
+			[R do: [:a|
+				| q r |
+				q _ a // b.
+				r _ a \\ b.
+				self assert: a = (q * b + r).
+				self assert: (r isZero or: [r valuation < b valuation])]]]! !
+
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/29/2019 18:02:47'!
 testValuationRingGCD
 	| R |
@@ -8271,6 +7573,768 @@ testValuationRingLCM
 	| R |
 	R _ ZZ localizationAt: 5.
 	self testLCM: R! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:31:34'!
+testFiniteRing1
+	| R |
+	R _ (ZZ/2) polynomials.
+	R _ R / (R x^3 - R x).
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R isField not.
+	self assert: R size = 8.
+	self assert: R units size = 2.
+	self assert: R zeroDivisors size = 6.
+	self assert: R radical asSet = {R zero. R x^2 + R x} asSet
+	"also, this ring has two maximal ideals"! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:12:52'!
+testFiniteRing2
+	| R |
+	R _ (ZZ/2) polynomials.
+	R _ R / (R x * (R x + 1)).
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R isField not.
+	self assert: R size = 4.
+	self assert: R zeroDivisors size = 3.
+	self assert: R characteristic = 2.
+	self assert: R isLocal not.
+	"more about this ring: two maximal (and princial as well) ideals (so not a local ring)"! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:12:58'!
+testFiniteRing2Alternative
+	| R |
+	R _ ZZ/2 × (ZZ/2).
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R isField not.
+	self assert: R size = 4.
+	self assert: R zeroDivisors size = 3.
+	self assert: R characteristic = 2.
+	self assert: R isLocal not.
+	"more about this ring: two maximal (and principal as well) ideals (so not a local ring)"! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:13:04'!
+testFiniteRing3
+	| R |
+	R _ ZZ/4 × (ZZ/4).
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R characteristic = 4.
+	self assert: R isField not.
+	self assert: R size = 16.
+	self assert: R zeroDivisors size = 12.
+	self assert: R units size = 4.
+	self assert: R radical isTrivial not.
+	"more about this ring: two maximal ideals (so not a local ring), and non-trivial jacobson radical"! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 19:01:44'!
+testFiniteRingJacobsonRadical
+	| R |
+	R _ ZZ/12.
+	self assert: R radical = (R*6)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:00:10'!
+testFiniteRingLocalAndNotLocal
+	| R S |
+	R _ ZZ/6. "this is not a Galois ring, the zero-divisors dont form an ideal"
+	S _ ZZ/8. "this is a Galois ring"
+	self assert: R isLocal not.
+	self assert: S isLocal! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/7/2019 04:02:21'!
+testFiniteRingsAreArtinian
+	| R |
+	R _ ZZ/6. "not local"
+	self assert: R isArtinian.
+	R _ ZZ/8. "local, prime power ring, Galois ring"
+	self assert: R isArtinian.
+	R _ ZZ/4 × (ZZ/4).
+	self assert: R isArtinian.
+	R _ GaloisRing new: 3 to: 2 to: 4.
+	self assert: R isArtinian! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:21:42'!
+testGaloisField
+	| p k F |
+	p _ #(2 3 5) atRandom.
+	k _ #(1 2 3) atRandom.
+	F _ GaloisField new: p to: k.
+	self assert: F isField.
+	self assert: F characteristic = p.
+	self testRing: F.
+	self testRingHomomorphism: F projection.
+	self testSmallRingUnitsAndAssociates: F! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:18:36'!
+testGaloisField2
+	| GF pi x one a |
+	GF _ GaloisField new: 3^3.
+	self assert: GF isField.
+	self assert: GF characteristic = 3.
+	pi _ GF projection.
+	x _ pi domain x.
+	one _ pi domain one.
+	a _ pi value: x^2 + one.
+	self assert: a * a inverse = GF one.
+	[(a _ GF atRandom) isZero] whileTrue.
+	self assert: a * a inverse = GF one! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:13:29'!
+testGaloisRing
+	| R |
+	R _ GaloisRing new: 3 to: 3 to: 2.
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R characteristic = (3^3).
+	self assert: R size = (3^3^2).
+	self assert: R isLocal.
+	self assert: R isEuclidean! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 4/19/2019 04:55:59'!
+testGaloisRingCanonicalEmbeddingIntoOverring
+	"Canonical homomorphism from GR(p^n,m) to GR(p^n,m*k)."
+	| p n m k A B phi |
+	p _ #(2 3 5) atRandom.
+	n _ 3 atRandom.
+	m _ 3 atRandom.
+	k _ 3 atRandom.
+	A _ GaloisRing new: p to: n to: m.
+	B _ GaloisRing new: p to: n to: m * k.
+	phi _ A -> B.
+	self testRingHomomorphism: phi! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/15/2019 07:04:02'!
+testGaloisRingCanonicalProjectionOntoResidueField
+	"Canonical homomorphism from GR(p^n,m) to GF(p,m).
+	This sends 'a' in Z/(p^n)Z[x]/f to 'a mod p' in Z/pZ[x]/(f mod p) where f mod p means reducing the coefficients mod p."
+	| p n m A B phi |
+	p _ #(2 3 5) atRandom.
+	n _ 3 atRandom.
+	m _ 3 atRandom.
+	A _ GaloisRing new: p to: n to: m.
+	B _ GaloisField new: p to: m.
+	phi _ A -> B.
+	self testRingHomomorphism: phi! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/22/2018 03:53:54'!
+testGaloisRingNilradical
+	| R |
+	R _ GaloisRing new: 3 to: 3 to: 2.
+	self assert: R nilradical = (R * 3)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/4/2020 06:27:21'!
+testGaloisRingUnitsSize
+	| R |
+	R _ GaloisRing new: 3 to: 2 to: 2.
+	self assert: R units asSet size = 72! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 3/7/2020 16:57:36'!
+testIntegersModuloOneIsTrivial
+	self assert: (ZZ/1) isTrivial! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:14:13'!
+testModularIntegers
+	| R |
+	R _ ZZ / 256 atRandom.
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self testRingHomomorphism: R projection! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:17:02'!
+testModularIntegersAnnihilator
+	| R |
+	R _ ZZ/64 atRandom.
+	R do: [:x|
+		| ann |
+		ann _ x annihilator.
+		self assert: (x * ann generator) isZero.
+		R do: [:y| (x*y) isZero ifTrue: [self assert: (ann includes: y)]]]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 15:48:10'!
+testModularIntegersFactorization
+	| R |
+	R _ ZZ/(2 to: 1000) atRandom.
+	100 timesRepeat:
+		[| x factors |
+		x _ R atRandom.
+		factors _ x factors.
+		self assert: (factors asSet allSatisfy: [:each| each isIrreducible]).
+		self assert: (x isZero or: [x isUnit or: [x normalized = factors product]])]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:22:07'!
+testModularIntegersLift
+	self assert: ((2 to: 100) allSatisfy: [:m| (1 to: m) allSatisfy: [:x| (x % m) lift % m = (x % m)]])! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:09:29'!
+testModularIntegersPrimesExamples
+	| R |
+	R _ ZZ/6.
+	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 4) asSet.
+	R _ ZZ/12.
+	self assert: (R primes asSet collect: [:each| each representative]) = #(2 3 9 10) asSet! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 16:11:38'!
+testModularIntegersPrimitiveRoots
+	| X |
+	"number of primitive roots in Z/nZ for n=2 to 17:"
+	X _ #(1 1 1 2 1 2 0 2 2 4 0 4 2 0 0 8).
+	self assert: ((2 to: 17) collect: [:m| (ZZ/m) count: [:x| x isPrimitiveRoot]]) = X.
+	X withIndexDo: [:n :i|
+		n > 0
+			ifTrue: [self assert: (ZZ/(i+1)) primitiveRoot isPrimitiveRoot]
+			ifFalse: [self should: [(ZZ/(i+1)) primitiveRoot] raise: Error]]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/4/2019 15:25:01'!
+testModularIntegersProperties
+	| m R |
+	m _ (2 to: 10) atRandom.
+	R _ ZZ/m.
+	self assert: R isPIR.
+	self assert: m isPrime = R isField.
+	self assert: m isPrimePower = R isLocal.
+	self assert: R isField = R isIntegralDomain.
+	self assert: R isField = R isPID! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/19/2019 15:22:23'!
+testModularIntegersTrivial
+	| R |
+	R _ ZZ/1.
+	self assert: R isTrivial.
+	self assert: R size = 1.
+	self assert: R zero = R one! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:45'!
+testModularIntegersUnitsIrreduciblesAndReducibles
+	"From 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
+	| m R factors p |
+	m _ (2 to: 100) atRandom.
+	R _ ZZ/m.
+	self assert: R units asSet size = m phi.
+	factors _ m factors.
+	self assert: R irreducibles size = (m phi * ((factors asSet select: [:each| (factors occurrencesOf: each) > 1]) sum: [:each| 1/each] ifEmpty: [0])).
+	p _ 10 atRandom nextPrime.
+	m _ p ^ (2 to: 4) atRandom.
+	R _ ZZ/m.
+	self assert: R reducibles size = (R irreducibles size / (p - 1) - 1)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/20/2019 19:01:27'!
+testModularIntegersUnitsIrreduciblesAndReduciblesExamples
+	"Examples from 'A Special Subring Associated with Irreducible Elements in the Ring of Z/nZ', Augustine Musukwa, Khumbo Kumwenda, Journal of Mathematics (2017)."
+	| R |
+	R _ ZZ/8.
+	self assert: (R units asSet collect: [:each| each representative]) = #(1 3 5 7) asSet.
+	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 6) asSet.
+	R _ ZZ/36.
+	self assert: (R units asSet collect: [:each| each representative]) = #(1 5 7 11 13 17 19 23 25 29 31 35) asSet.
+	self assert: (R irreducibles asSet collect: [:each| each representative]) = #(2 3 10 14 15 21 22 26 33 34) asSet.
+	R _ ZZ/25.
+	self assert: R irreducibles size = 4.
+	self assert: R reducibles isEmpty.
+	R _ ZZ/32.
+	self assert: R irreducibles size = 8.
+	self assert: R reducibles size = 7.
+	R _ ZZ/343.
+	self assert: R irreducibles size = 42.
+	self assert: R reducibles size = 6! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:24:35'!
+testPrimeField
+	| p F |
+	p _ 256 atRandom nextPrime.
+	F _ ZZ / p.
+	self assert: F isField.
+	self assert: F characteristic = p.
+	self testRing: F.
+	self testRingHomomorphism: F projection.
+	self testSmallRingUnitsAndAssociates: F! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:25:44'!
+testPrimeFieldEulerTheorem
+	| p F a |
+	p _ 256 atRandom nextPrime.
+	F _ ZZ / p.
+	[a _ F atRandom. a isZero] whileTrue.
+	self assert: a ^ (p - 1) = F one! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/10/2018 00:39:19'!
+testPrimeFieldLogarithm
+	| F g a b p |
+	p _ 17.
+	F _ ZZ/p.
+	g _ F primitiveRoot.
+	[(a _ F atRandom) isZero] whileTrue.
+	[(b _ F atRandom) isZero] whileTrue.
+	self assert: g ^ (a log: g) = a.
+	self assert: (a log: g) + (b log: g) \\ (p-1) = ((a*b log: g) \\ (p-1)).
+	self assert: (a log: g) - (b log: g) \\ (p-1) = ((a/b log: g) \\ (p-1))! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/11/2018 06:39:22'!
+testPrimeFieldPrimitiveRoot
+	| p F g i x |
+	p _ 100 atRandom nextPrime.
+	F _ ZZ/p.
+	g _ F primitiveRoot.
+	self assert: g multiplicativeOrder = (p-1).
+	i _ 1.
+	x _ g.
+	[x = F one] whileFalse: [x _ x*g. i _ i+1].
+	self assert: i = (p-1)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:26:33'!
+testPrimeFieldQuadraticResidues
+	| F |
+	F _ PrimeField new: 1000 atRandom nextPrime.
+	self assert: F atRandom squared isQuadraticResidue.
+	self assert: ((1000 count: [F atRandom isQuadraticResidue]) between: 400 and: 600)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:28:46'!
+testPrimeFieldSquareRoot
+	| F a x |
+	100 timesRepeat:
+		[F _ PrimeField new: (1000 atRandom + 1) nextPrime.
+		a _ F atRandom squared.
+		x _ a squareRoot.
+		self assert: x squared = a]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/4/2020 06:26:10'!
+testPrimeFieldUnitsSize
+	| F |
+	F _ ZZ/256 atRandom nextPrime.
+	self assert: F units size = (F size - 1)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:15:40'!
+testPrimePowerRing
+	| R |
+	R _ PrimePowerRing new: 3 to: 3.
+	self testRing: R.
+	self testSmallRingUnitsAndAssociates: R.
+	self assert: R characteristic = (3^3).
+	self assert: R size = (3^3).
+	self assert: R isLocal.
+	self assert: R isEuclidean.
+	self assert: R maximalIdeal = (R*3)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:21'!
+testPrimePowerRingCanonicalProjections
+	"Canonical homomorphism from ZZ/<p^n> to ZZ/<p^m> with 1 <= m <= n."
+	| p n m A B phi a b |
+	p _ 100 atRandom nextPrime.
+	n _ 4 atRandom.
+	A _ ZZ/(p^n).
+	m _ n atRandom.
+	B _ ZZ/(p^m).
+	phi _ A -> B.
+	a _ A atRandom.
+	b _ phi value: a.
+	self assert: (B includes: b).
+	self assert: a representative \\ (p^m) = b representative.
+	self testRingHomomorphism: phi! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 14:25:29'!
+testPrimePowerRingNilradical
+	| R |
+	R _ PrimePowerRing new: 3 to: 3.
+	self assert: R nilradical = (R * 3)! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/5/2019 17:26:32'!
+testPrimePowerRingNilradicalAndUnits
+	| p n R |
+	p _ 30 atRandom nextPrime.
+	n _ 4 atRandom.
+	R _ ZZ/(p^n).
+	self assert: R units size + R nilradical size = R size! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:29:15'!
+testPrimePowerRingSquareRoot
+	| F a x |
+	100 timesRepeat:
+		[F _ PrimePowerRing new: 10 atRandom nextPrime to: 3 atRandom.
+		a _ F atRandom squared.
+		x _ a squareRoot.
+		self assert: x squared = a]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/8/2020 18:03:43'!
+testPrimePowerRingValuationAndUnit
+	| R x |
+	R _ PrimePowerRing new: 3 to: 5.
+	x _ R !! 5.
+	self assert: x valuation = 0.
+	self assert: x unit = x.
+	x _ R !! (3*3*5*2).
+	self assert: x valuation = 2.
+	self assert: x unit = (R !! 10).
+	"this is undefined for an Euclidean valuation, but we define it at 0 to be +infinity in order to make it compatible with the p-adic valuation:"
+	x _ R !! 0.
+	self assert: x valuation = Infinity positive! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:16:08'!
+testQuasiGaloisRing1
+	| p r n A |
+	p _ #(2 3) atRandom.
+	r _ 3 atRandom.
+	n _ 3 atRandom+1.
+	A _ QuasiGaloisRing new: p to: r to: n.
+	self testRing: A.
+	self testSmallRingUnitsAndAssociates: A.
+	self assert: A characteristic = p.
+	self assert: A size = (p^(r*n)).
+	self assert: A isLocal.
+	self assert: A isFinite.
+	self assert: A isField not! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:27:33'!
+testSmallPrimeField
+	| p F E |
+	p _ 20 atRandom nextPrime.
+	F _ ZZ/p.
+	E _ SmallPrimeField new: p.
+	F do: [:a|
+		F do: [:b| | c d |
+			c _ E !! a representative.
+			d _ E !! b representative.
+			self assert: (a+b) representative = (c+d) representative.
+			self assert: (a-b) representative = (c-d) representative.
+			self assert: (a*b) representative = (c*d) representative.
+			b isZero ifFalse:
+				[self assert: (a/b) representative = (c/d) representative.
+				self assert: b inverse representative = d inverse representative]]]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:27:49'!
+testSmallPrimeFieldTables
+	| p F g |
+	p _ 20 atRandom nextPrime.
+	F _ SmallPrimeField new: p.
+	g _ F primitiveRoot.
+	1 to: p-1 do: [:n| self assert: (F expTable at: n) = (g^n) representative].
+	0 to: p-2 do: [:n| self assert: (F logTable at: (g^n) representative) = n]! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:28:07'!
+testSquareRootModulo2
+	| F |
+	F _ PrimeField new: 2.
+	self assert: F zero squareRoot = F zero.
+	self assert: F one squareRoot = F one! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:29:26'!
+testZ6IsNotPID
+	self assert: (ZZ/6) isPID not! !
+
+!RingTest methodsFor: 'finite rings' stamp: 'len 6/16/2019 13:48:07'!
+testZ6PrimeNeedNotBeIrreducible
+	| R a |
+	R _ ZZ/6.
+	a _ R!!2.
+	self assert: a isPrime.
+	self assert: a isIrreducible not! !
+
+!RingTest methodsFor: 'general' stamp: 'len 7/17/2019 03:19:17'!
+testCanonicalMorphisms
+	| R x Q |
+	R _ QQ polynomials.
+	x _ R x.
+	Q _ R / (x^2 + 1).
+	self assert: (ZZ -> R value: 4) = (R !! 4). "canonical morphism from initial object"
+	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
+testKrullDimension
+	| R I |
+	self assert: ZZ dimension = 1.
+	self assert: QQ dimension = 0.
+	self assert: (ZZ polynomialsIn: 2) dimension = 3.
+	R _ QQ polynomialsIn: #(x y).
+	I _ R * {R x ^ 2 + (R y ^ 2) - 1}.
+	self assert: (R / I) dimension = 1! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/4/2018 23:52:20'!
+testNilradical
+	self assert: ZZ nilradical = (ZZ*0).
+	self assert: (ZZ/12) nilradical = (ZZ/12*6)! !
+
+!RingTest methodsFor: 'general' stamp: 'len 9/22/2018 19:03:04'!
+testProductRing
+	| R S P |
+	R _ self newRing.
+	S _ self newRing.
+	P _ R × S.
+	self testRing: P.
+	self testRingHomomorphism: (P projection: 2 atRandom)! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/4/2020 06:32:28'!
+testQQ
+	self testRing: QQ! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:06:49'!
+testRing: R
+	self testRingAxioms: R.
+	self testRingUnitsAndAssociates: R! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:09:44'!
+testRingAxioms: R
+	| one zero a b c |
+	one _ R one.
+	zero _ R zero.
+	300 timesRepeat:
+		[a _ R atRandomBits: 100.
+		b _ R atRandomBits: 100.
+		c _ R atRandomBits: 100.
+		self assert: a * one = a.
+		self assert: one * a = a.
+		self assert: zero * a = zero.
+		self assert: a * zero = zero.
+		self assert: zero + a = a.
+		self assert: a + zero = a.
+		"commutativity of addition:"
+		self assert: a + b = (b + a).
+		"associativity of addition:"
+		self assert: a + b + c = (a + (b + c)).
+		"associativity of multiplication:"
+		self assert: a * b * c = (a * (b * c)).
+		"distributivity:"
+		self assert: (a + b) * c = (a * c + (b * c)).
+		"commutativity of multiplication:"
+		R isCommutative ifTrue: [self assert: a * b = (b * a)]]! !
+
+!RingTest methodsFor: 'general' stamp: 'len 3/13/2018 20:15:02'!
+testRingHomomorphism: phi
+	| R S a b |
+	R _ phi domain.
+	S _ phi codomain.
+	a _ R atRandomBits: 10.
+	b _ R atRandomBits: 10.
+	self assert: (phi value: R zero) = S zero.
+	self assert: (phi value: R one) = S one.
+	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
+	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:10:34'!
+testRingUnitsAndAssociates: R
+"	R size < 300 ifTrue: [^ self testSmallRingUnitsAndAssociates: R]."
+	300 timesRepeat:
+		[| x u |
+		x _ R atRandomBits: 30.
+		u _ (R atRandomBits: 30) unit.
+		self assert: x unit isUnit.
+		self assert: u unit = u.
+		self assert: u * u inverse = R one.
+		self assert: x normalized * x unit = x.
+		self assert: x normalized = (x * u) normalized]! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/8/2020 18:03:09'!
+testSmallRingUnitsAndAssociates: R
+	R do: [:x| self assert: x unit isUnit].
+	R units do: [:u| self assert: u unit = u].
+	R units do: [:u| self assert: u * u inverse = R one].
+	R do: [:x| self assert: x normalized * x unit = x].
+	R size < 80
+		ifTrue:
+			[R units do: [:u|
+				R do: [:x| self assert: x normalized = (x * u) normalized]]]
+		ifFalse:
+			[R do: [:x|
+				| u |
+				u _ R atRandom unit.
+				self assert: x normalized = (x * u) normalized]]! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/6/2016 20:27'!
+testZZ
+	self testRing: ZZ! !
+
+!RingTest methodsFor: 'general' stamp: 'len 10/1/2018 05:41:38'!
+testZZIdeals
+	self assert: (ZZ * 3 includes: 6).
+	self deny: (ZZ * 3 includes: 7).
+	self assert: (ZZ * 0) isTrivial.
+	self assert: (ZZ * 1) isOne! !
+
+!RingTest methodsFor: 'general' stamp: 'len 5/15/2018 19:17:51'!
+testZZPrimeNotMaximalIdeal
+	| I |
+	I _ ZZ * 0.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/26/2019 13:00:09'!
+testDVR: V
+	| a b p |
+	self assert: V isLocal.
+	self assert: V isIntegralDomain.
+	self assert: V isEuclidean.
+	self assert: V one valuation = 0.
+	p _ V uniformizer.
+	self assert: p valuation = 1.
+	a _ V atRandomBits: 100.
+	self assert: (a*p) valuation = (a valuation + 1).
+	b _ V atRandomBits: 100.
+	self assert: (a*b) valuation = (a valuation + b valuation)! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/4/2019 18:28:31'!
+testLocalHomomorphism
+	| f |
+	f _ ZZ/4 to: ZZ/2 evaluating: [:x| ZZ/2 !! x representative].
+	self assert: f isLocal
+! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:28'!
+testValuationRing1
+	| V |
+	V _ ZZ localizationAt: 5.
+	self testRing: V.
+	self testRingHomomorphism: V -> QQ! !
+
+!RingTest methodsFor: 'local rings' stamp: 'len 6/29/2019 18:02:37'!
+testValuationRing2
+	| V |
+	V _ ZZ localizationAt: 5.
+	self testDVR: V! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 6/10/2019 14:52:03'!
+testLocalizationInclusions
+	| Z2 Z3 Z6 |
+	Z2 _ ZZ localizationAt: 2.
+	Z3 _ ZZ localizationAt: 3.
+	Z6 _ ZZ localizationAt: 6. "<- this is not a prime ideal, it shouldn't be allowed"
+	self assert: Z6 >= Z2.
+	self assert: Z6 >= Z3.
+	self deny: Z3 >= Z2.
+	self deny: Z2 >= Z3.
+	self deny: Z2 >= Z6! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 6/29/2019 18:20:30'!
+testLocalizationMaximalIdeal
+	| Z2 |
+	Z2 _ ZZ localizationAt: 2.
+	self assert: Z2 maximalIdeal = (Z2 * (Z2 !! 2))! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:16:41'!
+testLocalizationOfModularIntegers1
+	| R |
+	R _ ZZ/60.
+	self assert: (R localizationAt: (R*2)) = (ZZ/4).
+	self assert: (R localizationAt: (R*3)) = (ZZ/3).
+	self assert: (R localizationAt: (R*5)) = (ZZ/5)! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:47'!
+testLocalizationOfModularIntegers2
+	| R P L phi |
+	R _ ZZ/60.
+	P _ R*2.
+	L _ R localizationAt: P. "the localization is actually the prime power ring Z/4Z"
+	"localization map:"
+	phi _ R -> L.
+	self testRingHomomorphism: phi.
+	"everything not in P maps to a unit:"
+	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/7/2019 16:20:56'!
+testLocalizationOfModularIntegers3
+	| R P L phi |
+	R _ ZZ/60.
+	P _ R*3.
+	L _ R localizationAt: P. "the localization is actually the field GF(3)"
+	"localization map:"
+	phi _ R -> L.
+	self testRingHomomorphism: phi.
+	"everything not in P maps to a unit:"
+	R do: [:each| self assert: ((P includes: each) or: [(phi value: each) isUnit])]! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 7/30/2019 04:56:29'!
+testLocalizationOfZAt2
+	| L |
+	L _ ZZ localizationAt: 2.
+	self assert: QQ !! (L !! (1/3)) = (1/3).
+	self should: [L !! (3/2)] raise: Error.
+	self assert: QQ !! (L !! 2) = 2.
+	self assert: QQ !! (L !! 3) = 3.
+	self assert: (L atRandomBits: 10) denominator odd.
+	self testRing: L.
+	self testRingHomomorphism: ZZ -> L! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/4/2020 06:30:23'!
+testMultivariatePolynomialRing
+	| R P |
+	R _ self newRing.
+	P _ R polynomialsIn: #(x y z).
+	self testRing: R.
+	self testRingHomomorphism: R -> P! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/4/2020 06:29:53'!
+testPolynomialRing
+	| R P |
+	R _ self newRing.
+	P _ R polynomials.
+	self testRing: P.
+	self testRingHomomorphism: R -> P! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:18:02'!
+testPolynomialRingPrimeNotMaximalIdeal
+	"Z[x]/<x> is isomorphic to Z, which is an integral domain but not a field. So <x> is prime but not maximal."
+	| R I |
+	R _ ZZ polynomials.
+	I _ R * R x.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/15/2018 19:19:26'!
+testPolynomialRingPrimeNotMaximalIdeal2
+	"Q[x,y]/<x> is isomorphic to Q[y], which is an integral domain but not a field. So <x> is prime but not maximal."
+	| R I |
+	R _ QQ polynomialsIn: 2.
+	I _ R * R x.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
+!RingTest methodsFor: 'quotients' stamp: 'len 10/6/2016 20:32'!
+testQuotientRing
+	| Q |
+	Q _ self newQuotientRing.
+	self testRing: Q.
+	self testRingHomomorphism: Q projection! !
+
+!RingTest methodsFor: 'quotients' stamp: 'len 2/27/2017 20:51:24'!
+testQuotientRing2
+	| Q pi f g |
+	Q _ self newQuotientRing.
+	f _ Q base atRandomBits: 10.
+	g _ Q relations atRandomBits: 10.
+	pi _ Q projection.
+	self assert: (pi value: g) isZero.
+	self assert: (Q includes: (pi value: f)).
+	self testRingHomomorphism: pi.
+"	self assert: (pi value: f) = (pi value: f + g)."
+"	h _ Q atRandomBits: 100.
+	self assert: (pi value: (pi section value: h)) = h"! !
+
+!RingTest methodsFor: 'quotients' stamp: 'len 4/8/2018 17:47:19'!
+testQuotientRingNotIntegralDomain
+	| R |
+	R _ QQ polynomials.
+	R _ R / (R x^2 - 1).
+	self assert: R isField not.
+	self assert: R isIntegralDomain not! !
+
+!RingTest methodsFor: 'quotients' stamp: 'len 4/8/2018 17:48:23'!
+testQuotientRingWhichIsAField
+	| R |
+	R _ QQ polynomials.
+	R _ R / (R x^2 + (R x * 2) + 2).
+	self assert: R isField! !
+
+!RingTest methodsFor: 'private' stamp: 'len 12/2/2016 11:13:56'!
+newQuotientRing
+	| R I |
+	2 atRandom = 1 ifTrue: [^ ZZ / (2 to: 10) atRandom].
+	R _ ZZ polynomials.
+	I _ R * (R atRandomBits: 10 maxDegree: 5).
+	^ R / I! !
+
+!RingTest methodsFor: 'private' stamp: 'len 9/16/2018 23:31:05'!
+newRing
+	4 atRandom = 1 ifTrue: [^ self newQuotientRing].
+	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
+	^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 18:09:49'!
 testBellNumbers
