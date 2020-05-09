@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 3:31:25 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 6:03:14 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 572!
+!provides: 'Domains' 1 573!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -9827,10 +9827,6 @@ printOn2: aStream
 // aNumber
 	^ self collect: [:each| each // aNumber]! !
 
-!MonomialIndexedTuple methodsFor: 'operations' stamp: 'len 2/6/2017 03:14:46'!
-/// aNumber
-	^ self collect: [:each| each /// aNumber]! !
-
 !MonomialIndexedTuple methodsFor: 'operations' stamp: 'len 11/28/2016 18:59:11'!
 \\ aNumber
 	^ self collect: [:each| each \\ aNumber]! !
@@ -9843,6 +9839,10 @@ printOn2: aStream
 	answer _ scalars zero.
 	associations do: [:each| aMonomialTuple at: each key ifPresent: [:value2| answer _ answer + (each value*value2)]].
 	^ answer! !
+
+!MonomialIndexedTuple methodsFor: 'operations' stamp: 'len 5/9/2020 18:01:08'!
+÷ aNumber
+	^ self collect: [:each| each ÷ aNumber]! !
 
 !MonomialIndexedTuple methodsFor: 'operations' stamp: 'len 3/6/2017 16:28:36'!
 convolution22: aMonomialTuple
@@ -22070,7 +22070,7 @@ reduce: aPolynomial
 	t _ S x: S rank.
 	^ R !! (S !! self * t + (S !! anIdeal * (t - S one)) eliminate: S rank)! !
 
-!PolynomialIdeal methodsFor: 'operations' stamp: 'len 6/10/2019 13:41:16'!
+!PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/9/2020 17:55:22'!
 : anIdeal
 	"Answer the colon quotient I:J of the receiver I with the argument J.
 	This is defined as I:J := {r in R | rJ <= I}."
@@ -22081,7 +22081,7 @@ reduce: aPolynomial
 	R isIntegralDomain ifFalse: [^ self error: 'not over an integral domain'].
 	answer _ R asIdeal. "<1>"
 	anIdeal generators do: [:g|
-		answer _ answer /\ (R * ((R * g /\ self) basis apply: [:h| h /// g]))].
+		answer _ answer /\ (R * ((R * g /\ self) basis apply: [:h| h ÷ g]))].
 	^ answer! !
 
 !PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/23/2018 22:50:08'!
@@ -22329,7 +22329,7 @@ generatingMonomials
 		anIdeal generators do: [:other| intersection add: (each lcm: other)]].
 	^ self class new scalars: self scalars; generators: intersection! !
 
-!MonomialIdeal methodsFor: 'operations' stamp: 'len 6/10/2019 13:41:03'!
+!MonomialIdeal methodsFor: 'operations' stamp: 'len 5/9/2020 17:54:37'!
 : anIdeal
 	"Answer the colon quotient I:J of the receiver I with the argument J.
 	This is defined as I:J := {r in R | rJ <= I}.
@@ -22341,7 +22341,7 @@ generatingMonomials
 	R isIntegralDomain ifFalse: [^ DomainError signal: 'not over an integral domain']. "is this needed?"
 	answer _ R asIdeal. "<1>"
 	anIdeal generators do: [:g|
-		answer _ answer /\ (self class new scalars: self scalars; generators: (self generators collect: [:each| each /// (each gcd: g)]))].
+		answer _ answer /\ (self class new scalars: self scalars; generators: (self generators collect: [:each| each ÷ (each gcd: g)]))].
 	^ answer! !
 
 !MonomialIdeal methodsFor: 'operations' stamp: 'len 4/14/2020 03:28:19'!
@@ -33193,6 +33193,12 @@ asRatio
 · anElement
 	^ self * anElement! !
 
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 17:43:30'!
+÷ anElement
+	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	self isZero ifTrue: [^ self].
+	^ self // anElement! !
+
 !RingElement methodsFor: 'operations' stamp: 'len 5/4/2020 02:20:18'!
 gcd: anElement
 	"Answer the greatest common divisor of the receiver and the argument.
@@ -33525,9 +33531,11 @@ parent
 representative
 	^ self numerator representative asRatio / self denominator representative asRatio! !
 
-!Ratio methodsFor: 'accessing' stamp: 'len 5/9/2020 09:38:58'!
+!Ratio methodsFor: 'accessing' stamp: 'len 5/9/2020 16:51:14'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	self isUnit ifTrue: [^ self].
+	"is this right?"
 	^ self class numerator: numerator unit denominator: denominator! !
 
 !Ratio methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:25'!
@@ -33669,14 +33677,14 @@ setNumerator: anObject denominator: anotherObject
 	numerator _ anObject.
 	denominator _ anotherObject! !
 
-!Ratio class methodsFor: 'instance creation' stamp: 'len 5/8/2020 18:06:17'!
+!Ratio class methodsFor: 'instance creation' stamp: 'len 5/9/2020 17:57:02'!
 numerator: anElement denominator: anotherElement
 	| numerator denominator gcd |
 	(numerator _ anElement) isZero ifTrue: [^ self reducedNumerator: numerator denominator: numerator one].
 	(denominator _ anotherElement) isZeroDivisor ifTrue: [^ (ZeroDivide dividend: numerator) signal].
 	gcd _ numerator gcd: denominator.
-	numerator _ numerator /// gcd.
-	denominator _ denominator /// gcd.
+	numerator _ numerator ÷ gcd.
+	denominator _ denominator ÷ gcd.
 	numerator _ numerator * denominator unit.
 	denominator _ denominator normalized.
 	^ self reducedNumerator: numerator denominator: denominator! !
@@ -33922,19 +33930,19 @@ isHomogeneous
 isLinear
 	^ denominator isLinear and: [denominator isConstant]! !
 
-!RationalFunction methodsFor: 'private' stamp: 'len 5/3/2020 10:11:36'!
+!RationalFunction methodsFor: 'private' stamp: 'len 5/9/2020 17:59:27'!
 reduce
 	"Reduce the receiver dividing the numerator and the denominator
 	by their GCD and making the denominator monic."
-	| gcd mult num den |
-	(num _ numerator) isZero ifTrue: [denominator _ num one. ^ self].
-	den _ denominator.
-	gcd _ num gcd: den.
-	num _ num /// gcd.
-	den _ den /// gcd.
-	mult _ den leadingCoefficient inverse.
-	numerator _ num * mult.
-	denominator _ den * mult! !
+	| a b gcd u |
+	(a _ numerator) isZero ifTrue: [denominator _ a one. ^ self].
+	b _ denominator.
+	gcd _ a gcd: b.
+	a _ a ÷ gcd.
+	b _ b ÷ gcd.
+	u _ b leadingCoefficient unit inverse.
+	numerator _ a * u.
+	denominator _ b * u! !
 
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
 bitSize
@@ -34045,10 +34053,12 @@ zero
 	(parent includes: anElement) ifFalse: [^ self  adapt: anElement andSend: #+].
 	^ parent project: representative + anElement representative! !
 
-!Residue methodsFor: 'operations' stamp: 'len 11/1/2016 00:22'!
-/// aResidueClass
-	"Answer the exact division of the receiver by the argument."
-	^ parent project: representative /// aResidueClass representative! !
+!Residue methodsFor: 'operations' stamp: 'len 5/9/2020 17:51:04'!
+÷ anElement
+	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	self isZero ifTrue: [^ self].
+	"this is wrong:"
+	^ parent project: representative ÷ anElement representative! !
 
 !Residue methodsFor: 'operations' stamp: 'len 8/14/2019 04:33:01'!
 gcd: anElement
@@ -35238,15 +35248,6 @@ terms
 		ifTrue: [^ self apply: [:each| each // anObject]].
 	^ (self divisionBy: anObject) quotient! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 12/24/2017 19:49:16'!
-/// anObject
-	"Answer the exact quotient of the division of the receiver by the argument."
-	(anObject isKindOf: Monomial)
-		ifTrue: [^ self dividedByMonomial: anObject].
-	(self scalars includes: anObject)
-		ifTrue: [^ self apply: [:each| each /// anObject]].
-	^ self exactlyDividedBy: anObject! !
-
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:38:28'!
 \\ anObject
 	"Answer the remainder of the division of the receiver by the argument."
@@ -35260,6 +35261,16 @@ terms
 	"Answer the composition of the receiver with the argument."
 	anObject isBlock ifTrue: [^ [:x| self value: (anObject value: x)]].
 	^ self value: anObject! !
+
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2020 17:49:30'!
+÷ anElement
+	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	self isZero ifTrue: [^ self].
+	(anElement isKindOf: Monomial)
+		ifTrue: [^ self dividedByMonomial: anElement].
+	(self scalars includes: anElement)
+		ifTrue: [^ self apply: [:each| each ÷ anElement]].
+	^ self exactlyDividedBy: anElement! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:40:24'!
 divisionBy: aPolynomial
@@ -35555,12 +35566,12 @@ integerPrimitivePart
 	self isZero ifTrue: [^ self].
 	^ self / (self integerContent * self sign)! !
 
-!Polynomial methodsFor: 'factorization' stamp: 'len 7/20/2019 04:46:43'!
+!Polynomial methodsFor: 'factorization' stamp: 'len 5/9/2020 17:54:54'!
 primitivePart
 	"Answer the primitive part of the receiver."
 	self isZero ifTrue: [^ self].
 	self scalars isField ifTrue: [^ self / self content].
-	^ self /// self content! !
+	^ self ÷ self content! !
 
 !Polynomial methodsFor: 'factorization' stamp: 'len 9/25/2018 00:28:05'!
 sign
@@ -35670,14 +35681,14 @@ s: aPolynomial
 	lcm _ h1 lcm: h2.
 	^ self * (lcm / h1) / self leadingCoefficient - (aPolynomial * (lcm / h2) / aPolynomial leadingCoefficient)! !
 
-!Polynomial methodsFor: 'operations' stamp: 'len 2/6/2017 03:06:13'!
+!Polynomial methodsFor: 'operations' stamp: 'len 5/9/2020 17:55:10'!
 squareFree
 	"Answer the maximal squarefree divisor of the receiver."
 	| g |
 	self parent scalars characteristic = 0 ifFalse: [^ DomainError signal: 'field must include Q (i.e., must be of characteristic 0)'].
 	g _ self.
 	self indeterminates do: [:each| g _ g gcd: (self derivativeIn: each)].
-	^ self /// g! !
+	^ self ÷ g! !
 
 !Polynomial methodsFor: 'operations' stamp: 'len 2/9/2017 03:18:14'!
 substitute: aBlock
@@ -35795,7 +35806,7 @@ sprs2: aPolynomial
 	b _ r leadingCoefficient.
 	phi _ phi * ((b / phi) ^ (delta - 1))] repeat! !
 
-!Polynomial methodsFor: 'remainder sequences' stamp: 'len 5/18/2018 20:52:31'!
+!Polynomial methodsFor: 'remainder sequences' stamp: 'len 5/9/2020 17:55:02'!
 sprs: aPolynomial
 	"Answer the Subresultant Polynomial Remainder Sequence of the receiver with the argument."
 	| delta phi beta f1 f2 r answer |
@@ -35811,7 +35822,7 @@ sprs: aPolynomial
 			delta _ f2 degree - f1 degree + 1.
 			beta _ (-1) ^ delta * (phi ^ (delta - 1)) * f2 leadingCoefficient.
 			phi _ phi * ((f1 leadingCoefficient / phi) ^ (delta - 1)).
-			r _ (f2 pseudoRem: f1) /// beta.
+			r _ (f2 pseudoRem: f1) ÷ beta.
 			f2 _ f1. f1 _ r].
 	^ answer! !
 
@@ -36251,15 +36262,6 @@ order
 	self scalars isField ifTrue: [^ self parent coefficients: (self coefficients polynomialDivisionBy: anObject coefficients) first].
 	^ (self divisionBy: anObject) quotient! !
 
-!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 12/22/2017 18:31:05'!
-/// anObject
-	"Answer the exact quotient of the division of the receiver by the argument."
-	(anObject isKindOf: Monomial)
-		ifTrue: [^ self dividedByMonomial: anObject].
-	(self scalars includes: anObject)
-		ifTrue: [^ self parent coefficients: self coefficients /// anObject].
-	^ self exactlyDividedBy: anObject! !
-
 !UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 8/8/2019 04:47:06'!
 \\ anObject
 	"Answer the remainder of the division of the receiver by the argument."
@@ -36270,6 +36272,16 @@ order
 	self scalars isField
 		ifTrue: [^ self parent coefficients: (self coefficients polynomialDivisionBy: anObject coefficients) last].
 	^ (self divisionBy: anObject) remainder! !
+
+!UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2020 17:53:30'!
+÷ anElement
+	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	self isZero ifTrue: [^ self].
+	(anElement isKindOf: Monomial)
+		ifTrue: [^ self dividedByMonomial: anElement].
+	(self scalars includes: anElement)
+		ifTrue: [^ self parent coefficients: self coefficients ÷ anElement].
+	^ self exactlyDividedBy: anElement! !
 
 !UnivariatePolynomial methodsFor: 'arithmetic' stamp: 'len 5/3/2020 08:27:11'!
 inverse
@@ -36468,13 +36480,13 @@ factorizationIntegers
 		f factorizationZassenhauss do: [:each| answer add: each withOccurrences: r]].
 	^ answer! !
 
-!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 4/25/2018 16:48:20'!
+!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 5/9/2020 18:00:40'!
 factorizationIntegers2
 	| answer f g |
 	answer _ Bag new.
 	self content factorizationDo: [:p :e| answer add: (self parent constant: p) withOccurrences: e].
 	g _ self gcd: self derivative.
-	f _ self /// g.
+	f _ self ÷ g.
 	"TODO: if the receiver is not square-free, we're missing powers of factors"
 	(f / (f content * f sign)) factorizationZassenhauss
 		withOccurrencesDo: [:each :k|
@@ -38795,13 +38807,9 @@ withIndexDo: aBlock
 	anObject isMatrix ifTrue: [^ anObject colift: self].
 	^ self * anObject inverse! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 3/29/2016 18:50'!
-// aNumber
-	^ self collect: [:each| each // aNumber]! !
-
-!Tuple methodsFor: 'operations' stamp: 'len 2/6/2017 03:11:48'!
-/// aNumber
-	^ self collect: [:each| each /// aNumber]! !
+!Tuple methodsFor: 'operations' stamp: 'len 5/9/2020 17:52:24'!
+// anElement
+	^ self collect: [:each| each // anElement]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 3/29/2016 19:02'!
 << anInteger
@@ -38827,6 +38835,10 @@ withIndexDo: aBlock
 	answer _ (self at: 1) * (aTuple at: 1).
 	2 to: (self size min: aTuple size) do: [:i| answer _ answer + ((self at: i) * (aTuple at: i))].
 	^ answer! !
+
+!Tuple methodsFor: 'operations' stamp: 'len 5/9/2020 17:52:00'!
+÷ anElement
+	^ self collect: [:each| each ÷ anElement]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 5/14/2019 20:50:30'!
 ‘ aTuple
@@ -38947,10 +38959,10 @@ polynomialValue: anObject
 	self reverseDo: [:each| answer _ anObject * answer + (one * each)].
 	^ answer! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 7/17/2019 15:25:06'!
+!Tuple methodsFor: 'operations' stamp: 'len 5/9/2020 18:00:31'!
 primitivePart
 	"Answer the primitive part of the receiver."
-	^ self isZero ifTrue: [self] ifFalse: [self /// self content]! !
+	^ self isZero ifTrue: [self] ifFalse: [self ÷ self content]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 11/5/2016 09:27'!
 support
@@ -41360,7 +41372,7 @@ matrix
 matrix: aMatrix
 	matrix _ aMatrix! !
 
-!ExtendedSmithReduction methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 14:39:56'!
+!ExtendedSmithReduction methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:54:15'!
 reduceStep: i mod: D
 	| j c euclid B Ai Aj |
 	"2. Initialize j for row reduction:"
@@ -41372,7 +41384,7 @@ reduceStep: i mod: D
 			[euclid _ ExtendedEuclid on: {S at: i@i. S at: i@j}.
 "			euclid verifyMinimal ifFalse: [self halt]."
 			B _ (Ai _ S columnAt: i) * euclid bezout first + ((Aj _ S columnAt: j) * euclid bezout second).
-			S columnAt: j put: Aj * ((S at: i@i) /// euclid gcd) - (Ai * ((S at: i@j) /// euclid gcd)) \\ D.
+			S columnAt: j put: Aj * ((S at: i@i) ÷ euclid gcd) - (Ai * ((S at: i@j) ÷ euclid gcd)) \\ D.
 			S columnAt: i put: B \\ D.
 			j _ j - 1].
 	"5. Initialize j for column reduction:"
@@ -41384,13 +41396,13 @@ reduceStep: i mod: D
 			[euclid _ ExtendedEuclid on: {S at: i@i. S at: j@i}.
 "			euclid verifyMinimal ifFalse: [self halt]."
 			B _ (Ai _ S rowAt: i) * euclid bezout first + ((Aj _ S rowAt: j) * euclid bezout second).
-			S rowAt: j put: Aj * ((S at: i@i) /// euclid gcd) - (Ai * ((S at: j@i) /// euclid gcd)) \\ D.
+			S rowAt: j put: Aj * ((S at: i@i) ÷ euclid gcd) - (Ai * ((S at: j@i) ÷ euclid gcd)) \\ D.
 			S rowAt: i put: B \\ D.
 			j _ j - 1.
 			c _ c + 1].
 	c > 0] whileTrue "8. Repeat stage i?"! !
 
-!ExtendedSmithReduction methodsFor: 'as yet unclassified' stamp: 'len 5/5/2019 14:44:48'!
+!ExtendedSmithReduction methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:54:23'!
 run
 	| n i D b k |
 	n _ matrix height.
@@ -41414,7 +41426,7 @@ run
 			L rowAt: i put: (L rowAt: i) + (L rowAt: k)].
 	"10. Next stage:"
 	elementaryDivisors add: ((S at: i@i) gcd: D).
-	D _ D /// elementaryDivisors last.
+	D _ D ÷ elementaryDivisors last.
 	i = 2]
 		whileFalse: [i _ i - 1].
 	elementaryDivisors add: ((S at: 1@1) gcd: D).
@@ -41745,7 +41757,7 @@ matrix: aMatrix
 reduced
 	^ matrix scalars diagonalMatrix: self invariants! !
 
-!SmithReduction methodsFor: 'private' stamp: 'len 5/25/2019 10:28:41'!
+!SmithReduction methodsFor: 'private' stamp: 'len 5/9/2020 18:00:07'!
 reduceStep: i mod: R
 	| j c euclid B Ai Aj |
 	"2. Initialize j for row reduction:"
@@ -41757,7 +41769,7 @@ reduceStep: i mod: R
 			[euclid _ ExtendedEuclid on: {matrix at: i@i. matrix at: i@j}.
 "			euclid verifyMinimal ifFalse: [self halt]."
 			B _ (Ai _ matrix columnAt: i) * euclid bezout first + ((Aj _ matrix columnAt: j) * euclid bezout second).
-			matrix columnAt: j put: Aj * ((matrix at: i@i) /// euclid gcd) - (Ai * ((matrix at: i@j) /// euclid gcd)) \\ R.
+			matrix columnAt: j put: Aj * ((matrix at: i@i) ÷ euclid gcd) - (Ai * ((matrix at: i@j) ÷ euclid gcd)) \\ R.
 			matrix columnAt: i put: B \\ R.
 			j _ j - 1].
 	"5. Initialize j for column reduction:"
@@ -41769,13 +41781,13 @@ reduceStep: i mod: R
 			[euclid _ ExtendedEuclid on: {matrix at: i@i. matrix at: j@i}.
 "			euclid verifyMinimal ifFalse: [self halt]."
 			B _ (Ai _ matrix rowAt: i) * euclid bezout first + ((Aj _ matrix rowAt: j) * euclid bezout second).
-			matrix rowAt: j put: Aj * ((matrix at: i@i) /// euclid gcd) - (Ai * ((matrix at: j@i) /// euclid gcd)) \\ R.
+			matrix rowAt: j put: Aj * ((matrix at: i@i) ÷ euclid gcd) - (Ai * ((matrix at: j@i) ÷ euclid gcd)) \\ R.
 			matrix rowAt: i put: B \\ R.
 			j _ j - 1.
 			c _ c + 1].
 	c > 0] whileTrue "8. Repeat stage i?"! !
 
-!SmithReduction methodsFor: 'private' stamp: 'len 6/14/2019 01:07:06'!
+!SmithReduction methodsFor: 'private' stamp: 'len 5/9/2020 18:00:20'!
 run
 	| n i R b k |
 	n _ matrix height.
@@ -41794,7 +41806,7 @@ run
 		whileFalse: [matrix rowAt: i put: (matrix rowAt: i) + (matrix rowAt: k)].
 	"10. Next stage:"
 	invariants add: ((matrix at: i@i) gcd: R).
-	R _ R /// invariants last.
+	R _ R ÷ invariants last.
 	i = 2]
 		whileFalse: [i _ i - 1].
 	invariants add: ((matrix at: 1@1) gcd: R).
@@ -42421,11 +42433,11 @@ dividend
 divisor
 	^ divisor! !
 
-!PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 5/16/2019 04:13:07'!
+!PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 5/9/2020 17:55:53'!
 exactQuotient
 	"Answer the quotient of an exact division."
 	self remainder isZero ifFalse: [self error: 'not an exact division'].
-	^ self quotient /// (divisor leadingCoefficient ^ self delta)! !
+	^ self quotient ÷ (divisor leadingCoefficient ^ self delta)! !
 
 !PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 12/6/2015 07:30'!
 quotient
@@ -44525,10 +44537,6 @@ withIndexDo: elementAndIndexBlock
 // aNumber
 	^ self collect: [:each| each // aNumber]! !
 
-!Sum methodsFor: 'operations' stamp: 'len 2/6/2017 03:13:48'!
-/// aNumber
-	^ self collect: [:each| each /// aNumber]! !
-
 !Sum methodsFor: 'operations' stamp: 'len 2/6/2017 03:15:23'!
 \\ aNumber
 	^ self collect: [:each| each \\ aNumber]! !
@@ -44541,6 +44549,10 @@ withIndexDo: elementAndIndexBlock
 	coefficients associationsDo: [:each|
 		aSum at: each key ifPresent: [:value2| answer _ answer + (each value*value2)]].
 	^ answer! !
+
+!Sum methodsFor: 'operations' stamp: 'len 5/9/2020 18:01:23'!
+÷ aNumber
+	^ self collect: [:each| each ÷ aNumber]! !
 
 !Sum methodsFor: 'operations' stamp: 'len 1/10/2018 21:09:39'!
 convolution: aFormalSum
@@ -45763,10 +45775,6 @@ isFinite
 isInfinite
 	^ false! !
 
-!Number methodsFor: '*domains' stamp: 'len 2/10/2017 15:26:13'!
-/// aNumber
-	^ self / aNumber! !
-
 !Number methodsFor: '*domains' stamp: 'len 3/25/2018 16:03:52'!
 ^ aNumber
 	aNumber isInteger ifTrue: [^ self raisedToInteger: aNumber].
@@ -45920,15 +45928,15 @@ valuation: p
 , aTuple
 	^ (ZZ tuple: {self}), aTuple! !
 
-!Integer methodsFor: '*domains' stamp: 'len 11/1/2016 00:23'!
-/// anInteger
-	"Answer the exact division of the receiver by the argument."
-	^ self // anInteger! !
-
 !Integer methodsFor: '*domains' stamp: 'len 8/6/2019 06:18:27'!
 | anInteger
 	"Answer true if the receiver divides anInteger."
 	^ anInteger \\ self = 0! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 17:43:23'!
+÷ anInteger
+	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	^ self // anInteger! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/12/2016 09:35:38'!
 Stirling: anInteger
