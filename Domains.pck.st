@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 8 May 2020 at 6:23:46 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 3:31:25 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 571!
+!provides: 'Domains' 1 572!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -1800,6 +1800,26 @@ Map subclass: #Function
 Function class
 	instanceVariableNames: ''!
 
+!classDefinition: #CFiniteSequence category: #'Domains-Sequences'!
+Sequence subclass: #CFiniteSequence
+	instanceVariableNames: 'coefficients initialValues'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Sequences'!
+!classDefinition: 'CFiniteSequence class' category: #'Domains-Sequences'!
+CFiniteSequence class
+	instanceVariableNames: ''!
+
+!classDefinition: #Sequence category: #'Domains-Sequences'!
+Function subclass: #Sequence
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Sequences'!
+!classDefinition: 'Sequence class' category: #'Domains-Sequences'!
+Sequence class
+	instanceVariableNames: ''!
+
 !classDefinition: #Functor category: #'Domains-Kernel'!
 Map subclass: #Functor
 	instanceVariableNames: ''
@@ -1958,26 +1978,6 @@ LinearFractionalMap subclass: #ModularMap
 	category: 'Domains-Etc-Modular Forms'!
 !classDefinition: 'ModularMap class' category: #'Domains-Etc-Modular Forms'!
 ModularMap class
-	instanceVariableNames: ''!
-
-!classDefinition: #Sequence category: #'Domains-Sequences'!
-Map subclass: #Sequence
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sequences'!
-!classDefinition: 'Sequence class' category: #'Domains-Sequences'!
-Sequence class
-	instanceVariableNames: ''!
-
-!classDefinition: #CFiniteSequence category: #'Domains-Sequences'!
-Sequence subclass: #CFiniteSequence
-	instanceVariableNames: 'coefficients initialValues'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Sequences'!
-!classDefinition: 'CFiniteSequence class' category: #'Domains-Sequences'!
-CFiniteSequence class
 	instanceVariableNames: ''!
 
 !classDefinition: #SimplicialMap category: #'Domains-Simplices'!
@@ -4297,6 +4297,50 @@ References:
 	https://en.wikipedia.org/wiki/Function_(set_theory)
 !
 
+!CFiniteSequence commentStamp: '<historical>' prior: 0!
+Constant-recursive (or C-recursive or C-finite) sequences, i.e. sequences satisfying homogeneous linear recurrences with constant coefficients:
+	a(n) = c_1 a(n-1) + ... + c_d a(n-d)
+
+These sequences are closed under:
+- addition a(n)+b(n)
+- (Hadamard or termwise) multiplication a(n)*b(n)
+- convolution (Cauchy multiplication)
+- interlacing {a(1),b(1),a(2),b(2),...}
+- scalar multiplication a(n)*c
+- (left) shift a(n+k), k>0
+- indefinite sumation a(1)+a(2)+...+a(n)
+- multisection a(mn+r), 0 <= r < m.
+
+Power series whose coefficients are linear recursive sequences are closed under:
+- addition
+- multiplication
+- derivation
+
+Example:
+	CFiniteSequence fibonacci.
+	CFiniteSequence fibonacci generatingFunction
+
+Example:
+	| f |
+	f _ CFiniteSequence fibonacci * CFiniteSequence pellNumbers.
+	f minimalPolynomial
+!
+
+!Sequence commentStamp: '<historical>' prior: 0!
+Sequences are functions with domain the natural numbers {1,2,...}. They can be evaluated at an index (#value: and #at:), and can also be iterated over like Smalltalk collections (#do:, #collect:, #select, etc).
+
+Example (the Fibonacci sequence):
+	Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)].
+
+Example (the harmonic numbers):
+	Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]].
+
+Each sequence has an associated generating series, which is the formal power series with coefficients given by the sequence (see PowerSeries):
+	Sequence fibonacci generatingSeries
+and Dirichlet series (see DirichletSeries):
+	Sequence fibonacci dirichletSeries
+!
+
 !Functor commentStamp: '<historical>' prior: 0!
 A functor between two categories is a function that preserves composition of morphisms. They are morphisms of categories (see Category).
 
@@ -4378,50 +4422,6 @@ Scheme morphisms of elliptic curves E -> E' that send the origin of E to the ori
 Transformations of the form
 	z |-> az + b / (cz + d)
 where ad - cb ~= 0.!
-
-!Sequence commentStamp: '<historical>' prior: 0!
-Sequences are functions with domain the natural numbers {1,2,...}. They can be evaluated at an index (#value: and #at:), and can also be iterated over like Smalltalk collections (#do:, #collect:, #select, etc).
-
-Example (the Fibonacci sequence):
-	Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)].
-
-Example (the harmonic numbers):
-	Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]].
-
-Each sequence has an associated generating series, which is the formal power series with coefficients given by the sequence (see PowerSeries):
-	Sequence fibonacci generatingSeries
-and Dirichlet series (see DirichletSeries):
-	Sequence fibonacci dirichletSeries
-!
-
-!CFiniteSequence commentStamp: '<historical>' prior: 0!
-Constant-recursive (or C-recursive or C-finite) sequences, i.e. sequences satisfying homogeneous linear recurrences with constant coefficients:
-	a(n) = c_1 a(n-1) + ... + c_d a(n-d)
-
-These sequences are closed under:
-- addition a(n)+b(n)
-- (Hadamard or termwise) multiplication a(n)*b(n)
-- convolution (Cauchy multiplication)
-- interlacing {a(1),b(1),a(2),b(2),...}
-- scalar multiplication a(n)*c
-- (left) shift a(n+k), k>0
-- indefinite sumation a(1)+a(2)+...+a(n)
-- multisection a(mn+r), 0 <= r < m.
-
-Power series whose coefficients are linear recursive sequences are closed under:
-- addition
-- multiplication
-- derivation
-
-Example:
-	CFiniteSequence fibonacci.
-	CFiniteSequence fibonacci generatingFunction
-
-Example:
-	| f |
-	f _ CFiniteSequence fibonacci * CFiniteSequence pellNumbers.
-	f minimalPolynomial
-!
 
 !SimplicialMap commentStamp: '<historical>' prior: 0!
 Morphisms of simplicial complexes. See SimplicialComplex.!
@@ -5651,6 +5651,20 @@ printOn: aStream
 category
 	^ Sets! !
 
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:30:15'!
+>> anInteger
+	anInteger > 0 ifTrue: [^ super >> anInteger].
+	^ self class to: self codomain evaluating: (super >> anInteger) maxOrder: self order squared! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/3/2019 17:29:54'!
+>> anInteger
+	^ self species to: self codomain evaluating: [:i| self at: i-anInteger ifAbsent: [self codomain zero]]! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 6/4/2019 05:30:08'!
+printOn: aStream
+	(1 to: self printLimit) do: [:i| aStream print: (self at: i)] separatedBy: [aStream nextPutAll:', ' ].
+	aStream nextPutAll: '...'! !
+
 !Functor methodsFor: 'accessing' stamp: 'len 4/26/2020 17:40:38'!
 category
 	^ Categories! !
@@ -5758,20 +5772,6 @@ printOn: aStream
 	(c = 0 or: [d = 0])
 		ifTrue: [aStream print: denominator]
 		ifFalse: [aStream nextPut: $(; print: denominator; nextPut: $)]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/3/2019 17:29:54'!
->> anInteger
-	^ self species to: self codomain evaluating: [:i| self at: i-anInteger ifAbsent: [self codomain zero]]! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 6/4/2019 05:30:08'!
-printOn: aStream
-	(1 to: self printLimit) do: [:i| aStream print: (self at: i)] separatedBy: [aStream nextPutAll:', ' ].
-	aStream nextPutAll: '...'! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:30:15'!
->> anInteger
-	anInteger > 0 ifTrue: [^ super >> anInteger].
-	^ self class to: self codomain evaluating: (super >> anInteger) maxOrder: self order squared! !
 
 !SimplicialMap methodsFor: 'printing' stamp: 'len 2/20/2017 15:23:39'!
 printOn: aStream
@@ -6468,9 +6468,9 @@ adaptToFloat: rcvr andSend: selector
 adaptToFraction: rcvr andSend: selector
 	^ (self class fromRational: rcvr) perform: selector with: self! !
 
-!RealAlgebraicNumber methodsFor: 'converting' stamp: 'len 11/19/2015 21:39'!
+!RealAlgebraicNumber methodsFor: 'converting' stamp: 'len 5/9/2020 10:15:06'!
 adaptToInteger: rcvr andSend: selector
-	^ (self class fromRational: rcvr) perform: selector with: self! !
+	^ (self class fromRational: rcvr asRatio) perform: selector with: self! !
 
 !RealAlgebraicNumber methodsFor: 'converting' stamp: 'len 6/4/2016 23:06'!
 asFloat
@@ -6630,15 +6630,14 @@ rightSign
 rightSign: anInteger
 	rightSign _ anInteger! !
 
-!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 7/30/2019 05:21:57'!
-fromRational: anIntegerOrFraction
+!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/9/2020 10:06:46'!
+fromRational: aRational
 	"Answer an instance of the receiver representing the rational number anIntegerOrFraction."
-	| q x |
-	q _ anIntegerOrFraction asFraction.
+	| x |
 	x _ QQ polynomials x.
 	^ self
-		minimalPolynomial: x * q denominator - q numerator
- 		bounds: (RealInterval open: anIntegerOrFraction closed: anIntegerOrFraction)! !
+		minimalPolynomial: x * aRational denominator - aRational numerator
+ 		bounds: (RealInterval open: aRational closed: aRational)! !
 
 !RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/29/2018 17:30:10'!
 minimalPolynomial: aPolynomial bounds: aRealInterval
@@ -12229,13 +12228,14 @@ fromAll: anArray
 		ifTrue: [^ self addCoprojections: ((1 to: self arity) collect: [:i| self coprojection: i])].
 	^ nil! !
 
-!Domain methodsFor: 'morphisms' stamp: 'len 5/8/2020 15:47:28'!
+!Domain methodsFor: 'morphisms' stamp: 'len 5/9/2020 15:17:42'!
 hom: anObject
 	"This is the external Hom(A,-) functor, where A is the receiver:
 	- if the argument is a domain X, answer Hom(A,X), the set of morphisms from A to X;
 	- if the argument is a morphism g:X->Y, answer the function Hom(A,f):Hom(A,X)->Hom(A,Y) that sends the morphism f to g·f.
 	See => for the internal hom functor."
 	anObject isMorphism ifTrue: [^ (self hom: anObject domain) to: (self hom: anObject codomain) evaluating: [:f| anObject · f]].
+	"self category = anObject category ifFalse: [DomainError signal]."
 	^ HomSet from: self to: anObject! !
 
 !Domain methodsFor: 'morphisms' stamp: 'len 4/22/2020 05:50:03'!
@@ -13090,11 +13090,11 @@ codomain: aDomain
 domain: aDomain
 	domain _ aDomain! !
 
-!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:23:45'!
+!HomSet class methodsFor: 'examples' stamp: 'len 5/9/2020 15:17:50'!
 example1
 	"The set Hom(N,Z), the functions from the natural numbers to the integers.
 	This is the space of sequences. (See class Sequence)."
-	^ NN hom: ZZ! !
+	^ NN hom: ZZ carrier! !
 
 !HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:42:46'!
 example2
@@ -17128,9 +17128,9 @@ adapt: anElement
 	(self integers adapt: anElement) ifNotNil: [:integerElement| ^ self embed: integerElement].
 	^ super adapt: anElement! !
 
-!FractionRing methodsFor: 'morphisms' stamp: 'len 7/16/2019 17:02:31'!
+!FractionRing methodsFor: 'morphisms' stamp: 'len 5/9/2020 09:34:55'!
 embed: anElement
-	^ anElement : self integers one! !
+	^ anElement asRatio! !
 
 !FractionRing methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:17:32'!
 from: aDomain
@@ -21590,10 +21590,6 @@ example6QuotientPresentation
 	"A free presentation of the quotient module Z^3 / <(1,2,3), (2,2,2)>."
 	^ (ZZ^3 / {(1,2,3). (2,2,2)}) presentation! !
 
-!Ideal methodsFor: 'accessing' stamp: 'len 5/5/2018 16:40:17'!
-denominator
-	^ self scalars one! !
-
 !Ideal methodsFor: 'accessing' stamp: 'len 1/15/2018 19:03:08'!
 generator
 	| generator |
@@ -21608,10 +21604,6 @@ generator
 height
 	"Answer the height (or codimension, or rank) of the receiver."
 	^ (self scalars localizationAt: self) dimension "<- this seems incorrect, we defined localization only at prime ideals"! !
-
-!Ideal methodsFor: 'accessing' stamp: 'len 5/5/2018 16:40:06'!
-numerator
-	^ self! !
 
 !Ideal methodsFor: 'accessing' stamp: 'len 5/3/2020 22:55:09'!
 representative
@@ -23008,9 +23000,9 @@ coordinatesOf: anElement
 elementAt: aTuple
 	^ aTuple isEmpty ifTrue: [scalars zero] ifFalse: [aTuple at: 1]! !
 
-!ScalarModule methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:18:47'!
+!ScalarModule methodsFor: 'morphisms' stamp: 'len 5/9/2020 10:18:48'!
 from: aDomain
-	aDomain = scalars ifTrue: [^ self addMap: (aDomain to: self evaluating: [:x| x])].
+	aDomain = scalars ifTrue: [^ self carrier addMap: (aDomain carrier to: self carrier evaluating: [:x| x])].
 	aDomain -> scalars ifNotNil: [:aMorphism| ^ aMorphism -> self].
 	^ super from: aDomain! !
 
@@ -27374,6 +27366,689 @@ initialize
 	super initialize.
 	Smalltalk at: #Sets put: (Category new name: #Sets)! !
 
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:53'!
+at: n ifAbsent: aBlock
+	self order = 0 ifTrue: [^ self codomain zero].
+	n <= initialValues size ifTrue: [^ initialValues at: n].
+	^ (self matrix ^ (n - self order) * initialValues) last
+"	answer _ 0.
+	1 to: self order do: [:i |
+		answer _ (self at: n - self order + i - 1) * (coefficients at: i) + answer].
+	^ answer"! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 01:41'!
+characteristicPolynomial
+	^ self codomain polynomials coefficients: (coefficients negated copyWith: self codomain one)! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 03:49'!
+coefficients
+	^ coefficients! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 03:49'!
+initialValues
+	^ initialValues! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:14:12'!
+matrix
+	^ self propertyAt: #matrix ifAbsentPut: [self characteristicPolynomial companion transposed]! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 02:08'!
+minimalPolynomial
+	^ self minimal characteristicPolynomial! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/28/2015 23:45'!
+order
+	^ coefficients size! !
+
+!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 01:44'!
+startIndex
+	^ 1! !
+
+!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 12/3/2015 23:02'!
+coefficients: anArray
+	coefficients _ anArray! !
+
+!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 3/28/2018 18:09:29'!
+initialValues: anArray
+	initialValues _ anArray.
+	initialValues isTuple ifFalse: [initialValues _ self codomain tuple: initialValues]! !
+
+!CFiniteSequence methodsFor: 'comparing' stamp: 'len 10/31/2016 04:14'!
+= aSequence
+	| f g |
+	(aSequence isKindOf: CFiniteSequence)
+		ifFalse: [^ super = aSequence].
+	f _ self minimal.
+	g _ aSequence minimal.
+	^ f coefficients = g coefficients and: [f initialValues = g initialValues]! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:35'!
+* anObject
+	(anObject isKindOf: self class)
+		ifTrue: [^ self class to: self codomain evaluating: super * anObject maxOrder: self order * anObject order].
+	(self codomain includes: anObject)
+		ifTrue: [^ self class to: self codomain evaluating: super * anObject maxOrder: self order].
+	^ super * anObject! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:29'!
++ aSequence
+	(aSequence isKindOf: self class) ifFalse: [^ super + aSequence].
+	^ self class to: self codomain evaluating: super + aSequence maxOrder: self order + aSequence order! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:28'!
+convolution: aSequence
+	(aSequence isKindOf: self class) ifFalse: [^ super convolution: aSequence].
+	^ self class to: self codomain evaluating: (super convolution: aSequence) maxOrder: self order * aSequence order! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/28/2016 11:14:22'!
+minimal
+	^ self propertyAt: #minimal ifAbsentPut: [self class to: self codomain evaluating: self maxOrder: self order]! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:31'!
+negated
+	^ self class to: self codomain evaluating: super negated maxOrder: self order! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:39'!
+squared
+	| n |
+	n _ self order.
+	^ self class to: self codomain evaluating: super squared maxOrder: n*(n-1)/2! !
+
+!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:49'!
+sum
+	"Answer the indefinite sum of the receiver."
+	^ self class to: self codomain evaluating: super sum maxOrder: self order squared! !
+
+!CFiniteSequence methodsFor: 'printing' stamp: 'len 12/27/2015 01:25'!
+printLimit
+	^ self order + 10 min: super printLimit! !
+
+!CFiniteSequence methodsFor: 'series' stamp: 'len 12/24/2017 22:13:45'!
+generatingFunction
+	| r s |
+	"Answer the generating function of the receiver, which is a rational function that equals its ordinary generating series."
+	s _ self characteristicPolynomial reversed.
+	r _ self codomain polynomials coefficients:
+		((0 to: self order - 1) collect: [:j|
+			(self at: j+1) - ((1 to: j) sum: [:i| (s coefficientAtDegree: i) * (self at: j-i+1)])]).
+	^ r / s! !
+
+!CFiniteSequence methodsFor: 'testing' stamp: 'len 12/27/2015 02:08'!
+isMinimal
+	^ self minimalPolynomial = self characteristicPolynomial! !
+
+!CFiniteSequence methodsFor: 'testing' stamp: 'len 4/11/2016 23:10'!
+isZero
+	^ self minimal order = 0! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:14'!
+fibonacci
+	"The Fibonacci sequence defined as a C-finite sequence."
+	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 1)! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:36'!
+geometric: aNumber
+	(aNumber isInteger or: [aNumber isFraction])
+		ifFalse: [^ DomainError signal: 'argument is not rational'].
+	^ CFiniteSequence to: QQ initialValues: #(1) coefficients: {aNumber}! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:27'!
+id
+	"The identity sequence id(n) := n, defined by a recurrence."
+	^ CFiniteSequence to: QQ initialValues: #(1 2) coefficients: #(-1 2)! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:33'!
+jacobsthalNumbers
+	"The Jacobsthal numbers."
+	^ CFiniteSequence initialValues: #(0 1) coefficients: #(2 1)! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:42'!
+lucasNumbers
+	"The Lucas numbers."
+	^ CFiniteSequence initialValues: #(2 1) coefficients: #(1 1)! !
+
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:49'!
+pellNumbers
+	"The Pell numbers."
+	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 2)! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 7/15/2016 18:27'!
+initialValues: anArray coefficients: anotherArray
+	^ self to: ZZ initialValues: anArray coefficients: anotherArray! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 19:42'!
+to: codomain constant: anObject
+	^ self to: codomain initialValues: {anObject} coefficients: {anObject one}! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 8/6/2016 00:46'!
+to: codomain evaluating: aBlock maxOrder: n
+	| initialValues bm f |
+	initialValues _ (1 to: 2*n) collect: aBlock.
+	bm _ ModifiedBerlekampMassey new
+		field: (codomain isField ifTrue: [codomain] ifFalse: [codomain fractions]);
+		input: initialValues.
+	f _ bm minimalPolynomial.
+	^ self to: codomain initialValues: (initialValues copyFrom: 1 to: f degree) minimalPolynomial:f! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 3/30/2016 03:54'!
+to: codomain initialValues: anArray characteristicPolynomial: aPolynomial
+	^ self to: codomain initialValues: anArray coefficients: aPolynomial tail negated coefficients! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 11/5/2016 10:27'!
+to: aCodomain initialValues: anArray coefficients: anotherArray
+	^ self new codomain: aCodomain; initialValues: anArray; coefficients: anotherArray! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/28/2016 12:19:00'!
+to: codomain initialValues: anArray minimalPolynomial: aPolynomial
+	| answer |
+	answer _ self to: codomain initialValues: anArray characteristicPolynomial: aPolynomial.
+	answer propertyAt: #minimal put: answer.
+	^ answer! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 6/4/2019 07:19:55'!
+to: aCodomain initialValues: initialArray periodic: periodArray
+	| coefficients |
+	coefficients _ Array new: initialArray size + periodArray size.
+	coefficients atAllPut: periodArray first zero.
+	coefficients at: initialArray size + 1 put: periodArray first one.
+	^ self to: aCodomain initialValues: initialArray asArray, periodArray coefficients: coefficients! !
+
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 03:41'!
+to: codomain periodic: anArray
+	| coefficients |
+	coefficients _ Array new: anArray size.
+	coefficients atAllPut: anArray first zero.
+	coefficients at: 1 put: anArray first one.
+	^ self to: codomain initialValues: anArray coefficients: coefficients! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:30'!
+at: anInteger
+	^ self at: anInteger ifAbsent: []! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 6/3/2019 17:30:31'!
+at: anInteger ifAbsent: aBlock
+	^ anInteger > 0 ifTrue: [super value: anInteger] ifFalse: [aBlock value]! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:14:04'!
+codomain
+	^ self propertyAt: #codomain ifAbsent: [ZZ]! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:42'!
+domain
+	^ self propertyAt: #domain ifAbsent: [NN]! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 6/1/2019 08:33:57'!
+scalars
+	"For compatibility with tuples."
+	^ self codomain! !
+
+!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:26'!
+size
+	^ self propertyAt: #size ifAbsent: [Aleph new]! !
+
+!Sequence methodsFor: 'comparing' stamp: 'len 12/5/2015 01:11'!
+beginsWith: aSequenceableCollection
+	1 to: aSequenceableCollection size do: [:i| (self at: i) = (aSequenceableCollection at: i) ifFalse: [^ false]].
+	^ true! !
+
+!Sequence methodsFor: 'comparing' stamp: 'len 12/27/2015 01:29'!
+equals: aSequence upTo: n
+	^ self beginsWith: (aSequence copyFrom: 1 to: n)! !
+
+!Sequence methodsFor: 'comparing' stamp: 'len 12/27/2015 03:56'!
+hash
+	^ (self at: 1) hash + (self at: 3) hash + (self at: 5) hash! !
+
+!Sequence methodsFor: 'converting' stamp: 'len 12/2/2016 09:57:05'!
+asStream
+	^ ReadStream on: self! !
+
+!Sequence methodsFor: 'copying' stamp: 'len 6/1/2019 08:31:20'!
+copyFrom: start to: end
+	end isInfinite
+		ifTrue: [^ self >> (1 - start)].
+	^ (start to: end) collect: [:i| self at: i]! !
+
+!Sequence methodsFor: 'copying' stamp: 'len 4/20/2016 21:25'!
+first: n
+	^ self copyFrom: 1 to: n! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 12/3/2015 20:34'!
+collect: aBlock
+	^ self species evaluating: [:i| aBlock value: (self at: i)]! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 4/25/2016 07:08'!
+count: aBlock
+	^ (self collect: [:each| (aBlock value: each) ifTrue: [1] ifFalse: [0]]) sum! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 12/27/2015 03:45'!
+do: aBlock
+	1 to: self size do: [:each| aBlock value: (self at: each)]! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 6/2/2019 04:31:06'!
+findFirst: aBlock
+	"Return the index of my first element for which aBlock evaluates as true."
+	| index |
+	index _ 0.
+	[(aBlock value: (self at: (index _ index + 1))) ifTrue: [^ index]] repeat! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 12/3/2015 23:16'!
+select: aBlock
+	^ self species evaluating: [:i|
+		| k j value |
+		k _ 1.
+		j _ 1.
+		[[aBlock value: (value _ self at: k)] whileFalse: [k _ k + 1]. j < i] whileTrue: [j _ j + 1. k _ k + 1].
+		value]! !
+
+!Sequence methodsFor: 'enumerating' stamp: 'len 3/27/2016 04:44'!
+withIndexDo: aBlock
+	| i |
+	i _ 1.
+	self do: [:each| aBlock value: each value: i. i _ i + 1]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:20:19'!
+* anObject
+	^ (self codomain includes: anObject)
+		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) * anObject]]
+		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) * (anObject at: n)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:05'!
++ anObject
+	^ (self codomain includes: anObject)
+		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) + anObject]]
+		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) + (anObject at: n)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:53:45'!
+- anObject
+	^ self + anObject negated! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:51:55'!
+/ anObject
+	^ self * anObject reciprocal! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:29:43'!
+<< anInteger
+	^ self >> anInteger negated! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
+average
+	^ self species to: self codomain evaluating: [:N| ((1 to: N) sum: [:n| self at: n]) / N]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:51'!
+backwardDifference: n at: h
+	^ self species
+		to: self codomain
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + (i*h))]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:10:01'!
+binomialInverseTransform
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (n-1 choose: k) * (self at: k+1)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:06:06'!
+binomialTransform
+	"The binomial transform is its own inverse, it's an involution."
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (-1)^(n-1-k) * (n-1 choose: k) * (self at: k+1)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:08'!
+centralDifference: n at: h
+	^ self species
+		to: self codomain
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + ((n/2 - i)*h))]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:29:55'!
+convolution: aSequence
+	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:i| (self at: 1+i) * (aSequence at: n-i)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:31:04'!
+difference
+	"Answer the 'difference' sequence of the receiver, or delta, or discrete derivative."
+	^ (self << 1) - self! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
+dirichlet: aSequence
+	"Answer the Dirichlet convolution of the receiver with the argument, assuming both are arithmetic functions (i.e. functions from the natural numbers to the complex numbers).
+	The set of arithmetic functions form a commutative ring (the Dirichlet ring) under pointwise addition and Dirichlet convolution."
+	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| (self at: d) * (aSequence at: n/d)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:27'!
+forwardDifference: n at: h
+	^ self species
+		to: self codomain
+		evaluating: [:x| (0 to: n) sum: [:i| (-1)^(n-i) * (n choose: i) * (self at: x + ((n-i)*h))]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:50'!
+hadamard: aSequence
+	"Answer the entrywise product with the argument, also called Hadamard product."
+	^ self class to: self codomain evaluating: [:i| (self at: i) * (aSequence at: i)]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
+moebiusInverse
+	"This is equivalent to the Dirichlet convolution of the Moebius arithmetic function with the receiver.
+	If f(n) and g(n) are two arithmetic functions satisfying g = f * 1 (Dirichlet convolution of f with the constant function 1), then the Moebius inversion formula can be used to retrieve f as f = mu * g. It is said that f and g and Moebius transforms of each other."
+	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| d moebius * (self at: n/d)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:24:13'!
+negated
+	^ self species to: self codomain evaluating: [:n| (self at: n) negated]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:48'!
+product
+	"Answer the indefinite product of the receiver."
+	^ self species to: self codomain evaluating: [:i| (1 to: i) collect: [:k| self at: k] andFold: [:a :b| a*b]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:23:27'!
+reciprocal
+	^ self species to: self codomain evaluating: [:n| (self at: n) reciprocal]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
+shift: anInteger
+	^ self species to: self codomain evaluating: [:i| self at: i-anInteger]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:54:25'!
+squared
+	^ self * self! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
+stirlingInverseTransform
+	^ self species to: self codomain evaluating: [:n| (1 to: n) sum: [:k| (n stirling: k) * (self at: k)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
+stirlingTransform
+	^ self species to: self codomain evaluating: [:n| (1 to: n) sum: [:k| (n Stirling: k) * (self at: k)]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:48'!
+sum
+	"Answer the indefinite sum of the receiver."
+	^ self species to: self codomain evaluating: [:i| (1 to: i) sum: [:k| self at: k]]! !
+
+!Sequence methodsFor: 'operations' stamp: 'len 12/4/2015 04:00'!
+value: aNumber
+	^ self at: aNumber asInteger! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 4/25/2016 07:23'!
+lookup
+	^ OEIS default lookup: self! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 12/28/2016 11:13:18'!
+printLimit
+	^ self propertyAt: #printLimit ifAbsent: [17]! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 12/28/2016 11:13:57'!
+printLimit: anInteger
+	self propertyAt: #printLimit put: anInteger! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 4/26/2016 06:46'!
+printOn: aStream base: base
+	(1 to: self printLimit) do: [:i| (self at: i) printOn: aStream base: base] separatedBy: [aStream nextPutAll:', ' ].
+	aStream nextPutAll: '...'! !
+
+!Sequence methodsFor: 'printing' stamp: 'len 4/26/2016 06:47'!
+printStringBase: base
+	^ String streamContents:
+		[:aStream| self printOn: aStream base: base]! !
+
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 16:58:56'!
+bellSeries: p
+	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| self at: p^(n-1)])! !
+
+!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:25'!
+dirichletSeries
+	"Answer the Dirichlet series generating function of the receiver."
+	^ DirichletSeries coefficients: self! !
+
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:18'!
+exponentialSeries
+	"Answer the exponential generating function of the receiver."
+	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| (self at: n) / (n-1) factorial])! !
+
+!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:26'!
+generatingSeries
+	"Answer the ordinary generating function of the receiver."
+	^ self ordinaryGeneratingSeries! !
+
+!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:31'!
+ordinaryGeneratingSeries
+	"Answer the ordinary generating function of the receiver."
+	^ self codomain powerSeries coefficients: self! !
+
+!Sequence methodsFor: 'private' stamp: 'len 12/3/2015 20:34'!
+species
+	^ Sequence! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:53'!
+Omega
+	"Number of prime divisors of n counted with multiplicity. A001222."
+	^ Sequence evaluating: [:n| n factors size]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:24:46'!
+aliquot
+	"This is the aliquot function a(n) or s(n).
+	It is the sum of the proper divisors of n (aliquot parts of n).
+	If a(n) = n, n is a perfect number. If a(n) = n - 1, it is almost perfect. If a(n) > n, it is an abundant number."
+	^ Sequence evaluating: [:n| n divisors sum - n]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 4/16/2016 19:33'!
+bbs: s p: p q: q
+	"Answer the Blum Blum Shub sequence for the given parameters."
+	| lambda m |
+	lambda _ p - 1 lcm: q - 1.
+	m _ p * q.
+	^ self evaluating: [:i| s raisedTo: (2 raisedTo: i modulo: lambda) modulo: m]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 6/4/2019 18:03:08'!
+bellNumbers
+	"The Bell numbers."
+	^ Sequence evaluating: [:n| (0 to: n-1) sum: [:k| n-1 Stirling: k]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 12/12/2016 17:08:06'!
+bernoulli
+	"This is the sequence of Bernoulli numbers (starting at 1), computed via a recurrence."
+	^ Sequence to: QQ initialValues: #(1) recurrence: [:f :n| (n>4 and: [n even]) ifTrue: [0] ifFalse: [((0 to: n-2) sum: [:k| (n choose: k) * (f at: k+1)]) / n negated]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:39'!
+calkinWilf
+	"The Calkin-Wilf sequence.
+	It enumerates the positive rational numbers by a breadth-first traversal of the Calkin-Wilf tree."
+	^ Sequence
+		to: QQ
+		evaluating:
+			[:n| | q |
+			q _ 1.
+			n-1 timesRepeat: [q _ 1 / (2 * q floor - q + 1)].
+			q]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:48'!
+catalanNumbers
+	"The Catalan numbers."
+	^ Sequence evaluating: [:n| (2*(n-1) choose: n-1) / n]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:26:11'!
+fibonacci
+	"The Fibonacci sequence defined as a recurrence."
+	^ Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:26:21'!
+harmonicNumbers
+	"The harmonic numbers."
+	^ Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 7/17/2016 22:10'!
+hensel: aPolynomial at: anIntegerRoot mod: p
+	"Answer the p-adic expansion by Hensel lemma."
+	| x |
+	x _ aPolynomial species x.
+	^ self recurrence:
+		[:f :n|
+		n = 1
+			ifTrue: [anIntegerRoot]
+			ifFalse:
+				[| g a |
+				g _ (f at: n-1) + (p^(n-1) * x).
+				a _ (aPolynomial value: g % (p^n)) roots anyOne representative.
+				(g value: a) \\ (p^n)]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:27'!
+highlyCompositeNumbers
+	"The sequence of highly composite numbers."
+	^ Sequence recurrence: [:f :n| | i max |
+		n = 1
+			ifTrue: [1]
+			ifFalse:
+				[i _ f at: n-1.
+				max _ i numberOfDivisors.
+				[(i _ i + 1) numberOfDivisors > max] whileFalse. i]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:03'!
+id
+	"The identity sequence."
+	^ Sequence evaluating: [:n| n]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:15'!
+liouville
+	"The Liouville function."
+	| Omega |
+	Omega _ Sequence Omega.
+	^ Sequence evaluating: [:n| (-1) ^ (Omega at: n)]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:28'!
+mangoldt
+	"The von Mangoldt function (float)."
+	^ Sequence evaluating: [:n| | factors | factors _ n factors. factors asSet size = 1 ifTrue: [factors anyOne ln] ifFalse: [0]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:36'!
+mangoldt2
+	"The log2 von Mangoldt function."
+	^ Sequence evaluating: [:n| | factors | factors _ n factors. factors asSet size = 1 ifTrue: [factors anyOne highBit] ifFalse: [0]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:29:45'!
+moebius
+	"The Moebius function mu(n).
+	This is 0 if n is squarefree, and (-1)^k otherwise (where k is the number of prime factors counted with multiplicity)."
+	^ Sequence evaluating: [:n| n moebius]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:54'!
+omega
+	"Number of distinct primes dividing n. A001221."
+	^ Sequence evaluating: [:n| n factors asSet size]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:14'!
+one
+	"The constant sequence that is always 1."
+	^ Sequence constant: 1! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:09'!
+partitions
+	"The partition function p(n) = number of partition of n. OEIS A000041."
+	^ Sequence evaluating: [:n| n partitions size]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:03'!
+phi
+	"Euler's totient function."
+	^ Sequence evaluating: [:n| n phi]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 6/1/2019 13:35:39'!
+primeGaps
+	"The sequence of prime gaps.
+	This is p(n+1) - p(n), the difference between concecutive primes."
+	| p |
+	p _ 2.
+	^ Sequence streaming: [p negated + (p _ p nextPrime)]
+"	^ Sequence primes difference"! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:31:34'!
+primes
+	"The sequence of primes."
+	^ Sequence initialValues: #(2) recurrence: [:f :i| (f at: i-1) nextPrime]
+"	^ Sequence evaluating: [:i|
+		| n count |
+		n _ 2.
+		count _ 1.
+		[count = i] whileFalse: [n _ n nextPrime. count _ count + 1].
+		n]"! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:32:01'!
+sigma
+	"The sigma(n) function, defined as the sum of the positive divisors of n.
+	The number n is said to be a perfect number iff sigma(n) = 2*n."
+	^ Sequence evaluating: [:n| n divisors sum]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 22:44'!
+sigma: x
+	"Answer the sigma(x,n) function."
+	^ Sequence evaluating: [:n| n divisors sum: [:d| d^x]]! !
+
+!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:54'!
+tau
+	"Number of divisors of n, also called d(n) and sigma_O(n). A000005."
+	^ Sequence evaluating: [:n| n divisors size]! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
+constant: anInteger
+	anInteger isInteger
+		ifFalse: [^ DomainError signal: 'argument is not integer'].
+	^ self to: ZZ constant: anInteger! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
+dynamic: aBlock
+	^ self to: ZZ dynamic: aBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:30'!
+evaluating: aBlock
+	^ self to: ZZ evaluating: aBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
+initialValues: anArray recurrence: aBinaryBlock
+	^ self to: ZZ initialValues: anArray recurrence: aBinaryBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
+recurrence: aBinaryBlock
+	^ self initialValues: #() recurrence: aBinaryBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:29'!
+streaming: aBlock
+	^ self to: ZZ streaming: aBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 4/19/2016 21:42'!
+to: aDomain constant: anObject
+	^ self to: aDomain evaluating: [:n| anObject]! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/11/2016 23:16'!
+to: aDomain dynamic: aBlock
+	^ self to: aDomain evaluating:
+			[:n| | x |
+			x _ 0.
+			n timesRepeat: [x _ aBlock value: x].
+			x]! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:21'!
+to: aDomain evaluating: aBlock
+	^ self from: NN to: aDomain evaluating: aBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:07'!
+to: aDomain initialValues: anArray recurrence: aBlock
+	| cache |
+	cache _ OrderedCollection withAll: anArray.
+	^ self to: aDomain evaluating:
+			[:n|
+			"(n isInteger and: [n > 0]) ifFalse: [DomainError signal]."
+			[cache size < n] whileTrue: [cache add: (aBlock value: cache value: cache size + 1)].
+			cache at: n]! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
+to: aDomain recurrence: aBlock
+	^ self to: aDomain initialValues: #() recurrence: aBlock! !
+
+!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:57'!
+to: aDomain streaming: aBlock
+	| cache |
+	cache _ OrderedCollection new.
+	^ self to: aDomain evaluating:
+			[:n|
+			"(n isInteger and: [n > 0]) ifFalse: [DomainError signal]."
+			[cache size < n] whileTrue: [cache add: aBlock value].
+			cache at: n]! !
+
 !Functor class methodsFor: 'class initialization' stamp: 'len 4/26/2020 17:41:52'!
 initialize
 	super initialize.
@@ -27578,11 +28253,6 @@ image
 !GroupMap methodsFor: 'accessing' stamp: 'len 5/13/2019 16:40:43'!
 kernel
 	^ self domain select: [:each| (self value: each) = self codomain identity]! !
-
-!GroupMap methodsFor: 'accessing' stamp: 'len 3/10/2020 17:55:18'!
-parent
-	"A group homomorphism f:A->B belongs to Hom(A,B)."
-	^ self domain hom: self codomain! !
 
 !GroupMap methodsFor: 'accessing' stamp: 'len 3/11/2020 12:37:42'!
 preimage: anObject
@@ -27799,11 +28469,6 @@ modulus
 !DirichletCharacter methodsFor: 'as yet unclassified' stamp: 'len 8/3/2019 08:58:14'!
 odd
 	^ (self value: self domain !! -1) = self codomain one negated! !
-
-!RingMap methodsFor: 'accessing' stamp: 'len 3/10/2020 17:56:03'!
-parent
-	"A ring homomorphism f:A->B belongs to Hom(A,B)."
-	^ self domain hom: self codomain! !
 
 !RingMap methodsFor: 'comparing' stamp: 'len 8/6/2019 06:24:17'!
 = aRingMap
@@ -28524,10 +29189,10 @@ isLinear
 	"Answer true if the receiver is a homogeneous linear map (defined by homogeneous linear polynomials, with independent coefficient zero)."
 	^ self representatives allSatisfy: [:each| each isLinear]! !
 
-!RationalMap methodsFor: 'testing' stamp: 'len 1/15/2017 17:14:44'!
+!RationalMap methodsFor: 'testing' stamp: 'len 5/9/2020 10:04:50'!
 isPolynomial
 	"Answer true if the receiver is a polynomial map."
-	^ self representatives allSatisfy: [:each| each denominator isConstant]! !
+	^ self representatives allSatisfy: [:each| (each isKindOf: Polynomial)]! !
 
 !RationalMap methodsFor: 'testing' stamp: 'len 1/15/2017 17:23:31'!
 isRegular
@@ -28741,689 +29406,6 @@ isHyperbolic
 !ModularMap methodsFor: 'as yet unclassified' stamp: 'len 12/14/2016 10:27:12'!
 isParabolic
 	^ self trace abs = 2! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:30'!
-at: anInteger
-	^ self at: anInteger ifAbsent: []! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 6/3/2019 17:30:31'!
-at: anInteger ifAbsent: aBlock
-	^ anInteger > 0 ifTrue: [super value: anInteger] ifFalse: [aBlock value]! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:14:04'!
-codomain
-	^ self propertyAt: #codomain ifAbsent: [ZZ]! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:42'!
-domain
-	^ self propertyAt: #domain ifAbsent: [NN]! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 6/1/2019 08:33:57'!
-scalars
-	"For compatibility with tuples."
-	^ self codomain! !
-
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:26'!
-size
-	^ self propertyAt: #size ifAbsent: [Aleph new]! !
-
-!Sequence methodsFor: 'comparing' stamp: 'len 12/5/2015 01:11'!
-beginsWith: aSequenceableCollection
-	1 to: aSequenceableCollection size do: [:i| (self at: i) = (aSequenceableCollection at: i) ifFalse: [^ false]].
-	^ true! !
-
-!Sequence methodsFor: 'comparing' stamp: 'len 12/27/2015 01:29'!
-equals: aSequence upTo: n
-	^ self beginsWith: (aSequence copyFrom: 1 to: n)! !
-
-!Sequence methodsFor: 'comparing' stamp: 'len 12/27/2015 03:56'!
-hash
-	^ (self at: 1) hash + (self at: 3) hash + (self at: 5) hash! !
-
-!Sequence methodsFor: 'converting' stamp: 'len 12/2/2016 09:57:05'!
-asStream
-	^ ReadStream on: self! !
-
-!Sequence methodsFor: 'copying' stamp: 'len 6/1/2019 08:31:20'!
-copyFrom: start to: end
-	end isInfinite
-		ifTrue: [^ self >> (1 - start)].
-	^ (start to: end) collect: [:i| self at: i]! !
-
-!Sequence methodsFor: 'copying' stamp: 'len 4/20/2016 21:25'!
-first: n
-	^ self copyFrom: 1 to: n! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 12/3/2015 20:34'!
-collect: aBlock
-	^ self species evaluating: [:i| aBlock value: (self at: i)]! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 4/25/2016 07:08'!
-count: aBlock
-	^ (self collect: [:each| (aBlock value: each) ifTrue: [1] ifFalse: [0]]) sum! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 12/27/2015 03:45'!
-do: aBlock
-	1 to: self size do: [:each| aBlock value: (self at: each)]! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 6/2/2019 04:31:06'!
-findFirst: aBlock
-	"Return the index of my first element for which aBlock evaluates as true."
-	| index |
-	index _ 0.
-	[(aBlock value: (self at: (index _ index + 1))) ifTrue: [^ index]] repeat! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 12/3/2015 23:16'!
-select: aBlock
-	^ self species evaluating: [:i|
-		| k j value |
-		k _ 1.
-		j _ 1.
-		[[aBlock value: (value _ self at: k)] whileFalse: [k _ k + 1]. j < i] whileTrue: [j _ j + 1. k _ k + 1].
-		value]! !
-
-!Sequence methodsFor: 'enumerating' stamp: 'len 3/27/2016 04:44'!
-withIndexDo: aBlock
-	| i |
-	i _ 1.
-	self do: [:each| aBlock value: each value: i. i _ i + 1]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:20:19'!
-* anObject
-	^ (self codomain includes: anObject)
-		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) * anObject]]
-		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) * (anObject at: n)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:05'!
-+ anObject
-	^ (self codomain includes: anObject)
-		ifTrue: [self species to: self codomain evaluating: [:n| (self at: n) + anObject]]
-		ifFalse: [self species to: self codomain evaluating: [:n| (self at: n) + (anObject at: n)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:53:45'!
-- anObject
-	^ self + anObject negated! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:51:55'!
-/ anObject
-	^ self * anObject reciprocal! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:29:43'!
-<< anInteger
-	^ self >> anInteger negated! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
-average
-	^ self species to: self codomain evaluating: [:N| ((1 to: N) sum: [:n| self at: n]) / N]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:21:51'!
-backwardDifference: n at: h
-	^ self species
-		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + (i*h))]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:10:01'!
-binomialInverseTransform
-	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (n-1 choose: k) * (self at: k+1)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 18:06:06'!
-binomialTransform
-	"The binomial transform is its own inverse, it's an involution."
-	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:k| (-1)^(n-1-k) * (n-1 choose: k) * (self at: k+1)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:08'!
-centralDifference: n at: h
-	^ self species
-		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^i * (n choose: i) * (self at: x + ((n/2 - i)*h))]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 05:29:55'!
-convolution: aSequence
-	^ self species to: self codomain evaluating: [:n| (0 to: n-1) sum: [:i| (self at: 1+i) * (aSequence at: n-i)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/1/2019 08:31:04'!
-difference
-	"Answer the 'difference' sequence of the receiver, or delta, or discrete derivative."
-	^ (self << 1) - self! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
-dirichlet: aSequence
-	"Answer the Dirichlet convolution of the receiver with the argument, assuming both are arithmetic functions (i.e. functions from the natural numbers to the complex numbers).
-	The set of arithmetic functions form a commutative ring (the Dirichlet ring) under pointwise addition and Dirichlet convolution."
-	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| (self at: d) * (aSequence at: n/d)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:27'!
-forwardDifference: n at: h
-	^ self species
-		to: self codomain
-		evaluating: [:x| (0 to: n) sum: [:i| (-1)^(n-i) * (n choose: i) * (self at: x + ((n-i)*h))]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:22:50'!
-hadamard: aSequence
-	"Answer the entrywise product with the argument, also called Hadamard product."
-	^ self class to: self codomain evaluating: [:i| (self at: i) * (aSequence at: i)]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:11'!
-moebiusInverse
-	"This is equivalent to the Dirichlet convolution of the Moebius arithmetic function with the receiver.
-	If f(n) and g(n) are two arithmetic functions satisfying g = f * 1 (Dirichlet convolution of f with the constant function 1), then the Moebius inversion formula can be used to retrieve f as f = mu * g. It is said that f and g and Moebius transforms of each other."
-	^ self species to: self codomain evaluating: [:n| n divisors sum: [:d| d moebius * (self at: n/d)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:24:13'!
-negated
-	^ self species to: self codomain evaluating: [:n| (self at: n) negated]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:48'!
-product
-	"Answer the indefinite product of the receiver."
-	^ self species to: self codomain evaluating: [:i| (1 to: i) collect: [:k| self at: k] andFold: [:a :b| a*b]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 6/4/2019 09:23:27'!
-reciprocal
-	^ self species to: self codomain evaluating: [:n| (self at: n) reciprocal]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
-shift: anInteger
-	^ self species to: self codomain evaluating: [:i| self at: i-anInteger]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 5/6/2019 03:54:25'!
-squared
-	^ self * self! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
-stirlingInverseTransform
-	^ self species to: self codomain evaluating: [:n| (1 to: n) sum: [:k| (n stirling: k) * (self at: k)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 02:12'!
-stirlingTransform
-	^ self species to: self codomain evaluating: [:n| (1 to: n) sum: [:k| (n Stirling: k) * (self at: k)]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:48'!
-sum
-	"Answer the indefinite sum of the receiver."
-	^ self species to: self codomain evaluating: [:i| (1 to: i) sum: [:k| self at: k]]! !
-
-!Sequence methodsFor: 'operations' stamp: 'len 12/4/2015 04:00'!
-value: aNumber
-	^ self at: aNumber asInteger! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 4/25/2016 07:23'!
-lookup
-	^ OEIS default lookup: self! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 12/28/2016 11:13:18'!
-printLimit
-	^ self propertyAt: #printLimit ifAbsent: [17]! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 12/28/2016 11:13:57'!
-printLimit: anInteger
-	self propertyAt: #printLimit put: anInteger! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 4/26/2016 06:46'!
-printOn: aStream base: base
-	(1 to: self printLimit) do: [:i| (self at: i) printOn: aStream base: base] separatedBy: [aStream nextPutAll:', ' ].
-	aStream nextPutAll: '...'! !
-
-!Sequence methodsFor: 'printing' stamp: 'len 4/26/2016 06:47'!
-printStringBase: base
-	^ String streamContents:
-		[:aStream| self printOn: aStream base: base]! !
-
-!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 16:58:56'!
-bellSeries: p
-	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| self at: p^(n-1)])! !
-
-!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:25'!
-dirichletSeries
-	"Answer the Dirichlet series generating function of the receiver."
-	^ DirichletSeries coefficients: self! !
-
-!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:18'!
-exponentialSeries
-	"Answer the exponential generating function of the receiver."
-	^ self codomain powerSeries coefficients: (self species to: self codomain evaluating: [:n| (self at: n) / (n-1) factorial])! !
-
-!Sequence methodsFor: 'series' stamp: 'len 12/29/2015 04:26'!
-generatingSeries
-	"Answer the ordinary generating function of the receiver."
-	^ self ordinaryGeneratingSeries! !
-
-!Sequence methodsFor: 'series' stamp: 'len 6/2/2019 17:00:31'!
-ordinaryGeneratingSeries
-	"Answer the ordinary generating function of the receiver."
-	^ self codomain powerSeries coefficients: self! !
-
-!Sequence methodsFor: 'private' stamp: 'len 12/3/2015 20:34'!
-species
-	^ Sequence! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:53'!
-Omega
-	"Number of prime divisors of n counted with multiplicity. A001222."
-	^ Sequence evaluating: [:n| n factors size]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:24:46'!
-aliquot
-	"This is the aliquot function a(n) or s(n).
-	It is the sum of the proper divisors of n (aliquot parts of n).
-	If a(n) = n, n is a perfect number. If a(n) = n - 1, it is almost perfect. If a(n) > n, it is an abundant number."
-	^ Sequence evaluating: [:n| n divisors sum - n]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 4/16/2016 19:33'!
-bbs: s p: p q: q
-	"Answer the Blum Blum Shub sequence for the given parameters."
-	| lambda m |
-	lambda _ p - 1 lcm: q - 1.
-	m _ p * q.
-	^ self evaluating: [:i| s raisedTo: (2 raisedTo: i modulo: lambda) modulo: m]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 6/4/2019 18:03:08'!
-bellNumbers
-	"The Bell numbers."
-	^ Sequence evaluating: [:n| (0 to: n-1) sum: [:k| n-1 Stirling: k]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 12/12/2016 17:08:06'!
-bernoulli
-	"This is the sequence of Bernoulli numbers (starting at 1), computed via a recurrence."
-	^ Sequence to: QQ initialValues: #(1) recurrence: [:f :n| (n>4 and: [n even]) ifTrue: [0] ifFalse: [((0 to: n-2) sum: [:k| (n choose: k) * (f at: k+1)]) / n negated]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:39'!
-calkinWilf
-	"The Calkin-Wilf sequence.
-	It enumerates the positive rational numbers by a breadth-first traversal of the Calkin-Wilf tree."
-	^ Sequence
-		to: QQ
-		evaluating:
-			[:n| | q |
-			q _ 1.
-			n-1 timesRepeat: [q _ 1 / (2 * q floor - q + 1)].
-			q]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:48'!
-catalanNumbers
-	"The Catalan numbers."
-	^ Sequence evaluating: [:n| (2*(n-1) choose: n-1) / n]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:26:11'!
-fibonacci
-	"The Fibonacci sequence defined as a recurrence."
-	^ Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:26:21'!
-harmonicNumbers
-	"The harmonic numbers."
-	^ Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 7/17/2016 22:10'!
-hensel: aPolynomial at: anIntegerRoot mod: p
-	"Answer the p-adic expansion by Hensel lemma."
-	| x |
-	x _ aPolynomial species x.
-	^ self recurrence:
-		[:f :n|
-		n = 1
-			ifTrue: [anIntegerRoot]
-			ifFalse:
-				[| g a |
-				g _ (f at: n-1) + (p^(n-1) * x).
-				a _ (aPolynomial value: g % (p^n)) roots anyOne representative.
-				(g value: a) \\ (p^n)]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:27'!
-highlyCompositeNumbers
-	"The sequence of highly composite numbers."
-	^ Sequence recurrence: [:f :n| | i max |
-		n = 1
-			ifTrue: [1]
-			ifFalse:
-				[i _ f at: n-1.
-				max _ i numberOfDivisors.
-				[(i _ i + 1) numberOfDivisors > max] whileFalse. i]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:03'!
-id
-	"The identity sequence."
-	^ Sequence evaluating: [:n| n]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:15'!
-liouville
-	"The Liouville function."
-	| Omega |
-	Omega _ Sequence Omega.
-	^ Sequence evaluating: [:n| (-1) ^ (Omega at: n)]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:28'!
-mangoldt
-	"The von Mangoldt function (float)."
-	^ Sequence evaluating: [:n| | factors | factors _ n factors. factors asSet size = 1 ifTrue: [factors anyOne ln] ifFalse: [0]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:27:36'!
-mangoldt2
-	"The log2 von Mangoldt function."
-	^ Sequence evaluating: [:n| | factors | factors _ n factors. factors asSet size = 1 ifTrue: [factors anyOne highBit] ifFalse: [0]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:29:45'!
-moebius
-	"The Moebius function mu(n).
-	This is 0 if n is squarefree, and (-1)^k otherwise (where k is the number of prime factors counted with multiplicity)."
-	^ Sequence evaluating: [:n| n moebius]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:54'!
-omega
-	"Number of distinct primes dividing n. A001221."
-	^ Sequence evaluating: [:n| n factors asSet size]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:14'!
-one
-	"The constant sequence that is always 1."
-	^ Sequence constant: 1! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:09'!
-partitions
-	"The partition function p(n) = number of partition of n. OEIS A000041."
-	^ Sequence evaluating: [:n| n partitions size]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:38:03'!
-phi
-	"Euler's totient function."
-	^ Sequence evaluating: [:n| n phi]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 6/1/2019 13:35:39'!
-primeGaps
-	"The sequence of prime gaps.
-	This is p(n+1) - p(n), the difference between concecutive primes."
-	| p |
-	p _ 2.
-	^ Sequence streaming: [p negated + (p _ p nextPrime)]
-"	^ Sequence primes difference"! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:31:34'!
-primes
-	"The sequence of primes."
-	^ Sequence initialValues: #(2) recurrence: [:f :i| (f at: i-1) nextPrime]
-"	^ Sequence evaluating: [:i|
-		| n count |
-		n _ 2.
-		count _ 1.
-		[count = i] whileFalse: [n _ n nextPrime. count _ count + 1].
-		n]"! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:32:01'!
-sigma
-	"The sigma(n) function, defined as the sum of the positive divisors of n.
-	The number n is said to be a perfect number iff sigma(n) = 2*n."
-	^ Sequence evaluating: [:n| n divisors sum]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 22:44'!
-sigma: x
-	"Answer the sigma(x,n) function."
-	^ Sequence evaluating: [:n| n divisors sum: [:d| d^x]]! !
-
-!Sequence class methodsFor: 'examples' stamp: 'len 12/4/2015 01:54'!
-tau
-	"Number of divisors of n, also called d(n) and sigma_O(n). A000005."
-	^ Sequence evaluating: [:n| n divisors size]! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
-constant: anInteger
-	anInteger isInteger
-		ifFalse: [^ DomainError signal: 'argument is not integer'].
-	^ self to: ZZ constant: anInteger! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
-dynamic: aBlock
-	^ self to: ZZ dynamic: aBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:30'!
-evaluating: aBlock
-	^ self to: ZZ evaluating: aBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
-initialValues: anArray recurrence: aBinaryBlock
-	^ self to: ZZ initialValues: anArray recurrence: aBinaryBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
-recurrence: aBinaryBlock
-	^ self initialValues: #() recurrence: aBinaryBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:29'!
-streaming: aBlock
-	^ self to: ZZ streaming: aBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 4/19/2016 21:42'!
-to: aDomain constant: anObject
-	^ self to: aDomain evaluating: [:n| anObject]! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 5/11/2016 23:16'!
-to: aDomain dynamic: aBlock
-	^ self to: aDomain evaluating:
-			[:n| | x |
-			x _ 0.
-			n timesRepeat: [x _ aBlock value: x].
-			x]! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:21'!
-to: aDomain evaluating: aBlock
-	^ self from: NN to: aDomain evaluating: aBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:07'!
-to: aDomain initialValues: anArray recurrence: aBlock
-	| cache |
-	cache _ OrderedCollection withAll: anArray.
-	^ self to: aDomain evaluating:
-			[:n|
-			"(n isInteger and: [n > 0]) ifFalse: [DomainError signal]."
-			[cache size < n] whileTrue: [cache add: (aBlock value: cache value: cache size + 1)].
-			cache at: n]! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
-to: aDomain recurrence: aBlock
-	^ self to: aDomain initialValues: #() recurrence: aBlock! !
-
-!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:57'!
-to: aDomain streaming: aBlock
-	| cache |
-	cache _ OrderedCollection new.
-	^ self to: aDomain evaluating:
-			[:n|
-			"(n isInteger and: [n > 0]) ifFalse: [DomainError signal]."
-			[cache size < n] whileTrue: [cache add: aBlock value].
-			cache at: n]! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 6/4/2019 05:39:53'!
-at: n ifAbsent: aBlock
-	self order = 0 ifTrue: [^ self codomain zero].
-	n <= initialValues size ifTrue: [^ initialValues at: n].
-	^ (self matrix ^ (n - self order) * initialValues) last
-"	answer _ 0.
-	1 to: self order do: [:i |
-		answer _ (self at: n - self order + i - 1) * (coefficients at: i) + answer].
-	^ answer"! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 01:41'!
-characteristicPolynomial
-	^ self codomain polynomials coefficients: (coefficients negated copyWith: self codomain one)! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 03:49'!
-coefficients
-	^ coefficients! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 03:49'!
-initialValues
-	^ initialValues! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:14:12'!
-matrix
-	^ self propertyAt: #matrix ifAbsentPut: [self characteristicPolynomial companion transposed]! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 02:08'!
-minimalPolynomial
-	^ self minimal characteristicPolynomial! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/28/2015 23:45'!
-order
-	^ coefficients size! !
-
-!CFiniteSequence methodsFor: 'accessing' stamp: 'len 12/27/2015 01:44'!
-startIndex
-	^ 1! !
-
-!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 12/3/2015 23:02'!
-coefficients: anArray
-	coefficients _ anArray! !
-
-!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 3/28/2018 18:09:29'!
-initialValues: anArray
-	initialValues _ anArray.
-	initialValues isTuple ifFalse: [initialValues _ self codomain tuple: initialValues]! !
-
-!CFiniteSequence methodsFor: 'comparing' stamp: 'len 10/31/2016 04:14'!
-= aSequence
-	| f g |
-	(aSequence isKindOf: CFiniteSequence)
-		ifFalse: [^ super = aSequence].
-	f _ self minimal.
-	g _ aSequence minimal.
-	^ f coefficients = g coefficients and: [f initialValues = g initialValues]! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:35'!
-* anObject
-	(anObject isKindOf: self class)
-		ifTrue: [^ self class to: self codomain evaluating: super * anObject maxOrder: self order * anObject order].
-	(self codomain includes: anObject)
-		ifTrue: [^ self class to: self codomain evaluating: super * anObject maxOrder: self order].
-	^ super * anObject! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:29'!
-+ aSequence
-	(aSequence isKindOf: self class) ifFalse: [^ super + aSequence].
-	^ self class to: self codomain evaluating: super + aSequence maxOrder: self order + aSequence order! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:28'!
-convolution: aSequence
-	(aSequence isKindOf: self class) ifFalse: [^ super convolution: aSequence].
-	^ self class to: self codomain evaluating: (super convolution: aSequence) maxOrder: self order * aSequence order! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/28/2016 11:14:22'!
-minimal
-	^ self propertyAt: #minimal ifAbsentPut: [self class to: self codomain evaluating: self maxOrder: self order]! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:31'!
-negated
-	^ self class to: self codomain evaluating: super negated maxOrder: self order! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/24/2015 03:39'!
-squared
-	| n |
-	n _ self order.
-	^ self class to: self codomain evaluating: super squared maxOrder: n*(n-1)/2! !
-
-!CFiniteSequence methodsFor: 'operations' stamp: 'len 12/27/2015 19:49'!
-sum
-	"Answer the indefinite sum of the receiver."
-	^ self class to: self codomain evaluating: super sum maxOrder: self order squared! !
-
-!CFiniteSequence methodsFor: 'printing' stamp: 'len 12/27/2015 01:25'!
-printLimit
-	^ self order + 10 min: super printLimit! !
-
-!CFiniteSequence methodsFor: 'series' stamp: 'len 12/24/2017 22:13:45'!
-generatingFunction
-	| r s |
-	"Answer the generating function of the receiver, which is a rational function that equals its ordinary generating series."
-	s _ self characteristicPolynomial reversed.
-	r _ self codomain polynomials coefficients:
-		((0 to: self order - 1) collect: [:j|
-			(self at: j+1) - ((1 to: j) sum: [:i| (s coefficientAtDegree: i) * (self at: j-i+1)])]).
-	^ r / s! !
-
-!CFiniteSequence methodsFor: 'testing' stamp: 'len 12/27/2015 02:08'!
-isMinimal
-	^ self minimalPolynomial = self characteristicPolynomial! !
-
-!CFiniteSequence methodsFor: 'testing' stamp: 'len 4/11/2016 23:10'!
-isZero
-	^ self minimal order = 0! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:14'!
-fibonacci
-	"The Fibonacci sequence defined as a C-finite sequence."
-	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 1)! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:36'!
-geometric: aNumber
-	(aNumber isInteger or: [aNumber isFraction])
-		ifFalse: [^ DomainError signal: 'argument is not rational'].
-	^ CFiniteSequence to: QQ initialValues: #(1) coefficients: {aNumber}! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:27'!
-id
-	"The identity sequence id(n) := n, defined by a recurrence."
-	^ CFiniteSequence to: QQ initialValues: #(1 2) coefficients: #(-1 2)! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:33'!
-jacobsthalNumbers
-	"The Jacobsthal numbers."
-	^ CFiniteSequence initialValues: #(0 1) coefficients: #(2 1)! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:42'!
-lucasNumbers
-	"The Lucas numbers."
-	^ CFiniteSequence initialValues: #(2 1) coefficients: #(1 1)! !
-
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:49'!
-pellNumbers
-	"The Pell numbers."
-	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 2)! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 7/15/2016 18:27'!
-initialValues: anArray coefficients: anotherArray
-	^ self to: ZZ initialValues: anArray coefficients: anotherArray! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 19:42'!
-to: codomain constant: anObject
-	^ self to: codomain initialValues: {anObject} coefficients: {anObject one}! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 8/6/2016 00:46'!
-to: codomain evaluating: aBlock maxOrder: n
-	| initialValues bm f |
-	initialValues _ (1 to: 2*n) collect: aBlock.
-	bm _ ModifiedBerlekampMassey new
-		field: (codomain isField ifTrue: [codomain] ifFalse: [codomain fractions]);
-		input: initialValues.
-	f _ bm minimalPolynomial.
-	^ self to: codomain initialValues: (initialValues copyFrom: 1 to: f degree) minimalPolynomial:f! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 3/30/2016 03:54'!
-to: codomain initialValues: anArray characteristicPolynomial: aPolynomial
-	^ self to: codomain initialValues: anArray coefficients: aPolynomial tail negated coefficients! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 11/5/2016 10:27'!
-to: aCodomain initialValues: anArray coefficients: anotherArray
-	^ self new codomain: aCodomain; initialValues: anArray; coefficients: anotherArray! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/28/2016 12:19:00'!
-to: codomain initialValues: anArray minimalPolynomial: aPolynomial
-	| answer |
-	answer _ self to: codomain initialValues: anArray characteristicPolynomial: aPolynomial.
-	answer propertyAt: #minimal put: answer.
-	^ answer! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 6/4/2019 07:19:55'!
-to: aCodomain initialValues: initialArray periodic: periodArray
-	| coefficients |
-	coefficients _ Array new: initialArray size + periodArray size.
-	coefficients atAllPut: periodArray first zero.
-	coefficients at: initialArray size + 1 put: periodArray first one.
-	^ self to: aCodomain initialValues: initialArray asArray, periodArray coefficients: coefficients! !
-
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 03:41'!
-to: codomain periodic: anArray
-	| coefficients |
-	coefficients _ Array new: anArray size.
-	coefficients atAllPut: anArray first zero.
-	coefficients at: 1 put: anArray first one.
-	^ self to: codomain initialValues: anArray coefficients: coefficients! !
 
 !SimplicialMap methodsFor: 'accessing-private' stamp: 'len 2/20/2017 15:17:40'!
 map: aDictionary
@@ -33058,18 +33040,10 @@ annihilator
 	self parent isIntegralDomain ifTrue: [^ self parent zeroIdeal].
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:58:07'!
-denominator
-	^ self one! !
-
 !RingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:23'!
 normalized
 	"Answer a unique choice of associate. See >>unit."
 	^ self * self unit inverse! !
-
-!RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:57:58'!
-numerator
-	^ self! !
 
 !RingElement methodsFor: 'accessing' stamp: 'len 9/24/2018 22:58:16'!
 one
@@ -33122,6 +33096,25 @@ zero
 
 	^anElement <= self! !
 
+!RingElement methodsFor: 'comparing' stamp: 'len 6/20/2019 18:13:26'!
+| anElement
+	"Answer true if the receiver divides anElement."
+	self isZero ifTrue: [^ false].
+	anElement isZero ifTrue: [^ true].
+	self parent isEuclidean ifTrue: [^ (anElement \\ self) isZero].
+	self parent isFinite ifFalse: [self subclassResponsibility].
+	^ self parent anySatisfy: [:any| self * any = anElement]
+	
+"	^ self isZero not and: [(anElement \\ self) isZero]"
+
+"	^ self isZero not and: [self parent * self includes: anElement]"
+! !
+
+!RingElement methodsFor: 'comparing' stamp: 'len 5/9/2020 09:04:30'!
+~ anElement
+	"Answer true if the receiver and the argument are associates."
+	^ self normalized = anElement normalized! !
+
 !RingElement methodsFor: 'comparing' stamp: 'len 7/17/2019 08:29:10'!
 between: min and: max 
 	"Answer whether the receiver is less than or equal to the argument, max,  and greater than or equal to the argument, min."
@@ -33158,6 +33151,10 @@ adaptToInteger: rcvr andSend: selector
 	selector = #/ ifTrue: [^ self one * rcvr / self].
 	^ super adaptToInteger: rcvr andSend: selector! !
 
+!RingElement methodsFor: 'converting' stamp: 'len 5/9/2020 09:29:14'!
+asRatio
+	^ Ratio numerator: self denominator: self one! !
+
 !RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:47'!
 * anElement
 	^ self subclassResponsibility! !
@@ -33179,16 +33176,9 @@ adaptToInteger: rcvr andSend: selector
 	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 7/17/2019 02:44:34'!
-: anElement
-	"Answer a formal fraction with the receiver as numerator and the argument as denominator.
-	This is an element of the total ring of fractions."
-	(self parent includes: anElement) ifTrue: [^ Ratio numerator: self denominator: anElement].
-	^ DomainError signal! !
-
-!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 04:31:16'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 14:29:29'!
 \\ anElement
-	"Answer the quotient of the Euclidean division of the receiver by anElement."
+	"Answer the remainder of the Euclidean division of the receiver by anElement."
 	^ self - (self // anElement * anElement)! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 5/3/2020 10:12:10'!
@@ -33260,10 +33250,15 @@ reciprocal
 squared
 	^ self * self! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/8/2020 18:04:01'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 09:24:53'!
+stabilizatorWith: b modulo: N
+	"If the receiver is 'a', answer 'c' such that '<a + cb, N> = <a, b, N>'."
+	self notYetImplemented! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 14:05:14'!
 xgcd: anElement
 	"Extended Euclidean algorithm.
-	Answer an array {x. u. v} where self * u + (anElement * v) = x, and x = (self gcd: anElement)."
+	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement)."
 	| a b zero one s1 t1 s t r1 r u |
 	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #xgcd:].
 	a _ self.
@@ -33284,20 +33279,6 @@ xgcd: anElement
 	u _ r unit inverse.
 	s _ s * u. t _ t * u. r _ r * u.
 	^ {r. t. s}! !
-
-!RingElement methodsFor: 'testing' stamp: 'len 6/20/2019 18:13:26'!
-| anElement
-	"Answer true if the receiver divides anElement."
-	self isZero ifTrue: [^ false].
-	anElement isZero ifTrue: [^ true].
-	self parent isEuclidean ifTrue: [^ (anElement \\ self) isZero].
-	self parent isFinite ifFalse: [self subclassResponsibility].
-	^ self parent anySatisfy: [:any| self * any = anElement]
-	
-"	^ self isZero not and: [(anElement \\ self) isZero]"
-
-"	^ self isZero not and: [self parent * self includes: anElement]"
-! !
 
 !RingElement methodsFor: 'testing' stamp: 'len 9/25/2018 15:26:51'!
 isIdempotent
@@ -33385,7 +33366,7 @@ numerator
 parent
 	^ parent! !
 
-!Germ methodsFor: 'accessing' stamp: 'len 5/8/2020 18:11:03'!
+!Germ methodsFor: 'accessing' stamp: 'len 5/9/2020 09:35:33'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
 	| p q |
@@ -33393,7 +33374,7 @@ unit
 	p _ parent p.
 	q _ self numerator.
 	[p | q] whileTrue: [q _ q // p].
-	^ self class new parent: parent; ratio: q : self denominator! !
+	^ self class new parent: parent; ratio: q asRatio / self denominator asRatio "<- optimize"! !
 
 !Germ methodsFor: 'accessing' stamp: 'len 5/3/2020 09:44:13'!
 valuation
@@ -33428,28 +33409,32 @@ leadingMonomial
 leadingTerm
 	^ ratio leadingTerm! !
 
-!Germ methodsFor: 'comparing' stamp: 'len 5/3/2020 09:43:49'!
+!Germ methodsFor: 'comparing' stamp: 'len 5/9/2020 09:33:08'!
 <= anElement
-	^ ratio <= anElement ratio! !
+	^ ratio <= anElement asRatio! !
 
-!Germ methodsFor: 'comparing' stamp: 'len 5/3/2020 09:43:57'!
+!Germ methodsFor: 'comparing' stamp: 'len 5/9/2020 09:33:15'!
 = anObject
-	^ self class = anObject class and: [ratio = anObject ratio]! !
+	^ self class = anObject class and: [ratio = anObject asRatio]! !
 
 !Germ methodsFor: 'comparing' stamp: 'len 7/17/2019 03:28:14'!
 hash
 	^ ratio hash! !
 
-!Germ methodsFor: 'operations' stamp: 'len 5/3/2020 09:43:34'!
+!Germ methodsFor: 'converting' stamp: 'len 5/9/2020 09:31:00'!
+asRatio
+	^ ratio! !
+
+!Germ methodsFor: 'operations' stamp: 'len 5/9/2020 09:32:50'!
 * anElement
 	anElement isInteger ifTrue: [^ self class new parent: parent; ratio: ratio * anElement].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
-	^ self class new parent: parent; ratio: ratio * anElement ratio! !
+	^ self class new parent: parent; ratio: ratio * anElement asRatio! !
 
-!Germ methodsFor: 'operations' stamp: 'len 5/3/2020 09:42:48'!
+!Germ methodsFor: 'operations' stamp: 'len 5/9/2020 09:33:03'!
 + anElement
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
-	^ self class new parent: parent; ratio: ratio + anElement ratio! !
+	^ self class new parent: parent; ratio: ratio + anElement asRatio! !
 
 !Germ methodsFor: 'operations' stamp: 'len 5/8/2020 18:07:57'!
 // anElement
@@ -33485,6 +33470,10 @@ lcm: anElement
 negated
 	^ self class new parent: parent; ratio: ratio negated! !
 
+!Germ methodsFor: 'testing' stamp: 'len 5/9/2020 10:58:12'!
+isIntegral
+	^ ratio isIntegral! !
+
 !Germ methodsFor: 'testing' stamp: 'len 7/30/2019 05:27:44'!
 isNilpotent
 	"Answer true if self^n = 0 for some integer n >= 1."
@@ -33507,10 +33496,6 @@ isZeroDivisor
 !Germ methodsFor: 'private' stamp: 'len 6/28/2019 13:24:53'!
 parent: aLocalRing
 	parent _ aLocalRing! !
-
-!Germ methodsFor: 'private' stamp: 'len 5/3/2020 09:43:41'!
-ratio
-	^ ratio! !
 
 !Germ methodsFor: 'private' stamp: 'len 7/17/2019 03:25:28'!
 ratio: aRatio
@@ -33536,14 +33521,14 @@ numerator
 parent
 	^ numerator parent fractions! !
 
-!Ratio methodsFor: 'accessing' stamp: 'len 7/16/2019 16:53:35'!
+!Ratio methodsFor: 'accessing' stamp: 'len 5/9/2020 09:39:14'!
 representative
-	^ self numerator representative : self denominator representative! !
+	^ self numerator representative asRatio / self denominator representative asRatio! !
 
-!Ratio methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:29'!
+!Ratio methodsFor: 'accessing' stamp: 'len 5/9/2020 09:38:58'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
-	^ numerator unit : denominator! !
+	^ self class numerator: numerator unit denominator: denominator! !
 
 !Ratio methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:25'!
 valuation
@@ -33607,26 +33592,25 @@ one
 zero
 	^ self class numerator: numerator zero denominator: denominator one! !
 
-!Ratio methodsFor: 'operations' stamp: 'len 7/17/2019 04:52:48'!
-* anObject
-	(self parent includes: anObject)
-		ifTrue: [^ self class numerator: numerator * anObject numerator denominator: denominator * anObject denominator].
-	^ numerator * anObject : denominator! !
+!Ratio methodsFor: 'converting' stamp: 'len 5/9/2020 09:30:37'!
+asRatio
+	^ self! !
 
-!Ratio methodsFor: 'operations' stamp: 'len 7/21/2019 12:49:08'!
-+ anObject
-	(self parent includes: anObject)
-		ifTrue: [^ self class numerator: numerator * anObject denominator + (denominator * anObject numerator) denominator: denominator * anObject denominator].
-	^ numerator + (denominator * anObject) : denominator! !
+!Ratio methodsFor: 'operations' stamp: 'len 5/9/2020 09:41:09'!
+* anElement
+	anElement isInteger ifTrue: [^ self class numerator: numerator * anElement denominator: denominator].
+	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
+	^ self class numerator: numerator * anElement numerator denominator: denominator * anElement denominator! !
+
+!Ratio methodsFor: 'operations' stamp: 'len 5/9/2020 09:42:00'!
++ anElement
+	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
+	^ self class numerator: numerator * anElement denominator + (denominator * anElement numerator) denominator: denominator * anElement denominator! !
 
 !Ratio methodsFor: 'operations' stamp: 'len 7/17/2019 02:40:43'!
 / anObject
 	(self parent integers includes: anObject) ifTrue: [^ self / (self parent embed: anObject)].
 	^ super / anObject! !
-
-!Ratio methodsFor: 'operations' stamp: 'len 7/16/2019 17:10:08'!
-: anElement
-	^ self / anElement! !
 
 !Ratio methodsFor: 'operations' stamp: 'len 5/3/2020 10:11:13'!
 ^ anInteger
@@ -34741,17 +34725,17 @@ valuation
 = anElement
 	^ self class = anElement class and: [representative = anElement representative and: [precision = anElement precision]]! !
 
-!AdicInteger methodsFor: 'comparing' stamp: 'len 8/11/2019 09:33:26'!
-~ anElement
-	"Answer true if the receiver is 'weakly equal' to the argument.
-	Note that this relation is not transitive."
-	anElement precision > precision ifTrue: [^ anElement ~ self].
-	precision = anElement precision ifTrue: [^ representative = anElement representative].
-	^ representative = (anElement representative \\ precision)! !
-
 !AdicInteger methodsFor: 'comparing' stamp: 'len 8/11/2019 02:24:16'!
 hash
 	^ representative hash! !
+
+!AdicInteger methodsFor: 'comparing' stamp: 'len 5/9/2020 09:02:53'!
+isWeaklyEqualTo: anElement
+	"Answer true if the receiver is 'weakly equal' to the argument.
+	Note that this relation is not transitive."
+	anElement precision > precision ifTrue: [^ anElement isWeaklyEqualTo: self].
+	precision = anElement precision ifTrue: [^ representative = anElement representative].
+	^ representative = (anElement representative \\ precision)! !
 
 !AdicInteger methodsFor: 'operations' stamp: 'len 4/15/2020 08:00:19'!
 * anElement
@@ -35263,13 +35247,6 @@ terms
 		ifTrue: [^ self apply: [:each| each /// anObject]].
 	^ self exactlyDividedBy: anObject! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 7/17/2019 02:45:33'!
-: aPolynomial
-	"Answer a formal fraction with the receiver as numerator and the argument as denominator.
-	This is an element of the total ring of fractions."
-	(self parent includes: aPolynomial) ifTrue: [^ RationalFunction numerator: self denominator: aPolynomial].
-	^ DomainError signal! !
-
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:38:28'!
 \\ anObject
 	"Answer the remainder of the division of the receiver by the argument."
@@ -35432,8 +35409,10 @@ raisedTo: anInteger modulo: aPolynomial
 squared
 	^ self * self! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/8/2020 18:07:00'!
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2020 14:05:56'!
 xgcd: aPolynomial
+	"Extended Euclidean algorithm.
+	Answer an array {g. u. v} where self * u + (aPolynomial * v) = g, and g = (self gcd: aPolynomial)."
 	| a b zero one s1 t1 s t r1 r u |
 	(self parent includes: aPolynomial) ifFalse: [^ self adapt: aPolynomial andSend: #xgcd:].
 	a _ self.
@@ -35494,6 +35473,10 @@ asMultivariate
 	self partsDo: [:each|
 		answer _ answer + (S !! each value * (S x: R rank + 1 to: each key degree))].
 	^ answer! !
+
+!Polynomial methodsFor: 'converting' stamp: 'len 5/9/2020 09:34:34'!
+asRatio
+	^ RationalFunction numerator: self denominator: self one! !
 
 !Polynomial methodsFor: 'converting' stamp: 'len 12/21/2017 20:09:56'!
 asScalar
@@ -36568,12 +36551,12 @@ factorizationZassenhauss2
 			g | f ifTrue: [answer add: g]]].
 	^ answer! !
 
-!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 5/3/2020 10:15:34'!
+!UnivariatePolynomial methodsFor: 'factorization-private' stamp: 'len 5/9/2020 14:06:47'!
 henselLift: factors to: Zpk
 	"The receiver is a polynomial in Z[x].
 	The argument 'factors' is a factorization of the receiver's projection to (Z/pZ)[x].
 	Answer the Hensel lift of the factorization to (Z/(p^k)Z)[x]."
-	| r mid g h s t bezout gFactors hFactors |
+	| r mid g h s t euclid gFactors hFactors |
 "	p _ factors anyOne scalars characteristic."
 	r _ factors size.
 	r = 1 ifTrue: "can be optimized, compute inverse modulo p using extended euclid, then lift to p^k with newton iteration algorithm 9.10 (modern computer algebra)"
@@ -36583,9 +36566,9 @@ henselLift: factors to: Zpk
 	hFactors _ factors copyFrom: mid+1 to: r.
 	g _ gFactors product * self leadingCoefficient.
 	h _ hFactors product.
-	bezout _ (ExtendedEuclid on: {g. h}) bezout.
-	s _ bezout first.
-	t _ bezout second.
+	euclid _ g xgcd: h.
+	s _ euclid at: 2.
+	t _ euclid at: 3.
 "	m _ p."
 	Zpk quadraticLiftingsDo: [:phi| "Hensel step:"
 		| e division c d b |
@@ -37438,17 +37421,17 @@ valuation
 	self class = aPowerSeries class ifFalse: [^ super = aPowerSeries].
 	^ representative = aPowerSeries representative and: [precision = aPowerSeries precision].! !
 
-!PowerSeries methodsFor: 'comparing' stamp: 'len 8/14/2019 05:01:00'!
-~ aPowerSeries
-	"Answer true if the receiver is 'weakly equal' to the argument.
-	Note that this relation is not transitive."
-	aPowerSeries precision > precision ifTrue: [^ aPowerSeries ~ self].
-	precision = aPowerSeries precision ifTrue: [^ representative = aPowerSeries representative].
-	^ representative = (aPowerSeries representative truncatedTo: precision)! !
-
 !PowerSeries methodsFor: 'comparing' stamp: 'len 8/10/2019 05:59:52'!
 hash
 	^ representative hash! !
+
+!PowerSeries methodsFor: 'comparing' stamp: 'len 5/9/2020 09:03:44'!
+isWeaklyEqualTo: aPowerSeries
+	"Answer true if the receiver is 'weakly equal' to the argument.
+	Note that this relation is not transitive."
+	aPowerSeries precision > precision ifTrue: [^ aPowerSeries isWeaklyEqualTo: self].
+	precision = aPowerSeries precision ifTrue: [^ representative = aPowerSeries representative].
+	^ representative = (aPowerSeries representative truncatedTo: precision)! !
 
 !PowerSeries methodsFor: 'operations' stamp: 'len 4/15/2020 08:00:50'!
 * anElement
@@ -38590,10 +38573,10 @@ normalized
 	"Answer a unique choice of associate. See >>unit."
 	^ self * self unit inverse! !
 
-!Tuple methodsFor: 'accessing' stamp: 'len 4/21/2018 23:11:10'!
+!Tuple methodsFor: 'accessing' stamp: 'len 5/9/2020 10:01:13'!
 numerator
 	self scalars isLocalization ifFalse: [^ self].
-	^ self * self denominator over: self scalars integers! !
+	^ self * (self scalars !! self denominator) over: self scalars integers! !
 
 !Tuple methodsFor: 'accessing' stamp: 'len 5/8/2019 04:06:16'!
 scalars
@@ -42714,9 +42697,9 @@ run
 					m _ m + 1]]].
 	^ L! !
 
-!CRT methodsFor: 'initialization' stamp: 'len 4/18/2018 06:23:08'!
+!CRT methodsFor: 'initialization' stamp: 'len 5/9/2020 13:54:30'!
 moduli: anArray
-	| one k mj p euclid d |
+	| one k mj p euclid |
 	moduli _ anArray.
 	"Precomputations:"
 	one _ moduli first one.
@@ -42724,13 +42707,13 @@ moduli: anArray
 	C _ Array new: k.
 	C at: 1 put: one.
 	2 to: k do: [:j|
+		| u |
 		mj _ moduli at: j.
 		p _ one. 1 to: j-1 do: [:i| p _ p * (moduli at: i) \\ mj].
-		euclid _ ExtendedEuclid on: {p. mj}.
-		d _ euclid gcd.
-		d ~= one ifTrue: [^ self error: 'the moduli are not coprime'].
-		euclid verify ifFalse: [self error: 'failed'].
-		C at: j put: euclid bezout first]! !
+		euclid _ p xgcd: mj.
+		(euclid at: 1) ~= one ifTrue: [^ self error: 'the moduli are not coprime'].
+		p * (u _ euclid at: 2) + (mj * (euclid at: 3)) = one ifFalse: [self error: 'failed'].
+		C at: j put: u]! !
 
 !CRT methodsFor: 'computing' stamp: 'len 4/26/2018 08:16:09'!
 solve: remainders
@@ -42753,16 +42736,16 @@ solve: remainders
 mod: anArray
 	^ self new moduli: anArray! !
 
-!CRT class methodsFor: 'instance creation' stamp: 'len 4/26/2018 20:56:04'!
+!CRT class methodsFor: 'instance creation' stamp: 'len 5/9/2020 13:55:54'!
 solve: aCollection
 	| x m |
 	x _ aCollection first.
 	m _ x modulus.
-	aCollection allButFirstDo: [:each| | xi mi bezout |
+	aCollection allButFirstDo: [:each| | xi mi euclid |
 		xi _ each.
 		mi _ xi modulus.
-		bezout _ (ExtendedEuclid on: {m. mi}) bezout.
-		x _ bezout first * m * xi representative + (bezout second * mi * x representative).
+		euclid _ m xgcd: mi.
+		x _ (euclid at: 2) * m * xi representative + ((euclid at: 3) * mi * x representative).
 		m _ m*mi.
 		x _ x % m].
 	^ x! !
@@ -45895,6 +45878,10 @@ adaptToAlgebraic: rcvr andSend: selector
 adaptToRealAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (RealAlgebraicNumber fromRational: self)! !
 
+!Fraction methodsFor: '*domains' stamp: 'len 5/9/2020 10:16:38'!
+asRational
+	^ Rational numerator: numerator denominator: denominator! !
+
 !Fraction methodsFor: '*domains' stamp: 'len 2/10/2016 21:13'!
 bitSize
 	^ numerator bitSize + denominator bitSize! !
@@ -45938,13 +45925,6 @@ valuation: p
 	"Answer the exact division of the receiver by the argument."
 	^ self // anInteger! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/3/2020 08:48:13'!
-: anObject
-"	anObject isInteger ifTrue: [^ self / anObject]."
-	anObject isInteger ifTrue: [^ Rational numerator: self denominator: anObject].
-	(anObject isKindOf: Rational) ifTrue: [^ anObject denominator * self : anObject numerator]. "optimize!!"
-	^ DomainError signal! !
-
 !Integer methodsFor: '*domains' stamp: 'len 8/6/2019 06:18:27'!
 | anInteger
 	"Answer true if the receiver divides anInteger."
@@ -45961,7 +45941,7 @@ Stirling: anInteger
 	anInteger = 2 ifTrue: [^ 2 ^ (self-1) - 1].
 	^ anInteger*(self - 1 Stirling: anInteger) + (self - 1 Stirling: anInteger - 1)! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/3/2020 09:56:00'!
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 09:35:49'!
 abs: p
 	"Answer the p-adic absolute value of the receiver."
 	| powers q |
@@ -45969,19 +45949,27 @@ abs: p
 	q _ self abs.
 	powers _ 1.
 	[p | q] whileTrue: [powers _ powers * p. q _ q // p].
-	^ 1 : powers! !
+	^ powers asRatio reciprocal! !
 
 !Integer methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:45'!
 adaptToAlgebraic: rcvr andSend: selector
 	^ rcvr perform: selector with: (ComplexAlgebraicNumber fromRational: self)! !
 
-!Integer methodsFor: '*domains' stamp: 'len 1/13/2016 03:56'!
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 10:11:44'!
 adaptToRealAlgebraic: rcvr andSend: selector
-	^ rcvr perform: selector with: (RealAlgebraicNumber fromRational: self)! !
+	^ rcvr perform: selector with: (RealAlgebraicNumber fromRational: self asRatio)! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/14/2016 14:35:53'!
 additiveOrder
 	^ self == 0 ifTrue: [1] ifFalse: [Infinity positive]! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 10:17:06'!
+asRatio
+	^ self asRational! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 10:16:58'!
+asRational
+	^ Rational numerator: self denominator: 1! !
 
 !Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:45'!
 bitCount
@@ -46043,10 +46031,6 @@ count: aBlock
 	answer _ 0.
 	self timesRepeat: [aBlock value ifTrue: [answer _ answer + 1]].
 	^ answer! !
-
-!Integer methodsFor: '*domains' stamp: 'len 11/19/2015 18:29'!
-denominator
-	^ 1! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/26/2016 21:24:14'!
 divisors
@@ -46288,10 +46272,6 @@ normalized
 numberOfDivisors
 	^ self primeSignature inject: 1 into: [:x :each| x * (each + 1)]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 11/19/2015 18:29'!
-numerator
-	^ self! !
-
 !Integer methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:04'!
 parent
 	^ ZZ! !
@@ -46476,10 +46456,10 @@ valuation: p
 	[p | q] whileTrue: [answer _ answer + 1. q _ q // p].
 	^ answer! !
 
-!Integer methodsFor: '*domains' stamp: 'len 3/6/2017 16:27:34'!
+!Integer methodsFor: '*domains' stamp: 'len 5/9/2020 14:04:58'!
 xgcd: anInteger
 	"Extended Euclidean algorithm.
-	Answer an array {x. u. v} where self * u + (anInteger * v) = x, and x = (self gcd: anInteger)."
+	Answer an array {g. u. v} where self * u + (anInteger * v) = g, and g = (self gcd: anInteger)."
 	| a b s1 t1 s t r1 r |
 	a _ self. b _ anInteger.
 	s1 _ 0. s _ 1.
