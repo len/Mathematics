@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 6:03:14 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 May 2020 at 2:35:17 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 573!
+!provides: 'Domains' 1 574!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -5083,6 +5083,14 @@ printOn: aStream
 	elements do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
 	aStream nextPut: $}! !
 
+!Iterator methodsFor: 'printing' stamp: 'len 5/10/2020 10:16:19'!
+printOn: aStream
+	| count |
+	aStream nextPut: ${.
+	count _ 0.
+	self do: [:element| aStream print: element] separatedBy: [(count _ count + 1) > 10 ifTrue: [aStream nextPutAll: '...)'. ^ self] ifFalse: [aStream nextPutAll: ', ']].
+	aStream nextPut: $}! !
+
 !Graph methodsFor: 'printing' stamp: 'len 7/13/2016 22:54'!
 printOn: aStream
 	self isEmpty ifTrue: [aStream nextPut: Character emptySet. ^ self].
@@ -7569,14 +7577,6 @@ keysAndValuesDo: aBlock
 	index := 1.
 	self do: [:el | aBlock value: index value: el.  index := index + 1]! !
 
-!Iterator methodsFor: 'printing' stamp: 'len 7/5/2019 15:30:51'!
-printElementsOn: aStream
-	| count |
-	aStream nextPut: $(.
-	count _ 0.
-	self do: [:element| aStream print: element] separatedBy: [(count _ count + 1) > 10 ifTrue: [aStream nextPutAll: '...)'. ^ self] ifFalse: [aStream nextPutAll: ', ']].
-	aStream nextPut: $)! !
-
 !Iterator methodsFor: 'removing'!
 remove: oldObject ifAbsent: anExceptionBlock 
 	"Iterators are read-only."
@@ -7700,10 +7700,12 @@ adjacencyMatrix: vertices
 	"Answer the adjacency matrix of the receiver, using the vertex ordering given by the argument."
 	^ ZZ matrix: vertices size evaluating: [:i :j| self multiplicityFrom: (vertices at: i) to: (vertices at: j)]! !
 
-!Graph methodsFor: 'operations' stamp: 'len 7/25/2016 02:32'!
+!Graph methodsFor: 'operations' stamp: 'len 5/10/2020 09:52:40'!
 automorphisms
 	"Answer the group of symmetries of the receiver, i.e. the group of permutations of vertices that don't change the graph."
-	^ (SymmetricGroup on: self values) select: [:each| (self apply: each) = self]! !
+	| S |
+	S _ SymmetricGroup on: self values.
+	^ S span: (S select: [:each| (self apply: each) = self])! !
 
 !Graph methodsFor: 'operations' stamp: 'len 7/25/2016 02:37'!
 automorphismsWithInvariant: aBlock
@@ -12544,12 +12546,12 @@ anySatisfy: aBlock
 	self do: [:each| (aBlock value: each) ifTrue: [^ true]].
 	^ false! !
 
-!Structure methodsFor: 'enumerating' stamp: 'len 5/8/2020 15:50:17'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/10/2020 12:01:57'!
 collect: aBlock
-	| elements |
-	elements _ Set new.
-	self do: [:each| elements add: (aBlock value: each)].
-	^ FormalSet newFrom: elements! !
+	^ Iterator on: [:iteratorBlock|
+		| visited image |
+		visited _ Set new.
+		self do: [:each| visited add: (image _ aBlock value: each) ifAbsent: [iteratorBlock value: image]]]! !
 
 !Structure methodsFor: 'enumerating' stamp: 'len 9/16/2018 16:11:56'!
 count: aBlock
@@ -12608,12 +12610,13 @@ noneSatisfy: aBlock
 product: aBlock
 	^ self elements product: aBlock! !
 
-!Structure methodsFor: 'enumerating' stamp: 'len 5/8/2020 15:50:39'!
+!Structure methodsFor: 'enumerating' stamp: 'len 5/10/2020 11:52:53'!
+reject: aBlock
+	^ Iterator on: [:iteratorBlock| self do: [:each| (aBlock value: each) ifFalse: [iteratorBlock value: each]]]! !
+
+!Structure methodsFor: 'enumerating' stamp: 'len 5/10/2020 09:45:49'!
 select: aBlock
-	| elements |
-	elements _ Set new.
-	self do: [:each| (aBlock value: each) ifTrue: [elements add: each]].
-	^ FormalSet newFrom: elements! !
+	^ Iterator on: [:iteratorBlock| self do: [:each| (aBlock value: each) ifTrue: [iteratorBlock value: each]]]! !
 
 !Structure methodsFor: 'enumerating' stamp: 'len 5/3/2018 01:29:16'!
 sum: aBlock
@@ -13513,14 +13516,6 @@ asMonoid
 	"Forgetful functor to the category of monoids."
 	^ self propertyAt: #asMonoid ifAbsentPut: [Monoid newFrom: (self propertyAt: #elements ifAbsent: [self])]! !
 
-!Group methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:44'!
-collect: aBlock
-	"Answer the subgroup resulting of mapping the elements of the receiver by aBlock."
-	| elements |
-	elements _ Set new.
-	self do: [:each| elements add: (aBlock value: each)].
-	^ self copyEmpty elements: elements! !
-
 !Group methodsFor: 'enumerating' stamp: 'len 5/5/2019 18:40:47'!
 do: aBlock
 	| generators current previous |
@@ -13540,14 +13535,6 @@ do: aBlock
 			current add: xy ifAbsent: [aBlock value: xy]]].
 	previous size < current size] whileTrue.
 	self propertyAt: #elements put: current! !
-
-!Group methodsFor: 'enumerating' stamp: 'len 5/1/2016 23:45'!
-select: aBlock
-	"Answer the subgroup resulting of the selection by aBlock."
-	| elements |
-	elements _ Set new.
-	self do: [:each| (aBlock value: each) ifTrue: [elements add: each]].
-	^ self copyEmpty elements: elements! !
 
 !Group methodsFor: 'graphs' stamp: 'len 5/5/2019 18:37:46'!
 cayleyGraph: generators
@@ -13722,9 +13709,9 @@ abelianization
 center
 	^ self centralizerOf: self! !
 
-!Group methodsFor: 'operations' stamp: 'len 5/5/2019 18:38:13'!
+!Group methodsFor: 'operations' stamp: 'len 5/10/2020 09:50:58'!
 centralizerOf: aCollection
-	^ self select: [:x| aCollection allSatisfy: [:y| x · y = (y · x)]]! !
+	^ self span: (self select: [:x| aCollection allSatisfy: [:y| x · y = (y · x)]])! !
 
 !Group methodsFor: 'operations' stamp: 'len 3/6/2017 16:33:57'!
 commutator
@@ -13834,11 +13821,11 @@ perfectCore
 	self derivedSeriesDo: [:each| answer _ each].
 	^ answer! !
 
-!Group methodsFor: 'operations' stamp: 'len 5/2/2020 17:36:38'!
+!Group methodsFor: 'operations' stamp: 'len 5/10/2020 11:48:59'!
 span: aCollection
 	"Answer the subgroup generated by the argument."
 	self isAmbient ifFalse: [^ self ambient span: aCollection].
-	^ self species new ambient: self; generators: aCollection! !
+	^ self species new ambient: self; generators: (aCollection collect: [:each| self !! each])! !
 
 !Group methodsFor: 'random' stamp: 'len 5/25/2019 04:43:18'!
 atRandom: aRandom
@@ -14002,6 +13989,10 @@ computeGenerators
 						elements add: x · y]].
 				previous size = elements size] whileFalse]].
 	^ generators! !
+
+!Group methodsFor: 'private' stamp: 'len 5/10/2020 11:48:31'!
+generators: aCollection
+	^ super generators: (aCollection asSet reject: [:each| each isIdentity])! !
 
 !Group methodsFor: 'private' stamp: 'len 5/5/2019 17:57:19'!
 raise: anElement to: anInteger
@@ -15046,10 +15037,6 @@ reduced
 "
 	self notYetImplemented! !
 
-!PermutationGroup methodsFor: 'operations' stamp: 'len 2/1/2018 23:47:51'!
-span: aCollection
-	^ self ambient span: aCollection! !
-
 !PermutationGroup methodsFor: 'testing' stamp: 'len 1/31/2018 18:41:29'!
 includes: aPermutation
 	^ (self ambient includes: aPermutation) and: [self contains: aPermutation]! !
@@ -15294,10 +15281,6 @@ do: aBlock
 commutator
 	^ self alternatingSubgroup! !
 
-!SymmetricGroup methodsFor: 'operations' stamp: 'len 5/24/2019 17:04:24'!
-span: aCollection
-	^ self species new ambient: self; generators: (aCollection collect: [:each| self !! each])! !
-
 !SymmetricGroup methodsFor: 'random' stamp: 'len 5/25/2019 06:25:25'!
 atRandom: aRandom
 	^ self images: ((1 to: self degree) asArray shuffledBy: aRandom)! !
@@ -15417,9 +15400,11 @@ space: aRing
 on: aRing
 	^ self new space: aRing! !
 
-!ModularIntegerUnitGroup methodsFor: 'accessing' stamp: 'len 6/9/2019 11:42:45'!
+!ModularIntegerUnitGroup methodsFor: 'accessing' stamp: 'len 5/10/2020 11:04:55'!
 generators
-	^ {self space primitiveRoot}! !
+	self propertyAt: #generators ifPresent: [:aCollection| ^ aCollection].
+	self isCyclic ifTrue: [^ self propertyAt: #generators put: {self space primitiveRoot}].
+	^ super generators! !
 
 !ModularIntegerUnitGroup methodsFor: 'accessing' stamp: 'len 5/6/2019 02:41:40'!
 modulus
@@ -15665,10 +15650,6 @@ reynolds
 	action _ self polynomialAction.
 	^ self space coordinateRing to: self invariantsRing evaluating: [:p| (self sum: [:g| action value: {g. p}]) / order]! !
 
-!LinearGroup methodsFor: 'operations' stamp: 'len 9/26/2018 22:52:14'!
-span: aCollection
-	^ self ambient span: aCollection! !
-
 !LinearGroup methodsFor: 'printing' stamp: 'len 12/8/2016 08:58:51'!
 shortName
 	^ nil! !
@@ -15806,10 +15787,6 @@ commutator
 !GeneralLinearGroup methodsFor: 'operations' stamp: 'len 9/26/2018 23:00:39'!
 orthogonal
 	^ OrthogonalGroup on: self space! !
-
-!GeneralLinearGroup methodsFor: 'operations' stamp: 'len 9/26/2018 22:53:03'!
-span: aCollection
-	^ self copyEmpty generators: (aCollection collect: [:each| self !! each])! !
 
 !GeneralLinearGroup methodsFor: 'operations' stamp: 'len 9/26/2018 23:01:08'!
 special
@@ -16497,11 +16474,6 @@ matrix: shape scalar: anElement
 zeroMatrix: shape
 	^ self matrix: shape scalar: self zero! !
 
-!Ring methodsFor: 'elements-operations' stamp: 'len 6/5/2019 13:36:06'!
-divide: anElement by: anotherElement
-	"Answer the quotient and remainder of the division of anElement by anotherElement."
-	^ {anElement // anotherElement. anElement \\ anotherElement}! !
-
 !Ring methodsFor: 'elements-tuples' stamp: 'len 3/9/2020 20:17:15'!
 tuple: anArray
 	(anArray isTuple and: [anArray scalars == self]) ifTrue: [^ anArray].
@@ -16536,23 +16508,11 @@ zeroTuple: anInteger
 idealsDo: aBlock
 	^ self subclassResponsibility! !
 
-!Ring methodsFor: 'enumerating' stamp: 'len 5/4/2020 10:01:32'!
-irreduciblesDo: aBlock
-	self do: [:each| each isIrreducible ifTrue: [aBlock value: each]]! !
-
 !Ring methodsFor: 'enumerating' stamp: 'len 6/9/2019 16:21:27'!
 primeIdealsDo: aBlock
 	self isField ifTrue: [aBlock value: self zeroIdeal. ^ self].
 	self isDVR ifTrue: [aBlock value: self zeroIdeal; value: self maximalIdeal. ^ self].
 	self idealsDo: [:each| each isPrime ifTrue: [aBlock value: each]]! !
-
-!Ring methodsFor: 'enumerating' stamp: 'len 5/4/2020 09:33:25'!
-primesDo: aBlock
-	self do: [:each| each isPrime ifTrue: [aBlock value: each]]! !
-
-!Ring methodsFor: 'enumerating' stamp: 'len 5/4/2020 10:02:32'!
-reduciblesDo: aBlock
-	self do: [:each| each isReducible ifTrue: [aBlock value: each]]! !
 
 !Ring methodsFor: 'enumerating' stamp: 'len 3/11/2020 16:58:35'!
 tuples: n do: aBlock
@@ -16687,9 +16647,9 @@ freeAlgebraIn: anIntegerOrCollection
 ideals
 	^ Iterator on: self performing: #idealsDo:! !
 
-!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 16:40:26'!
+!Ring methodsFor: 'operations' stamp: 'len 5/10/2020 10:13:24'!
 irreducibles
-	^ Iterator on: self performing: #irreduciblesDo:! !
+	^ self select: [:each| each isIrreducible]! !
 
 !Ring methodsFor: 'operations' stamp: 'len 7/31/2019 05:52:35'!
 localizationAt: aPrimeIdeal
@@ -16714,9 +16674,9 @@ localizationAwayFrom: aPrimeElement
 	L addMap: (L into: F evaluating: [:f| F numerator: f numerator denominator: f denominator])." "<- add also retraction"
 	^ L! !
 
-!Ring methodsFor: 'operations' stamp: 'len 8/7/2019 05:00:58'!
+!Ring methodsFor: 'operations' stamp: 'len 5/10/2020 12:07:13'!
 nilradical
-	"Answer the ideal consisting of all nilpotent elements, i.e. all x such that there exists some n with x^n = 0. It is the intersection of all prime ideals."
+	"Answer the ideal consisting of all nilpotent elements, i.e. all x such that there exists some n with x^n = 0. It is the intersection of all prime ideals. (See also >>radical.)"
 	^ self zeroIdeal radical
 	
 "alternative:
@@ -16762,13 +16722,13 @@ powerSeriesIn: anIntegerOrCollection
 primeIdeals
 	^ Iterator on: self performing: #primeIdealsDo:! !
 
-!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 16:40:16'!
+!Ring methodsFor: 'operations' stamp: 'len 5/10/2020 10:13:57'!
 primes
-	^ Iterator on: self performing: #primesDo:! !
+	^ self select: [:each| each isPrime]! !
 
-!Ring methodsFor: 'operations' stamp: 'len 5/4/2020 10:08:20'!
+!Ring methodsFor: 'operations' stamp: 'len 5/10/2020 12:07:26'!
 radical
-	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals. In a local ring, it is equal to the set of non-invertible elements, i.e. the maximal ideal."
+	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals. In a local ring, it is equal to the set of non-invertible elements, i.e. the maximal ideal. (See also >>nilradical.)"
 	| generators one |
 	self isLocal ifTrue: [^ self maximalIdeal].
 	self isFinite ifFalse: [^ self notYetImplemented].
@@ -16788,9 +16748,9 @@ reduced
 	"Answer the associated reduced ring. This is the quotient by the ideal of all nilpotent elements (the nilradical)."
 	^ self / self nilradical! !
 
-!Ring methodsFor: 'operations' stamp: 'len 6/20/2019 18:21:56'!
+!Ring methodsFor: 'operations' stamp: 'len 5/10/2020 10:14:32'!
 reducibles
-	^ Iterator on: self performing: #reduciblesDo:! !
+	^ self select: [:each| each isReducible]! !
 
 !Ring methodsFor: 'operations' stamp: 'len 6/7/2019 10:56:08'!
 residueField
@@ -17286,6 +17246,10 @@ extension: aPolynomial
 !RationalField methodsFor: 'operations' stamp: 'len 1/20/2018 19:03:44'!
 realClosure
 	^ RR! !
+
+!RationalField methodsFor: 'testing' stamp: 'len 5/10/2020 09:37:11'!
+includes: anObject
+	^ anObject isMemberOf: Rational! !
 
 !RationalField methodsFor: 'testing' stamp: 'len 1/8/2017 07:50:01'!
 isField
@@ -19218,6 +19182,13 @@ dimension
 	"Answer the Krull dimension of the receiver."
 	^ 1! !
 
+!RationalIntegerRing methodsFor: 'accessing' stamp: 'len 5/10/2020 08:45:11'!
+primes
+	^ Iterator on: [:aBlock| | p |
+		p _ 2.
+		[aBlock value: p.
+		p _ p nextPrime] repeat]! !
+
 !RationalIntegerRing methodsFor: 'accessing' stamp: 'len 4/24/2016 02:58'!
 size
 	^ Aleph new! !
@@ -19263,13 +19234,6 @@ primeIdealsDo: aBlock
 	| p |
 	p _ 0.
 	[aBlock value: self * p.
-	p _ p nextPrime] repeat! !
-
-!RationalIntegerRing methodsFor: 'enumerating' stamp: 'len 6/20/2019 17:45:26'!
-primesDo: aBlock
-	| p |
-	p _ 2.
-	[aBlock value: p.
 	p _ p nextPrime] repeat! !
 
 !RationalIntegerRing methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:58:29'!
@@ -19972,10 +19936,10 @@ scalars
 size
 	^ Aleph new * self scalars size! !
 
-!PolynomialRing methodsFor: 'comparing' stamp: 'len 8/8/2019 04:36:59'!
+!PolynomialRing methodsFor: 'comparing' stamp: 'len 5/10/2020 09:34:13'!
 = anObject
 	self == anObject ifTrue: [^ true].
-	^ (anObject isKindOf: PolynomialRing) and: [self scalars = anObject scalars and: [self rank = anObject rank and: [self ordering = anObject ordering]]]! !
+	^ anObject class == self class and: [self scalars = anObject scalars and: [self rank = anObject rank and: [self ordering = anObject ordering]]]! !
 
 !PolynomialRing methodsFor: 'comparing' stamp: 'len 8/30/2016 07:09'!
 ~ aPolynomialRing
@@ -20056,7 +20020,7 @@ orderedBy: aMonomialOrdering
 over: aRing
 	^ self class monomials: self monomials over: aRing! !
 
-!PolynomialRing methodsFor: 'elements' stamp: 'len 4/9/2020 18:13:41'!
+!PolynomialRing methodsFor: 'elements' stamp: 'len 5/10/2020 09:39:19'!
 adapt: anElement
 	| f parts |
 	(anElement isInteger or: [anElement isFraction])
@@ -20068,7 +20032,7 @@ adapt: anElement
 	f _ anElement.
 	f parent scalars = self scalars ifFalse: [f _ f over: self scalars].
 	(f indeterminates allSatisfy: [:each| each <= self rank])
-		ifFalse: [self error: 'unknown indeterminates are present'].
+		ifFalse: [^ nil]. "self error: 'unknown indeterminates are present'"
 	(f isKindOf: UnivariatePolynomial)
 		ifTrue:
 			[self isUnivariate ifTrue: [^ self coefficients: f coefficients].
@@ -20412,6 +20376,11 @@ localization
 proj
 	"Answer the projective space associated to the receiver, Proj(R)."
 	^ ProjectiveSpace coordinateRing: self! !
+
+!PolynomialRing methodsFor: 'operations' stamp: 'len 5/10/2020 12:12:23'!
+radical
+	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals. In a polynomial ring, it is the same as the nilradical."
+	^ self nilradical! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 6/9/2019 15:22:18'!
 span: aCollection
@@ -28906,12 +28875,12 @@ asPolynomial
 	P _ self domain coordinateRing.
 	^ (P tuple: P rank evaluating: [:i| P x: i]) · (matrix asTuple over: P)! !
 
-!FreeModuleMap methodsFor: 'converting' stamp: 'len 4/13/2020 01:45:42'!
+!FreeModuleMap methodsFor: 'converting' stamp: 'len 5/9/2020 22:27:48'!
 asRationalMap
 	| P polynomials |
 	P _ self domain coordinateRing.
 	polynomials _ (matrix over: P) * (P tuple: P rank evaluating: [:i| P x: i]).
-	^ RationalMap from: P spec to: self codomain coordinateRing spec polynomials: polynomials asArray! !
+	^ RationalMap from: P spec to: self codomain coordinateRing spec representatives: polynomials! !
 
 !FreeModuleMap methodsFor: 'converting' stamp: 'len 5/14/2019 20:46:13'!
 asTensor
@@ -29063,10 +29032,6 @@ size
 	"Answer the number of components of the receiver."
 	^ self codomain ambient rank! !
 
-!RationalMap methodsFor: 'accessing-private' stamp: 'len 12/28/2016 21:54:40'!
-representatives: anArray 
-	self propertyAt: #representatives put: anArray asArray! !
-
 !RationalMap methodsFor: 'arithmetic' stamp: 'len 1/20/2018 22:05:44'!
 * anObject
 	^ self species from: self domain to: self codomain representatives: self representatives * anObject! !
@@ -29201,6 +29166,10 @@ isRegular
 	(self domain ambient isKindOf: ProjectiveSpace) ifTrue: [^ self isConstant].
 	^ DomainError signal! !
 
+!RationalMap methodsFor: 'private' stamp: 'len 5/9/2020 22:18:28'!
+representatives: aTuple
+	self propertyAt: #representatives put: aTuple! !
+
 !RationalMap methodsFor: 'private' stamp: 'len 1/10/2017 18:47:11'!
 species
 	^ RationalMap! !
@@ -29225,17 +29194,11 @@ from: aDomain to: aCodomain evaluating: anExpression
 	F _ aDomain ambient functionField.
 	^ self from: aDomain to: aCodomain representatives: (anExpression value: (F tuple: aDomain ambient rank evaluating: [:i| F x: i]))! !
 
-!RationalMap class methodsFor: 'instance creation' stamp: 'len 1/3/2017 08:30:11'!
-from: aDomain to: aCodomain polynomials: anArrayOfPolynomials
-	| F |
-	F _ aDomain ambient functionField.
-	^ self from: aDomain to: aCodomain representatives: (anArrayOfPolynomials collect: [:each| F embed: each])! !
-
-!RationalMap class methodsFor: 'instance creation' stamp: 'len 12/28/2016 21:50:27'!
+!RationalMap class methodsFor: 'instance creation' stamp: 'len 5/9/2020 22:18:46'!
 from: aDomain to: aCodomain representatives: anArrayOfRationalFunctions
 	((aDomain isProjective or: [aCodomain isProjective]) and: [anArrayOfRationalFunctions anySatisfy: [:any| any isHomogeneous not]])
 		ifTrue: [^ self error: 'not homogeneous'].
-	^ self new domain: aDomain; codomain: aCodomain; representatives: anArrayOfRationalFunctions! !
+	^ self new domain: aDomain; codomain: aCodomain; representatives: (aDomain ambient functionField tuple: anArrayOfRationalFunctions)! !
 
 !EllipticCurveIsogeny methodsFor: 'as yet unclassified' stamp: 'len 3/6/2017 16:48:06'!
 dual
@@ -33040,6 +33003,10 @@ annihilator
 	self parent isIntegralDomain ifTrue: [^ self parent zeroIdeal].
 	^ self subclassResponsibility! !
 
+!RingElement methodsFor: 'accessing' stamp: 'len 5/10/2020 11:56:35'!
+associates
+	^ self parent units collect: [:each| self*each]! !
+
 !RingElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:05:23'!
 normalized
 	"Answer a unique choice of associate. See >>unit."
@@ -33110,9 +33077,11 @@ zero
 "	^ self isZero not and: [self parent * self includes: anElement]"
 ! !
 
-!RingElement methodsFor: 'comparing' stamp: 'len 5/9/2020 09:04:30'!
+!RingElement methodsFor: 'comparing' stamp: 'len 5/10/2020 10:56:45'!
 ~ anElement
-	"Answer true if the receiver and the argument are associates."
+	"Answer true if the receiver and the argument are associates.
+	Note that we define 'a ~ b' if there's a unit 'u' such that 'a = b*u',
+	this relation is called 'strongly associate' by some authors."
 	^ self normalized = anElement normalized! !
 
 !RingElement methodsFor: 'comparing' stamp: 'len 7/17/2019 08:29:10'!
@@ -33171,10 +33140,10 @@ asRatio
 / anElement
 	^ self * anElement reciprocal! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 04:31:06'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 22:49:27'!
 // anElement
-	"Answer the quotient of the Euclidean division of the receiver by anElement."
-	^ self subclassResponsibility! !
+	"Answer the quotient of the division of the receiver by anElement."
+	^ self div: anElement! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 14:29:29'!
 \\ anElement
@@ -33199,7 +33168,12 @@ asRatio
 	self isZero ifTrue: [^ self].
 	^ self // anElement! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/4/2020 02:20:18'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 22:43:14'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
+	^ self subclassResponsibility! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 22:48:28'!
 gcd: anElement
 	"Answer the greatest common divisor of the receiver and the argument.
 	The result is the canonical associate (normalized)."
@@ -33207,20 +33181,25 @@ gcd: anElement
 	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
 	a _ self.
 	b _ anElement.
-	[a isZero] whileFalse: [a _ b \\ (b _ a)].
+	[a isZero] whileFalse: [a _ b mod: (b _ a)].
 	^ b normalized! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 8/12/2019 10:54:31'!
 inverse
 	^ self subclassResponsibility! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 6/17/2019 11:19:00'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 23:31:27'!
 lcm: anElement
 	"Answer the least common multiple of the receiver and the argument.
 	The result is the canonical associate (normalized)."
 	self isZero ifTrue: [^ self].
 	anElement isZero ifTrue: [^ anElement].
-	^ (self // (self gcd: anElement) * anElement) normalized! !
+	^ (self ÷ (self gcd: anElement) * anElement) normalized! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 22:49:07'!
+mod: anElement
+	"Answer the remainder of the Euclidean division of the receiver by anElement."
+	^ self - ((self div: anElement) * anElement)! !
 
 !RingElement methodsFor: 'operations' stamp: 'len 9/24/2018 02:09:14'!
 negated
@@ -33256,15 +33235,17 @@ reciprocal
 squared
 	^ self * self! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 09:24:53'!
-stabilizatorWith: b modulo: N
+!RingElement methodsFor: 'operations' stamp: 'len 5/10/2020 11:00:58'!
+stabilizerWith: b modulo: N
 	"If the receiver is 'a', answer 'c' such that '<a + cb, N> = <a, b, N>'."
 	self notYetImplemented! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/9/2020 14:05:14'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/10/2020 13:44:59'!
 xgcd: anElement
 	"Extended Euclidean algorithm.
-	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement)."
+	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement). The following unimodular matrix can be constructed from the output:
+		[ u          v ] [a]
+		[-b/g  a/g] [b] = (g 0)."
 	| a b zero one s1 t1 s t r1 r u |
 	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #xgcd:].
 	a _ self.
@@ -33289,6 +33270,10 @@ xgcd: anElement
 !RingElement methodsFor: 'testing' stamp: 'len 9/25/2018 15:26:51'!
 isIdempotent
 	^ self squared = self one! !
+
+!RingElement methodsFor: 'testing' stamp: 'len 5/10/2020 11:49:43'!
+isIdentity
+	^ self isOne! !
 
 !RingElement methodsFor: 'testing' stamp: 'len 5/4/2020 09:27:40'!
 isIrreducible
@@ -33442,11 +33427,13 @@ asRatio
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
 	^ self class new parent: parent; ratio: ratio + anElement asRatio! !
 
-!Germ methodsFor: 'operations' stamp: 'len 5/8/2020 18:07:57'!
-// anElement
+!Germ methodsFor: 'operations' stamp: 'len 5/9/2020 22:57:49'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #div:].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ parent zero].
 	^ self unit / anElement unit * (parent uniformizer ^ v)! !
 
@@ -33780,10 +33767,6 @@ asInteger
 		ifTrue: [^ self class numerator: numerator * anObject denominator + (denominator * anObject numerator) denominator: denominator * anObject denominator].
 	^ super + anObject! !
 
-!Rational methodsFor: 'operations' stamp: 'len 7/21/2019 09:00:18'!
-// anObject
-	^ (self / anObject) floor! !
-
 !Rational methodsFor: 'operations' stamp: 'len 7/17/2019 03:34:48'!
 abs
 	^ self class reducedNumerator: numerator abs denominator: denominator! !
@@ -33844,14 +33827,12 @@ positive
 strictlyPositive
 	^ numerator strictlyPositive! !
 
-!RationalFunction methodsFor: 'operations' stamp: 'len 4/7/2018 01:05:41'!
+!RationalFunction methodsFor: 'operations' stamp: 'len 5/9/2020 23:28:55'!
 derivative
-	"Answer the derivative of the receiver."
-
-	| num gcd |
-	num _ denominator * numerator derivative - (numerator * denominator derivative).
-	gcd _ denominator gcd: num.
-	^ self class numerator: num // gcd denominator: (denominator // gcd) squared * gcd! !
+	| a g |
+	a _ denominator * numerator derivative - (numerator * denominator derivative).
+	g _ denominator gcd: a.
+	^ self class numerator: a // g denominator: (denominator // g) squared * g! !
 
 !RationalFunction methodsFor: 'operations' stamp: 'len 4/7/2018 01:06:26'!
 homogenized
@@ -34053,17 +34034,20 @@ zero
 	(parent includes: anElement) ifFalse: [^ self  adapt: anElement andSend: #+].
 	^ parent project: representative + anElement representative! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/9/2020 17:51:04'!
+!Residue methodsFor: 'operations' stamp: 'len 5/10/2020 14:27:11'!
 ÷ anElement
 	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
+	| xgcd |
 	self isZero ifTrue: [^ self].
-	"this is wrong:"
-	^ parent project: representative ÷ anElement representative! !
+	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	xgcd _ anElement representative xgcd: self modulus.
+	^ parent project: (xgcd at: 2) * (representative ÷ (xgcd at: 1))! !
 
-!Residue methodsFor: 'operations' stamp: 'len 8/14/2019 04:33:01'!
+!Residue methodsFor: 'operations' stamp: 'len 5/10/2020 14:22:21'!
 gcd: anElement
+	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
-	^ parent representative: (self normalized lift gcd: anElement normalized lift)! !
+	^ (parent project: (representative gcd: anElement representative)) normalized! !
 
 !Residue methodsFor: 'operations' stamp: 'len 8/12/2019 10:56:08'!
 inverse
@@ -34080,6 +34064,17 @@ value: anObject
 !Residue methodsFor: 'operations' stamp: 'len 8/14/2019 08:11:41'!
 valueWithArguments: anArray
 	^ representative valueWithArguments: anArray! !
+
+!Residue methodsFor: 'operations' stamp: 'len 5/10/2020 14:22:33'!
+xgcd: anElement
+	"Extended Euclidean algorithm.
+	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement)."
+	| xgcd g u |
+	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	xgcd _ representative xgcd: anElement representative.
+	g _ parent project: (xgcd at: 1).
+	u _ g unit inverse.
+	^ {g * u. (parent project: (xgcd at: 2)) * u. (parent project: (xgcd at: 3)) * u}! !
 
 !Residue methodsFor: 'testing' stamp: 'len 9/15/2018 16:07:02'!
 contains: anObject
@@ -34305,8 +34300,9 @@ squareRoot
 	"Assuming the receiver is a quadratic residue, answer a square root."
 	^ self notYetImplemented! !
 
-!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 6/19/2019 04:30:04'!
-// anElement
+!ModularInteger methodsFor: 'operations-euclidean' stamp: 'len 5/9/2020 22:59:39'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	^ parent project: (representative quotientBy: anElement representative modulo: parent modulus)! !
@@ -34392,10 +34388,11 @@ squareRoot
 	e _ q - (2*r) + 1 // 2.
 	^ ((parent representative: x) ^ r * ((parent representative: a) ^ e)) * ((parent representative: p) ^ (v // 2))! !
 
-!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 5/8/2020 18:06:37'!
-// anElement
+!PrimePowerResidue methodsFor: 'operations-euclidean' stamp: 'len 5/9/2020 23:00:43'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	| v |
-	parent = anElement parent ifFalse: [^ self adapt: anElement andSend: #//].
+	parent = anElement parent ifFalse: [^ self adapt: anElement andSend: #div:].
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
@@ -34573,12 +34570,13 @@ unit
 valuation
 	^ representative content valuation! !
 
-!GaloisRingElement methodsFor: 'operations' stamp: 'len 5/8/2020 18:08:09'!
-// anElement
+!GaloisRingElement methodsFor: 'operations' stamp: 'len 5/9/2020 22:56:20'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
 	| v |
 	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
 	self isZero ifTrue: [^ self].
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #div:].
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
 	^ self unit * anElement unit inverse * (parent p ^ v)! !
 
@@ -34759,15 +34757,6 @@ isWeaklyEqualTo: anElement
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
 	^ parent project: representative + anElement representative precision: (precision min: anElement precision)! !
 
-!AdicInteger methodsFor: 'operations' stamp: 'len 5/8/2020 18:09:14'!
-// anElement
-	| v |
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
-	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
-	self isZero ifTrue: [^ self].
-	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self unit * anElement unit inverse * (parent power: v)! !
-
 !AdicInteger methodsFor: 'operations' stamp: 'len 8/11/2019 11:22:59'!
 << anInteger
 	^ self >> anInteger negated! !
@@ -34778,6 +34767,16 @@ O: anInteger
 	precision <= anInteger ifTrue: [^ self].
 	anInteger > 0 ifFalse: [self error: 'precision must be positive'].
 	^ parent project: representative precision: anInteger! !
+
+!AdicInteger methodsFor: 'operations' stamp: 'len 5/9/2020 22:52:31'!
+div: anElement
+	"Answer the quotient of the Euclidean division of the receiver by anElement."
+	| v |
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #div:].
+	anElement isZero ifTrue: [^ (ZeroDivide dividend: self) signal].
+	self isZero ifTrue: [^ self].
+	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
+	^ self unit * anElement unit inverse * (parent power: v)! !
 
 !AdicInteger methodsFor: 'operations' stamp: 'len 8/12/2019 13:12:34'!
 factors
@@ -34957,17 +34956,17 @@ hash
 		valuation: valuation - anElement valuation
 		unit: unitPart * anElement unitPart inverse! !
 
-!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 18:08:33'!
-// anElement
-	| v |
-	anElement isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self) signal].
-	self isZero ifTrue: [^ self].
-	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ self zero].
-	^ self unit / anElement unit >> v! !
-
 !AdicNumber methodsFor: 'operations' stamp: 'len 6/7/2019 11:37:35'!
 exp
 	^ self notYetImplemented! !
+
+!AdicNumber methodsFor: 'operations' stamp: 'len 5/9/2020 19:05:38'!
+inverse
+	self isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self one) signal].
+	self relativePrecision <= 0 ifTrue: [^ self zero].
+	^ self class new
+		valuation: valuation negated
+		unit: unitPart inverse! !
 
 !AdicNumber methodsFor: 'operations' stamp: 'len 6/7/2019 11:37:32'!
 log
@@ -34978,14 +34977,6 @@ negated
 	^ self class new
 		valuation: valuation
 		unit: unitPart negated! !
-
-!AdicNumber methodsFor: 'operations' stamp: 'len 5/8/2020 17:51:17'!
-reciprocal
-	self isWeaklyZero ifTrue: [^ (ZeroDivide dividend: self one) signal].
-	self relativePrecision <= 0 ifTrue: [^ self zero].
-	^ self class new
-		valuation: valuation negated
-		unit: unitPart inverse! !
 
 !AdicNumber methodsFor: 'operations' stamp: 'len 6/7/2019 15:29:53'!
 sqrt
@@ -35239,14 +35230,14 @@ terms
 		ifTrue: [^ self dividedByScalar: anObject].
 	^ super / anObject! !
 
-!Polynomial methodsFor: 'arithmetic' stamp: 'len 8/5/2019 10:17:12'!
-// anObject
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/9/2020 23:18:53'!
+// anElement
 	"Answer the quotient of the division of the receiver by the argument."
-	(anObject isKindOf: Monomial)
-		ifTrue: [^ self dividedByMonomial: anObject].
-	(self scalars includes: anObject)
-		ifTrue: [^ self apply: [:each| each // anObject]].
-	^ (self divisionBy: anObject) quotient! !
+	(anElement isKindOf: Monomial)
+		ifTrue: [^ self dividedByMonomial: anElement].
+	(self scalars includes: anElement)
+		ifTrue: [^ self apply: [:each| each // anElement]].
+	^ (self divisionBy: anElement) quotient! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:38:28'!
 \\ anObject
@@ -35271,6 +35262,10 @@ terms
 	(self scalars includes: anElement)
 		ifTrue: [^ self apply: [:each| each ÷ anElement]].
 	^ self exactlyDividedBy: anElement! !
+
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/10/2020 00:04:33'!
+div: aPolynomial
+	^ (self divisionBy: aPolynomial) quotient! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 4/24/2018 19:40:24'!
 divisionBy: aPolynomial
@@ -35332,6 +35327,10 @@ lcm: aPolynomial
 	self isZero ifTrue: [^ self].
 	aPolynomial isZero ifTrue: [^ aPolynomial].
 	^ ((self exactlyDividedBy: (self gcd: aPolynomial)) * aPolynomial) normalized! !
+
+!Polynomial methodsFor: 'arithmetic' stamp: 'len 5/10/2020 00:04:45'!
+mod: aPolynomial
+	^ (self divisionBy: aPolynomial) remainder! !
 
 !Polynomial methodsFor: 'arithmetic' stamp: 'len 7/17/2019 11:04:17'!
 pgcd: aPolynomial
@@ -35856,6 +35855,10 @@ isHomogeneous
 	self monomials do: [ :each | each degree = n ifFalse: [^ false]].
 	^ true! !
 
+!Polynomial methodsFor: 'testing' stamp: 'len 5/10/2020 12:34:09'!
+isIdempotent
+	^ self isConstant and: [self independentCoefficient isIdempotent]! !
+
 !Polynomial methodsFor: 'testing' stamp: 'len 4/24/2018 15:33:32'!
 isIrreducible
 	self isConstant ifTrue: [^ false]. "constant polynomials are not reducible nor irreducible"
@@ -35917,12 +35920,14 @@ isUnivariateIn: anInteger
 	self monomialsDo: [:each| (each isUnivariateIn: anInteger) ifFalse: [^ false]].
 	^ true! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 5/4/2020 09:48:45'!
+!Polynomial methodsFor: 'testing' stamp: 'len 5/10/2020 12:30:35'!
 isZeroDivisor
 	"Answer true if there exists a nonzero element that multiplied by the receiver is zero."
 	parent isIntegralDomain ifTrue: [^ self isZero].
-	"if the receiver has only 1 term, we can just check if the coffieient is a zero divisor"
+	"If the receiver has only 1 term, we can just check if the coefficient is a zero divisor:"
+	self support isSingleton ifTrue: [^ self leadingCoefficient isZeroDivisor].
 	parent scalars isFinite ifFalse: [^ self notYetImplemented].
+	"McCoy's theorem:"
 	^ parent scalars anySatisfy: [:any| any isZero not and: [(self * any) isZero]]! !
 
 !Polynomial methodsFor: 'private' stamp: 'len 8/10/2019 08:47:34'!
@@ -37950,9 +37955,11 @@ printQuadraticOn: aStream base: base
 - anObject
 	^ self + anObject negated! !
 
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/12/2016 03:38'!
-/ anObject
-	^ self * anObject reciprocal! !
+!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 5/9/2020 20:35:07'!
+/ aNumber
+	aNumber class = self class
+		ifFalse: [^ aNumber adaptToAlgebraic: self andSend: #+].
+	^ self * aNumber inverse! !
 
 !ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 1/13/2016 04:01'!
 i
@@ -37978,11 +37985,6 @@ negated
 		minimalPolynomial: minimalPolynomial zeroNegation
 		approximation: approximation negated
 		radius: radius! !
-
-!ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 8/12/2019 11:02:18'!
-reciprocal
-	"Answer the multiplicative inverse of the receiver."
-	^ self inverse! !
 
 !ComplexAlgebraicNumber methodsFor: 'arithmetic' stamp: 'len 4/29/2018 17:03:28'!
 squareRoot
@@ -38595,10 +38597,45 @@ scalars
 	"Answer the ring of scalars (or ring of coefficients) of the receiver."
 	^ self subclassResponsibility! !
 
-!Tuple methodsFor: 'accessing' stamp: 'len 5/8/2020 18:13:32'!
+!Tuple methodsFor: 'accessing' stamp: 'len 5/10/2020 06:48:45'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
-	^ (self at: self depth ifAbsent: [^ self scalars one]) unit! !
+	| a tail u uInv |
+	self isEmpty ifTrue: [^ self scalars one].
+	tail _ OrderedCollection new: self size.
+	a _ self last.
+	u _ a unit.
+	uInv _ u inverse.
+	tail add: a * uInv.
+	self size - 1 to: 1 by: -1 do: [:i| | v vInv |
+		a _ self at: i.
+		v _ a unit.
+		vInv _ v inverse.
+		(tail allSatisfy: [:each| each * vInv = each]) ifFalse: [^ u].
+		tail add: a * vInv.
+		u _ u * v.
+		uInv _ uInv * vInv].
+	^ u! !
+
+!Tuple methodsFor: 'accessing' stamp: 'len 5/10/2020 06:16:09'!
+unit2
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	| a tail u uInv |
+	self isEmpty ifTrue: [^ self scalars one].
+	tail _ OrderedCollection new: self size.
+	a _ self last.
+	u _ a unit.
+	uInv _ u inverse.
+	tail add: a * uInv.
+	self size - 1 to: 1 by: -1 do: [:i| | v vInv |
+		a _ self at: i.
+		v _ a unit.
+		vInv _ v inverse.
+		(tail allSatisfy: [:each| each * vInv = each]) ifFalse: [^ u].
+		tail add: a * vInv.
+		u _ u * v.
+		uInv _ uInv * vInv].
+	^ u! !
 
 !Tuple methodsFor: 'accessing' stamp: 'len 3/29/2016 19:06'!
 x
@@ -38882,6 +38919,10 @@ content
 	self do: [:each| answer _ answer gcd: each].
 	^ answer! !
 
+!Tuple methodsFor: 'operations' stamp: 'len 5/9/2020 23:03:05'!
+div: anElement
+	^ self collect: [:each| each div: anElement]! !
+
 !Tuple methodsFor: 'operations' stamp: 'len 11/12/2016 08:18'!
 hadamard: aTuple
 	"Answer the entrywise product with the argument, also called Hadamard product."
@@ -38907,6 +38948,10 @@ min
 	answer _ self first.
 	2 to: self size do: [:i| answer _ answer min: (self at: i)].
 	^ answer! !
+
+!Tuple methodsFor: 'operations' stamp: 'len 5/9/2020 23:03:14'!
+mod: anElement
+	^ self collect: [:each| each mod: anElement]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 1/16/2018 22:02:42'!
 multiplyBy: aNumber
@@ -39956,12 +40001,12 @@ rowsDo: aBlock
 	This is the 'backlash' operator, as implemented in MATLAB, Octave and Sage."
 	^ self lift: aMatrix! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 6/8/2019 02:30:21'!
+!Matrix methodsFor: 'operations' stamp: 'len 5/9/2020 19:06:10'!
 ^ anInteger
 	"Answer the receiver raised to the power anInteger."
 	anInteger = 1 ifTrue: [^ self].
 	anInteger = 0 ifTrue: [^ self identity].
-	anInteger < 0 ifTrue: [^ self reciprocal ^ anInteger negated].
+	anInteger < 0 ifTrue: [^ self inverse ^ anInteger negated].
 	^ anInteger even ifTrue: [self squared ^ (anInteger // 2)] ifFalse: [self squared ^ (anInteger // 2) * self]! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/14/2020 07:06:19'!
@@ -40383,10 +40428,6 @@ pseudoInverse
 rank
 	self isEmpty ifTrue: [^ 0].
 	^ self reduction rank! !
-
-!Matrix methodsFor: 'operations' stamp: 'len 12/10/2015 23:51'!
-reciprocal
-	^ self inverse! !
 
 !Matrix methodsFor: 'operations' stamp: 'len 4/12/2020 19:02:22'!
 retraction
@@ -41682,7 +41723,7 @@ reduceStep
 				[self multiplyRow: i by: pivot.
 				self addRow: row times: value negated toRow: i]]! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/30/2019 07:19:29'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 5/9/2020 23:14:50'!
 oldreduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -41697,10 +41738,10 @@ oldreduceStep: k column: j
 	b _ matrix at: k@j.
 	"4. Reduce:"
 	matrix height to: k+1 by: -1 do: [:i| | q |
-		q _ (matrix at: i@j) // b. "q _ ((matrix at: i@j) / b) rounded."
+		q _ (matrix at: i@j) div: b. "q _ ((matrix at: i@j) / b) rounded."
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 5/8/2020 18:07:49'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 5/9/2020 23:14:14'!
 reduceStep: k column: j
 	"Perform the reduction step on row k and column j."
 	| i0 b |
@@ -41715,10 +41756,10 @@ reduceStep: k column: j
 	b _ matrix at: k@j.
 	"4. Reduce:"
 	matrix height to: k+1 by: -1 do: [:i| | q |
-		q _ (matrix at: i@j) // b.
+		q _ (matrix at: i@j) div: b.
 		self addRow: k times: q negated toRow: i]] repeat! !
 
-!HermiteReduction methodsFor: 'private' stamp: 'len 7/12/2019 12:29:57'!
+!HermiteReduction methodsFor: 'private' stamp: 'len 5/9/2020 23:15:01'!
 run
 	| n m k j b |
 	m _ matrix height.
@@ -41734,7 +41775,7 @@ run
 			[k _ k - 1]
 		ifFalse:
 			[1 to: k-1 do: [:i| | q |
-				q _ (matrix at: i@j) // b.
+				q _ (matrix at: i@j) div: b.
 				self addRow: k times: q negated toRow: i]].
 	"6. Finished?"
 	j = n or: [k = m]] whileFalse: [j _ j + 1. k _ k + 1].
@@ -42334,63 +42375,6 @@ polynomial: aPolynomial
 squareFreePolynomial: aPolynomial
 	^ super polynomial: aPolynomial! !
 
-!PolynomialDivision methodsFor: 'private' stamp: 'len 5/3/2020 10:08:18'!
-divide
-	"Compute the quotient and the remainder polynomials."
-	| quo rem lc n m term |
-	divisor isZero ifTrue: [^ (ZeroDivide dividend: dividend) signal].
-	(m _ divisor degree) = 0
-		ifTrue: [quotient _ dividend * divisor leadingCoefficient inverse.
-					remainder _ dividend zero.
-					^ self].
-	dividend degree < m
-		ifTrue: [quotient _ dividend zero. remainder _ dividend.
-					^ self].
-"	indeterminate _ divisor leadingIndeterminate."
-	quo _ dividend parent zero.
-	rem _ dividend copy.
-	lc _ divisor leadingCoefficient.
-	[(n _ rem degree) >= m]
-		whileTrue:
-			[term _ dividend parent coefficient: rem leadingCoefficient / lc degree: n-m.
-			rem _ rem + (divisor * term negated).
-			"or optimized as:
-			divisor monomialsAndCoefficientsDo: [:key :value|
-				rem coefficientAt: key * monomial add: value * minusC]."
-			quo _ quo + term.
-			" or optimized as:
-			quo coefficientAt: monomial add: c"].
-	quotient _ quo. remainder _ rem! !
-
-!PolynomialDivision methodsFor: 'private' stamp: 'len 5/3/2020 10:08:27'!
-divideNoQuotient
-	"Compute the remainder polynomial."
-	| rem lc n m term |
-	divisor isZero ifTrue: [^ (ZeroDivide dividend: dividend) signal].
-	(m _ divisor degree) = 0
-		ifTrue: [quotient _ dividend * divisor leadingCoefficient inverse.
-					remainder _ dividend zero.
-					^ self].
-	dividend degree < m
-		ifTrue: [quotient _ dividend zero. remainder _ dividend.
-					^ self].
-"	indeterminate _ divisor leadingIndeterminate."
-	rem _ dividend copy.
-	lc _ divisor leadingCoefficient.
-	[(n _ rem degree) >= m]
-		whileTrue:
-			[term _ dividend parent coefficient: rem leadingCoefficient / lc degree: n-m.
-			rem _ rem + (divisor * term negated).
-			"or optimized as:
-			divisor monomialsAndCoefficientsDo: [:key :value|
-				rem coefficientAt: key * monomial add: value * minusC]."].
-	remainder _ rem! !
-
-!PolynomialDivision methodsFor: 'initialization' stamp: 'len 12/6/2015 06:19'!
-divide: aPolynomial by: anotherPolynomial
-	dividend _ aPolynomial.
-	divisor _ anotherPolynomial! !
-
 !PolynomialDivision methodsFor: 'accessing' stamp: 'len 12/2/2015 02:43'!
 dividend
 	^ dividend! !
@@ -42399,20 +42383,72 @@ dividend
 divisor
 	^ divisor! !
 
-!PolynomialDivision methodsFor: 'accessing' stamp: 'len 2/6/2017 07:47:58'!
+!PolynomialDivision methodsFor: 'accessing' stamp: 'len 5/10/2020 05:21:01'!
 exactQuotient
-	self remainder isZero ifFalse: [self error: 'not an exact division'].
+"	self remainder isZero ifFalse: [self error: 'not an exact division']."
 	^ self quotient! !
 
-!PolynomialDivision methodsFor: 'accessing' stamp: 'len 12/6/2015 06:19'!
+!PolynomialDivision methodsFor: 'accessing' stamp: 'len 5/10/2020 09:33:06'!
 quotient
-	quotient isNil ifTrue: [self divide].
+	quotient isNil ifTrue: ["remainder notNil ifTrue: [self error: 'should call #quotient first']." self divide].
 	^ quotient! !
 
 !PolynomialDivision methodsFor: 'accessing' stamp: 'len 5/26/2018 16:55:14'!
 remainder
 	remainder isNil ifTrue: [self divideNoQuotient].
 	^ remainder! !
+
+!PolynomialDivision methodsFor: 'initialization' stamp: 'len 12/6/2015 06:19'!
+divide: aPolynomial by: anotherPolynomial
+	dividend _ aPolynomial.
+	divisor _ anotherPolynomial! !
+
+!PolynomialDivision methodsFor: 'private' stamp: 'len 5/10/2020 05:16:57'!
+divide
+	"Compute the quotient and the remainder polynomials."
+	| q r c n m t |
+	divisor isZero ifTrue: [^ (ZeroDivide dividend: dividend) signal].
+	(m _ divisor degree) = 0
+		ifTrue:
+			[quotient _ dividend * divisor leadingCoefficient inverse.
+			remainder _ dividend zero.
+			^ self].
+	dividend degree < m
+		ifTrue:
+			[quotient _ dividend zero. remainder _ dividend.
+			^ self].
+	q _ dividend parent zero.
+	r _ dividend.
+	c _ divisor leadingCoefficient.
+	[(n _ r degree) >= m]
+		whileTrue:
+			[t _ dividend parent coefficient: r leadingCoefficient / c degree: n-m.
+			r _ r + (divisor * t negated).
+			q _ q + t].
+	quotient _ q.
+	remainder _ r! !
+
+!PolynomialDivision methodsFor: 'private' stamp: 'len 5/10/2020 05:17:09'!
+divideNoQuotient
+	"Compute the remainder polynomial."
+	| r c n m t |
+	divisor isZero ifTrue: [^ (ZeroDivide dividend: dividend) signal].
+	(m _ divisor degree) = 0
+		ifTrue:
+			[quotient _ dividend * divisor leadingCoefficient inverse.
+			remainder _ dividend zero.
+			^ self].
+	dividend degree < m
+		ifTrue:
+			[quotient _ dividend zero. remainder _ dividend.
+			^ self].
+	r _ dividend.
+	c _ divisor leadingCoefficient.
+	[(n _ r degree) >= m]
+		whileTrue:
+			[t _ dividend parent coefficient: r leadingCoefficient / c degree: n-m.
+			r _ r + (divisor * t negated)].
+	remainder _ r! !
 
 !PolynomialDivision class methodsFor: 'instance creation' stamp: 'len 1/23/98 16:03'!
 divide: aPolynomial by: anotherPolynomial
@@ -42439,15 +42475,20 @@ exactQuotient
 	self remainder isZero ifFalse: [self error: 'not an exact division'].
 	^ self quotient ÷ (divisor leadingCoefficient ^ self delta)! !
 
-!PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 12/6/2015 07:30'!
+!PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 5/10/2020 05:18:36'!
 quotient
-	quotient isNil ifTrue: [self divide].
+	quotient isNil ifTrue: [remainder notNil ifTrue: [self error: 'should call #quotient first']. self divide].
 	^ quotient! !
 
 !PolynomialPseudoDivision methodsFor: 'accessing' stamp: 'len 12/6/2015 07:31'!
 remainder
 	remainder isNil ifTrue: [self divide].
 	^ remainder! !
+
+!PolynomialPseudoDivision methodsFor: 'initialization' stamp: 'len 12/11/2015 06:56'!
+divide: aPolynomial by: anotherPolynomial
+	dividend _ aPolynomial.
+	divisor _ anotherPolynomial! !
 
 !PolynomialPseudoDivision methodsFor: 'private' stamp: 'len 1/23/2017 11:44:32'!
 divide
@@ -42470,17 +42511,9 @@ divide
 	remainder _ remainder * d - (divisor * s).
 	e _ e - 1] repeat! !
 
-!PolynomialPseudoDivision methodsFor: 'private' stamp: 'len 7/4/2016 04:37'!
+!PolynomialPseudoDivision methodsFor: 'private' stamp: 'len 5/10/2020 05:01:48'!
 verify
-	| a b |
-	a _ dividend * (divisor leadingCoefficient ^ self delta).
-	b _ self quotient * divisor + self remainder.
-	^ a = b! !
-
-!PolynomialPseudoDivision methodsFor: 'initialization' stamp: 'len 12/11/2015 06:56'!
-divide: aPolynomial by: anotherPolynomial
-	dividend _ aPolynomial.
-	divisor _ anotherPolynomial! !
+	^ dividend * (divisor leadingCoefficient ^ self delta) = (self quotient * divisor + self remainder)! !
 
 !PolynomialPseudoDivision class methodsFor: 'instance creation' stamp: 'len 12/11/2015 06:57'!
 divide: aPolynomial by: anotherPolynomial
@@ -45933,6 +45966,10 @@ valuation: p
 	"Answer true if the receiver divides anInteger."
 	^ anInteger \\ self = 0! !
 
+!Integer methodsFor: '*domains' stamp: 'len 5/10/2020 10:58:50'!
+~ anInteger
+	^ self normalized = anInteger normalized! !
+
 !Integer methodsFor: '*domains' stamp: 'len 5/9/2020 17:43:23'!
 ÷ anInteger
 	"Answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
@@ -45978,6 +46015,10 @@ asRatio
 !Integer methodsFor: '*domains' stamp: 'len 5/9/2020 10:16:58'!
 asRational
 	^ Rational numerator: self denominator: 1! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/10/2020 10:57:45'!
+associates
+	^ self = 0 ifTrue: [#(0)] ifFalse: [{self negated. self}]! !
 
 !Integer methodsFor: '*domains' stamp: 'len 7/2/2016 05:45'!
 bitCount
@@ -46672,6 +46713,14 @@ isFinite
 !Collection methodsFor: '*domains' stamp: 'len 6/23/2016 05:29'!
 isInfinite
 	^ false! !
+
+!Collection methodsFor: '*domains' stamp: 'len 5/10/2020 12:26:12'!
+isSingleton
+	"Answer true if the receiver contains exactly one element."
+	| seenOneElement |
+	seenOneElement _ false.
+	self do: [:each| seenOneElement ifTrue: [^ false]. seenOneElement _ true].
+	^ seenOneElement! !
 
 !Collection methodsFor: '*domains' stamp: 'len 4/25/2016 07:52'!
 plot: aFunction
