@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 9 May 2020 at 6:04:36 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 May 2020 at 2:36:44 pm'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 158!
+!provides: 'MathematicsTests' 1 159!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1361,7 +1361,7 @@ testLocalAndGlobalDimension
 	self assert: (X !! (1,0,0)) stalk dimension = 2. "dimension of X at (1,0,0)"
 	self assert: (X !! (0,0,1)) stalk dimension = 1. "dimension of X at (0,0,1)"! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 6/10/2019 14:54:26'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/9/2020 22:16:08'!
 testMorphismsOfProjectiveVarieties
 	"'A Singular Introduction To Commutative Algebra', Example A.6.8 (morphisms of projective varieties)."
 	| P A x y z X f1 f2 f3 I J Y phi Z |
@@ -1716,15 +1716,15 @@ testRationalMap2
 	X _ A3 subscheme: {x^3*z - (x*y^2*(3/4)) - (x*y*z*(3/2)) + (y^3) + (z^2*(1/4))}.
 	self assert: f image = X! !
 
-!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 5/5/2019 18:29:43'!
+!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 5/9/2020 20:34:08'!
 testRationalMapAffineExample
 	"From lecture notes MIT 18.782 Introduction to Arithmetic Geometry, Lecture #15, Fall 2013, 10/29/2013, Example 15.19."
 	| A2 x y X A1 phi phi2 phiInv |
-	A2 _ AffineSpace new: 2 over: CC.
+	A2 _ AffineSpace new: 2 over: QQ.
 	x _ A2 coordinateRing x.
 	y _ A2 coordinateRing y.
 	X _ A2 subscheme: x^2 + (y^2) - 1.
-	A1 _ AffineSpace new: 1 over: CC.
+	A1 _ AffineSpace new: 1 over: QQ.
 	phi _ X to: A1 evaluatingWithArguments: [:x0 :y0| {y0 / (x0 + 1)}].
 	phi2 _ X to: A1 evaluatingWithArguments: [:x0 :y0| {1 - x0 / y0}].
 	self assert: phi = phi2.
@@ -6304,14 +6304,7 @@ testSubstraction
 	c _ R !! (676 - 123).
 	self assert: a - b = c! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 1/9/2017 21:38:34'!
-testAllMonomialsOfDegree
-	| d n |
-	n _ 5 atRandom.
-	d _ 5 atRandom.
-	self assert: (ZZ polynomialsIn: n :: allMonomialsOfDegree: d) size = (n+d-1 choose: d)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:52:52'!
+!PolynomialTest methodsFor: 'arithmetic' stamp: 'len 4/25/2018 21:52:52'!
 testArithmeticOver: R
 	| x f g |
 	x _ R polynomials x.
@@ -6325,47 +6318,23 @@ testArithmeticOver: R
 	self assert: (f*g + (x - 1) \\ g) = (x - 1)
 ! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:53:17'!
+!PolynomialTest methodsFor: 'arithmetic' stamp: 'len 4/25/2018 21:53:17'!
 testArithmeticQQ
 	self testArithmeticOver: QQ! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:53:36'!
+!PolynomialTest methodsFor: 'arithmetic' stamp: 'len 4/25/2018 21:53:36'!
 testArithmeticZ2
 	self testArithmeticOver: ZZ/2! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:53:50'!
+!PolynomialTest methodsFor: 'arithmetic' stamp: 'len 4/25/2018 21:53:50'!
 testArithmeticZ3
 	self testArithmeticOver: ZZ/3! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:57:08'!
+!PolynomialTest methodsFor: 'arithmetic' stamp: 'len 4/25/2018 21:57:08'!
 testArithmeticZm
 	self testArithmeticOver: ZZ/(2 + 100 atRandom)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/26/2018 08:16:24'!
-testCRT
-	| x f1 f2 f3 crt r1 r2 r3 h |
-	x _ QQ polynomials x.
-	f1 _ x^5 + 1.
-	f2 _ x^2 + 1.
-	f3 _ x - 1.
-	crt _ CRT mod: {f1. f2. f3}.
-	r1 _ x-1.
-	r2 _ x+1.
-	r3 _ x-x. "zero"
-	h _ crt solve: {r1. r2. r3}.
-	self assert: h \\ f1 = r1.
-	self assert: h \\ f2 = r2.
-	self assert: h \\ f3 = r3! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2018 17:01:40'!
-testCompanionMatrix
-	| x p |
-	x _ QQ polynomials x.
-	p _ x^2 + (x*2) - 1.
-	self assert: p companion characteristicPolynomial = p.
-	self assert: p companion minimalPolynomial = p! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:49:56'!
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 7/17/2019 10:49:56'!
 testContentAndPrimitive
 	| Zx Zxy x y f |
 	Zx _ ZZ polynomialsIn: #(x).
@@ -6375,31 +6344,101 @@ testContentAndPrimitive
 	f _ 2*x*y + (2*(x^2)).
 	self assert: f primitivePart * f content = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:05'!
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 7/17/2019 10:50:05'!
 testContentAndPrimitiveAtRandom
 	| Zx f |
 	Zx _ ZZ polynomials.
 	f _ Zx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
 	self assert: f primitivePart * f content = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:50'!
-testDiscriminant
-	| Zx x f g |
-	Zx _ ZZ polynomials.
-	x _ Zx x.
-	f _ x^2 + x + 1.
-	g _ x^3 + 1.
-	self assert: (f*g) discriminant = (f discriminant * g discriminant * (f resultant: g) squared)! !
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/9/2020 14:01:43'!
+testExtendedEuclidBug
+	| x f1 f2 |
+	x _ QQ polynomials x.
+	f1 _ x^2 + 1.
+	f2 _ x - 1.
+	self assert: (f1 xgcd: f2) first = (f1 gcd: f2)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 11/28/2016 22:09:14'!
-testDiscriminant2
-	| Zx x f |
-	Zx _ ZZ polynomials.
-	x _ Zx x.
-	f _ x^2 - x - 36042.
-	self assert: f discriminant = 144169 "this is a prime, although looks like a square :)"! !
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 8/26/2016 06:09'!
+testGCD
+	| P x f g |
+	P _ QQ polynomials.
+	x _ P x.
+	f _ x^4 - 1.
+	g _ x^6 - 1.
+	self assert: (f gcd: g) = (x^2 - 1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/4/2016 04:33'!
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 7/20/2019 04:59:20'!
+testGCDMultivariate
+	| Zxy x y f g |
+	Zxy _ ZZ polynomialsIn: #(x y) ordering: #lex.
+	x _ Zxy x.
+	y _ Zxy y.
+	f _ (x+y)*(y-x).
+	g _ (y-x)^2.
+	self assert: (f gcd: g) = (x-y)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 4/25/2018 22:13:05'!
+testGCDMultivariate2
+	"Example from Sage documentation."
+	| R x y f g |
+	R _ QQ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*(x+y)*3.
+	g _ x*(y^2 - (x^2))*9.
+	self assert: (f gcd: g) = (x^2 + (x*y))! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 4/25/2018 18:33:50'!
+testGCDMultivariateOverQ
+	| R x y f g |
+	R _ QQ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = (x*y)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 4/25/2018 18:33:41'!
+testGCDMultivariateOverZ
+	| R x y f g |
+	R _ ZZ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = (x*y*3)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 4/25/2018 18:37:41'!
+testGCDOverRationalFunctions
+	| R x y f g |
+	R _ QQ polynomialsIn: #(y) :: fractions polynomials.
+	x _ R x. y _ R scalars x.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = x! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 8/26/2016 05:52'!
+testGCDOverZ
+	| x f g |
+	x _ ZZ polynomials x.
+	f _ (x^4 - 1)*6.
+	g _ (x^6 - 1)*9.
+	self assert: (f gcd: g) = ((x^2 - 1)*3)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 4/25/2018 22:21:04'!
+testGCDOverZ2
+	| x f g h |
+	x _ ZZ/2 :: polynomials x.
+	h _ x^3 - x + 1.
+	f _ h * (x + 1) * x.
+	g _ h * (x + 1) * (x^2 + 1).
+	self assert: (f gcd: g) = (h * (x + 1))! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 8/26/2016 06:09'!
+testMultivariateGCDBug
+	| x |
+	x _ QQ polynomialsIn: 3 :: x.
+	self assert: (x^2 gcd: x) = x! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 7/4/2016 04:33'!
 testDivision: F
 	| Fx f g |
 	Fx _ F polynomials.
@@ -6407,28 +6446,305 @@ testDivision: F
 	[g _ Fx atRandomBits: 100 maxDegree: 10 atRandom. g isZero] whileTrue.
 	self assert: (f // g) * g + (f \\ g) = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:08'!
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:23:03'!
+testDivisionPrimeField65535
+	self testDivision: (PrimeField new: 2^17 - 1)! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:22:44'!
+testDivisionPrimeFieldZ2
+	self testDivision: (PrimeField new: 2)! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 8/26/2016 06:08'!
 testDivisionQ
 	self testDivision: QQ! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 10/18/2016 21:01'!
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:20:48'!
+testDivisionQ1
+	| P x f g |
+	P _ QQ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 - (x*3).
+	self assert: f // g = (P !! (-1/3)).
+	self assert: f \\ g = (P !! (1/3))! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:21:33'!
+testDivisionQ2
+	| P x f g |
+	P _ QQ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 + (x*3).
+	self assert: f // g = (P !! (1/3)).
+	self assert: f \\ g = (P !! (-1/3))! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:25:11'!
+testDivisionZ1
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 + (x*3).
+	self assert: f // g = (P !! 0).
+	self assert: f \\ g = x! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:26:03'!
 testDivisionZ2
-	self testDivision: (PrimeField new: 2)! !
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 - (x*3).
+	self assert: f // g = (P !! -1).
+	self assert: f \\ g = (1 - (x*2))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 10/18/2016 21:01'!
-testDivisionZ65535
-	self testDivision: (PrimeField new: 2^17 - 1)! !
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:26:46'!
+testDivisionZ3
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 - x.
+	self assert: f // g = (P !! -1).
+	self assert: f \\ g = (P !! 1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/18/2018 20:47:02'!
-testDomainError
-	| f g |
-	f _ ZZ polynomials atRandomBits: 10.
-	self should: [f / 2] raise: DomainError.
-	g _ QQ polynomials atRandomBits: 100 maxDegree: 5. "will have denominators"
-	self should: [f + g] raise: DomainError.
-	self should: [f * g] raise: DomainError! !
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:27:06'!
+testDivisionZ4
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x.
+	g _ 1 + x.
+	self assert: f // g = (P !! 1).
+	self assert: f \\ g = (P !! -1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 11/25/2016 10:33:07'!
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 04:12:34'!
+testDivisionZ5
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x*4.
+	g _ x*2.
+	self assert: f // g = (P !! 2).
+	self assert: f \\ g = (P !! 0)! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 04:13:39'!
+testDivisionZ6
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x*4.
+	g _ x*3.
+	self assert: f // g = (P !! 1).
+	self assert: f \\ g = x! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 04:14:50'!
+testDivisionZ7
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x*4+1.
+	g _ x^2*3.
+	self assert: f // g = (P !! 0).
+	self assert: f \\ g = f! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/9/2020 17:56:04'!
+testExactDivisionBug
+	| Zx x f |
+	Zx _ ZZ polynomials.
+	x _ Zx x.
+	f _ x*2.
+	self assert: f ÷ f = Zx one! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/9/2020 17:56:14'!
+testExactDivisionMultivariate
+	| Qxy x y f g |
+	Qxy _ QQ polynomialsIn: #(x y).
+	x _ Qxy x.
+	y _ Qxy y.
+	f _ x-y.
+	g _ x+y.
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:38:33'!
+testExactDivisionMultivariate2
+	| Qxy x y f g |
+	Qxy _ QQ polynomialsIn: #(x y).
+	x _ Qxy x.
+	y _ Qxy y.
+	f _ x-y.
+	g _ x+y.
+	self assert: (f * g divisionBy: g) quotient = f.
+	self assert: (f * g divisionBy: f) quotient = g! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:23:27'!
+testExactDivisionQ
+	| x f g |
+	x _ QQ polynomials x.
+	f _ x^2 + x + 1.
+	g _ 1 - x.
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:23:32'!
+testExactDivisionQRandom
+	| Qx f g |
+	Qx _ QQ polynomials.
+	f _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
+	g _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:23:37'!
+testExactDivisionZ
+	| x f g |
+	x _ ZZ polynomials x.
+	f _ x^2 + x + 1.
+	g _ 1 - x.
+	self assert: f * g ÷ g = f.
+	self assert: f * g ÷ f = g! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:38:36'!
+testMultivariateDivision
+	"Example from Cox IVA 62 p."
+	| Zxy x y f f1 f2 division |
+	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
+	x _ Zxy x.
+	y _ Zxy y.
+	f _ x*(y^2)+1.
+	f1 _ x*y+1.
+	f2 _ y+1.
+	division _ f divisionBy: {f1. f2}.
+	self assert: division quotients = {y. y one negated}.
+	self assert: division remainder = (y one * 2).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:38:40'!
+testMultivariateDivision2
+	"Example from Cox IVA 63 p."
+	| Zxy x y f f1 f2 division |
+	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
+	x _ Zxy x.
+	y _ Zxy y.
+	f _ x^2*y + (x*(y^2)) + (y^2).
+	f1 _ x*y-1.
+	f2 _ y^2-1.
+	division _ f divisionBy: {f1. f2}.
+	self assert: division quotients = {x+y. y one}.
+	self assert: division remainder = (x+y+1).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:38:42'!
+testMultivariateDivision3
+	"Example from Cox IVA 67 p."
+	| Zxy x y f f1 f2 division |
+	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
+	x _ Zxy x.
+	y _ Zxy y.
+	f _ x^2*y + (x*(y^2)) + (y^2).
+	f1 _ x*y-1.
+	f2 _ y^2-1.
+	division _ f divisionBy: {f2. f1}.
+	self assert: division quotients = {x+1. x}.
+	self assert: division remainder = (x*2+1).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:39'!
+testPseudoDivision1
+	| Zxy x y division |
+	Zxy _ ZZ polynomialsIn: #(x y).
+	x _ Zxy x.
+	y _ Zxy y.
+	division _ x^2 + (y^2) pseudoDivisionBy: y - x in: 2.
+	self assert: division quotient asMultivariate = (x + y).
+	self assert: division remainder asMultivariate = (x^2 * 2).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:41'!
+testPseudoDivision2
+	| Zxy x y division |
+	Zxy _ QQ polynomialsIn: #(x y).
+	x _ Zxy x.
+	y _ Zxy y.
+	division _ x^2 + (y^2) pseudoDivisionBy: (y-x)*2 in: 2.
+	self assert: division quotient asMultivariate = ((x+y) * 2).
+	self assert: division remainder asMultivariate = (x^2 * 8).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:45'!
+testPseudoDivision3
+	| Zxy x y division |
+	Zxy _ ZZ polynomialsIn: #(x y).
+	x _ Zxy x.
+	y _ Zxy y.
+	division _ x^2 + (y^2) pseudoDivisionBy: y - x in: 2.
+	self assert: division quotient asMultivariate = (x + y).
+	self assert: division remainder asMultivariate = (x^2 * 2).
+	self assert: division verify.
+
+	division _ x^2 + (y^2) pseudoDivisionBy: x - y in: 2.
+	self assert: division quotient asMultivariate = (x + y) negated.
+	self assert: division remainder asMultivariate = (x^2 * 2).
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:40:58'!
+testPseudoDivision: R
+	| Rx f g div |
+	Rx _ R polynomials.
+	f _ Rx atRandomBits: 100 maxDegree: 10 atRandom.
+	[g _ Rx atRandomBits: 100 maxDegree: 10 atRandom. g isZero] whileTrue.
+	div _ f pseudoDivisionBy: g.
+	self assert: div verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:01'!
+testPseudoDivisionUnivariate
+	| Zx x division |
+	Zx _ ZZ polynomials.
+	x _ Zx x.
+	division _ x^3 + x + 1 pseudoDivisionBy: (x^2 * 3) + x + 1.
+	self assert: division quotient = (x*3 - 1).
+	self assert: division remainder = (x*7 + 10).
+	self assert: division delta = 2.
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:02'!
+testPseudoDivisionUnivariate2
+	"Example from Zippel book"
+	| Zx a b |
+	Zx _ ZZ polynomials.
+	a _ Zx coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ Zx coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	^ self assert: (a pseudoDivisionBy: b) verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 8/26/2016 05:53'!
+testPseudoDivisionZ
+	self testPseudoDivision: ZZ! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 12/2/2016 11:13:22'!
+testPseudoDivisionZ6
+	self testPseudoDivision: ZZ / 6! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:07'!
+testPseudoRemainder
+	| Zx x a b r |
+	Zx _ ZZ polynomials.
+	x _ Zx x.
+	a _ x^8 + (x^6) - (3*(x^4)) - (3*(x^3)) + (8*(x^2)) + (2*x) - 5.
+	b _ 3*(x^6) + (5*(x^4)) - (4*(x^2)) - (9*x) + 21.
+	r _ Zx coefficients: #(-9 0 3 0 -15).
+	self assert: (a pseudoRem: b) = r.
+	self assert: (a pseudoDivisionBy: b) remainder = r! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:17:25'!
+testRemainderInconsistency
+	"In Sage these two give the same result (1), same in Magma."
+	| X x |
+	X _ ZZ polynomials x.
+	x _ QQ polynomials x.
+	self assert: (x \\ (1 - x)) leadingCoefficient = (X \\ (1 - X)) leadingCoefficient! !
+
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 11/25/2016 10:33:07'!
 testEPRS
 	"Example from Zippel."
 	| a b eprs |
@@ -6441,7 +6757,36 @@ testEPRS
 		(15795 30375 -59535) 
 		(1254542875143750 -1654608338437500) (12593338795500743100931141992187500))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:50'!
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 11/25/2016 10:33:02'!
+testPPRS
+	"Example from Zippel."
+	| a b pprs |
+	a _ ZZ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ ZZ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	pprs _ a pprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
+	self assert: pprs = #((1 0 1 0 -3 -3 8 2 -5) 
+		(3 0 5 0 -4 -9 21)
+		(-5 0 1 0 -3)
+		(13 25 -49)
+		(4663 -6150)
+		(1))! !
+
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 11/25/2016 10:32:56'!
+testSPRS
+	"Example from Zippel."
+	| a b sprs |
+	a _ ZZ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ ZZ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	sprs _ a sprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
+	self assert: sprs = #((1 0 1 0 -3 -3 8 2 -5)
+		#(3 0 5 0 -4 -9 21)
+		#(15 0 -3 0 9)
+		#(65 125 -245)
+		#(9326 -12300)
+		#(260708))
+! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 8/26/2016 05:50'!
 testEvaluationHomomorphism
 	| Zx f g a |
 	Zx _ ZZ polynomials.
@@ -6453,7 +6798,7 @@ testEvaluationHomomorphism
 	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
 	self assert: (f^3 value: a) = ((f value: a)^3)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/31/2016 06:56'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 3/31/2016 06:56'!
 testEvaluationHomomorphism: F
 	| Fx f g a |
 	Fx _ F polynomials.
@@ -6465,7 +6810,7 @@ testEvaluationHomomorphism: F
 	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
 	self assert: (f^3 value: a) = ((f value: a)^3)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/15/2020 18:24:04'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 3/15/2020 18:24:04'!
 testEvaluationHomomorphismMultivariate
 	| Zxyz f g a |
 	Zxyz _ ZZ polynomialsIn: #(x y z).
@@ -6477,24 +6822,24 @@ testEvaluationHomomorphismMultivariate
 	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
 	self assert: (f^3 value: a) = ((f value: a)^3)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 10/18/2016 21:01'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 10/18/2016 21:01'!
 testEvaluationHomomorphismZ2
 	self testEvaluationHomomorphism: (PrimeField new: 2)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:13:08'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 12/2/2016 11:13:08'!
 testEvaluationHomomorphismZm
 	self testEvaluationHomomorphism: ZZ / (2 + 100 atRandom).
 	self testEvaluationHomomorphism: ZZ / (2^13 - 2).
 	self testEvaluationHomomorphism: ZZ / (2^31 - 2)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:17:17'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 12/2/2016 11:17:17'!
 testEvaluationHomomorphismZp
 	self testEvaluationHomomorphism: (PrimeField new: 3).
 	self testEvaluationHomomorphism: (PrimeField new: 5).
 	self testEvaluationHomomorphism: (PrimeField new: 2^13 - 1).
 	self testEvaluationHomomorphism: (PrimeField new: 2^31 - 1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/15/2020 18:24:26'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 3/15/2020 18:24:26'!
 testEvaluationMultivariate
 	| Zxyz f a x y z |
 	Zxyz _ ZZ polynomialsIn: #(x y z).
@@ -6503,72 +6848,7 @@ testEvaluationMultivariate
 	a _ ZZ atRandomTuple: 3 bits: 100.
 	self assert: (f value: a) = ((a at: 1)^2 * (a at: 2) - (a at: 3))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:04'!
-testExactDivisionBug
-	| Zx x f |
-	Zx _ ZZ polynomials.
-	x _ Zx x.
-	f _ x*2.
-	self assert: f ÷ f = Zx one! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:14'!
-testExactDivisionMultivariate
-	| Qxy x y f g |
-	Qxy _ QQ polynomialsIn: #(x y).
-	x _ Qxy x.
-	y _ Qxy y.
-	f _ x-y.
-	g _ x+y.
-	self assert: f * g ÷ g = f.
-	self assert: f * g ÷ f = g! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:33'!
-testExactDivisionMultivariate2
-	| Qxy x y f g |
-	Qxy _ QQ polynomialsIn: #(x y).
-	x _ Qxy x.
-	y _ Qxy y.
-	f _ x-y.
-	g _ x+y.
-	self assert: (f * g divisionBy: g) quotient = f.
-	self assert: (f * g divisionBy: f) quotient = g! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:25'!
-testExactDivisionOverQ
-	| x f g |
-	x _ QQ polynomials x.
-	f _ x^2 + x + 1.
-	g _ 1 - x.
-	self assert: f * g ÷ g = f.
-	self assert: f * g ÷ f = g! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:39'!
-testExactDivisionOverQRandom
-	| Qx f g |
-	Qx _ QQ polynomials.
-	f _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
-	g _ Qx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
-	self assert: f * g ÷ g = f.
-	self assert: f * g ÷ f = g! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 17:56:50'!
-testExactDivisionOverZ
-	| x f g |
-	x _ ZZ polynomials x.
-	f _ x^2 + x + 1.
-	g _ 1 - x.
-	self assert: f * g ÷ g = f.
-	self assert: f * g ÷ f = g! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/9/2020 14:01:43'!
-testExtendedEuclidBug
-	| x f1 f2 |
-	x _ QQ polynomials x.
-	f1 _ x^2 + 1.
-	f2 _ x - 1.
-	self assert: (f1 xgcd: f2) first = (f1 gcd: f2)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/9/2018 21:26:43'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/9/2018 21:26:43'!
 testFiniteFieldFactorization
 	| F Fx x one f factors |
 	F _ ZZ / 3.
@@ -6583,7 +6863,7 @@ testFiniteFieldFactorization
 	self assert: (factors occurrencesOf: x + one) = 1.
 	self assert: (factors inject: Fx one into: [:a :b| a*b]) = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:16:50'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 12/2/2016 11:16:50'!
 testFiniteFieldFactorization2
 	| Z3 x f factors |
 	Z3 _ ZZ / 3.
@@ -6594,7 +6874,7 @@ testFiniteFieldFactorization2
 	self assert: (factors occurrencesOf: x-1) = 2.
 	self assert: (factors occurrencesOf: x-2) = 1! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/9/2018 21:30:09'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/9/2018 21:30:09'!
 testFiniteFieldFactorization3
 	| F9 x f factors |
 	F9 _ GaloisField new: (3^2).
@@ -6605,7 +6885,7 @@ testFiniteFieldFactorization3
 	self assert: (factors occurrencesOf: x-1) = 2.
 	self assert: (factors occurrencesOf: x-2) = 1! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/10/2018 06:48:53'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/10/2018 06:48:53'!
 testFiniteFieldFactorization4
 	| R x f factors |
 	R _ ZZ / 2.
@@ -6616,14 +6896,14 @@ testFiniteFieldFactorization4
 	self assert: (factors occurrencesOf: x+1) = 8.
 	self assert: (factors occurrencesOf: x^2+x+1) = 8! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/10/2018 06:52:30'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/10/2018 06:52:30'!
 testFiniteFieldFactorization5
 	| R x |
 	R _ ZZ / 2.
 	x _ R polynomials x.
 	self assert: (x^15 - 1) factors = {x + 1. x^2 + x + 1. x^4 + (x^3) + (x^2) + x + 1. x^4 + x + 1. x^4 + (x^3) + 1} asBag! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/15/2020 18:25:25'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 3/15/2020 18:25:25'!
 testFiniteFieldIrreduciblePolynomials
 	"Z/<3>[x] has 8 irreducible monic polynomials of degree 3, out of 27 monic polynomials of degree 3."
 	| F Fx f count |
@@ -6640,7 +6920,7 @@ testFiniteFieldIrreduciblePolynomials
 				[self assert: f factors size > 1]].
 	self assert: count = 8! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:16:38'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 12/2/2016 11:16:38'!
 testFiniteFieldIsIrreducible
 	| F Fx x f |
 	F _ ZZ / 3.
@@ -6650,18 +6930,7 @@ testFiniteFieldIsIrreducible
 	self assert: f factors size = 1.
 	self assert: f isIrreducible! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/24/2018 20:33:32'!
-testFiniteFieldRoots
-	| Z3 x f roots |
-	Z3 _ ZZ / 3.
-	x _ Z3 polynomials x.
-	f _ (x-1)^2*(x-2).
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: (Z3 project: 1)) = 2.
-	self assert: (roots occurrencesOf: (Z3 project: 2)) = 1! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 15:39:00'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/24/2018 15:39:00'!
 testFiniteFieldSFF
 	| F Fx x one f factors |
 	F _ ZZ / 3.
@@ -6675,106 +6944,7 @@ testFiniteFieldSFF
 	self assert: (factors occurrencesOf: x^2 + one) = 3.
 	self assert: (factors occurrencesOf: x + one) = 1! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:09'!
-testGCD
-	| P x f g |
-	P _ QQ polynomials.
-	x _ P x.
-	f _ x^4 - 1.
-	g _ x^6 - 1.
-	self assert: (f gcd: g) = (x^2 - 1)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/20/2019 04:59:20'!
-testGCDMultivariate
-	| Zxy x y f g |
-	Zxy _ ZZ polynomialsIn: #(x y) ordering: #lex.
-	x _ Zxy x.
-	y _ Zxy y.
-	f _ (x+y)*(y-x).
-	g _ (y-x)^2.
-	self assert: (f gcd: g) = (x-y)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 22:13:05'!
-testGCDMultivariate2
-	"Example from Sage documentation."
-	| R x y f g |
-	R _ QQ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*(x+y)*3.
-	g _ x*(y^2 - (x^2))*9.
-	self assert: (f gcd: g) = (x^2 + (x*y))! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 18:33:50'!
-testGCDMultivariateOverQ
-	| R x y f g |
-	R _ QQ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = (x*y)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 18:33:41'!
-testGCDMultivariateOverZ
-	| R x y f g |
-	R _ ZZ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = (x*y*3)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 18:37:41'!
-testGCDOverRationalFunctions
-	| R x y f g |
-	R _ QQ polynomialsIn: #(y) :: fractions polynomials.
-	x _ R x. y _ R scalars x.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = x! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:52'!
-testGCDOverZ
-	| x f g |
-	x _ ZZ polynomials x.
-	f _ (x^4 - 1)*6.
-	g _ (x^6 - 1)*9.
-	self assert: (f gcd: g) = ((x^2 - 1)*3)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 22:21:04'!
-testGCDOverZ2
-	| x f g h |
-	x _ ZZ/2 :: polynomials x.
-	h _ x^3 - x + 1.
-	f _ h * (x + 1) * x.
-	g _ h * (x + 1) * (x^2 + 1).
-	self assert: (f gcd: g) = (h * (x + 1))! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:27'!
-testGaussLemma
-	"Lemma (Gauss): The product of two primitive polynomials is primitive."
-	| Zx f g |
-	Zx _ ZZ polynomials.
-	f _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
-	g _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
-	self assert: (f primitivePart * g primitivePart) isPrimitive! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/2/2018 16:35:46'!
-testHeight
-	| x |
-	x _ QQ polynomials x.
-	self assert: (x * 2 - 5) height =  5.
-	self assert: (x * 5 - 2) height =  5! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 9/22/2018 23:41:08'!
-testInclusionInFractionField
-	| R F |
-	R _ QQ polynomials.
-	F _ R fractions.
-	self assert: R <= F.
-	self assert: F >= R.
-	self deny: R >= F.
-	self deny: F <= R! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 15:49:59'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/25/2018 15:49:59'!
 testIntegerFactorization
 	| x f factors |
 	x _ ZZ polynomials x.
@@ -6784,7 +6954,142 @@ testIntegerFactorization
 	self assert: factors asSet size = 6.
 	self assert: factors product = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:09'!
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/25/2018 15:46:49'!
+testRationalFactorization
+	| x f factors |
+	x _ QQ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	factors _ f factors.
+	self assert: factors size = 5.
+	self assert: factors asSet size = 4.
+	self assert: factors product monic = f monic "up to a unit"! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 3/24/2018 20:33:32'!
+testFiniteFieldRoots
+	| Z3 x f roots |
+	Z3 _ ZZ / 3.
+	x _ Z3 polynomials x.
+	f _ (x-1)^2*(x-2).
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: (Z3 project: 1)) = 2.
+	self assert: (roots occurrencesOf: (Z3 project: 2)) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 4/24/2018 17:32:47'!
+testRationalRoots
+	| x f roots |
+	x _ QQ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: 1/2) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 3/24/2018 20:32:28'!
+testRationalRootsBug
+	| x f roots |
+	x _ QQ polynomials x.
+	f _ x^3*-1 + (3*x) + 2.
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: -1) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 4/29/2018 20:30:09'!
+testRealRoots
+	| x f roots |
+	x _ QQ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	roots _ f allRootsIn: RR.
+	self assert: roots size = 5.
+	self assert: roots asSet size = 4.
+	self assert: (roots occurrencesOf: 1/2) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 1/9/2017 21:38:34'!
+testAllMonomialsOfDegree
+	| d n |
+	n _ 5 atRandom.
+	d _ 5 atRandom.
+	self assert: (ZZ polynomialsIn: n :: allMonomialsOfDegree: d) size = (n+d-1 choose: d)! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/26/2018 08:16:24'!
+testCRT
+	| x f1 f2 f3 crt r1 r2 r3 h |
+	x _ QQ polynomials x.
+	f1 _ x^5 + 1.
+	f2 _ x^2 + 1.
+	f3 _ x - 1.
+	crt _ CRT mod: {f1. f2. f3}.
+	r1 _ x-1.
+	r2 _ x+1.
+	r3 _ x-x. "zero"
+	h _ crt solve: {r1. r2. r3}.
+	self assert: h \\ f1 = r1.
+	self assert: h \\ f2 = r2.
+	self assert: h \\ f3 = r3! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/30/2018 17:01:40'!
+testCompanionMatrix
+	| x p |
+	x _ QQ polynomials x.
+	p _ x^2 + (x*2) - 1.
+	self assert: p companion characteristicPolynomial = p.
+	self assert: p companion minimalPolynomial = p! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 05:50'!
+testDiscriminant
+	| Zx x f g |
+	Zx _ ZZ polynomials.
+	x _ Zx x.
+	f _ x^2 + x + 1.
+	g _ x^3 + 1.
+	self assert: (f*g) discriminant = (f discriminant * g discriminant * (f resultant: g) squared)! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 11/28/2016 22:09:14'!
+testDiscriminant2
+	| Zx x f |
+	Zx _ ZZ polynomials.
+	x _ Zx x.
+	f _ x^2 - x - 36042.
+	self assert: f discriminant = 144169 "this is a prime, although looks like a square :)"! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 5/18/2018 20:47:02'!
+testDomainError
+	| f g |
+	f _ ZZ polynomials atRandomBits: 10.
+	self should: [f / 2] raise: DomainError.
+	g _ QQ polynomials atRandomBits: 100 maxDegree: 5. "will have denominators"
+	self should: [f + g] raise: DomainError.
+	self should: [f * g] raise: DomainError! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 7/17/2019 10:50:27'!
+testGaussLemma
+	"Lemma (Gauss): The product of two primitive polynomials is primitive."
+	| Zx f g |
+	Zx _ ZZ polynomials.
+	f _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
+	g _ Zx atRandomBits: 100 maxDegree: (5 to: 10) atRandom.
+	self assert: (f primitivePart * g primitivePart) isPrimitive! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 5/2/2018 16:35:46'!
+testHeight
+	| x |
+	x _ QQ polynomials x.
+	self assert: (x * 2 - 5) height =  5.
+	self assert: (x * 5 - 2) height =  5! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 9/22/2018 23:41:08'!
+testInclusionInFractionField
+	| R F |
+	R _ QQ polynomials.
+	F _ R fractions.
+	self assert: R <= F.
+	self assert: F >= R.
+	self deny: R >= F.
+	self deny: F <= R! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:09'!
 testInterpolation
 	| Qx f |
 	Qx _ QQ polynomials.
@@ -6793,7 +7098,7 @@ testInterpolation
 	self assert: (f value: 2) = 3.
 	self assert: (f value: 4) = 5! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:09'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:09'!
 testInterpolation2
 	| Qx f |
 	Qx _ QQ polynomials.
@@ -6802,7 +7107,7 @@ testInterpolation2
 	self assert: (f value: 2) = 4.
 	self assert: (f value: 3) = 9! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:44:25'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/25/2018 21:44:25'!
 testIsIrreducible
 	"The polynomial x^4 + 1 is irreducible in Z[x] and Q[x], and it is reducible Z/p[x] for all prime numbers p."
 	| p |
@@ -6811,7 +7116,7 @@ testIsIrreducible
 	p _ 1000 atRandom nextPrime.
 	self deny: (ZZ/p :: polynomials !! [:x| x^4 + 1] :: isIrreducible)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:48:05'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/25/2018 21:48:05'!
 testIsIrreducibleOverQ
 	| x f |
 	x _ QQ polynomials x.
@@ -6821,7 +7126,7 @@ testIsIrreducibleOverQ
 	self assert: (f*2) isIrreducible.
 	self assert: (f*(x+1)) isIrreducible not! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 21:47:42'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/25/2018 21:47:42'!
 testIsIrreducibleOverZ
 	| x f |
 	x _ ZZ polynomials x.
@@ -6832,7 +7137,7 @@ testIsIrreducibleOverZ
 	self assert: (f*(x+1)) isIrreducible not.
 ! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 16:14:11'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 6/5/2019 16:14:11'!
 testIsNilpotentOverZm
 	| m R N U d f k |
 	m _ (2 to: 100) atRandom.
@@ -6846,7 +7151,7 @@ testIsNilpotentOverZm
 	f _ R polynomials coefficients: ((1 to: d) collect: [:i| i=k ifTrue: [U atRandom] ifFalse: [N atRandom]]).
 	self assert: f isNilpotent not! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/27/2018 21:22:40'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 4/27/2018 21:22:40'!
 testIsSeparableNot
 	"A tipical example of a polynomial that is NOT separable."
 	| p F x Fy y f |
@@ -6858,7 +7163,7 @@ testIsSeparableNot
 	f _ y^p - x.
 	self assert: f isSeparable not! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 6/5/2019 16:19:04'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 6/5/2019 16:19:04'!
 testIsUnitOverZm
 	| m R N U d f k |
 	m _ (2 to: 100) atRandom.
@@ -6875,158 +7180,7 @@ testIsUnitOverZm
 	f _ R polynomials coefficients: ({U atRandom}, ((1 to: d) collect: [:i| i=k ifTrue: [U atRandom] ifFalse: [N atRandom]])).
 	self assert: f isUnit not! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:36'!
-testMultivariateDivision
-	"Example from Cox IVA 62 p."
-	| Zxy x y f f1 f2 division |
-	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
-	x _ Zxy x.
-	y _ Zxy y.
-	f _ x*(y^2)+1.
-	f1 _ x*y+1.
-	f2 _ y+1.
-	division _ f divisionBy: {f1. f2}.
-	self assert: division quotients = {y. y one negated}.
-	self assert: division remainder = (y one * 2).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:40'!
-testMultivariateDivision2
-	"Example from Cox IVA 63 p."
-	| Zxy x y f f1 f2 division |
-	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
-	x _ Zxy x.
-	y _ Zxy y.
-	f _ x^2*y + (x*(y^2)) + (y^2).
-	f1 _ x*y-1.
-	f2 _ y^2-1.
-	division _ f divisionBy: {f1. f2}.
-	self assert: division quotients = {x+y. y one}.
-	self assert: division remainder = (x+y+1).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:38:42'!
-testMultivariateDivision3
-	"Example from Cox IVA 67 p."
-	| Zxy x y f f1 f2 division |
-	Zxy _ ZZ polynomialsIn: #(x y) ordering: (MonomialOrdering lex: #(2 1)).
-	x _ Zxy x.
-	y _ Zxy y.
-	f _ x^2*y + (x*(y^2)) + (y^2).
-	f1 _ x*y-1.
-	f2 _ y^2-1.
-	division _ f divisionBy: {f2. f1}.
-	self assert: division quotients = {x+1. x}.
-	self assert: division remainder = (x*2+1).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:09'!
-testMultivariateGCDBug
-	| x |
-	x _ QQ polynomialsIn: 3 :: x.
-	self assert: (x^2 gcd: x) = x! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 11/25/2016 10:33:02'!
-testPPRS
-	"Example from Zippel."
-	| a b pprs |
-	a _ ZZ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ ZZ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	pprs _ a pprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
-	self assert: pprs = #((1 0 1 0 -3 -3 8 2 -5) 
-		(3 0 5 0 -4 -9 21)
-		(-5 0 1 0 -3)
-		(13 25 -49)
-		(4663 -6150)
-		(1))! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:39'!
-testPseudoDivision1
-	| Zxy x y division |
-	Zxy _ ZZ polynomialsIn: #(x y).
-	x _ Zxy x.
-	y _ Zxy y.
-	division _ x^2 + (y^2) pseudoDivisionBy: y - x in: 2.
-	self assert: division quotient asMultivariate = (x + y).
-	self assert: division remainder asMultivariate = (x^2 * 2).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:41'!
-testPseudoDivision2
-	| Zxy x y division |
-	Zxy _ QQ polynomialsIn: #(x y).
-	x _ Zxy x.
-	y _ Zxy y.
-	division _ x^2 + (y^2) pseudoDivisionBy: (y-x)*2 in: 2.
-	self assert: division quotient asMultivariate = ((x+y) * 2).
-	self assert: division remainder asMultivariate = (x^2 * 8).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:45'!
-testPseudoDivision3
-	| Zxy x y division |
-	Zxy _ ZZ polynomialsIn: #(x y).
-	x _ Zxy x.
-	y _ Zxy y.
-	division _ x^2 + (y^2) pseudoDivisionBy: y - x in: 2.
-	self assert: division quotient asMultivariate = (x + y).
-	self assert: division remainder asMultivariate = (x^2 * 2).
-	self assert: division verify.
-
-	division _ x^2 + (y^2) pseudoDivisionBy: x - y in: 2.
-	self assert: division quotient asMultivariate = (x + y) negated.
-	self assert: division remainder asMultivariate = (x^2 * 2).
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:40:58'!
-testPseudoDivision: R
-	| Rx f g div |
-	Rx _ R polynomials.
-	f _ Rx atRandomBits: 100 maxDegree: 10 atRandom.
-	[g _ Rx atRandomBits: 100 maxDegree: 10 atRandom. g isZero] whileTrue.
-	div _ f pseudoDivisionBy: g.
-	self assert: div verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:01'!
-testPseudoDivisionUnivariate
-	| Zx x division |
-	Zx _ ZZ polynomials.
-	x _ Zx x.
-	division _ x^3 + x + 1 pseudoDivisionBy: (x^2 * 3) + x + 1.
-	self assert: division quotient = (x*3 - 1).
-	self assert: division remainder = (x*7 + 10).
-	self assert: division delta = 2.
-	self assert: division verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:02'!
-testPseudoDivisionUnivariate2
-	"Example from Zippel book"
-	| Zx a b |
-	Zx _ ZZ polynomials.
-	a _ Zx coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ Zx coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	^ self assert: (a pseudoDivisionBy: b) verify! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:53'!
-testPseudoDivisionZ
-	self testPseudoDivision: ZZ! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:13:22'!
-testPseudoDivisionZ6
-	self testPseudoDivision: ZZ / 6! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 19:41:07'!
-testPseudoRemainder
-	| Zx x a b r |
-	Zx _ ZZ polynomials.
-	x _ Zx x.
-	a _ x^8 + (x^6) - (3*(x^4)) - (3*(x^3)) + (8*(x^2)) + (2*x) - 5.
-	b _ 3*(x^6) + (5*(x^4)) - (4*(x^2)) - (9*x) + 21.
-	r _ Zx coefficients: #(-9 0 3 0 -15).
-	self assert: (a pseudoRem: b) = r.
-	self assert: (a pseudoDivisionBy: b) remainder = r! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/22/2018 18:26:13'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 5/22/2018 18:26:13'!
 testQuotientRingBug
 	"This is fixed by making ideals of Z[x] have generators with positive leading coefficient. But it could be still a problem for polynomials over other rings."
 	| R f Q pi a b |
@@ -7038,56 +7192,7 @@ testQuotientRingBug
 	b _ R x^2 + 1.
 	self assert: (pi value: a) + (pi value: b) = (pi value: a+b)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/25/2018 15:46:49'!
-testRationalFactorization
-	| x f factors |
-	x _ QQ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	factors _ f factors.
-	self assert: factors size = 5.
-	self assert: factors asSet size = 4.
-	self assert: factors product monic = f monic "up to a unit"! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/24/2018 17:32:47'!
-testRationalRoots
-	| x f roots |
-	x _ QQ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: 1/2) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/24/2018 20:32:28'!
-testRationalRootsBug
-	| x f roots |
-	x _ QQ polynomials x.
-	f _ x^3*-1 + (3*x) + 2.
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: -1) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/29/2018 20:30:09'!
-testRealRoots
-	| x f roots |
-	x _ QQ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	roots _ f allRootsIn: RR.
-	self assert: roots size = 5.
-	self assert: roots asSet size = 4.
-	self assert: (roots occurrencesOf: 1/2) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/17/2018 16:04:08'!
-testRemainderInconsistency
-	"In Sage these two give the same result."
-	| X x |
-	X _ ZZ polynomials x.
-	x _ QQ polynomials x.
-	self assert: (x \\ (1 - x)) leadingCoefficient = (X \\ (1 - X)) leadingCoefficient! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/7/2017 07:27:20'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 3/7/2017 07:27:20'!
 testResultant
 	| Zx x f g f2 g2 h |
 	Zx _ ZZ polynomials.
@@ -7102,7 +7207,7 @@ testResultant
 	self assert: (-1)^(f degree * g degree) * (f resultant: g) = (g resultant: f).
 	self assert: (f * g resultant: h) = ((f resultant: h) * (g resultant: h))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:53'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 05:53'!
 testResultant2
 	| Zx x f g |
 	Zx _ ZZ polynomials.
@@ -7111,22 +7216,7 @@ testResultant2
 	g _ 3 * (x - 7).
 	self assert: (f resultant: g) = ((2 ^ 1) * (3^2) * (5 - 7) * (11 - 7))! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 11/25/2016 10:32:56'!
-testSPRS
-	"Example from Zippel."
-	| a b sprs |
-	a _ ZZ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ ZZ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	sprs _ a sprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
-	self assert: sprs = #((1 0 1 0 -3 -3 8 2 -5)
-		#(3 0 5 0 -4 -9 21)
-		#(15 0 -3 0 9)
-		#(65 125 -245)
-		#(9326 -12300)
-		#(260708))
-! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:53'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 05:53'!
 testShift
 	| Zx x f |
 	Zx _ ZZ polynomials.
@@ -7137,7 +7227,7 @@ testShift
 	self assert: f * (x^3) = (f shift: 3).
 	self assert: (f * (x^3) shift: -3) = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:10'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:10'!
 testSquareFree
 	| P x f1 f2 f3 f |
 	P _ QQ polynomials.
@@ -7148,7 +7238,7 @@ testSquareFree
 	f _ f1*f1*f2*f3*f3*f3.
 	self assert: f squareFree = (f1 * f2 * f3)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:10'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:10'!
 testSquareFreeMultivariate
 	| P x y f1 f2 f |
 	P _ QQ polynomialsIn: #(x y).
@@ -7159,7 +7249,7 @@ testSquareFreeMultivariate
 	f _ f1*f1*f2*f2.
 	self assert: f squareFree = (f1 * f2)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 7/17/2019 10:50:36'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 7/17/2019 10:50:36'!
 testSubresultant
 	"deg(gcd(f,g)) = d iff subresultant(f,g,k) = 0 for all k < d and subresultant(f,g,d) ~= 0, and the d-th subresultant coefficient is in fact a gcd of f and g."
 	| x f g |
@@ -7172,7 +7262,7 @@ testSubresultant
 	self assert: (f subresultant: 2 with: g) isZero not.
 	self assert: (f subresultant: 2 with: g) primitivePart = (x^2 - 1)! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 05:54'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 05:54'!
 testSubresultant0
 	| Zx x f g |
 	Zx _ ZZ polynomials.
@@ -7181,7 +7271,7 @@ testSubresultant0
 	g _ 3 * (x - 7).
 	self assert: (f resultant: g) = (f subresultant: 0 with: g) asScalar! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:10'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:10'!
 testUnivariateMultivariateConversion
 	| Qx x y f |
 	Qx _ QQ polynomialsIn: #(x y).
@@ -7192,7 +7282,7 @@ testUnivariateMultivariateConversion
 "	self assert: (f asUnivariateIn: 1 :: asMultivariate) = f."
 	self assert: (f asUnivariateIn: 2 :: asMultivariate) = f! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 3/7/2017 07:27:48'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 3/7/2017 07:27:48'!
 testUnivariateMultivariateConversion2
 	| Qx x y f f2 x0 y0 |
 	Qx _ QQ polynomialsIn: #(x y).
@@ -7206,7 +7296,7 @@ testUnivariateMultivariateConversion2
 	y0 _ (-100 to: 100) atRandom.
 	self assert: ((f2 value: y0) value: x0) = (f value: {x0. y0})! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/26/2016 06:10'!
+!PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:10'!
 testZeroCoefficientBug
 	| Qx |
 	Qx _ QQ polynomials.
@@ -8771,6 +8861,23 @@ testModTupleSum
 	a _ ZZ tuple: ((1 to: 10) collect: [:i| 100 atRandom]).
 	b _ a % 7.
 	self assert: b sum = (a sum % 7)! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2020 07:49:25'!
+testModularIntegersTupleAssociateBug
+	| R t |
+	R _ ZZ/8.
+	t _ R tuple: #(3 2).
+	self assert: t*5*5 = t.
+	self assert: (t*5) normalized = t normalized! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2020 06:46:25'!
+testModularIntegersTupleUnitsAndAssociates
+	| R t tt |
+	R _ ZZ/64 atRandom.
+	t _ R atRandomTuple: 5 atRandom.
+	tt _ t normalized.
+	self assert: t * t unit inverse = tt.
+	R unitsDo: [:u| self assert: (t*u) normalized = tt].! !
 
 !TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 14:24'!
 testTuple: a operation: aSymbol modulo: modulus
