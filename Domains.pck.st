@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 15 May 2020 at 9:37:14 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 15 May 2020 at 6:12:44 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 575!
+!provides: 'Domains' 1 576!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -21374,15 +21374,15 @@ reduce: anElement
 	(self contains: anElement) ifTrue: [^ self zero].
 	^ anElement! !
 
-!Module methodsFor: 'operations' stamp: 'len 4/29/2020 12:51:06'!
+!Module methodsFor: 'operations' stamp: 'len 5/15/2020 11:45:13'!
 span: aCollection
 	"Answer the submodule spanned by the module elements in aCollection."
 	| generators |
 	self isAmbient ifFalse: [^ self ambient span: aCollection].
-	generators _ aCollection select: [:each| each isZero not].
+	generators _ (aCollection collect: [:each| self !! each]) select: [:each| each isZero not].
 	(self isFree and: [self scalars isPID]) ifTrue:
 		[| M |
-		M _ Matrix rows: (generators collect: [:each| self coordinatesOf: self !! each]).
+		M _ Matrix rows: (generators collect: [:each| self coordinatesOf: each]).
 		M _ M echelon.
 		generators _ (M rows select: [:each| each isZero not]) collect: [:each| self elementAt: each].
 		(self isVectorSpace and: [generators size = self rank]) ifTrue: [^ self]].
@@ -24659,26 +24659,29 @@ pointsOver: aRing do: aBlock
 		ifTrue: [^ self pointsOverIntegersDo: aBlock].
 	self pointsOverRing: aRing do: aBlock! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 4/13/2020 03:00:57'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/15/2020 17:54:10'!
 pointsOverField: aRing do: aBlock
 	| one zero |
 	one _ aRing one.
 	zero _ aRing zero.
-	aRing tuples: self rank - 1 do: [:each|
-		(each isZero not and: [(each at: each depth) = one])
+	aRing tuples: self rank - 1 do: [:each| | d |
+		((d _ each depth) > 0 and: [(each at: d) = one])
 			ifTrue: [aBlock value: (self pointAt: each, zero)].
 		aBlock value: (self pointAt: (each, one))].! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/2/2019 10:08:33'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/15/2020 18:06:20'!
 pointsOverIntegersDo: aBlock
-	self notYetImplemented! !
+	ZZ tuples: self rank do: [:each| | d |
+		((d _ each depth) > 0 and: [(each at: d) > 0 and: [each content = 1]])
+			ifTrue: [aBlock value: each]]! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 4/14/2020 13:37:37'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/15/2020 17:54:33'!
 pointsOverRing: aRing do: aBlock
-	self notYetImplemented
-"	| visited point |
+	| visited point |
 	visited _ Set new.
-	aRing tuples: self rank + 1 do: [:each| each isZero ifFalse: [visited add: (point _ self pointAt: each) ifAbsent: [aBlock value: point]]]"! !
+	aRing tuples: self rank do: [:each|
+		(aRing * each asArray) isOne
+			ifTrue: [visited add: (point _ self pointAt: each) ifAbsent: [aBlock value: point]]]! !
 
 !ProjectiveSpace methodsFor: 'testing' stamp: 'len 1/5/2017 07:59:24'!
 isOrdinaryProjectiveSpace
@@ -46571,12 +46574,13 @@ reciprocalModulo: mod
 		ifTrue: [result]
 		ifFalse: [result2]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 4/21/2020 22:15:23'!
+!Integer methodsFor: '*domains' stamp: 'len 5/15/2020 12:11:29'!
 split: anInteger
-	"Answer a factor of the argument splitting off the common factors between the argument and the receiver."
+	"Answer a factor of the argument splitting off the common factors between the argument and the receiver.
+	Reference: 'Fast Algorithms for Linear Algebra Modulo N', Arne Storjohann, Thom Mulders."
 	| a |
 	a _ self.
-	((anInteger log: 2) log: 2) ceiling timesRepeat: [a _ a squared \\ anInteger].
+	anInteger highBit highBit timesRepeat: [a _ a squared \\ anInteger].
 	^ anInteger // (a gcd: anInteger)! !
 
 !Integer methodsFor: '*domains' stamp: 'len 12/14/2016 22:03:49'!
