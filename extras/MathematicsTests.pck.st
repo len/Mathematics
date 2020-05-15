@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 10 May 2020 at 2:36:44 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 15 May 2020 at 9:44:24 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 159!
+!provides: 'MathematicsTests' 1 160!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -6438,12 +6438,12 @@ testMultivariateGCDBug
 	x _ QQ polynomialsIn: 3 :: x.
 	self assert: (x^2 gcd: x) = x! !
 
-!PolynomialTest methodsFor: 'division' stamp: 'len 7/4/2016 04:33'!
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:33:23'!
 testDivision: F
 	| Fx f g |
 	Fx _ F polynomials.
-	f _ Fx atRandomBits: 100 maxDegree: 10 atRandom.
-	[g _ Fx atRandomBits: 100 maxDegree: 10 atRandom. g isZero] whileTrue.
+	f _ Fx atRandomBits: 50 maxDegree: 5 atRandom.
+	[g _ Fx atRandomBits: 50 maxDegree: 5 atRandom. g isZero] whileTrue.
 	self assert: (f // g) * g + (f \\ g) = f! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:23:03'!
@@ -6477,6 +6477,18 @@ testDivisionQ2
 	g _ 1 + (x*3).
 	self assert: f // g = (P !! (1/3)).
 	self assert: f \\ g = (P !! (-1/3))! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:22:57'!
+testDivisionRationalFunctions
+	self testDivision: QQ polynomials fractions! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:23:21'!
+testDivisionRationalFunctionsZ2
+	self testDivision: (ZZ/2) polynomials fractions! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/13/2020 08:53:01'!
+testDivisionRationalFunctionsZ65535
+	self testDivision: (PrimeField new: 2^17 - 1) polynomials fractions! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 5/10/2020 02:25:11'!
 testDivisionZ1
@@ -6547,6 +6559,26 @@ testDivisionZ7
 	g _ x^2*3.
 	self assert: f // g = (P !! 0).
 	self assert: f \\ g = f! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/13/2020 12:48:54'!
+testDivisionZ8
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x*(-10).
+	g _ x*(-9).
+	self assert: f // g = (P !! 1).
+	self assert: f \\ g = x negated! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/14/2020 08:27:25'!
+testDivisionZ9
+	| P x f g |
+	P _ ZZ polynomials.
+	x _ P x.
+	f _ x*(-10).
+	g _ x*(-3).
+	self assert: f // g = (P !! 3).
+	self assert: f \\ g = (x*(-1))! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 5/9/2020 17:56:04'!
 testExactDivisionBug
@@ -6688,14 +6720,22 @@ testPseudoDivision3
 	self assert: division remainder asMultivariate = (x^2 * 2).
 	self assert: division verify! !
 
-!PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:40:58'!
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:33:15'!
 testPseudoDivision: R
-	| Rx f g div |
+	| Rx f g division |
 	Rx _ R polynomials.
-	f _ Rx atRandomBits: 100 maxDegree: 10 atRandom.
-	[g _ Rx atRandomBits: 100 maxDegree: 10 atRandom. g isZero] whileTrue.
-	div _ f pseudoDivisionBy: g.
-	self assert: div verify! !
+	f _ Rx atRandomBits: 50 maxDegree: 5 atRandom.
+	[g _ Rx atRandomBits: 50 maxDegree: 5 atRandom. g isZero] whileTrue.
+	division _ f pseudoDivisionBy: g.
+	self assert: division verify! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:24:22'!
+testPseudoDivisionOverPolynomialRing1
+	self testPseudoDivision: QQ polynomials! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:24:31'!
+testPseudoDivisionOverPolynomialRing2
+	self testPseudoDivision: (QQ polynomialsIn: 2)! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:01'!
 testPseudoDivisionUnivariate
@@ -6721,9 +6761,17 @@ testPseudoDivisionUnivariate2
 testPseudoDivisionZ
 	self testPseudoDivision: ZZ! !
 
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:21:19'!
+testPseudoDivisionZ12
+	self testPseudoDivision: ZZ / 12! !
+
 !PolynomialTest methodsFor: 'division' stamp: 'len 12/2/2016 11:13:22'!
 testPseudoDivisionZ6
 	self testPseudoDivision: ZZ / 6! !
+
+!PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:21:31'!
+testPseudoDivisionZ8
+	self testPseudoDivision: ZZ / 8! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 4/24/2018 19:41:07'!
 testPseudoRemainder
@@ -7445,11 +7493,11 @@ testGaloisRingIsEuclidean
 	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
 	self testEuclideanRing: R! !
 
-!RingTest methodsFor: 'euclidean' stamp: 'len 5/4/2020 05:30:50'!
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/12/2020 12:41:30'!
 testGaloisRingLCM
 	| R |
 	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
-	self testGCD: R! !
+	self testLCM: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:15'!
 testLCM: R
@@ -8059,7 +8107,7 @@ testPrimePowerRingValuationAndUnit
 	x _ R !! 0.
 	self assert: x valuation = Infinity positive! !
 
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:16:08'!
+!RingTest methodsFor: 'finite rings' stamp: 'len 5/10/2020 19:58:36'!
 testQuasiGaloisRing1
 	| p r n A |
 	p _ #(2 3) atRandom.
@@ -8067,7 +8115,7 @@ testQuasiGaloisRing1
 	n _ 3 atRandom+1.
 	A _ QuasiGaloisRing new: p to: r to: n.
 	self testRing: A.
-	self testSmallRingUnitsAndAssociates: A.
+	self testRingUnitsAndAssociates: A.
 	self assert: A characteristic = p.
 	self assert: A size = (p^(r*n)).
 	self assert: A isLocal.
@@ -8128,6 +8176,15 @@ testCanonicalMorphisms
 	self assert: (ZZ -> R value: 4) = (R !! 4). "canonical morphism from initial object"
 	self assert: (R -> Q value: x^2 + 2) = Q one. "canonical morphism to quotient object"! !
 
+!RingTest methodsFor: 'general' stamp: 'len 5/13/2020 06:06:15'!
+testDivisionByUnits: R
+	100 timesRepeat:
+		[| x u |
+		x _ R atRandomBits: 30.
+		u _ R units atRandomBits: 30.
+		self assert: x*u // u = x.
+		self assert: x // u = (x * u inverse)]! !
+
 !RingTest methodsFor: 'general' stamp: 'len 10/20/2016 06:06'!
 testKrullDimension
 	| R I |
@@ -8156,20 +8213,21 @@ testProductRing
 testQQ
 	self testRing: QQ! !
 
-!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:06:49'!
+!RingTest methodsFor: 'general' stamp: 'len 5/13/2020 06:07:00'!
 testRing: R
 	self testRingAxioms: R.
-	self testRingUnitsAndAssociates: R! !
+	self testRingUnitsAndAssociates: R.
+	self testDivisionByUnits: R! !
 
-!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:09:44'!
+!RingTest methodsFor: 'general' stamp: 'len 5/13/2020 06:44:18'!
 testRingAxioms: R
 	| one zero a b c |
 	one _ R one.
 	zero _ R zero.
-	300 timesRepeat:
-		[a _ R atRandomBits: 100.
-		b _ R atRandomBits: 100.
-		c _ R atRandomBits: 100.
+	100 timesRepeat:
+		[a _ R atRandomBits: 20.
+		b _ R atRandomBits: 20.
+		c _ R atRandomBits: 20.
 		self assert: a * one = a.
 		self assert: one * a = a.
 		self assert: zero * a = zero.
@@ -8199,10 +8257,10 @@ testRingHomomorphism: phi
 	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
 	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
 
-!RingTest methodsFor: 'general' stamp: 'len 5/9/2020 17:10:34'!
+!RingTest methodsFor: 'general' stamp: 'len 5/11/2020 03:06:02'!
 testRingUnitsAndAssociates: R
-"	R size < 300 ifTrue: [^ self testSmallRingUnitsAndAssociates: R]."
-	300 timesRepeat:
+"	R size < 100 ifTrue: [^ self testSmallRingUnitsAndAssociates: R]."
+	100 timesRepeat:
 		[| x u |
 		x _ R atRandomBits: 30.
 		u _ (R atRandomBits: 30) unit.
@@ -8279,6 +8337,14 @@ testValuationRing2
 	| V |
 	V _ ZZ localizationAt: 5.
 	self testDVR: V! !
+
+!RingTest methodsFor: 'localizations' stamp: 'len 5/13/2020 06:50:08'!
+testFractionsRing
+	| R F |
+	R _ self newRing.
+	F _ R fractions.
+	self testRing: R.
+	self testRingHomomorphism: R -> F! !
 
 !RingTest methodsFor: 'localizations' stamp: 'len 6/10/2019 14:52:03'!
 testLocalizationInclusions
@@ -8376,6 +8442,16 @@ testPolynomialRingPrimeNotMaximalIdeal2
 	self assert: I isPrime.
 	self assert: I isMaximal not! !
 
+!RingTest methodsFor: 'polynomials' stamp: 'len 5/13/2020 06:28:58'!
+testRationalFunctions
+	| R P F |
+	R _ self newField.
+	P _ R polynomials.
+	F _ P fractions.
+	self testRing: F.
+	self testRingHomomorphism: R -> F.
+	self testRingHomomorphism: P -> F! !
+
 !RingTest methodsFor: 'quotients' stamp: 'len 10/6/2016 20:32'!
 testQuotientRing
 	| Q |
@@ -8412,19 +8488,28 @@ testQuotientRingWhichIsAField
 	R _ R / (R x^2 + (R x * 2) + 2).
 	self assert: R isField! !
 
-!RingTest methodsFor: 'private' stamp: 'len 12/2/2016 11:13:56'!
+!RingTest methodsFor: 'private' stamp: 'len 5/13/2020 06:41:42'!
+newField
+	| R |
+	R _ {QQ. ZZ / 256 atRandom nextPrime} atRandom.
+	"TODO: function fields, p-adics, power series"
+"	R _ 2 atRandom = 1 ifTrue: [R extensionDegree: 3 atRandom + 1]."
+"	2 atRandom = 1 ifTrue: [^ R polynomials fractions]."
+	^ R! !
+
+!RingTest methodsFor: 'private' stamp: 'len 5/13/2020 06:47:50'!
 newQuotientRing
 	| R I |
 	2 atRandom = 1 ifTrue: [^ ZZ / (2 to: 10) atRandom].
-	R _ ZZ polynomials.
+	R _ QQ polynomials.
 	I _ R * (R atRandomBits: 10 maxDegree: 5).
 	^ R / I! !
 
-!RingTest methodsFor: 'private' stamp: 'len 9/16/2018 23:31:05'!
+!RingTest methodsFor: 'private' stamp: 'len 5/13/2020 06:48:49'!
 newRing
 	4 atRandom = 1 ifTrue: [^ self newQuotientRing].
-	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
-	^ {ZZ. QQ. ZZ / (2 to: 10) atRandom} atRandom! !
+	2 atRandom = 1 ifTrue: [^ {ZZ. QQ. ZZ / 64 atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
+	^ {ZZ. QQ. ZZ / 64 atRandom} atRandom! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 18:09:49'!
 testBellNumbers
