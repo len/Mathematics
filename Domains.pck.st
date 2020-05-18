@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 15 May 2020 at 6:12:44 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 18 May 2020 at 9:18:09 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 576!
+!provides: 'Domains' 1 577!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2860,6 +2860,16 @@ MatrixReduction subclass: #HermiteReduction
 HermiteReduction class
 	instanceVariableNames: ''!
 
+!classDefinition: #HowellReduction category: #'Domains-Modules-Matrices-Algorithms'!
+MatrixReduction subclass: #HowellReduction
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Modules-Matrices-Algorithms'!
+!classDefinition: 'HowellReduction class' category: #'Domains-Modules-Matrices-Algorithms'!
+HowellReduction class
+	instanceVariableNames: ''!
+
 !classDefinition: #SmithReduction category: #'Domains-Modules-Matrices-Algorithms'!
 Object subclass: #SmithReduction
 	instanceVariableNames: 'matrix invariants'
@@ -4798,6 +4808,16 @@ The algorithm is essentially [1] but modified to do row reduction instead of col
 
 [1] Henri Cohen, 'A Course in Computational Algebraic Number Theory', Algorithm 2.4.4.!
 
+!HowellReduction commentStamp: '<historical>' prior: 0!
+This is the Howell row reduction algorithm. Given a matrix with coefficients in a PIR such as Z/mZ, it reduces the matrix to its Howell normal form.
+
+References:
+John A. Howell, 'Spans in the module (Z/mZ)^s' (1986)
+Arne Storjohann, 'Algorithms for Matrix Canonical Forms' (2000)
+Arne Storjohann, Thom Mulders, 'Fast algorithms for linear algebra modulo N' (1998)
+Claus Flieker, Tommy Hofmann, 'Computing in quotients of rings of integers' (2016)
+!
+
 !SmithReduction commentStamp: '<historical>' prior: 0!
 This is the Smith reduction algorithm. Given a matrix with coefficients in a PID, it reduces the matrix to its Smith normal form.
 
@@ -5091,12 +5111,12 @@ printOn: aStream
 	self isEmpty ifTrue: [aStream nextPut: Character emptySet. ^ self].
 	super printOn: aStream! !
 
-!YoungTableau methodsFor: 'printing' stamp: 'len 1/17/2017 09:06:41'!
+!YoungTableau methodsFor: 'printing' stamp: 'len 5/17/2020 12:36:42'!
 printOn: aStream
 	self rows do: [:row|
 		aStream nextPut: $[.
 		row do: [:each| aStream print: each] separatedBy: [aStream nextPut: $|].
-		aStream nextPut: $]] separatedBy: [aStream lf; space]! !
+		aStream nextPut: $]] separatedBy: [aStream newLine; space]! !
 
 !Simplex methodsFor: 'printing' stamp: 'len 2/27/2017 08:21:52'!
 printOn: aStream
@@ -6123,7 +6143,7 @@ printOn: aStream
 	self modulus > 16 ifTrue: [^ super printOn: aStream].
 	1 to: self size do: [:i| (representatives at: i) printOn: aStream base: 16]! !
 
-!Matrix methodsFor: 'printing' stamp: 'len 5/16/2019 00:13:05'!
+!Matrix methodsFor: 'printing' stamp: 'len 5/17/2020 12:37:01'!
 printOn: aStream
 	| lengths string pad |
 	self isEmpty ifTrue: [aStream nextPutAll: '[]'. ^ self].
@@ -6145,7 +6165,7 @@ printOn: aStream
 		pad timesRepeat: [aStream space].
 		aStream nextPutAll: string.
 		pad timesRepeat: [aStream space]]
-			separatedBy: [aStream nextPut: $]; lf; nextPutAll: ' ['].
+			separatedBy: [aStream nextPut: $]; newLine; nextPutAll: ' ['].
 	aStream nextPut: $]! !
 
 !ModuleMonomial methodsFor: 'printing' stamp: 'len 1/5/2018 16:01:39'!
@@ -6215,12 +6235,12 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: $[; print: value; nextPut: $]! !
 
-!YoungDiagram methodsFor: 'as yet unclassified' stamp: 'len 1/17/2017 09:06:37'!
+!YoungDiagram methodsFor: 'as yet unclassified' stamp: 'len 5/17/2020 12:36:48'!
 printOn: aStream
 	self shape do: [:k|
 		aStream nextPut: $[.
 		(1 to: k) do: [:ignore| aStream space] separatedBy: [aStream nextPut: $|].
-		aStream nextPut: $]] separatedBy: [aStream lf; space]! !
+		aStream nextPut: $]] separatedBy: [aStream newLine; space]! !
 
 !WeierstrassEquation methodsFor: 'printing' stamp: 'len 2/12/2017 06:05:00'!
 printOn: aStream
@@ -20445,6 +20465,11 @@ has: anIndeterminate
 includes: anObject
 	^ anObject parent = self! !
 
+!PolynomialRing methodsFor: 'testing' stamp: 'len 5/18/2020 07:29:09'!
+isBezout
+	"Answer true if the receiver is a Bezout ring, i.e. every finitely generated ideal is principal."
+	^ self isEuclidean! !
+
 !PolynomialRing methodsFor: 'testing' stamp: 'len 5/1/2019 17:33:22'!
 isCoherent
 	"Answer true if the receiver is a coherent ring, i.e. if it is coherent as a module over itself."
@@ -20452,10 +20477,10 @@ isCoherent
 	self scalars isPruferDomain ifTrue: [^ true].
 	^ super isCoherent! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 4/26/2020 08:48:41'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 5/18/2020 07:27:47'!
 isEuclidean
 	"Answer true if the receiver is a Euclidean ring, i.e. it has division with remainder."
-	^ self scalars isField! !
+	^ self scalars isField and: [self isUnivariate]! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 4/29/2019 04:48:51'!
 isGCDDomain
@@ -21554,12 +21579,12 @@ example6QuotientPresentation
 	"A free presentation of the quotient module Z^3 / <(1,2,3), (2,2,2)>."
 	^ (ZZ^3 / {(1,2,3). (2,2,2)}) presentation! !
 
-!Ideal methodsFor: 'accessing' stamp: 'len 1/15/2018 19:03:08'!
+!Ideal methodsFor: 'accessing' stamp: 'len 5/18/2020 06:55:53'!
 generator
 	| generator |
 	self generators size = 1 ifTrue: [^ self generators anyOne].
 	self generators size = 0 ifTrue: [^ self scalars zero].
-	self scalars isPID ifFalse: [^ self error: 'not a principal ideal domain'].
+	self scalars isPIR ifFalse: [^ DomainError signal].
 	self generators do: [:each| generator _ generator isNil ifTrue: [each] ifFalse: [generator gcd: each]].
 	self generators: {generator}.
 	^ generator! !
@@ -21789,12 +21814,12 @@ isZero
 	"Answer true if the receiver is the zero ideal {0}."
 	^ self isTrivial! !
 
-!Ideal methodsFor: 'private' stamp: 'len 1/15/2018 18:48:36'!
+!Ideal methodsFor: 'private' stamp: 'len 5/18/2020 07:46:06'!
 generators: aCollection
 	| generators |
 	generators _ aCollection asSet reject: [:each| each isZero].
-"	generators size = aCollection size ifTrue: [generators _ aCollection]." "keep order if possible"
-	(generators size > 1 and: [[self scalars isPID] ifError: [false]])
+	generators _ generators collect: [:each| each normalized].
+	(generators size > 1 and: [self scalars isPIR])
 		ifTrue:
 			[| generator |
 			generators do: [:each| generator _ generator isNil ifTrue: [each] ifFalse: [generator gcd: each]].
@@ -22680,6 +22705,11 @@ new: anIntegerOrCollection over: aRing
 !HomModule methodsFor: 'accessing' stamp: 'len 3/4/2020 18:44:10'!
 ambient
 	^ self! !
+
+!HomModule methodsFor: 'accessing' stamp: 'len 5/17/2020 17:44:15'!
+carrier
+	^ self propertyAt: #carrier ifAbsentPut: [domain hom: codomain]
+! !
 
 !HomModule methodsFor: 'accessing' stamp: 'len 10/2/2018 01:15:09'!
 codomain
@@ -24675,12 +24705,12 @@ pointsOverIntegersDo: aBlock
 		((d _ each depth) > 0 and: [(each at: d) > 0 and: [each content = 1]])
 			ifTrue: [aBlock value: each]]! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/15/2020 17:54:33'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/16/2020 09:50:05'!
 pointsOverRing: aRing do: aBlock
 	| visited point |
 	visited _ Set new.
 	aRing tuples: self rank do: [:each|
-		(aRing * each asArray) isOne
+		each isUnimodular
 			ifTrue: [visited add: (point _ self pointAt: each) ifAbsent: [aBlock value: point]]]! !
 
 !ProjectiveSpace methodsFor: 'testing' stamp: 'len 1/5/2017 07:59:24'!
@@ -33008,14 +33038,9 @@ exactQuotient
 quotient
 	^ quotient ifNil: [quotient _ dividend // divisor]! !
 
-!Division methodsFor: 'accessing' stamp: 'len 5/15/2020 06:06:04'!
+!Division methodsFor: 'accessing' stamp: 'len 5/17/2020 07:32:15'!
 remainder
-	^ remainder ifNil: [remainder _ dividend \\ divisor]! !
-
-!Division methodsFor: 'private' stamp: 'len 5/15/2020 05:47:43'!
-divide
-	quotient _ dividend // divisor.
-	remainder _ dividend \\ divisor! !
+	^ remainder ifNil: [remainder _ dividend - (divisor * self quotient)]! !
 
 !Division methodsFor: 'private' stamp: 'len 5/15/2020 06:06:46'!
 dividend: a divisor: b
@@ -33220,9 +33245,10 @@ asRatio
 divisionBy: anElement
 	^ Division divide: self by: anElement! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/14/2020 12:31:22'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/17/2020 07:26:13'!
 gcd: anElement
-	"Answer the greatest common divisor of the receiver and the argument.
+	"Answer the greatest common divisor of the receiver and the argument,
+	i.e. a generator of the principal ideal generated by the reciever and the argument.
 	The result is the canonical associate (normalized)."
 	| a b |
 	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
@@ -33284,12 +33310,10 @@ stabilizerWith: b modulo: N
 	"If the receiver is 'a', answer 'c' such that '<a + cb, N> = <a, b, N>'."
 	self notYetImplemented! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/10/2020 13:44:59'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/18/2020 08:40:36'!
 xgcd: anElement
 	"Extended Euclidean algorithm.
-	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement). The following unimodular matrix can be constructed from the output:
-		[ u          v ] [a]
-		[-b/g  a/g] [b] = (g 0)."
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t} where as + bt = g = (a gcd: b)."
 	| a b zero one s1 t1 s t r1 r u |
 	(self parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #xgcd:].
 	a _ self.
@@ -33310,6 +33334,17 @@ xgcd: anElement
 	u _ r unit inverse.
 	s _ s * u. t _ t * u. r _ r * u.
 	^ {r. t. s}! !
+
+!RingElement methodsFor: 'operations' stamp: 'len 5/18/2020 08:48:42'!
+xxgcd: anElement
+	"(More) Extended Euclidean algorithm.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+		[s  t] [a]
+		[u v] [b] = (g 0)."
+	| xgcd g |
+	(self isZero and: [anElement isZero]) ifTrue: [^ {self. self parent one. self. self. self parent one}].
+	self parent isIntegralDomain ifFalse: [^ DomainError signal].
+	^ (xgcd _ self xgcd: anElement), {(anElement ÷ (g _ xgcd at: 1)) negated. self ÷ g}! !
 
 !RingElement methodsFor: 'testing' stamp: 'len 9/25/2018 15:26:51'!
 isIdempotent
@@ -33976,13 +34011,13 @@ reduce
 	numerator _ a * u.
 	denominator _ b * u! !
 
-!Residue methodsFor: 'accessing' stamp: 'len 5/10/2020 16:45:09'!
+!Residue methodsFor: 'accessing' stamp: 'len 5/18/2020 06:56:36'!
 annihilator
 	| xgcd |
 	self flag: #fix. "optimize and generalize for when base is not a PIR"
-	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	parent base isPIR ifFalse: [^ DomainError signal].
 	xgcd _ representative xgcd: parent modulus.
-	^ parent * (parent representative: ((xgcd at: 2) annihilator gcd: parent modulus // (xgcd at: 1)))! !
+	^ parent * (parent representative: ((xgcd at: 2) annihilator gcd: parent modulus ÷ (xgcd at: 1)))! !
 
 !Residue methodsFor: 'accessing' stamp: 'len 12/28/2015 20:32'!
 bitSize
@@ -34012,14 +34047,15 @@ parent
 representative
 	^ representative! !
 
-!Residue methodsFor: 'accessing' stamp: 'len 5/10/2020 16:41:15'!
+!Residue methodsFor: 'accessing' stamp: 'len 5/18/2020 06:56:47'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
 	"Adapted from ModularInteger>>\. This algorithm solves the congruence ax = self (mod m) where 'a' is the canonical associate of the receiver, and then looks for a solution 'x' that is a unit."
 	| a x modulus m |
 	self isZero ifTrue: [^ parent one].
 	self flag: #fix. "optimize and generalize for when base is not a PIR"
-	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	"See Storjohann. 'Algorithms for Matrix canonical Forms', pag. 15."
+	parent base isPIR ifFalse: [^ DomainError signal].
 	a _ representative gcd: (modulus _ parent modulus).
 	a isOne ifTrue: [^ self].
 	x _ representative // a.
@@ -34116,20 +34152,20 @@ zero
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
 	^ parent representative: (representative quotientBy: anElement representative modulo: parent modulus)! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/14/2020 05:24:16'!
+!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 06:56:27'!
 ÷ anElement
 	"Answer quotient of the exact division of the receiver by the argument, i.e. answer 'c' such that 'a = b * c', where 'a' is the receiver and 'b' is the argument. If the receiver is 0, answer 0. The result is undefined if 'b' doesn't divide 'a'."
 	| xgcd |
 	self isZero ifTrue: [^ self].
 	self flag: #fix. "optimize"
-	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	parent base isPIR ifFalse: [^ DomainError signal].
 	xgcd _ anElement representative xgcd: self modulus.
 	^ parent project: (xgcd at: 2) * (representative ÷ (xgcd at: 1))! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/10/2020 15:59:38'!
+!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 06:55:32'!
 gcd: anElement
 	self flag: #fix. "optimize"
-	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	parent base isPIR ifFalse: [^ DomainError signal].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
 	^ (parent project: (representative gcd: anElement representative)) normalized! !
 
@@ -34149,17 +34185,38 @@ value: anObject
 valueWithArguments: anArray
 	^ representative valueWithArguments: anArray! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/10/2020 15:59:45'!
-xgcd: anElement
+!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 06:55:26'!
+xgcd2: anElement
 	"Extended Euclidean algorithm.
 	Answer an array {g. u. v} where self * u + (anElement * v) = g, and g = (self gcd: anElement)."
 	| xgcd g u |
 	self flag: #fix. "optimize"
-	parent base isPIR ifFalse: [^ DomainError signal: 'base ring is not a PIR'].
+	parent base isPIR ifFalse: [^ DomainError signal].
 	xgcd _ representative xgcd: anElement representative.
 	g _ parent project: (xgcd at: 1).
 	u _ g unit inverse.
 	^ {g * u. (parent project: (xgcd at: 2)) * u. (parent project: (xgcd at: 3)) * u}! !
+
+!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 08:40:12'!
+xgcd: anElement
+	"Extended Euclidean algorithm.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t} where as + bt = g = (a gcd: b)."
+	| result |
+	self flag: #fix. "optimize"
+	parent base isPIR ifFalse: [^ DomainError signal].
+	result _ (representative xgcd: anElement representative) collect: [:each| parent project: each].
+	^ result * result first unit inverse! !
+
+!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 08:50:41'!
+xxgcd: anElement
+	"(More) Extended Euclidean algorithm.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+		[s  t] [a]
+		[u v] [b] = (g 0)."
+	| result |
+	(self isZero and: [anElement isZero]) ifTrue: [^ {self. self parent one. self. self. self parent one}].
+	result _ (representative xxgcd: anElement representative) collect: [:each| parent project: each].
+	^ result * result first unit inverse! !
 
 !Residue methodsFor: 'testing' stamp: 'len 9/15/2018 16:07:02'!
 contains: anObject
@@ -34190,9 +34247,9 @@ parent: aQuotientRing
 representative: anObject
 	representative _ anObject! !
 
-!ModularInteger methodsFor: 'accessing' stamp: 'len 5/10/2020 19:40:10'!
+!ModularInteger methodsFor: 'accessing' stamp: 'len 5/17/2020 16:44:36'!
 annihilator
-	^ parent * (parent project: parent modulus // (representative gcd: parent modulus))! !
+	^ parent * (parent project: parent modulus ÷ (representative gcd: parent modulus))! !
 
 !ModularInteger methodsFor: 'accessing' stamp: 'len 4/21/2016 05:55'!
 bitSize
@@ -34359,11 +34416,6 @@ additiveOrder
 	modulus _ self modulus.
 	^ modulus // (representative gcd: modulus)! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 9/15/2019 09:27:56'!
-gcd: anElement
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
-	^ parent project: (self normalized lift gcd: anElement normalized lift)! !
-
 !ModularInteger methodsFor: 'operations' stamp: 'len 8/12/2019 10:57:09'!
 inverse
 	representative == 1 ifTrue: [^ self].
@@ -34397,11 +34449,18 @@ squareRoot
 	"Assuming the receiver is a quadratic residue, answer a square root."
 	^ self notYetImplemented! !
 
-!ModularInteger methodsFor: 'operations' stamp: 'len 6/24/2019 01:53:31'!
+!ModularInteger methodsFor: 'operations' stamp: 'len 5/16/2020 09:58:18'!
+stabilizerWith: anElement
+	| N g |
+	N _ self modulus.
+	g _ (representative gcd: anElement representative) gcd: N.
+	^ parent representative: (N ÷ g split: representative ÷ g)! !
+
+!ModularInteger methodsFor: 'operations' stamp: 'len 5/18/2020 06:53:50'!
 valuation
 	"Answer the Euclidean valuation of the receiver."
 	self isZero ifTrue: [^ Infinity negative].
-	^ (representative gcd: parent modulus)! !
+	^ representative gcd: parent modulus! !
 
 !ModularInteger methodsFor: 'testing' stamp: 'len 5/4/2020 09:29:01'!
 isIrreducible
@@ -34741,9 +34800,19 @@ hash
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #//].
 	^ parent compose: (components with: anElement components collect: [:a :b| a // b])! !
 
+!RingTuple methodsFor: 'operations' stamp: 'len 5/17/2020 07:26:25'!
+gcd: anElement
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #gcd:].
+	^ parent compose: (components with: anElement components collect: [:a :b| a gcd: b])! !
+
 !RingTuple methodsFor: 'operations' stamp: 'len 4/25/2020 06:39:41'!
 inverse
 	^ self class new parent: parent; components: (components collect: [:each| each inverse])! !
+
+!RingTuple methodsFor: 'operations' stamp: 'len 5/17/2020 07:27:12'!
+lcm: anElement
+	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #lcm:].
+	^ parent compose: (components with: anElement components collect: [:a :b| a lcm: b])! !
 
 !RingTuple methodsFor: 'operations' stamp: 'len 4/25/2020 06:39:56'!
 negated
@@ -35153,17 +35222,14 @@ representative
 scalars
 	^ parent scalars! !
 
-!Polynomial methodsFor: 'accessing' stamp: 'len 5/8/2020 18:12:06'!
+!Polynomial methodsFor: 'accessing' stamp: 'len 5/16/2020 16:04:18'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
-	| c u v |
+	| u |
 	self isZero ifTrue: [^ parent one].
 	parent scalars isIntegralDomain ifTrue: [^ parent constant: self leadingCoefficient unit].
-	c _ self leadingCoefficient.
-	u _ c unit.
-	self isConstant ifFalse:
-		[v _ u * self tail unit leadingCoefficient.
-		c * v inverse = (c * u inverse) ifTrue: [u _ v]].
+	u _ parent scalars one.
+	self coefficients do: [:each| u _ u * each unit].
 	^ parent constant: u! !
 
 !Polynomial methodsFor: 'accessing' stamp: 'len 5/8/2020 18:22:10'!
@@ -35947,10 +36013,10 @@ isSquareFree
 	self isMonomial ifTrue: [^ self monomials anyOne isSquareFree].
 	^ self isZero not and: [(self gcd: self derivative) isConstant]! !
 
-!Polynomial methodsFor: 'testing' stamp: 'len 5/8/2020 15:30:51'!
+!Polynomial methodsFor: 'testing' stamp: 'len 5/16/2020 16:00:13'!
 isUnit
 	"Answer true if the receiver is invertible."
-	self isConstant ifTrue: [^ self leadingCoefficient isUnit].
+	self isConstant ifTrue: [^ self independentCoefficient isUnit].
 	parent scalars isIntegralDomain ifTrue: [^ false].
 	self independentCoefficient isUnit ifFalse: [^ false].
 	"this assumes the polynomial is univariate, can it be generalized to multivariate?"
@@ -36264,9 +36330,9 @@ degree
 	coefficients isEmpty ifTrue: [^ Infinity negative].
 	^ coefficients size - 1! !
 
-!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 3/23/2016 00:01'!
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 5/16/2020 15:59:53'!
 independentCoefficient
-	^ self coefficientAtDegree: 0! !
+	^ self atDegree: 0! !
 
 !UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 8/12/2019 16:51:05'!
 leadingCoefficient
@@ -38660,44 +38726,20 @@ scalars
 	"Answer the ring of scalars (or ring of coefficients) of the receiver."
 	^ self subclassResponsibility! !
 
-!Tuple methodsFor: 'accessing' stamp: 'len 5/10/2020 06:48:45'!
+!Tuple methodsFor: 'accessing' stamp: 'len 5/16/2020 12:27:17'!
+second
+	^ self at: 2! !
+
+!Tuple methodsFor: 'accessing' stamp: 'len 5/16/2020 19:02:24'!
 unit
 	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
-	| a tail u uInv |
-	self isEmpty ifTrue: [^ self scalars one].
-	tail _ OrderedCollection new: self size.
-	a _ self last.
-	u _ a unit.
-	uInv _ u inverse.
-	tail add: a * uInv.
-	self size - 1 to: 1 by: -1 do: [:i| | v vInv |
-		a _ self at: i.
-		v _ a unit.
-		vInv _ v inverse.
-		(tail allSatisfy: [:each| each * vInv = each]) ifFalse: [^ u].
-		tail add: a * vInv.
-		u _ u * v.
-		uInv _ uInv * vInv].
-	^ u! !
-
-!Tuple methodsFor: 'accessing' stamp: 'len 5/10/2020 06:16:09'!
-unit2
-	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
-	| a tail u uInv |
-	self isEmpty ifTrue: [^ self scalars one].
-	tail _ OrderedCollection new: self size.
-	a _ self last.
-	u _ a unit.
-	uInv _ u inverse.
-	tail add: a * uInv.
-	self size - 1 to: 1 by: -1 do: [:i| | v vInv |
-		a _ self at: i.
-		v _ a unit.
-		vInv _ v inverse.
-		(tail allSatisfy: [:each| each * vInv = each]) ifFalse: [^ u].
-		tail add: a * vInv.
-		u _ u * v.
-		uInv _ uInv * vInv].
+	| a d u u2 |
+	self reverseDo: [:each| each isUnit ifTrue: [^ each]].
+	(d _ self depth) > 0 ifFalse: [^ self scalars one].
+	u _ (self at: d) unit.
+	a _ (self at: d) * u inverse.
+	u2 _ (self copyFrom: 1 to: d-1) unit.
+	a * u2 inverse = a ifTrue: [^ u*u2].
 	^ u! !
 
 !Tuple methodsFor: 'accessing' stamp: 'len 3/29/2016 19:06'!
@@ -39119,6 +39161,19 @@ primitivePart
 	"Answer the primitive part of the receiver."
 	^ self isZero ifTrue: [self] ifFalse: [self ÷ self content]! !
 
+!Tuple methodsFor: 'operations' stamp: 'len 5/16/2020 13:32:19'!
+stabilizers
+	| answer last |
+	self size <= 1 ifTrue: [^ #()].
+	answer _ OrderedCollection new: self size - 1.
+	last _ self at: 1.
+	2 to: self size do: [:i| | ai ci |
+		ai _ self at: i.
+		ci _ last stabilizerWith: ai.
+		answer add: ci.
+		last _ ci*ai + last].
+	^ answer! !
+
 !Tuple methodsFor: 'operations' stamp: 'len 11/5/2016 09:27'!
 support
 	^ (1 to: self size) reject: [:each| (self at: each) isZero]! !
@@ -39174,6 +39229,12 @@ isSequenceable
 !Tuple methodsFor: 'testing' stamp: 'len 3/28/2018 18:01:30'!
 isTuple
 	^ true! !
+
+!Tuple methodsFor: 'testing' stamp: 'len 5/16/2020 10:34:21'!
+isUnimodular
+	"Answer true if the coefficients of the receiver generate the unit ideal.
+	Some authors use the name 'primitive' instead of 'unimodular'."
+	^ (self scalars * self asArray) isOne! !
 
 !Tuple methodsFor: 'testing' stamp: 'len 3/29/2016 19:04'!
 isZero
@@ -40698,12 +40759,12 @@ value: aTuple
 isBroken
 	^ self isEmpty not and: [(self allSatisfy: [:each| self scalars includes: each]) not]! !
 
-!Matrix methodsFor: 'printing' stamp: 'len 3/2/2017 05:14:04'!
+!Matrix methodsFor: 'printing' stamp: 'len 5/17/2020 12:37:06'!
 printBitsOn: aStream
 	aStream nextPut: $[.
 	self rows do: [:row|
 		row do: [:bit| aStream nextPut: (bit isZero ifTrue: [$0] ifFalse: [$1])]]
-			separatedBy: [aStream nextPut: $]; lf; nextPutAll: ' ['].
+			separatedBy: [aStream nextPut: $]; newLine; nextPutAll: ' ['].
 	aStream nextPut: $]! !
 
 !Matrix methodsFor: 'printing' stamp: 'len 5/30/2019 16:17:04'!
@@ -41012,7 +41073,7 @@ primaryInvariantFactors
 reduction
 	^ self reductionWith: nil! !
 
-!Matrix methodsFor: 'reduction' stamp: 'len 7/13/2019 14:26:26'!
+!Matrix methodsFor: 'reduction' stamp: 'len 5/17/2020 11:03:21'!
 reductionWith: aMatrix
 	self scalars isField
 		ifTrue: [^ GaussianElimination on: self extension: aMatrix].
@@ -41020,6 +41081,8 @@ reductionWith: aMatrix
 		ifTrue: [^ HermiteReduction on: self extension: aMatrix].
 	self scalars isIntegralDomain
 		ifTrue: [^ GaussBareiss on: self extension: aMatrix].
+	self scalars isPIR
+		ifTrue: [^ HowellReduction on: self extension: aMatrix].
 	^ DomainError signal! !
 
 !Matrix methodsFor: 'spectrum' stamp: 'len 4/7/2018 06:25:14'!
@@ -41988,6 +42051,77 @@ run
 				self addRow: k times: q negated toRow: i]].
 	"6. Finished?"
 	j = n or: [k = m]] whileFalse: [j _ j + 1. k _ k + 1].
+	^ matrix! !
+
+!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:50:49'!
+cancel: aPoint with: anotherPoint
+	| a b mgcd g s t u v j i Aj Ai |
+	mgcd _ (a _ matrix at: aPoint) xxgcd: (b _ matrix at: anotherPoint).
+	g _ mgcd at: 1.
+	s _ mgcd at: 2.
+	t _ mgcd at: 3.
+	u _ mgcd at: 4.
+	v _ mgcd at: 5.
+	self assert: s*a + (t*b) = g.
+	self assert: (u*a + (v*b)) isZero.
+	self assert: (s*v - (t*u)) isUnit.
+	"optimize!! avoid wasting memory"
+	"is this changing the determinant? should also update the extension"
+	j _ aPoint x.
+	i _ anotherPoint x.
+	Aj _ (matrix rowAt: j) copy.
+	Ai _ (matrix rowAt: i) copy.
+	matrix rowAt: j put: Aj*s + (Ai*t).
+	matrix rowAt: i put: Aj*u + (Ai*v)! !
+
+!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:50:45'!
+cancel: aPoint withTemporary: aTuple
+	| a b mgcd g s t u v j Aj |
+	mgcd _ (a _ matrix at: aPoint) xxgcd: (b _ aTuple at: aPoint y).
+	g _ mgcd at: 1.
+	s _ mgcd at: 2.
+	t _ mgcd at: 3.
+	u _ mgcd at: 4.
+	v _ mgcd at: 5.
+	self assert: s*a + (t*b) = g.
+	self assert: (u*a + (v*b)) isZero.
+	self assert: (s*v - (t*u)) isUnit.
+	"optimize!! avoid wasting memory"
+	"is this changing the determinant? should also update the extension"
+	j _ aPoint x.
+	Aj _ (matrix rowAt: j) copy.
+	matrix rowAt: j put: Aj*s + (aTuple*t).
+	^ Aj*u + (aTuple*v)! !
+
+!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:19:29'!
+run
+	| n |
+	n _ matrix width.
+	"Augment the matrix with zero rows to make it square:"
+	n > matrix height ifTrue: [matrix _ matrix rowAugmented: (matrix scalars zeroMatrix: (n - matrix height) @ n)].
+	self assert: matrix isSquare.
+	self assert: matrix height = n.
+	Transcript clear.
+	"Put it in upper triangular form:"
+	1 to: n do: [:j|
+		j+1 to: n do: [:i|
+			Transcript print: i@j; newLine; space; print: matrix; newLine.
+			 self cancel: j@j with: i@j]].
+	self assert: matrix isUpperTriangular.			
+	"Put it in Howell form:"
+	1 to: n do: [:j|
+		| B |
+		Transcript print: j; newLine; space; print: matrix; newLine.
+		(matrix isZeroAt: j@j)
+			ifTrue:
+				[B _ (matrix rowAt: j) copy]
+			ifFalse:
+				[self multiplyRow: j by: (matrix at: j@j) unit inverse.
+				1 to: j-1 do: [:i| self addRow: j times: ((matrix at: i@j) // (matrix at: j@j)) negated toRow: i].
+				B _ (matrix rowAt: j) * (matrix at: j@j) annihilator generator].
+		Transcript nextPut: $.; print: matrix; newLine.
+		j+1 to: n do: [:i| B _ self cancel: i@i withTemporary: B]].
+	Transcript print: matrix; newLine.
 	^ matrix! !
 
 !SmithReduction methodsFor: 'accessing' stamp: 'len 5/28/2019 08:51:31'!
@@ -46296,6 +46430,10 @@ isNilpotent
 	"Answer true if self^n = 0 for some integer n >= 1."
 	^ self = 0! !
 
+!Integer methodsFor: '*domains' stamp: 'len 5/17/2020 15:20:08'!
+isOne
+	^ self = 1! !
+
 !Integer methodsFor: '*domains' stamp: 'len 1/7/2017 21:04:34'!
 isPerfectSquare
 	^ self sqrtFloor squared = self! !
@@ -46645,6 +46783,16 @@ xgcd: anInteger
 			temp _ t1. t1 _ t - (q * t1). t _ temp].
 	s _ s * b sign. t _ t * a sign.
 	^ {r. t. s}! !
+
+!Integer methodsFor: '*domains' stamp: 'len 5/18/2020 08:49:07'!
+xxgcd: anInteger
+	"(More) Extended Euclidean algorithm.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+		[s  t] [a]
+		[u v] [b] = (g 0)."
+	| xgcd g |
+	(self = 0 and: [anInteger = 0]) ifTrue: [^ {0. 1. 0. 0. 1}].
+	^ (xgcd _ self xgcd: anInteger), {(anInteger ÷ (g _ xgcd at: 1)) negated. self ÷ g}! !
 
 !SmallInteger methodsFor: '*domains' stamp: 'len 11/12/2016 08:38'!
 bitCount
