@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 15 May 2020 at 9:44:24 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 23 May 2020 at 4:14:02 am'!
 'Description Please enter a description for this package'!
-!provides: 'MathematicsTests' 1 160!
+!provides: 'MathematicsTests' 1 161!
 SystemOrganization addCategory: #MathematicsTests!
 
 
@@ -1673,10 +1673,10 @@ testProjectiveSpaceOverFiniteField
 	self assert: S size = 10.
 	self assert: S asSet size = 10! !
 
-!AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 7/8/2019 13:37:55'!
+!AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 5/15/2020 18:11:50'!
 testProjectiveSpaceOverModularIntegers
 	| N n P numberOfPoints |
-	N _ (2 to: 12) atRandom.
+	N _ (2 to: 6) atRandom.
 	n _ (1 to: 3) atRandom.
 	P _ ProjectiveSpace new: n over: ZZ/N.
 	"formula from Cohen's 'A course in computational algebraic number theory' page 486:"
@@ -3564,6 +3564,19 @@ testIntegerIdealsPrimePrimarySemiprime
 	self assert: (ZZ*30) isSemiprime.
 	self assert: (ZZ*12) isSemiprime not! !
 
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2020 12:11:58'!
+testIntegerSplit
+	"Split algorithm from 'Fast Algorithms for Linear Algebra Modulo N', Arne Storjohann, Thom Mulders."
+	| D a M |
+	10000 timesRepeat:
+		[D _ 100 atRandom.
+		a _ D atRandom - 1.
+		M _ a split: D.
+		self assert: M > 0.
+		self assert: M | D.
+		M factors asSet do: [:p| self deny: p | a].
+		(D / M) factors asSet do: [:p| self assert: p | a]]! !
+
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 11:11:24'!
 testIteratorCovering
 	| F |
@@ -3855,6 +3868,41 @@ testHermiteNormalFormOverPolynomials
 	A _ R matrix: 2 coefficients: {x^2 + 3. (x*2 - 1)^2. (x + 2)^2. x^2*3 + 5}.
 	H _ R matrix: 2 coefficients: {R one. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. R zero. x^4 + (x^3*12) - (x^2*13) - (x*12) - 11}.
 	self assert: A HNF = H! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/19/2020 15:17:31'!
+testHowellNormalForm1
+	"Examples from 'Fast Algorithms for Linear Algebra Modulo N', Arne Storjohann, Thom Mulders."
+	| R A B C D H |
+	R _ ZZ/12.
+	A _ R matrix: #((4 1 0) (0 0 5) (0 0 0)).
+	B _ R matrix: #((8 5 5) (0 9 8) (0 0 10)).
+	C _ R matrix: #((4 1 10) (0 0 5) (0 0 0)).
+	D _ R matrix: #((4 1 0) (0 0 1) (0 0 0)).
+	H _ R matrix: #((4 1 0) (0 3 0) (0 0 1)).
+	self assert: A echelon = H.
+	self assert: B echelon = H.
+	self assert: C echelon = H.
+	self assert: D echelon = H
+! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/18/2020 13:32:06'!
+testHowellNormalForm2
+	| m R t u |
+	100 timesRepeat:
+		[[m _ 256 atRandom + 1. m isPrime] whileTrue.
+		R _ ZZ/m.
+		t _ R atRandomTuple: 5 atRandom.
+		u _ R units atRandom.
+		self assert: t asRowMatrix echelon = (t*u) asRowMatrix echelon]! !
+
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/19/2020 15:23:06'!
+testHowellNormalForm3
+	"Example from 'Spans in the module (Z/mZ)^s', John A. Howell (1986)."
+	| R A H |
+	R _ ZZ/6.
+	A _ R matrix: #((2 1)).
+	H _ R matrix: #((2 1) (0 3)).
+	self assert: A echelon = H! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 3/3/2017 16:36:34'!
 testIsEchelonForm
@@ -4823,13 +4871,13 @@ testAdjointAndHomFunctor
 	f _ QQ^3 => (QQ^4) :: atRandomBits: 100.
 	self assert: (f => QQ asScalarModule) = f adjoint! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/18/2020 15:30:53'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/17/2020 07:34:53'!
 testCoequalizer
 	| A B f g coeq |
 	A _ self newFreeModule.
 	B _ self newFreeModuleOver: A scalars.
-	f _ (A => B) atRandomBits: 100 atRandom.
-	g _ (A => B) atRandomBits: 100 atRandom.
+	f _ (A => B) atRandomBits: 50 atRandom.
+	g _ (A => B) atRandomBits: 50 atRandom.
 	coeq _ f coequalizer: g.
 	self assert: (f -> coeq) notNil.
 	self assert: f -> coeq = (g -> coeq)! !
@@ -5217,6 +5265,14 @@ testDiscriminant
 	self assert: M discriminant = 1.
 	self assert: (M span: {(1,2,3)}) discriminant = 14.
 	self assert: (M span: {(1,2,3). (1,1,1)}) discriminant = 6 ! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 5/15/2020 11:48:02'!
+testExampleModulesOverZ12
+	| M A B |
+	M _ ZZ/12^3.
+	A _ M span: {(4,1,0). (0,0,5)}.
+	B _ M span: {(8,5,5). (0,9,8). (0,0,10)}.
+	self assert: A = B! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 1/21/2018 21:47:53'!
 testFreeModule: M
@@ -7319,6 +7375,26 @@ testSubresultant0
 	g _ 3 * (x - 7).
 	self assert: (f resultant: g) = (f subresultant: 0 with: g) asScalar! !
 
+!PolynomialTest methodsFor: 'etc' stamp: 'len 5/16/2020 17:24:09'!
+testUnitAndAssociateBug1
+	| R x f g |
+	R _ ZZ/6 :: polynomials.
+	x _ R x.
+	f _ x*3+2.
+	g _ f*(-1).
+	self assert: f normalized = g normalized! !
+
+!PolynomialTest methodsFor: 'etc' stamp: 'len 5/16/2020 17:23:24'!
+testUnitAndAssociateBug2
+	| R x f u g |
+	R _ ZZ/4 :: polynomials.
+	x _ R x.
+	f _ x+1.
+	u _ x*2+1.
+	self assert: u isUnit.
+	g _ f*u.
+	self assert: f normalized = g normalized! !
+
 !PolynomialTest methodsFor: 'etc' stamp: 'len 8/26/2016 06:10'!
 testUnivariateMultivariateConversion
 	| Qx x y f |
@@ -7499,6 +7575,12 @@ testGaloisRingLCM
 	R _ GaloisRing new: 3 atRandom nextPrime to: 2 atRandom to: 2 atRandom.
 	self testLCM: R! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/18/2020 08:51:45'!
+testIntegersXXGCD
+	-100 to: 100 do: [:a|
+		-100 to: 100 do: [:b|
+			self testXXGCD: a with: b]]! !
+
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/19/2019 14:13:15'!
 testLCM: R
 	R size < 60 ifTrue: [self testLCMAll: R].
@@ -7644,6 +7726,12 @@ testModularIntegersRingLCM
 	R _ ZZ/(2 to: 256) atRandom.
 	self testLCM: R! !
 
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/18/2020 08:51:34'!
+testModularIntegersXXGCD
+	| R |
+	R _ ZZ/12.
+	R do: [:a| R do: [:b| self testXXGCD: a with: b]]! !
+
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/17/2019 10:16:32'!
 testPolynomialsOverFieldGCD
 	| F R |
@@ -7664,6 +7752,13 @@ testPolynomialsOverFieldLCM
 	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
 	R _ F polynomials.
 	self testLCM: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/18/2020 09:00:25'!
+testPolynomialsOverFieldXXGCD
+	| F R |
+	F _ 2 atRandom = 1 ifTrue: [QQ] ifFalse: [GaloisField new: 5 atRandom nextPrime to: 3 atRandom].
+	R _ F polynomials.
+	self testXXGCD: R! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 6/16/2019 17:46:04'!
 testPrimePowerRingIsEuclidean
@@ -7711,6 +7806,28 @@ testValuationRingLCM
 	| R |
 	R _ ZZ localizationAt: 5.
 	self testLCM: R! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/18/2020 09:02:31'!
+testXXGCD: R
+	100 timesRepeat:
+		[| a b |
+		a _ R atRandomBits: 30.
+		b _ R atRandomBits: 30.
+		self testXXGCD: a with: b]! !
+
+!RingTest methodsFor: 'euclidean' stamp: 'len 5/18/2020 08:50:20'!
+testXXGCD: a with: b
+	| result g s t u v |
+	result _ a xxgcd: b.
+	g _ result at: 1.
+	s _ result at: 2.
+	t _ result at: 3.
+	u _ result at: 4.
+	v _ result at: 5.
+	self assert: g = (a gcd: b).
+	self assert: s*a + (t*b) = g.
+	self assert: (u*a + (v*b)) isZero.
+	self assert: (s*v - (t*u)) isUnit! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:31:34'!
 testFiniteRing1
@@ -8955,14 +9072,58 @@ testModularIntegersTupleAssociateBug
 	self assert: t*5*5 = t.
 	self assert: (t*5) normalized = t normalized! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2020 06:46:25'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2020 17:14:01'!
+testModularIntegersTupleAssociateBug1
+	| R t |
+	R _ ZZ/6.
+	t _ R tuple: #(2 3).
+	self assert: t*5*5 = t.
+	self assert: (t*5) normalized = t normalized! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2020 17:13:48'!
+testModularIntegersTupleAssociateBug2
+	| R t |
+	R _ ZZ/6.
+	t _ R tuple: #(3 2).
+	self assert: t*5*5 = t.
+	self assert: (t*5) normalized = t normalized! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2020 17:12:28'!
 testModularIntegersTupleUnitsAndAssociates
 	| R t tt |
-	R _ ZZ/64 atRandom.
-	t _ R atRandomTuple: 5 atRandom.
-	tt _ t normalized.
-	self assert: t * t unit inverse = tt.
-	R unitsDo: [:u| self assert: (t*u) normalized = tt].! !
+	100 timesRepeat:
+		[R _ ZZ/64 atRandom.
+		t _ R atRandomTuple: 5 atRandom.
+		tt _ t normalized.
+		self assert: t * t unit inverse = tt.
+		R unitsDo: [:u| self assert: (t*u) normalized = tt]]! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/17/2020 07:49:46'!
+testModularIntegersTupleUnitsAndAssociates2
+	"Examples from Magma."
+	| R |
+	R _ ZZ/6.
+	self assert: (R tuple: #(0 2)) normalized = (R tuple: #(0 2)).
+	self assert: (R tuple: #(0 4)) normalized = (R tuple: #(0 2)).
+	self assert: (R tuple: #(2 3)) normalized = (R tuple: #(2 3)).
+	self assert: (R tuple: #(4 3)) normalized = (R tuple: #(2 3)).
+	R _ ZZ/8.
+	self assert: (R tuple: #(3 2)) normalized = (R tuple: #(1 6)).
+	self assert: (R tuple: #(7 2)) normalized = (R tuple: #(1 6)).
+	self assert: (R tuple: #(2 3)) normalized = (R tuple: #(2 3)).
+	self assert: (R tuple: #(2 7)) normalized = (R tuple: #(2 3))! !
+
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/18/2020 13:23:20'!
+testModularIntegersTupleUnitsAndAssociates3
+	"Examples from Magma."
+	| R |
+	R _ ZZ/6.
+	self assert: (R tuple: #(0 4)) ~ (R tuple: #(0 2)).
+	self assert: (R tuple: #(4 3)) ~ (R tuple: #(2 3)).
+	R _ ZZ/8.
+	self assert: (R tuple: #(3 2)) ~ (R tuple: #(1 6)).
+	self assert: (R tuple: #(7 2)) ~ (R tuple: #(1 6)).
+	self assert: (R tuple: #(2 7)) ~ (R tuple: #(2 3))! !
 
 !TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 14:24'!
 testTuple: a operation: aSymbol modulo: modulus
