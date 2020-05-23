@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 7:56:05 am'!
+'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 9:38:23 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 579!
+!provides: 'Domains' 1 580!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -5330,9 +5330,9 @@ printOn: aStream
 	aStream nextPutAll: self shortName.
 	aStream nextPut: $(; print: space; nextPut: $)! !
 
-!DirichletGroup methodsFor: 'as yet unclassified' stamp: 'len 12/9/2016 15:50:16'!
+!DirichletGroup methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 printOn: aStream
-	aStream nextPut: $(; print: ZZ; nextPut: $/; print: self modulus; nextPutAll: ')', '*' super! !
+	aStream nextPut: $(; print: ƒ; nextPut: $/; print: self modulus; nextPutAll: ')', '*' super! !
 
 !Gamma0CongruenceSubgroup methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 07:37:35'!
 printOn: aStream
@@ -5430,13 +5430,13 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: $ƒ! !
 
-!AdicField methodsFor: 'printing' stamp: 'len 12/17/2016 22:21:17'!
+!AdicField methodsFor: 'printing' stamp: 'len 5/23/2020 09:11:37'!
 printOn: aStream
-	aStream print: QQ; nextPutAll: self p printString sub! !
+	aStream print: „; nextPutAll: self p printString sub! !
 
-!AdicRing methodsFor: 'printing' stamp: 'len 6/6/2019 12:07:53'!
+!AdicRing methodsFor: 'printing' stamp: 'len 5/23/2020 08:55:51'!
 printOn: aStream
-	aStream print: ZZ; nextPutAll: self p printString sub! !
+	aStream print: ƒ; nextPutAll: self p printString sub! !
 
 !ComplexField methodsFor: 'printing' stamp: 'len 5/23/2020 07:34:10'!
 printOn: aStream
@@ -5450,16 +5450,16 @@ printOn: aStream
 printOn: aStream
 	aStream nextPutAll: 'O' italic; nextPut: $(; print: self ambient; nextPut: $)! !
 
-!CyclotomicRing methodsFor: 'printing' stamp: 'len 1/18/2018 19:23:55'!
+!CyclotomicRing methodsFor: 'printing' stamp: 'len 5/23/2020 09:13:12'!
 printOn: aStream
-	aStream print: ZZ; nextPut: $[; print: self ambient x; nextPut: $]! !
+	aStream print: ƒ; nextPut: $[; print: self ambient x; nextPut: $]! !
 
-!QuadraticRing methodsFor: 'printing' stamp: 'len 1/18/2018 19:26:15'!
+!QuadraticRing methodsFor: 'printing' stamp: 'len 5/23/2020 09:13:12'!
 printOn: aStream
 	| K a |
 	K _ self ambient.
 	a _ K d \\ 4 = 1 ifTrue: [K x + K one / (K one * 2)] ifFalse: [K x].
-	aStream print: ZZ; nextPut: $[; print: a; nextPut: $]! !
+	aStream print: ƒ; nextPut: $[; print: a; nextPut: $]! !
 
 !PolynomialRing methodsFor: 'printing' stamp: 'len 2/12/2017 06:49:02'!
 printOn: aStream
@@ -5769,10 +5769,10 @@ printOn: aStream
 			self representatives do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ', '].
 			aStream nextPut: $)]! !
 
-!LinearFractionalMap methodsFor: 'printing' stamp: 'len 12/9/2016 16:08:40'!
+!LinearFractionalMap methodsFor: 'printing' stamp: 'len 5/23/2020 09:31:47'!
 printOn: aStream
 	| z denominator numerator |
-	z _ (CC polynomialsIn: #(z)) x.
+	z _ († polynomialsIn: #(z)) x.
 	c isZero ifTrue: [aStream print: z * a + b / d. ^ self].
 	numerator _ z * a + b.
 	(a = 0 or: [b = 0])
@@ -6335,9 +6335,9 @@ denominator
 minimalPolynomial
 	^ minimalPolynomial! !
 
-!RealAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/3/2020 07:26:55'!
+!RealAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:27'!
 parent
-	^ RR! !
+	^ …! !
 
 !RealAlgebraicNumber methodsFor: 'approximating' stamp: 'len 6/4/2016 22:22'!
 absoluteError
@@ -6490,7 +6490,7 @@ asFloat
 	self refineTo: 0.000001.
 	^ self approximation asFloat! !
 
-!RealAlgebraicNumber methodsFor: 'converting' stamp: 'len 4/29/2018 20:28:54'!
+!RealAlgebraicNumber methodsFor: 'converting' stamp: 'len 5/23/2020 09:33:01'!
 asRational
 	"Convert the receiver to Fraction or Integer."
 	| alpha |
@@ -6500,7 +6500,7 @@ asRational
 			[alpha _ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient.
 			self bounds: (RealInterval open: alpha closed: alpha).
 			^ alpha].
-	(minimalPolynomial rootsIn: QQ)
+	(minimalPolynomial rootsIn: „)
 		do: [:each|
 			(each between: self leftBound and: self rightBound)
 				ifTrue: [self bounds: (RealInterval open: each closed: each). ^ each]].
@@ -6563,12 +6563,12 @@ isAlgebraicInteger
 	"An algebraic number is an 'algebraic integer' if it's the root of a monic polynomial in Z[x], in particular if it's minimal polynomial has integer coefficients."
 	^ self minimalPolynomial coefficients allSatisfy: [:each| each isInteger]! !
 
-!RealAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/29/2018 20:09:03'!
+!RealAlgebraicNumber methodsFor: 'testing' stamp: 'len 5/23/2020 09:33:01'!
 isRational
 	"Answer true if the receiver is a rational number."
 	minimalPolynomial degree < 2 ifTrue: [^ true].
 	self rightBound = self leftBound ifTrue: [^ true].
-	(minimalPolynomial rootsIn: QQ)
+	(minimalPolynomial rootsIn: „)
 		do: [:each|
 			(self bounds includes: each)
 				ifTrue: [self bounds: (RealInterval closed: each closed: each). ^ true]].
@@ -6641,11 +6641,11 @@ rightSign
 rightSign: anInteger
 	rightSign _ anInteger! !
 
-!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/9/2020 10:06:46'!
+!RealAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
 fromRational: aRational
 	"Answer an instance of the receiver representing the rational number anIntegerOrFraction."
 	| x |
-	x _ QQ polynomials x.
+	x _ „ polynomials x.
 	^ self
 		minimalPolynomial: x * aRational denominator - aRational numerator
  		bounds: (RealInterval open: aRational closed: aRational)! !
@@ -6662,35 +6662,35 @@ polynomial: aPolynomial bounds: aRealInterval
 	approximation _ aRealInterval midpoint.
 	^ self minimalPolynomial: (aPolynomial factors detectMin: [:f| (f value: approximation) abs]) bounds: aRealInterval! !
 
-!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/12/2018 17:51:12'!
+!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 phi
 	"Answer the Phidias number or Golden Ratio."
 	| x |
-	x _ QQ polynomials x.
+	x _ „ polynomials x.
 	^ self minimalPolynomial: x^2 - x - 1 bounds: (RealInterval open: 1.0 open: 2.0)! !
 
-!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/12/2018 17:51:01'!
+!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 sqrt2
 	"Answer an instance of the receiver representing the square root of 2."
 	^ self
-		minimalPolynomial: QQ polynomials x squared - 2
+		minimalPolynomial: „ polynomials x squared - 2
  		bounds: (RealInterval open: 1.0 open: 2.0)! !
 
-!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/12/2018 17:50:54'!
+!RealAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 sqrt: aNumber
 	"Answer a square root of the rational argument."
 	aNumber positive ifFalse: [^ DomainError signal: 'negative square root'].
 	^ self
-		minimalPolynomial: QQ polynomials x squared - aNumber
+		minimalPolynomial: „ polynomials x squared - aNumber
  		bounds: (RealInterval open: 0.0 open: (aNumber max: 1.0))! !
 
 !ContinuedFraction methodsFor: 'accessing' stamp: 'len 12/2/2015 00:07'!
 coefficients
 	^ coefficients! !
 
-!ContinuedFraction methodsFor: 'accessing' stamp: 'len 5/3/2020 07:26:39'!
+!ContinuedFraction methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:27'!
 parent
-	^ RR! !
+	^ …! !
 
 !ContinuedFraction methodsFor: 'arithmetic' stamp: 'len 12/3/2015 02:17'!
 negated
@@ -6711,9 +6711,9 @@ convergentAt: anInteger
 	(1 to: n-1) reverseDo: [:i| x _ x reciprocal + (coefficients at: i)].
 	^ x! !
 
-!ContinuedFraction methodsFor: 'convergents' stamp: 'len 7/15/2016 18:31'!
+!ContinuedFraction methodsFor: 'convergents' stamp: 'len 5/23/2020 09:33:01'!
 convergents
-	^ Sequence to: QQ evaluating: [:i| self convergentAt: i]! !
+	^ Sequence to: „ evaluating: [:i| self convergentAt: i]! !
 
 !ContinuedFraction methodsFor: 'convergents' stamp: 'len 3/27/2016 04:51'!
 convergentsDo: aBlock
@@ -6735,16 +6735,16 @@ asFraction
 	self isInfinite ifTrue: [self error: 'infinite continued fraction'].
 	^ self convergentAt: coefficients size! !
 
-!ContinuedFraction methodsFor: 'initialization' stamp: 'len 8/12/2019 13:52:32'!
+!ContinuedFraction methodsFor: 'initialization' stamp: 'len 5/23/2020 09:34:55'!
 coefficients: aSequence
 	coefficients _ (aSequence isTuple or: [aSequence isKindOf: Sequence])
 		ifTrue: [aSequence]
-		ifFalse: [ZZ tuple: aSequence]! !
+		ifFalse: [ƒ tuple: aSequence]! !
 
-!ContinuedFraction methodsFor: 'initialization' stamp: 'len 11/5/2016 10:29'!
+!ContinuedFraction methodsFor: 'initialization' stamp: 'len 5/23/2020 09:34:55'!
 fromFraction: aFraction
 	| x a |
-	aFraction isInfinity ifTrue: [coefficients _ ZZ tuple: 0 evaluating: []. ^ self].
+	aFraction isInfinity ifTrue: [coefficients _ ƒ tuple: 0 evaluating: []. ^ self].
 	coefficients _ OrderedCollection new.
 	x _ aFraction.
 	a _ x floor.
@@ -6755,7 +6755,7 @@ fromFraction: aFraction
 			[x _ x reciprocal.
 			a _ x floor.
 			coefficients add: a].
-	coefficients _ ZZ tuple: coefficients asArray! !
+	coefficients _ ƒ tuple: coefficients asArray! !
 
 !ContinuedFraction methodsFor: 'printing' stamp: 'len 10/18/2016 13:49'!
 printOn: aStream base: base
@@ -7688,20 +7688,20 @@ on: anObject performing: aSymbol
 			G addEdgeFrom: (e1 key, e2 key) to: (e1 value, e2 value)]].
 	^ G! !
 
-!Graph methodsFor: 'operations' stamp: 'len 3/2/2017 19:57:31'!
+!Graph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 adjacencyMatrix
 	"Answer the adjacency matrix of the receiver, assuming that the vertices are the integers {1,..,n}.
 	If the graph is labelled, use the labels as entries in the matrix."
 	| n matrix |
 	n _ self order.
-	matrix _ (ZZ ^ (n@n)) zero.
+	matrix _ (ƒ ^ (n@n)) zero.
 	self edgesAndLabelsDo: [:edge :label| matrix at: edge key @ edge value add: (label ifNil: [1])].
 	^ matrix! !
 
-!Graph methodsFor: 'operations' stamp: 'len 8/17/2019 10:10:27'!
+!Graph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 adjacencyMatrix: vertices
 	"Answer the adjacency matrix of the receiver, using the vertex ordering given by the argument."
-	^ ZZ matrix: vertices size evaluating: [:i :j| self multiplicityFrom: (vertices at: i) to: (vertices at: j)]! !
+	^ ƒ matrix: vertices size evaluating: [:i :j| self multiplicityFrom: (vertices at: i) to: (vertices at: j)]! !
 
 !Graph methodsFor: 'operations' stamp: 'len 5/10/2020 09:52:40'!
 automorphisms
@@ -7796,10 +7796,10 @@ chromaticNumber
 	chi _ self chromaticPolynomial.
 	^ (1 to: self size) detect: [:i| (chi value: i) > 0]! !
 
-!Graph methodsFor: 'operations' stamp: 'len 7/15/2016 18:23'!
+!Graph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 chromaticPolynomial
 	"The chromatic polynomial P(G,k) is a polynomial in k that counts the number of k-colorings of G."
-	^ self chromaticPolynomialAt: ZZ polynomials x! !
+	^ self chromaticPolynomialAt: ƒ polynomials x! !
 
 !Graph methodsFor: 'operations' stamp: 'len 7/14/2016 06:50'!
 chromaticPolynomialAt: k
@@ -9389,11 +9389,11 @@ edgeAtRandom: aRandom
 complement
 	^ self class digraph: digraph complement! !
 
-!UndirectedGraph methodsFor: 'operations' stamp: 'len 7/15/2016 18:25'!
+!UndirectedGraph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 flowPolynomial
 	"The flow polynomial F(G,k) is a polynomial in k that counts the number of nowhere-zero k-flows of G."
 	| x |
-	x _ ZZ polynomials x.
+	x _ ƒ polynomials x.
 	^ (-1)^(self size + self numberOfEdges + self components size) * (self tuttePolynomial value: {0. 1 - x})! !
 
 !UndirectedGraph methodsFor: 'operations' stamp: 'len 7/13/2016 22:13'!
@@ -9404,10 +9404,10 @@ symmetric
 transposed
 	^ self! !
 
-!UndirectedGraph methodsFor: 'operations' stamp: 'len 3/6/2017 16:30:08'!
+!UndirectedGraph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 tuttePolynomial
 	| P K G |
-	P _ ZZ polynomialsIn: #(x y).
+	P _ ƒ polynomialsIn: #(x y).
 	self isEdgeless ifTrue: [^ P one].
 	K _ self components size.
 	self edgesDo: [:e|
@@ -10529,7 +10529,7 @@ color: aColor
 dimension
 	^ x size! !
 
-!GraphNodeMorph methodsFor: 'accessing' stamp: 'len 11/5/2016 10:30'!
+!GraphNodeMorph methodsFor: 'accessing' stamp: 'len 5/23/2020 09:33:01'!
 dimension: anInteger
 	| n |
 	(n _ x size) = anInteger
@@ -10540,7 +10540,7 @@ dimension: anInteger
 			dx _ dx copyFrom: 1 to: anInteger]
 		ifFalse:
 			[| z |
-			z _ QQ tuple: anInteger - n evaluating: [:i| 0].
+			z _ „ tuple: anInteger - n evaluating: [:i| 0].
 			x _ x, z.
 			dx _ dx, z]! !
 
@@ -10776,31 +10776,31 @@ morphExtent: aPoint
 palette: aComplexPalette
 	palette _ aComplexPalette! !
 
-!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:38:23'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:47'!
 exampleBlaschkeProduct
 	"This is a phase plot of the Blaschke product defined by 40 randomly choosen numbers in the unit disk."
 	| random A f |
 	random _ Random new.
 	A _ (1 to: 40) collect: [:each| Complex abs: random next arg: Float twoPi * random next].
-	f _ CC carrier to: CC carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
+	f _ † carrier to: † carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
 	^ ComplexPlotMorph new box: (-1 @ -1 corner: 1 @ 1); palette: ComplexPalette phase; function: f! !
 
-!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:10'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:47'!
 exampleReciprocalSinus
 	| f |
-	f _ CC carrier to: CC carrier evaluating: [:z| (1/z) sin].
+	f _ † carrier to: † carrier evaluating: [:z| (1/z) sin].
 	^ ComplexPlotMorph new box: (-2 @ -1 corner: 2 @ 1); palette: ComplexPalette default; function: f! !
 
-!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:14'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:47'!
 exampleRiemannZetaFunction
 	| f |
-	f _ CC carrier to: CC carrier evaluating: [:z| (1 to: 100) sum: [:n| n^z negated]].
+	f _ † carrier to: † carrier evaluating: [:z| (1 to: 100) sum: [:n| n^z negated]].
 	^ ComplexPlotMorph new morphExtent: 300@300; box: (-5@-5 corner: 5@5); palette: (ComplexPalette grid: 1@5); function: f! !
 
-!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:40:19'!
+!ComplexPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:47'!
 exampleSinus
 	| f |
-	f _ CC carrier to: CC carrier evaluating: [:z| z sin].
+	f _ † carrier to: † carrier evaluating: [:z| z sin].
 	^ ComplexPlotMorph new box: (-2*Float pi @ -1.5 corner: 2*Float pi @ 1.5); palette: (ComplexPalette grid: 1@10); function: f! !
 
 !FunctionPlotMorph methodsFor: 'private' stamp: 'len 1/2/2016 06:07'!
@@ -10950,11 +10950,11 @@ initialize
 	fillColor _ Color transparent.
 	textColor _ Color gray alpha: 0.5! !
 
-!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:41:45'!
+!FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example1
 	"Plotting the sine function."
 	| sin |
-	sin _ RR carrier to: RR carrier evaluating: [:x| x sin].
+	sin _ … carrier to: … carrier evaluating: [:x| x sin].
 	^ FunctionPlotMorph new evaluationPoints: (0.0 to: Float pi * 2 count: 100); function: sin; color: (Color red alpha: 0.5)! !
 
 !FunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:42:40'!
@@ -11103,13 +11103,13 @@ example
 	100000 timesRepeat: [h addValue: r next].
 	h openInHand! !
 
-!HistogramMorph class methodsFor: 'examples' stamp: 'len 7/15/2016 18:26'!
+!HistogramMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example2
 	"
 	HistogramMorph example2
 	"
 	| h S n |
-	S _ ZZ ^ 4.
+	S _ ƒ ^ 4.
 	n _ 40.
 	h _ HistogramMorph new: 500 min: 0 max: n.
 	100000 timesRepeat: [h addValue: (S atRandom: n) bitSize].
@@ -11273,18 +11273,18 @@ morphExtent: aPoint
 	image _ nil.
 	super morphExtent: aPoint! !
 
-!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 19:47:53'!
+!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example1
 	"Circle of radious 1."
 	| function |
-	function _ (RR^2) carrier to: RR carrier evaluatingWithArguments: [:x :y| x^2 + (y^2) - 1].
+	function _ (…^2) carrier to: … carrier evaluatingWithArguments: [:x :y| x^2 + (y^2) - 1].
 	^ ImplicitFunctionPlotMorph new function: function! !
 
-!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 19:47:20'!
+!ImplicitFunctionPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example2
 	"Descartes folium."
 	| function |
-	function _ (RR^2) carrier to: RR carrier evaluatingWithArguments: [:x :y| x^3 + (y^3) - (3*x*y)].
+	function _ (…^2) carrier to: … carrier evaluatingWithArguments: [:x :y| x^3 + (y^3) - (3*x*y)].
 	^ ImplicitFunctionPlotMorph new function: function! !
 
 !ImplicitSurfacePlotMorph methodsFor: 'accessing' stamp: 'len 1/22/2017 07:44:33'!
@@ -11534,14 +11534,14 @@ initialize
 morphToDomain: aPoint
 	^ (aPoint x * (xMax - xMin) / extent x + xMin, (aPoint y * (yMax - yMin) / extent y + yMin))! !
 
-!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:53:38'!
+!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:31:27'!
 applyRotationBy: aPoint
 	| bounds xSpeed ySpeed rotation |
 	self dimension < 3 ifTrue: [^ self].
 	bounds _ self morphLocalBounds.
 	xSpeed _ Float pi / bounds width.
 	ySpeed _ Float pi / bounds height.
-	rotation _ (RR^self dimension) endomorphisms evaluating: [:p|
+	rotation _ (…^self dimension) endomorphisms evaluating: [:p|
 		| xz yz |
 		xz _ p x @ p z.
 		xz _ xz rotatedBy: aPoint x * xSpeed.
@@ -11643,12 +11643,12 @@ mouseMove: aMouseMoveEvent localPosition: localEventPosition
 				ifFalse: [self applyRotationBy: lastMousePosition - localEventPosition]].
 	lastMousePosition _ localEventPosition! !
 
-!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:50:24'!
+!ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:31:27'!
 points: anArray
 	points _ anArray.
 	max _ points max: [:each| each max].
 	min _ points min: [:each| each min].
-	transformation _ RR^self dimension :: id.
+	transformation _ …^self dimension :: id.
 	self redrawNeeded! !
 
 !ScatterPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 8/21/2016 07:13'!
@@ -11686,11 +11686,11 @@ example3
 timeDelayPlot: anArray
 	^ self timeDelayPlot: anArray lag: 1! !
 
-!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 11/5/2016 06:17'!
+!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:31:27'!
 timeDelayPlot: anArray dimension: m lag: r
 	^ self new
 		points: ((m*r+1 to: anArray size) collect: [:i|
-			RR tuple: m evaluating: [:j| anArray at: i-(j-1*r)]])! !
+			… tuple: m evaluating: [:j| anArray at: i-(j-1*r)]])! !
 
 !ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 8/18/2016 06:39'!
 timeDelayPlot: anArray lag: r
@@ -11753,13 +11753,13 @@ morphExtent: aPoint
 palette: aComplexPalette
 	palette _ aComplexPalette! !
 
-!UnitDiskPlotMorph class methodsFor: 'examples' stamp: 'len 5/1/2020 18:55:36'!
+!UnitDiskPlotMorph class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:47'!
 exampleBlaschkeProduct
 	"This is a phase plot of the Blaschke product defined by 40 randomly choosen numbers in the unit disk, plotted through a conformal mapping of the complex plane into the unit disk."
 	| random A f |
 	random _ Random new.
 	A _ (1 to: 40) collect: [:each| Complex abs: random next arg: Float twoPi * random next].
-	f _ CC carrier to: CC carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
+	f _ † carrier to: † carrier evaluating: [:z| A product: [:a| a abs / a * (a - z) / (1 - (a conjugated * z))]].
 	^ UnitDiskPlotMorph new mapPlaneToUnitDisk; palette: ComplexPalette phase; function: f! !
 
 !GraphEdgeMorph methodsFor: 'private' stamp: 'len 2/19/2016 19:04'!
@@ -12103,7 +12103,7 @@ solve: f max: max
 normalAt: aPoint
 	^ (Float32Vector3 x: ((gradient at: 1) value: aPoint) y: ((gradient at: 2) value: aPoint) z: ((gradient at: 3) value: aPoint)) normalize! !
 
-!ImplicitSurface methodsFor: 'tracing' stamp: 'len 1/22/2017 20:51:27'!
+!ImplicitSurface methodsFor: 'tracing' stamp: 'len 5/23/2020 09:31:27'!
 writeIntersectionsWith: aRay into: aCollection
 	| t0 origin ox oy oz direction dx dy dz t f root intersection p |
 	(t0 _ self intersectionWithSphere: aRay) ifNil: [^ self].
@@ -12115,23 +12115,23 @@ writeIntersectionsWith: aRay into: aCollection
 	dx _ direction x.
 	dy _ direction y.
 	dz _ direction z.
-	t _ RR polynomials x.
+	t _ … polynomials x.
 	f _ polynomial value: {t*dx + ox. t*dy + oy. t*dz + oz}.
 	(root _ self solve: f max: radiusSquared sqrt*2) ifNil: [^ self].
 	intersection _ Intersection for: self ray: aRay distance: root+t0.
 	p _ intersection intersectionPoint. "this is expensive, can we do without computing this intersection point?"
 	(p dot: p) < (radiusSquared - 0.00001) ifTrue: [aCollection add: intersection]! !
 
-!ImplicitSurface class methodsFor: 'examples' stamp: 'len 5/15/2019 01:47:44'!
+!ImplicitSurface class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example1
 	^ self new
-		polynomial: ((RR polynomialsIn: #(x y z)) generate: [:x :y :z| x^2 + (y^2) + (z^3) + (x*y*z*2) - 1]);
+		polynomial: ((… polynomialsIn: #(x y z)) generate: [:x :y :z| x^2 + (y^2) + (z^3) + (x*y*z*2) - 1]);
 		radius: 1.0! !
 
-!ImplicitSurface class methodsFor: 'examples' stamp: 'len 5/15/2019 01:48:24'!
+!ImplicitSurface class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example2
 	^ self new
-		polynomial: ((RR polynomialsIn: #(x y z)) generate: [:x :y :z| x^2 - ((y^2)*(z^2))]);
+		polynomial: ((… polynomialsIn: #(x y z)) generate: [:x :y :z| x^2 - ((y^2)*(z^2))]);
 		radius: 5.0! !
 
 !Domain methodsFor: 'accessing' stamp: 'len 4/22/2020 05:45:14'!
@@ -12337,25 +12337,25 @@ isRing
 isVectorSpace
 	^ false! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:28'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example1asSet
 	"The ring Z/5Z as a Smalltalk Set.
 	This is possible because the ring is finite."
-	^ (ZZ/5) asSet! !
+	^ (ƒ/5) asSet! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:32'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example1atRandom
 	"Taking an element at random from the Z-module of rank 10.
 	Use 50 bits to generate this element. Essentially, this can return
 	at most 2^50 different elements, and their bitsize doesn't exceed 50
 	bits (where bitsize is losely defined, in this case it's the sum
 	of bitsize of the coefficients of the coordinates)."
-	^ ZZ^10 atRandom: (Random seed: 12345) bits: 50! !
+	^ ƒ^10 atRandom: (Random seed: 12345) bits: 50! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:36'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example21VectorSpace
 	"The vector space of 3-tuples with rational coefficients."
-	^ QQ ^ 3! !
+	^ „ ^ 3! !
 
 !Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:40'!
 example3DirectProductOfGroups
@@ -12364,41 +12364,41 @@ example3DirectProductOfGroups
 	permutations of {1,2,3,4}."
 	^ (SymmetricGroup on: #(a b c)) × (AlternatingGroup new: 4)! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:46'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example41Polynomials
 	"Polynomials in two variables with integer coefficients."
-	^ ZZ polynomialsIn: #(a b)! !
+	^ ƒ polynomialsIn: #(a b)! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:51'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:03:31'!
 example42AffineRing
 	"The quotient of a polynomial ring by an ideal.
 	This is an affine ring, in particular it is the coordinate ring of the twisted cubic."
 	| R x y z I |
-	R _ CC polynomialsIn: #(x y z).
+	R _ † polynomialsIn: #(x y z).
 	x _ R x: 1.
 	y _ R x: 2.
 	z _ R x: 3.
 	I _ R * {(x^2) - y. (x^3) - z}.
 	^ R / I! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:55'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:03:36'!
 example43AffineVariety
 	"This is the twisted cubic affine variety, parameterized by (x, x^2, x^3) in C^3."
 	| R x y z I |
-	R _ CC polynomialsIn: #(x y z).
+	R _ † polynomialsIn: #(x y z).
 	x _ R x: 1.
 	y _ R x: 2.
 	z _ R x: 3.
 	I _ R * {(x^2) - y. (x^3) - z}.
 	^ (R / I) spec! !
 
-!Domain class methodsFor: 'examples' stamp: 'len 4/29/2020 17:29:59'!
+!Domain class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example5GL
 	"The group GL(Q^3) of invertible linear maps
 	on the vector space of 3-tuples with rational coefficients.
 	This is the automorphisms group of the vector space, and
 	its elements are linear maps, not matrices."
-	^ (QQ ^ 3) automorphisms! !
+	^ („ ^ 3) automorphisms! !
 
 !Domain class methodsFor: 'initialization' stamp: 'len 5/4/2020 03:18:07'!
 initializeAll
@@ -13039,14 +13039,14 @@ isProduct
 components: anArray
 	components _ anArray! !
 
-!CartesianProduct class methodsFor: 'examples' stamp: 'len 5/2/2020 13:13:51'!
+!CartesianProduct class methodsFor: 'examples' stamp: 'len 5/23/2020 08:59:16'!
 example
 	"The cartesian product of the ring of rational integers
 	and the field of rational numbers (as sets).
 	An element of this cartesian product is an array with an
 	integer in the first component and a rational number
 	in the second component."
-	^ (ZZ, QQ)
+	^ (ƒ, „)
 ! !
 
 !CartesianProduct class methodsFor: 'instance creation' stamp: 'len 11/10/2015 22:17'!
@@ -13108,26 +13108,26 @@ codomain: aDomain
 domain: aDomain
 	domain _ aDomain! !
 
-!HomSet class methodsFor: 'examples' stamp: 'len 5/9/2020 15:17:50'!
+!HomSet class methodsFor: 'examples' stamp: 'len 5/23/2020 09:04:40'!
 example1
 	"The set Hom(N,Z), the functions from the natural numbers to the integers.
 	This is the space of sequences. (See class Sequence)."
-	^ NN hom: ZZ carrier! !
+	^ ‚ hom: ƒ carrier! !
 
-!HomSet class methodsFor: 'examples' stamp: 'len 3/3/2017 17:42:46'!
+!HomSet class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example2
 	"The endomorphisms of the rational integers Z.
 	This is Hom(Z,Z), the set of ring homomorphisms from Z to itself."
-	^ ZZ endomorphisms! !
+	^ ƒ endomorphisms! !
 
-!HomSet class methodsFor: 'examples' stamp: 'len 4/22/2019 13:30:14'!
+!HomSet class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example3
 	"In some categories the Hom-Set has actually richer structure,
 	and can be seen as an object of the category.
 	Here's the vector space of linear maps from the Q^3 to Q^5.
 	This is the internal hom(Q^3,Q^5), and it is a vector space itself.
 	(It is not an instance of HomSet.)"
-	^ (QQ^3) => (QQ^5)! !
+	^ („^3) => („^5)! !
 
 !HomSet class methodsFor: 'instance creation' stamp: 'len 4/19/2016 04:53'!
 from: aDomain to: anotherDomain
@@ -13185,10 +13185,10 @@ isFinite
 isReal
 	^ true! !
 
-!Naturals class methodsFor: 'initialization' stamp: 'len 8/5/2016 21:33'!
+!Naturals class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:50:31'!
 initialize
 	super initialize.
-	Smalltalk at: #NN put: self new! !
+	Smalltalk at: #‚ put: self new! !
 
 !Monoid methodsFor: 'accessing' stamp: 'len 5/1/2020 15:38:48'!
 identity
@@ -13328,9 +13328,9 @@ allMonomialsOfDegree: anInteger
 						answer add: monomial]]]].
 	^ answer asArray sort reverse! !
 
-!FreeAbelianMonoid methodsFor: 'enumerating' stamp: 'len 5/13/2019 11:59:18'!
+!FreeAbelianMonoid methodsFor: 'enumerating' stamp: 'len 5/23/2020 09:04:52'!
 do: aBlock
-	NN ^ self rank do: [:each| aBlock value: self !! (each asArray collect: [:x| x - 1])]! !
+	‚ ^ self rank do: [:each| aBlock value: self !! (each asArray collect: [:x| x - 1])]! !
 
 !FreeAbelianMonoid methodsFor: 'operations' stamp: 'len 8/8/2019 11:13:43'!
 × aMonoid
@@ -13365,9 +13365,9 @@ do: aBlock
 			answer onto: aMonoid evaluating: [:x| aMonoid exponents: (x exponents copyFrom: n+1 to: x exponents size)]};
 		yourself! !
 
-!FreeAbelianMonoid methodsFor: 'random' stamp: 'len 5/13/2019 11:59:34'!
+!FreeAbelianMonoid methodsFor: 'random' stamp: 'len 5/23/2020 09:05:01'!
 atRandom: aRandom bits: bitSize
-	^ self !! ((NN ^ self rank atRandom: aRandom bits: bitSize) asArray collect: [:x| x - 1])! !
+	^ self !! ((‚ ^ self rank atRandom: aRandom bits: bitSize) asArray collect: [:x| x - 1])! !
 
 !FreeAbelianMonoid methodsFor: 'testing' stamp: 'len 4/25/2020 10:00:13'!
 includes: anObject
@@ -13753,9 +13753,9 @@ conjugacyClassOf: anElement
 conjugacyClasses
 	^ self conjugation orbits! !
 
-!Group methodsFor: 'operations' stamp: 'len 5/26/2019 08:42:36'!
+!Group methodsFor: 'operations' stamp: 'len 5/23/2020 09:13:12'!
 groupAlgebra
-	^ self groupAlgebraOver: ZZ! !
+	^ self groupAlgebraOver: ƒ! !
 
 !Group methodsFor: 'operations' stamp: 'len 5/26/2019 08:45:21'!
 groupAlgebraOver: aRing
@@ -14280,9 +14280,9 @@ rank
 	"Answer the torsion-free rank of the receiver."
 	^ self orders count: [:each| each = 0]! !
 
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/28/2019 03:37:09'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/23/2020 08:52:43'!
 relationMatrix
-	^ ZZ diagonalMatrix: (self orders select: [:each| each isZero not])! !
+	^ ƒ diagonalMatrix: (self orders select: [:each| each isZero not])! !
 
 !AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 04:22:38'!
 relators
@@ -14593,13 +14593,13 @@ newFrom: anObject
 x: anInteger to: exponent
 	^ (Monomial new: rank x: anInteger to: exponent) parent: self! !
 
-!FreeAbelianGroup methodsFor: 'enumerating' stamp: 'len 5/13/2019 11:56:21'!
+!FreeAbelianGroup methodsFor: 'enumerating' stamp: 'len 5/23/2020 09:13:12'!
 do: aBlock
-	ZZ ^ self rank do: [:each| aBlock value: self !! each asArray]! !
+	ƒ ^ self rank do: [:each| aBlock value: self !! each asArray]! !
 
-!FreeAbelianGroup methodsFor: 'random' stamp: 'len 3/15/2020 18:16:44'!
+!FreeAbelianGroup methodsFor: 'random' stamp: 'len 5/23/2020 09:13:12'!
 atRandom: aRandom bits: bitSize
-	^ self !! (ZZ atRandom: aRandom tuple: self rank bits: bitSize) asArray! !
+	^ self !! (ƒ atRandom: aRandom tuple: self rank bits: bitSize) asArray! !
 
 !FreeAbelianGroup methodsFor: 'testing' stamp: 'len 4/25/2020 09:57:52'!
 includes: anObject
@@ -15005,13 +15005,13 @@ space
 	self generators ifNotNil: [:generators| ^ anObject containsAllOf: generators].
 	^ super = anObject! !
 
-!PermutationGroup methodsFor: 'converting' stamp: 'len 9/26/2018 22:03:36'!
+!PermutationGroup methodsFor: 'converting' stamp: 'len 5/23/2020 09:11:37'!
 asMatrixGroup
 	"Return a matrix group isomorphic to the receiver.
 	Assume the space of the receiver is an interval (1 to: n)."
 	| n generators |
 	n _ self degree.
-	generators _ self generators collect: [:g| QQ matrix: n@n evaluating: [:i :j| (g at: i) = j ifTrue: [1] ifFalse: [0]]].
+	generators _ self generators collect: [:g| „ matrix: n@n evaluating: [:i :j| (g at: i) = j ifTrue: [1] ifFalse: [0]]].
 	^ LinearGroup generators: generators! !
 
 !PermutationGroup methodsFor: 'copying' stamp: 'len 9/26/2018 22:36:31'!
@@ -15693,30 +15693,30 @@ space: aFreeModule
 species
 	^ LinearGroup! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:33:08'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 C3
 	"Cyclic matrix group of order 3."
-	^ (ZZ/5 ^ 2) automorphisms span: #((0 1 -1 -1))! !
+	^ (ƒ/5 ^ 2) automorphisms span: #((0 1 -1 -1))! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:34:09'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 C4
 	"Cyclic matrix group of order 4."
-	^ (ZZ/7 ^ 2) automorphisms span: #((0 -1 1 0))! !
+	^ (ƒ/7 ^ 2) automorphisms span: #((0 -1 1 0))! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:33:29'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 D8
 	"Dihedral group of order 8."
-	^ (ZZ/3 ^ 2) automorphisms span: #((0 1 2 0) (1 0 0 2))! !
+	^ (ƒ/3 ^ 2) automorphisms span: #((0 1 2 0) (1 0 0 2))! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:34:27'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 GL
 	"The general linear group of 3x3 invertible matrices with rational coefficients."
-	^ (QQ^3) automorphisms! !
+	^ („^3) automorphisms! !
 
-!LinearGroup class methodsFor: 'examples' stamp: 'len 5/10/2019 09:35:56'!
+!LinearGroup class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 klein
 	"The Klein four-group (or Vierergruppe) as a linear group."
-	^ (ZZ^2) automorphisms span: #((1 0 0 -1) (-1 0 0 1))! !
+	^ (ƒ^2) automorphisms span: #((1 0 0 -1) (-1 0 0 1))! !
 
 !LinearGroup class methodsFor: 'instance creation' stamp: 'len 9/25/2018 17:21:17'!
 generators: aCollection
@@ -16121,9 +16121,9 @@ hash
 modulus
 	^ self domain modulus! !
 
-!DirichletGroup methodsFor: 'as yet unclassified' stamp: 'len 12/28/2016 11:30:44'!
+!DirichletGroup methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 modulus: anInteger
-	self propertyAt: #domain put: (ZZ / anInteger) units! !
+	self propertyAt: #domain put: (ƒ / anInteger) units! !
 
 !DirichletGroup class methodsFor: 'instance creation' stamp: 'len 12/9/2016 15:51:30'!
 new: anInteger
@@ -16133,9 +16133,9 @@ new: anInteger
 new: anInteger to: aCodomain
 	^ self new modulus: anInteger; codomain: aCodomain! !
 
-!ArithmeticGroup methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 04:48:58'!
+!ArithmeticGroup methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:03:47'!
 action
-	^ GroupAction from: (self, CC) to: CC evaluatingWithArguments: [:f :z| f value: z]! !
+	^ GroupAction from: (self, †) to: † evaluatingWithArguments: [:f :z| f value: z]! !
 
 !ArithmeticGroup methodsFor: 'as yet unclassified' stamp: 'len 12/20/2016 12:20:53'!
 ambient
@@ -16192,7 +16192,7 @@ genus
 	^ self curve genus
 "(1 + projectiveIndex) / 12 - nu2 / 4 - nu3 / 4 - ncusps/2"! !
 
-!CongruenceSubgroup methodsFor: 'operations' stamp: 'len 12/11/2016 07:57:22'!
+!CongruenceSubgroup methodsFor: 'operations' stamp: 'len 5/23/2020 09:13:12'!
 widthOf: aCusp
 	"Algorithm 1.19 (Width of a cusp) in Stein's 'Modular Forms, A Computational Approach'."
 	| gamma |
@@ -16204,7 +16204,7 @@ widthOf: aCusp
 			a _ aCusp numerator.
 			b _ aCusp denominator.
 			xgcd _ a xgcd: b.
-			gamma _ Matrix rows: {ZZ tuple: {a. b}. ZZ tuple: {xgcd at: 2. xgcd at: 3}}].
+			gamma _ Matrix rows: {ƒ tuple: {a. b}. ƒ tuple: {xgcd at: 2. xgcd at: 3}}].
 	"..."! !
 
 !CongruenceSubgroup methodsFor: 'testing' stamp: 'len 6/2/2018 17:59:42'!
@@ -16332,10 +16332,10 @@ dimension
 	self isFinite ifTrue: [^ 0].
 	^ self propertyAt: #dimension! !
 
-!Ring methodsFor: 'accessing' stamp: 'len 8/10/2019 08:40:36'!
+!Ring methodsFor: 'accessing' stamp: 'len 5/23/2020 09:11:37'!
 hilbertSeries
 	"Answer the Hilbert series of the receiver expressed as a rational function in Q(t)."
-	^ self hilbertSeriesAt: (QQ polynomialsIn: #(t)) fractions x! !
+	^ self hilbertSeriesAt: („ polynomialsIn: #(t)) fractions x! !
 
 !Ring methodsFor: 'accessing' stamp: 'len 5/20/2018 22:37:12'!
 maximalIdeal
@@ -16347,11 +16347,11 @@ maximalIdeal
 one
 	^ self propertyAt: #one ifAbsentPut: [self generators anyOne one]! !
 
-!Ring methodsFor: 'accessing' stamp: 'len 4/26/2020 08:00:14'!
+!Ring methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 scalars
 	"Because the ring of rational integers is the initial object in the category of rings.
 	Subclasses can override."
-	^ ZZ! !
+	^ ƒ! !
 
 !Ring methodsFor: 'accessing' stamp: 'len 6/14/2019 01:06:08'!
 uniformizer
@@ -17172,10 +17172,10 @@ isTrivial
 integers: aRing
 	self propertyAt: #integers put: aRing! !
 
-!FractionRing class methodsFor: 'examples' stamp: 'len 6/9/2019 08:35:43'!
+!FractionRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example1
 	"The ring of fractions of the rational integers is the field of rational numbers:"
-	^ ZZ fractions
+	^ ƒ fractions
 ! !
 
 !FractionRing class methodsFor: 'instance creation' stamp: 'len 6/21/2019 17:36:14'!
@@ -17187,9 +17187,9 @@ degree
 	"Answer the degree of the receiver as an algebraic extension (as a number field)."
 	^ 1! !
 
-!RationalField methodsFor: 'accessing' stamp: 'len 10/14/2016 22:01'!
+!RationalField methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 integers
-	^ ZZ! !
+	^ ƒ! !
 
 !RationalField methodsFor: 'accessing' stamp: 'len 4/24/2016 03:00'!
 size
@@ -17240,9 +17240,9 @@ adic: aPrime precision: anInteger
 adjoin: anAlgebraicNumber
 	^ NumberField adjoint: anAlgebraicNumber! !
 
-!RationalField methodsFor: 'operations' stamp: 'len 1/20/2018 19:01:07'!
+!RationalField methodsFor: 'operations' stamp: 'len 5/23/2020 09:03:52'!
 algebraicClosure
-	^ CC! !
+	^ †! !
 
 !RationalField methodsFor: 'operations' stamp: 'len 5/21/2018 16:20:48'!
 extension: aPolynomial
@@ -17252,9 +17252,9 @@ extension: aPolynomial
 "	aPolynomial degree = 2 ifTrue: [^ QuadraticField polynomial: aPolynomial]."
 	^ NumberField polynomial: aPolynomial! !
 
-!RationalField methodsFor: 'operations' stamp: 'len 1/20/2018 19:03:44'!
+!RationalField methodsFor: 'operations' stamp: 'len 5/23/2020 09:04:18'!
 realClosure
-	^ RR! !
+	^ …! !
 
 !RationalField methodsFor: 'testing' stamp: 'len 5/10/2020 09:37:11'!
 includes: anObject
@@ -17281,10 +17281,10 @@ isPrime
 isReal
 	^ true! !
 
-!RationalField class methodsFor: 'initialization' stamp: 'len 8/5/2016 21:33'!
+!RationalField class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:51:27'!
 initialize
 	super initialize.
-	Smalltalk at: #QQ put: self new! !
+	Smalltalk at: #„ put: self new! !
 
 !AffineFractionRing methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 10:19:01'!
 asAffineRing
@@ -17351,16 +17351,16 @@ isMultivariate
 isUnivariate
 	^ self integers isUnivariate! !
 
-!RationalFunctionField class methodsFor: 'examples' stamp: 'len 5/18/2018 18:38:15'!
+!RationalFunctionField class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example1
 	"The field of rational functions in two indeterminates over the rationals:"
-	^ (QQ polynomialsIn: #(x y)) fractions! !
+	^ („ polynomialsIn: #(x y)) fractions! !
 
-!RationalFunctionField class methodsFor: 'examples' stamp: 'len 5/18/2018 18:37:11'!
+!RationalFunctionField class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example2
 	"x / y in Q(x,y):"
 	| F |
-	F _ (QQ polynomialsIn: #(x y)) fractions.
+	F _ („ polynomialsIn: #(x y)) fractions.
 	^ (F x: 1) / (F x: 2)! !
 
 !RationalFunctionField class methodsFor: 'instance creation' stamp: 'len 1/5/2017 09:51:56'!
@@ -17589,15 +17589,21 @@ localizationIdeal
 localizationIdeal: anIdeal
 	self propertyAt: #localizationIdeal put: anIdeal! !
 
-!LocalRing class methodsFor: 'examples' stamp: 'len 1/23/2018 21:24:50'!
+!LocalRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:24'!
 exampleZZLocalizedAt2
 	"Answer the localization of the integers at <2>.
 	This is the ring of fractions with odd denominator."
-	^ ZZ localizationAt: 2! !
+	^ ƒ localizationAt: 2! !
 
 !LocalRing class methodsFor: 'instance creation' stamp: 'len 6/6/2019 11:10:47'!
 at: anIdeal
 	^ self new localizationIdeal: anIdeal! !
+
+!LocalRing class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
+exampleƒLocalizedAt2
+	"Answer the localization of the integers at <2>.
+	This is the ring of fractions with odd denominator."
+	^ ƒ localizationAt: 2! !
 
 !ProductRing methodsFor: 'accessing' stamp: 'len 5/3/2018 01:54:47'!
 characteristic
@@ -17709,17 +17715,17 @@ isReduced
 components: anArray
 	components _ anArray! !
 
-!ProductRing class methodsFor: 'examples' stamp: 'len 5/22/2018 21:56:13'!
+!ProductRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example1
 	"The product ring of two finite rings. This is a ring of order 4,
 	with 3 zero-divisors and 1 unit, characteristic 2, and two maximal
 	(and principal) ideals (so it's not a local ring)."
-	^ ZZ/2 × (ZZ/2)! !
+	^ ƒ/2 × (ƒ/2)! !
 
-!ProductRing class methodsFor: 'examples' stamp: 'len 5/22/2018 21:56:51'!
+!ProductRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example2
 	"The canonical projection to the second component:"
-	^ ZZ/2 × (ZZ/2) projection: 2! !
+	^ ƒ/2 × (ƒ/2) projection: 2! !
 
 !ProductRing class methodsFor: 'instance creation' stamp: 'len 8/29/2016 04:09'!
 components: anArray
@@ -17929,31 +17935,31 @@ elementClass
 relations: anIdeal
 	self propertyAt: #relations put: anIdeal! !
 
-!QuotientRing class methodsFor: 'examples' stamp: 'len 10/29/2016 10:25'!
+!QuotientRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 exampleZ6
 	"The quotient ring of residue classes of integers modulo 6."
 	| I |
-	I _ ZZ * 6.
-	^ ZZ/I "alternatively, you can just write ZZ/6 or ZZ mod: 6."! !
+	I _ ƒ * 6.
+	^ ƒ/I "alternatively, you can just write ƒ/6 or ƒ mod: 6."! !
 
-!QuotientRing class methodsFor: 'examples' stamp: 'len 10/29/2016 10:25'!
+!QuotientRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 exampleZ6Elements
 	"The elements of the quotient ring of residue classes of integers modulo 6."
-	^ (ZZ/6) elements! !
+	^ (ƒ/6) elements! !
 
-!QuotientRing class methodsFor: 'examples' stamp: 'len 5/22/2018 21:55:40'!
+!QuotientRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 exampleZ6Projection
 	"The canonical projection from the integers ring Z
 	to the quotient ring of residue classes modulo 6."
-	^ (ZZ/6) projection! !
+	^ (ƒ/6) projection! !
 
 !QuotientRing class methodsFor: 'instance creation' stamp: 'len 7/31/2019 08:22:46'!
 relations: anIdeal
 	^ self new relations: anIdeal! !
 
-!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 11/29/2016 21:40:34'!
+!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 base
-	^ ZZ! !
+	^ ƒ! !
 
 !ModularIntegerRing methodsFor: 'accessing' stamp: 'len 4/25/2016 00:26'!
 characteristic
@@ -17985,9 +17991,9 @@ primitiveRoot
 			ifFalse: [^ self propertyAt: #primitiveRoot put: x]].
 	^ self error: 'no primitive element'! !
 
-!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 2/27/2017 20:49:49'!
+!ModularIntegerRing methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 relations
-	^ self propertyAt: #relations ifAbsentPut: [ZZ * modulus]! !
+	^ self propertyAt: #relations ifAbsentPut: [ƒ * modulus]! !
 
 !ModularIntegerRing methodsFor: 'accessing' stamp: 'len 4/25/2016 00:27'!
 size
@@ -18299,16 +18305,16 @@ example1
 	"The Galois ring Z/<5^3>:"
 	^ PrimePowerRing new: 5 to: 3! !
 
-!PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/21/2018 16:30:41'!
+!PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example2
 	"Another way to create the Galois ring Z/<5^3>.
 	This is less efficient because internally it performs a factorization."
-	^ ZZ/(5^3)! !
+	^ ƒ/(5^3)! !
 
-!PrimePowerRing class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:57'!
+!PrimePowerRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example3
 	"The canonical ring homomorphism from a prime ring Z/(p^n)Z to Z/pZ:"
-	^ ZZ/(5^3) -> (ZZ/5)! !
+	^ ƒ/(5^3) -> (ƒ/5)! !
 
 !PrimePowerRing class methodsFor: 'instance creation' stamp: 'len 5/21/2018 16:28:00'!
 new: p to: n
@@ -18707,9 +18713,9 @@ isLocalField
 elementClass
 	^ AlgebraicElement! !
 
-!AlgebraicExtensionRing class methodsFor: 'examples' stamp: 'len 2/22/2017 08:47:43'!
+!AlgebraicExtensionRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example
-	^ QQ extension: QQ polynomials x^4 - 2! !
+	^ „ extension: „ polynomials x^4 - 2! !
 
 !AlgebraicExtensionRing class methodsFor: 'instance creation' stamp: 'len 5/12/2016 10:05'!
 polynomial: aPolynomial
@@ -18855,10 +18861,10 @@ new: p to: n to: m
 irreduciblePolynomialOfDegree: m mod: p
 	^ (IrreduciblePolynomialsCache at: {p. m} ifAbsent: []) ifNil: [IrreduciblePolynomialsCache at: {p. m} put: ((PrimeField new: p) polynomials findIrreducibleOfDegree: m)]! !
 
-!GaloisField methodsFor: 'accessing' stamp: 'len 5/27/2018 04:39:39'!
+!GaloisField methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 universalPolynomial
 	"Answer the universal polynomial of which all elements of the receiver are roots."
-	^ ZZ polynomials !! [:x| x^self size - x]! !
+	^ ƒ polynomials !! [:x| x^self size - x]! !
 
 !GaloisField methodsFor: 'comparing' stamp: 'len 9/22/2018 18:53:34'!
 ~ aRing
@@ -18957,9 +18963,9 @@ isPerfectField
 	"A field is perfect if either it has characteristic 0 or has characteristic p and every element in the field has a p-th root in the field."
 	^ self characteristic = 0! !
 
-!NumberField methodsFor: 'accessing' stamp: 'len 4/16/2018 16:04:31'!
+!NumberField methodsFor: 'accessing' stamp: 'len 5/23/2020 09:03:57'!
 adjoint
-	^ self propertyAt: #adjoint ifAbsentPut: [self polynomial anyRootIn: CC]! !
+	^ self propertyAt: #adjoint ifAbsentPut: [self polynomial anyRootIn: †]! !
 
 !NumberField methodsFor: 'accessing' stamp: 'len 1/10/2016 22:35'!
 basis
@@ -18979,9 +18985,9 @@ integers
 integralBasis
 	^ self notYetImplemented "COHEN 6.1.8"! !
 
-!NumberField methodsFor: 'accessing' stamp: 'len 11/3/2016 04:41'!
+!NumberField methodsFor: 'accessing' stamp: 'len 5/23/2020 09:11:37'!
 scalars
-	^ QQ! !
+	^ „! !
 
 !NumberField methodsFor: 'accessing' stamp: 'len 3/19/2016 09:33'!
 signature
@@ -19010,9 +19016,9 @@ isomorphismTo: aNumberField
 preferedEmbedding
 	^ self embeddings detect: [:one| (one value: self x) = self adjoint]! !
 
-!NumberField methodsFor: 'morphisms' stamp: 'len 1/20/2018 19:02:57'!
+!NumberField methodsFor: 'morphisms' stamp: 'len 5/23/2020 09:04:21'!
 realEmbeddings
-	^ self embeddingsIn: RR! !
+	^ self embeddingsIn: …! !
 
 !NumberField methodsFor: 'operations' stamp: 'len 1/10/2016 22:34'!
 archimedeanPlaces
@@ -19066,9 +19072,9 @@ adjoint: anAlgebraicNumber
 	self propertyAt: #adjoint put: anAlgebraicNumber.
 	self polynomial: anAlgebraicNumber minimalPolynomial! !
 
-!NumberField class methodsFor: 'examples' stamp: 'len 2/22/2017 08:50:36'!
+!NumberField class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example
-	^ QQ adjoin: RealAlgebraicNumber sqrt2! !
+	^ „ adjoin: RealAlgebraicNumber sqrt2! !
 
 !NumberField class methodsFor: 'instance creation' stamp: 'len 1/11/2016 02:03'!
 adjoint: anAlgebraicNumber
@@ -19094,11 +19100,11 @@ integralBasis
 order
 	^ self propertyAt: #order! !
 
-!CyclotomicField methodsFor: 'accessing-private' stamp: 'len 5/23/2020 07:18:00'!
+!CyclotomicField methodsFor: 'accessing-private' stamp: 'len 5/23/2020 09:11:37'!
 order: anInteger
 	anInteger > 2 ifFalse: [^ self error: 'the order of a cyclotomic field must be > 2'].
 	self propertyAt: #order put: anInteger.
-	self polynomial: ((QQ polynomialsIn: {'', anInteger printString sub}) cyclotomic: anInteger)! !
+	self polynomial: ((„ polynomialsIn: {'', anInteger printString sub}) cyclotomic: anInteger)! !
 
 !CyclotomicField methodsFor: 'morphisms' stamp: 'len 12/10/2016 21:08:51'!
 automorphisms
@@ -19160,12 +19166,12 @@ isQuadratic
 d
 	^ self polynomial independentCoefficient asInteger negated! !
 
-!QuadraticField methodsFor: 'private' stamp: 'len 5/23/2020 07:41:08'!
+!QuadraticField methodsFor: 'private' stamp: 'len 5/23/2020 09:11:37'!
 sqrt: anInteger
 	| P d |
 	d _ anInteger squareFree.
 	(d == 0 or: [d == 1]) ifTrue: [DomainError signal: 'not a quadratic field'].
-	P _ QQ polynomialsIn: {d == -1 ifTrue: ['i' italic] ifFalse: ['Ÿ', d printString]}.
+	P _ „ polynomialsIn: {d == -1 ifTrue: ['i' italic] ifFalse: ['Ÿ', d printString]}.
 	self polynomial: P x squared - d! !
 
 !QuadraticField class methodsFor: 'examples' stamp: 'len 12/12/2016 17:12:01'!
@@ -19266,9 +19272,9 @@ adic: aPrime
 adic: aPrime precision: anInteger
 	^ AdicRing at: aPrime precision: anInteger! !
 
-!RationalIntegerRing methodsFor: 'operations' stamp: 'len 7/15/2016 18:31'!
+!RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/23/2020 09:11:37'!
 fractions
-	^ QQ! !
+	^ „! !
 
 !RationalIntegerRing methodsFor: 'operations' stamp: 'len 5/21/2018 22:03:53'!
 radical
@@ -19348,10 +19354,10 @@ isReduced
 	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0."
 	^ true! !
 
-!RationalIntegerRing class methodsFor: 'initialization' stamp: 'len 8/5/2016 21:32'!
+!RationalIntegerRing class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:50:48'!
 initialize
 	super initialize.
-	Smalltalk at: #ZZ put: self new! !
+	Smalltalk at: #ƒ put: self new! !
 
 !AdicField methodsFor: 'accessing' stamp: 'len 8/11/2019 11:26:37'!
 characteristic
@@ -19525,10 +19531,10 @@ jet: anInteger
 atRandom: aRandom
 	^ self atRandom: aRandom bits: (self p log: 2) * self defaultPrecision! !
 
-!AdicRing methodsFor: 'random' stamp: 'len 6/2/2019 09:33:02'!
+!AdicRing methodsFor: 'random' stamp: 'len 5/23/2020 08:55:40'!
 atRandom: aRandom bits: bitSize
 	| n |
-	n _ ZZ atRandom: aRandom bits: bitSize.
+	n _ ƒ atRandom: aRandom bits: bitSize.
 	n = 0 ifTrue: [n _ 1].
 	^ self !! n! !
 
@@ -19650,10 +19656,10 @@ isField
 isLocalField
 	^ true! !
 
-!ComplexField class methodsFor: 'initialization' stamp: 'len 8/5/2016 21:34'!
+!ComplexField class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:51:01'!
 initialize
 	super initialize.
-	Smalltalk at: #CC put: self new! !
+	Smalltalk at: #† put: self new! !
 
 !RealField methodsFor: 'accessing' stamp: 'len 8/6/2016 03:45'!
 characteristic
@@ -19692,9 +19698,9 @@ embed: anObject
 	(anObject isInteger or: [anObject isFraction]) ifTrue: [^ anObject].
 	^ super embed: anObject! !
 
-!RealField methodsFor: 'operations' stamp: 'len 1/20/2018 19:00:26'!
+!RealField methodsFor: 'operations' stamp: 'len 5/23/2020 09:04:02'!
 algebraicClosure
-	^ CC! !
+	^ †! !
 
 !RealField methodsFor: 'testing' stamp: 'len 8/5/2016 21:50'!
 includes: anObject
@@ -19724,10 +19730,10 @@ isOrdered
 isReal
 	^ true! !
 
-!RealField class methodsFor: 'initialization' stamp: 'len 8/5/2016 21:33'!
+!RealField class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:51:12'!
 initialize
 	super initialize.
-	Smalltalk at: #RR put: self new! !
+	Smalltalk at: #… put: self new! !
 
 !Order methodsFor: 'accessing' stamp: 'len 12/28/2016 12:13:45'!
 basis
@@ -20546,43 +20552,43 @@ ordering: aMonomialOrdering
 scalars: aRing
 	scalars _ aRing! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:25:28'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example11
 	"Creating a polynomial in Z[x]."
 	| R x |
-	R _ ZZ polynomials.
+	R _ ƒ polynomials.
 	x _ R x.
 	^ x^2 - x + 3! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:25:37'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example12
 	"Creating a polynomial in Z[x] from a tuple of coefficients."
-	^ ZZ polynomials coefficients: #(3 -1 1)! !
+	^ ƒ polynomials coefficients: #(3 -1 1)! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:26:16'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example13
 	"Creating a polynomial in Z[x] from a block."
-	^ ZZ polynomials !! [:x| x^2 - x + 3]! !
+	^ ƒ polynomials !! [:x| x^2 - x + 3]! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:26:52'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example21
 	"Creating a polynomial in Q[x,y]."
 	| R x y |
-	R _ ZZ polynomialsIn: #(x y). "these are just names for printing"
+	R _ ƒ polynomialsIn: #(x y). "these are just names for printing"
 	x _ R x: 1.
 	y _ R x: 2.
 	^ x^2 - (x*y) + 1! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:27:07'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example22
 	"A more compact way to create a polynomial in Q[x,y]."
-	^ (ZZ polynomialsIn: #(x y)) !! [:x :y| x^2 - (x*y) + 1]! !
+	^ (ƒ polynomialsIn: #(x y)) !! [:x :y| x^2 - (x*y) + 1]! !
 
-!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/22/2018 22:27:28'!
+!PolynomialRing class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example23
 	"Creating a polynomial in Q[x,y] with local graded lexicographic ordering."
 	| R x y |
-	R _ ZZ polynomialsIn: #(x y) ordering: #lglex.
+	R _ ƒ polynomialsIn: #(x y) ordering: #lglex.
 	x _ R x: 1.
 	y _ R x: 2.
 	^ x^2 - (x*y) + 1! !
@@ -21553,35 +21559,35 @@ isVectorSpace
 species
 	^ Module! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:44:51'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 example1
 	"The Z-module Z^3."
-	^ ZZ^3! !
+	^ ƒ^3! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:47:08'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 example2Dual
 	"The dual of Z^3, i.e. the Z-module of linear forms in Z^3."
-	^ (ZZ^3) dual! !
+	^ (ƒ^3) dual! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:47:20'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:11:37'!
 example3HomSpace
 	"The vector space of linear maps from Q^3 to Q^2."
-	^ QQ^3 => (QQ^2)! !
+	^ „^3 => („^2)! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:48:43'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 example4Quotient
 	"The quotient module Z^3 / <(1,2,3), (2,2,2)>."
-	^ ZZ^3 / {(1,2,3). (2,2,2)}! !
+	^ ƒ^3 / {(1,2,3). (2,2,2)}! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:51:14'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 example5QuotientInvariants
 	"Invariants of the Z-module Z^3 / <(1,2,3), (2,2,2)>."
-	^ (ZZ^3 / {(1,2,3). (2,2,2)}) invariants! !
+	^ (ƒ^3 / {(1,2,3). (2,2,2)}) invariants! !
 
-!Module class methodsFor: 'as yet unclassified' stamp: 'len 4/30/2020 07:51:30'!
+!Module class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:13:12'!
 example6QuotientPresentation
 	"A free presentation of the quotient module Z^3 / <(1,2,3), (2,2,2)>."
-	^ (ZZ^3 / {(1,2,3). (2,2,2)}) presentation! !
+	^ (ƒ^3 / {(1,2,3). (2,2,2)}) presentation! !
 
 !Ideal methodsFor: 'accessing' stamp: 'len 5/18/2020 06:55:53'!
 generator
@@ -21834,16 +21840,16 @@ generators: aCollection
 scalars: aRing
 	self ambient: aRing asScalarModule! !
 
-!Ideal class methodsFor: 'examples' stamp: 'len 5/11/2018 20:52:37'!
+!Ideal class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example1
 	"Creating an ideal of Z:"
-	^ ZZ * {12. 18. 60}! !
+	^ ƒ * {12. 18. 60}! !
 
-!Ideal class methodsFor: 'examples' stamp: 'len 5/11/2018 20:53:57'!
+!Ideal class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 example2
 	"Creating an ideal in Z/3Z[x,y,z]:"
 	| R x y z |
-	R _ ZZ/3 polynomialsIn: #(x y z).
+	R _ ƒ/3 polynomialsIn: #(x y z).
 	x _ R x.
 	y _ R y.
 	z _ R z.
@@ -21904,9 +21910,9 @@ isPrincipal
 	"Answer true if the receiver is generated by a single element."
 	^ self representative isPrincipal! !
 
-!RationalIntegerIdeal methodsFor: 'accessing' stamp: 'len 5/2/2020 17:27:13'!
+!RationalIntegerIdeal methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 ambient
-	^ ZZ asScalarModule! !
+	^ ƒ asScalarModule! !
 
 !RationalIntegerIdeal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:14:04'!
 invert: anInteger
@@ -21919,10 +21925,10 @@ invert: anInteger
 	"Answer the intersection of the receiver and the argument."
 	^ self scalars * (self generator lcm: anIdeal generator)! !
 
-!RationalIntegerIdeal methodsFor: 'operations' stamp: 'len 7/31/2019 08:24:47'!
+!RationalIntegerIdeal methodsFor: 'operations' stamp: 'len 5/23/2020 09:13:12'!
 quotientRing
 	"Answer the quotient ring of the base ring by the receiver."
-	^ ZZ / self generator! !
+	^ ƒ / self generator! !
 
 !RationalIntegerIdeal methodsFor: 'operations' stamp: 'len 5/4/2018 23:46:45'!
 radical
@@ -22128,10 +22134,10 @@ highestCorner
 	"TODO: compute it combinatorially from a standard basis"
 	self notYetImplemented! !
 
-!PolynomialIdeal methodsFor: 'operations' stamp: 'len 8/10/2019 08:40:31'!
+!PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/23/2020 09:10:45'!
 hilbertSeries
 	"Answer the Hilbert series of the receiver expressed as a rational function in Q(t)."
-	^ self hilbertSeriesAt: (QQ polynomialsIn: #(t)) fractions x! !
+	^ self hilbertSeriesAt: („ polynomialsIn: #(t)) fractions x! !
 
 !PolynomialIdeal methodsFor: 'operations' stamp: 'len 8/10/2019 08:35:28'!
 hilbertSeriesAt: t
@@ -22295,15 +22301,15 @@ generators: aCollection
 		ifTrue: [generators _ generators collect: [:each| each * each sign]].
 	super generators: generators! !
 
-!PolynomialIdeal class methodsFor: 'examples' stamp: 'len 5/12/2018 17:10:21'!
+!PolynomialIdeal class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cyclic3
 	"The ideal of cyclic 3-roots."
-	^ (QQ polynomialsIn: #(x y z)) cyclicIdeal! !
+	^ („ polynomialsIn: #(x y z)) cyclicIdeal! !
 
-!PolynomialIdeal class methodsFor: 'examples' stamp: 'len 5/12/2018 17:13:04'!
+!PolynomialIdeal class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 katsura3
 	"The Katsura ideal in 3 variables with rational coefficients."
-	^ (QQ polynomialsIn: #(a b c)) katsuraIdeal! !
+	^ („ polynomialsIn: #(a b c)) katsuraIdeal! !
 
 !MonomialIdeal methodsFor: 'accessing' stamp: 'len 2/19/2017 09:27:47'!
 generatingMonomials
@@ -23223,10 +23229,10 @@ computeType
 components: anArray
 	^ self new components: anArray! !
 
-!Scheme methodsFor: 'accessing' stamp: 'len 1/13/2017 20:02:34'!
+!Scheme methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 base
 	"Answer the base scheme of the receiver."
-	^ self propertyAt: #base ifAbsent: [ZZ spec]! !
+	^ self propertyAt: #base ifAbsent: [ƒ spec]! !
 
 !Scheme methodsFor: 'accessing' stamp: 'len 10/4/2016 09:19'!
 codimension
@@ -23557,18 +23563,18 @@ coordinateRing: aCommutativeRing
 species
 	^ AffineScheme! !
 
-!AffineScheme class methodsFor: 'examples' stamp: 'len 5/22/2018 22:31:28'!
+!AffineScheme class methodsFor: 'examples' stamp: 'len 5/23/2020 08:55:54'!
 example1
 	"Spec(Z), the prime spectrum of the rational integers.
 	This is the initial object in the category of schemes."	
-	^ ZZ spec! !
+	^ ƒ spec! !
 
-!AffineScheme class methodsFor: 'examples' stamp: 'len 5/22/2018 22:34:02'!
+!AffineScheme class methodsFor: 'examples' stamp: 'len 5/23/2020 08:55:57'!
 example2
 	"Spec(Z/6Z), the prime spectrum of the residue class ring
 	of integers modulo 6, as a set it is the set of prime
 	ideals of Z/6Z:"
-	^ (ZZ/6) spec asSet! !
+	^ (ƒ/6) spec asSet! !
 
 !AffineScheme class methodsFor: 'instance creation' stamp: 'len 1/13/2017 15:59:43'!
 coordinateRing: aRing
@@ -23763,22 +23769,22 @@ satisfies: aTuple
 species
 	^ AffineVariety! !
 
-!AffineVariety class methodsFor: 'examples' stamp: 'len 2/22/2017 08:17:35'!
+!AffineVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 circle
 	"The unit circle in the rational affine plane:"
 	| R x y I |
-	R _ QQ polynomialsIn: #(x y).
+	R _ „ polynomialsIn: #(x y).
 	x _ R x.
 	y _ R y.
 	I _ R * (x^2 + (y^2) - 1).
 	^ (R / I) spec! !
 
-!AffineVariety class methodsFor: 'examples' stamp: 'len 2/22/2017 08:18:13'!
+!AffineVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 clebschCubic
 	"The Clebsch cubic as affine scheme in Q^3.
 	This is the unique cubic surface that has Sym(5) as symmetry group."
 	| A x y z f |
-	A _ AffineSpace new: #(x y z) over: QQ.
+	A _ AffineSpace new: #(x y z) over: „.
 	x _ A coordinateRing x.
 	y _ A coordinateRing y.
 	z _ A coordinateRing z.
@@ -23790,31 +23796,31 @@ clebschCubic
 			+ 1.
 	^ A subscheme: f! !
 
-!AffineVariety class methodsFor: 'examples' stamp: 'len 5/22/2018 22:45:58'!
+!AffineVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 romanSurface
 	"The Roman surface or Steiner surface.
 	This is a self-intersecting mapping of the real projective plane into affine 3-space.
 	It was discovered by Jakob Steiner when he was in Rome in 1844."
 	| A r |
-	A _ AffineSpace new: #(x y z) over: QQ.
+	A _ AffineSpace new: #(x y z) over: „.
 	r _ 1.
 	^ A subscheme: A coordinateRing !! [:x :y :z| x*y^2 + (y*z^2) + (z*x^2) - (x*y*z*r squared)]! !
 
-!AffineVariety class methodsFor: 'examples' stamp: 'len 2/22/2017 08:18:46'!
+!AffineVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 twistedCubic
 	"This is the twisted cubic affine variety, parameterized by (x, x^2, x^3) in C^3."
 	| A x y z |
-	A _ AffineSpace new: #(x y z) over: QQ algebraicClosure.
+	A _ AffineSpace new: #(x y z) over: „ algebraicClosure.
 	x _ A coordinateRing x.
 	y _ A coordinateRing y.
 	z _ A coordinateRing z.
 	^ A subscheme: {y - (x^2). z - (x^3)}! !
 
-!AffineVariety class methodsFor: 'examples' stamp: 'len 5/22/2018 22:46:08'!
+!AffineVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 whitneyUmbrella
 	"This is Whitney's umbrella in affine space Q^3."
 	| A |
-	A _ AffineSpace new: #(x y z) over: QQ.
+	A _ AffineSpace new: #(x y z) over: „.
 	^ A subscheme: A coordinateRing !! [:x :y :z| x^2*y - (z^2)]! !
 
 !AffineVariety class methodsFor: 'instance creation' stamp: 'len 8/27/2018 21:55:35'!
@@ -23878,14 +23884,14 @@ tangentsAt: aTuple
 	derivatives _ (0 to: r) collect: [:k| (f derivative: k in: 1) derivative: r-k in: 2].
 	^ (self ambient subscheme: ((0 to: r) sum: [:k| (r choose: k) * (derivatives at: k+1) * (f parent x: 1 to: k) * (f parent x: 2 to: r-k)])) + aTuple! !
 
-!AffinePlaneCurve class methodsFor: 'examples' stamp: 'len 5/22/2018 22:36:16'!
+!AffinePlaneCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 descartesFolium
 	"This is the 'Descartes folium'."
-	^ AffinePlaneCurve polynomial: (QQ polynomialsIn: #(x y)) !! [:x :y| x^3 + (y^3) - (3*x*y)]! !
+	^ AffinePlaneCurve polynomial: („ polynomialsIn: #(x y)) !! [:x :y| x^3 + (y^3) - (3*x*y)]! !
 
-!AffinePlaneCurve class methodsFor: 'examples' stamp: 'len 5/22/2018 22:35:53'!
+!AffinePlaneCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 iminus
-	^ AffinePlaneCurve polynomial: (QQ polynomialsIn: #(x y)) !! [:x :y| x^3 + (y^3) - x - (2*y) - 1]! !
+	^ AffinePlaneCurve polynomial: („ polynomialsIn: #(x y)) !! [:x :y| x^3 + (y^3) - x - (2*y) - 1]! !
 
 !AffineSpace methodsFor: 'accessing' stamp: 'len 8/27/2016 19:03'!
 ambient
@@ -23940,25 +23946,25 @@ isPlane
 satisfies: aTuple
 	^ true! !
 
-!AffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 18:59:49'!
+!AffineSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example1
 	"The rational affine plane:"
-	^ AffineSpace new: 2 over: QQ! !
+	^ AffineSpace new: 2 over: „! !
 
-!AffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 19:00:16'!
+!AffineSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example2
 	"Or assigning names to the indeterminates of the coordinate ring:"
-	^ AffineSpace new: #(x y) over: QQ! !
+	^ AffineSpace new: #(x y) over: „! !
 
-!AffineSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 19:00:37'!
+!AffineSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example3
 	"And equivalently:"
-	^ (QQ polynomialsIn: #(x y)) spec! !
+	^ („ polynomialsIn: #(x y)) spec! !
 
-!AffineSpace class methodsFor: 'examples' stamp: 'len 4/18/2020 22:58:39'!
+!AffineSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example4
 	"Product of affine spaces:"
-	^ (AffineSpace new: #(x y z) over: QQ) × (AffineSpace new: #(a b) over: QQ)! !
+	^ (AffineSpace new: #(x y z) over: „) × (AffineSpace new: #(a b) over: „)! !
 
 !AffineSpace class methodsFor: 'instance creation' stamp: 'len 10/28/2016 10:39'!
 new: rank over: aRing
@@ -24009,17 +24015,17 @@ base
 	"Answer the base scheme of the receiver."
 	^ self scalars spec! !
 
-!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 10/27/2016 21:44'!
+!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 5/23/2020 09:11:37'!
 degree
 	| t H |
-	t _ QQ polynomials fractions x.
+	t _ „ polynomials fractions x.
 	H _ self coordinateRing hilbertSeriesAt: t.
 	^ (1 - t) ^ (H orderAt: 1) negated * H value: 1! !
 
-!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 10/27/2016 22:50'!
+!ProjectiveVariety methodsFor: 'accessing' stamp: 'len 5/23/2020 09:11:37'!
 degree2
 	| t H |
-	t _ QQ polynomials fractions x.
+	t _ „ polynomials fractions x.
 	H _ self coordinateRing hilbertSeriesAt: t.
 	^ (1 - t) ^ self coordinateRing dimension * H value: 1! !
 
@@ -24198,34 +24204,34 @@ saturated
 species
 	^ ProjectiveVariety! !
 
-!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/22/2018 22:49:43'!
+!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cayleyCubic
 	"The Cayley cubic as projective surface.
 	This is the unique cubic surface that has 4 ordinary nodes.
 	It is a degeneration of the Clebsh cubic and has Sym(4) as its symmetry group."
 	| P |
-	P _ ProjectiveSpace new: #(x y z w) over: QQ.
+	P _ ProjectiveSpace new: #(x y z w) over: „.
 	^ P subscheme: P coordinateRing !! [:x :y :z :w| x*y*z + (x*y*w) + (x*z*w) + (y*z*w)]! !
 
-!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/22/2018 22:45:30'!
+!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 fermat4
 	"The 4th Fermat curve."
 	| P |
-	P _ ProjectiveSpace new: #(x y z) over: QQ.
+	P _ ProjectiveSpace new: #(x y z) over: „.
 	^ P subscheme: P coordinateRing !! [:x :y :z| x^4 + (y^4) - (z^4)]! !
 
-!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 2/22/2017 08:19:34'!
+!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 fermat: n
 	"The n-th Fermat curve."
 	| P |
-	P _ ProjectiveSpace new: #(x y z) over: QQ.
+	P _ ProjectiveSpace new: #(x y z) over: „.
 	^ P subscheme: (P coordinateRing generate: [:x :y :z| x^n + (y^n) - (z^n)])! !
 
-!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 2/22/2017 08:19:42'!
+!ProjectiveVariety class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 kleinQuartic
 	"This is a projective variety, a curve in P^2(C)."
 	| P x y z |
-	P _ ProjectiveSpace new: 2 over: QQ.
+	P _ ProjectiveSpace new: 2 over: „.
 	x _ P coordinateRing x.
 	y _ P coordinateRing y.
 	z _ P coordinateRing z.
@@ -24452,11 +24458,11 @@ equation: aWeierstrassEquation
 	equation _ aWeierstrassEquation.
 	self coordinateRing: aWeierstrassEquation homogeneousPolynomial asIdeal quotientRing! !
 
-!EllipticCurve methodsFor: 'converting' stamp: 'len 8/3/2019 08:59:58'!
+!EllipticCurve methodsFor: 'converting' stamp: 'len 5/23/2020 09:13:12'!
 % anInteger
 	"Answer the reduction of the receiver modulo anInteger."
 	(self scalars isKindOf: RationalField) ifFalse: [^ DomainError signal: 'not over the rationals'].
-	^ self over: ZZ / anInteger! !
+	^ self over: ƒ / anInteger! !
 
 !EllipticCurve methodsFor: 'converting' stamp: 'len 1/20/2017 09:37:28'!
 over: aRing
@@ -24481,11 +24487,11 @@ divisionPolynomial: n at: x
 	"Answer the n-th division polynomial of the receiver evaluated at x."
 	^ self notYetImplemented! !
 
-!EllipticCurve methodsFor: 'operations' stamp: 'len 12/28/2016 09:58:01'!
+!EllipticCurve methodsFor: 'operations' stamp: 'len 5/23/2020 09:13:12'!
 divisionPolynomialNew: n
 	"Answer the n-th division polynomial."
 	| R w x y |
-	R _ ZZ polynomialsIn: #(x y).
+	R _ ƒ polynomialsIn: #(x y).
 	n == 1 ifTrue: [^ R one].
 	w _ self equation.
 	x _ R x.
@@ -24589,31 +24595,31 @@ divisionPolynomial0: n at: x
 				ifTrue: [(self divisionPolynomial: m at: x)^3 * (self divisionPolynomial: -2 at: x) * (self divisionPolynomial: m+2 at: x) - ((self divisionPolynomial: m+1 at: x)^3 * (self divisionPolynomial: m-1 at: x))]
 				ifFalse: [(self divisionPolynomial: m at: x)^3 * (self divisionPolynomial: m+2 at: x) - ((self divisionPolynomial: m+1 at: x)^3 * (self divisionPolynomial: m-1 at: x) * (self divisionPolynomial: -2 at: x))]]! !
 
-!EllipticCurve class methodsFor: 'examples' stamp: 'len 7/20/2019 08:31:53'!
+!EllipticCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cremona11a1
 	"Elliptic curve 11a1, first curve in the Cremona database."
-	^ EllipticCurve coefficients: ((0,-1,1,-10,-20) over: QQ)! !
+	^ EllipticCurve coefficients: ((0,-1,1,-10,-20) over: „)! !
 
-!EllipticCurve class methodsFor: 'examples' stamp: 'len 7/20/2019 08:32:01'!
+!EllipticCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cremona11a2
 	"Elliptic curve 11a2 from the Cremona database."
-	^ EllipticCurve coefficients: ((0,-1,1,-7820,-263580) over: QQ)! !
+	^ EllipticCurve coefficients: ((0,-1,1,-7820,-263580) over: „)! !
 
-!EllipticCurve class methodsFor: 'examples' stamp: 'len 7/20/2019 08:32:10'!
+!EllipticCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cremona11a3
 	"Elliptic curve 11a3 from the Cremona database."
-	^ EllipticCurve coefficients: ((0,-1,1,0,0) over: QQ)! !
+	^ EllipticCurve coefficients: ((0,-1,1,0,0) over: „)! !
 
-!EllipticCurve class methodsFor: 'examples' stamp: 'len 7/20/2019 08:32:17'!
+!EllipticCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cremona37a
 	"Elliptic curve 37a from the Cremona database.
 	This is the elliptic curve of rank 1 with smallest conductor."
-	^ EllipticCurve coefficients: ((0,0,1,-1,0) over: QQ)! !
+	^ EllipticCurve coefficients: ((0,0,1,-1,0) over: „)! !
 
-!EllipticCurve class methodsFor: 'examples' stamp: 'len 7/20/2019 08:32:25'!
+!EllipticCurve class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 cremona389a1
 	"Elliptic curve 389a1 from the Cremona database."
-	^ EllipticCurve coefficients: ((0,1,1,-2,0) over: QQ)! !
+	^ EllipticCurve coefficients: ((0,1,1,-2,0) over: „)! !
 
 !EllipticCurve class methodsFor: 'examples' stamp: 'len 8/24/2018 20:06:52'!
 secp256k1
@@ -24707,9 +24713,9 @@ pointsOverField: aRing do: aBlock
 			ifTrue: [aBlock value: (self pointAt: each, zero)].
 		aBlock value: (self pointAt: (each, one))].! !
 
-!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/15/2020 18:06:20'!
+!ProjectiveSpace methodsFor: 'points-private' stamp: 'len 5/23/2020 09:13:12'!
 pointsOverIntegersDo: aBlock
-	ZZ tuples: self rank do: [:each| | d |
+	ƒ tuples: self rank do: [:each| | d |
 		((d _ each depth) > 0 and: [(each at: d) > 0 and: [each content = 1]])
 			ifTrue: [aBlock value: each]]! !
 
@@ -24742,20 +24748,20 @@ newPatch: i
 saturated
 	^ self! !
 
-!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 19:02:08'!
+!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example1
 	"The rational projective plane:"
-	^ ProjectiveSpace new: 2 over: QQ! !
+	^ ProjectiveSpace new: 2 over: „! !
 
-!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 19:02:21'!
+!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example2
 	"Or assigning names to the indeterminates of the homogeneous coordinate ring:"
-	^ ProjectiveSpace new: #(x y z) over: QQ! !
+	^ ProjectiveSpace new: #(x y z) over: „! !
 
-!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/17/2018 19:02:44'!
+!ProjectiveSpace class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 example3
 	"And equivalently:"
-	^ (QQ polynomialsIn: #(x y z)) proj! !
+	^ („ polynomialsIn: #(x y z)) proj! !
 
 !ProjectiveSpace class methodsFor: 'instance creation' stamp: 'len 1/12/2017 14:39:20'!
 coordinateRing: aPolynomialRing
@@ -24912,22 +24918,22 @@ euler
 	"Answer the Euler characteristic of the receiver."
 	^ (0 to: self dimension) sum: [:p| -1^p * (self cells: p) size]! !
 
-!CellComplex methodsFor: 'invariants' stamp: 'len 2/15/2017 15:46:13'!
+!CellComplex methodsFor: 'invariants' stamp: 'len 5/23/2020 08:59:21'!
 fPolynomial
 	"Answer the f-polynomial of this cell complex. This is the univariate polynomial with coefficients given by the f-vector (in decreasing order of exponents)."
-	^ ZZ polynomials coefficients: self fVector reversed! !
+	^ ƒ polynomials coefficients: self fVector reversed! !
 
-!CellComplex methodsFor: 'invariants' stamp: 'len 2/15/2017 15:47:04'!
+!CellComplex methodsFor: 'invariants' stamp: 'len 5/23/2020 08:59:24'!
 fVector
 	"Answer the f-vector of this cell complex. This is a tuple of integers that count the number of cells of each dimension."
-	^ ZZ tuple: self dimension + 2 evaluating: [:i| (self cells: i-2) size]! !
+	^ ƒ tuple: self dimension + 2 evaluating: [:i| (self cells: i-2) size]! !
 
-!CellComplex methodsFor: 'invariants' stamp: 'len 2/15/2017 15:48:40'!
+!CellComplex methodsFor: 'invariants' stamp: 'len 5/23/2020 08:59:27'!
 gVector
 	"Answer the g-vector of this cell complex."
 	| h |
 	h _ self hVector.
-	^ ZZ tuple: h size // 2 + 1 evaluating: [:i| i == 1 ifTrue: [1] ifFalse: [(h at: i) - (h at: i-1)]]! !
+	^ ƒ tuple: h size // 2 + 1 evaluating: [:i| i == 1 ifTrue: [1] ifFalse: [(h at: i) - (h at: i-1)]]! !
 
 !CellComplex methodsFor: 'invariants' stamp: 'len 9/7/2019 10:19:29'!
 hPolynomial
@@ -25142,11 +25148,11 @@ dual
 	V _ self vertices.
 	^ self species on: V facets: (self nonfaces collect: [:each| each complementIn: V])! !
 
-!SimplicialComplex methodsFor: 'operations' stamp: 'len 2/19/2017 10:14:10'!
+!SimplicialComplex methodsFor: 'operations' stamp: 'len 5/23/2020 09:11:37'!
 facetIdeal
 	"Answer the facet ideal of this simplicial complex.
 	This is the ideal generated by those squarefree monomials associated to the maximal faces (facets) of the simplicial complex."
-	^ self facetIdealIn: (QQ polynomialsIn: self vertices size)! !
+	^ self facetIdealIn: („ polynomialsIn: self vertices size)! !
 
 !SimplicialComplex methodsFor: 'operations' stamp: 'len 2/19/2017 10:13:47'!
 facetIdealIn: aRing
@@ -25172,11 +25178,11 @@ skeleton: n
 	"Answer the n-skeleton of the receiver."
 	^ self collect: [:each| each dimension <= n]! !
 
-!SimplicialComplex methodsFor: 'operations' stamp: 'len 2/19/2017 10:14:16'!
+!SimplicialComplex methodsFor: 'operations' stamp: 'len 5/23/2020 09:11:37'!
 stanleyReisnerIdeal
 	"Answer the Stanley-Reisner ideal of this simplicial complex.
 	This is the ideal generated by those squarefree monomials associated to nonfaces of the simplicial complex."
-	^ self stanleyReisnerIdealIn: (QQ polynomialsIn: self vertices size)! !
+	^ self stanleyReisnerIdealIn: („ polynomialsIn: self vertices size)! !
 
 !SimplicialComplex methodsFor: 'operations' stamp: 'len 2/19/2017 10:14:20'!
 stanleyReisnerIdealIn: aRing
@@ -25187,9 +25193,9 @@ stanleyReisnerIdealIn: aRing
 	^ aRing * (self nonfaces collect: [:each|
 		each vertices inject: aRing one into: [:g :v| g * (aRing x: (labelling at: v))]])! !
 
-!SimplicialComplex methodsFor: 'operations' stamp: 'len 2/18/2017 20:07:02'!
+!SimplicialComplex methodsFor: 'operations' stamp: 'len 5/23/2020 09:11:37'!
 stanleyReisnerRing
-	^ self stanleyReisnerRingOver: QQ! !
+	^ self stanleyReisnerRingOver: „! !
 
 !SimplicialComplex methodsFor: 'operations' stamp: 'len 1/15/2018 22:23:09'!
 stanleyReisnerRingOver: aRing
@@ -25437,16 +25443,16 @@ newFrom: anObject
 				ifFalse: [exponents _ exponents, (ByteArray new: rank - n) "hack"]].
 	^ (Monomial exponents: exponents) parent: self! !
 
-!FreeAbelianSemigroup methodsFor: 'enumerating' stamp: 'len 5/23/2019 19:09:12'!
+!FreeAbelianSemigroup methodsFor: 'enumerating' stamp: 'len 5/23/2020 09:05:08'!
 do: aBlock
 	| first |
 	first _ true.
-	NN ^ self rank do: [:each| first ifFalse: [aBlock value: self !! (each asArray collect: [:x| x - 1])]. first _ false]! !
+	‚ ^ self rank do: [:each| first ifFalse: [aBlock value: self !! (each asArray collect: [:x| x - 1])]. first _ false]! !
 
-!FreeAbelianSemigroup methodsFor: 'random' stamp: 'len 5/23/2019 19:05:59'!
+!FreeAbelianSemigroup methodsFor: 'random' stamp: 'len 5/23/2020 09:13:12'!
 atRandom: aRandom bits: bitSize
 	| M |
-	M _ ZZ ^ self rank.
+	M _ ƒ ^ self rank.
 	^ self !! (((M atRandom: aRandom bits: bitSize) collect: [:each| each abs]) + (M generators atRandom: aRandom))! !
 
 !FreeAbelianSemigroup methodsFor: 'testing' stamp: 'len 5/23/2019 18:50:38'!
@@ -25538,11 +25544,11 @@ characteristic
 one
 	^ self propertyAt: #one ifAbsentPut: [self generators anyOne one]! !
 
-!Semiring methodsFor: 'accessing' stamp: 'len 5/17/2018 18:47:22'!
+!Semiring methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 scalars
 	"Because the ring of rational integers is the initial object in the category of rings.
 	Subclasses can override."
-	^ ZZ! !
+	^ ƒ! !
 
 !Semiring methodsFor: 'accessing' stamp: 'len 2/22/2017 21:30:34'!
 zero
@@ -25916,9 +25922,9 @@ associatedQuadraticForm
 innerProduct
 	^ self ambient innerProduct! !
 
-!Lattice methodsFor: 'accessing' stamp: 'len 12/8/2017 18:26:50'!
+!Lattice methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 scalars
-	^ ZZ! !
+	^ ƒ! !
 
 !Lattice methodsFor: 'accessing' stamp: 'len 3/28/2018 05:05:34'!
 shortVector
@@ -26050,59 +26056,59 @@ matrix: aMatrix
 	M _ Matrix rows: (M rows select: [:each| each isZero not]).	
 	super matrix: M! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/19/2019 07:19:57'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 A: n
 	"Answer the lattice A_n = {(x0,...,xn) in Z^{n+1} : x0 + ... + xn = 0}."
 	| t B |
-	t _ (QQ tuple: n+1 e: 2) - (QQ tuple: n+1 e: 1).
+	t _ („ tuple: n+1 e: 2) - („ tuple: n+1 e: 1).
 	B _ OrderedCollection new.
 	n timesRepeat: [B add: t. t _ t >> 1].
 	^ self basis: B! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/19/2019 07:16:49'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 Adual: n
 	"Answer the dual of A_n."
 	| V B |
-	V _ QQ^(n+1).
+	V _ „^(n+1).
 	B _ OrderedCollection new.
 	1 to: n do: [:i| B add: (V e: 1) - (V e: i+1)].
-	B add: (QQ tuple: n+1 evaluating: [:i| i=1 ifTrue: [n negated / (n+1)] ifFalse: [1 / (n+1)]]).
+	B add: („ tuple: n+1 evaluating: [:i| i=1 ifTrue: [n negated / (n+1)] ifFalse: [1 / (n+1)]]).
 	^ self basis: B! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/19/2019 07:26:56'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 D4
 	"Answer the D4 lattice, which is self-dual."
-	^ self basis: {(1,0,0,0) over: QQ. (0,1,0,0) over: QQ. (0,0,1,0) over: QQ. ((1,1,1,1) over: QQ) * (QQ !! (1/2))}! !
+	^ self basis: {(1,0,0,0) over: „. (0,1,0,0) over: „. (0,0,1,0) over: „. ((1,1,1,1) over: „) * („ !! (1/2))}! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/19/2019 07:21:52'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 D: n
 	"Answer the checkboard lattice D_n = {(x1,...,xn) in Z^n : x0 + ... + xn is even}."
 	| t0 t B |
 	B _ OrderedCollection new.
-	t0 _ ((QQ tuple: n e: 1) + (QQ tuple: n e: 2)) negated.
+	t0 _ ((„ tuple: n e: 1) + („ tuple: n e: 2)) negated.
 	B add: t0.
-	t _ (QQ tuple: n e: 1) - (QQ tuple: n e: 2).
+	t _ („ tuple: n e: 1) - („ tuple: n e: 2).
 	n-1 timesRepeat: [B add: t. t _ t >> 1].
 	^ self basis: B! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/19/2019 07:22:20'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 Ddual: n
 	"Answer the dual of D_n."
 	| B |
 	B _ OrderedCollection new.
-	1 to: n-1 do: [:i| B add: (QQ tuple: n e: i)].
-	B add: (QQ tuple: n evaluating: [:i| 1/2]).
+	1 to: n-1 do: [:i| B add: („ tuple: n e: i)].
+	B add: („ tuple: n evaluating: [:i| 1/2]).
 	^ self basis: B! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/30/2019 02:28:19'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 E8
 	| t0 t B answer |
 	B _ OrderedCollection new.
-	t0 _ (QQ tuple: 8 e: 1) * 2.
+	t0 _ („ tuple: 8 e: 1) * 2.
 	B add: t0.
-	t _ (QQ tuple: 8 e: 2) - (QQ tuple: 8 e: 1).
+	t _ („ tuple: 8 e: 2) - („ tuple: 8 e: 1).
 	6 timesRepeat: [B add: t. t _ t >> 1].
-	B add: (QQ tuple: 8 evaluating: [:i| 1/2]).
+	B add: („ tuple: 8 evaluating: [:i| 1/2]).
 	answer _ self basis: B.
 	answer properties
 		at: #minimalNorm put: 2;
@@ -26113,10 +26119,10 @@ E8
 		at: #thickness put: Float pi ^ 4 / 24.
 	^ answer! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 7/15/2016 18:34'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 Z: n
 	"Answer the n-dimensional cubic or integer lattice Z^n."
-	^ self basis: (QQ ^ n) basis! !
+	^ self basis: („ ^ n) basis! !
 
 !Lattice class methodsFor: 'examples' stamp: 'len 3/19/2018 15:39:36'!
 bcc
@@ -26130,11 +26136,11 @@ fcc
 	Both A_3 and D_3 are equivalent to the fcc."
 	^ self basis: {(-1,-1,0). (1,-1,0). (0,1,-1)}! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 8/5/2019 12:02:17'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 leech
 	"The Leech lattice is the unique even unimodular lattice in R^24 with with no norm 2 vectors."
 	| G answer |
-	G _ QQ matrix: 24 coefficients:
+	G _ „ matrix: 24 coefficients:
 #(8 4 4 4 4 4 4 2 4 4 4 2 4 2 2 2 4 2 2 2 0 0 0 -3
  4 4 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 1 1 2 1 0 0 -1
  4 2 4 2 2 2 2 2 2 2 2 2 2 1 2 1 2 2 1 1 1 0 0 -1
@@ -26166,11 +26172,11 @@ leech
 		at: #coveringRadius put: 2 sqrt.
 	^ answer! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 8/5/2019 12:02:04'!
+!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
 leech2
 	"Another version of the Leech lattice."
 	| G answer |
-	G _ QQ matrix: 24 coefficients:
+	G _ „ matrix: 24 coefficients:
 #(4 -2 -2 2 2 2 -1 -1 2 2 -2 2 -2 1 -1 1 1 2 0 -1 0 -2 -2 2
 -2 4 0 0 -2 0 -1 2 0 0 2 -1 1 1 -1 1 -2 -2 -1 1 1 2 1 -2
 -2 0 4 0 0 -2 0 0 0 0 2 0 0 -2 1 -1 -1 -1 1 -1 -1 1 0 -1
@@ -26219,25 +26225,25 @@ ambient
 	"Answer the ambient vector space."
 	^ self asVectorSpace ambient! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 11/21/2016 14:00:50'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 completeWeightEnumerator
 	"Answer the complete weight enumerator polynomial."
 	| F P |
 	F _ self ambient scalars elements asArray.
-	P _ ZZ polynomialsIn: F size.
+	P _ ƒ polynomialsIn: F size.
 	^ self elements sum: [:each| P monomial: (P monomials exponents: (F collect: [:i| each occurrencesOf: i]))]! !
 
 !LinearCode methodsFor: 'accessing' stamp: 'len 5/12/2016 07:19'!
 dimension
 	^ self rank! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 10/9/2016 09:06'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 distance
 	"Answer the Hamming distance function."
 	| k V |
 	k _ self dimension.
 	V _ self ambient.
-	^ (V, V) to: ZZ evaluating: [:xy| | x y | x _ V coordinatesOf: xy first. y _ V coordinatesOf: xy second. (1 to: k) count: [:i| (x at: i) ~= (y at: i)]]! !
+	^ (V, V) to: ƒ evaluating: [:xy| | x y | x _ V coordinatesOf: xy first. y _ V coordinatesOf: xy second. (1 to: k) count: [:i| (x at: i) ~= (y at: i)]]! !
 
 !LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:18:47'!
 generatorMatrix
@@ -26277,12 +26283,12 @@ size
 	"Answer the number of codewords."
 	^ self asVectorSpace size! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 5/1/2020 20:21:22'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 weight
 	"Answer the Hamming weight function."
 	| V |
 	V _ self ambient.
-	^ V carrier to: ZZ carrier evaluating: [:x| (V coordinatesOf: x) weight]! !
+	^ V carrier to: ƒ carrier evaluating: [:x| (V coordinatesOf: x) weight]! !
 
 !LinearCode methodsFor: 'accessing' stamp: 'len 2/15/2016 20:44'!
 weightDistribution
@@ -26297,11 +26303,11 @@ weightDistribution: aCodeword
 	"Answer the weight distribution wrt aCodeword."
 	self notYetImplemented! !
 
-!LinearCode methodsFor: 'accessing' stamp: 'len 4/13/2020 08:14:01'!
+!LinearCode methodsFor: 'accessing' stamp: 'len 5/23/2020 09:13:12'!
 weightEnumerator
 	"Answer the Hamming weight enumerator polynomial."
 	| P x y weights answer n |
-	P _ ZZ polynomialsIn: #(x y).
+	P _ ƒ polynomialsIn: #(x y).
 	x _ P x.
 	y _ P y.
 	answer _ P zero.
@@ -26451,12 +26457,12 @@ G12
 			(0,0,0,0,1,0, 1,2,2,1,0,1) % 3.
 			(0,0,0,0,0,1, 1,1,2,2,1,0) % 3})! !
 
-!LinearCode class methodsFor: 'examples' stamp: 'len 5/2/2020 11:52:37'!
+!LinearCode class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 G24
 	"Answer the extended binary Golary code [24,12,8].
 	Its generator matrix is I|A, where I is the 12x12 identity matrix and A is the complement of the adjacency matrix of the icosahedron."
 	| F A |
-	F _ ZZ/2.
+	F _ ƒ/2.
 	A _ Graph icosahedron adjacencyMatrix: (1 to: 12).
 	A _ A apply: (A scalars carrier to: F carrier evaluating: [:x| x = 0 ifTrue: [F one] ifFalse: [F zero]]).
 	^ self matrix: (A identity columnAugmented: A)! !
@@ -26497,10 +26503,10 @@ simplex
 			(0,1,1,0,0,1,1) % 2.
 			(1,0,1,0,1,0,1) % 2})! !
 
-!LinearCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:44:12'!
+!LinearCode class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 tetracode
 	"Answer the tetracode, a self dual code of minimum distance 3."
-	^ self subspace: ((ZZ/3)^4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3})! !
+	^ self subspace: ((ƒ/3)^4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3})! !
 
 !LinearCode class methodsFor: 'instance creation' stamp: 'len 4/13/2020 08:16:36'!
 matrix: aMatrix
@@ -26564,10 +26570,10 @@ includes: aCodeword
 isIrreducible
 	^ generator isIrreducible! !
 
-!CyclicCode2 class methodsFor: 'examples-todo' stamp: 'len 5/25/2018 18:47:57'!
+!CyclicCode2 class methodsFor: 'examples-todo' stamp: 'len 5/23/2020 09:13:12'!
 H7
 	"Answer the Hamming code of length 7."
-	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
+	^ self new: 7 generator: (ƒ/2) polynomials !! [:x| x^3 + x + 1]! !
 
 !CyclicCode2 class methodsFor: 'instance creation' stamp: 'len 5/18/2016 07:20'!
 new: n generator: aPolynomial
@@ -26613,17 +26619,17 @@ isCyclic
 	x _ generator parent x.
 	^ generator | (x ^ n - x parent one)! !
 
-!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:46:50'!
+!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 G23
 	"Answer the perfect binary Golay code [23,12,7]."
 	| g |
-	g _ (ZZ/2) polynomials !! [:x| x^11 + (x^10) + (x^6) + (x^5) + (x^4) + (x^2) + 1].
+	g _ (ƒ/2) polynomials !! [:x| x^11 + (x^10) + (x^6) + (x^5) + (x^4) + (x^2) + 1].
 	^ self new: 23 generator: g! !
 
-!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/25/2018 18:47:12'!
+!PolynomialCode class methodsFor: 'examples' stamp: 'len 5/23/2020 09:13:12'!
 H7
 	"Answer the Hamming code [7,4,3]."
-	^ self new: 7 generator: (ZZ/2) polynomials !! [:x| x^3 + x + 1]! !
+	^ self new: 7 generator: (ƒ/2) polynomials !! [:x| x^3 + x + 1]! !
 
 !PolynomialCode class methodsFor: 'instance creation' stamp: 'len 5/12/2016 07:42'!
 generator: aPolynomial
@@ -26855,10 +26861,10 @@ verify
 		(self at: i) image <= (self at: i-1) kernel ifFalse: [^ false halt]].
 	^ true! !
 
-!ChainComplex class methodsFor: 'examples' stamp: 'len 4/30/2020 10:42:15'!
+!ChainComplex class methodsFor: 'examples' stamp: 'len 5/23/2020 08:59:30'!
 kleinBottle
 	"The chain complex associated to a triangulation of the Klein bottle:"
-	^ SimplicialComplex kleinBottle chainComplexOver: ZZ! !
+	^ SimplicialComplex kleinBottle chainComplexOver: ƒ! !
 
 !ChainComplex class methodsFor: 'instance creation' stamp: 'len 5/14/2019 16:35:16'!
 differentials: anArray
@@ -27072,20 +27078,20 @@ domain: aDomain
 "	(aDomain isKindOf: Domain) ifFalse: [^ DomainError signal: 'not a Domain']."
 	self propertyAt: #domain put: aDomain! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/27/2018 21:25:19'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example1Projection
 	"Algebraic structures often come equipped with some canonical morphisms.
 	Here we construct the direct product of the ring of rational integers
 	with the field of rational numbers, and get the projection to the second component."
-	^ ZZ × QQ projection: 2! !
+	^ ƒ × „ projection: 2! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 3/13/2020 06:18:37'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example21Embedding
 	"Here we construct Q[x], the ring of univariate polynomials over the rational numbers.
 	It comes equipped with a canonical embedding from the rational numbers to the constant polynomials."
 	| R phi F psi |
-	R _ QQ polynomials.
-	phi _ QQ -> R.
+	R _ „ polynomials.
+	phi _ „ -> R.
 	"Then we construct its field of fractions Q(x) (the rational functions),
 	that comes with a cannonical embedding from the polynomial ring to the rational functions with denominator 1 (the localization map)."
 	F _ R fractions.
@@ -27093,12 +27099,12 @@ example21Embedding
 	"If we compose them we get an embedding from the rational numbers Q to the field of univariate rational functions Q(x), that sends a number to a constant rational function."
 	^ psi · phi! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/29/2020 18:17:52'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example22EasierEmbedding
 	"Another way to obtain the canonical embedding from Q to the rational functions over Q."
-	^ QQ >-> QQ polynomials fractions! !
+	^ „ >-> „ polynomials fractions! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/22/2019 04:48:39'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example3CanonicalMorphism
 	"Canonical morphisms can be retrieved through the message #->.
 	More specific messages #>-> and #->> are also available
@@ -27106,19 +27112,19 @@ example3CanonicalMorphism
 	For example, Z (the ring of integers) is the initial object in
 	the category of commutative rings with unit, i.e. there's
 	a canonical morphism from Z to any commutative ring:"
-	^ ZZ -> (QQ polynomialsIn: #(x y z))! !
+	^ ƒ -> („ polynomialsIn: #(x y z))! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:26'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example4CanonicalMorphism
 	"The quotient map from a polynomial ring R to a quotient by
 	one of its ideals R/I is another example of canonical morphism."
 	| R x I |
-	R _ QQ polynomials.
+	R _ „ polynomials.
 	x _ R x.
 	I _ R * (x squared + 1).
 	^ R -> (R / I)! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/19/2019 04:54:38'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example5CanonicalMorphism
 	"The message #-> can be sent to a Morphism with a Domain as
 	argument, or to a Domain with a Morphism as argument.
@@ -27126,17 +27132,17 @@ example5CanonicalMorphism
 	For example, given an arbitrary ring homomorphism,
 	we can send it *canonically* to a quotient of its codomain."
 	| R phi x I |
-	R _ (ZZ/5) polynomials. "univariate polynomials over Z/<5>"
+	R _ (ƒ/5) polynomials. "univariate polynomials over Z/<5>"
 	phi _ R frobenius. "the Frobenius endomorphism"
 	x _ R x.
 	I _ R * (x squared + 1).
 	^ phi -> (R / I)! !
 
-!Morphism class methodsFor: 'examples' stamp: 'len 4/29/2020 18:20:54'!
+!Morphism class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example6GLAsGroupAction
 	"The action of the group GL(3,Q) on the vector space of dimension 3 over the rationals.
 	The action is evaluation of a linear map at a vector."
-	^ (QQ^3) automorphisms action! !
+	^ („^3) automorphisms action! !
 
 !Map methodsFor: 'accessing' stamp: 'len 12/28/2016 11:09:59'!
 codomain
@@ -27281,62 +27287,62 @@ isSurjective
 expression: anObject
 	self propertyAt: #expression put: ((anObject isKindOf: Map) ifTrue: [anObject propertyAt: #expression ifAbsent: [anObject]] ifFalse: [anObject])! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/2/2020 05:38:54'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example1Function1
-	"ZZ is the ring of rational integers, and it has an underying set of elements (rational integers), that can be accessed by sending the message #carrier. We can use this to create a function on the set of integers:"
-	ZZ carrier to: ZZ carrier evaluating: [:x| x squared + 1]! !
+	"ƒ is the ring of rational integers, and it has an underying set of elements (rational integers), that can be accessed by sending the message #carrier. We can use this to create a function on the set of integers:"
+	ƒ carrier to: ƒ carrier evaluating: [:x| x squared + 1]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/1/2020 22:31:24'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:30:27'!
 example1Function2
 	"The function 'x^2 + 1' on the set of natural numbers.
 	This is a Sequence, i.e. function with domain the natural numbers."
-	^ NN to: NN evaluating: [:x| x squared + 1]! !
+	^ ‚ to: ‚ evaluating: [:x| x squared + 1]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/1/2020 22:02:10'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example2Morphism1
 	"This is the most common way to define morphisms.
-	QQ^3 is the vector space of 3-tuples with rational coefficients,
+	„^3 is the vector space of 3-tuples with rational coefficients,
 	and this defines a linear map on it (an endomorphism)
 	by sending the message #to:evaluating: to the vector space.
 	This creates an instance of ModuleMap."
-	^ QQ^3 to: QQ^3 evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ „^3 to: „^3 evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/1/2020 22:02:19'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example2Morphism12
 	"This, on the other hand, is a function on the underlying set of
-	QQ^3. Is is a morphism in the category of sets, but is not a morphism
+	„^3. Is is a morphism in the category of sets, but is not a morphism
 	of vector spaces. This creates an instance of Function."
-	^ (QQ^3) carrier to: (QQ^3) carrier evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ („^3) carrier to: („^3) carrier evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/1/2020 21:55:30'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example2Morphism2
 	"Here's another way to define the same morphism,
 	by creating vector space Hom(Q^3, Q^3) of linear maps
 	and sending the message #evaluating: to it."
-	^ QQ^3 => (QQ^3) evaluating: [:v| (v x - v y, v x, v z)]! !
+	^ „^3 => („^3) evaluating: [:v| (v x - v y, v x, v z)]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/1/2020 21:56:05'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example2Morphism22
 	"Or equivalently, creating Hom(Q^3, Q^3) and coercing
 	a Smalltalk block into an element of the Hom vector space."
-	^ QQ^3 => (QQ^3) !! [:v| (v x - v y, v x, v z)]! !
+	^ „^3 => („^3) !! [:v| (v x - v y, v x, v z)]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 5/11/2019 04:32:50'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example2Morphism3
 	"And yet another way. Here Hom(Q^3, Q^3) is created
 	by sending the message #endomorphisms to the vector space."
-	^ (QQ^3) endomorphisms !! [:v| (v x - v y, v x, v z)]! !
+	^ („^3) endomorphisms !! [:v| (v x - v y, v x, v z)]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 3/3/2020 10:56:36'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example3Frobenius1
 	"One way to define the Frobenius ring homomorphism."
-	^ (ZZ / 6) endomorphisms !! [:x| x^6]! !
+	^ (ƒ / 6) endomorphisms !! [:x| x^6]! !
 
-!Map class methodsFor: 'examples' stamp: 'len 12/2/2016 11:08:57'!
+!Map class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example3Frobenius2
 	"The Frobenius ring homomorphism defined by a polynomial."
 	| R x |
-	R _ ZZ / 6.
+	R _ ƒ / 6.
 	x _ R polynomials x.
 	^ R endomorphisms evaluating: x ^ 6! !
 
@@ -27515,13 +27521,13 @@ at: anInteger
 at: anInteger ifAbsent: aBlock
 	^ anInteger > 0 ifTrue: [super value: anInteger] ifFalse: [aBlock value]! !
 
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:14:04'!
+!Sequence methodsFor: 'accessing' stamp: 'len 5/23/2020 09:34:55'!
 codomain
-	^ self propertyAt: #codomain ifAbsent: [ZZ]! !
+	^ self propertyAt: #codomain ifAbsent: [ƒ]! !
 
-!Sequence methodsFor: 'accessing' stamp: 'len 12/28/2016 11:13:42'!
+!Sequence methodsFor: 'accessing' stamp: 'len 5/23/2020 09:30:12'!
 domain
-	^ self propertyAt: #domain ifAbsent: [NN]! !
+	^ self propertyAt: #domain ifAbsent: [‚]! !
 
 !Sequence methodsFor: 'accessing' stamp: 'len 6/1/2019 08:33:57'!
 scalars
@@ -27646,17 +27652,17 @@ bellNumbers
 	"The Bell numbers."
 	^ Sequence evaluating: [:n| (0 to: n-1) sum: [:k| n-1 Stirling: k]]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 12/12/2016 17:08:06'!
+!Sequence class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 bernoulli
 	"This is the sequence of Bernoulli numbers (starting at 1), computed via a recurrence."
-	^ Sequence to: QQ initialValues: #(1) recurrence: [:f :n| (n>4 and: [n even]) ifTrue: [0] ifFalse: [((0 to: n-2) sum: [:k| (n choose: k) * (f at: k+1)]) / n negated]]! !
+	^ Sequence to: „ initialValues: #(1) recurrence: [:f :n| (n>4 and: [n even]) ifTrue: [0] ifFalse: [((0 to: n-2) sum: [:k| (n choose: k) * (f at: k+1)]) / n negated]]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:25:39'!
+!Sequence class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 calkinWilf
 	"The Calkin-Wilf sequence.
 	It enumerates the positive rational numbers by a breadth-first traversal of the Calkin-Wilf tree."
 	^ Sequence
-		to: QQ
+		to: „
 		evaluating:
 			[:n| | q |
 			q _ 1.
@@ -27673,10 +27679,10 @@ fibonacci
 	"The Fibonacci sequence defined as a recurrence."
 	^ Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)]! !
 
-!Sequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:26:21'!
+!Sequence class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 harmonicNumbers
 	"The harmonic numbers."
-	^ Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]]! !
+	^ Sequence to: „ evaluating: [:n| (1 to: n) sum: [:k| 1/k]]! !
 
 !Sequence class methodsFor: 'examples' stamp: 'len 7/17/2016 22:10'!
 hensel: aPolynomial at: anIntegerRoot mod: p
@@ -27788,31 +27794,31 @@ tau
 	"Number of divisors of n, also called d(n) and sigma_O(n). A000005."
 	^ Sequence evaluating: [:n| n divisors size]! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:34:55'!
 constant: anInteger
 	anInteger isInteger
 		ifFalse: [^ DomainError signal: 'argument is not integer'].
-	^ self to: ZZ constant: anInteger! !
+	^ self to: ƒ constant: anInteger! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:29'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:34:55'!
 dynamic: aBlock
-	^ self to: ZZ dynamic: aBlock! !
+	^ self to: ƒ dynamic: aBlock! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:30'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:34:55'!
 evaluating: aBlock
-	^ self to: ZZ evaluating: aBlock! !
+	^ self to: ƒ evaluating: aBlock! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:34:55'!
 initialValues: anArray recurrence: aBinaryBlock
-	^ self to: ZZ initialValues: anArray recurrence: aBinaryBlock! !
+	^ self to: ƒ initialValues: anArray recurrence: aBinaryBlock! !
 
 !Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:08'!
 recurrence: aBinaryBlock
 	^ self initialValues: #() recurrence: aBinaryBlock! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 6/1/2019 13:35:29'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:34:55'!
 streaming: aBlock
-	^ self to: ZZ streaming: aBlock! !
+	^ self to: ƒ streaming: aBlock! !
 
 !Sequence class methodsFor: 'intance creation' stamp: 'len 4/19/2016 21:42'!
 to: aDomain constant: anObject
@@ -27826,9 +27832,9 @@ to: aDomain dynamic: aBlock
 			n timesRepeat: [x _ aBlock value: x].
 			x]! !
 
-!Sequence class methodsFor: 'intance creation' stamp: 'len 7/15/2016 18:21'!
+!Sequence class methodsFor: 'intance creation' stamp: 'len 5/23/2020 09:30:18'!
 to: aDomain evaluating: aBlock
-	^ self from: NN to: aDomain evaluating: aBlock! !
+	^ self from: ‚ to: aDomain evaluating: aBlock! !
 
 !Sequence class methodsFor: 'intance creation' stamp: 'len 10/10/2016 21:07'!
 to: aDomain initialValues: anArray recurrence: aBlock
@@ -27974,16 +27980,16 @@ fibonacci
 	"The Fibonacci sequence defined as a C-finite sequence."
 	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 1)! !
 
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:36'!
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 geometric: aNumber
 	(aNumber isInteger or: [aNumber isFraction])
 		ifFalse: [^ DomainError signal: 'argument is not rational'].
-	^ CFiniteSequence to: QQ initialValues: #(1) coefficients: {aNumber}! !
+	^ CFiniteSequence to: „ initialValues: #(1) coefficients: {aNumber}! !
 
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:27'!
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 id
 	"The identity sequence id(n) := n, defined by a recurrence."
-	^ CFiniteSequence to: QQ initialValues: #(1 2) coefficients: #(-1 2)! !
+	^ CFiniteSequence to: „ initialValues: #(1 2) coefficients: #(-1 2)! !
 
 !CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:36:33'!
 jacobsthalNumbers
@@ -28000,9 +28006,9 @@ pellNumbers
 	"The Pell numbers."
 	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 2)! !
 
-!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 7/15/2016 18:27'!
+!CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:34:55'!
 initialValues: anArray coefficients: anotherArray
-	^ self to: ZZ initialValues: anArray coefficients: anotherArray! !
+	^ self to: ƒ initialValues: anArray coefficients: anotherArray! !
 
 !CFiniteSequence class methodsFor: 'instance creation' stamp: 'len 12/27/2015 19:42'!
 to: codomain constant: anObject
@@ -28417,9 +28423,9 @@ matrix: aMatrix
 reciprocal
 	^ self class from: domain to: codomain matrix: matrix negated! !
 
-!AbelianGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:07:14'!
+!AbelianGroupMap methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:52:51'!
 value: anElement
-	^ codomain !! (matrix * (ZZ tuple: anElement coordinates))! !
+	^ codomain !! (matrix * (ƒ tuple: anElement coordinates))! !
 
 !AbelianGroupMap class methodsFor: 'as yet unclassified' stamp: 'len 5/6/2019 14:08:15'!
 from: anAbelianGroup to: anotherAbelianGroup matrix: aMatrix
@@ -28551,11 +28557,11 @@ species
 verify
 	^ super isRingHomomorphism! !
 
-!RingMap class methodsFor: 'examples' stamp: 'len 4/19/2019 04:55:46'!
+!RingMap class methodsFor: 'examples' stamp: 'len 5/23/2020 09:34:55'!
 example1
 	"The ring of rational integers is the initial object in the category of rings.
 	There's always a unique ring homomorphism from the integers to any given ring:"
-	^ ZZ -> (ZZ/6) polynomials! !
+	^ ƒ -> (ƒ/6) polynomials! !
 
 !RingMap class methodsFor: 'initialization' stamp: 'len 4/26/2020 18:13:54'!
 initialize
@@ -29205,13 +29211,13 @@ representatives: aTuple
 species
 	^ RationalMap! !
 
-!RationalMap class methodsFor: 'examples' stamp: 'len 11/1/2016 16:51'!
+!RationalMap class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example1TwistedCubicTangentParametrization
 	"Example from Cox's 'Ideals, Varieties and Algorithms' pag. 234.
 	Parametrization of the tangent surface of the twisted cubic."
 	| A2 A3 |
-	A2 _ AffineSpace new: #(t u) over: QQ.
-	A3 _ AffineSpace new: 3 over: QQ.
+	A2 _ AffineSpace new: #(t u) over: „.
+	A3 _ AffineSpace new: 3 over: „.
 	^ A2 to: A3 evaluatingWithArguments: [:t :u| {t + u. t^2 + (t*u*2). t^3 + (t^2*u*3)}]! !
 
 !RationalMap class methodsFor: 'examples' stamp: 'len 11/1/2016 16:51'!
@@ -29260,17 +29266,17 @@ b
 c
 	^ c! !
 
-!LinearFractionalMap methodsFor: 'accessing' stamp: 'len 12/14/2016 10:34:59'!
+!LinearFractionalMap methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:47'!
 codomain
-	^ CC! !
+	^ †! !
 
 !LinearFractionalMap methodsFor: 'accessing' stamp: 'len 12/9/2016 10:07:31'!
 d
 	^ d! !
 
-!LinearFractionalMap methodsFor: 'accessing' stamp: 'len 12/10/2016 12:05:21'!
+!LinearFractionalMap methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:47'!
 domain
-	^ CC! !
+	^ †! !
 
 !LinearFractionalMap methodsFor: 'accessing' stamp: 'len 12/9/2016 16:30:21'!
 identity
@@ -29385,9 +29391,9 @@ a: a b: b c: c d: d
 matrix: aMatrix
 	^ self a: (aMatrix at: 1@1) b: (aMatrix at: 1@2) c: (aMatrix at: 2@1) d: (aMatrix at: 2@2)! !
 
-!ModularMap methodsFor: 'as yet unclassified' stamp: 'len 1/2/2017 11:20:36'!
+!ModularMap methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
 asMatrix
-	^ ZZ matrix: 2 coefficients: {a. b. c. d}! !
+	^ ƒ matrix: 2 coefficients: {a. b. c. d}! !
 
 !ModularMap methodsFor: 'as yet unclassified' stamp: 'len 12/14/2016 10:26:46'!
 isElliptic
@@ -29995,9 +30001,9 @@ from: aModule coefficients: aTuple
 	"Answer the quadratic form associated with the given coefficients (in lexicographical order) in the distinguished basis of the given free module."
 	^ self new domain: aModule; coefficients: aTuple! !
 
-!ModularForm methodsFor: 'as yet unclassified' stamp: 'len 12/11/2016 08:26:42'!
+!ModularForm methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:31:47'!
 codomain
-	^ CC! !
+	^ †! !
 
 !ModularForm methodsFor: 'as yet unclassified' stamp: 'len 12/11/2016 08:26:35'!
 domain
@@ -30645,13 +30651,13 @@ radius2
 real
 	^ real! !
 
-!ComplexBox methodsFor: 'accessing' stamp: 'len 11/5/2016 09:53'!
+!ComplexBox methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:47'!
 sample
 	"Answer a sample point in the receiver."
 	| sampleImaginary sampleReal |
 	sampleReal _ real sample.
 	sampleImaginary _ imaginary sample.
-	^ CC tuple: sampleReal size evaluating: [:i| Complex real: (sampleReal at: i) imaginary: (sampleImaginary at: i)]! !
+	^ † tuple: sampleReal size evaluating: [:i| Complex real: (sampleReal at: i) imaginary: (sampleImaginary at: i)]! !
 
 !ComplexBox methodsFor: 'accessing' stamp: 'len 6/5/2016 21:42'!
 width
@@ -30783,14 +30789,14 @@ last
 measure
 	^ components inject: 1 into: [:measure :each| measure * each measure]! !
 
-!RealBox methodsFor: 'accessing' stamp: 'len 11/5/2016 10:39'!
+!RealBox methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:27'!
 midpoint
-	^ RR tuple: (components collect: [:each| each midpoint])! !
+	^ … tuple: (components collect: [:each| each midpoint])! !
 
-!RealBox methodsFor: 'accessing' stamp: 'len 11/5/2016 05:48'!
+!RealBox methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:27'!
 sample
 	"Answer a sample point in the receiver."
-	^ RR tuple: self size evaluating: [:each| (self at: each) sample]! !
+	^ … tuple: self size evaluating: [:each| (self at: each) sample]! !
 
 !RealBox methodsFor: 'accessing' stamp: 'len 1/11/2016 02:37'!
 size
@@ -31767,21 +31773,21 @@ leadingMonomialOf: aPolynomial
 weights: aCollectionOfTuples
 	weights _ aCollectionOfTuples collect: [:each| each as: FloatArray]! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 1/11/2018 17:24:12'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
 glex: aCollection
 	"Answer the total (or graded) lexicographic ordering with the indeterminates of aCollection."
 	| weights |
 	weights _ OrderedCollection new.
-	weights add: (QQ tuple: aCollection size evaluating: [:each| 1]).
+	weights add: („ tuple: aCollection size evaluating: [:each| 1]).
 	weights addAll: (self lex: aCollection) weights.
 	^ self new: aCollection size weights: weights! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 1/11/2018 17:24:17'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
 grevlex: aCollection
 	"Answer the total (or graded) reverse lexicographic ordering with the indeterminates of aCollection."
 	| weights |
 	weights _ OrderedCollection new.
-	weights add: (QQ tuple: aCollection size evaluating: [:each| 1]).
+	weights add: („ tuple: aCollection size evaluating: [:each| 1]).
 	weights addAll: (self revlex: aCollection) weights.
 	^ self new: aCollection size weights: weights! !
 
@@ -31790,12 +31796,12 @@ indeterminates: indeterminates weights: weights
 	weights isSequenceable ifFalse: [self error: 'the indeterminates are unordered'].
 	^ self new: indeterminates size weights: (weights collect: [:each| each withIndexCollect: [:x :i| each at: (indeterminates indexOf: i)]])! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 11/5/2016 06:18'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
 lex: aCollection
 	"Answer the lexicographic order with the indeterminates of aCollection."
 	| weighs n |
 	n _ aCollection size.
-	weighs _ (1 to: n) collect: [:i| QQ tuple: n evaluating: [:k| k==i ifTrue:[1] ifFalse: [0]]].
+	weighs _ (1 to: n) collect: [:i| „ tuple: n evaluating: [:k| k==i ifTrue:[1] ifFalse: [0]]].
 	^ self indeterminates: aCollection weights: weighs! !
 
 !WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 7/3/2016 02:44'!
@@ -33777,13 +33783,13 @@ reducedNumerator: anObject denominator: anotherObject
 imaginary
 	^ self zero! !
 
-!Rational methodsFor: 'accessing' stamp: 'len 7/21/2019 08:58:04'!
+!Rational methodsFor: 'accessing' stamp: 'len 5/23/2020 09:33:01'!
 minimalPolynomial
-	^ QQ polynomials x - self! !
+	^ „ polynomials x - self! !
 
-!Rational methodsFor: 'accessing' stamp: 'len 7/17/2019 02:33:51'!
+!Rational methodsFor: 'accessing' stamp: 'len 5/23/2020 09:33:01'!
 parent
-	^ QQ! !
+	^ „! !
 
 !Rational methodsFor: 'accessing' stamp: 'len 7/21/2019 04:48:12'!
 real
@@ -34656,10 +34662,10 @@ isZeroDivisor
 characteristicPolynomial
 	^ self representation characteristicPolynomial! !
 
-!AlgebraicElement methodsFor: 'accessing' stamp: 'len 4/6/2018 23:44:03'!
+!AlgebraicElement methodsFor: 'accessing' stamp: 'len 5/23/2020 09:33:01'!
 characteristicPolynomial2
 	| x |
-	x _ QQ algebraicClosure polynomials x.
+	x _ „ algebraicClosure polynomials x.
 	^ self parent base !! (self parent embeddings product: [:each| x - (each value: self)])! !
 
 !AlgebraicElement methodsFor: 'accessing' stamp: 'len 6/25/2019 02:08:46'!
@@ -36791,14 +36797,14 @@ equalDegreeFactorization: d
 								factors add: c; add: u // c]]]].
 	^ factors! !
 
-!UnivariatePolynomial methodsFor: 'factorization' stamp: 'len 8/4/2019 12:58:10'!
+!UnivariatePolynomial methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
 factors
 	self scalars isGaloisField
 		ifTrue: [^ self factorizationFiniteField].
 	(self scalars isKindOf: RationalIntegerRing)
 		ifTrue: [^ self factorizationIntegers].
 	(self scalars isKindOf: RationalField)
-		ifTrue: [^ (self integerPrimitivePart over: ZZ) factorizationIntegers apply: [:each| self parent !! each]].
+		ifTrue: [^ (self integerPrimitivePart over: ƒ) factorizationIntegers apply: [:each| self parent !! each]].
 	self parent isUFD
 		ifFalse: [^ DomainError signal: 'not an UFD'].
 	^ self notYetImplemented! !
@@ -37982,23 +37988,23 @@ value: anObject upTo: n
 isZero
 	^ coefficients isZero! !
 
-!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:01:28'!
+!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 cos
 	"The power series expansion of cos(x)."
-	^ QQ powerSeries coefficients:
-		(Sequence to: QQ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
+	^ „ powerSeries coefficients:
+		(Sequence to: „ evaluating: [:n| n even ifTrue: [0] ifFalse: [|k| k _ n-1/2. (-1)^k / (2*k) factorial]])! !
 
-!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:02:05'!
+!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 exp
 	"The power series expansion of exp(x)."
-	^ QQ powerSeries
-		coefficients: (Sequence to: QQ evaluating: [:n| 1 / n factorial])! !
+	^ „ powerSeries
+		coefficients: (Sequence to: „ evaluating: [:n| 1 / n factorial])! !
 
-!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 6/4/2019 08:01:49'!
+!RelaxedPowerSeries class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 sin
 	"The power series expansion of sin(x)."
-	^ QQ powerSeries
-		coefficients: (Sequence to: QQ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
+	^ „ powerSeries
+		coefficients: (Sequence to: „ evaluating: [:n| n odd ifTrue: [0] ifFalse: [|k| k _ n/2-1. (-1)^k / (2*k+1) factorial]])! !
 
 !RelaxedPowerSeries class methodsFor: 'instance creation' stamp: 'len 12/27/2015 16:21'!
 coefficients: aSequence
@@ -38235,7 +38241,7 @@ asFloat
 	self refineTo: 0.000001.
 	^ self approximation asFloat! !
 
-!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 4/28/2018 07:09:28'!
+!ComplexAlgebraicNumber methodsFor: 'converting' stamp: 'len 5/23/2020 09:33:01'!
 asRational
 	"Convert the receiver to Fraction or Integer."
 	| alpha |
@@ -38245,7 +38251,7 @@ asRational
 			[alpha _ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient.
 			approximation _ alpha. radius _ 0.
 			^ alpha].
-	(minimalPolynomial rootsIn: QQ)
+	(minimalPolynomial rootsIn: „)
 		do: [:each|
 			(each - approximation) abs < radius
 				ifTrue: [approximation _ each. radius _ 0. ^ each]].
@@ -38260,10 +38266,10 @@ approximation: aNumber radius: anotherNumber
 minimalPolynomial: aPolynomial
 	minimalPolynomial _ aPolynomial integerPrimitivePart "<- or should it be monic?"! !
 
-!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 4/30/2018 04:52:43'!
+!ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:47'!
 conjugates
 	"The conjugates of an algebraic number with minimal polynomial of degree n are all its n-th roots."
-	^ (minimalPolynomial rootsIn: CC) "copyWithout: self"! !
+	^ (minimalPolynomial rootsIn: †) "copyWithout: self"! !
 
 !ComplexAlgebraicNumber methodsFor: 'accessing' stamp: 'len 5/2/2018 16:37:43'!
 degree
@@ -38303,11 +38309,11 @@ isImaginary
 isNumber
 	^ true! !
 
-!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 4/28/2018 07:05:26'!
+!ComplexAlgebraicNumber methodsFor: 'testing' stamp: 'len 5/23/2020 09:33:01'!
 isRational
 	minimalPolynomial degree < 2 ifTrue: [^ true].
 	radius = 0 ifTrue: [^ true].
-	(minimalPolynomial rootsIn: QQ)
+	(minimalPolynomial rootsIn: „)
 		do: [:each|
 			(each - approximation) abs < radius
 				ifTrue: [approximation _ each. radius _ 0. ^ true]].
@@ -38349,12 +38355,12 @@ approximation: approximateValue radius: approximationError maxDegree: n
 	"Answer an algebraic number with the given approximate value, approximation error, with minimal polynomial of degree at most n."
 	^ self notYetImplemented! !
 
-!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 4/30/2018 05:38:36'!
+!ComplexAlgebraicNumber class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
 fromRational: anIntegerOrFraction
 	"Answer an instance of the receiver representing the rational number anIntegerOrFraction."
 	| q x |
 	q _ anIntegerOrFraction asFraction.
-	x _ QQ polynomials x.
+	x _ „ polynomials x.
 	^ self
 		minimalPolynomial: x * q denominator - q numerator
  		approximation: anIntegerOrFraction
@@ -38373,33 +38379,33 @@ polynomial: aPolynomial approximation: aComplex radius: aNumber
 	minimalPolynomial degree = 1 ifTrue: [^ minimalPolynomial independentCoefficient negated / minimalPolynomial leadingCoefficient].
 	^ self minimalPolynomial: minimalPolynomial approximation: aComplex radius: aNumber! !
 
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 01:34:40'!
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 i
 	| x |
-	x _ QQ polynomials x.
+	x _ „ polynomials x.
 	^ self minimalPolynomial: x^2 + 1 approximation: 1 i radius: 0! !
 
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 4/30/2018 05:26:21'!
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 phi
 	"Answer the Phidias number or Golden Ratio."
 	| x |
-	x _ QQ polynomials x.
+	x _ „ polynomials x.
 	^ self minimalPolynomial: x^2 - x - 1 approximation: 2.0 radius: 1! !
 
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 7/15/2016 18:31'!
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 sqrt2
 	"Answer an instance of the receiver representing the square root of 2."
 
 	^ self
-		minimalPolynomial: QQ polynomials x squared - 2
+		minimalPolynomial: „ polynomials x squared - 2
  		approximation: 1.5
 		radius: 0.1! !
 
-!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 11/10/2016 10:31'!
+!ComplexAlgebraicNumber class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 sqrt: anIntegerOrFraction
 	"Answer a square root of the rational argument."
 	^ self
-		minimalPolynomial: QQ polynomials x squared - anIntegerOrFraction
+		minimalPolynomial: „ polynomials x squared - anIntegerOrFraction
  		approximation: (anIntegerOrFraction negative ifTrue: [anIntegerOrFraction negated sqrt i] ifFalse: [anIntegerOrFraction sqrt]) radius: 0.00001! !
 
 !ModuleElement methodsFor: 'accessing' stamp: 'len 5/8/2020 18:07:20'!
@@ -38673,11 +38679,11 @@ parent: aDirectSumModule
 isZero
 	^ components allSatisfy: [:each| each isZero]! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 7/31/2019 08:28:19'!
+!Tuple methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
 % anInteger
 	| R |
 	self flag: #fix. "optimize. this is slow because creates lots of residue class objects"
-	R _ ZZ / anInteger.
+	R _ ƒ / anInteger.
 	^ R tuple: self size evaluating: [:i| R project: (self at: i) asInteger]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 7/19/2019 07:00:27'!
@@ -39498,10 +39504,10 @@ depth
 	(Instead, Magma defines this as the index of the *first* non-zero entry.)"
 	^ bits highBit! !
 
-!BitTuple methodsFor: 'accessing' stamp: 'len 5/8/2019 03:06:26'!
+!BitTuple methodsFor: 'accessing' stamp: 'len 5/23/2020 09:34:55'!
 representative
 	"Answer a representative integer tuple."
-	^ ZZ tuple: self size evaluating: [:i| bits bitAt: i]! !
+	^ ƒ tuple: self size evaluating: [:i| bits bitAt: i]! !
 
 !BitTuple methodsFor: 'accessing' stamp: 'len 5/4/2018 19:09:27'!
 scalars
@@ -39700,11 +39706,11 @@ bits: anInteger
 size: anInteger
 	size _ anInteger! !
 
-!BitTuple class methodsFor: 'initialization' stamp: 'len 12/2/2016 11:18:19'!
+!BitTuple class methodsFor: 'initialization' stamp: 'len 5/23/2020 08:58:58'!
 initialize
 	| Z2 |
 	super initialize.
-	Z2 _ ZZ / 2.
+	Z2 _ ƒ / 2.
 	One _ Z2 one.
 	Zero _ Z2 zero! !
 
@@ -39755,18 +39761,18 @@ lastNonZero
 	representatives size to: 1 by: -1 do: [:i| (representatives at: i) = 0 ifFalse: [^ i]].
 	^ 0! !
 
-!ModularTuple methodsFor: 'accessing' stamp: 'len 4/23/2018 21:01:36'!
+!ModularTuple methodsFor: 'accessing' stamp: 'len 5/23/2020 09:34:55'!
 lift
 	"Answer a representative integer tuple."
 	| m h |
 	m _ scalars modulus.
 	h _ m >> 1.
-	^ ZZ tuple: self size evaluating: [:i| | r | r _ representatives at: i. r <= h ifTrue: [r] ifFalse: [r - m]]! !
+	^ ƒ tuple: self size evaluating: [:i| | r | r _ representatives at: i. r <= h ifTrue: [r] ifFalse: [r - m]]! !
 
-!ModularTuple methodsFor: 'accessing' stamp: 'len 4/23/2018 20:33:12'!
+!ModularTuple methodsFor: 'accessing' stamp: 'len 5/23/2020 09:34:55'!
 representative
 	"Answer a representative integer tuple."
-	^ ZZ tuple: representatives! !
+	^ ƒ tuple: representatives! !
 
 !ModularTuple methodsFor: 'accessing' stamp: 'len 12/1/2016 16:36:02'!
 scalars
@@ -44182,12 +44188,12 @@ max: aNumber
 min: aNumber
 	min _ aNumber! !
 
-!RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 5/1/2020 18:46:06'!
+!RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:31:27'!
 default
 	| blue green red |
-	red _ RR polynomials interpolate: {"0 -> 0.0." 40 -> 0. 65 -> 0.8. "90 -> 0." 100 -> 0. 150 -> 0.5. 200 -> 0.9. 215 -> 1. 255 -> 0.95}.
-	green _ RR polynomials interpolate: {0 -> 0.2. 50 -> 0.48. 100 -> 0.68. 150 -> 0.75. 200 -> 0.70. 255 -> 1}.
-	blue _ RR polynomials interpolate: {0 -> 0.5. 35 -> 0.9. 85 -> 0.8. 115 -> 0.7. 150 -> 0.5. 200 -> 0.3. 255 -> 0}.
+	red _ … polynomials interpolate: {"0 -> 0.0." 40 -> 0. 65 -> 0.8. "90 -> 0." 100 -> 0. 150 -> 0.5. 200 -> 0.9. 215 -> 1. 255 -> 0.95}.
+	green _ … polynomials interpolate: {0 -> 0.2. 50 -> 0.48. 100 -> 0.68. 150 -> 0.75. 200 -> 0.70. 255 -> 1}.
+	blue _ … polynomials interpolate: {0 -> 0.5. 35 -> 0.9. 85 -> 0.8. 115 -> 0.7. 150 -> 0.5. 200 -> 0.3. 255 -> 0}.
 	^ self new colors: ((0 to: 255) collect: [:x| Color fromArray: ({x < 80 ifTrue: [0] ifFalse: [red value: x]. green value: x. blue value: x} collect: [:y| y abs min: 1.0])]); min: 0.0; max: 1.0! !
 
 !RealPalette class methodsFor: 'as yet unclassified' stamp: 'len 8/18/2016 07:30'!
@@ -45397,22 +45403,22 @@ D: V
 			roots add: (V e: i) - (V e: j); add: (V e: i) + (V e: j)]].
 	^ self on: V roots: roots! !
 
-!RootSystem class methodsFor: 'examples' stamp: 'len 7/15/2016 18:37'!
+!RootSystem class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example1
 	"This is a normalized root system in R^n. The Weyl group associated to it is the symmetric group S_n."
 	| V roots |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	roots _ Set new.
 	1 to: V dimension do: [:i|
 		1 to: i-1 do: [:j|
 			roots add: (V e: i) - (V e: j); add: (V e: j) - (V e: i)]].
 	^ RootSystem on: V roots: roots! !
 
-!RootSystem class methodsFor: 'examples' stamp: 'len 1/20/2018 19:03:50'!
+!RootSystem class methodsFor: 'examples' stamp: 'len 5/23/2020 09:31:27'!
 example2
 	"This is a normalized root system in R^n. The Weyl group associated to it is the hyperoctahedral group."
 	| V roots |
-	V _ RR ^ 3.
+	V _ … ^ 3.
 	roots _ Set new.
 	1 to: V dimension do: [:i|
 		1 to: i-1 do: [:j|
@@ -45425,11 +45431,11 @@ example2
 				add: ((V e: i) + (V e: j)) negated]].
 	^ RootSystem on: V roots: roots! !
 
-!RootSystem class methodsFor: 'examples' stamp: 'len 7/15/2016 18:37'!
+!RootSystem class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 example3
 	"This is a normalized root system in R^n. The Weyl group associated to it is an index 2 subgroup of the hyperoctahedral group."
 	| V roots |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	roots _ Set new.
 	1 to: 3 do: [:i|
 		1 to: i-1 do: [:j|
@@ -45440,26 +45446,26 @@ example3
 				add: ((V e: i) + (V e: j)) negated]].
 	^ RootSystem on: V roots: roots! !
 
-!RootSystem class methodsFor: 'examples' stamp: 'len 7/15/2016 18:37'!
+!RootSystem class methodsFor: 'examples' stamp: 'len 5/23/2020 09:33:01'!
 hexagonal
-	^ self A: QQ ^ 2! !
+	^ self A: „ ^ 2! !
 
 !RootSystem class methodsFor: 'instance creation' stamp: 'len 5/23/2016 05:00'!
 on: aVectorSpace roots: aCollection
 	^ self new ambient: aVectorSpace; roots: aCollection! !
 
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 09:02:37'!
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 rootSystem1
 	| V roots |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	roots _ Set new.
 	1 to: 3 do: [:i| 1 to: i-1 do: [:j| |r| roots add: (r _ (V x: i) - (V x: j)); add: r negated]].
 	^ RootSystem on: V roots: roots! !
 
-!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 09:02:58'!
+!RootSystemTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 rootSystem2
 	| V roots |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	roots _ Set new.
 	1 to: 3 do: [:i|
 		1 to: i-1 do: [:j|
@@ -45555,11 +45561,11 @@ basis: aCollection
 	d _ basis size.
 	delta _ 3/4 "(4/3 + 0.0000000001)^((d-1)/2)"! !
 
-!LLL methodsFor: 'private' stamp: 'len 7/19/2019 06:53:17'!
+!LLL methodsFor: 'private' stamp: 'len 5/23/2020 09:33:01'!
 computeMu
 	| n bi oj |
 	n _ basis size.
-	mu _ QQ matrix: n@n evaluating: [:i :j|
+	mu _ „ matrix: n@n evaluating: [:i :j|
 		bi _ basis at: i.
 		oj _ orthogonalBasis at: j.
 		(bi · oj) / (oj · oj)] "redundant computation of oj*oj"! !
@@ -45717,20 +45723,20 @@ testLeech
 newQuadraticForm
 	^ self newQuadraticForm: (2 to: 5) atRandom! !
 
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:13:29'!
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 newQuadraticForm: n
 	| V |
-	V _ QQ^n.
-	^ QuadraticForm from: V coefficients: (QQ^(n + 1 * n / 2) atRandomBits: 100)! !
+	V _ „^n.
+	^ QuadraticForm from: V coefficients: („^(n + 1 * n / 2) atRandomBits: 100)! !
 
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/28/2018 15:17:28'!
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testArithmetic
 	| n Q1 Q2 p a |
 	n _ (1 to: 5) atRandom.
 	Q1 _ self newQuadraticForm: n.
 	Q2 _ self newQuadraticForm: n.
 	p _ Q1 domain atRandomBits: 100.
-	a _ QQ atRandomBits: 100.
+	a _ „ atRandomBits: 100.
 	self assert: (Q1 value: p) + (Q2 value: p) = (Q1 + Q2 value: p).
 	self assert: (Q1 * a value: p) = ((Q1 value: p) * a).
 	self assert: Q1 + Q2 + Q2 negated = Q1! !
@@ -45744,13 +45750,13 @@ testAsPolynomial
 	self assert: (Q value: p) = (f value: p).
 	self assert: (f degree = 2 and: [f isHomogeneous])! !
 
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:33'!
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
 testAssociatedBilinearForm
 	"Example from Sage."
 	| Q B |
-	Q _ QuadraticForm coefficients: ((1,4,0,1,4,1) over: ZZ).
+	Q _ QuadraticForm coefficients: ((1,4,0,1,4,1) over: ƒ).
 	B _ Q associatedBilinearForm.
-	self assert: (B value: {(1,2,0) over: ZZ. (0,1,1) over: ZZ}) = 8! !
+	self assert: (B value: {(1,2,0) over: ƒ. (0,1,1) over: ƒ}) = 8! !
 
 !QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 6/3/2018 18:33:42'!
 testAssociatedBilinearForm2
@@ -45760,36 +45766,36 @@ testAssociatedBilinearForm2
 	B _ Q associatedBilinearForm.
 	self assert: (B value: {(1,1). (1/2,2)}) = (19/4)! !
 
-!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 3/27/2018 23:47:33'!
+!QuadraticFormTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testEvaluation
 	"Example from Sage."
 	| Q |
-	Q _ QuadraticForm from: QQ^3 coefficients: (0 to: 5).
+	Q _ QuadraticForm from: „^3 coefficients: (0 to: 5).
 	self assert: (Q value: (1,2,3)) = 89.
 	self assert: (Q value: (1,0,0)) = 0.
 	self assert: (Q value: (1,1,1)) = 15! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 12:40:05'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testGeneralLinearAtRandom
 	| V G |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	G _ V automorphisms.
 	self assert: (G atRandomBits: 100) isAutomorphism.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 9/26/2018 21:54:15'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testOrthogonalAtRandom
 	| V G |
-	V _ QQ ^ 3.
+	V _ „ ^ 3.
 	G _ V automorphisms orthogonal.
 	self assert: (G atRandomBits: 100) isOrthogonal.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 8/5/2019 12:07:33'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testRotationsBy90Degrees
 	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
 	| V G |
-	V _ QQ ^ 2.
+	V _ „ ^ 2.
 	G _ LinearGroup on: V generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
 	self assert: G size = 4.
 	self assert: G isCyclic.
@@ -45797,10 +45803,10 @@ testRotationsBy90Degrees
 	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
 	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 4/13/2020 03:25:32'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:48'!
 testDual
 	| C |
-	C _ LinearCode subspace: (ZZ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
+	C _ LinearCode subspace: (ƒ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
 	self assert: C dual size = (C ambient size / C size).
 	C dual do: [:v|
 		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
@@ -45826,7 +45832,7 @@ testHamming743
 	self assert: H7 weightDistribution = #(0 3 3 3 3 3 3 3 4 4 4 4 4 4 4 7) asBag.
 	self assert: H7 dual minimumDistance = 4! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 7/15/2016 18:24'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:51'!
 testHamming844
 	| C P x y |
 	C _ LinearCode H8.
@@ -45834,7 +45840,7 @@ testHamming844
 	self assert: C isSelfOrthogonal.
 	self assert: C minimumDistance = 4.
 	self assert: C dual minimumDistance = 4.
-	P _ ZZ polynomialsIn: 2.
+	P _ ƒ polynomialsIn: 2.
 	x _ P x. y _ P y.
 	self assert: C weightEnumerator = (x^8 + (x*y^4*14) + (y^8))! !
 
@@ -45857,10 +45863,10 @@ testParityCheckMatrix
 	M _ H7 parityCheckMatrix.
 	self assert: (M * H7 atRandom coordinates) isZero! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:40:58'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:54'!
 testSelfDual
 	| F C |
-	F _ ZZ/2.
+	F _ ƒ/2.
 	"{00,11} is the smallest self-dual code"
 	C _ LinearCode subspace: (F^2 span: {(0,0) % 2. (1,1) % 2}).
 	self assert: C isSelfDual.
@@ -45886,22 +45892,22 @@ testSingletonBoundTetracode
 	"Any linear [n,k,d] code satisfies k + d <= n + 1."
 	self testSingletonBound: LinearCode tetracode! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 10:20'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:59'!
 testTetracode
 	| C P x y |
-	C _ LinearCode subspace: (ZZ/3 ^ 4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3}).
+	C _ LinearCode subspace: (ƒ/3 ^ 4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3}).
 	self assert: C isSelfDual.
 	self assert: C minimumDistance = 3.
-	P _ ZZ polynomialsIn: #(x y).
+	P _ ƒ polynomialsIn: #(x y).
 	x _ P x.
 	y _ P y.
 	self assert: C weightEnumerator = (x^4 + (x*(y^3)*8))! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2018 18:41:19'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:00:02'!
 testWeightEnumerator
 	"From youtube, Neil Sloane 'error correcting codes, group theory and invariant theory part 1' 19:30."
 	| F C w x y |
-	F _ ZZ/2.
+	F _ ƒ/2.
 	C _ LinearCode subspace: (F^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
 	w _ C weightEnumerator.
 	x _ w parent x.
