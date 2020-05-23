@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 18 May 2020 at 9:18:09 am'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3784] on 23 May 2020 at 4:12:25 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 577!
+!provides: 'Domains' 1 578!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -2882,7 +2882,7 @@ SmithReduction class
 
 !classDefinition: #ModuleMonomial category: #'Domains-Modules-Multivariate'!
 Object subclass: #ModuleMonomial
-	instanceVariableNames: 'parent monomial position'
+	instanceVariableNames: 'ordering monomial position'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Domains-Modules-Multivariate'!
@@ -2928,16 +2928,6 @@ ModuleMonomialOrdering subclass: #TermOverPositionOrdering
 	category: 'Domains-Modules-Multivariate'!
 !classDefinition: 'TermOverPositionOrdering class' category: #'Domains-Modules-Multivariate'!
 TermOverPositionOrdering class
-	instanceVariableNames: ''!
-
-!classDefinition: #ModulePolynomial category: #'Domains-Modules-Multivariate'!
-Object subclass: #ModulePolynomial
-	instanceVariableNames: 'parts'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Modules-Multivariate'!
-!classDefinition: 'ModulePolynomial class' category: #'Domains-Modules-Multivariate'!
-ModulePolynomial class
 	instanceVariableNames: ''!
 
 !classDefinition: #Buchberger category: #'Domains-Polynomials-Algorithms'!
@@ -6138,22 +6128,23 @@ printOn: aStream
 printOn: aStream
 	1 to: self size do: [:i| aStream print: (self at: i)]! !
 
-!ModularTuple methodsFor: 'printing' stamp: 'len 12/1/2016 16:40:08'!
+!ModularTuple methodsFor: 'printing' stamp: 'len 5/18/2020 13:47:12'!
 printOn: aStream
 	self modulus > 16 ifTrue: [^ super printOn: aStream].
-	1 to: self size do: [:i| (representatives at: i) printOn: aStream base: 16]! !
+	representatives do: [:each| each printOn: aStream base: 16]! !
 
-!Matrix methodsFor: 'printing' stamp: 'len 5/17/2020 12:37:01'!
+!Matrix methodsFor: 'printing' stamp: 'len 5/18/2020 13:55:00'!
 printOn: aStream
 	| lengths string pad |
 	self isEmpty ifTrue: [aStream nextPutAll: '[]'. ^ self].
-	self scalars size = 2 ifTrue: [^ self printBitsOn: aStream].
+	((self scalars isKindOf: ModularIntegerRing) and: [self scalars modulus <= 16])
+		ifTrue: [self rows do: [:each| aStream nextPut: $[; print: each; nextPut: $]] separatedBy: [aStream newLine; space]. ^ self].
 	lengths _ (1 to: self width) collect: [:each| 0].
 	self rows do: [:each|
 		1 to: each size do: [:i|
 			lengths at: i put: ((lengths at: i) max: (each at: i) printText size)]].
-	aStream nextPut: $[.
 	self rows do: [:each|
+		aStream nextPut: $[.
 		1 to: each size - 1 do: [:i|
 			string _ (each at: i) printText.
 			pad _ (lengths at: i) - string size.
@@ -6164,15 +6155,15 @@ printOn: aStream
 		pad _ (lengths at: each size) - string size.
 		pad timesRepeat: [aStream space].
 		aStream nextPutAll: string.
-		pad timesRepeat: [aStream space]]
-			separatedBy: [aStream nextPut: $]; newLine; nextPutAll: ' ['].
-	aStream nextPut: $]! !
+		pad timesRepeat: [aStream space].
+		aStream nextPut: $]]
+			separatedBy: [aStream newLine; space]! !
 
 !ModuleMonomial methodsFor: 'printing' stamp: 'len 1/5/2018 16:01:39'!
 printOn: aStream
 	aStream print: monomial; nextPutAll: Character epsilon asText, position printString sub! !
 
-!ModuleMonomialOrdering methodsFor: 'ordering' stamp: 'len 1/5/2018 11:15:24'!
+!ModuleMonomialOrdering methodsFor: 'printing' stamp: 'len 1/5/2018 11:15:24'!
 printOn: aStream
 	self type isNil
 		ifTrue: [super printOn: aStream]
@@ -18137,12 +18128,12 @@ isPIR
 	"Answer true if the receiver is a principal ideal ring, i.e. all ideals are principal (but it is not necesarily a PID, i.e. it is not necesarily an integral domain)."
 	^ true! !
 
-!ModularIntegerRing methodsFor: 'testing' stamp: 'len 9/27/2018 15:54:29'!
+!ModularIntegerRing methodsFor: 'testing' stamp: 'len 5/18/2020 09:56:13'!
 isReduced
 	"Answer true if the receiver has no non-zero nilpotent elements, or equivalently if it has no non-zero elements with square zero, i.e. x^2 = 0 implies x = 0.
 	This is true if the modulus is square-free."
 	modulus = 0 ifTrue: [^ true].
-	self modulusFactorization withOccurrencesDo: [:p :e| e > 1 ifTrue: [^ false]].
+	self modulusFactors withOccurrencesDo: [:p :e| e > 1 ifTrue: [^ false]].
 	^ true
 
 "	^ modulus = 0 or: [modulus isSquareFree]"! !
@@ -20477,10 +20468,13 @@ isCoherent
 	self scalars isPruferDomain ifTrue: [^ true].
 	^ super isCoherent! !
 
-!PolynomialRing methodsFor: 'testing' stamp: 'len 5/18/2020 07:27:47'!
+!PolynomialRing methodsFor: 'testing' stamp: 'len 5/18/2020 09:42:31'!
 isEuclidean
 	"Answer true if the receiver is a Euclidean ring, i.e. it has division with remainder."
-	^ self scalars isField and: [self isUnivariate]! !
+	self isUnivariate ifFalse: [^ false].
+	self scalars isField ifTrue: [^ true].
+	"TODO: Z/6Z[x] is a PIR (and thus Euclidean), Z/8Z is not a PIR. For R a finite commutative ring, the polynomial ring R[x] is a PIR iff R is a direct product of finite fields. Also R[x] is a PIR iff it is isomorphic to a direct product of PIDs."
+	^ false! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 4/29/2019 04:48:51'!
 isGCDDomain
@@ -20520,6 +20514,18 @@ isNoetherian
 isPID
 	"Univariate polynomials over a field are principal ideal domains."
 	^ self scalars isField and: [self isUnivariate]! !
+
+!PolynomialRing methodsFor: 'testing' stamp: 'len 5/18/2020 09:59:42'!
+isPIR
+	"A principal ideal ring (PIR) is a ring in which every ideal is principal, i.e. can be generated by a single element.
+	In a PIR any two nonzero elements have a well-defined GCD."
+	"Principal ideal rings are exactly the rings that are both Bezout and Noetherian:"
+	self isUnivariate ifFalse: [^ false].
+	self scalars isField ifTrue: [^ true].
+	"TODO: Z/6Z[x] is a PIR (and thus Euclidean), Z/8Z is not a PIR. For R a finite commutative ring, the polynomial ring R[x] is a PIR iff R is a direct product of finite fields. Also R[x] is a PIR iff it is isomorphic to a direct product of PIDs."
+	(self scalars isKindOf: ModularIntegerRing) ifTrue: [^ self scalars isReduced].
+	(self scalars isKindOf: GaloisRing) ifTrue: [^ self scalars exponent = 1].
+	^ super isPIR! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 10/22/2016 18:11'!
 isUFD
@@ -22701,6 +22707,10 @@ new: anIntegerOrCollection over: aRing
 	^ anIntegerOrCollection isInteger
 		ifTrue: [self new rank: anIntegerOrCollection; scalars: aRing] 
 		ifFalse: [self new rank: anIntegerOrCollection size; names: anIntegerOrCollection asArray; scalars: aRing]! !
+
+!FreeModule class methodsFor: 'instance creation' stamp: 'len 5/18/2020 19:12:01'!
+new: anIntegerOrCollection over: aRing ordering: aModuleMonomialOrdering
+	^ (self new: anIntegerOrCollection over: aRing) ordering: aModuleMonomialOrdering! !
 
 !HomModule methodsFor: 'accessing' stamp: 'len 3/4/2020 18:44:10'!
 ambient
@@ -33335,10 +33345,10 @@ xgcd: anElement
 	s _ s * u. t _ t * u. r _ r * u.
 	^ {r. t. s}! !
 
-!RingElement methodsFor: 'operations' stamp: 'len 5/18/2020 08:48:42'!
+!RingElement methodsFor: 'operations' stamp: 'len 5/19/2020 13:15:01'!
 xxgcd: anElement
 	"(More) Extended Euclidean algorithm.
-	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut = 1, i.e. answer the coefficients of a unimodular matrix such that:.
 		[s  t] [a]
 		[u v] [b] = (g 0)."
 	| xgcd g |
@@ -33516,9 +33526,9 @@ asRatio
 	(v _ self valuation - anElement valuation) < 0 ifTrue: [^ parent zero].
 	^ self unit / anElement unit * (parent uniformizer ^ v)! !
 
-!Germ methodsFor: 'operations' stamp: 'len 4/21/2020 07:24:27'!
+!Germ methodsFor: 'operations' stamp: 'len 5/18/2020 15:49:32'!
 factors
-	"If the parent of the receiver is a DVR, and this means it is an UFD with unique irreducible element up to multiplication by units."
+	"If the parent of the receiver is a DVR, this means it is an UFD with unique irreducible element up to multiplication by units."
 	^ Bag new add: parent uniformizer withOccurrences: self valuation; yourself! !
 
 !Germ methodsFor: 'operations' stamp: 'len 6/29/2019 17:46:18'!
@@ -33641,10 +33651,9 @@ leadingMonomial
 	self isIntegral ifFalse: [^ DomainError signal: 'not integral'].
 	^ numerator leadingMonomial! !
 
-!Ratio methodsFor: 'accessing-multivariate' stamp: 'len 8/14/2019 08:24:59'!
+!Ratio methodsFor: 'accessing-multivariate' stamp: 'len 5/18/2020 20:23:38'!
 leadingTerm
-"	self isIntegral ifFalse: [^ DomainError signal: 'not integral']."
-	^ numerator leadingTerm / denominator! !
+	^ self class numerator: numerator leadingTerm denominator: denominator! !
 
 !Ratio methodsFor: 'comparing' stamp: 'len 7/30/2019 05:14:23'!
 <= anElement
@@ -34207,16 +34216,26 @@ xgcd: anElement
 	result _ (representative xgcd: anElement representative) collect: [:each| parent project: each].
 	^ result * result first unit inverse! !
 
-!Residue methodsFor: 'operations' stamp: 'len 5/18/2020 08:50:41'!
+!Residue methodsFor: 'operations' stamp: 'len 5/19/2020 13:14:48'!
 xxgcd: anElement
 	"(More) Extended Euclidean algorithm.
-	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut = 1, i.e. answer the coefficients of a unimodular matrix such that:.
 		[s  t] [a]
 		[u v] [b] = (g 0)."
-	| result |
+	| result g s t u v x |
 	(self isZero and: [anElement isZero]) ifTrue: [^ {self. self parent one. self. self. self parent one}].
-	result _ (representative xxgcd: anElement representative) collect: [:each| parent project: each].
-	^ result * result first unit inverse! !
+	result _ representative xxgcd: anElement representative.
+	g _ parent project: (result at: 1).
+	x _ g unit inverse.
+	g _ g * x.
+	s _ (parent project: (result at: 2)) * x.
+	t _ (parent project: (result at: 3)) * x.
+	u _ (parent project: (result at: 4)) * x.
+	v _ (parent project: (result at: 5)) * x.
+	x _ (s*v - (u*t)) inverse.
+	u _ u * x.
+	v _ v * x.
+	^ {g. s. t. u. v}! !
 
 !Residue methodsFor: 'testing' stamp: 'len 9/15/2018 16:07:02'!
 contains: anObject
@@ -37598,9 +37617,9 @@ derivative
 derivativeIn: anIndeterminate
 	^ parent representative: (representative derivativeIn: anIndeterminate) precision: precision - 1! !
 
-!PowerSeries methodsFor: 'operations' stamp: 'len 4/21/2020 07:23:03'!
+!PowerSeries methodsFor: 'operations' stamp: 'len 5/18/2020 15:34:35'!
 factors
-	"If the parent of the receiver is a DVR, and this means it is an UFD with unique irreducible element up to multiplication by units."
+	"If the parent of the receiver is a DVR, this means it is an UFD with unique irreducible element up to multiplication by units."
 	^ Bag new add: parent uniformizer withOccurrences: self valuation; yourself! !
 
 !PowerSeries methodsFor: 'operations' stamp: 'len 5/4/2020 10:06:02'!
@@ -38556,9 +38575,9 @@ leadingTerm
 ordering
 	^ parent ordering! !
 
-!Vector methodsFor: 'accessing-multivariate' stamp: 'len 3/6/2020 17:55:02'!
+!Vector methodsFor: 'accessing-multivariate' stamp: 'len 5/18/2020 20:25:49'!
 termAt: aModuleMonomial
-	^ (self at: aModuleMonomial position) termAt: aModuleMonomial monomial! !
+	^ (parent x: aModuleMonomial position) * ((self at: aModuleMonomial position) termAt: aModuleMonomial monomial)! !
 
 !Vector methodsFor: 'comparing' stamp: 'len 3/30/2020 07:35:32'!
 = anObject
@@ -38758,7 +38777,7 @@ z
 zero
 	^ self apply: [:each| each zero]! !
 
-!Tuple methodsFor: 'comparing' stamp: 'len 5/10/2020 16:11:51'!
+!Tuple methodsFor: 'comparing' stamp: 'len 5/19/2020 12:54:33'!
 ~ aTuple
 	"Answer true if the receiver and the argument are equivalent as homogeneous tuples."
 	self scalars isIntegralDomain ifTrue:
@@ -38770,6 +38789,8 @@ zero
 		y isZero ifTrue: [^ false].
 		1 to: self size do: [:i| (self at: i) * y = ((aTuple at: i) * x) ifFalse: [^ false]].
 		^ true].
+	"Over a PIR we compare use their Howell normal form:"
+"	self scalars isPIR ifTrue: [^ self asRowMatrix echelon = aTuple asRowMatrix echelon]."
 	"In a general ring we have to check all units:"
 	^ self scalars units anySatisfy: [:any| self * any = aTuple]
 
@@ -40759,14 +40780,6 @@ value: aTuple
 isBroken
 	^ self isEmpty not and: [(self allSatisfy: [:each| self scalars includes: each]) not]! !
 
-!Matrix methodsFor: 'printing' stamp: 'len 5/17/2020 12:37:06'!
-printBitsOn: aStream
-	aStream nextPut: $[.
-	self rows do: [:row|
-		row do: [:bit| aStream nextPut: (bit isZero ifTrue: [$0] ifFalse: [$1])]]
-			separatedBy: [aStream nextPut: $]; newLine; nextPutAll: ' ['].
-	aStream nextPut: $]! !
-
 !Matrix methodsFor: 'printing' stamp: 'len 5/30/2019 16:17:04'!
 printText
 	self isBroken ifTrue: [^ super printText addAttribute: TextColor red].
@@ -41150,9 +41163,9 @@ kernelModulo: aMatrix
 isDiagonal
 	^ self isLowerTriangular and: [self isUpperTriangular]! !
 
-!Matrix methodsFor: 'testing' stamp: 'len 3/7/2017 08:22:30'!
+!Matrix methodsFor: 'testing' stamp: 'len 5/19/2020 13:26:25'!
 isEchelonForm
-	"Answer true if the receiver is in echelon form.
+	"Answer true if the receiver is in (row) echelon form.
 	It must satisfy the following conditions:
 	1. All nonzero rows are above any rows of all zeros;
 	2. The leading coefficient (or pivot) of each nonzero row is always strictly to the right of the pivot of the row above it."
@@ -42053,7 +42066,7 @@ run
 	j = n or: [k = m]] whileFalse: [j _ j + 1. k _ k + 1].
 	^ matrix! !
 
-!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:50:49'!
+!HowellReduction methodsFor: 'private' stamp: 'len 5/19/2020 12:47:35'!
 cancel: aPoint with: anotherPoint
 	| a b mgcd g s t u v j i Aj Ai |
 	mgcd _ (a _ matrix at: aPoint) xxgcd: (b _ matrix at: anotherPoint).
@@ -42064,7 +42077,7 @@ cancel: aPoint with: anotherPoint
 	v _ mgcd at: 5.
 	self assert: s*a + (t*b) = g.
 	self assert: (u*a + (v*b)) isZero.
-	self assert: (s*v - (t*u)) isUnit.
+	self assert: (s*v - (t*u)) = g one.
 	"optimize!! avoid wasting memory"
 	"is this changing the determinant? should also update the extension"
 	j _ aPoint x.
@@ -42074,7 +42087,7 @@ cancel: aPoint with: anotherPoint
 	matrix rowAt: j put: Aj*s + (Ai*t).
 	matrix rowAt: i put: Aj*u + (Ai*v)! !
 
-!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:50:45'!
+!HowellReduction methodsFor: 'private' stamp: 'len 5/19/2020 12:46:15'!
 cancel: aPoint withTemporary: aTuple
 	| a b mgcd g s t u v j Aj |
 	mgcd _ (a _ matrix at: aPoint) xxgcd: (b _ aTuple at: aPoint y).
@@ -42085,7 +42098,7 @@ cancel: aPoint withTemporary: aTuple
 	v _ mgcd at: 5.
 	self assert: s*a + (t*b) = g.
 	self assert: (u*a + (v*b)) isZero.
-	self assert: (s*v - (t*u)) isUnit.
+	self assert: (s*v - (t*u)) = g one.
 	"optimize!! avoid wasting memory"
 	"is this changing the determinant? should also update the extension"
 	j _ aPoint x.
@@ -42093,7 +42106,7 @@ cancel: aPoint withTemporary: aTuple
 	matrix rowAt: j put: Aj*s + (aTuple*t).
 	^ Aj*u + (aTuple*v)! !
 
-!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 08:19:29'!
+!HowellReduction methodsFor: 'private' stamp: 'len 5/18/2020 13:33:10'!
 run
 	| n |
 	n _ matrix width.
@@ -42101,17 +42114,17 @@ run
 	n > matrix height ifTrue: [matrix _ matrix rowAugmented: (matrix scalars zeroMatrix: (n - matrix height) @ n)].
 	self assert: matrix isSquare.
 	self assert: matrix height = n.
-	Transcript clear.
+"	Transcript clear."
 	"Put it in upper triangular form:"
 	1 to: n do: [:j|
 		j+1 to: n do: [:i|
-			Transcript print: i@j; newLine; space; print: matrix; newLine.
+"			Transcript print: i@j; newLine; space; print: matrix; newLine."
 			 self cancel: j@j with: i@j]].
 	self assert: matrix isUpperTriangular.			
 	"Put it in Howell form:"
 	1 to: n do: [:j|
 		| B |
-		Transcript print: j; newLine; space; print: matrix; newLine.
+"		Transcript print: j; newLine; space; print: matrix; newLine."
 		(matrix isZeroAt: j@j)
 			ifTrue:
 				[B _ (matrix rowAt: j) copy]
@@ -42119,9 +42132,9 @@ run
 				[self multiplyRow: j by: (matrix at: j@j) unit inverse.
 				1 to: j-1 do: [:i| self addRow: j times: ((matrix at: i@j) // (matrix at: j@j)) negated toRow: i].
 				B _ (matrix rowAt: j) * (matrix at: j@j) annihilator generator].
-		Transcript nextPut: $.; print: matrix; newLine.
+"		Transcript nextPut: $.; print: matrix; newLine."
 		j+1 to: n do: [:i| B _ self cancel: i@i withTemporary: B]].
-	Transcript print: matrix; newLine.
+"	Transcript print: matrix; newLine."
 	^ matrix! !
 
 !SmithReduction methodsFor: 'accessing' stamp: 'len 5/28/2019 08:51:31'!
@@ -42200,21 +42213,9 @@ run
 monomial
 	^ monomial! !
 
-!ModuleMonomial methodsFor: 'accessing' stamp: 'len 1/5/2018 11:25:10'!
-parent
-	^ parent! !
-
 !ModuleMonomial methodsFor: 'accessing' stamp: 'len 1/14/2017 20:20:47'!
 position
 	^ position! !
-
-!ModuleMonomial methodsFor: 'accessing-private' stamp: 'len 1/14/2017 20:20:31'!
-monomial: aMonomial
-	monomial _ aMonomial! !
-
-!ModuleMonomial methodsFor: 'accessing-private' stamp: 'len 1/14/2017 20:20:41'!
-position: anInteger
-	position _ anInteger! !
 
 !ModuleMonomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:20:58'!
 < aModuleMonomial
@@ -42238,10 +42239,10 @@ position: anInteger
 	self == aModuleMonomial ifTrue: [^ true].
 	^ (self compare: aModuleMonomial) >= 0! !
 
-!ModuleMonomial methodsFor: 'comparing' stamp: 'len 8/18/2019 04:59:35'!
+!ModuleMonomial methodsFor: 'comparing' stamp: 'len 5/18/2020 20:01:43'!
 compare: aModuleMonomial
 	"Answer -1 if the receiver is < than the argument, 0 if they are equal, 1 if it is > than the argument."
-	^ parent ordering compare: self with: aModuleMonomial! !
+	^ ordering compare: self with: aModuleMonomial! !
 
 !ModuleMonomial methodsFor: 'comparing' stamp: 'len 1/5/2018 11:20:11'!
 hash
@@ -42252,51 +42253,80 @@ hash
 	"Answer true if the receiver divides the argument."
 	^ position = aModuleMonomial position and: [monomial | aModuleMonomial monomial]! !
 
+!ModuleMonomial methodsFor: 'private' stamp: 'len 1/14/2017 20:20:31'!
+monomial: aMonomial
+	monomial _ aMonomial! !
+
+!ModuleMonomial methodsFor: 'private' stamp: 'len 5/18/2020 20:02:15'!
+ordering: aModuleMonomialOrdering
+	ordering _ aModuleMonomialOrdering! !
+
+!ModuleMonomial methodsFor: 'private' stamp: 'len 1/14/2017 20:20:41'!
+position: anInteger
+	position _ anInteger! !
+
+!ModuleMonomialOrdering methodsFor: 'accessing' stamp: 'len 1/5/2018 11:14:14'!
+type
+	^ nil! !
+
 !ModuleMonomialOrdering methodsFor: 'ordering' stamp: 'len 1/14/2017 20:54:49'!
 compare: aModuleMonomial with: anotherModuleMonomial
 	^ self subclassResponsibility! !
 
-!ModuleMonomialOrdering methodsFor: 'ordering' stamp: 'len 1/14/2017 21:08:38'!
-leadingMonomialOf: aPolynomialTuple
+!ModuleMonomialOrdering methodsFor: 'ordering' stamp: 'len 5/18/2020 20:06:20'!
+leadingMonomialOf: aTuple
 	self subclassResponsibility! !
 
-!ModuleMonomialOrdering methodsFor: 'ordering' stamp: 'len 1/5/2018 11:14:14'!
-type
-	^ nil! !
-
-!ModuleMonomialOrdering class methodsFor: 'as yet unclassified' stamp: 'len 1/7/2018 17:10:27'!
+!ModuleMonomialOrdering class methodsFor: 'examples' stamp: 'len 1/7/2018 17:10:27'!
 pos
 	^ PositionOverTermOrdering new! !
 
-!ModuleMonomialOrdering class methodsFor: 'as yet unclassified' stamp: 'len 1/7/2018 17:10:09'!
+!ModuleMonomialOrdering class methodsFor: 'examples' stamp: 'len 1/7/2018 17:10:09'!
 top
 	^ TermOverPositionOrdering new! !
 
-!PositionOverTermOrdering methodsFor: 'as yet unclassified' stamp: 'len 1/5/2018 11:16:54'!
+!PositionOverTermOrdering methodsFor: 'accessing' stamp: 'len 1/5/2018 11:15:41'!
+type
+	^ #pos! !
+
+!PositionOverTermOrdering methodsFor: 'ordering' stamp: 'len 1/5/2018 11:16:54'!
 compare: aModuleMonomial with: anotherModuleMonomial
 	| result |
 	(result _ (aModuleMonomial position - anotherModuleMonomial position) sign	) == 0
 		ifFalse: [^ result].
 	^ aModuleMonomial monomial compare: anotherModuleMonomial monomial! !
 
-!PositionOverTermOrdering methodsFor: 'as yet unclassified' stamp: 'len 1/5/2018 11:15:41'!
-type
-	^ #pos! !
+!PositionOverTermOrdering methodsFor: 'ordering' stamp: 'len 5/18/2020 20:10:08'!
+leadingMonomialOf: aTuple
+	1 to: aTuple size do: [:i| | f |
+		(f _ aTuple at: i) isZero ifFalse: [^ ModuleMonomial new ordering: self; monomial: f leadingMonomial; position: i]].
+	^ nil! !
 
-!SchreyerOrdering methodsFor: 'as yet unclassified' stamp: 'len 1/5/2018 11:25:47'!
+!SchreyerOrdering methodsFor: 'accessing' stamp: 'len 1/5/2018 11:25:47'!
 type
 	^ #schreyer! !
 
-!TermOverPositionOrdering methodsFor: 'as yet unclassified' stamp: 'len 1/14/2017 21:01:40'!
+!TermOverPositionOrdering methodsFor: 'accessing' stamp: 'len 1/5/2018 11:15:34'!
+type
+	^ #top! !
+
+!TermOverPositionOrdering methodsFor: 'ordering' stamp: 'len 1/14/2017 21:01:40'!
 compare: aModuleMonomial with: anotherModuleMonomial
 	| result |
 	(result _ aModuleMonomial monomial compare: anotherModuleMonomial monomial) == 0
 		ifFalse: [^ result].
 	^ (aModuleMonomial position - anotherModuleMonomial position) sign! !
 
-!TermOverPositionOrdering methodsFor: 'as yet unclassified' stamp: 'len 1/5/2018 11:15:34'!
-type
-	^ #top! !
+!TermOverPositionOrdering methodsFor: 'ordering' stamp: 'len 5/18/2020 20:18:33'!
+leadingMonomialOf: aTuple
+	| monomial position |
+	monomial _ nil.
+	1 to: aTuple size do: [:i|
+		(aTuple at: i) leadingMonomial
+			ifNotNil: [:aMonomial|
+				(monomial isNil or: [aMonomial > monomial])
+					ifTrue: [monomial _ aMonomial. position _ i]]].
+	^ monomial ifNotNil: [ModuleMonomial new ordering: self; monomial: monomial; position: position]! !
 
 !Buchberger methodsFor: 'as yet unclassified' stamp: 'len 5/7/2018 18:14:03'!
 basis
@@ -46784,10 +46814,10 @@ xgcd: anInteger
 	s _ s * b sign. t _ t * a sign.
 	^ {r. t. s}! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/18/2020 08:49:07'!
+!Integer methodsFor: '*domains' stamp: 'len 5/19/2020 13:14:54'!
 xxgcd: anInteger
 	"(More) Extended Euclidean algorithm.
-	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut is a unit, i.e. answer the coefficients of an unimodular matrix such that:.
+	If the receiver is 'a' and the argument is 'b'. answer an array {g. s. t. u. v} where as + bt = g = (a gcd: b), au + bv = 0, and sv - ut = 1, i.e. answer the coefficients of a unimodular matrix such that:.
 		[s  t] [a]
 		[u v] [b] = (g 0)."
 	| xgcd g |
