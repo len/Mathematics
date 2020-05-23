@@ -1,6 +1,6 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3762] on 23 May 2019 at 3:17:42 pm'!
+'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 7:54:53 am'!
 'Description Please enter a description for this package'!
-!provides: 'Documentation' 1 8!
+!provides: 'Documentation' 1 9!
 SystemOrganization addCategory: #Documentation!
 
 
@@ -25,7 +25,7 @@ copy: aString replaceAll: oldSubstring with: newSubstring
 		collect: [:each| (each includesSubString: 'http') ifTrue: [each] ifFalse: [each copyReplaceTokens: oldSubstring with: newSubstring]]
 		andFold: [:a :b| a, Character lf asString, b]! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 22:19:08'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 07:34:49'!
 escape: aString
 	| output |
 	output _ aString.
@@ -39,16 +39,14 @@ escape: aString
 	output _ output copyReplaceAll: Character arrowLeft asString with: '&larr;'.
 	output _ output copyReplaceAll: Character arrowUp asString with: '&uarr;'.
 	output _ output copyReplaceAll: Character arrowDown asString with: '&darr;'.
-	output _ output copyReplaceAll: Character otimes asString with: '&otimes;'.
-	output _ output copyReplaceAll: Character oplus asString with: '&oplus;'.
-	output _ output copyReplaceAll: Character infinity asString with: '&infin;'.
-	output _ output copyReplaceAll: Character emptySet asString with: '&empty;'.
-"	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
-	output _ output copyReplaceAll: Character cap asString with: '&cap;'.
-"	output _ output copyReplaceAll: Character circ asString with: 'o'.
+	output _ output copyReplaceAll: 'ë' with: '&otimes;'.
+	output _ output copyReplaceAll: 'ê' with: '&oplus;'.
+	output _ output copyReplaceAll: 'Ä' asString with: '&infin;'.
+	output _ output copyReplaceAll: 'ÿ' with: '&empty;'.
+	output _ output copyReplaceAll: 'í' with: 'o'.
 	^ output! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/16/2019 22:18:57'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 07:35:10'!
 escapeCode: aString
 	| output |
 	output _ aString.
@@ -58,13 +56,11 @@ escapeCode: aString
 	output _ output copyReplaceAll: Character arrowLeft asString with: '&larr;'.
 	output _ output copyReplaceAll: Character arrowUp asString with: '&uarr;'.
 	output _ output copyReplaceAll: Character arrowDown asString with: '&darr;'.
-	output _ output copyReplaceAll: Character otimes asString with: '&otimes;'.
-	output _ output copyReplaceAll: Character oplus asString with: '&oplus;'.
-	output _ output copyReplaceAll: Character infinity asString with: '&infin;'.
-	output _ output copyReplaceAll: Character emptySet asString with: '&empty;'.
-"	output _ output copyReplaceAll: Character cup asString with: '&cup;'.
-	output _ output copyReplaceAll: Character cap asString with: '&cap;'.
-"	output _ output copyReplaceAll: Character circ asString with: 'o'.
+	output _ output copyReplaceAll: 'ë' with: '&otimes;'.
+	output _ output copyReplaceAll: 'ê' asString with: '&oplus;'.
+	output _ output copyReplaceAll: 'Ä' asString with: '&infin;'.
+	output _ output copyReplaceAll: 'ÿ' with: '&empty;'.
+	output _ output copyReplaceAll: 'í' asString with: 'o'.
 	^ output! !
 
 !DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2019 15:16:42'!
