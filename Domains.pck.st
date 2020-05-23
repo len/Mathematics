@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 9:38:23 am'!
+'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 10:13:53 am'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 580!
+!provides: 'Domains' 1 583!
 !requires: 'RayTracer' 1 2 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
 SystemOrganization addCategory: #'Domains-Kernel-Support'!
@@ -3649,7 +3649,7 @@ Given two domains A and B in the same category, the set Hom(A,B) of morphisms be
 
 Domains can be equipped with canonical morphisms. For example, field extensions and localizations have canonical embeddings (monomorphisms), and quotient objects have canonical projections (epimorphisms). Products have projection maps to their components, and coproducts have coprojection maps from their components.
 
-More generally, canonical morphisms (respectively canonical injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). For example, for any unital ring R, 'ZZ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit element of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms, and #toAll: and #fromAll: to answer projections and coprojections.
+More generally, canonical morphisms (respectively canonical injective morphisms, surjective morphisms and isomorphisms) are uniquely determined by their domain and codomain and can be retrieved by sending the message #-> (respectively #>->, #->> and #<->). For example, for any unital ring R, 'ƒ -> R' returns the canonical ring homomorphism that sends an integer 'n' to 'n times the unit element of R'. In order for this mechanism to work, subclasses must sometimes extend the messages #to: and #from: to answer canonical morphisms, and #toAll: and #fromAll: to answer projections and coprojections.
 
 References:
 	https://ncatlab.org/nlab/show/category+theory
@@ -3659,12 +3659,12 @@ References:
 	https://en.wikipedia.org/wiki/Coproduct
 !
 
-!Structure commentStamp: 'len 5/2/2020 07:14:55' prior: 0!
+!Structure commentStamp: '<historical>' prior: 0!
 Domains with an underlying set of elements (the 'carrier' set). These can be simple sets, or algebraic structures such as Groups, Rings, Modules, etc. In terms of category theory, these are objects of concrete categories, i.e. they are realized as sets of elements endowed with certain algebraic structure, and their morphisms are structure-preserving Maps.
 
 The underlying set of a domain can have finite or infinite cardinality, and whenever it makes sense they implement some *Collection* protocol (such as #do:, #size, #asSet, #atRandom:, etc).
 
-There's also a simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. Known canonical morphisms are used for automatic coercion of elements between domains. For example, for any unital ring R there's a canonical ring homomorphism from the ring of rational integers to R that sends an integer 'n' to 'n times the unit element of R', and this means that coercion of an integer 'n' to an element of R can be performed simply as 'R !! n'. Subclasses can also extend the coercion mechanism by implementing methods for #adapt: and #newFrom:.
+There's also a simple coercion mechanism that allows the conversion of elements from a domain to another via the message #!!. Known canonical morphisms are used for automatic coercion of elements between domains. For example, for any unital ring R there's a canonical ring homomorphism from the ring of rational integers ƒ to R that sends an integer 'n' to 'n times the unit element of R', and this means that coercion of an integer 'n' to an element of R can be performed simply as 'R !! n'. Subclasses can also extend the coercion mechanism by implementing methods for #adapt: and #newFrom:.
 
 References:
 	https://en.wikipedia.org/wiki/Algebraic_structure
@@ -3702,7 +3702,7 @@ References:
 Sets of S-points (or S-rational points) of a scheme X, noted X(S), where X and S are schemes over some base scheme or ring B. By definition, an S-point is a morphism from S to X over B. See also RationalPoint.!
 
 !Naturals commentStamp: '<historical>' prior: 0!
-The singleton global instance NN is the set of natural numbers 1, 2, 3, ...!
+The singleton global instance ‚ is the set of natural numbers 1, 2, 3, ...!
 
 !Monoid commentStamp: '<historical>' prior: 0!
 Monoids consist of a set, an associative binary operation and an identity element. They are objects in the category of monoids, with MonoidMaps as their morphisms.
@@ -3877,7 +3877,7 @@ References:
 	https://en.wikipedia.org/wiki/Field_of_fractions!
 
 !RationalField commentStamp: '<historical>' prior: 0!
-The singletion global instance QQ is the field of rational numbers.!
+The singletion global instance „ is the field of rational numbers.!
 
 !AffineFractionRing commentStamp: '<historical>' prior: 0!
 Total ring of fractions of an affine ring R = K[x1,...,xn]/I over a field K. The elements are fractions a / b where a and b are in R, and b is invertible in R. See AffineRationalFunction.
@@ -3982,7 +3982,7 @@ Cyclotomic fields, i.e. number fields obtained by adjoining a complex primitive 
 Quadratic number fields, i.e. number fields with defining quadratic polynomial of the form x^2 - d, with d a squarefree integer.!
 
 !RationalIntegerRing commentStamp: '<historical>' prior: 0!
-The singletion global instance ZZ is the ring of rational integers.!
+The singletion global instance ƒ is the ring of rational integers.!
 
 !AdicField commentStamp: '<historical>' prior: 0!
 Field of p-adic numbers Qp. This is the fraction field of the ring of p-adic integers Zp. Elements are AdicNumbers. See also AdicRing and AdicInteger.!
@@ -3993,10 +3993,10 @@ Ring of p-adic integers Zp. Elements are AdicIntegers. See also AdicField, AdicN
 For each prime number p, the ring of p-adic integers Zp is the formal completion of the ring Z at the prime ideal <p>. Geometrically this means that Zp is the ring of functions on a formal neighbourhood of p inside Spec(Z). Algebaically it means that the elements in Zp look like formal power series where the formal variable is the prime number p.!
 
 !ComplexField commentStamp: '<historical>' prior: 0!
-The singletion global instance CC is the field of complex numbers.!
+The singletion global instance † is the field of complex numbers.!
 
 !RealField commentStamp: '<historical>' prior: 0!
-The singletion global instance RR is the field of real numbers.!
+The singletion global instance … is the field of real numbers.!
 
 !Order commentStamp: '<historical>' prior: 0!
 Orders in a number field, i.e. subrings of a number field that as Z-modules are finitely generated and of maximal rank (with rank equal to the degree of the number field). See NumberField.!
@@ -4304,7 +4304,7 @@ Example (the Fibonacci sequence):
 	Sequence initialValues: #(0 1) recurrence: [:f :n| (f at: n-1) + (f at: n-2)].
 
 Example (the harmonic numbers):
-	Sequence to: QQ evaluating: [:n| (1 to: n) sum: [:k| 1/k]].
+	Sequence to: „ evaluating: [:n| (1 to: n) sum: [:k| 1/k]].
 
 Each sequence has an associated generating series, which is the formal power series with coefficients given by the sequence (see PowerSeries):
 	Sequence fibonacci generatingSeries
@@ -4721,24 +4721,24 @@ Elements of direct sums of modules, i.e. tuples of module elements. See DirectSu
 !Tuple commentStamp: '<historical>' prior: 0!
 Tuples with coefficients in some ring R, i.e. finite ordered lists of n elements of R indexed by integers 1 to n.
 
-Some subclasses implement special kinds of tuples for concrete rings, such as Z/mZ and Z/2Z. These special tuples have a compact representation that saves memory and allows fast arithmetic. Fundamental parts of the system (such as linear algebra and polynomials) ultimately rely on tuples.
+Some subclasses implement special kinds of tuples for concrete rings, such as ƒ/mƒ  and ƒ/2ƒ. These special tuples have a compact representation that saves memory and allows fast arithmetic. Fundamental parts of the system (such as linear algebra and polynomials) ultimately rely on tuples.
 
 Tuples are commonly created by sending a message to the ring where the coefficients belong to. For example:
 	"Two ways to create the 4-tuple (1,2,4,8) with integer coefficients:"
-	ZZ tuple: #(1 2 4 8).
-	ZZ tuple: 4 evaluating: [:i| i squared].
+	ƒ tuple: #(1 2 4 8).
+	ƒ tuple: 4 evaluating: [:i| i squared].
 
 It is also handy to create tuples by sending the message #, to a number. For example:
 	(1,2,4,8)
-However, when created in this way, even if all the coefficients are Integers, the tuple will be considered a rational tuple (with coefficients in the field of rational numbers QQ), so the above example is equivalent to:
-	QQ tuple: #(1 2 4 8)
+However, when created in this way, even if all the coefficients are Integers, the tuple will be considered a rational tuple (with coefficients in the field of rational numbers „), so the above example is equivalent to:
+	„ tuple: #(1 2 4 8)
 !
 
 !ArrayedTuple commentStamp: '<historical>' prior: 0!
 General n-tuples internally represented as an Array. These are the tuples used by default for an arbitrary ring.!
 
 !BitTuple commentStamp: '<historical>' prior: 0!
-Tuples of integer residue classes modulo 2, i.e. a binary tuple, a bit string, or a tuple of bits. The coefficients field is Z/2Z.
+Tuples of integer residue classes modulo 2, i.e. a binary tuple, a bit string, or a tuple of bits. The coefficients field is ƒ/2ƒ.
 
 Example:
 	"A handy way to create a binary tuple:"
@@ -4746,7 +4746,7 @@ Example:
 !
 
 !ModularTuple commentStamp: '<historical>' prior: 0!
-Tuples with coefficients in an integer residue class ring (or field) Z/mZ. See ModularInteger, ModularIntegerRing, PrimeField.
+Tuples with coefficients in an integer residue class ring (or field) ƒ/mƒ. See ModularInteger, ModularIntegerRing, PrimeField.
 
 Example:
 	"A handy way to create a tuple of integers modulo 3:"
@@ -11717,12 +11717,12 @@ drawOn: aCanvas
 	image isNil ifTrue: [self buildImage].
 	aCanvas image: image at: 0@0! !
 
-!UnitDiskPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 12/15/2016 18:41:22'!
+!UnitDiskPlotMorph methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 10:11:27'!
 function: aFunction
 	function _ aFunction.
 "	function domain = HH
 		ifTrue: [self mapUpperHalfPlaneToUnitDisk]
-		ifFalse: [function domain = CC ifTrue: [self mapPlaneToUnitDisk]]."
+		ifFalse: [function domain = † ifTrue: [self mapPlaneToUnitDisk]]."
 	image _ nil.
 	self redrawNeeded! !
 
@@ -12043,12 +12043,12 @@ defaultTextureForColor: aColor
 				addFinish: (ReflectionFinish new reflection: 1);
 				yourself)"! !
 
-!ImplicitSurface methodsFor: 'initializing' stamp: 'len 5/16/2018 05:24:39'!
+!ImplicitSurface methodsFor: 'initializing' stamp: 'len 5/23/2020 10:10:00'!
 initialize
-"	self polynomial: (RR polynomialsIn: #(x y z) :: generate: [:x :y :z| x**2 + (y**2) + (z**2) - 2])"
-"	self polynomial: (RR polynomialsIn: #(x y z) :: generate: [:x :y :z| x**2 + (z**2) - (y**2)])."
+"	self polynomial: (… polynomialsIn: #(x y z) :: generate: [:x :y :z| x**2 + (y**2) + (z**2) - 2])"
+"	self polynomial: (… polynomialsIn: #(x y z) :: generate: [:x :y :z| x**2 + (z**2) - (y**2)])."
 	self polynomial: AffineVariety clebschCubic asHypersurface polynomial.
-"	self polynomial: (QQ polynomialsIn: #(x y z) :: generate: [:x :y :z| x squared + y squared - ((1 - z) * (z**4))])."
+"	self polynomial: („ polynomialsIn: #(x y z) :: generate: [:x :y :z| x squared + y squared - ((1 - z) * (z**4))])."
 	self radius: 1.0! !
 
 !ImplicitSurface methodsFor: 'tracing-private' stamp: 'len 1/20/2017 21:25:30'!
@@ -12400,9 +12400,9 @@ example5GL
 	its elements are linear maps, not matrices."
 	^ („ ^ 3) automorphisms! !
 
-!Domain class methodsFor: 'initialization' stamp: 'len 5/4/2020 03:18:07'!
+!Domain class methodsFor: 'initialization' stamp: 'len 5/23/2020 09:50:50'!
 initializeAll
-	"First initialize all Domains, set globals like ZZ, QQ, etc:"
+	"First initialize all Domains, set globals like ƒ, „, etc:"
 	Domain withAllSubclassesDo: [:each| (each class selectors includes: #initialize) ifTrue: [each initialize]].
 	"Then initialize all Morphisms, set globals for categories like Sets, Groups, etc:"
 	Morphism withAllSubclassesDo: [:each| (each class selectors includes: #initialize) ifTrue: [each initialize]]! !
@@ -12702,10 +12702,10 @@ to: aCodomain evaluating: aBlock
 	"Answer a morphism to the specified codomain (in the same category), evaluating as the given block."
 	^ self subclassResponsibility! !
 
-!Structure methodsFor: 'morphisms' stamp: 'len 2/15/2017 11:09:11'!
+!Structure methodsFor: 'morphisms' stamp: 'len 5/23/2020 09:51:43'!
 to: aCodomain evaluatingWithArguments: aBlock
 	"When the receiver is N-ary, this method allows to define morphisms by N-ary blocks.
-	Example: ZZ × ZZ to: ZZ evaluatingWithArguments: [:a :b| a * b]."
+	Example: ƒ × ƒ to: ƒ evaluatingWithArguments: [:a :b| a * b]."
 	^ self to: aCodomain evaluating: [:each| aBlock valueWithArguments: each asArray]! !
 
 !Structure methodsFor: 'morphisms' stamp: 'len 5/24/2019 10:46:58'!
@@ -18661,7 +18661,7 @@ x
 polynomial: aPolynomial
 	self relations: aPolynomial parent * aPolynomial! !
 
-!AlgebraicExtensionRing methodsFor: 'converting' stamp: 'len 5/1/2020 18:03:08'!
+!AlgebraicExtensionRing methodsFor: 'converting' stamp: 'len 5/23/2020 10:07:20'!
 asModule
 	^ self propertyAt: #asModule ifAbsentPut:
 		[| M |
@@ -18676,7 +18676,7 @@ asModule
 		M]
 
 "
-	QQ extension: QQ polynomials x^4 - 2 :: asVectorSpace
+	„ extension: „ polynomials x^4 - 2 :: asVectorSpace
 "! !
 
 !AlgebraicExtensionRing methodsFor: 'morphisms' stamp: 'len 5/6/2019 03:35:42'!
@@ -20220,10 +20220,10 @@ chebyshevOfOrder: n
 		c = 0 ifFalse: [answer _ answer + (self coefficient: self scalars one * c degree: each - 1)]].
 	^ answer! !
 
-!PolynomialRing methodsFor: 'examples' stamp: 'len 5/12/2018 16:57:04'!
+!PolynomialRing methodsFor: 'examples' stamp: 'len 5/23/2020 10:07:53'!
 continuantOfOrder: n
 	"Answer the continuant polynomial of order n."
-	"(QQ polynomialsIn: #(x y z)) continuantOfOrder: 3"
+	"(„ polynomialsIn: #(x y z)) continuantOfOrder: 3"
 
 	n = 0 ifTrue: [^ self one].
 	n = 1 ifTrue: [^ self x: 1].
@@ -20261,18 +20261,18 @@ cyclotomic: n
 	n divisors do: [:each| each = n ifFalse: [product _ product * (self cyclotomic: each)]].
 	^ x^n - one // product! !
 
-!PolynomialRing methodsFor: 'examples' stamp: 'len 5/12/2018 16:56:46'!
+!PolynomialRing methodsFor: 'examples' stamp: 'len 5/23/2020 10:08:03'!
 determinantOfOrder: n
 	"Answer the determinant polynomial of order n."
-	"QQ polynomials determinantOfOrder: 3"
+	"„ polynomials determinantOfOrder: 3"
 
 	n = 0 ifTrue: [^ self zero].
 	^ (self ^ (n@n) evaluating: [:i :j| self x: n * (j - 1) + i]) determinant! !
 
-!PolynomialRing methodsFor: 'examples' stamp: 'len 5/12/2018 16:56:34'!
+!PolynomialRing methodsFor: 'examples' stamp: 'len 5/23/2020 10:08:09'!
 fibonacciOfOrder: n
 	"Answer the n-th Fibonacci polynomial."
-	"QQ polynomials fibonacciOfOrder: 3"
+	"„ polynomials fibonacciOfOrder: 3"
 
 	n negative ifTrue: [^ self notYetImplemented].
 	n = 0 ifTrue: [^ self zero].
@@ -27944,7 +27944,7 @@ initialValues: anArray
 	initialValues _ anArray.
 	initialValues isTuple ifFalse: [initialValues _ self codomain tuple: initialValues]! !
 
-!CFiniteSequence methodsFor: 'comparing' stamp: 'len 10/31/2016 04:14'!
+!CFiniteSequence methodsFor: 'comparing' stamp: 'len 5/23/2020 10:04:19'!
 = aSequence
 	| f g |
 	(aSequence isKindOf: CFiniteSequence)
@@ -27975,7 +27975,7 @@ isMinimal
 isZero
 	^ self minimal order = 0! !
 
-!CFiniteSequence class methodsFor: 'examples' stamp: 'len 2/22/2017 08:37:14'!
+!CFiniteSequence class methodsFor: 'examples' stamp: 'len 5/23/2020 10:04:12'!
 fibonacci
 	"The Fibonacci sequence defined as a C-finite sequence."
 	^ CFiniteSequence initialValues: #(0 1) coefficients: #(1 1)! !
@@ -46168,9 +46168,9 @@ root: anInteger
 zero
 	^ 0! !
 
-!Float methodsFor: '*domains' stamp: 'len 5/1/2020 18:52:54'!
+!Float methodsFor: '*domains' stamp: 'len 5/23/2020 10:12:50'!
 , aTuple
-	^ (RR tuple: {self}), aTuple! !
+	^ (… tuple: {self}), aTuple! !
 
 !Float methodsFor: '*domains' stamp: 'len 1/13/2016 03:55'!
 adaptToAlgebraic: rcvr andSend: selector
@@ -46184,23 +46184,23 @@ adaptToRealAlgebraic: rcvr andSend: selector
 inverse
 	^ self reciprocal! !
 
-!Float methodsFor: '*domains' stamp: 'len 5/3/2020 07:26:21'!
+!Float methodsFor: '*domains' stamp: 'len 5/23/2020 10:13:14'!
 parent
-	^ RR! !
+	^ …! !
 
 !Float methodsFor: '*domains' stamp: 'len 2/25/2016 17:17'!
 squareRoot
 	^ self sqrt! !
 
-!Fraction methodsFor: '*domains' stamp: 'len 8/3/2019 09:00:13'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/23/2020 09:53:21'!
 % anInteger
 	| R |
-	R _ ZZ / anInteger.
+	R _ ƒ / anInteger.
 	^ (R project: numerator) / (R project: denominator)! !
 
-!Fraction methodsFor: '*domains' stamp: 'len 7/30/2019 03:42:21'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/23/2020 09:53:29'!
 , aTuple
-	^ (QQ tuple: {self}), aTuple! !
+	^ („ tuple: {self}), aTuple! !
 
 !Fraction methodsFor: '*domains' stamp: 'len 6/5/2019 14:48:57'!
 abs: p
@@ -46235,9 +46235,9 @@ isIntegral
 isRational
 	^ true! !
 
-!Fraction methodsFor: '*domains' stamp: 'len 4/28/2018 16:58:05'!
+!Fraction methodsFor: '*domains' stamp: 'len 5/23/2020 09:53:13'!
 minimalPolynomial
-	^ QQ polynomials x - self! !
+	^ „ polynomials x - self! !
 
 !Fraction methodsFor: '*domains' stamp: 'len 1/20/2018 19:17:29'!
 squareRoot
@@ -46249,13 +46249,13 @@ valuation: p
 	"Answer the p-adic valuation of the receiver."
 	^ (numerator valuation: p) - (denominator valuation: p)! !
 
-!Integer methodsFor: '*domains' stamp: 'len 8/3/2019 09:01:50'!
+!Integer methodsFor: '*domains' stamp: 'len 5/23/2020 09:54:28'!
 % anInteger
-	^ ZZ / anInteger project: self! !
+	^ ƒ / anInteger project: self! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/3/2020 07:41:21'!
+!Integer methodsFor: '*domains' stamp: 'len 5/23/2020 09:54:43'!
 , aTuple
-	^ (ZZ tuple: {self}), aTuple! !
+	^ (ƒ tuple: {self}), aTuple! !
 
 !Integer methodsFor: '*domains' stamp: 'len 8/6/2019 06:18:27'!
 | anInteger
@@ -46305,9 +46305,9 @@ adaptToRealAlgebraic: rcvr andSend: selector
 additiveOrder
 	^ self == 0 ifTrue: [1] ifFalse: [Infinity positive]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/10/2020 22:01:31'!
+!Integer methodsFor: '*domains' stamp: 'len 5/23/2020 09:54:54'!
 annihilator
-	^ ZZ zeroIdeal! !
+	^ ƒ zeroIdeal! !
 
 !Integer methodsFor: '*domains' stamp: 'len 5/9/2020 10:17:06'!
 asRatio
@@ -46600,9 +46600,9 @@ legendre: p
 	answer > 1 ifTrue: [answer _ answer - p].
 	^ answer! !
 
-!Integer methodsFor: '*domains' stamp: 'len 4/28/2018 16:58:43'!
+!Integer methodsFor: '*domains' stamp: 'len 5/23/2020 10:03:14'!
 minimalPolynomial
-	^ QQ polynomials x - self! !
+	^ „ polynomials x - self! !
 
 !Integer methodsFor: '*domains' stamp: 'len 11/28/2015 07:08'!
 moebius
@@ -46630,9 +46630,9 @@ normalized
 numberOfDivisors
 	^ self primeSignature inject: 1 into: [:x :each| x * (each + 1)]! !
 
-!Integer methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:04'!
+!Integer methodsFor: '*domains' stamp: 'len 5/23/2020 10:03:23'!
 parent
-	^ ZZ! !
+	^ „! !
 
 !Integer methodsFor: '*domains' stamp: 'len 7/2/2016 20:55'!
 partitions
@@ -47073,9 +47073,9 @@ permutedBy: aPermutation
 	1 to: self size do: [:i| answer at: (aPermutation at: i) put: (self at: i)].
 	^ answer! !
 
-!SequenceableCollection methodsFor: '*domains' stamp: 'len 5/1/2020 20:09:11'!
+!SequenceableCollection methodsFor: '*domains' stamp: 'len 5/23/2020 10:05:45'!
 plot
-	^ FunctionPlotMorph new evaluationPoints: (1 to: self size); function: (ZZ carrier to: RR carrier evaluating: [:n| self at: n])! !
+	^ FunctionPlotMorph new evaluationPoints: (1 to: self size); function: (ƒ carrier to: … carrier evaluating: [:n| self at: n])! !
 
 !SequenceableCollection methodsFor: '*domains' stamp: 'len 11/18/2016 08:58:16'!
 sum
@@ -47341,9 +47341,9 @@ norm2
 one
 	^ self class real: real one imaginary: imaginary zero! !
 
-!Complex methodsFor: '*domains' stamp: 'len 5/27/2018 03:59:33'!
+!Complex methodsFor: '*domains' stamp: 'len 5/23/2020 10:12:18'!
 parent
-	^ CC! !
+	^ †! !
 
 !Complex methodsFor: '*domains' stamp: 'len 11/29/2016 11:42:24'!
 printOn: aStream
