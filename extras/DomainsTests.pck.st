@@ -1,6 +1,7 @@
-'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 9:38:19 am'!
+'From Cuis 5.0 [latest update: #4190] on 31 May 2020 at 8:55:17 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 162!
+!provides: 'DomainsTests' 1 167!
+!requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
 
@@ -1245,6 +1246,25 @@ testProjectiveEmbedding
 	"the projective scheme has one more point at infinity:"
 	self assert: affinePointsEmbedded size + 1 = projectivePoints size! !
 
+!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+testSmoothnessOver„
+	| P C |
+	P _ ProjectiveSpace new: 2 over: „.
+	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
+	self assert: C isSingular! !
+
+!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:32:00'!
+testSmoothnessOver†
+	| P R C |
+	P _ ProjectiveSpace new: 2 over: †.
+	R _ P coordinateRing.
+	C _ P subscheme: R !! [:x :y :z| x].
+	self assert: C isSingular not.
+	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3)].
+	self assert: C isSingular.
+	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3) + (z^3)].
+	self assert: C isSingular not! !
+
 !AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 5/23/2020 09:33:01'!
 testConicCoefficients
 	self assert: (Conic coefficients: (1,2,3,4,5,6)) coefficients = (1,2,3,4,5,6).
@@ -1258,6 +1278,53 @@ testConicDeterminant
 testConicIsSmooth
 	self assert: (Conic coefficients: ((1,-1,0) over: „)) isSmooth not.
 	self assert: (Conic coefficients: (1,1,1,1,1,0) % 2) isSmooth! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:16'!
+testProjectiveLineOverFiniteRing
+	| P |
+	P _ ProjectiveLine over: ƒ/6.
+	"P(Z/6Z) has 12 points: [0:1], [1:1], [2:1], [3:1], [4:1], [5:1], [1:2], [3:2], [5:2], [1:3], [2:3] and [1:0] (Henri Cohen, 'A Course in Computational Algebraic Number Theory', 478p)"
+	self assert: P points size = 12.
+	self assert: (Iterator on: P points performing: #do:) size = 12! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:27'!
+testProjectiveLineOverFiniteRing2AsDirectProduct
+	| P |
+	P _ ProjectiveLine over: ƒ/2 × (ƒ/2). "isomorphic to ƒ/2[x]/<x(x+1)>"
+	self assert: P points size = 9.
+	self assert: (Iterator on: P points performing: #do:) size = 9! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:37'!
+testProjectiveLineOverFiniteRing2AsQuotient
+	| R P |
+	R _ (ƒ/2) polynomials.
+	R _ R / (R x * (R x + 1)). "isomorphic to ƒ/2 × (ƒ/2)"
+	P _ ProjectiveLine over: R.
+	self assert: P points size = 9.
+	self assert: (Iterator on: P points performing: #do:) size = 9! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:42'!
+testProjectiveLineOverFiniteRing4
+	| P |
+	P _ ProjectiveLine over: ƒ/4 × (ƒ/4).
+	self assert: P points size = 36.
+	self assert: (Iterator on: P points performing: #do:) size = 36! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:49'!
+testProjectiveLineOverFiniteRing5
+	| P |
+	P _ ProjectiveLine over: ƒ/2 × (ƒ/2) × (ƒ/2).
+	self assert: P points size = 27.
+	self assert: (Iterator on: P points performing: #do:) size = 27! !
+
+!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:53'!
+testProjectiveLineOverFiniteRing6
+	| R P |
+	R _ (ƒ/2) polynomials.
+	R _ R / (R x^3 - R x).
+	P _ ProjectiveLine over: R.
+	self assert: P points size = 18.
+	self assert: (Iterator on: P points performing: #do:) size = 18! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 09:33:01'!
 testDifference
@@ -1340,14 +1407,14 @@ testIntersection
 	self assert: (W satisfies: (1, 0)).
 	self assert: (W satisfies: (0, 1)) not! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 09:33:01'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/28/2020 18:15:56'!
 testLinearSubspaceAsAlgebraicVariety
 	| S V |
 	S _ „ ^ 3 grassmannian: 2 :: atRandomBits: 10.
 	V _ S asAlgebraicVariety.
 	self assert: V dimension + 1 = S rank. "because it's projective"
-	self assert: (V satisfies: (S x: 1) coordinates).
-	self assert: (V satisfies: (S x: 2) coordinates)! !
+	self assert: (V satisfies: (S x: 1)).
+	self assert: (V satisfies: (S x: 2))! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 09:33:01'!
 testLocalAndGlobalDimension
@@ -1382,14 +1449,14 @@ testMorphismsOfProjectiveVarieties
 	self assert: Z isCurve.
 	self assert: Z degree = 6! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 09:33:01'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/31/2020 20:38:36'!
 testMultiplicity
 	"Example from Sage documentation."
 	| A X q1 q2 |
 	A _ AffineSpace new: 4 over: „.
 	X _ A subscheme: (A coordinateRing !! [:x :y :z :w| {z*y - (x^7). w - (2*z)}]).
-	q1 _ X !! („ tuple: {1. (1/3). 3. 6}).
-	q2 _ X !! („ zeroTuple: 4).
+	q1 _ X !! („^4 !! {1. (1/3). 3. 6}).
+	q2 _ X !! („^4) zero.
 	self assert: q1 multiplicity = 1.
 	self assert: q2 multiplicity = 2! !
 
@@ -1544,53 +1611,6 @@ testSpecZSubschemes
 	self deny: (ƒ / 10) spec >= (ƒ / 3) spec.
 	self assert: (ƒ / 10) spec /\ (ƒ / 15) spec = (ƒ / 5) spec.
 	self assert: (ƒ / 10) spec \/ (ƒ / 15) spec = (ƒ / 30) spec! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:16'!
-testProjectiveLineOverFiniteRing
-	| P |
-	P _ ProjectiveLine over: ƒ/6.
-	"P(Z/6Z) has 12 points: [0:1], [1:1], [2:1], [3:1], [4:1], [5:1], [1:2], [3:2], [5:2], [1:3], [2:3] and [1:0] (Henri Cohen, 'A Course in Computational Algebraic Number Theory', 478p)"
-	self assert: P points size = 12.
-	self assert: (Iterator on: P points performing: #do:) size = 12! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:27'!
-testProjectiveLineOverFiniteRing2AsDirectProduct
-	| P |
-	P _ ProjectiveLine over: ƒ/2 × (ƒ/2). "isomorphic to ƒ/2[x]/<x(x+1)>"
-	self assert: P points size = 9.
-	self assert: (Iterator on: P points performing: #do:) size = 9! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:37'!
-testProjectiveLineOverFiniteRing2AsQuotient
-	| R P |
-	R _ (ƒ/2) polynomials.
-	R _ R / (R x * (R x + 1)). "isomorphic to ƒ/2 × (ƒ/2)"
-	P _ ProjectiveLine over: R.
-	self assert: P points size = 9.
-	self assert: (Iterator on: P points performing: #do:) size = 9! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:42'!
-testProjectiveLineOverFiniteRing4
-	| P |
-	P _ ProjectiveLine over: ƒ/4 × (ƒ/4).
-	self assert: P points size = 36.
-	self assert: (Iterator on: P points performing: #do:) size = 36! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:49'!
-testProjectiveLineOverFiniteRing5
-	| P |
-	P _ ProjectiveLine over: ƒ/2 × (ƒ/2) × (ƒ/2).
-	self assert: P points size = 27.
-	self assert: (Iterator on: P points performing: #do:) size = 27! !
-
-!AlgebraicGeometryTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 08:56:53'!
-testProjectiveLineOverFiniteRing6
-	| R P |
-	R _ (ƒ/2) polynomials.
-	R _ R / (R x^3 - R x).
-	P _ ProjectiveLine over: R.
-	self assert: P points size = 18.
-	self assert: (Iterator on: P points performing: #do:) size = 18! !
 
 !AlgebraicGeometryTest methodsFor: 'projective' stamp: 'len 5/23/2020 08:56:56'!
 testProjectivePlaneCurveArithmeticGenus
@@ -1885,25 +1905,6 @@ testTangentConeAndTangentSpace
 	"the tangent space is the whole plane:"
 	self assert: o tangentSpace = A! !
 
-!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-testSmoothnessOver„
-	| P C |
-	P _ ProjectiveSpace new: 2 over: „.
-	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
-	self assert: C isSingular! !
-
-!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:32:00'!
-testSmoothnessOver†
-	| P R C |
-	P _ ProjectiveSpace new: 2 over: †.
-	R _ P coordinateRing.
-	C _ P subscheme: R !! [:x :y :z| x].
-	self assert: C isSingular not.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3)].
-	self assert: C isSingular.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3) + (z^3)].
-	self assert: C isSingular not! !
-
 !AlgebraicNumbersTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2018 05:39:40'!
 testArithmetic
 	| sqrt2 sqrt3 sqrt5 sqrt6 |
@@ -2123,6 +2124,30 @@ testAffineRingIdealOperations
 	self assert: I radical = J. "this fails probably because PolynomialIdeal>>radical is broken"
 	"... and then some tests of primary decomposition"! !
 
+!CommutativeAlgebraTest methodsFor: 'algorithms' stamp: 'len 5/23/2020 09:33:01'!
+testExtendedBuchberger
+	| I algorithm G G2 |
+	I _ („ polynomialsIn: #(a b c d)) cyclicIdeal.
+	I _ I orderedBy: #grevlex.
+	G _ (algorithm _ ExtendedBuchberger on: I) basis.
+	self assert: algorithm verify.
+	self assert: G verify.
+	G2 _ (Buchberger on: I) basis.
+	self assert: G reduced = G2 reduced.
+	self assert: algorithm matrix * (I scalars tuple: I generators) = (I scalars tuple: G)! !
+
+!CommutativeAlgebraTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+testKrullDimensionOverƒ
+	| R I Q |
+	R _ ƒ polynomialsIn: #(x y).
+	self assert: R dimension = 3.
+"	I _ R * {R x. R y}.
+	Q _ R / I.
+	self assert: Q dimension = 0.
+"	I _ R * R zero. "zero ideal"
+	Q _ R / I.
+	self assert: Q dimension = 3! !
+
 !CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/23/2020 09:33:01'!
 testBuchbergerNormalForm
 	"A Singular Introduction to Commutative Algebra, Example 1.6.12."
@@ -2184,34 +2209,6 @@ testMultivariateDivisionExample4
 	f2 _ R !! [:x :y| y^3 + 4].
 	self assert: (f divisionBy: {f1. f2}) printString = 'x^2y^3 - 2xy^2 = (y^2)(x^2y - 2x) + (0)(y^3 + 4) + 0'.
 	self assert: (f divisionBy: {f2. f1}) printString = 'x^2y^3 - 2xy^2 = (x^2)(y^3 + 4) + (0)(x^2y - 2x) + -4x^2 - 2xy^2'! !
-
-!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/23/2020 09:33:01'!
-testCyclic7Correctness
-	"Test correctness of the ideal of cyclic 7-roots checking against one generated by Singular."
-	| txt |
-	txt _ ((„ polynomialsIn: 7) cyclicIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
-	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
-	self assert: txt = 'x1x2x3x4x5x6x7-1,x1x2x3x4x5x6+x1x2x3x4x5x7+x1x2x3x4x6x7+x1x2x3x5x6x7+x1x2x4x5x6x7+x1x3x4x5x6x7+x2x3x4x5x6x7,x1x2x3x4x5+x2x3x4x5x6+x1x2x3x4x7+x1x2x3x6x7+x1x2x5x6x7+x1x4x5x6x7+x3x4x5x6x7,x1x2x3x4+x2x3x4x5+x3x4x5x6+x1x2x3x7+x1x2x6x7+x1x5x6x7+x4x5x6x7,x1x2x3+x2x3x4+x3x4x5+x4x5x6+x1x2x7+x1x6x7+x5x6x7,x1x2+x2x3+x3x4+x4x5+x5x6+x1x7+x6x7,x1+x2+x3+x4+x5+x6+x7'! !
-
-!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/23/2020 09:33:01'!
-testKatsura7Correctness
-	"Test correctness of Katsura-7 ideal checking against one generated by Singular."
-	| txt |
-	txt _ ((„ polynomialsIn: 7) katsuraIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
-	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
-	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'! !
-
-!CommutativeAlgebraTest methodsFor: 'algorithms' stamp: 'len 5/23/2020 09:33:01'!
-testExtendedBuchberger
-	| I algorithm G G2 |
-	I _ („ polynomialsIn: #(a b c d)) cyclicIdeal.
-	I _ I orderedBy: #grevlex.
-	G _ (algorithm _ ExtendedBuchberger on: I) basis.
-	self assert: algorithm verify.
-	self assert: G verify.
-	G2 _ (Buchberger on: I) basis.
-	self assert: G reduced = G2 reduced.
-	self assert: algorithm matrix * (I scalars tuple: I generators) = (I scalars tuple: G)! !
 
 !CommutativeAlgebraTest methodsFor: 'groebner' stamp: 'len 4/14/2020 00:53:45'!
 testGroebnerBasis: G ideal: I
@@ -2454,6 +2451,41 @@ testHilbertSeriesOfPolynomialRing
 	R _ „ polynomialsIn: 4.
 	H _ R hilbertSeriesAt: t.
 	self assert: H = ((1 - t) ^ -4)! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:33:01'!
+testIdealElementOperations
+	"Magma handbook example H103E2."
+	| R x y z I |
+	R _ „ polynomialsIn: #(x y z) "ordering: #lex".
+	x _ R x. y _ R y. z _ R z.
+	I _ R * {(x + y)^3. (y - z)^2. y^2*z + z}.
+	self assert: (I reduce: (y^2*z + z)) isZero.
+	"I basis reduceFull: x^3 = ..."
+	"I basis reduce: z^4 + (y^2))"
+	self deny: (I includes: x+y).
+	self assert: (I radicalContains: x+y).
+	self assert: (I radicalContains: (x+y)^2).
+	self deny: (I radicalContains: z).
+	self assert: (x^4 + y - z s: x^2 + y - z) = (x^2*y negated + (x^2*z) + y - z)! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:33:01'!
+testMonomialIdeal
+	"Test ideals generated by monomials are automatically created as MonomialIdeal."
+	| R f g h |
+	R _ „ polynomialsIn: 3.
+	f _ R !! [:x :y :z| x^2 + y].
+	g _ R !! [:x :y :z| z^3].
+	h _ R !! [:x :y :z| x^2*y].
+	self assert: (R * {f. g. h}) class ~= MonomialIdeal.
+	self assert: (R * {g. h}) class = MonomialIdeal! !
+
+!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:34:55'!
+testZeroIdeal
+	| zero |
+	zero _ ƒ * #(). "the zero ideal {0}"
+	self assert: zero isZero.
+	self assert: (zero includes: 0).
+	self deny: (zero includes: 42)! !
 
 !CommutativeAlgebraTest methodsFor: 'ideal operations' stamp: 'len 5/23/2020 09:33:01'!
 testIdealColon
@@ -2749,41 +2781,6 @@ testSquarefreeMonomialIdealPrimaryDecomposition
 	I _ R * {a*d. a*e. b*c*d. b*e. c*e. d*e}.
 	self assert: I primaryDecomposition = {R * {d. e}. R * {a. b. e}. R * {a. c. e}. R * {a. b. c. d}} asSet! !
 
-!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:33:01'!
-testIdealElementOperations
-	"Magma handbook example H103E2."
-	| R x y z I |
-	R _ „ polynomialsIn: #(x y z) "ordering: #lex".
-	x _ R x. y _ R y. z _ R z.
-	I _ R * {(x + y)^3. (y - z)^2. y^2*z + z}.
-	self assert: (I reduce: (y^2*z + z)) isZero.
-	"I basis reduceFull: x^3 = ..."
-	"I basis reduce: z^4 + (y^2))"
-	self deny: (I includes: x+y).
-	self assert: (I radicalContains: x+y).
-	self assert: (I radicalContains: (x+y)^2).
-	self deny: (I radicalContains: z).
-	self assert: (x^4 + y - z s: x^2 + y - z) = (x^2*y negated + (x^2*z) + y - z)! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:33:01'!
-testMonomialIdeal
-	"Test ideals generated by monomials are automatically created as MonomialIdeal."
-	| R f g h |
-	R _ „ polynomialsIn: 3.
-	f _ R !! [:x :y :z| x^2 + y].
-	g _ R !! [:x :y :z| z^3].
-	h _ R !! [:x :y :z| x^2*y].
-	self assert: (R * {f. g. h}) class ~= MonomialIdeal.
-	self assert: (R * {g. h}) class = MonomialIdeal! !
-
-!CommutativeAlgebraTest methodsFor: 'ideal basics' stamp: 'len 5/23/2020 09:34:55'!
-testZeroIdeal
-	| zero |
-	zero _ ƒ * #(). "the zero ideal {0}"
-	self assert: zero isZero.
-	self assert: (zero includes: 0).
-	self deny: (zero includes: 42)! !
-
 !CommutativeAlgebraTest methodsFor: 'krull dimension' stamp: 'len 5/23/2020 09:33:01'!
 testKrullDimension
 	| R I Q |
@@ -2848,17 +2845,21 @@ testKrullDimensionOverZZ
 	Q _ R / I.
 	self assert: Q dimension = 3! !
 
-!CommutativeAlgebraTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testKrullDimensionOverƒ
-	| R I Q |
-	R _ ƒ polynomialsIn: #(x y).
-	self assert: R dimension = 3.
-"	I _ R * {R x. R y}.
-	Q _ R / I.
-	self assert: Q dimension = 0.
-"	I _ R * R zero. "zero ideal"
-	Q _ R / I.
-	self assert: Q dimension = 3! !
+!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/23/2020 09:33:01'!
+testCyclic7Correctness
+	"Test correctness of the ideal of cyclic 7-roots checking against one generated by Singular."
+	| txt |
+	txt _ ((„ polynomialsIn: 7) cyclicIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
+	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
+	self assert: txt = 'x1x2x3x4x5x6x7-1,x1x2x3x4x5x6+x1x2x3x4x5x7+x1x2x3x4x6x7+x1x2x3x5x6x7+x1x2x4x5x6x7+x1x3x4x5x6x7+x2x3x4x5x6x7,x1x2x3x4x5+x2x3x4x5x6+x1x2x3x4x7+x1x2x3x6x7+x1x2x5x6x7+x1x4x5x6x7+x3x4x5x6x7,x1x2x3x4+x2x3x4x5+x3x4x5x6+x1x2x3x7+x1x2x6x7+x1x5x6x7+x4x5x6x7,x1x2x3+x2x3x4+x3x4x5+x4x5x6+x1x2x7+x1x6x7+x5x6x7,x1x2+x2x3+x3x4+x4x5+x5x6+x1x7+x6x7,x1+x2+x3+x4+x5+x6+x7'! !
+
+!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/23/2020 09:33:01'!
+testKatsura7Correctness
+	"Test correctness of Katsura-7 ideal checking against one generated by Singular."
+	| txt |
+	txt _ ((„ polynomialsIn: 7) katsuraIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
+	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
+	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'! !
 
 !EllipticCurvesTest methodsFor: 'as yet unclassified' stamp: 'len 11/11/2016 10:14'!
 testBInvariants
@@ -3708,7 +3709,7 @@ testPermutationProduct3
 	self assert: b*a = (G !! #((1 2 4))).
 	self assert: a*b = (G !! #((1 3 2)))! !
 
-!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+!MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/31/2020 07:20:07'!
 testPolynomialVectorSpace
 	| Qx V S x |
 	Qx _ „ polynomials.
@@ -3717,7 +3718,7 @@ testPolynomialVectorSpace
 	S _ V span: {Qx one. x^2. x*2}.
 	self assert: (S includes: V !! (x^2 + 2)).
 	self deny: (S includes: V !! (x^3 + 2)).
-	self assert: Qx !! (S orthogonalProjection value: x^3 - (x^2) + (x*2) + 3) = ((x^2) negated + (x*2) + 3)! !
+	self assert: Qx !! (S orthogonalProjection value: V !! (x^3 - (x^2) + (x*2) + 3)) = ((x^2) negated + (x*2) + 3)! !
 
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 12/13/2015 01:54'!
 testPrimeSignature
@@ -3963,18 +3964,18 @@ testIsHermiteNormalForm2
 	M _ ƒ matrix: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33). (0,0,0,1)}.
 	self assert: M isHermiteNormalForm not! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/31/2020 20:00:40'!
 testJordanNormalForm
 	| A jordan B |
 "	<timeout: 2>"
 	A _ „ matrix: { (5,4,2,1). (0,1,-1,-1). (-1,-1,3,0). (1,1,-1,2) }.
 	jordan _ A jordan.
 	self assert: jordan size = 3.
-	B _ „ matrix: 1 scalar: 1.
+	B _ („^1) id.
 	self assert: (jordan includes: B).
-	B _ „ matrix: 1 scalar: 2.
+	B _ („^1) id * 2.
 	self assert: (jordan includes: B).
-	B _ „ matrix: 2 scalar: 4 :: at: 1@2 put: 1; yourself.
+	B _ („^2) id * 4 :: at: 1@2 put: 1; yourself.
 	self assert: (jordan includes: B)! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:33:01'!
@@ -4094,13 +4095,13 @@ testSmithNormalFormDiagonal
 	A _ ƒ matrix: #((5 0 0) (0 2 0) (0 0 0)).
 	self assert: A SNF = (ƒ diagonalMatrix: #(1 10 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/31/2020 20:01:10'!
 testSmithNormalFormOverPolynomials
 	"Example from Sage documentation."
 	| R x A |
 	R _ „ polynomials.
 	x _ R x.
-	A _ (R matrix: 2 scalar: x) - (R matrix: #((3 -4) (1 -1))).
+	A _ (R^2) id * x - (R matrix: #((3 -4) (1 -1))).
 	self assert: A SNF = (R diagonalMatrix: {R one. x^2 - (x*2) + 1})! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
@@ -4303,13 +4304,13 @@ testAdjugateCramerRule
 	I _ A identity.
 	self assert: A * A adjugate = (I * A determinant)! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 5/31/2020 20:10:14'!
 testAdjugateProperties
 	| A B I c |
 	A _ „ matrix: { (-3,2,-5). (-1,0,-2). (3,-4,1) }.
 	B _ „ matrix: { (-1,2,3). (1,-2,1). (2,2,-1) }.
 	c _ 7.
-	I _ „ identityMatrix: 3.
+	I _ („^3) id.
 	self assert: I adjugate = I.
 	self assert: (A * B) adjugate = (B adjugate * A adjugate).
 	self assert: (A*c) adjugate = (A adjugate * (c^2)).
@@ -4328,12 +4329,12 @@ testCayleyHamiltorTheoremInZ
 	A _ ƒ atRandomMatrix: 6 atRandom bits: 100.
 	self assert: (A characteristicPolynomial value: A) isZero! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'other' stamp: 'len 5/31/2020 20:10:48'!
 testDomainError
 	| A B |
-	A _ ƒ identityMatrix: 4.
+	A _ (ƒ^4) id.
 	self should: [A / 2] raise: DomainError.
-	B _ „ identityMatrix: 4.
+	B _ („^4) id.
 	self should: [A + B] raise: DomainError.
 	self should: [A * B] raise: DomainError! !
 
@@ -4361,11 +4362,11 @@ testFundamentalSubspacesDimensions
 	self assert: A coimage rank = r.
 	self assert: A cokernel rank = (m - r)! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 5/31/2020 20:10:58'!
 testInverse
 	| A I |
 	A _ „ matrix: { (2,1,1). (-1,0,1). (0,2,1) }.
-	I _ „ identityMatrix: 3.
+	I _ („^3) id.
 	self assert: A inverse * A = I.
 	self assert: A * A inverse = I! !
 
@@ -4677,45 +4678,45 @@ testBacklashTupleRandomOver: R
 testBacklashZnMatrixRandom
 	self testBacklashMatrixRandomOver: ƒ/(64 atRandom + 1)! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:33'!
 testCokernelMatrix
 	"From Sage."
 	| A B |
 	A _ „ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
 	B _ „ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernel echelon = B "we have to perform an addition echelonization"! !
+	self assert: A cokernelMap echelon = B "we have to perform an addition echelonization"! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:44'!
 testCokernelMatrixInteger
 	"From Sage."
 	| A B |
 	A _ ƒ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
 	B _ ƒ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernel echelon = B "we have to perform an additional echelonization"! !
+	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/29/2020 19:55:05'!
 testKernel
 	| A K |
 	A _ „ matrix: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
-	K _ „ matrix: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
+	K _ „^6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
 	self assert: A kernel = K! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:21'!
 testKernelInteger
 	"Example from GAP manual."
 	| A K |
 	A _ ƒ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
 	A _ A transposed.
 	K _ ƒ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
-	self assert: A kernel echelon = K "we have to perform an addition echelonization"! !
+	self assert: A kernelMap echelon = K "we have to perform an additional echelonization"! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/29/2020 19:55:34'!
 testKernelRational
 	"Example from GAP manual."
 	| A K |
 	A _ „ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
 	A _ A transposed.
-	K _ „ matrix: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
+	K _ „^5 span: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernel = K! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
@@ -4736,6 +4737,35 @@ testSlashWithTuple
 	self assert: x = („ tuple: #(1 2 3)).
 	self assert: x * A = b! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 12:40:32'!
+testSolveInteger
+	self testSolveRandomOver: ƒ! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 12:41:19'!
+testSolvePrimeField
+	self testSolveRandomOver: (PrimeField new: 256 atRandom nextPrime)! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 14:08:28'!
+testSolveRandomOver: aRing
+	| A B n solution N X combinations |
+	n _ 5 atRandom.
+	A _ aRing atRandomMatrix: n @ 5 atRandom bits: 100.
+	combinations _ (1 to: n) collect: [:each| 2 atRandom = 1].
+	B _ Matrix columns:
+		(combinations collect: [:isCombination|
+			isCombination
+				ifTrue: [A * (aRing atRandomTuple: A width bits: 20)]
+				ifFalse: [aRing atRandomTuple: A height bits: 20]]).
+	solution _ A solve: B.
+	N _ solution first.
+	X _ solution second.
+	self assert: N = (A*X - B).
+	combinations withIndexDo: [:isCombination :i| isCombination ifTrue: [self assert: (N columnAt: i) isZero]]! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 12:40:23'!
+testSolveRational
+	self testSolveRandomOver: „! !
+
 !MatrixTest methodsFor: 'private' stamp: 'len 3/9/2020 12:21:09'!
 newRandomMatrix: shape over: aRing
 	| samples |
@@ -4749,13 +4779,13 @@ testHomRelationsBug
 	V _ ƒ^1 / {5}.
 	self assert: V dual invariants = #(5)! !
 
-!ModuleTest methodsFor: 'bugs' stamp: 'len 5/23/2020 09:34:55'!
+!ModuleTest methodsFor: 'bugs' stamp: 'len 5/28/2020 18:22:25'!
 testHomRelationsBug2
 	| V W X |
 	V _ ƒ^2 / {(2,0)}.
 	W _ ƒ^3 / {(2,2,2)}.
 	X _ V => W.
-	self assert: (X !! (X relations atRandomBits: 100) coordinates) isZero! !
+	self assert: (X !! (X relations atRandomBits: 100)) isZero! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 5/23/2020 09:34:55'!
 testHomRelationsBug3
@@ -4769,6 +4799,18 @@ testModuleMapBug
 	| M f |
 	M _ ƒ^1 / {2}.
 	f _ M dual atRandomBits: 100.
+	self testLinearMap: f! !
+
+!ModuleTest methodsFor: 'bugs' stamp: 'len 5/24/2020 10:15:17'!
+testModuleMapBug2
+	| M N f g |
+	M _ ƒ^1/{3}.
+	N _ ƒ^1.
+	f _ M to: N mapping: [:i| i].
+	g _ M to: N mapping: [:i| i*2].
+	self assert: f = g.
+	self assert: f isZero.
+	self assert: g isZero.
 	self testLinearMap: f! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 4/21/2020 05:55:42'!
@@ -4997,11 +5039,11 @@ testKernel
 	v _ kernel atRandomBits: 100.
 	self assert: (f value: v) isZero! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:17'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/28/2020 18:22:37'!
 testKernelZ2
 	| V f kernel |
 	V _ (PrimeField new: 2) ^ 3.
-	f _ V dual evaluating: [:v| v coordinates sum].
+	f _ V dual evaluating: [:v| v sum].
 	kernel _ f kernel.
 	self assert: (kernel apply: f) isTrivial.
 	self assert: kernel rank = 2.
@@ -5050,20 +5092,20 @@ testLinearForm2
 	self assert: f kernel rank = 2.
 	self assert: f image rank = 1! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/28/2020 18:23:01'!
 testLinearFormAsPolynomial
 	| V f x |
 	V _ „ ^ 5 atRandom.
 	f _ V dual atRandomBits: 100.
 	x _ V atRandomBits: 100.
-	self assert: (f value: x) = (f asPolynomial value: x coordinates).
+	self assert: (f value: x) = (f asPolynomial value: x).
 	self assert: f parent !! f asPolynomial = f! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 3/14/2020 19:13:38'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/28/2020 18:23:08'!
 testLinearFormZ2
 	| V f |
 	V _ (PrimeField new: 2) ^ 4.
-	f _ V dual evaluating: [:v| v coordinates sum].
+	f _ V dual evaluating: [:v| v sum].
 	self assert: f domain = V.
 	self assert: f kernel rank = 3.
 	self assert: f image rank = 1.
@@ -5124,7 +5166,7 @@ testMapToSmallerDimensionIsNotInjective
 	f _ (V => W) atRandomBits: 100.
 	self assert: f isInjective not! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 5/31/2020 20:11:37'!
 testMapsInducedByHom
 	"Example from 'A Singular Introduction to Commutative Algebra', Example 2.1.7 (Maps Induced by Hom)."
 	| X Y Z f g h yz zx |
@@ -5135,13 +5177,13 @@ testMapsInducedByHom
 	g _ f => Z. "Hom(-,Z)"
 	self assert: g domain = (Y => Z). "it is contravariant"
 	self assert: g codomain = (X => Z).
-	self assert: g matrix = ((„ identityMatrix: 2) ‘ f matrix transposed).
+	self assert: g matrix = ((„^2) id ‘ f matrix transposed).
 	yz _ Y => Z atRandomBits: 100.
 	self assert: (g value: yz) = (yz · f).
 	h _ Z => f. "Hom(Z,-)"
 	self assert: h domain = (Z => X). "it is covariant"
 	self assert: h codomain = (Z => Y).
-	self assert: h matrix = (f matrix ‘ („ identityMatrix: 2)).
+	self assert: h matrix = (f matrix ‘ („^2) id).
 	zx _ Z => X atRandomBits: 100.
 	self assert: (h value: zx) = (f · zx)! !
 
@@ -6421,109 +6463,9 @@ testArithmeticZ3
 testArithmeticZm
 	self testArithmeticOver: ƒ/(2 + 100 atRandom)! !
 
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testContentAndPrimitive
-	| Zx Zxy x y f |
-	Zx _ ƒ polynomialsIn: #(x).
-	Zxy _ Zx polynomialsIn: #(y).
-	x _ Zx x.
-	y _ Zxy x.
-	f _ 2*x*y + (2*(x^2)).
-	self assert: f primitivePart * f content = f! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testContentAndPrimitiveAtRandom
-	| Zx f |
-	Zx _ ƒ polynomials.
-	f _ Zx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
-	self assert: f primitivePart * f content = f! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testExtendedEuclidBug
-	| x f1 f2 |
-	x _ „ polynomials x.
-	f1 _ x^2 + 1.
-	f2 _ x - 1.
-	self assert: (f1 xgcd: f2) first = (f1 gcd: f2)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testGCD
-	| P x f g |
-	P _ „ polynomials.
-	x _ P x.
-	f _ x^4 - 1.
-	g _ x^6 - 1.
-	self assert: (f gcd: g) = (x^2 - 1)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testGCDMultivariate
-	| Zxy x y f g |
-	Zxy _ ƒ polynomialsIn: #(x y) ordering: #lex.
-	x _ Zxy x.
-	y _ Zxy y.
-	f _ (x+y)*(y-x).
-	g _ (y-x)^2.
-	self assert: (f gcd: g) = (x-y)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testGCDMultivariate2
-	"Example from Sage documentation."
-	| R x y f g |
-	R _ „ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*(x+y)*3.
-	g _ x*(y^2 - (x^2))*9.
-	self assert: (f gcd: g) = (x^2 + (x*y))! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testGCDMultivariateOverQ
-	| R x y f g |
-	R _ „ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = (x*y)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testGCDMultivariateOverZ
-	| R x y f g |
-	R _ ƒ polynomialsIn: #(x y).
-	x _ R x. y _ R y.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = (x*y*3)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testGCDOverRationalFunctions
-	| R x y f g |
-	R _ „ polynomialsIn: #(y) :: fractions polynomials.
-	x _ R x. y _ R scalars x.
-	f _ x^2*y*6.
-	g _ x*(y^2)*15 + (x^3*(y^2)*21).
-	self assert: (f gcd: g) = x! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testGCDOverZ
-	| x f g |
-	x _ ƒ polynomials x.
-	f _ (x^4 - 1)*6.
-	g _ (x^6 - 1)*9.
-	self assert: (f gcd: g) = ((x^2 - 1)*3)! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
-testGCDOverZ2
-	| x f g h |
-	x _ ƒ/2 :: polynomials x.
-	h _ x^3 - x + 1.
-	f _ h * (x + 1) * x.
-	g _ h * (x + 1) * (x^2 + 1).
-	self assert: (f gcd: g) = (h * (x + 1))! !
-
-!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
-testMultivariateGCDBug
-	| x |
-	x _ „ polynomialsIn: 3 :: x.
-	self assert: (x^2 gcd: x) = x! !
+!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+testArithmetic„
+	self testArithmeticOver: „! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:33:23'!
 testDivision: F
@@ -6879,268 +6821,6 @@ testRemainderInconsistency
 	x _ „ polynomials x.
 	self assert: (x \\ (1 - x)) leadingCoefficient = (X \\ (1 - X)) leadingCoefficient! !
 
-!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
-testEPRS
-	"Example from Zippel."
-	| a b eprs |
-	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	eprs _ a eprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
-	self assert: eprs = #((1 0 1 0 -3 -3 8 2 -5)
-		(3 0 5 0 -4 -9 21)
-		(-15 0 3 0 -9) 
-		(15795 30375 -59535) 
-		(1254542875143750 -1654608338437500) (12593338795500743100931141992187500))! !
-
-!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
-testPPRS
-	"Example from Zippel."
-	| a b pprs |
-	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	pprs _ a pprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
-	self assert: pprs = #((1 0 1 0 -3 -3 8 2 -5) 
-		(3 0 5 0 -4 -9 21)
-		(-5 0 1 0 -3)
-		(13 25 -49)
-		(4663 -6150)
-		(1))! !
-
-!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
-testSPRS
-	"Example from Zippel."
-	| a b sprs |
-	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
-	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
-	sprs _ a sprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
-	self assert: sprs = #((1 0 1 0 -3 -3 8 2 -5)
-		#(3 0 5 0 -4 -9 21)
-		#(15 0 -3 0 9)
-		#(65 125 -245)
-		#(9326 -12300)
-		#(260708))
-! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
-testEvaluationHomomorphism
-	| Zx f g a |
-	Zx _ ƒ polynomials.
-	f _ Zx atRandomBits: 1000 maxDegree: 10.
-	g _ Zx atRandomBits: 1000 maxDegree: 10.
-	a _ ƒ atRandomBits: 100.
-	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
-	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
-	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
-	self assert: (f^3 value: a) = ((f value: a)^3)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 3/31/2016 06:56'!
-testEvaluationHomomorphism: F
-	| Fx f g a |
-	Fx _ F polynomials.
-	f _ Fx atRandomDegree: 10 atRandom.
-	g _ Fx atRandomDegree: 10 atRandom.
-	a _ F atRandom.
-	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
-	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
-	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
-	self assert: (f^3 value: a) = ((f value: a)^3)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
-testEvaluationHomomorphismMultivariate
-	| Zxyz f g a |
-	Zxyz _ ƒ polynomialsIn: #(x y z).
-	f _ Zxyz atRandomBits: 1000 maxDegree: 10.
-	g _ Zxyz atRandomBits: 1000 maxDegree: 10.
-	a _ ƒ atRandomTuple: 3 bits: 100.
-	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
-	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
-	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
-	self assert: (f^3 value: a) = ((f value: a)^3)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 10/18/2016 21:01'!
-testEvaluationHomomorphismZ2
-	self testEvaluationHomomorphism: (PrimeField new: 2)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
-testEvaluationHomomorphismZm
-	self testEvaluationHomomorphism: ƒ / (2 + 100 atRandom).
-	self testEvaluationHomomorphism: ƒ / (2^13 - 2).
-	self testEvaluationHomomorphism: ƒ / (2^31 - 2)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 12/2/2016 11:17:17'!
-testEvaluationHomomorphismZp
-	self testEvaluationHomomorphism: (PrimeField new: 3).
-	self testEvaluationHomomorphism: (PrimeField new: 5).
-	self testEvaluationHomomorphism: (PrimeField new: 2^13 - 1).
-	self testEvaluationHomomorphism: (PrimeField new: 2^31 - 1)! !
-
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
-testEvaluationMultivariate
-	| Zxyz f a x y z |
-	Zxyz _ ƒ polynomialsIn: #(x y z).
-	x _ Zxyz x. y _ Zxyz y. z _ Zxyz z.
-	f _ x^2 * y - z.
-	a _ ƒ atRandomTuple: 3 bits: 100.
-	self assert: (f value: a) = ((a at: 1)^2 * (a at: 2) - (a at: 3))! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldFactorization
-	| F Fx x one f factors |
-	F _ ƒ / 3.
-	Fx _ F polynomials.
-	x _ Fx x.
-	one _ Fx one.
-	f _ x^11 + (x^9 * 2) + (x^8 * 2) + (x^6) + (x^5) + (x^3 * 2) + (x^2 * 2) + one.
-	factors _ f factors.
-	self assert: factors size = 8.
-	self assert: (factors occurrencesOf: x + (one*2)) = 4.
-	self assert: (factors occurrencesOf: x^2 + one) = 3.
-	self assert: (factors occurrencesOf: x + one) = 1.
-	self assert: (factors inject: Fx one into: [:a :b| a*b]) = f! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldFactorization2
-	| Z3 x f factors |
-	Z3 _ ƒ / 3.
-	x _ Z3 polynomials x.
-	f _ (x-1)^2*(x-2).
-	factors _ f factors.
-	self assert: factors size = 3.
-	self assert: (factors occurrencesOf: x-1) = 2.
-	self assert: (factors occurrencesOf: x-2) = 1! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/9/2018 21:30:09'!
-testFiniteFieldFactorization3
-	| F9 x f factors |
-	F9 _ GaloisField new: (3^2).
-	x _ F9 polynomials x.
-	f _ (x-1)^2*(x-2).
-	factors _ f factors.
-	self assert: factors size = 3.
-	self assert: (factors occurrencesOf: x-1) = 2.
-	self assert: (factors occurrencesOf: x-2) = 1! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldFactorization4
-	| R x f factors |
-	R _ ƒ / 2.
-	x _ R polynomials x.
-	f _ x^24 - 1.
-	factors _ f factors.
-	self assert: factors size = 16.
-	self assert: (factors occurrencesOf: x+1) = 8.
-	self assert: (factors occurrencesOf: x^2+x+1) = 8! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldFactorization5
-	| R x |
-	R _ ƒ / 2.
-	x _ R polynomials x.
-	self assert: (x^15 - 1) factors = {x + 1. x^2 + x + 1. x^4 + (x^3) + (x^2) + x + 1. x^4 + x + 1. x^4 + (x^3) + 1} asBag! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldIrreduciblePolynomials
-	"Z/<3>[x] has 8 irreducible monic polynomials of degree 3, out of 27 monic polynomials of degree 3."
-	| F Fx f count |
-	F _ ƒ / 3.
-	Fx _ F polynomials.
-	count _ 0.
-	F tuples: 3 do: [:each|
-		f _ (Fx coefficients: each, F one).
-		f isIrreducible
-			ifTrue:
-				[count _ count + 1.
-				self assert: f factors size = 1]
-			ifFalse:
-				[self assert: f factors size > 1]].
-	self assert: count = 8! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldIsIrreducible
-	| F Fx x f |
-	F _ ƒ / 3.
-	Fx _ F polynomials.
-	x _ Fx x.
-	f _ x^3 + (x*2) + 1.
-	self assert: f factors size = 1.
-	self assert: f isIrreducible! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldSFF
-	| F Fx x one f factors |
-	F _ ƒ / 3.
-	Fx _ F polynomials.
-	x _ Fx x.
-	one _ Fx one.
-	f _ x^11 + (x^9 * 2) + (x^8 * 2) + (x^6) + (x^5) + (x^3 * 2) + (x^2 * 2) + one.
-	factors _ f squareFreeFactorization.
-	self assert: factors size = 8.
-	self assert: (factors occurrencesOf: x + (one*2)) = 4.
-	self assert: (factors occurrencesOf: x^2 + one) = 3.
-	self assert: (factors occurrencesOf: x + one) = 1! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
-testIntegerFactorization
-	| x f factors |
-	x _ ƒ polynomials x.
-	f _ (x*2-1)^2*(x-2)*(x^2 + 1)*(x^2-2)*18.
-	factors _ f factors.
-	self assert: factors size = 8.
-	self assert: factors asSet size = 6.
-	self assert: factors product = f! !
-
-!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:33:01'!
-testRationalFactorization
-	| x f factors |
-	x _ „ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	factors _ f factors.
-	self assert: factors size = 5.
-	self assert: factors asSet size = 4.
-	self assert: factors product monic = f monic "up to a unit"! !
-
-!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:34:55'!
-testFiniteFieldRoots
-	| Z3 x f roots |
-	Z3 _ ƒ / 3.
-	x _ Z3 polynomials x.
-	f _ (x-1)^2*(x-2).
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: (Z3 project: 1)) = 2.
-	self assert: (roots occurrencesOf: (Z3 project: 2)) = 1! !
-
-!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
-testRationalRoots
-	| x f roots |
-	x _ „ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: 1/2) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
-!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
-testRationalRootsBug
-	| x f roots |
-	x _ „ polynomials x.
-	f _ x^3*-1 + (3*x) + 2.
-	roots _ f allRoots.
-	self assert: roots size = 3.
-	self assert: (roots occurrencesOf: -1) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
-!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
-testRealRoots
-	| x f roots |
-	x _ „ polynomials x.
-	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
-	roots _ f allRootsIn: ….
-	self assert: roots size = 5.
-	self assert: roots asSet size = 4.
-	self assert: (roots occurrencesOf: 1/2) = 2.
-	self assert: (roots occurrencesOf: 2) = 1! !
-
 !PolynomialTest methodsFor: 'etc' stamp: 'len 5/23/2020 09:34:55'!
 testAllMonomialsOfDegree
 	| d n |
@@ -7457,9 +7137,371 @@ testZeroCoefficientBug
 	Qx _ „ polynomials.
 	self assert: (Qx one * 0) isZero! !
 
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-testArithmetic„
-	self testArithmeticOver: „! !
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+testEvaluationHomomorphism
+	| Zx f g a |
+	Zx _ ƒ polynomials.
+	f _ Zx atRandomBits: 1000 maxDegree: 10.
+	g _ Zx atRandomBits: 1000 maxDegree: 10.
+	a _ ƒ atRandomBits: 100.
+	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
+	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
+	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
+	self assert: (f^3 value: a) = ((f value: a)^3)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 3/31/2016 06:56'!
+testEvaluationHomomorphism: F
+	| Fx f g a |
+	Fx _ F polynomials.
+	f _ Fx atRandomDegree: 10 atRandom.
+	g _ Fx atRandomDegree: 10 atRandom.
+	a _ F atRandom.
+	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
+	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
+	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
+	self assert: (f^3 value: a) = ((f value: a)^3)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+testEvaluationHomomorphismMultivariate
+	| Zxyz f g a |
+	Zxyz _ ƒ polynomialsIn: #(x y z).
+	f _ Zxyz atRandomBits: 1000 maxDegree: 10.
+	g _ Zxyz atRandomBits: 1000 maxDegree: 10.
+	a _ ƒ atRandomTuple: 3 bits: 100.
+	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
+	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
+	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
+	self assert: (f^3 value: a) = ((f value: a)^3)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 10/18/2016 21:01'!
+testEvaluationHomomorphismZ2
+	self testEvaluationHomomorphism: (PrimeField new: 2)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+testEvaluationHomomorphismZm
+	self testEvaluationHomomorphism: ƒ / (2 + 100 atRandom).
+	self testEvaluationHomomorphism: ƒ / (2^13 - 2).
+	self testEvaluationHomomorphism: ƒ / (2^31 - 2)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 12/2/2016 11:17:17'!
+testEvaluationHomomorphismZp
+	self testEvaluationHomomorphism: (PrimeField new: 3).
+	self testEvaluationHomomorphism: (PrimeField new: 5).
+	self testEvaluationHomomorphism: (PrimeField new: 2^13 - 1).
+	self testEvaluationHomomorphism: (PrimeField new: 2^31 - 1)! !
+
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+testEvaluationMultivariate
+	| Zxyz f a x y z |
+	Zxyz _ ƒ polynomialsIn: #(x y z).
+	x _ Zxyz x. y _ Zxyz y. z _ Zxyz z.
+	f _ x^2 * y - z.
+	a _ ƒ atRandomTuple: 3 bits: 100.
+	self assert: (f value: a) = ((a at: 1)^2 * (a at: 2) - (a at: 3))! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldFactorization
+	| F Fx x one f factors |
+	F _ ƒ / 3.
+	Fx _ F polynomials.
+	x _ Fx x.
+	one _ Fx one.
+	f _ x^11 + (x^9 * 2) + (x^8 * 2) + (x^6) + (x^5) + (x^3 * 2) + (x^2 * 2) + one.
+	factors _ f factors.
+	self assert: factors size = 8.
+	self assert: (factors occurrencesOf: x + (one*2)) = 4.
+	self assert: (factors occurrencesOf: x^2 + one) = 3.
+	self assert: (factors occurrencesOf: x + one) = 1.
+	self assert: (factors inject: Fx one into: [:a :b| a*b]) = f! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldFactorization2
+	| Z3 x f factors |
+	Z3 _ ƒ / 3.
+	x _ Z3 polynomials x.
+	f _ (x-1)^2*(x-2).
+	factors _ f factors.
+	self assert: factors size = 3.
+	self assert: (factors occurrencesOf: x-1) = 2.
+	self assert: (factors occurrencesOf: x-2) = 1! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 4/9/2018 21:30:09'!
+testFiniteFieldFactorization3
+	| F9 x f factors |
+	F9 _ GaloisField new: (3^2).
+	x _ F9 polynomials x.
+	f _ (x-1)^2*(x-2).
+	factors _ f factors.
+	self assert: factors size = 3.
+	self assert: (factors occurrencesOf: x-1) = 2.
+	self assert: (factors occurrencesOf: x-2) = 1! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldFactorization4
+	| R x f factors |
+	R _ ƒ / 2.
+	x _ R polynomials x.
+	f _ x^24 - 1.
+	factors _ f factors.
+	self assert: factors size = 16.
+	self assert: (factors occurrencesOf: x+1) = 8.
+	self assert: (factors occurrencesOf: x^2+x+1) = 8! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldFactorization5
+	| R x |
+	R _ ƒ / 2.
+	x _ R polynomials x.
+	self assert: (x^15 - 1) factors = {x + 1. x^2 + x + 1. x^4 + (x^3) + (x^2) + x + 1. x^4 + x + 1. x^4 + (x^3) + 1} asBag! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/28/2020 18:09:33'!
+testFiniteFieldIrreduciblePolynomials
+	"Z/<3>[x] has 8 irreducible monic polynomials of degree 3, out of 27 monic polynomials of degree 3."
+	| F Fx f count |
+	F _ ƒ / 3.
+	Fx _ F polynomials.
+	count _ 0.
+	F^3 do: [:each|
+		f _ (Fx coefficients: each, F one).
+		f isIrreducible
+			ifTrue:
+				[count _ count + 1.
+				self assert: f factors size = 1]
+			ifFalse:
+				[self assert: f factors size > 1]].
+	self assert: count = 8! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldIsIrreducible
+	| F Fx x f |
+	F _ ƒ / 3.
+	Fx _ F polynomials.
+	x _ Fx x.
+	f _ x^3 + (x*2) + 1.
+	self assert: f factors size = 1.
+	self assert: f isIrreducible! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldSFF
+	| F Fx x one f factors |
+	F _ ƒ / 3.
+	Fx _ F polynomials.
+	x _ Fx x.
+	one _ Fx one.
+	f _ x^11 + (x^9 * 2) + (x^8 * 2) + (x^6) + (x^5) + (x^3 * 2) + (x^2 * 2) + one.
+	factors _ f squareFreeFactorization.
+	self assert: factors size = 8.
+	self assert: (factors occurrencesOf: x + (one*2)) = 4.
+	self assert: (factors occurrencesOf: x^2 + one) = 3.
+	self assert: (factors occurrencesOf: x + one) = 1! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
+testIntegerFactorization
+	| x f factors |
+	x _ ƒ polynomials x.
+	f _ (x*2-1)^2*(x-2)*(x^2 + 1)*(x^2-2)*18.
+	factors _ f factors.
+	self assert: factors size = 8.
+	self assert: factors asSet size = 6.
+	self assert: factors product = f! !
+
+!PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:33:01'!
+testRationalFactorization
+	| x f factors |
+	x _ „ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	factors _ f factors.
+	self assert: factors size = 5.
+	self assert: factors asSet size = 4.
+	self assert: factors product monic = f monic "up to a unit"! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testContentAndPrimitive
+	| Zx Zxy x y f |
+	Zx _ ƒ polynomialsIn: #(x).
+	Zxy _ Zx polynomialsIn: #(y).
+	x _ Zx x.
+	y _ Zxy x.
+	f _ 2*x*y + (2*(x^2)).
+	self assert: f primitivePart * f content = f! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testContentAndPrimitiveAtRandom
+	| Zx f |
+	Zx _ ƒ polynomials.
+	f _ Zx atRandomBits: 100 maxDegree: (1 to: 10) atRandom.
+	self assert: f primitivePart * f content = f! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testExtendedEuclidBug
+	| x f1 f2 |
+	x _ „ polynomials x.
+	f1 _ x^2 + 1.
+	f2 _ x - 1.
+	self assert: (f1 xgcd: f2) first = (f1 gcd: f2)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testGCD
+	| P x f g |
+	P _ „ polynomials.
+	x _ P x.
+	f _ x^4 - 1.
+	g _ x^6 - 1.
+	self assert: (f gcd: g) = (x^2 - 1)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testGCDMultivariate
+	| Zxy x y f g |
+	Zxy _ ƒ polynomialsIn: #(x y) ordering: #lex.
+	x _ Zxy x.
+	y _ Zxy y.
+	f _ (x+y)*(y-x).
+	g _ (y-x)^2.
+	self assert: (f gcd: g) = (x-y)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testGCDMultivariate2
+	"Example from Sage documentation."
+	| R x y f g |
+	R _ „ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*(x+y)*3.
+	g _ x*(y^2 - (x^2))*9.
+	self assert: (f gcd: g) = (x^2 + (x*y))! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testGCDMultivariateOverQ
+	| R x y f g |
+	R _ „ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = (x*y)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testGCDMultivariateOverZ
+	| R x y f g |
+	R _ ƒ polynomialsIn: #(x y).
+	x _ R x. y _ R y.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = (x*y*3)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testGCDOverRationalFunctions
+	| R x y f g |
+	R _ „ polynomialsIn: #(y) :: fractions polynomials.
+	x _ R x. y _ R scalars x.
+	f _ x^2*y*6.
+	g _ x*(y^2)*15 + (x^3*(y^2)*21).
+	self assert: (f gcd: g) = x! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testGCDOverZ
+	| x f g |
+	x _ ƒ polynomials x.
+	f _ (x^4 - 1)*6.
+	g _ (x^6 - 1)*9.
+	self assert: (f gcd: g) = ((x^2 - 1)*3)! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:34:55'!
+testGCDOverZ2
+	| x f g h |
+	x _ ƒ/2 :: polynomials x.
+	h _ x^3 - x + 1.
+	f _ h * (x + 1) * x.
+	g _ h * (x + 1) * (x^2 + 1).
+	self assert: (f gcd: g) = (h * (x + 1))! !
+
+!PolynomialTest methodsFor: 'gcd' stamp: 'len 5/23/2020 09:33:01'!
+testMultivariateGCDBug
+	| x |
+	x _ „ polynomialsIn: 3 :: x.
+	self assert: (x^2 gcd: x) = x! !
+
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
+testEPRS
+	"Example from Zippel."
+	| a b eprs |
+	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	eprs _ a eprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
+	self assert: eprs = #((1 0 1 0 -3 -3 8 2 -5)
+		(3 0 5 0 -4 -9 21)
+		(-15 0 3 0 -9) 
+		(15795 30375 -59535) 
+		(1254542875143750 -1654608338437500) (12593338795500743100931141992187500))! !
+
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
+testPPRS
+	"Example from Zippel."
+	| a b pprs |
+	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	pprs _ a pprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
+	self assert: pprs = #((1 0 1 0 -3 -3 8 2 -5) 
+		(3 0 5 0 -4 -9 21)
+		(-5 0 1 0 -3)
+		(13 25 -49)
+		(4663 -6150)
+		(1))! !
+
+!PolynomialTest methodsFor: 'remainder sequences' stamp: 'len 5/23/2020 09:34:55'!
+testSPRS
+	"Example from Zippel."
+	| a b sprs |
+	a _ ƒ polynomials coefficients: #(1 0 1 0 -3 -3 8 2 -5) reversed.
+	b _ ƒ polynomials coefficients: #(3 0 5 0 -4 -9 21) reversed.
+	sprs _ a sprs: b :: collect: [:each| each coefficients reversed asArray] :: asArray.
+	self assert: sprs = #((1 0 1 0 -3 -3 8 2 -5)
+		#(3 0 5 0 -4 -9 21)
+		#(15 0 -3 0 9)
+		#(65 125 -245)
+		#(9326 -12300)
+		#(260708))
+! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:34:55'!
+testFiniteFieldRoots
+	| Z3 x f roots |
+	Z3 _ ƒ / 3.
+	x _ Z3 polynomials x.
+	f _ (x-1)^2*(x-2).
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: (Z3 project: 1)) = 2.
+	self assert: (roots occurrencesOf: (Z3 project: 2)) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
+testRationalRoots
+	| x f roots |
+	x _ „ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: 1/2) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
+testRationalRootsBug
+	| x f roots |
+	x _ „ polynomials x.
+	f _ x^3*-1 + (3*x) + 2.
+	roots _ f allRoots.
+	self assert: roots size = 3.
+	self assert: (roots occurrencesOf: -1) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
+
+!PolynomialTest methodsFor: 'roots' stamp: 'len 5/23/2020 09:33:01'!
+testRealRoots
+	| x f roots |
+	x _ „ polynomials x.
+	f _ (x-(1/2))^2*(x-2)*(x^2 + 1)*(x^2-2).
+	roots _ f allRootsIn: ….
+	self assert: roots size = 5.
+	self assert: roots asSet size = 4.
+	self assert: (roots occurrencesOf: 1/2) = 2.
+	self assert: (roots occurrencesOf: 2) = 1! !
 
 !PowerSeriesTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 cos
@@ -7521,6 +7563,28 @@ testSinSquaredPlusCosSquared
 	sin _ self sin.
 	cos _ self cos.
 	self assert: cos squared + sin squared = cos parent one! !
+
+!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+testƒ
+	self testRing: ƒ! !
+
+!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+testƒIdeals
+	self assert: (ƒ * 3 includes: 6).
+	self deny: (ƒ * 3 includes: 7).
+	self assert: (ƒ * 0) isTrivial.
+	self assert: (ƒ * 1) isOne! !
+
+!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+testƒPrimeNotMaximalIdeal
+	| I |
+	I _ ƒ * 0.
+	self assert: I isPrime.
+	self assert: I isMaximal not! !
+
+!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+test„
+	self testRing: „! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 5/23/2020 09:34:55'!
 testCongruenceSolving1
@@ -8041,17 +8105,6 @@ testModularIntegersAnnihilator
 		ann _ x annihilator.
 		self assert: (x * ann generator) isZero.
 		R do: [:y| (x*y) isZero ifTrue: [self assert: (ann includes: y)]]]! !
-
-!RingTest methodsFor: 'finite rings' stamp: 'len 5/23/2020 09:34:55'!
-testModularIntegersFactorization
-	| R |
-	R _ ƒ/(2 to: 1000) atRandom.
-	100 timesRepeat:
-		[| x factors |
-		x _ R atRandom.
-		factors _ x factors.
-		self assert: (factors asSet allSatisfy: [:each| each isIrreducible]).
-		self assert: (x isZero or: [x isUnit or: [x normalized = factors product]])]! !
 
 !RingTest methodsFor: 'finite rings' stamp: 'len 5/9/2020 17:22:07'!
 testModularIntegersLift
@@ -8662,28 +8715,6 @@ newRing
 	4 atRandom = 1 ifTrue: [^ self newQuotientRing].
 	2 atRandom = 1 ifTrue: [^ {ƒ. „. ƒ / 64 atRandom} atRandom polynomialsIn: (1 to: 3) atRandom].
 	^ {ƒ. „. ƒ / 64 atRandom} atRandom! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒ
-	self testRing: ƒ! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒIdeals
-	self assert: (ƒ * 3 includes: 6).
-	self deny: (ƒ * 3 includes: 7).
-	self assert: (ƒ * 0) isTrivial.
-	self assert: (ƒ * 1) isOne! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒPrimeNotMaximalIdeal
-	| I |
-	I _ ƒ * 0.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-test„
-	self testRing: „! !
 
 !SequenceTest methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 18:09:49'!
 testBellNumbers
