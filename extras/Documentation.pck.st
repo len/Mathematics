@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 7:54:53 am'!
+'From Cuis 5.0 [latest update: #4163] on 23 May 2020 at 10:21:25 am'!
 'Description Please enter a description for this package'!
-!provides: 'Documentation' 1 9!
+!provides: 'Documentation' 1 10!
 SystemOrganization addCategory: #Documentation!
 
 
@@ -25,7 +25,7 @@ copy: aString replaceAll: oldSubstring with: newSubstring
 		collect: [:each| (each includesSubString: 'http') ifTrue: [each] ifFalse: [each copyReplaceTokens: oldSubstring with: newSubstring]]
 		andFold: [:a :b| a, Character lf asString, b]! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 07:34:49'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 10:19:53'!
 escape: aString
 	| output |
 	output _ aString.
@@ -44,9 +44,14 @@ escape: aString
 	output _ output copyReplaceAll: '€' asString with: '&infin;'.
 	output _ output copyReplaceAll: 'Ø' with: '&empty;'.
 	output _ output copyReplaceAll: '’' with: 'o'.
+	output _ output copyReplaceAll: '‚' with: 'N'.
+	output _ output copyReplaceAll: 'ƒ' with: 'Z'.
+	output _ output copyReplaceAll: '„' with: 'Q'.
+	output _ output copyReplaceAll: '…' with: 'R'.
+	output _ output copyReplaceAll: '†' with: 'C'.
 	^ output! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 07:35:10'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 10:20:05'!
 escapeCode: aString
 	| output |
 	output _ aString.
@@ -61,6 +66,11 @@ escapeCode: aString
 	output _ output copyReplaceAll: '€' asString with: '&infin;'.
 	output _ output copyReplaceAll: 'Ø' with: '&empty;'.
 	output _ output copyReplaceAll: '’' asString with: 'o'.
+	output _ output copyReplaceAll: '‚' with: 'N'.
+	output _ output copyReplaceAll: 'ƒ' with: 'Z'.
+	output _ output copyReplaceAll: '„' with: 'Q'.
+	output _ output copyReplaceAll: '…' with: 'R'.
+	output _ output copyReplaceAll: '†' with: 'C'.
 	^ output! !
 
 !DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2019 15:16:42'!
@@ -178,6 +188,6 @@ generateIndexByClassCategories
 	file _ self path, 'index.md' :: asFileEntry.
 	file assureExistence; fileContents: output contents! !
 
-!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 8/11/2016 21:58'!
+!DocumentationGenerator methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 10:21:19'!
 path
-	^ '/home/guest/cuis/Cuis-Mathematics.wiki/doc/'! !
+	^ '/home/guest/cuis/Domains.wiki/doc/'! !
