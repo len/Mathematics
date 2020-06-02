@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 31 May 2020 at 8:55:05 pm'!
+'From Cuis 5.0 [latest update: #4190] on 2 June 2020 at 4:18:09 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 591!
+!provides: 'Domains' 1 592!
 !requires: 'RayTracer' 1 2 nil!
 !requires: 'Complex' 1 7 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
@@ -3612,24 +3612,19 @@ Internally, they are represented by a list of associations monomial -> value. Th
 A GraphMorph is composed of nodes and edges (GraphNodeMorph and GraphEdgeMorph or subclasses). Subclasses of GraphMorph implement different layouts.
 
 Examples:
-	| A4 a b |
-	A4 _ AlternatingGroup on: (1 to: 4).
-	a _ Permutation image: (2,1,4,3).
-	b _ Permutation image: (2,3,1,4).
-	(A4 cayleyGraphMorph: {a.b}) openInWorld.
-
-	| R W |
-	R _ RootSystem example1.
-	W _ R dual weylGroup.
-	(W cayleyGraphMorph: {W atRandom. W atRandom}) openInWorld
+	| S a b |
+	S _ SymmetricGroup on: (1 to: 4).
+	a _ S !! #(2 1 4 3).
+	b _ S !! #(2 3 1 4).
+	(S alternatingSubgroup cayleyGraphMorph: {a.b})
 
 	| G |
 	G _ Graph exampleImplicitGraph.
-	SpringGraphMorph new graph: G; openInWorld 
+	SpringGraphMorph new graph: G
 
 	| G |
 	G _ RootedDigraph exampleSmallLabelledTree.
-	SpringGraphMorph new graph: G; openInWorld 
+	SpringGraphMorph new graph: G
 !
 
 !HistogramMorph commentStamp: '<historical>' prior: 0!
@@ -6734,10 +6729,10 @@ coefficients: aSequence
 		ifTrue: [aSequence]
 		ifFalse: [É tuple: aSequence]! !
 
-!ContinuedFraction methodsFor: 'initialization' stamp: 'len 5/23/2020 09:34:55'!
+!ContinuedFraction methodsFor: 'initialization' stamp: 'len 6/1/2020 13:47:40'!
 fromFraction: aFraction
 	| x a |
-	aFraction isInfinity ifTrue: [coefficients _ É tuple: 0 evaluating: []. ^ self].
+	aFraction isInfinity ifTrue: [coefficients _ (É^0) zero. ^ self].
 	coefficients _ OrderedCollection new.
 	x _ aFraction.
 	a _ x floor.
@@ -6748,7 +6743,7 @@ fromFraction: aFraction
 			[x _ x reciprocal.
 			a _ x floor.
 			coefficients add: a].
-	coefficients _ É tuple: coefficients asArray! !
+	coefficients _ É^coefficients size !! coefficients asArray! !
 
 !ContinuedFraction methodsFor: 'printing' stamp: 'len 10/18/2016 13:49'!
 printOn: aStream base: base
@@ -7836,20 +7831,20 @@ select: aBlock
 			G addEdgeFrom: (e1 key, e2 key) to: (e1 value, e2 value)]].
 	^ G! !
 
-!Graph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
+!Graph methodsFor: 'operations' stamp: 'len 6/2/2020 11:51:18'!
 adjacencyMatrix
 	"Answer the adjacency matrix of the receiver, assuming that the vertices are the integers {1,..,n}.
 	If the graph is labelled, use the labels as entries in the matrix."
 	| n matrix |
 	n _ self order.
-	matrix _ (É ^ (n@n)) zero.
+	matrix _ (É^n) endomorphisms zero.
 	self edgesAndLabelsDo: [:edge :label| matrix at: edge key @ edge value add: (label ifNil: [1])].
 	^ matrix! !
 
-!Graph methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
+!Graph methodsFor: 'operations' stamp: 'len 6/1/2020 13:59:25'!
 adjacencyMatrix: vertices
 	"Answer the adjacency matrix of the receiver, using the vertex ordering given by the argument."
-	^ É matrix: vertices size evaluating: [:i :j| self multiplicityFrom: (vertices at: i) to: (vertices at: j)]! !
+	^ (É^vertices size) endomorphisms filling: [:i :j| self multiplicityFrom: (vertices at: i) to: (vertices at: j)]! !
 
 !Graph methodsFor: 'operations' stamp: 'len 5/10/2020 09:52:40'!
 automorphisms
@@ -7866,7 +7861,7 @@ automorphismsWithInvariant: aBlock
 	self nodesDo: [:each| (partition at: (aBlock value: each) ifAbsentPut: [OrderedCollection new]) add: each value].
 	^ self automorphismsWithPartition: partition! !
 
-!Graph methodsFor: 'operations' stamp: 'len 7/25/2016 02:46'!
+!Graph methodsFor: 'operations' stamp: 'len 6/2/2020 12:11:00'!
 automorphismsWithPartition: aCollection
 	"Answer the group of symmetries of the receiver, i.e. the group of permutations of vertices that don't change the graph."
 	| product automorphisms |
@@ -7876,7 +7871,7 @@ automorphismsWithPartition: aCollection
 		| f |
 		f _ each product.
 		(self apply: f) = self ifTrue: [automorphisms add: f]].
-	^ PermutationGroup on: self values elements: automorphisms! !
+	^ (SymmetricGroup on: self values) span: automorphisms! !
 
 !Graph methodsFor: 'operations' stamp: 'len 7/13/2016 23:13'!
 breadthFirstPath2From: origin to: target with: visitedNodes 
@@ -8054,9 +8049,9 @@ reflexive
 shortestPathFrom: source to: target
 	^ (Dijkstra graph: self source: source) shortestPathTo: target! !
 
-!Graph methodsFor: 'operations' stamp: 'len 7/20/2016 23:55'!
+!Graph methodsFor: 'operations' stamp: 'len 6/2/2020 12:14:00'!
 subgraphInducedBy: aSet
-	"Answer the subgraph induces by aSet of vertices."
+	"Answer the subgraph induced by aSet of vertices."
 	| answer |
 	answer _ self copy.
 	self edgesDo: [:each|
@@ -10440,7 +10435,7 @@ aproachConnectedNodes
 separateAllNodes
 	self nodesDo: [:each | each separateFromAllNodes]! !
 
-!SpringGraphMorph methodsFor: 'stepping' stamp: 'len 4/30/2016 02:23'!
+!SpringGraphMorph methodsFor: 'stepping' stamp: 'len 6/2/2020 16:10:41'!
 step
 	| maxDelta |
 	self nodesDo: [:each| each dampBy: 1.1]. "damping"
@@ -10477,7 +10472,7 @@ color: aColor
 dimension
 	^ x size! !
 
-!GraphNodeMorph methodsFor: 'accessing' stamp: 'len 5/29/2020 15:23:48'!
+!GraphNodeMorph methodsFor: 'accessing' stamp: 'len 6/2/2020 14:54:27'!
 dimension: anInteger
 	| n |
 	(n _ x size) = anInteger
@@ -10488,7 +10483,7 @@ dimension: anInteger
 			dx _ dx copyFrom: 1 to: anInteger]
 		ifFalse:
 			[| z |
-			z _ (Ñ^(anInteger - n)) zero.
+			z _ (Ö^(anInteger - n)) zero.
 			x _ x, z.
 			dx _ dx, z]! !
 
@@ -10561,30 +10556,32 @@ drawOn: aCanvas
 	"otherwise do nothing"
 	^ self! !
 
-!GraphNodeMorph methodsFor: 'initialization' stamp: 'len 7/9/2016 22:59'!
+!GraphNodeMorph methodsFor: 'initialization' stamp: 'len 6/2/2020 13:12:27'!
 initialize
 	super initialize.
 	self color: Color gray.
-	x _ (0,0).
+	x _ (0.0,0.0).
 	dx _ x.
 	shape _ #circle.
 	extent _ 10@10! !
 
-!GraphNodeMorph methodsFor: 'moving' stamp: 'len 7/9/2016 22:40'!
+!GraphNodeMorph methodsFor: 'moving' stamp: 'len 6/2/2020 15:03:08'!
 dampBy: aNumber
+	aNumber > 1.0 ifFalse: [^ self].
 	dx _ dx / aNumber! !
 
-!GraphNodeMorph methodsFor: 'moving' stamp: 'len 7/9/2016 22:40'!
+!GraphNodeMorph methodsFor: 'moving' stamp: 'len 6/2/2020 15:56:31'!
 doMove
 	| bounds delta |
+	dx do: [:each| each isNaN ifTrue: [dx _ dx zero. ^ 0.0]].
 	x _ x + dx.
 	bounds _ owner morphLocalBounds.
 	self morphPosition: bounds center + ((x at: 1) @ (x at: 2)).
 	(bounds containsRect: self morphBounds)
-		ifFalse: [delta _ 2 * (self morphBounds amountToTranslateWithin: bounds).
+		ifFalse: [delta _ 2.0 * (self morphBounds amountToTranslateWithin: bounds).
 					x _ x + (delta x, delta y).
 					self morphPosition: bounds center + ((x at: 1) @ (x at: 2)).
-					dx _ dx * 0 "0@0"].
+					dx _ dx * 0.0].
 	^ dx norm! !
 
 !GraphNodeMorph methodsFor: 'moving' stamp: 'len 7/9/2016 22:54'!
@@ -10595,7 +10592,7 @@ freeze
 perturbate: n
 	dx _ dx + (dx collect: [:xi| n atRandom - n])! !
 
-!GraphNodeMorph methodsFor: 'moving' stamp: 'len 7/9/2016 22:42'!
+!GraphNodeMorph methodsFor: 'moving' stamp: 'len 6/2/2020 16:01:50'!
 perturbation
 	^ x collect: [:xi| 3 atRandom - 2]! !
 
@@ -10630,34 +10627,32 @@ handlesMouseDown: evt
 wantsToBeDroppedInto: aMorph
 	^ aMorph isKindOf: SpringGraphMorph! !
 
-!SpringNodeMorph methodsFor: 'moving' stamp: 'len 3/6/2017 16:31:46'!
+!SpringNodeMorph methodsFor: 'moving' stamp: 'len 6/2/2020 16:03:40'!
 approachPoint: aPoint
-	| dxNew x1 x2 diff |
-	dxNew _ dx - dx. "0@0."
+	| x1 x2 difference distanceSquared |
 	x1 _ x.
 	x2 _ aPoint.
-	x1 = x2 ifTrue: [^ self].
-	diff _ x1 - x2.
-	dxNew _ dxNew + (diff / diff norm2).
-	dxNew isZero ifFalse: [dx _ dx + (dxNew / dxNew norm * 2)]! !
+	difference _ x1 - x2.
+	distanceSquared _ difference norm2.
+	distanceSquared > 0.1 ifFalse: [^ self].
+	dx _ dx + (difference / difference norm * 2.0)! !
 
-!SpringNodeMorph methodsFor: 'moving' stamp: 'len 3/6/2017 16:32:42'!
+!SpringNodeMorph methodsFor: 'moving' stamp: 'len 6/2/2020 16:08:12'!
 separateFromAllNodes
-	| dxNew x1 x2 |
+	| force x1 x2 magnitude |
 	(owner isKindOf: SpringGraphMorph) ifFalse: [^ self].
-	dxNew _ dx - dx. "0@0"
+	force _ dx zero.
 	x1 _ x.
 	owner nodesDo: [:each|
 		x2 _ each x + each dx.
 		self == each
 			ifFalse:
-				[x1 = x2
-					ifTrue: [dxNew _ dxNew + self perturbation]
-					ifFalse:
-						[| diff |
-						diff _ x1 - x2.
-						dxNew _ dxNew + (diff / diff norm2)]]].
-	dxNew isZero ifFalse: [dx _ dx + (dxNew / dxNew norm * 2)]! !
+				[| difference distanceSquared |
+				difference _ x1 - x2.
+				distanceSquared _ difference norm2.
+				force _ force + (distanceSquared > 1.0 ifTrue: [difference / distanceSquared] ifFalse: [self perturbation])]].
+	magnitude _ force norm.
+	magnitude > 0.1 ifTrue: [dx _ dx + (force / magnitude * 2)]! !
 
 !SpringNodeMorph methodsFor: 'private' stamp: 'len 2/29/2016 21:28'!
 nearbyNodesDo: aBlock
@@ -11634,11 +11629,11 @@ example3
 timeDelayPlot: anArray
 	^ self timeDelayPlot: anArray lag: 1! !
 
-!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:31:27'!
+!ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 6/1/2020 13:39:42'!
 timeDelayPlot: anArray dimension: m lag: r
 	^ self new
 		points: ((m*r+1 to: anArray size) collect: [:i|
-			Ö tuple: m evaluating: [:j| anArray at: i-(j-1*r)]])! !
+			Ö^m filling: [:j| anArray at: i-(j-1*r)]])! !
 
 !ScatterPlotMorph class methodsFor: 'instance creation' stamp: 'len 8/18/2016 06:39'!
 timeDelayPlot: anArray lag: r
@@ -11887,7 +11882,7 @@ stepTime
 wantsSteps
 	^ true! !
 
-!GraphEdgeMorph methodsFor: 'private' stamp: 'len 2/19/2016 19:04'!
+!GraphEdgeMorph methodsFor: 'private' stamp: 'len 6/2/2020 16:00:04'!
 adjustBounds
 	| newBounds |
 	newBounds _ (self externalize: self sourcePoint) rect: (self externalize: self targetPoint).
@@ -14257,9 +14252,11 @@ rank
 	"Answer the torsion-free rank of the receiver."
 	^ self orders count: [:each| each = 0]! !
 
-!AbelianGroup methodsFor: 'accessing' stamp: 'len 5/23/2020 08:52:43'!
+!AbelianGroup methodsFor: 'accessing' stamp: 'len 6/1/2020 12:02:37'!
 relationMatrix
-	^ É diagonalMatrix: (self orders select: [:each| each isZero not])! !
+	| diagonal |
+	diagonal _ self orders select: [:each| each isZero not].
+	^ (É^diagonal size) endomorphisms diagonal: diagonal! !
 
 !AbelianGroup methodsFor: 'accessing' stamp: 'len 5/14/2019 04:22:38'!
 relators
@@ -14541,6 +14538,10 @@ torsion
 hash
 	^ self rank + self class hash! !
 
+!FreeAbelianGroup methodsFor: 'converting' stamp: 'len 6/1/2020 13:33:58'!
+asModule
+	^ self propertyAt: #asModule ifAbsentPut: [É^rank]! !
+
 !FreeAbelianGroup methodsFor: 'converting' stamp: 'len 5/8/2020 15:57:01'!
 asMonoid
 	"Forgetful functor to the category of monoids."
@@ -14574,9 +14575,9 @@ x: anInteger to: exponent
 do: aBlock
 	É ^ self rank do: [:each| aBlock value: self !! each asArray]! !
 
-!FreeAbelianGroup methodsFor: 'random' stamp: 'len 5/23/2020 09:13:12'!
+!FreeAbelianGroup methodsFor: 'random' stamp: 'len 6/1/2020 13:34:26'!
 atRandom: aRandom bits: bitSize
-	^ self !! (É atRandom: aRandom tuple: self rank bits: bitSize) asArray! !
+	^ self !! (self asModule atRandom: aRandom bits: bitSize) asArray! !
 
 !FreeAbelianGroup methodsFor: 'testing' stamp: 'len 4/25/2020 09:57:52'!
 includes: anObject
@@ -15695,11 +15696,11 @@ klein
 	"The Klein four-group (or Vierergruppe) as a linear group."
 	^ (É^2) automorphisms span: #((1 0 0 -1) (-1 0 0 1))! !
 
-!LinearGroup class methodsFor: 'instance creation' stamp: 'len 9/25/2018 17:21:17'!
+!LinearGroup class methodsFor: 'instance creation' stamp: 'len 6/1/2020 12:13:11'!
 generators: aCollection
 	| aMatrix |
 	aMatrix _ aCollection anyOne.
-	^ self on: aMatrix scalars ^ aMatrix height generators: aCollection! !
+	^ self on: aMatrix domain generators: aCollection! !
 
 !LinearGroup class methodsFor: 'instance creation' stamp: 'len 9/26/2018 23:06:05'!
 new: anInteger over: aRing
@@ -15731,27 +15732,28 @@ size
 	(anObject isKindOf: LinearGroup) ifFalse: [^ super >= anObject].
 	^ self scalars >= anObject scalars and: [self degree = anObject degree]! !
 
-!GeneralLinearGroup methodsFor: 'converting' stamp: 'len 5/28/2020 18:21:16'!
+!GeneralLinearGroup methodsFor: 'converting' stamp: 'len 6/1/2020 13:07:40'!
 asAlgebraicVariety
-	| n P det V |
+	| n P det V endos |
 	self scalars isField ifFalse: [self notYetImplemented].
 	n _ self degree.
 	P _ self scalars polynomialsIn: n squared + 1.
-	det _ (P matrix: n coefficients: P generators) determinant.
+	endos _ (P^n) endomorphisms.
+	det _ (endos !! P generators) determinant.
 	V _ (P * (det * (P x: n squared + 1) - P one)) variety.
 	V carrier
 		addMap: (self carrier to: V carrier evaluating: [:M| V !! (M asTuple, M determinant inverse)]);
-		addMap: (V carrier to: self carrier evaluating: [:p| p scalars matrix: n coefficients: p allButLast]).
+		addMap: (V carrier to: self carrier evaluating: [:p| endos !! p allButLast]).
 	^ V! !
 
 !GeneralLinearGroup methodsFor: 'elements' stamp: 'len 4/9/2020 18:10:41'!
 adapt: anElement
 	^ (self space endomorphisms adapt: anElement) ifNil: [^ super adapt: anElement]! !
 
-!GeneralLinearGroup methodsFor: 'elements' stamp: 'len 4/9/2020 07:16:11'!
+!GeneralLinearGroup methodsFor: 'elements' stamp: 'len 6/1/2020 12:36:50'!
 newFrom: anObject
 	(anObject isKindOf: SequenceableCollection)
-		ifTrue: [^ self space endomorphisms !! (self scalars matrix: self degree coefficients: (anObject collect: [:each| self scalars !! each]))].
+		ifTrue: [^ self space endomorphisms !! anObject].
 	^ super newFrom: anObject! !
 
 !GeneralLinearGroup methodsFor: 'enumerating' stamp: 'len 5/16/2019 12:41:22'!
@@ -15851,9 +15853,9 @@ contains: aMatrix
 dimension
 	^ 1! !
 
-!ScalarGroup methodsFor: 'enumerating' stamp: 'len 12/8/2016 11:16:31'!
+!ScalarGroup methodsFor: 'enumerating' stamp: 'len 6/1/2020 12:14:07'!
 do: aBlock
-	self scalars do: [:each| aBlock value: (self scalars matrix: self degree scalar: each)]! !
+	self scalars do: [:each| each isZero ifFalse: [aBlock value: (self space endomorphisms scalar: each)]]! !
 
 !ScalarGroup methodsFor: 'operations' stamp: 'len 9/25/2018 17:17:22'!
 special
@@ -16169,7 +16171,7 @@ genus
 	^ self curve genus
 "(1 + projectiveIndex) / 12 - nu2 / 4 - nu3 / 4 - ncusps/2"! !
 
-!CongruenceSubgroup methodsFor: 'operations' stamp: 'len 5/23/2020 09:13:12'!
+!CongruenceSubgroup methodsFor: 'operations' stamp: 'len 6/1/2020 15:10:39'!
 widthOf: aCusp
 	"Algorithm 1.19 (Width of a cusp) in Stein's 'Modular Forms, A Computational Approach'."
 	| gamma |
@@ -16181,7 +16183,7 @@ widthOf: aCusp
 			a _ aCusp numerator.
 			b _ aCusp denominator.
 			xgcd _ a xgcd: b.
-			gamma _ Matrix rows: {É tuple: {a. b}. É tuple: {xgcd at: 2. xgcd at: 3}}].
+			gamma _ Matrix rows: {(a, b). ((xgcd at: 2), (xgcd at: 3))}].
 	"..."! !
 
 !CongruenceSubgroup methodsFor: 'testing' stamp: 'len 6/2/2018 17:59:42'!
@@ -16446,52 +16448,6 @@ newFrom: anObject
 	anObject isFraction ifTrue: [^ (self one * anObject numerator) * (self one * anObject denominator) inverse].
 	^ super newFrom: anObject! !
 
-!Ring methodsFor: 'elements-matrices' stamp: 'len 5/15/2019 02:12:12'!
-diagonalMatrix: anArray
-	^ self matrix: anArray size @ anArray size evaluatingDiagonal: [:i| anArray at: i]! !
-
-!Ring methodsFor: 'elements-matrices' stamp: 'len 4/4/2018 00:03:12'!
-matrix: aCollection
-	^ Matrix rows: (aCollection collect: [:each| self tuple: each])! !
-
-!Ring methodsFor: 'elements-matrices' stamp: 'len 3/8/2020 17:36:12'!
-matrix: shape coefficients: aCollection
-	| stream |
-	stream _ aCollection readStream.
-	^ self matrix: shape evaluating: [:i :j| stream next]! !
-
-!Ring methodsFor: 'elements-matrices' stamp: 'len 3/8/2020 17:36:05'!
-matrix: shape evaluating: aBlock
-	| n m |
-	shape isInteger ifTrue: [n _ m _ shape] ifFalse: [n _ shape x. m _ shape y].
-	^ Matrix rows: ((1 to: n) collect: [:i| self tuple: m evaluating: [:j| aBlock value: i value: j]])! !
-
-!Ring methodsFor: 'elements-matrices' stamp: 'len 3/8/2020 17:36:30'!
-matrix: shape evaluatingDiagonal: aBlock
-	| zero |
-	zero _ self zero.
-	^ self matrix: shape evaluating: [:i :j| i == j ifTrue: [aBlock value: i] ifFalse: [zero]]! !
-
-!Ring methodsFor: 'elements-matrices' stamp: 'len 3/8/2020 17:36:38'!
-matrix: shape scalar: anElement
-	^ self matrix: shape evaluatingDiagonal: [:i| anElement]! !
-
-!Ring methodsFor: 'elements-tuples' stamp: 'len 5/28/2020 18:19:10'!
-tuple: anArray
-	(anArray isTuple and: [anArray scalars == self]) ifTrue: [^ anArray].
-	^ (self ^ anArray size) elementAt: anArray! !
-
-!Ring methodsFor: 'elements-tuples' stamp: 'len 5/8/2019 03:18:46'!
-tuple: anInteger evaluating: aBlock
-	| array |
-	array _ Array new: anInteger.
-	1 to: anInteger do: [:i| array at: i put: (aBlock value: i)].
-	^ self tuple: array! !
-
-!Ring methodsFor: 'elements-tuples' stamp: 'len 5/28/2020 18:33:01'!
-tupleClass
-	^ ArrayTuple! !
-
 !Ring methodsFor: 'enumerating' stamp: 'len 9/22/2018 18:58:55'!
 idealsDo: aBlock
 	^ self subclassResponsibility! !
@@ -16754,42 +16710,6 @@ zeroDivisors
 zeroIdeal
 	^ self * #()! !
 
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:15'!
-atRandom: aRandom matrix: shape
-	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:32'!
-atRandom: aRandom matrix: shape bits: bitSize
-	| bitsPerCoefficient |
-	bitsPerCoefficient _ bitSize / (shape isInteger ifTrue: [shape squared] ifFalse: [shape x * shape y]).
-	^ self matrix: shape evaluating: [:i :j| self atRandom: aRandom bits: bitsPerCoefficient]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:35'!
-atRandom: aRandom tuple: anInteger
-	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:33:30'!
-atRandom: aRandom tuple: anInteger bits: bitSize
-	| bitsPerCoefficient |
-	bitsPerCoefficient _ bitSize / anInteger.
-	^ self tuple: anInteger evaluating: [:i| self atRandom: aRandom bits: bitsPerCoefficient]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:40'!
-atRandomMatrix: shape
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:37:49'!
-atRandomMatrix: shape bits: bitSize
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom matrix: shape bits: bitSize]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:32:05'!
-atRandomTuple: anInteger
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger]! !
-
-!Ring methodsFor: 'random' stamp: 'len 3/8/2020 17:31:52'!
-atRandomTuple: anInteger bits: bitSize
-	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom tuple: anInteger bits: bitSize]! !
-
 !Ring methodsFor: 'testing' stamp: 'len 12/28/2016 12:09:46'!
 isAlgebraicallyClosed
 	^ self propertyAt: #isAlgebraicallyClosed ifAbsent: [false]! !
@@ -17004,6 +16924,25 @@ fractionalIdealClass
 !Ring methodsFor: 'private' stamp: 'len 5/2/2020 05:15:05'!
 species
 	^ Ring! !
+
+!Ring methodsFor: 'private' stamp: 'len 5/28/2020 18:33:01'!
+tupleClass
+	^ ArrayTuple! !
+
+!Ring methodsFor: 'deprecated' stamp: 'len 4/4/2018 00:03:12'!
+matrix: aCollection
+	^ Matrix rows: (aCollection collect: [:each| self tuple: each])! !
+
+!Ring methodsFor: 'deprecated' stamp: 'len 6/1/2020 14:01:34'!
+matrix: shape evaluating: aBlock
+	| n m |
+	shape isInteger ifTrue: [n _ m _ shape] ifFalse: [n _ shape x. m _ shape y].
+	^ self^m to: self^n filling: aBlock! !
+
+!Ring methodsFor: 'deprecated' stamp: 'len 5/28/2020 18:19:10'!
+tuple: anArray
+	(anArray isTuple and: [anArray scalars == self]) ifTrue: [^ anArray].
+	^ (self ^ anArray size) elementAt: anArray! !
 
 !FractionRing methodsFor: 'accessing' stamp: 'len 6/21/2019 17:59:07'!
 characteristic
@@ -17982,10 +17921,6 @@ asAbelianGroup
 		addMap: (answer carrier to: self carrier evaluating: [:each| self !! (each at: 1)]).
 	^ answer! !
 
-!ModularIntegerRing methodsFor: 'elements-tuples' stamp: 'len 5/4/2019 07:47:29'!
-tupleClass
-	^ self modulus = 2 ifTrue: [BitTuple] ifFalse: [ModularTuple]! !
-
 !ModularIntegerRing methodsFor: 'enumerating' stamp: 'len 4/14/2020 13:34:12'!
 do: aBlock
 	0 to: self modulus - 1 do: [:i| aBlock value: (self representative: i)]! !
@@ -18129,6 +18064,10 @@ representativesArrayClass
 	modulus <= 255 ifTrue: [^ ByteArray].
 	modulus <= 16rFFFFFFFF ifTrue: [^ WordArray].
 	^ Array! !
+
+!ModularIntegerRing methodsFor: 'private' stamp: 'len 5/4/2019 07:47:29'!
+tupleClass
+	^ self modulus = 2 ifTrue: [BitTuple] ifFalse: [ModularTuple]! !
 
 !ModularIntegerRing class methodsFor: 'instance creation' stamp: 'len 11/29/2016 21:46:49'!
 new: anInteger
@@ -20029,14 +19968,14 @@ adapt: anElement
 coefficient: aNumber degree: anInteger
 	^ self coefficients: (self scalars tuple: {aNumber}) >>> anInteger! !
 
-!PolynomialRing methodsFor: 'elements' stamp: 'len 12/22/2017 19:18:07'!
+!PolynomialRing methodsFor: 'elements' stamp: 'len 6/1/2020 13:26:10'!
 coefficient: aNumber monomial: aMonomial
 	^ self isUnivariate
 		ifTrue:
 			[| n zero coefficients |
 			n _ aMonomial degree + 1.
 			zero _ aNumber zero.
-			coefficients _ self scalars tuple: n evaluating: [:i| i=n ifTrue: [aNumber] ifFalse: [zero]].
+			coefficients _ self scalars^n filling: [:i| i=n ifTrue: [aNumber] ifFalse: [zero]].
 			(UnivariatePolynomial coefficients: coefficients) parent: self]
 		ifFalse:
 			[| parts |
@@ -20381,11 +20320,11 @@ atRandom: aRandom bits: bitSize
 atRandom: aRandom bits: bitSize maxDegree: d
 	^ self atRandom: aRandom bits: bitSize maxDegree: d maxTerms: 2 ^ self rank! !
 
-!PolynomialRing methodsFor: 'random' stamp: 'len 3/9/2020 12:18:35'!
+!PolynomialRing methodsFor: 'random' stamp: 'len 6/1/2020 13:35:07'!
 atRandom: aRandom bits: bitSize maxDegree: d maxTerms: n
 	| answer term |
 	self isUnivariate
-		ifTrue: [^ self coefficients: (self scalars atRandom: aRandom tuple: d+1 bits: bitSize)].
+		ifTrue: [^ self coefficients: (self scalars^(d+1) atRandom: aRandom bits: bitSize)].
 	answer _ self zero.
 	(n atRandom: aRandom) timesRepeat:
 		[term _ self one.
@@ -20394,26 +20333,26 @@ atRandom: aRandom bits: bitSize maxDegree: d maxTerms: n
 		answer _ answer + term].
 	^ answer! !
 
-!PolynomialRing methodsFor: 'random' stamp: 'len 3/9/2020 12:19:29'!
+!PolynomialRing methodsFor: 'random' stamp: 'len 6/1/2020 13:28:03'!
 atRandom: aRandom maxDegree: d
 	self isUnivariate ifFalse: [^ self notYetImplemented].
-	^ self coefficients: (self scalars atRandom: aRandom tuple: d+1)! !
+	^ self coefficients: (self scalars^(d+1) atRandom: aRandom)! !
 
 !PolynomialRing methodsFor: 'random' stamp: 'len 7/5/2016 02:29'!
 atRandomBits: bitSize maxDegree: d
 	^ Random withDefaultDo: [:aRandom| self atRandom: aRandom bits: bitSize maxDegree: d]! !
 
-!PolynomialRing methodsFor: 'random' stamp: 'len 3/9/2020 12:17:10'!
+!PolynomialRing methodsFor: 'random' stamp: 'len 6/1/2020 13:29:30'!
 atRandomDegree: d
 	"Answer a polynomial of degree d choosen at random with a uniform distribution."
 	self isUnivariate ifFalse: [^ self notYetImplemented].
-	^ self coefficients: (self scalars atRandomTuple: d), self scalars one! !
+	^ self coefficients: (self scalars^d) atRandom, self scalars one! !
 
-!PolynomialRing methodsFor: 'random' stamp: 'len 3/9/2020 12:16:54'!
+!PolynomialRing methodsFor: 'random' stamp: 'len 6/1/2020 13:29:46'!
 atRandomMaxDegree: d
 	"Answer a polynomial of degree at most d choosen at random with a uniform distribution."
 	self isUnivariate ifFalse: [^ self notYetImplemented].
-	^ self coefficients: (self scalars atRandomTuple: d+1)! !
+	^ self coefficients: (self scalars^(d+1)) atRandom! !
 
 !PolynomialRing methodsFor: 'testing' stamp: 'len 6/4/2016 05:13'!
 has: anIndeterminate
@@ -22827,6 +22766,10 @@ coordinatesOf: anElement
 	self isTrivial ifTrue: [^ anElement isZero ifTrue: [self scalars tuple: #()]].
 	^ anElement matrix asTuple! !
 
+!HomModule methodsFor: 'elements' stamp: 'len 6/1/2020 11:54:45'!
+diagonal: anArray
+	^ domain to: codomain mapping: [:i| (codomain x: i) * (anArray at: i)]! !
+
 !HomModule methodsFor: 'elements' stamp: 'len 10/2/2018 01:17:40'!
 evaluating: aBlock
 	^ domain to: codomain evaluating: aBlock! !
@@ -24967,17 +24910,17 @@ fPolynomial
 	"Answer the f-polynomial of this cell complex. This is the univariate polynomial with coefficients given by the f-vector (in decreasing order of exponents)."
 	^ É polynomials coefficients: self fVector reversed! !
 
-!CellComplex methodsFor: 'invariants' stamp: 'len 5/23/2020 08:59:24'!
+!CellComplex methodsFor: 'invariants' stamp: 'len 6/1/2020 13:09:21'!
 fVector
 	"Answer the f-vector of this cell complex. This is a tuple of integers that count the number of cells of each dimension."
-	^ É tuple: self dimension + 2 evaluating: [:i| (self cells: i-2) size]! !
+	^ É^(self dimension + 2) filling: [:i| (self cells: i-2) size]! !
 
-!CellComplex methodsFor: 'invariants' stamp: 'len 5/23/2020 08:59:27'!
+!CellComplex methodsFor: 'invariants' stamp: 'len 6/1/2020 13:09:38'!
 gVector
 	"Answer the g-vector of this cell complex."
 	| h |
 	h _ self hVector.
-	^ É tuple: h size // 2 + 1 evaluating: [:i| i == 1 ifTrue: [1] ifFalse: [(h at: i) - (h at: i-1)]]! !
+	^ É^(h size // 2 + 1) filling: [:i| i == 1 ifTrue: [1] ifFalse: [(h at: i) - (h at: i-1)]]! !
 
 !CellComplex methodsFor: 'invariants' stamp: 'len 9/7/2019 10:19:29'!
 hPolynomial
@@ -26110,14 +26053,14 @@ A: n
 	n timesRepeat: [B add: t. t _ t >> 1].
 	^ self basis: B! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
+!Lattice class methodsFor: 'examples' stamp: 'len 6/1/2020 13:12:03'!
 Adual: n
 	"Answer the dual of A_n."
 	| V B |
 	V _ Ñ^(n+1).
 	B _ OrderedCollection new.
 	1 to: n do: [:i| B add: (V e: 1) - (V e: i+1)].
-	B add: (Ñ tuple: n+1 evaluating: [:i| i=1 ifTrue: [n negated / (n+1)] ifFalse: [1 / (n+1)]]).
+	B add: (V filling: [:i| i=1 ifTrue: [n negated / (n+1)] ifFalse: [1 / (n+1)]]).
 	^ self basis: B! !
 
 !Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
@@ -26184,11 +26127,11 @@ fcc
 	Both A_3 and D_3 are equivalent to the fcc."
 	^ self basis: {(-1,-1,0). (1,-1,0). (0,1,-1)}! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
+!Lattice class methodsFor: 'examples' stamp: 'len 6/1/2020 12:37:32'!
 leech
 	"The Leech lattice is the unique even unimodular lattice in R^24 with with no norm 2 vectors."
 	| G answer |
-	G _ Ñ matrix: 24 coefficients:
+	G _ (Ñ^24) endomorphisms !!
 #(8 4 4 4 4 4 4 2 4 4 4 2 4 2 2 2 4 2 2 2 0 0 0 -3
  4 4 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 1 1 2 1 0 0 -1
  4 2 4 2 2 2 2 2 2 2 2 2 2 1 2 1 2 2 1 1 1 0 0 -1
@@ -26220,11 +26163,11 @@ leech
 		at: #coveringRadius put: 2 sqrt.
 	^ answer! !
 
-!Lattice class methodsFor: 'examples' stamp: 'len 5/23/2020 09:11:37'!
+!Lattice class methodsFor: 'examples' stamp: 'len 6/1/2020 12:37:55'!
 leech2
 	"Another version of the Leech lattice."
 	| G answer |
-	G _ Ñ matrix: 24 coefficients:
+	G _ (Ñ^24) endomorphisms !!
 #(4 -2 -2 2 2 2 -1 -1 2 2 -2 2 -2 1 -1 1 1 2 0 -1 0 -2 -2 2
 -2 4 0 0 -2 0 -1 2 0 0 2 -1 1 1 -1 1 -2 -2 -1 1 1 2 1 -2
 -2 0 4 0 0 -2 0 0 0 0 2 0 0 -2 1 -1 -1 -1 1 -1 -1 1 0 -1
@@ -27959,10 +27902,10 @@ startIndex
 coefficients: anArray
 	coefficients _ anArray! !
 
-!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 3/28/2018 18:09:29'!
+!CFiniteSequence methodsFor: 'accessing-private' stamp: 'len 6/1/2020 15:06:14'!
 initialValues: anArray
 	initialValues _ anArray.
-	initialValues isTuple ifFalse: [initialValues _ self codomain tuple: initialValues]! !
+	initialValues isTuple ifFalse: [initialValues _ self codomain^initialValues size !! initialValues]! !
 
 !CFiniteSequence methodsFor: 'comparing' stamp: 'len 5/23/2020 10:04:19'!
 = aSequence
@@ -29312,7 +29255,7 @@ rowsDo: aBlock
 	codomain = aMatrix codomain ifFalse: [DomainError signal: 'codomains don''t match'].
 	^ self class from: domain ê aMatrix domain to: codomain columns: self columns, aMatrix columns! !
 
-!Matrix methodsFor: 'operations' stamp: 'len 4/13/2020 01:03:51'!
+!Matrix methodsFor: 'operations' stamp: 'len 6/1/2020 13:50:24'!
 ë aMatrix
 	"Answer the Kronecker product of the receiver by the argument."
 	| m n p q |
@@ -29321,9 +29264,9 @@ rowsDo: aBlock
 	n _ self width.
 	p _ aMatrix height.
 	q _ aMatrix width.
-	^ self scalars
-		matrix: (m*p) @ (n*q)
-		evaluating: [:i :j|
+	^ self scalars^(n*q)
+		to: self scalars^(m*p)
+		filling: [:i :j|
 			(self at: (i-1)*m//(m*p)+1 @ ((j-1)*n//(n*q)+1)) *
 			(aMatrix at: (i-1)\\p+1 @ ((j-1)\\q+1))]! !
 
@@ -30972,11 +30915,11 @@ example2TwistedCubicTangent
 	"The tangent surface of the twisted cubic."
 	^ self example1TwistedCubicTangentParametrization image! !
 
-!RationalMap class methodsFor: 'instance creation' stamp: 'len 12/28/2016 21:52:41'!
+!RationalMap class methodsFor: 'instance creation' stamp: 'len 6/1/2020 13:27:10'!
 from: aDomain to: aCodomain evaluating: anExpression
 	| F |
 	F _ aDomain ambient functionField.
-	^ self from: aDomain to: aCodomain representatives: (anExpression value: (F tuple: aDomain ambient rank evaluating: [:i| F x: i]))! !
+	^ self from: aDomain to: aCodomain representatives: (anExpression value: (F^aDomain ambient rank filling: [:i| F x: i]))! !
 
 !RationalMap class methodsFor: 'instance creation' stamp: 'len 5/9/2020 22:18:46'!
 from: aDomain to: aCodomain representatives: anArrayOfRationalFunctions
@@ -31054,9 +30997,9 @@ d: aNumber
 hash
 	^ ((a hash + b hash) hashMultiply + c hash) hashMultiply + d hash! !
 
-!LinearFractionalMap methodsFor: 'converting' stamp: 'len 12/28/2016 10:23:54'!
+!LinearFractionalMap methodsFor: 'converting' stamp: 'len 6/1/2020 12:38:46'!
 asMatrix
-	^ self domain scalars matrix: 2 coefficients: {a. b. c. d}! !
+	^ (self domain scalars^2) endomorphisms !! {a. b. c. d}! !
 
 !LinearFractionalMap methodsFor: 'converting' stamp: 'len 12/28/2016 10:24:10'!
 asRationalFunction
@@ -31138,9 +31081,9 @@ a: a b: b c: c d: d
 matrix: aMatrix
 	^ self a: (aMatrix at: 1@1) b: (aMatrix at: 1@2) c: (aMatrix at: 2@1) d: (aMatrix at: 2@2)! !
 
-!ModularMap methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!ModularMap methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:05:39'!
 asMatrix
-	^ É matrix: 2 coefficients: {a. b. c. d}! !
+	^ (É^2) endomorphisms !! {a. b. c. d}! !
 
 !ModularMap methodsFor: 'as yet unclassified' stamp: 'len 12/14/2016 10:26:46'!
 isElliptic
@@ -32165,15 +32108,14 @@ dehomogenized
 	"Answer the dehomogenization of the receiver."
 	^ self dehomogenizedIn: self coordinates depth! !
 
-!ProjectivePoint methodsFor: 'converting' stamp: 'len 1/12/2017 14:46:26'!
+!ProjectivePoint methodsFor: 'converting' stamp: 'len 6/1/2020 13:26:52'!
 dehomogenizedIn: anInteger
 	"Answer the dehomogenization of the receiver with respect to the anInteger-th coordinate."
 	| scalar |
 	scalar _ coordinates at: anInteger.
 	^ (self codomain patch: anInteger) pointAt:
-		(self scalars
-			tuple: coordinates size - 1
-			evaluating: [:i| (i < anInteger ifTrue: [coordinates at: i] ifFalse: [coordinates at: i + 1]) / scalar])! !
+		(self scalars^(coordinates size - 1)
+			filling: [:i| (i < anInteger ifTrue: [coordinates at: i] ifFalse: [coordinates at: i + 1]) / scalar])! !
 
 !ProjectivePoint methodsFor: 'printing' stamp: 'len 2/10/2017 09:55:36'!
 printInsidesOn: aStream
@@ -32398,13 +32340,13 @@ radius2
 real
 	^ real! !
 
-!ComplexBox methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:47'!
+!ComplexBox methodsFor: 'accessing' stamp: 'len 6/1/2020 13:09:57'!
 sample
 	"Answer a sample point in the receiver."
 	| sampleImaginary sampleReal |
 	sampleReal _ real sample.
 	sampleImaginary _ imaginary sample.
-	^ Ü tuple: sampleReal size evaluating: [:i| Complex real: (sampleReal at: i) imaginary: (sampleImaginary at: i)]! !
+	^ Ü^sampleReal size filling: [:i| Complex real: (sampleReal at: i) imaginary: (sampleImaginary at: i)]! !
 
 !ComplexBox methodsFor: 'accessing' stamp: 'len 6/5/2016 21:42'!
 width
@@ -32540,10 +32482,10 @@ measure
 midpoint
 	^ Ö tuple: (components collect: [:each| each midpoint])! !
 
-!RealBox methodsFor: 'accessing' stamp: 'len 5/23/2020 09:31:27'!
+!RealBox methodsFor: 'accessing' stamp: 'len 6/1/2020 13:27:25'!
 sample
 	"Answer a sample point in the receiver."
-	^ Ö tuple: self size evaluating: [:each| (self at: each) sample]! !
+	^ Ö^self size filling: [:each| (self at: each) sample]! !
 
 !RealBox methodsFor: 'accessing' stamp: 'len 1/11/2016 02:37'!
 size
@@ -33520,21 +33462,21 @@ leadingMonomialOf: aPolynomial
 weights: aCollectionOfTuples
 	weights _ aCollectionOfTuples collect: [:each| each as: FloatArray]! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 6/1/2020 13:45:26'!
 glex: aCollection
 	"Answer the total (or graded) lexicographic ordering with the indeterminates of aCollection."
 	| weights |
 	weights _ OrderedCollection new.
-	weights add: (Ñ tuple: aCollection size evaluating: [:each| 1]).
+	weights add: (Ñ^aCollection size filling: [:each| 1]).
 	weights addAll: (self lex: aCollection) weights.
 	^ self new: aCollection size weights: weights! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 6/1/2020 13:45:46'!
 grevlex: aCollection
 	"Answer the total (or graded) reverse lexicographic ordering with the indeterminates of aCollection."
 	| weights |
 	weights _ OrderedCollection new.
-	weights add: (Ñ tuple: aCollection size evaluating: [:each| 1]).
+	weights add: (Ñ^aCollection size filling: [:each| 1]).
 	weights addAll: (self revlex: aCollection) weights.
 	^ self new: aCollection size weights: weights! !
 
@@ -33543,12 +33485,12 @@ indeterminates: indeterminates weights: weights
 	weights isSequenceable ifFalse: [self error: 'the indeterminates are unordered'].
 	^ self new: indeterminates size weights: (weights collect: [:each| each withIndexCollect: [:x :i| each at: (indeterminates indexOf: i)]])! !
 
-!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 5/23/2020 09:33:01'!
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 6/1/2020 13:46:57'!
 lex: aCollection
 	"Answer the lexicographic order with the indeterminates of aCollection."
 	| weighs n |
 	n _ aCollection size.
-	weighs _ (1 to: n) collect: [:i| Ñ tuple: n evaluating: [:k| k==i ifTrue:[1] ifFalse: [0]]].
+	weighs _ (Ñ^n) generators.
 	^ self indeterminates: aCollection weights: weighs! !
 
 !WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 7/3/2016 02:44'!
@@ -38633,21 +38575,22 @@ odd
 	"Decompose the receiver in the form f(x^2)x + g(x^2) and answer f(x)."
 	^ self parent coefficients: ((2 to: self coefficients size by: 2) collect: [:each| coefficients at: each])! !
 
-!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 1/25/2018 22:50:45'!
+!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 6/1/2020 13:42:47'!
 psc2: anInteger with: aPolynomial
 	"Answer the anInteger-th principal subresultant coefficient of the receiver with aPolynomial."
 
-	| f g n m t rows tuple |
+	| f g n m t rows tuple V |
 	f _ self.
 	g _ aPolynomial.
 	m _ f degree.
 	n _ g degree.
 	t _ m + n - anInteger - anInteger.
 	t <= 0 ifTrue: [^ self scalars one].
+	V _ self scalars^t.
 	rows _ OrderedCollection new: t.
-	tuple _ self scalars tuple: t evaluating: [:i| f coefficientAtDegree: m - i + 1].
+	tuple _ V filling: [:i| f coefficientAtDegree: m - i + 1].
 	n - anInteger timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
-	tuple _ self scalars tuple: t evaluating: [:i| g coefficientAtDegree: n - i + 1].
+	tuple _ V filling: [:i| g coefficientAtDegree: n - i + 1].
 	m - anInteger timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
 	^ (Matrix rows: rows) determinant! !
 
@@ -38657,21 +38600,22 @@ psc3: i with: aPolynomial
 	self flag: #fix. "use version 2, more efficient, but must test"
 	^ (self subresultant: i with: aPolynomial) leadingCoefficient "WTF, sometimes subresultant returns nil, SemialgebraicSet circle"! !
 
-!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 11/24/2016 12:12:18'!
+!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 6/1/2020 13:42:41'!
 psc: anInteger with: aPolynomial
 	"Answer the anInteger-th principal subresultant coefficient of the receiver with aPolynomial."
 
-	| f g n m t rows tuple |
+	| f g n m t rows tuple V |
 	f _ self.
 	g _ aPolynomial.
 	m _ f degree.
 	n _ g degree.
 	t _ m + n - anInteger - anInteger.
 	t <= 0 ifTrue: [^ self scalars one].
+	V _ self scalars^t.
 	rows _ OrderedCollection new: t.
-	tuple _ self scalars tuple: t evaluating: [:i| f coefficientAtDegree: m - i + 1].
+	tuple _ V filling: [:i| f coefficientAtDegree: m - i + 1].
 	n - anInteger timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
-	tuple _ self scalars tuple: t evaluating: [:i| g coefficientAtDegree: n - i + 1].
+	tuple _ V filling: [:i| g coefficientAtDegree: n - i + 1].
 	m - anInteger timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
 	^ (Matrix rows: rows) determinant! !
 
@@ -38731,10 +38675,10 @@ shift: anInteger
 	n >= 0 ifFalse: [^ self zero].
 	^ self parent coefficients: coefficients >>> anInteger! !
 
-!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 7/17/2019 11:12:51'!
+!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 6/1/2020 13:44:08'!
 subresultant: i with: aPolynomial
 	"Answer the i-th subresultant of the receiver with aPolynomial."
-	| lambda mu n m c rows matrix tuple |
+	| lambda mu n m c V rows matrix tuple |
 	m _ self degree.
 	n _ aPolynomial degree.
 	lambda _ m min: n.
@@ -38749,10 +38693,11 @@ subresultant: i with: aPolynomial
 			^ c * (c leadingCoefficient ^ ((m - n) abs - 1))].
 	(i between: lambda and: mu) ifTrue: [^ self zero].
 	(i between: 0 and: lambda - 1) ifFalse: [self error: 'index out of range'].
+	V _ self parent^(m + n - (2*i)).
 	rows _ OrderedCollection new.
-	tuple _ self parent tuple: m + n - (2*i) evaluating: [:k| self parent constant: (self coefficientAtDegree: m - k + 1)].
+	tuple _ V filling: [:k| self parent constant: (self coefficientAtDegree: m - k + 1)].
 	n - i timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
-	tuple _ self parent tuple: m + n - (2*i) evaluating: [:k| self parent constant: (aPolynomial coefficientAtDegree: n - k + 1)].
+	tuple _ V filling: [:k| self parent constant: (aPolynomial coefficientAtDegree: n - k + 1)].
 	m - i timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
 	matrix _ Matrix rows: rows.
 	1 to: n - i do: [:k|
@@ -38772,7 +38717,7 @@ subresultantChain: aPolynomial
 		answer add: (self subresultant: i with: aPolynomial)].
 	^ answer! !
 
-!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 11/24/2016 12:14:05'!
+!UnivariatePolynomial methodsFor: 'operations' stamp: 'len 6/1/2020 13:44:56'!
 sylvester: aPolynomial
 	"Answer the Sylvester matrix of the receiver with the argument.
 	If p,q polynomials of degrees m and n:
@@ -38781,13 +38726,14 @@ sylvester: aPolynomial
 	Also the kernel of the transposed Sylvester matrix gives all solutions of the Bezout equation:
 		f*p + g*q = 0
 	"
-	| m n rows tuple |
+	| m n V rows tuple |
 	m _ self degree.
 	n _ aPolynomial degree.
+	V _ self scalars^(m+n).
 	rows _ OrderedCollection new: m+n.
-	tuple _ self scalars tuple: m+n evaluating: [:i| self coefficientAtDegree: m-i+1].
+	tuple _ V filling: [:i| self coefficientAtDegree: m-i+1].
 	n timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
-	tuple _ self scalars tuple: m+n evaluating: [:i| aPolynomial coefficientAtDegree: n-i+1].
+	tuple _ V filling: [:i| aPolynomial coefficientAtDegree: n-i+1].
 	m timesRepeat: [rows add: tuple. tuple _ tuple shift: 1].
 	^ Matrix rows: rows! !
 
@@ -40602,12 +40548,12 @@ withIndexDo: aBlock
 withNameDo: aBlock
 	self with: parent names do: aBlock! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 5/23/2020 09:34:55'!
+!Tuple methodsFor: 'operations' stamp: 'len 6/1/2020 13:40:06'!
 % anInteger
 	| R |
 	self flag: #fix. "optimize. this is slow because creates lots of residue class objects"
 	R _ É / anInteger.
-	^ R tuple: self size evaluating: [:i| R project: (self at: i) asInteger]! !
+	^ R^self size filling: [:i| R project: (self at: i) asInteger]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 7/19/2019 07:00:27'!
 * anObject
@@ -40676,11 +40622,11 @@ add: aTuple times: aNumber from: startIndex to: stopIndex
 add: aTuple times: aNumber startingAt: startIndex
 	self add: aTuple times: aNumber from: startIndex to: (self size min: aTuple size)! !
 
-!Tuple methodsFor: 'operations' stamp: 'len 11/7/2016 02:24'!
+!Tuple methodsFor: 'operations' stamp: 'len 6/1/2020 13:40:32'!
 apply: aMorphism
 	"Apply a homomorphism to the coefficients of the receiver."
 	aMorphism isBlock ifTrue: [^ self collect: aMorphism].
-	^ aMorphism codomain tuple: self size evaluating: [:i| aMorphism value: (self at: i)]! !
+	^ aMorphism codomain^self size filling: [:i| aMorphism value: (self at: i)]! !
 
 !Tuple methodsFor: 'operations' stamp: 'len 3/29/2016 18:54'!
 conjugated
@@ -40948,10 +40894,10 @@ hash
 asArray
 	^ components! !
 
-!ArrayTuple methodsFor: 'copying' stamp: 'len 3/13/2020 16:51:38'!
+!ArrayTuple methodsFor: 'copying' stamp: 'len 6/1/2020 15:05:41'!
 , anObject
 	(anObject isTuple or: [anObject isArray])
-		ifTrue: [^ self scalars tuple: (components, anObject asArray)].
+		ifTrue: [^ self scalars^(self size + anObject size) elementAt: components, anObject asArray].
 	^ self copyWith: anObject! !
 
 !ArrayTuple methodsFor: 'copying' stamp: 'len 5/28/2020 14:41:59'!
@@ -41810,13 +41756,13 @@ parent: aModule
 hash
 	^ matrix hash! !
 
-!FreeModuleMap methodsFor: 'converting' stamp: 'len 4/13/2020 01:24:29'!
+!FreeModuleMap methodsFor: 'converting' stamp: 'len 6/1/2020 13:48:00'!
 asPolynomial
 	"If the receiver is a linear form, answer the receiver as a polynomial in the coordinate ring of the domain."
 	| P |
 	self isLinearForm ifFalse: [DomainError signal: 'not a linear form'].
 	P _ self domain coordinateRing.
-	^ (P tuple: P rank evaluating: [:i| P x: i]) ∑ (matrix asTuple over: P)! !
+	^ (P^P rank filling: [:i| P x: i]) ∑ (matrix asTuple over: P)! !
 
 !FreeModuleMap methodsFor: 'converting' stamp: 'len 5/9/2020 22:27:48'!
 asRationalMap
@@ -42413,9 +42359,9 @@ matrix
 matrix: aMatrix
 	matrix _ aMatrix! !
 
-!SmithReduction methodsFor: 'accessing' stamp: 'len 5/28/2019 08:55:12'!
+!SmithReduction methodsFor: 'accessing' stamp: 'len 6/1/2020 12:00:45'!
 reduced
-	^ matrix scalars diagonalMatrix: self invariants! !
+	^ (matrix scalars^self invariants size) endomorphisms diagonal: self invariants! !
 
 !SmithReduction methodsFor: 'private' stamp: 'len 5/9/2020 18:00:07'!
 reduceStep: i mod: R
@@ -43350,9 +43296,9 @@ solve: aCollection
 		x _ x % m].
 	^ x! !
 
-!DFT methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 08:20'!
+!DFT methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:11:17'!
 value: aTuple
-	^ ring tuple: n evaluating: [:k| (1 to: n) sum: [:j| (aTuple at: j) * (alpha ^ (j*k))]]! !
+	^ ring^n filling: [:k| (1 to: n) sum: [:j| (aTuple at: j) * (alpha ^ (j*k))]]! !
 
 !ExtendedEuclid methodsFor: 'accessing' stamp: 'len 4/18/2018 06:26:17'!
 bezout
