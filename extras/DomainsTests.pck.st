@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 31 May 2020 at 8:55:17 pm'!
+'From Cuis 5.0 [latest update: #4190] on 7 June 2020 at 1:26:05 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 167!
+!provides: 'DomainsTests' 1 169!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -83,6 +83,16 @@ TestCase subclass: #GroupTest
 	category: 'DomainsTests'!
 !classDefinition: 'GroupTest class' category: #DomainsTests!
 GroupTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #LinearGroupsTest category: #DomainsTests!
+TestCase subclass: #LinearGroupsTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'DomainsTests'!
+!classDefinition: 'LinearGroupsTest class' category: #DomainsTests!
+LinearGroupsTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #MathematicsTest category: #DomainsTests!
@@ -1246,25 +1256,6 @@ testProjectiveEmbedding
 	"the projective scheme has one more point at infinity:"
 	self assert: affinePointsEmbedded size + 1 = projectivePoints size! !
 
-!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-testSmoothnessOver„
-	| P C |
-	P _ ProjectiveSpace new: 2 over: „.
-	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
-	self assert: C isSingular! !
-
-!AlgebraicGeometryTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:32:00'!
-testSmoothnessOver†
-	| P R C |
-	P _ ProjectiveSpace new: 2 over: †.
-	R _ P coordinateRing.
-	C _ P subscheme: R !! [:x :y :z| x].
-	self assert: C isSingular not.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3)].
-	self assert: C isSingular.
-	C _ P subscheme: R !! [:x :y :z| y^2*z - (x^3) + (z^3)].
-	self assert: C isSingular not! !
-
 !AlgebraicGeometryTest methodsFor: 'conics' stamp: 'len 5/23/2020 09:33:01'!
 testConicCoefficients
 	self assert: (Conic coefficients: (1,2,3,4,5,6)) coefficients = (1,2,3,4,5,6).
@@ -1772,7 +1763,7 @@ testRationalMapImage
 	f _ A to: A evaluatingWithArguments: [:x :y| {x+1. y+2}].
 	self assert: (X apply: f) = X2! !
 
-!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 5/23/2020 09:33:01'!
+!AlgebraicGeometryTest methodsFor: 'rational maps' stamp: 'len 6/7/2020 12:57:04'!
 testRationalMapLinearMapConversion
 	| A2 A3 V2 V3 f f2 p f3 |
 	A2 _ AffineSpace new: 2 over: „.
@@ -1781,7 +1772,8 @@ testRationalMapLinearMapConversion
 	V3 _ „^3.
 
 	f _ V2 => V3 atRandomBits: 100.
-	f2 _ A2 => A3 !! f.
+	f2 _ f asRationalMap.
+	self assert: (A2 => A3 includes: f2).
 
 	p _ V2 atRandomBits: 100.
 	self assert: (f value: p) = (f2 value: p).
@@ -1845,13 +1837,13 @@ testSturmfelsExample2
 	"Each of the points is multiplicity-free:"
 	self assert: ourpoints isReduced. "equivalent to the original: ourpoints reduced projectiveClosure degree = 65."! !
 
-!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 5/23/2020 09:33:01'!
+!AlgebraicGeometryTest methodsFor: 'rational points' stamp: 'len 6/1/2020 12:35:22'!
 testTwistedCubic
 	| P R M C |
 	P _ ProjectiveSpace new: 3 over: „.
 	R _ P coordinateRing.
 	"R indeterminateNames: #(u v w t)"
-	M _ R matrix: (2@3) coefficients: ((1,2,3,2,3,4) collect: [:i| R x: i]).
+	M _ R^3 => (R^2) !! ((1,2,3,2,3,4) collect: [:i| R x: i]).
 	C _ P subscheme: (M minors: 2).
 	self assert: C dimension = 1.
 	self assert: C isSmooth! !
@@ -2124,7 +2116,7 @@ testAffineRingIdealOperations
 	self assert: I radical = J. "this fails probably because PolynomialIdeal>>radical is broken"
 	"... and then some tests of primary decomposition"! !
 
-!CommutativeAlgebraTest methodsFor: 'algorithms' stamp: 'len 5/23/2020 09:33:01'!
+!CommutativeAlgebraTest methodsFor: 'algorithms' stamp: 'len 6/1/2020 15:07:03'!
 testExtendedBuchberger
 	| I algorithm G G2 |
 	I _ („ polynomialsIn: #(a b c d)) cyclicIdeal.
@@ -2134,19 +2126,7 @@ testExtendedBuchberger
 	self assert: G verify.
 	G2 _ (Buchberger on: I) basis.
 	self assert: G reduced = G2 reduced.
-	self assert: algorithm matrix * (I scalars tuple: I generators) = (I scalars tuple: G)! !
-
-!CommutativeAlgebraTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testKrullDimensionOverƒ
-	| R I Q |
-	R _ ƒ polynomialsIn: #(x y).
-	self assert: R dimension = 3.
-"	I _ R * {R x. R y}.
-	Q _ R / I.
-	self assert: Q dimension = 0.
-"	I _ R * R zero. "zero ideal"
-	Q _ R / I.
-	self assert: Q dimension = 3! !
+	self assert: algorithm matrix * (I scalars^I generators size !! I generators) = (I scalars^G size !! G)! !
 
 !CommutativeAlgebraTest methodsFor: 'division and normal forms' stamp: 'len 5/23/2020 09:33:01'!
 testBuchbergerNormalForm
@@ -3408,6 +3388,34 @@ testTrivial
 	self assert: G size = 1.
 	self assert: G isTrivial! !
 
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+testGeneralLinearAtRandom
+	| V G |
+	V _ „ ^ 3.
+	G _ V automorphisms.
+	self assert: (G atRandomBits: 100) isAutomorphism.
+	self assert: (G includes: (G atRandomBits: 100))! !
+
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+testOrthogonalAtRandom
+	| V G |
+	V _ „ ^ 3.
+	G _ V automorphisms orthogonal.
+	self assert: (G atRandomBits: 100) isOrthogonal.
+	self assert: (G includes: (G atRandomBits: 100))! !
+
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+testRotationsBy90Degrees
+	"Group of rotations by 90 degrees in the plane, isomorphic to Z/4Z."
+	| V G |
+	V _ „ ^ 2.
+	G _ LinearGroup on: V generators: {V endomorphisms elementAt: (0, 1, -1, 0)}.
+	self assert: G size = 4.
+	self assert: G isCyclic.
+	self flag: #todo.
+	"test invariant ring K[x,y]^G = K[x^2+y^2, x^2y^2, x^3y-xy^3], isomorphic to K[a,b,c]/<c^2-a^2b+4b^2>"
+	"test hilbert series is 1-z^8 / ((1-z^2)^2(1-z^4)) = 1 + z^2 + 3z^4 + 3z^6 + ..."! !
+
 !MathematicsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testAlgebraicExtension
 	| x E a b |
@@ -3786,19 +3794,19 @@ testYoungTableauxStandard
 	self assert: T weight = #(1 1 1 1 1 1 1 1).
 	self assert: T shape = #(4 3 1)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/3/2019 05:00:17'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 13:00:24'!
 testEchelonOverFiniteField
 	"From Magma Handbook example H26E10."
 	| K w A |
 	K _ GaloisField new: 8.
 	w _ K x.
-	A _ K matrix: 4@3 coefficients: {1. w. w^5. 0. w^3. w^4. w. 1. w^6. w^3. 1. w^4}.
-	self assert: A echelon = (K matrix: 4@3 coefficients: {1. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 0})! !
+	A _ K^3 => (K^4) !! {1. w. w^5. 0. w^3. w^4. w. 1. w^6. w^3. 1. w^4}.
+	self assert: A echelon = (A parent !! {1. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 0})! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 14:09:35'!
 testHNFvsCHNF
 	| A |
-	A _ ƒ atRandomMatrix: 4 bits: 50.
+	A _ (ƒ^4 atRandom) endomorphisms atRandomBits: 50.
 	self assert: A HNF = A antitransposed CHNF antitransposed! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
@@ -3891,14 +3899,14 @@ testHermiteNormalForm9
 	H _ ƒ matrix: #((1 0 17 259 7) (0 1 31 453 13) (0 0 40 582 17)).
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 13:00:58'!
 testHermiteNormalFormOverPolynomials
 	"From MuPAD documentation."
 	| R x A H |
 	R _ „ polynomials.
 	x _ R x.
-	A _ R matrix: 2 coefficients: {x^2 + 3. (x*2 - 1)^2. (x + 2)^2. x^2*3 + 5}.
-	H _ R matrix: 2 coefficients: {R one. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. R zero. x^4 + (x^3*12) - (x^2*13) - (x*12) - 11}.
+	A _ (R^2) endomorphisms !! {x^2 + 3. (x*2 - 1)^2. (x + 2)^2. x^2*3 + 5}.
+	H _ (R^2) endomorphisms !! {R one. (x^3*4 + (x^2*47) - (x*76) + 20) / 49. R zero. x^4 + (x^3*12) - (x^2*13) - (x*12) - 11}.
 	self assert: A HNF = H! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
@@ -3917,13 +3925,13 @@ testHowellNormalForm1
 	self assert: D echelon = H
 ! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 13:28:49'!
 testHowellNormalForm2
 	| m R t u |
 	100 timesRepeat:
 		[[m _ 256 atRandom + 1. m isPrime] whileTrue.
 		R _ ƒ/m.
-		t _ R atRandomTuple: 5 atRandom.
+		t _ (R^5 atRandom) atRandom.
 		u _ R units atRandom.
 		self assert: t asRowMatrix echelon = (t*u) asRowMatrix echelon]! !
 
@@ -4008,13 +4016,13 @@ testRCF2
 		(0 0 0 0 0 0 1 0)).
 	self assert: A RCF = C! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 13:03:33'!
 testRCFAndInvariantFactors
 	"Example from Magma documentation."
 	| K A R x |
 	K _ ƒ/5.
-	A _ K matrix: 5 coefficients: (#(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0) apply: ƒ -> K).
-	R _ K matrix: 5 coefficients: (#(1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0) apply: ƒ -> K).
+	A _ (K^5) endomorphisms !! #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
+	R _ A parent !! #(1 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0).
 	self assert: A RCF = R.
 	x _ K polynomials x.
 	self assert: A invariantFactors = {x - 1. x^2 - 1. x^2 - 1}
@@ -4026,33 +4034,33 @@ testReducerPivots
 	A _ ƒ matrix: {(0,-1,-1). (0,-20,1). (0,1,2)}.
 	self assert: A reduction pivots asArray = {1@2. 2@3}! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:57:08'!
 testSmithNormalForm
 	| A |
 	A _ ƒ matrix: { (2,4,4). (-6,6,12). (10,-4,-16) }.
-	self assert: A SNF = (ƒ diagonalMatrix: #(2  6 12))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(2  6 12))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:57:31'!
 testSmithNormalForm2
 	| A |
 	"Reduced Laplacian matrix of K_4:"
 	A _ ƒ matrix: { (3,-1,-1). (-1,3,-1). (-1,-1,3) }.
-	self assert: A SNF = (ƒ diagonalMatrix: #(1  4  4))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1  4  4))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:57:48'!
 testSmithNormalForm3
 	"Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ƒ matrix: { (1,4,9). (16,25,36). (49,64,81) }.
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 3 72))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 3 72))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:58:08'!
 testSmithNormalForm4
 	"Smith form of a 3x3 matrix of rank 2.
 	Example from Willian Stein, 'Algebraic Number Theory, A Computational Approach'."
 	| A |
 	A _ ƒ matrix: #((2 3 4) (5 6 7) (8 9 10)).
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 3 0)) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 3 0)) "this fails with SNF because Cohen defines SNF only for nonsingular matrices, so use SNF2"! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
 testSmithNormalForm5
@@ -4068,18 +4076,18 @@ testSmithNormalForm6
 	A _ ƒ matrix: #((2 -4 12 7 0) (3 -3 5 -1 4) (2 -1 -4 -5 -12) (0 3 6 -2 0)).
 	self assert: A elementaryDivisors = #(1 1 1 2)! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:58:23'!
 testSmithNormalForm7
 	"From GAP manual."
 	| A |
 	A _ ƒ matrix: #((1 15 28) (4 5 6) (7 8 9)).
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 1 3))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 1 3))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:58:38'!
 testSmithNormalForm8
 	| A |
 	A _ ƒ matrix: #((2 1 -3) (3 -2 -1) (1 -3 2)).
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 7 0))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 7 0))! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
 testSmithNormalForm9
@@ -4087,22 +4095,22 @@ testSmithNormalForm9
 	A _ ƒ matrix: #((1 2 3 4 5 6 7) (1 0 1 0 1 0 1) (2 4 5 6 1 1 1) (1 4 2 5 2 0 0) (0 0 1 1 2 2 3)).
 	self assert: A SNF = (ƒ matrix: #((1 0 0 0 0 0 0) (0 1 0 0 0 0 0) (0 0 1 0 0 0 0) (0 0 0 1 0 0 0) (0 0 0 0 2 0 0)))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:59:06'!
 testSmithNormalFormDiagonal
 	| A |
 	A _ ƒ matrix: #((2 0 0) (0 1 0) (0 0 0)).
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 2 0)).
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 2 0)).
 	A _ ƒ matrix: #((5 0 0) (0 2 0) (0 0 0)).
-	self assert: A SNF = (ƒ diagonalMatrix: #(1 10 0))! !
+	self assert: A SNF = ((ƒ^3) endomorphisms diagonal: #(1 10 0))! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/31/2020 20:01:10'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 11:59:37'!
 testSmithNormalFormOverPolynomials
 	"Example from Sage documentation."
 	| R x A |
 	R _ „ polynomials.
 	x _ R x.
 	A _ (R^2) id * x - (R matrix: #((3 -4) (1 -1))).
-	self assert: A SNF = (R diagonalMatrix: {R one. x^2 - (x*2) + 1})! !
+	self assert: A SNF = ((R^2) endomorphisms diagonal: {R one. x^2 - (x*2) + 1})! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
 testSmithNormalFormOverPolynomialsOverPrimeField1
@@ -4114,17 +4122,17 @@ testSmithNormalFormOverPolynomialsOverPrimeField1
 	a _ P matrix: 5 evaluating: [:i :j| x^i + (x^j)].
 	self assert: a elementaryDivisors = {x. x^3 + (x^2*3) + x}! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 13:05:19'!
 testSmithNormalFormOverPolynomialsOverPrimeField2
 	"Example form Magma handbook (H88E7)."
 	| K P x a ax |
 	K _ ƒ/5.
 	P _ K polynomials.
 	x _ P x.
-	a _ ƒ matrix: 5 coefficients: #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
+	a _ (ƒ^5) endomorphisms !! #(0 2 4 2 0 2 2 2 3 3 3 4 4 1 3 0 0 0 0 1 0 0 0 1 0).
 	a _ a over: P.
 	ax _ a identity * x - a.
-	self assert: ax SNF = (P diagonalMatrix: {P one. P one. x - 1. x^2 - 1. x^2 - 1}).
+	self assert: ax SNF = ((P^5) endomorphisms diagonal: {P one. P one. x - 1. x^2 - 1. x^2 - 1}).
 	self assert: ax elementaryDivisors = {P one. P one. x - 1. x^2 - 1. x^2 - 1}! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
@@ -4137,26 +4145,26 @@ testCauchyDeterminantProductFormula
 	B _ ƒ matrix: {(1,0,4). (1,1,1). (2,-2,-3)}.
 	self assert: A determinant * B determinant = (A * B) determinant! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:07:00'!
 testCharacteristicMatrixAndPolynomialOverQ
 	| n A |
 	n _ 5 atRandom.
-	A _ „ atRandomMatrix: n bits: n*5.
+	A _ („^n) endomorphisms atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:07:19'!
 testCharacteristicMatrixAndPolynomialOverZ
 	| n A |
 	n _ 5 atRandom.
-	A _ ƒ atRandomMatrix: n bits: n*5.
+	A _ (ƒ^n) endomorphisms atRandomBits: n*5.
 	self assert: A characteristicPolynomial = A characteristicMatrix determinant! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:08:17'!
 testCharacteristicPolynomial
 	| A B |
-	A _ „ atRandomMatrix: 5 bits: 100.
+	A _ („^5 atRandom) endomorphisms atRandomBits: 100.
 	self assert: (A characteristicPolynomial value: A) isZero.
-	B _ „ atRandomMatrix: 5 bits: 100.
+	B _ A parent atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
@@ -4187,17 +4195,17 @@ testCharacteristicPolynomialExample4x4
 	x _ ƒ polynomials x.
 	self assert: A characteristicPolynomial = (x^4 - (x^3*34) - (x^2*80))! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 3/9/2020 12:51:34'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:09:00'!
 testCharacteristicPolynomialOver: R
 	| n A p B |
 	n _ 5 atRandom.
-	A _ R atRandomMatrix: n bits: 100.
+	A _ (R^n) endomorphisms atRandomBits: 100.
 	p _ A characteristicPolynomial.
 	self assert: (p value: A) isZero.
 	self assert: p degree = n.
 	self assert: p isMonic.
 	self assert: A transposed characteristicPolynomial = p.
-	B _ R atRandomMatrix: n bits: 100.
+	B _ A parent atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
@@ -4234,19 +4242,19 @@ testDeterminant2
 	vandermonde _ ƒ matrix: {(1,1,1). (3,5,7). (9,25,49)}.
 	self assert: vandermonde determinant = 16! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:10:56'!
 testMinimalPolynomial
 	| m f |
-	m _ „ atRandomMatrix: 5 bits: 100.
+	m _ („^5 atRandom) endomorphisms atRandomBits: 100.
 	f _ m minimalPolynomial.
 	self assert: f | m characteristicPolynomial.
 	self assert: (f value: m) isZero! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 13:01:40'!
 testPermanent
 	"Example from https://en.wikipedia.org/wiki/Permanent_(mathematics)"
 	| A |
-	A _ ƒ matrix: 4 coefficients: #(1 1 1 1 2 1 0 0 3 0 1 0 4 0 0 1).
+	A _ (ƒ^4) endomorphisms !! #(1 1 1 1 2 1 0 0 3 0 1 0 4 0 0 1).
 	self assert: A permanent = 10! !
 
 !MatrixTest methodsFor: 'invariants' stamp: 'len 5/23/2020 09:34:55'!
@@ -4317,16 +4325,16 @@ testAdjugateProperties
 	self assert: (A^5) adjugate = (A adjugate ^ 5).
 	self assert: A transposed adjugate = A adjugate transposed! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:06:39'!
 testCayleyHamiltorTheoremInQ
 	| A |
-	A _ „ atRandomMatrix: 6 atRandom bits: 100.
+	A _ („^6 atRandom) endomorphisms atRandomBits: 100.
 	self assert: (A characteristicPolynomial value: A) isZero! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:06:32'!
 testCayleyHamiltorTheoremInZ
 	| A |
-	A _ ƒ atRandomMatrix: 6 atRandom bits: 100.
+	A _ (ƒ^6 atRandom) endomorphisms atRandomBits: 100.
 	self assert: (A characteristicPolynomial value: A) isZero! !
 
 !MatrixTest methodsFor: 'other' stamp: 'len 5/31/2020 20:10:48'!
@@ -4394,16 +4402,16 @@ testKroneckerProduct
 	C _ ƒ matrix: #((0 5 0 10) (6 7 12 14) (0 15 0 20) (18 21 24 28)).
 	self assert: A ‘ B = C! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:10:04'!
 testLeftInverse
 	| A |
-	[A _ „ atRandomMatrix: 5@3 bits: 1000. A rank = 3] whileFalse.
+	[A _ „^3 => („^5) atRandomBits: 1000. A rank = 3] whileFalse.
 	self assert: (A retraction * A) isIdentity! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:10:34'!
 testLeftRightIdentity
 	| A |
-	A _ ƒ atRandomMatrix: 5 atRandom @ 5 atRandom bits: 100.
+	A _ ƒ^5 atRandom => (ƒ^5 atRandom) atRandomBits: 100.
 	self assert: A leftIdentity * A = A.
 	self assert: A * A rightIdentity = A! !
 
@@ -4413,17 +4421,17 @@ testMinor
 	A _ ƒ matrix: #((1 2 3) (4 5 6) (7 8 9)).
 	self assert: (A minor: 2@3) = -6! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 13:01:21'!
 testMinors
 	| A |
-	A _ ƒ matrix: 2@3 coefficients: (1 to: 6).
+	A _ ƒ^3 => (ƒ^2) !! (1 to: 6).
 	self assert: (A minors: 2) asArray = #(-3 -6 -3)! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:11:34'!
 testQRDecomposition
 	| n A QR Q R |
 	n _ 3.
-	[A _ „ atRandomMatrix: n bits: n*n. A isFullRank] whileFalse.
+	[A _ („^n) endomorphisms atRandomBits: n*n. A isFullRank] whileFalse.
 	A _ A over: ….
 	QR _ A QR.
 	Q _ QR first.
@@ -4432,19 +4440,19 @@ testQRDecomposition
 	self assert: Q isOrthogonal.
 	self assert: R isUpperTriangular! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:31:27'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 13:02:16'!
 testQRDecomposition2
 	"Example from wikipedia:"
 	| A Q R |
-	A _ … matrix: 3@3 coefficients: #(12 -51 4 6 167 -68 -4 24 -41).
-	Q _ … matrix: 3@3 coefficients: {6/7. -69/175. -58/175. 3/7. 158/175. 6/175. -2/7. 6/35. -33/35}.
-	R _ … matrix: 3@3 coefficients: #(14 21 -14 0 175 -70 0 0 35).
+	A _ (…^3) endomorphisms !! #(12 -51 4 6 167 -68 -4 24 -41).
+	Q _ A parent !! {6/7. -69/175. -58/175. 3/7. 158/175. 6/175. -2/7. 6/35. -33/35}.
+	R _ A parent !! #(14 21 -14 0 175 -70 0 0 35).
 	self assert: A QR = {Q. R}! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:11:54'!
 testRightInverse
 	| A |
-	[A _ „ atRandomMatrix: 3@5 bits: 1000. A rank = 3] whileFalse.
+	[A _ „^5 => („^3) atRandomBits: 1000. A rank = 3] whileFalse.
 	self assert: (A * A section) isIdentity! !
 
 !MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
@@ -4457,31 +4465,31 @@ testSimilarity
 	self assert: A ~ B.
 	self deny: A ~ C! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:12:44'!
 testSimilarity2
 	| n A B P |
 	n _ 5 atRandom.
-	A _ „ atRandomMatrix: n bits: 10*n*n.
-	[(P _ „ atRandomMatrix: n bits: 10*n*n) isSingular] whileTrue.
-	B _ „ atRandomMatrix: n bits: 10*n*n.
+	A _ („^n) endomorphisms atRandomBits: 10*n*n.
+	[(P _ A parent atRandomBits: 10*n*n) isSingular] whileTrue.
+	B _ A parent atRandomBits: 10*n*n.
 	self assert: A ~ (P inverse * A * P).
 	self deny: A ~ B! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:13:11'!
 testTransposed
 	| A |
-	A _ ƒ atRandomMatrix: 6 atRandom @ 6 atRandom bits: 1000.
+	A _ ƒ^6 atRandom => (ƒ^6 atRandom) atRandomBits: 1000.
 	self assert: A columns = A transposed rows.
 	self assert: A transposed transposed = A! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:39:49'!
 testBacklash
 	"Example from Sage documentation. Non-singular and square."
 	| A B X |
-	A _ „ matrix: 3 coefficients: #(1 2 4 5 3 1 1 2 -1).
-	B _ „ matrix: 3@2 coefficients: #(1 5 1 2 1 5).
+	A _ („^3) endomorphisms !! #(1 2 4 5 3 1 1 2 -1).
+	B _ „^2 => („^3) !! #(1 5 1 2 1 5).
 	X _ A \ B.
-	self assert: X = („ matrix: 3@2 coefficients: {-1/7. -11/7. 4/7. 23/7. 0. 0}).
+	self assert: X = („^2 => („^3) !! {-1/7. -11/7. 4/7. 23/7. 0. 0}).
 	self assert: A * X = B! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 4/21/2020 21:21:51'!
@@ -4492,14 +4500,14 @@ testBacklashGaloisFieldMatrixRandom
 testBacklashIntegerMatrixRandom
 	self testBacklashMatrixRandomOver: ƒ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:59:27'!
 testBacklashIntegerTuple
 	"Example from Sage documentation."
 	| A v x |
-	A _ ƒ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
-	v _ ƒ tuple: #(-1 -2).
+	A _ ƒ^3 => (ƒ^2) !! #(1 2 3 2 4 6).
+	v _ (-1, -2).
 	x _ A \ v.
-"	self assert: x = (ƒ tuple: #(-1 0 0))."
+"	self assert: x = (-1, 0, 0)."
 	self assert: A * x = v! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
@@ -4521,11 +4529,11 @@ testBacklashIntegerTuple3
 	"x _ ƒ tuple: #(38 25 -6 1 -34 -12 3 -3 -44)." "shortest solution"
 	self assert: A * (A \ b) = b! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:51:39'!
 testBacklashIntegerTupleBug
 	| A b x |
-	A _ ƒ matrix: 3@3 coefficients: #(1 0 0 0 1 0 0 0 10).
-	b _ ƒ tuple: #(0 0 10).
+	A _ (ƒ^3) endomorphisms !! #(1 0 0 0 1 0 0 0 10).
+	b _ (0, 0, 10).
 	x _ A \ b.
 	self assert: A * x = b! !
 
@@ -4533,63 +4541,63 @@ testBacklashIntegerTupleBug
 testBacklashIntegerTupleRandom
 	self testBacklashTupleRandomOver: ƒ! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/9/2020 19:17:52'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 14:05:38'!
 testBacklashMatrixRandomOver: R
 	| n m n2 A v b x |
 	100 timesRepeat:
 		[n _ 5 atRandom.
 		m _ 5 atRandom.
-		A _ R atRandomMatrix: m@n bits: m*n*5.
+		A _ R^n => (R^m) atRandomBits: m*n*5.
 		n2 _ 5 atRandom.
-		v _ R atRandomMatrix: n@n2 bits: n*n2*5.
+		v _ R^n2 => (R^n) atRandomBits: n*n2*5.
 		b _ A*v.
 		x _ A \ b.
 		self assert: A*x = b]! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:54:20'!
 testBacklashNoSolution
 	"Example from Sage documentation."
 	| A v |
-	A _ „ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
-	v _ „ tuple: #(1 1).
+	A _ „^3 => („^2) !! #(1 2 3 2 4 6).
+	v _ „^2 !! #(1 1).
 	self assert: (A \ v) isNil! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:54:10'!
 testBacklashNonSquare
 	"Example from Sage documentation."
 	| A B X |
-	A _ „ matrix: 2@4 coefficients: #(0 -1 1 0 -2 2 1 0).
-	B _ „ matrix: 2@2 coefficients: #(1 0 1 -1).
+	A _ „^4 => („^2) !! #(0 -1 1 0 -2 2 1 0).
+	B _ („^2) endomorphisms !! #(1 0 1 -1).
 	X _ A \ B.
-	self assert: X = („ matrix: 4@2 coefficients: {-3/2. 1/2. -1. 0. 0. 0. 0. 0}).
+	self assert: X = („^2 => („^4) !! {-3/2. 1/2. -1. 0. 0. 0. 0. 0}).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:55:04'!
 testBacklashNonSquare2
 	| A B X |
-	A _ „ matrix: 2@4 coefficients: #(0 0 -1 1 0 -2 2 1).
-	B _ „ matrix: 2@2 coefficients: #(1 0 1 -1).
+	A _ „^4 => („^2) !! #(0 0 -1 1 0 -2 2 1).
+	B _ („^2) endomorphisms !! #(1 0 1 -1).
 	X _ A \ B.
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:55:54'!
 testBacklashPascal3
 	"Example from Matlab documentation. Non-singular and square."
 	| A u x |
-	A _ ƒ matrix: 3 coefficients: #(1 1 1 1 2 3 1 3 6). "pascal(3)"
-	u _ ƒ tuple: #(3 1 4).
+	A _ (ƒ^3) endomorphisms !! #(1 1 1 1 2 3 1 3 6). "pascal(3)"
+	u _ (3, 1, 4).
 	x _ A \ u.
-	self assert: x = (ƒ tuple: #(10 -12 5)).
+	self assert: x = (10, -12, 5).
 	self assert: A * x = u! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:56:52'!
 testBacklashPascal3Magic3
 	"Example from Matlab documentation. Non-singular and square."
 	| A B X |
-	A _ ƒ matrix: 3 coefficients: #(1 1 1 1 2 3 1 3 6). "pascal(3)"
-	B _ ƒ matrix: 3 coefficients: #(8 1 6 3 5 7 4 9 2). "magic(3)"
+	A _ (ƒ^3) endomorphisms !! #(1 1 1 1 2 3 1 3 6). "pascal(3)"
+	B _ (ƒ^3) endomorphisms !! #(8 1 6 3 5 7 4 9 2). "magic(3)"
 	X _ A \ B.
-	self assert: X = (ƒ matrix: 3 coefficients: #(19 -3 -1 -17 4 13 6 0 -6)).
+	self assert: X = ((ƒ^3) endomorphisms !! #(19 -3 -1 -17 4 13 6 0 -6)).
 	self assert: A * X = B! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
@@ -4620,12 +4628,12 @@ testBacklashProductRingMatrixRandom
 testBacklashRationalMatrixRandom
 	self testBacklashMatrixRandomOver: „! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:57:31'!
 testBacklashRationalTuple
 	"Example from Sage documentation."
 	| A v x |
-	A _ „ matrix: 3 coefficients: #(1 2 3 -1 2 5 2 3 1).
-	v _ „ tuple: #(1 2 3).
+	A _ („^3) endomorphisms !! #(1 2 3 -1 2 5 2 3 1).
+	v _ „^3 !! #(1 2 3).
 	x _ A \ v.
 	self assert: x = (-13/12, (23/12), (-7/12)).
 	self assert: A * x = v! !
@@ -4643,33 +4651,33 @@ testBacklashRationalTuple2
 testBacklashRationalTupleRandom
 	self testBacklashTupleRandomOver: „! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:58:33'!
 testBacklashSingular
 	"Example from Sage documentation."
 	| A B X |
-	A _ „ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
-	B _ „ matrix: 2@2 coefficients: #(6 -6 12 -12).
+	A _ „^3 => („^2) !! #(1 2 3 2 4 6).
+	B _ „^2 => („^2) !! #(6 -6 12 -12).
 	X _ A \ B.
-	self assert: X = („ matrix: 3@2 coefficients: (6, -6, 0, 0, 0, 0)).
+	self assert: X = („^2 => („^3) !! (6, -6, 0, 0, 0, 0)).
 	self assert: A * X = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:58:50'!
 testBacklashTupleNonSquare
 	"Example from Sage documentation."
 	| A v x |
-	A _ „ matrix: 2@3 coefficients: #(1 2 3 2 4 6).
+	A _ „^3 => („^2) !! #(1 2 3 2 4 6).
 	v _ (-1/2, -1).
 	x _ (-1/2, 0, 0).
 	self assert: A \ v = x! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 3/9/2020 19:18:49'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 13:36:06'!
 testBacklashTupleRandomOver: R
 	| n m A v b x |
 	100 timesRepeat:
 		[n _ 5 atRandom.
 		m _ 5 atRandom.
-		A _ R atRandomMatrix: m@n bits: m*n*5.
-		v _ R atRandomTuple: n bits: n*5.
+		A _ R^n => (R^m) atRandomBits: m*n*5.
+		v _ R^n atRandomBits: n*5.
 		b _ A*v.
 		x _ A \ b.
 		self assert: A*x = b]! !
@@ -4719,22 +4727,22 @@ testKernelRational
 	K _ „^5 span: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernel = K! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 13:04:24'!
 testSlashWithMatrix
 	| A B X  |
-	A _ „ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
-	B _ „ matrix: 1@3 coefficients: #(2 19 8).
+	A _ („^3) endomorphisms !! #(1 1 3 2 0 4 -1 6 -1).
+	B _ „^3 => („^1) !! #(2 19 8).
 	X _ B / A.
-	self assert: X = („ matrix: 1@3 coefficients: #(1 2 3)).
+	self assert: X = (B parent !! #(1 2 3)).
 	self assert: X * A = B! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 13:04:58'!
 testSlashWithTuple
 	| A b x  |
-	A _ „ matrix: 3 coefficients: #(1 1 3 2 0 4 -1 6 -1).
-	b _ „ tuple: #(2 19 8).
+	A _ („^3) endomorphisms !! #(1 1 3 2 0 4 -1 6 -1).
+	b _ „^3 !! #(2 19 8).
 	x _ b / A.
-	self assert: x = („ tuple: #(1 2 3)).
+	self assert: x = („^3 !! #(1 2 3)).
 	self assert: x * A = b! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 12:40:32'!
@@ -4745,17 +4753,17 @@ testSolveInteger
 testSolvePrimeField
 	self testSolveRandomOver: (PrimeField new: 256 atRandom nextPrime)! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/24/2020 14:08:28'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 13:37:24'!
 testSolveRandomOver: aRing
 	| A B n solution N X combinations |
 	n _ 5 atRandom.
-	A _ aRing atRandomMatrix: n @ 5 atRandom bits: 100.
+	A _ aRing^5 => (aRing^n) atRandomBits: 100.
 	combinations _ (1 to: n) collect: [:each| 2 atRandom = 1].
 	B _ Matrix columns:
 		(combinations collect: [:isCombination|
 			isCombination
-				ifTrue: [A * (aRing atRandomTuple: A width bits: 20)]
-				ifFalse: [aRing atRandomTuple: A height bits: 20]]).
+				ifTrue: [A * (A domain atRandomBits: 20)]
+				ifFalse: [A codomain atRandomBits: 20]]).
 	solution _ A solve: B.
 	N _ solution first.
 	X _ solution second.
@@ -4766,12 +4774,13 @@ testSolveRandomOver: aRing
 testSolveRational
 	self testSolveRandomOver: „! !
 
-!MatrixTest methodsFor: 'private' stamp: 'len 3/9/2020 12:21:09'!
+!MatrixTest methodsFor: 'private' stamp: 'len 6/1/2020 14:04:41'!
 newRandomMatrix: shape over: aRing
-	| samples |
-	2 atRandom = 1 ifTrue: [^ aRing atRandomMatrix: shape bits: 100].
+	| samples hom |
+	hom _ aRing^shape y => (aRing^shape x).
+	2 atRandom = 1 ifTrue: [^ hom atRandomBits: 100].
 	samples _ {aRing zero. aRing one. aRing one negated}.
-	^ aRing matrix: shape evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
+	^ hom filling: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 5/23/2020 09:34:55'!
 testHomRelationsBug
@@ -5166,14 +5175,14 @@ testMapToSmallerDimensionIsNotInjective
 	f _ (V => W) atRandomBits: 100.
 	self assert: f isInjective not! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/31/2020 20:11:37'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 6/1/2020 13:06:03'!
 testMapsInducedByHom
 	"Example from 'A Singular Introduction to Commutative Algebra', Example 2.1.7 (Maps Induced by Hom)."
 	| X Y Z f g h yz zx |
 	X _ „^3.
 	Y _ „^3.
 	Z _ „^2.
-	f _ X to: Y matrix: („ matrix: 3 coefficients: (1 to: 9)).
+	f _ X to: Y matrix: („^3) endomorphisms !! (1 to: 9).
 	g _ f => Z. "Hom(-,Z)"
 	self assert: g domain = (Y => Z). "it is contravariant"
 	self assert: g codomain = (X => Z).
@@ -5866,12 +5875,13 @@ newLinearMap
 	W _ self newFreeModuleOver: K.
 	^ V => W !! (self newMatrix: W rank @ V rank over: K)! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 3/9/2020 20:42:07'!
+!ModuleTest methodsFor: 'private' stamp: 'len 6/1/2020 14:14:17'!
 newMatrix: shape over: aRing
-	| samples |
-	2 atRandom = 1 ifTrue: [^ aRing atRandomMatrix: shape bits: 100].
+	| hom samples |
+	hom _ aRing^shape y => (aRing^shape x).
+	2 atRandom = 1 ifTrue: [^ hom atRandomBits: 100].
 	samples _ {aRing zero. aRing one. aRing one negated}.
-	^ aRing matrix: shape evaluating: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
+	^ hom filling: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
 
 !ModuleTest methodsFor: 'private' stamp: 'len 5/23/2020 09:34:55'!
 newScalarsField
@@ -6462,10 +6472,6 @@ testArithmeticZ3
 !PolynomialTest methodsFor: 'arithmetic' stamp: 'len 5/23/2020 09:34:55'!
 testArithmeticZm
 	self testArithmeticOver: ƒ/(2 + 100 atRandom)! !
-
-!PolynomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-testArithmetic„
-	self testArithmeticOver: „! !
 
 !PolynomialTest methodsFor: 'division' stamp: 'len 5/12/2020 12:33:23'!
 testDivision: F
@@ -7161,13 +7167,13 @@ testEvaluationHomomorphism: F
 	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
 	self assert: (f^3 value: a) = ((f value: a)^3)! !
 
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 6/1/2020 13:37:41'!
 testEvaluationHomomorphismMultivariate
 	| Zxyz f g a |
 	Zxyz _ ƒ polynomialsIn: #(x y z).
 	f _ Zxyz atRandomBits: 1000 maxDegree: 10.
 	g _ Zxyz atRandomBits: 1000 maxDegree: 10.
-	a _ ƒ atRandomTuple: 3 bits: 100.
+	a _ ƒ^3 atRandomBits: 100.
 	self assert: (f+g value: a) = ((f value: a) + (g value: a)).
 	self assert: (f-g value: a) = ((f value: a) - (g value: a)).
 	self assert: (f*g value: a) = ((f value: a) * (g value: a)).
@@ -7190,13 +7196,13 @@ testEvaluationHomomorphismZp
 	self testEvaluationHomomorphism: (PrimeField new: 2^13 - 1).
 	self testEvaluationHomomorphism: (PrimeField new: 2^31 - 1)! !
 
-!PolynomialTest methodsFor: 'evaluation' stamp: 'len 5/23/2020 09:34:55'!
+!PolynomialTest methodsFor: 'evaluation' stamp: 'len 6/1/2020 13:37:52'!
 testEvaluationMultivariate
 	| Zxyz f a x y z |
 	Zxyz _ ƒ polynomialsIn: #(x y z).
 	x _ Zxyz x. y _ Zxyz y. z _ Zxyz z.
 	f _ x^2 * y - z.
-	a _ ƒ atRandomTuple: 3 bits: 100.
+	a _ ƒ^3 atRandomBits: 100.
 	self assert: (f value: a) = ((a at: 1)^2 * (a at: 2) - (a at: 3))! !
 
 !PolynomialTest methodsFor: 'factorization' stamp: 'len 5/23/2020 09:34:55'!
@@ -7563,28 +7569,6 @@ testSinSquaredPlusCosSquared
 	sin _ self sin.
 	cos _ self cos.
 	self assert: cos squared + sin squared = cos parent one! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒ
-	self testRing: ƒ! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒIdeals
-	self assert: (ƒ * 3 includes: 6).
-	self deny: (ƒ * 3 includes: 7).
-	self assert: (ƒ * 0) isTrivial.
-	self assert: (ƒ * 1) isOne! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
-testƒPrimeNotMaximalIdeal
-	| I |
-	I _ ƒ * 0.
-	self assert: I isPrime.
-	self assert: I isMaximal not! !
-
-!RingTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
-test„
-	self testRing: „! !
 
 !RingTest methodsFor: 'euclidean' stamp: 'len 5/23/2020 09:34:55'!
 testCongruenceSolving1
@@ -8502,6 +8486,13 @@ testZZIdeals
 	self assert: (ƒ * 0) isTrivial.
 	self assert: (ƒ * 1) isOne! !
 
+!RingTest methodsFor: 'general' stamp: 'len 6/7/2020 11:18:49'!
+testZZPrimeAndMaximalIdeals
+	| I |
+	I _ ƒ * 64 atRandom nextPrime.
+	self assert: I isPrime.
+	self assert: I isMaximal! !
+
 !RingTest methodsFor: 'general' stamp: 'len 5/23/2020 09:35:33'!
 testZZPrimeNotMaximalIdeal
 	| I |
@@ -9061,21 +9052,21 @@ testBitTupleBug
 	self assert: ((1,1,0) % 2 :: sum = Z2 zero).
 	self assert: ((1,1,1) % 2 :: sum = Z2 one)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:38:19'!
 testBitTupleOperations
 	| n a b |
 	n _ 120 atRandom.
-	a _ ƒ atRandomTuple: n bits: n*2.
-	b _ ƒ atRandomTuple: n bits: n*2.
+	a _ ƒ^n atRandomBits: n*2.
+	b _ ƒ^n atRandomBits: n*2.
 	#(+ - · convolution: hadamard:) do: [:op|
 		self testTuple: a with: b operation: op modulo: 2].
 	#(negated reversed copy sum product) do: [:op|
 		self testTuple: a operation: op modulo: 2]! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:30:24'!
 testBitTupleReversed
 	| v i |
-	v _ ƒ / 2 atRandomTuple: 100 atRandom.
+	v _ (ƒ/2^100 atRandom) atRandom.
 	i _ v size atRandom.
 	self assert: (v reversed at: i) = (v at: v size - i + 1).
 	self assert: v reversed reversed = v! !
@@ -9134,12 +9125,13 @@ testModTupleConvolution
 	b _ (2,3,4).
 	self assert: (a % 7 convolution: b % 7) = ((a convolution: b) % 7)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:39:06'!
 testModTupleOperations
-	| a b modulus |
+	| n a b modulus |
 	modulus _ 10 atRandom + 1.
-	a _ ƒ atRandomTuple: 5 bits: 30.
-	b _ ƒ atRandomTuple: 5 bits: 30.
+	n _ 5 atRandom.
+	a _ ƒ^n atRandomBits: 30.
+	b _ ƒ^n atRandomBits: 30.
 	#(+ - · convolution: hadamard:) do: [:op|
 		self testTuple: a with: b operation: op modulo: modulus].
 	#(negated reversed copy sum product) do: [:op|
@@ -9176,12 +9168,12 @@ testModularIntegersTupleAssociateBug2
 	self assert: t*5*5 = t.
 	self assert: (t*5) normalized = t normalized! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:30:48'!
 testModularIntegersTupleUnitsAndAssociates
 	| R t tt |
 	100 timesRepeat:
 		[R _ ƒ/64 atRandom.
-		t _ R atRandomTuple: 5 atRandom.
+		t _ (R^5 atRandom) atRandom.
 		tt _ t normalized.
 		self assert: t * t unit inverse = tt.
 		R unitsDo: [:u| self assert: (t*u) normalized = tt]]! !
