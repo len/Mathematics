@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 7 June 2020 at 1:24:23 pm'!
+'From Cuis 5.0 [latest update: #4190] on 7 June 2020 at 3:57:52 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 594!
+!provides: 'Domains' 1 595!
 !requires: 'RayTracer' 1 2 nil!
 !requires: 'Complex' 1 7 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
@@ -910,6 +910,16 @@ FractionRing subclass: #RationalField
 RationalField class
 	instanceVariableNames: ''!
 
+!classDefinition: #AdicField category: #'Domains-Rings-Adic'!
+FractionRing subclass: #AdicField
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Rings-Adic'!
+!classDefinition: 'AdicField class' category: #'Domains-Rings-Adic'!
+AdicField class
+	instanceVariableNames: ''!
+
 !classDefinition: #AffineFractionRing category: #'Domains-Polynomials'!
 FractionRing subclass: #AffineFractionRing
 	instanceVariableNames: 'quotient'
@@ -928,6 +938,16 @@ FractionRing subclass: #RationalFunctionField
 	category: 'Domains-Polynomials'!
 !classDefinition: 'RationalFunctionField class' category: #'Domains-Polynomials'!
 RationalFunctionField class
+	instanceVariableNames: ''!
+
+!classDefinition: #LaurentSeriesRing category: #'Domains-Series'!
+FractionRing subclass: #LaurentSeriesRing
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Series'!
+!classDefinition: 'LaurentSeriesRing class' category: #'Domains-Series'!
+LaurentSeriesRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #LocalRing category: #'Domains-Rings'!
@@ -1100,16 +1120,6 @@ Ring subclass: #RationalIntegerRing
 RationalIntegerRing class
 	instanceVariableNames: ''!
 
-!classDefinition: #AdicField category: #'Domains-Rings-Adic'!
-Ring subclass: #AdicField
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Rings-Adic'!
-!classDefinition: 'AdicField class' category: #'Domains-Rings-Adic'!
-AdicField class
-	instanceVariableNames: ''!
-
 !classDefinition: #AdicRing category: #'Domains-Rings-Adic'!
 Ring subclass: #AdicRing
 	instanceVariableNames: ''
@@ -1198,16 +1208,6 @@ Ring subclass: #PolynomialRing
 	category: 'Domains-Polynomials'!
 !classDefinition: 'PolynomialRing class' category: #'Domains-Polynomials'!
 PolynomialRing class
-	instanceVariableNames: ''!
-
-!classDefinition: #LaurentSeriesRing category: #'Domains-Series'!
-Ring subclass: #LaurentSeriesRing
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Series'!
-!classDefinition: 'LaurentSeriesRing class' category: #'Domains-Series'!
-LaurentSeriesRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #PowerSeriesRing category: #'Domains-Series'!
@@ -3754,6 +3754,9 @@ References:
 !RationalField commentStamp: '<historical>' prior: 0!
 The singletion global instance „ is the field of rational numbers.!
 
+!AdicField commentStamp: '<historical>' prior: 0!
+Field of p-adic numbers Qp. This is the fraction field of the ring of p-adic integers Zp. Elements are AdicNumbers. See also AdicRing and AdicInteger.!
+
 !AffineFractionRing commentStamp: '<historical>' prior: 0!
 Total ring of fractions of an affine ring R = K[x1,...,xn]/I over a field K. The elements are fractions a / b where a and b are in R, and b is invertible in R. See AffineRationalFunction.
 
@@ -3761,6 +3764,9 @@ Internally, the ring of fractions is constructed as an affine ring over the rati
 
 !RationalFunctionField commentStamp: '<historical>' prior: 0!
 The field of fractions of a polynomial ring with coefficients over a field.!
+
+!LaurentSeriesRing commentStamp: '<historical>' prior: 0!
+Ring R((x)) of univariate formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
 
 !LocalRing commentStamp: '<historical>' prior: 0!
 Localization of a commutative ring R at a prime ideal P. The elements are 'germs at P' (see Germ), and can be thought as fractions a / b with a in R and b in R \ P. This is a subring of the total ring of fractions Frac(R) (see FractionRing).
@@ -3859,9 +3865,6 @@ Quadratic number fields, i.e. number fields with defining quadratic polynomial o
 !RationalIntegerRing commentStamp: '<historical>' prior: 0!
 The singletion global instance ƒ is the ring of rational integers.!
 
-!AdicField commentStamp: '<historical>' prior: 0!
-Field of p-adic numbers Qp. This is the fraction field of the ring of p-adic integers Zp. Elements are AdicNumbers. See also AdicRing and AdicInteger.!
-
 !AdicRing commentStamp: '<historical>' prior: 0!
 Ring of p-adic integers Zp. Elements are AdicIntegers. See also AdicField, AdicNumber and PrimePowerRing.
 
@@ -3895,9 +3898,6 @@ Polynomial rings have an associated monomial ordering. This is used for defining
 
 See also PolynomialRingMap, PolynomialIdeal, AffineRing, RationalFunctionField, AffineSpace.
 !
-
-!LaurentSeriesRing commentStamp: '<historical>' prior: 0!
-Ring R((x)) of univariate formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
 
 !PowerSeriesRing commentStamp: '<historical>' prior: 0!
 Ring R[[x1,...,xn]] of formal power series in one or many indeterminates over a commutative ring R. See PowerSeries.
@@ -5195,12 +5195,22 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: $„! !
 
+!AdicField methodsFor: 'printing' stamp: 'len 5/23/2020 09:11:37'!
+printOn: aStream
+	aStream print: „; nextPutAll: self p printString sub! !
+
 !RationalFunctionField methodsFor: 'printing' stamp: 'len 10/28/2016 10:36'!
 printOn: aStream
 	aStream print: self scalars.
 	aStream nextPut: $(.
 	self integers printIndeterminatesOn: aStream.
 	aStream nextPut: $)! !
+
+!LaurentSeriesRing methodsFor: 'printing' stamp: 'len 9/22/2018 19:20:53'!
+printOn: aStream
+	aStream print: self scalars; nextPutAll: '(('.
+	self integers printIndeterminatesOn: aStream.
+	aStream nextPutAll: '))'! !
 
 !LocalRing methodsFor: 'printing' stamp: 'len 12/18/2016 21:05:06'!
 printOn: aStream
@@ -5266,10 +5276,6 @@ printOn: aStream
 printOn: aStream
 	aStream nextPut: $ƒ! !
 
-!AdicField methodsFor: 'printing' stamp: 'len 5/23/2020 09:11:37'!
-printOn: aStream
-	aStream print: „; nextPutAll: self p printString sub! !
-
 !AdicRing methodsFor: 'printing' stamp: 'len 5/23/2020 08:55:51'!
 printOn: aStream
 	aStream print: ƒ; nextPutAll: self p printString sub! !
@@ -5303,12 +5309,6 @@ printOn: aStream
 	self printIndeterminatesOn: aStream.
 	aStream nextPut: $].
 	self ordering isLocal ifTrue: [aStream nextPutAll: self maximalIdeal printText sub]! !
-
-!LaurentSeriesRing methodsFor: 'printing' stamp: 'len 9/22/2018 19:20:53'!
-printOn: aStream
-	aStream print: self scalars; nextPutAll: '(('.
-	self integers printIndeterminatesOn: aStream.
-	aStream nextPutAll: '))'! !
 
 !PowerSeriesRing methodsFor: 'printing' stamp: 'len 9/22/2018 19:20:17'!
 printOn: aStream
@@ -16952,6 +16952,40 @@ initialize
 	super initialize.
 	Smalltalk at: #„ put: self new! !
 
+!AdicField methodsFor: 'accessing' stamp: 'len 12/17/2016 20:30:57'!
+p
+	^ self integers p! !
+
+!AdicField methodsFor: 'accessing' stamp: 'len 6/7/2019 17:10:44'!
+power: anInteger
+	^ self integers power: anInteger! !
+
+!AdicField methodsFor: 'accessing' stamp: 'len 6/2/2019 05:24:21'!
+primeSubfield
+	^ self! !
+
+!AdicField methodsFor: 'morphisms' stamp: 'len 5/8/2020 18:09:22'!
+embed: anAdicInteger
+	| v |
+	v _ anAdicInteger valuation.
+	^ AdicNumber new valuation: v unit: anAdicInteger unit! !
+
+!AdicField methodsFor: 'testing' stamp: 'len 5/8/2020 17:54:13'!
+includes: anElement
+	^ (anElement isKindOf: AdicNumber) and: [self integers includes: anElement unitPart]! !
+
+!AdicField methodsFor: 'testing' stamp: 'len 8/7/2019 07:48:23'!
+isApproximate
+	^ true! !
+
+!AdicField methodsFor: 'testing' stamp: 'len 8/7/2019 09:48:30'!
+isField
+	^ true! !
+
+!AdicField methodsFor: 'testing' stamp: 'len 6/4/2019 04:52:35'!
+isLocalField
+	^ true! !
+
 !AffineFractionRing methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 10:19:01'!
 asAffineRing
 	^ quotient! !
@@ -17041,6 +17075,36 @@ on: aPolynomialRing
 		ifTrue: [aPolynomialRing]
 		ifFalse: [aPolynomialRing orderedBy: #llex]."
 	^ super on: R! !
+
+!LaurentSeriesRing methodsFor: 'accessing' stamp: 'len 6/3/2019 02:45:08'!
+names
+	^ self integers names! !
+
+!LaurentSeriesRing methodsFor: 'accessing' stamp: 'len 6/3/2019 02:45:47'!
+names: anArray
+	self integers names: anArray! !
+
+!LaurentSeriesRing methodsFor: 'accessing' stamp: 'len 6/7/2020 15:51:11'!
+x
+	^ self embed: self integers x! !
+
+!LaurentSeriesRing methodsFor: 'morphisms' stamp: 'len 6/7/2020 15:12:59'!
+embed: aPowerSeries
+	| v |
+	v _ aPowerSeries valuation.
+	^ LaurentSeries new valuation: v unit: aPowerSeries unit! !
+
+!LaurentSeriesRing methodsFor: 'testing' stamp: 'len 6/7/2020 15:11:05'!
+includes: anElement
+	^ (anElement isKindOf: LaurentSeries) and: [self integers includes: anElement unitPart]! !
+
+!LaurentSeriesRing methodsFor: 'testing' stamp: 'len 8/7/2019 07:53:39'!
+isApproximate
+	^ true! !
+
+!LaurentSeriesRing methodsFor: 'testing' stamp: 'len 6/4/2019 05:02:19'!
+isLocalField
+	^ self scalars isGaloisField! !
 
 !LocalRing methodsFor: 'accessing' stamp: 'len 10/28/2016 16:37'!
 characteristic
@@ -17541,16 +17605,13 @@ isBezout
 	"Bezout rings (like PIRs) are closed under quotients:"
 	^ self base isBezout or: [super isBezout]! !
 
-!QuotientRing methodsFor: 'testing' stamp: 'len 6/9/2019 03:02:03'!
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/7/2020 13:49:22'!
 isField
-	"Answer true if the receiver forms a residue field."
 	^ self base isTrivial not and: [self relations isMaximal]! !
 
-!QuotientRing methodsFor: 'testing' stamp: 'len 8/9/2019 12:03:48'!
+!QuotientRing methodsFor: 'testing' stamp: 'len 6/7/2020 13:49:07'!
 isIntegralDomain
-	self base isTrivial not ifTrue: [^ self relations isPrime].
-	self isIntegrallyClosedDomain ifTrue: [^ true].
-	^ super isIntegralDomain! !
+	^ self base isTrivial not and: [self relations isPrime]! !
 
 !QuotientRing methodsFor: 'testing' stamp: 'len 5/20/2018 21:59:53'!
 isLocal
@@ -19014,81 +19075,6 @@ initialize
 	super initialize.
 	Smalltalk at: #ƒ put: self new! !
 
-!AdicField methodsFor: 'accessing' stamp: 'len 8/11/2019 11:26:37'!
-characteristic
-	^ 0! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 8/7/2019 08:49:26'!
-integers
-	^ self propertyAt: #integers! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 8/11/2019 11:17:49'!
-one
-	^ self embed: self integers one! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 12/17/2016 20:30:57'!
-p
-	^ self integers p! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 6/7/2019 17:10:44'!
-power: anInteger
-	^ self integers power: anInteger! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 6/2/2019 05:24:21'!
-primeSubfield
-	^ self! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 8/11/2019 11:21:37'!
-uniformizer
-	"A uniformizer (or uniformizing parameter, uniformizer element or prime element) is any irreducible element of a DVR, or equivalently a generator of the maximal ideal. All non-zero ideals are generated by some power of the uniformizer."
-	^ self embed: self integers uniformizer! !
-
-!AdicField methodsFor: 'accessing' stamp: 'len 8/11/2019 11:17:53'!
-zero
-	^ self embed: self integers zero! !
-
-!AdicField methodsFor: 'comparing' stamp: 'len 8/9/2019 04:41:02'!
-= anObject
-	^ self == anObject or: [self class = anObject class and: [self integers = anObject integers]]! !
-
-!AdicField methodsFor: 'comparing' stamp: 'len 8/9/2019 04:41:11'!
-hash
-	^ self integers hash! !
-
-!AdicField methodsFor: 'morphisms' stamp: 'len 5/8/2020 18:09:22'!
-embed: anAdicInteger
-	| v |
-	v _ anAdicInteger valuation.
-	^ AdicNumber new valuation: v unit: anAdicInteger unit! !
-
-!AdicField methodsFor: 'operations' stamp: 'len 8/7/2019 08:49:02'!
-fractions
-	^ self! !
-
-!AdicField methodsFor: 'testing' stamp: 'len 5/8/2020 17:54:13'!
-includes: anElement
-	^ (anElement isKindOf: AdicNumber) and: [self integers includes: anElement unitPart]! !
-
-!AdicField methodsFor: 'testing' stamp: 'len 8/7/2019 07:48:23'!
-isApproximate
-	^ true! !
-
-!AdicField methodsFor: 'testing' stamp: 'len 8/7/2019 09:48:30'!
-isField
-	^ true! !
-
-!AdicField methodsFor: 'testing' stamp: 'len 6/4/2019 04:52:35'!
-isLocalField
-	^ true! !
-
-!AdicField methodsFor: 'private' stamp: 'len 8/7/2019 09:48:13'!
-integers: anAdicRing
-	self propertyAt: #integers put: anAdicRing! !
-
-!AdicField class methodsFor: 'as yet unclassified' stamp: 'len 8/7/2019 08:49:40'!
-on: anAdicRing
-	^ self new integers: anAdicRing! !
-
 !AdicRing methodsFor: 'accessing' stamp: 'len 12/17/2016 20:31:49'!
 characteristic
 	^ 0! !
@@ -20259,30 +20245,6 @@ new: anInteger over: aRing
 new: anInteger over: aRing ordering: aMonomialOrdering
 	^ self monomials: (FreeAbelianMonoid new: anInteger ordering: aMonomialOrdering) over: aRing! !
 
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 8/7/2019 07:53:39'!
-isApproximate
-	^ true! !
-
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/4/2019 05:02:19'!
-isLocalField
-	^ self scalars isGaloisField! !
-
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 02:45:08'!
-names
-	^ self integers names! !
-
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 02:45:47'!
-names: anArray
-	self integers names: anArray! !
-
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 8/11/2019 12:23:42'!
-scalars
-	^ self integers scalars! !
-
-!LaurentSeriesRing methodsFor: 'as yet unclassified' stamp: 'len 6/3/2019 02:48:02'!
-x
-	^ self !! self integers x! !
-
 !PowerSeriesRing methodsFor: 'accessing' stamp: 'len 8/9/2019 11:32:16'!
 base
 	^ self propertyAt: #base! !
@@ -20411,9 +20373,9 @@ to: aCodomain
 	aCodomain = self residueField ifTrue: [^ self addMap: ((self onto: aCodomain evaluating: [:f| aCodomain !! (f coefficients at: 1)]) name: 'Ž')].
 	^ super to: aCodomain! !
 
-!PowerSeriesRing methodsFor: 'operations' stamp: 'len 6/3/2019 03:08:37'!
+!PowerSeriesRing methodsFor: 'operations' stamp: 'len 6/7/2020 15:15:17'!
 fractions
-	^ LaurentSeriesRing on: self! !
+	^ self propertyAt: #fractions ifAbsentPut: [LaurentSeriesRing on: self]! !
 
 !PowerSeriesRing methodsFor: 'operations' stamp: 'len 8/9/2019 13:48:28'!
 over: aRing
@@ -20460,6 +20422,10 @@ isNoetherian
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 8/10/2019 05:02:00'!
 isPID
 	^ self base isPID! !
+
+!PowerSeriesRing methodsFor: 'testing' stamp: 'len 6/7/2020 15:18:22'!
+isTrivial
+	^ self base isTrivial! !
 
 !PowerSeriesRing methodsFor: 'testing' stamp: 'len 8/9/2019 12:43:57'!
 isUnivariate
@@ -23448,13 +23414,13 @@ singular
 	(See Eisenbud 'Commutative Algebra' Ch. 20, re Fitting ideal.)"
 	^ self propertyAt: #singularSubscheme ifAbsentPut: [self subscheme: self ideal singular]! !
 
-!AffineVariety methodsFor: 'operations' stamp: 'len 5/20/2018 16:20:19'!
+!AffineVariety methodsFor: 'operations' stamp: 'len 6/7/2020 14:32:53'!
 tangentConeAt: aTuple
 	"Answer the affine tangent cone at the given point."
 	| R I |
 	R _ self ambient coordinateRing.
 	I _ (self - aTuple) ideal.
-	^ (self ambient subscheme: ((I basisWithOrdering: #lglex) collect: [:each| R !! each leadingForm])) + aTuple! !
+	^ (self ambient subscheme: ((I basisWithOrdering: #lglex) collect: [:each| R !! each initialForm])) + aTuple! !
 
 !AffineVariety methodsFor: 'operations' stamp: 'len 5/20/2018 16:20:38'!
 tangentSpaceAt: aTuple
@@ -36249,10 +36215,10 @@ abs
 isPrime
 	^ self isZero or: [self valuation = 1] "optimize"! !
 
-!AdicInteger methodsFor: 'testing' stamp: 'len 8/11/2019 11:12:15'!
+!AdicInteger methodsFor: 'testing' stamp: 'len 6/7/2020 15:03:38'!
 isSquareFree
 	self valuation >= 2 ifTrue: [^ false].
-	self isWeaklyZero ifTrue: [^ self error: 'not enough precision'].
+"	self isWeaklyZero ifTrue: [^ self error: 'not enough precision']."
 	^ true! !
 
 !AdicInteger methodsFor: 'testing' stamp: 'len 5/4/2020 09:42:55'!
@@ -36559,14 +36525,20 @@ formAt: anInteger
 	self terms do: [:each| each degree = anInteger ifTrue: [answer _ answer + each]].
 	^ answer! !
 
-!Polynomial methodsFor: 'accessing-terms' stamp: 'len 2/7/2017 03:56:52'!
-leadingForm
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 6/7/2020 14:32:41'!
+initialForm
 	"Answer the homogeneous component of the lowest degree.
 	This makes sense for a local ordering."
 	self ordering isLocal ifFalse: [self error: 'not a local ordering'].
 	^ self isZero
 		 ifTrue: [self]
 		 ifFalse: [self formAt: self order]! !
+
+!Polynomial methodsFor: 'accessing-terms' stamp: 'len 6/7/2020 14:31:24'!
+initialTerm
+	^ self isZero
+		 ifTrue: [self]
+		 ifFalse: [self termAt: self initialMonomial]! !
 
 !Polynomial methodsFor: 'accessing-terms' stamp: 'len 3/1/2016 22:11'!
 leadingTerm
@@ -37310,9 +37282,17 @@ bitSize
 at: aMonomial
 	^ self at: aMonomial ifAbsent: [self scalars zero]! !
 
+!MultivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 6/7/2020 14:34:08'!
+initialCoefficient
+	^ parts isEmpty ifTrue: [self scalars zero] ifFalse: [parts first value]! !
+
 !MultivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 8/18/2019 06:07:09'!
 leadingCoefficient
 	^ parts isEmpty ifTrue: [self scalars zero] ifFalse: [parts last value]! !
+
+!MultivariatePolynomial methodsFor: 'accessing-monomials' stamp: 'len 6/7/2020 14:28:56'!
+initialMonomial
+	^ parts isEmpty ifFalse: [parts first key]! !
 
 !MultivariatePolynomial methodsFor: 'accessing-monomials' stamp: 'len 8/18/2019 06:07:17'!
 leadingMonomial
@@ -37565,6 +37545,10 @@ degree
 !UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 5/16/2020 15:59:53'!
 independentCoefficient
 	^ self atDegree: 0! !
+
+!UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 6/7/2020 14:34:53'!
+initialCoefficient
+	^ self coefficients detect: [:one| one isZero not] ifNone: [self scalars zero]! !
 
 !UnivariatePolynomial methodsFor: 'accessing-coefficients' stamp: 'len 8/12/2019 16:51:05'!
 leadingCoefficient
@@ -38727,6 +38711,10 @@ valuation
 hash
 	^ unitPart hash + valuation hash! !
 
+!LaurentSeries methodsFor: 'operations' stamp: 'len 6/7/2020 15:15:46'!
+over: aRing
+	^ self class on: (self integers over: aRing)! !
+
 !LaurentSeries methodsFor: 'testing' stamp: 'len 8/11/2019 11:35:18'!
 isIntegral
 	^ self valuation >= 0! !
@@ -38752,21 +38740,17 @@ coefficients
 independentCoefficient
 	^ representative independentCoefficient! !
 
-!PowerSeries methodsFor: 'accessing' stamp: 'len 5/31/2020 17:20:42'!
+!PowerSeries methodsFor: 'accessing' stamp: 'len 6/7/2020 14:29:59'!
 leadingCoefficient
-	"Answer the first non-zero coefficient, or zero if the receiver is zero."
-	self flag: #fix. "for this should use a local ordering, or another message"
-	^ representative leadingCoefficient! !
+	^ representative initialCoefficient! !
 
-!PowerSeries methodsFor: 'accessing' stamp: 'len 5/31/2020 17:20:54'!
+!PowerSeries methodsFor: 'accessing' stamp: 'len 6/7/2020 14:30:20'!
 leadingMonomial
-	self flag: #fix. "for this should use a local ordering, or another message"
-	^ representative leadingMonomial! !
+	^ representative initialMonomial! !
 
-!PowerSeries methodsFor: 'accessing' stamp: 'len 5/31/2020 17:20:58'!
+!PowerSeries methodsFor: 'accessing' stamp: 'len 6/7/2020 14:30:30'!
 leadingTerm
-	self flag: #fix. "for this should use a local ordering, or another message"
-	^ representative leadingTerm! !
+	^ representative initialTerm! !
 
 !PowerSeries methodsFor: 'accessing' stamp: 'len 8/9/2019 09:44:38'!
 parent
@@ -38784,6 +38768,18 @@ relativePrecision
 !PowerSeries methodsFor: 'accessing' stamp: 'len 8/9/2019 09:45:12'!
 representative
 	^ representative! !
+
+!PowerSeries methodsFor: 'accessing' stamp: 'len 6/7/2020 14:47:17'!
+unit
+	"Answer a unit 'u' such that 'self * u inverse' is a unique choice of associate. See >>normalized."
+	self isUnit ifTrue: [^ self].
+	self isZero ifTrue: [^ self parent one].
+	self parent isUnivariate
+		ifTrue:
+			[| v |
+			v _ representative order.
+			^ self parent representative: representative >> v precision: precision - v].
+	^ self notYetImplemented! !
 
 !PowerSeries methodsFor: 'accessing' stamp: 'len 4/14/2020 18:54:45'!
 valuation
@@ -38806,9 +38802,10 @@ isWeaklyEqualTo: aPowerSeries
 	precision = aPowerSeries precision ifTrue: [^ representative = aPowerSeries representative].
 	^ representative = (aPowerSeries representative truncatedTo: precision)! !
 
-!PowerSeries methodsFor: 'operations' stamp: 'len 4/15/2020 08:00:50'!
+!PowerSeries methodsFor: 'operations' stamp: 'len 6/7/2020 14:52:16'!
 * anElement
 	| N |
+	anElement isInteger ifTrue: [^ parent representative: representative * anElement precision: precision].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
 	self isZero ifTrue: [^ self].
 	anElement isZero ifTrue: [^ anElement].
@@ -38867,6 +38864,10 @@ isUnit
 	"Answer true if the receiver is invertible."
 	self parent scalars isField ifTrue: [^ self independentCoefficient isUnit].
 	^ super isUnit! !
+
+!PowerSeries methodsFor: 'testing' stamp: 'len 6/7/2020 14:49:57'!
+isZero
+	^ representative isZero! !
 
 !PowerSeries methodsFor: 'private' stamp: 'len 8/9/2019 09:44:51'!
 parent: aPowerSeriesRing
