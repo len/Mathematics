@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 15 July 2020 at 10:24:51 am'!
+'From Cuis 5.0 [latest update: #4190] on 17 July 2020 at 3:00:51 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 171!
+!provides: 'DomainsTests' 1 172!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -1225,6 +1225,16 @@ testGroupAlgebra1
 	A _ G groupAlgebraOver: „.
 	self testAlgebra: A! !
 
+!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/17/2020 14:47:57'!
+testGroupAlgebraInverse
+	| G A a |
+	G _ SymmetricGroup new: 3.
+	A _ G groupAlgebraOver: „.
+	[a _ A atRandomBits: 10.
+	a isUnit] whileFalse.
+	self assert: a * a inverse = A one.
+	self assert: a inverse * a = A one! !
+
 !AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/15/2020 10:12:53'!
 testMatrixAlgebra
 	| R A |
@@ -1256,6 +1266,15 @@ testQuaternionAlgebra2
 	self assert: A one isOne.
 	self assert: A id isIdentity! !
 
+!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/16/2020 19:14:35'!
+testQuaternionAlgebraAsJordanAlgebra
+	| A J |
+	A _ QuaternionAlgebra over: „ invariants: #(-5 -2).
+	J _ A asJordanAlgebra.
+	self assert: J isCommutative.
+	self assert: J isAssociative not.
+	self assert: J isJordan! !
+
 !AlgebraTest methodsFor: 'quaternions' stamp: 'len 6/20/2020 12:44:14'!
 testQuaternionAlgebraCoercionToAndFromModule
 	| A x |
@@ -1264,6 +1283,15 @@ testQuaternionAlgebraCoercionToAndFromModule
 	self assert: A asModule = („^4).
 	self assert: A asModule !! x = („^4 !! #(1 -2 3 0)).
 	self assert: A !! (A asModule !! #(1 -2 3 0)) = x! !
+
+!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/16/2020 19:05:05'!
+testQuaternionAlgebraInverse
+	| A a |
+	A _ QuaternionAlgebra over: „ invariants: #(-5 -2).
+	[a _ A atRandomBits: 20.
+	a isUnit] whileFalse.
+	self assert: a * a inverse = A one.
+	self assert: a inverse * a = A one! !
 
 !AlgebraTest methodsFor: 'quaternions' stamp: 'len 6/20/2020 12:57:40'!
 testQuaternionAlgebraNormAndTrace
@@ -6089,7 +6117,7 @@ testTensorProductRelations
 newFreeModule
 	^ self newFreeModuleOver: self newScalarsRing! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 5/2/2020 17:27:00'!
+!ModuleTest methodsFor: 'private' stamp: 'len 7/16/2020 10:42:06'!
 newFreeModuleOver: scalars
 	| M N |
 	M _ 3 atRandom = 1 ifTrue: [scalars asScalarModule] ifFalse: [scalars ^ 3 atRandom].
@@ -6097,7 +6125,7 @@ newFreeModuleOver: scalars
 		[N _ self newFreeModuleOver: scalars.
 		2 atRandom = 1 ifTrue: [^ M => N].
 		^ M ‘ N].
-	4 atRandom = 1 ifTrue: [^ M endomorphisms].
+	4 atRandom = 1 ifTrue: [^ M endomorphisms asModule].
 	4 atRandom = 1 ifTrue: [^ M dual].
 	^ M! !
 
