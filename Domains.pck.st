@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 15 July 2020 at 10:24:44 am'!
+'From Cuis 5.0 [latest update: #4190] on 17 July 2020 at 2:59:33 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 597!
+!provides: 'Domains' 1 598!
 !requires: 'RayTracer' 1 2 nil!
 !requires: 'Complex' 1 7 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
@@ -1322,6 +1322,16 @@ Module subclass: #HomModule
 HomModule class
 	instanceVariableNames: ''!
 
+!classDefinition: #MatrixModule category: #'Domains-Modules'!
+HomModule subclass: #MatrixModule
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Modules'!
+!classDefinition: 'MatrixModule class' category: #'Domains-Modules'!
+MatrixModule class
+	instanceVariableNames: ''!
+
 !classDefinition: #QuotientModule category: #'Domains-Modules'!
 Module subclass: #QuotientModule
 	instanceVariableNames: ''
@@ -1392,6 +1402,26 @@ AssociativeAlgebra subclass: #CliffordAlgebra
 CliffordAlgebra class
 	instanceVariableNames: ''!
 
+!classDefinition: #EndomorphismAlgebra category: #'Domains-Algebras'!
+AssociativeAlgebra subclass: #EndomorphismAlgebra
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Algebras'!
+!classDefinition: 'EndomorphismAlgebra class' category: #'Domains-Algebras'!
+EndomorphismAlgebra class
+	instanceVariableNames: ''!
+
+!classDefinition: #MatrixAlgebra category: #'Domains-Algebras'!
+EndomorphismAlgebra subclass: #MatrixAlgebra
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Algebras'!
+!classDefinition: 'MatrixAlgebra class' category: #'Domains-Algebras'!
+MatrixAlgebra class
+	instanceVariableNames: ''!
+
 !classDefinition: #GroupAlgebra category: #'Domains-Algebras'!
 AssociativeAlgebra subclass: #GroupAlgebra
 	instanceVariableNames: ''
@@ -1400,16 +1430,6 @@ AssociativeAlgebra subclass: #GroupAlgebra
 	category: 'Domains-Algebras'!
 !classDefinition: 'GroupAlgebra class' category: #'Domains-Algebras'!
 GroupAlgebra class
-	instanceVariableNames: ''!
-
-!classDefinition: #MatrixAlgebra category: #'Domains-Algebras'!
-AssociativeAlgebra subclass: #MatrixAlgebra
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Algebras'!
-!classDefinition: 'MatrixAlgebra class' category: #'Domains-Algebras'!
-MatrixAlgebra class
 	instanceVariableNames: ''!
 
 !classDefinition: #QuaternionAlgebra category: #'Domains-Algebras'!
@@ -2952,6 +2972,16 @@ Object subclass: #AlgebraElement
 AlgebraElement class
 	instanceVariableNames: ''!
 
+!classDefinition: #GroupSum category: #'Domains-Algebras'!
+AlgebraElement subclass: #GroupSum
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Algebras'!
+!classDefinition: 'GroupSum class' category: #'Domains-Algebras'!
+GroupSum class
+	instanceVariableNames: ''!
+
 !classDefinition: #Multivector category: #'Domains-Algebras'!
 AlgebraElement subclass: #Multivector
 	instanceVariableNames: ''
@@ -4000,7 +4030,7 @@ This is the completion of the polynomial ring R[x1,...,xn] at the maximal ideal 
 Completion of a given commutative ring R at a given maximal ideal I. This is the inverse limit of the quotient rings R / I^n.!
 
 !Module commentStamp: '<historical>' prior: 0!
-Finitely presented R-modules.
+Finitely presented right R-modules.
 
 Most functionality is implemented for the cases where R is a field (vector spaces, relying on gaussian elimination), or a PID such as Z or Q[x] (relying on the Hermite normal form or computing in the field of fractions), or a multivariate polynomial ring (relying on Groebner bases). In general, the algorithms rely on the ability to solve (in)homogeneous systems of linear equations over the coefficient ring.
 
@@ -4065,10 +4095,16 @@ Tensor product over R of a list of free R-modules. This is a free R-module with 
 
 See Tensor.!
 
-!Algebra commentStamp: 'len 7/15/2020 06:03:15' prior: 0!
-Finite-dimensional algebras over a commutative ring R. They don't have to be associative, commutative nor unital. They are defined over a free R-module of rank n by n^3 structure constants (elements of R), or equivalently by a bilinear map.
+!Algebra commentStamp: '<historical>' prior: 0!
+Finite-dimensional algebras over a commutative ring R. They don't have to be associative, commutative nor unital. They are defined over a free R-module of rank n by n^3 structure constants (elements of R), or equivalently by a bilinear map. For most computations R is required to be a field.
 
 See also AlgebraElement and AlgebraMap.!
+
+!EndomorphismAlgebra commentStamp: '<historical>' prior: 0!
+Algebra of R-module endomorphisms End(M). The underlying module is the hom module Hom(M,M) for a R-module M, and multiplication is composition of module maps.!
+
+!MatrixAlgebra commentStamp: '<historical>' prior: 0!
+Full matrix algebras, i.e. n^2-dimensional associative algebras of square nxn matrices over a ring R under matrix multiplication.!
 
 !GroupAlgebra commentStamp: '<historical>' prior: 0!
 Given a ring R and a group G, the group ring R[G] can be seen as a ring or as a free R-module with basis one-to-one with G. As a ring, its addition law is that of the free module, and the multiplication extends by linearity the given group law on the basis.
@@ -4081,9 +4117,6 @@ Categorically, the group ring construction is left adjoint to the group of units
 
 References:
 	https://en.wikipedia.org/wiki/Group_ring!
-
-!MatrixAlgebra commentStamp: 'len 7/15/2020 06:52:44' prior: 0!
-Full matrix algebras, i.e. n^2-dimensional associative algebras of square nxn matrices over a ring under matrix multiplication.!
 
 !QuaternionAlgebra commentStamp: 'len 7/15/2020 06:05:17' prior: 0!
 The algebra of quaternions over a field with given invariants (a,b). This is the 4-dimensional unital algebra generated by elements i, j such that i^2 = a, j^2 = b and ij = -ji.!
@@ -4767,6 +4800,9 @@ Generalizations of monomial orderings to multivariate R-modules (where R is a mu
 
 !AlgebraElement commentStamp: 'len 7/14/2020 21:24:19' prior: 0!
 Elements of finite dimensional algebras. See Algebra and AlgebraMap.!
+
+!GroupSum commentStamp: '<historical>' prior: 0!
+Linear combinations of group elements. These are elements of GroupAlgebras.!
 
 !Multivector commentStamp: 'len 7/15/2020 06:06:04' prior: 0!
 Elements of a Clifford algebra or an exterior algebra. See CliffordAlgebra.!
@@ -5467,6 +5503,10 @@ printOn: aStream
 			[aStream nextPutAll: 'End'; "aStream nextPutAll: self scalars printText sub;" nextPut: $(; print: self domain; nextPut: $)]
 		ifFalse: [aStream nextPutAll: 'Hom'; "nextPutAll: self scalars printText sub;" nextPut: $(; print: self domain; nextPut: $,; print: self codomain; nextPut: $)]! !
 
+!MatrixModule methodsFor: 'printing' stamp: 'len 7/16/2020 09:35:55'!
+printOn: aStream
+	aStream print: self scalars; nextPutAll: (self height printString, '×', self width printString) super! !
+
 !QuotientModule methodsFor: 'printing' stamp: 'len 1/24/2018 21:54:55'!
 printOn: aStream
 	aStream print: self base; nextPut: $/; print: self relations! !
@@ -5497,13 +5537,13 @@ printOn: aStream
 		nextPutAll: (self isExteriorAlgebra ifTrue: ['/\'] ifFalse: ['Cl']);
 		nextPut: $(; print: self space; nextPutAll: ', '; print: self form; nextPut: $)! !
 
-!GroupAlgebra methodsFor: 'printing' stamp: 'len 8/7/2016 08:38'!
-printOn: aStream
-	aStream print: self scalars; nextPut: $[; print: self group; nextPut: $]! !
-
 !MatrixAlgebra methodsFor: 'printing' stamp: 'len 7/15/2020 06:53:54'!
 printOn: aStream
 	aStream nextPutAll: 'M', self degree printString sub, '('; print: self scalars; nextPut: $)! !
+
+!GroupAlgebra methodsFor: 'printing' stamp: 'len 8/7/2016 08:38'!
+printOn: aStream
+	aStream print: self scalars; nextPut: $[; print: self group; nextPut: $]! !
 
 !QuaternionAlgebra methodsFor: 'printing' stamp: 'len 6/11/2020 19:16:16'!
 printOn: aStream
@@ -12176,6 +12216,10 @@ isTerminal
 isAbelianGroup
 	^ false! !
 
+!Domain methodsFor: 'testing-categories' stamp: 'len 7/15/2020 10:29:37'!
+isAgebra
+	^ false! !
+
 !Domain methodsFor: 'testing-categories' stamp: 'len 5/2/2020 21:33:10'!
 isCategory
 	^ false! !
@@ -14057,6 +14101,18 @@ adapt: anElement
 	(opposite includes: anElement) ifTrue: [^ OppositeGroupElement opposite: anElement inverse].
 	^ super adapt: anElement! !
 
+!OppositeGroup methodsFor: 'morphisms' stamp: 'len 7/16/2020 12:40:56'!
+from: aDomain
+	aDomain = opposite
+		ifTrue: [^ aDomain to: self evaluating: [:x| self adapt: x]].
+	^ super from: aDomain! !
+
+!OppositeGroup methodsFor: 'morphisms' stamp: 'len 7/16/2020 12:48:06'!
+to: aCodomain
+	aCodomain = opposite
+		ifTrue: [^ self to: aCodomain evaluating: [:x| x opposite inverse]].
+	^ super to: aCodomain! !
+
 !OppositeGroup methodsFor: 'operations' stamp: 'len 5/8/2019 13:41:23'!
 opposite
 	^ opposite! !
@@ -14370,6 +14426,10 @@ commutator: aSubgroup
 	"Answer the commutator group [G,H] of the receiver G with the argument H.
 	Since the receiver is commutative, this is the trivial group."
 	^ self null! !
+
+!AbelianGroup methodsFor: 'operations' stamp: 'len 7/16/2020 12:37:45'!
+opposite
+	^ self! !
 
 !AbelianGroup methodsFor: 'operations' stamp: 'len 5/15/2019 04:09:18'!
 orderOf: aMonomial
@@ -21230,9 +21290,18 @@ alternative 4:
 	^ self ambient span: (self annihilator basis collect: [:f| f asVector])
 "! !
 
+!Module methodsFor: 'operations' stamp: 'len 7/17/2020 10:34:24'!
+decomposition
+	"Answer a list of idecomposable submodules whose direct sum is isomorphic to the receiver, together with projection maps."
+	^ self notYetImplemented! !
+
 !Module methodsFor: 'operations' stamp: 'len 5/2/2020 17:26:55'!
 dual
 	^ self => self scalars asScalarModule! !
+
+!Module methodsFor: 'operations' stamp: 'len 7/16/2020 09:38:12'!
+endomorphisms
+	^ (self => self) asAlgebra! !
 
 !Module methodsFor: 'operations' stamp: 'len 3/15/2020 16:57:32'!
 grassmannian: r
@@ -21328,6 +21397,10 @@ isCoherent
 isCyclic
 	^ self isFree and: [self rank = 1]! !
 
+!Module methodsFor: 'testing' stamp: 'len 7/17/2020 10:34:42'!
+isDecomposable
+	^self decomposition size > 1! !
+
 !Module methodsFor: 'testing' stamp: 'len 3/15/2020 16:55:43'!
 isDual
 	"Answer true if the receiver is the module of linear forms Hom(M,R) for an R-module M."
@@ -21354,6 +21427,10 @@ isFree
 !Module methodsFor: 'testing' stamp: 'len 3/6/2020 20:16:10'!
 isFullRank
 	^ self rank = self degree! !
+
+!Module methodsFor: 'testing' stamp: 'len 7/17/2020 10:34:52'!
+isIdecomposable
+	^self isDecomposable not! !
 
 !Module methodsFor: 'testing' stamp: 'len 12/16/2016 13:55:05'!
 isInitial
@@ -22560,6 +22637,12 @@ toAll: anArray
 				yourself].
 "! !
 
+!FreeModule methodsFor: 'operations' stamp: 'len 7/16/2020 09:37:26'!
+=> aCodomain
+	(aCodomain isKindOf: FreeModule) ifFalse: [^ super => aCodomain].
+	aCodomain scalars = self scalars ifFalse: [DomainError signal: 'scalars don''t match'].
+	^ MatrixModule from: self to: aCodomain! !
+
 !FreeModule methodsFor: 'operations' stamp: 'len 7/13/2020 10:20:11'!
  aModule
 	"Answer the direct sum of the receiver and the argument."
@@ -22682,9 +22765,10 @@ zero
 = anObject
 	^ self == anObject or: [self class == anObject class and: [domain = anObject domain and: [codomain = anObject codomain]]]! !
 
-!HomModule methodsFor: 'converting' stamp: 'len 6/27/2020 09:15:35'!
+!HomModule methodsFor: 'converting' stamp: 'len 7/16/2020 09:34:12'!
 asAlgebra
-	^ MatrixAlgebra on: self! !
+	self isEndomorphisms ifTrue: [^ EndomorphismAlgebra on: self].
+	^ DomainError signal: 'not an endomorphism module'! !
 
 !HomModule methodsFor: 'converting' stamp: 'len 10/2/2018 01:17:24'!
 over: aRing
@@ -22714,10 +22798,6 @@ evaluating: aBlock
 !HomModule methodsFor: 'elements' stamp: 'len 4/25/2019 16:18:38'!
 evaluatingWithArguments: aBlock
 	^ domain to: codomain evaluatingWithArguments: aBlock! !
-
-!HomModule methodsFor: 'elements' stamp: 'len 5/31/2020 20:05:05'!
-filling: aBlock
-	^ domain to: codomain filling: aBlock! !
 
 !HomModule methodsFor: 'elements' stamp: 'len 10/2/2018 01:18:06'!
 identity
@@ -22755,13 +22835,13 @@ to: aCodomain
 		ifTrue: [^ self addMap: (self to: aCodomain mapping: [:i| self domain domain x: i])].
 	^ super to: aCodomain! !
 
-!HomModule methodsFor: 'operations' stamp: 'len 7/13/2020 10:06:58'!
+!HomModule methodsFor: 'operations' stamp: 'len 7/16/2020 17:44:05'!
 ‘ aModule
 	| answer |
 	((aModule isKindOf: HomModule) and: [aModule scalars = self scalars and: [self isFree and: [aModule isFree]]]) ifFalse: [^ super ‘ aModule].
 	answer _ self domain ‘ aModule domain => (self codomain ‘ aModule codomain).
 	"this should be a BilinearMap:"
-	answer carrier addMap: (self, aModule to: answer carrier evaluating: [:f :g| f ‘ g]).
+	answer carrier addMap: (self, aModule to: answer carrier evaluatingWithArguments: [:f :g| f ‘ g]).
 	^ answer! !
 
 !HomModule methodsFor: 'operations' stamp: 'len 3/6/2020 21:04:24'!
@@ -22803,6 +22883,23 @@ from: aModule to: anotherModule
 	^ self new
 		domain: aModule;
 		codomain: anotherModule! !
+
+!MatrixModule methodsFor: 'accessing' stamp: 'len 7/16/2020 09:43:34'!
+height
+	^ self codomain rank! !
+
+!MatrixModule methodsFor: 'accessing' stamp: 'len 7/16/2020 09:43:28'!
+width
+	^ self domain rank! !
+
+!MatrixModule methodsFor: 'converting' stamp: 'len 7/16/2020 09:36:29'!
+asAlgebra
+	self isEndomorphisms ifTrue: [^ MatrixAlgebra on: self].
+	^ DomainError signal: 'not a module of square matrices'! !
+
+!MatrixModule methodsFor: 'elements' stamp: 'len 7/16/2020 09:40:15'!
+filling: aBlock
+	^ domain to: codomain filling: aBlock! !
 
 !QuotientModule methodsFor: 'accessing' stamp: 'len 3/19/2020 20:30:28'!
 ambient
@@ -23196,17 +23293,21 @@ asVectorSpace
 	self scalars isField ifFalse: [^ DomainError signal].
 	^ self asModule! !
 
-!Algebra methodsFor: 'elements' stamp: 'len 7/14/2020 11:41:54'!
+!Algebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:28:59'!
 adapt: anElement
 	self isAmbient ifFalse: [^ super adapt: anElement].
-	(self asModule includes: anElement) ifTrue: [^ self elementClass parent: self moduleElement: anElement].
+	(self asModule includes: anElement) ifTrue: [^ self fromModuleElement: anElement].
 	(self scalars includes: anElement) ifTrue: [^ self one * anElement].
 	^ super adapt: anElement! !
 
-!Algebra methodsFor: 'elements' stamp: 'len 7/14/2020 11:41:13'!
+!Algebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:29:19'!
 elementAt: anArray
 	"Answer the element with the given coordinates."
-	^ self elementClass parent: self moduleElement: (self asModule elementAt: anArray)! !
+	^ self fromModuleElement: (self asModule elementAt: anArray)! !
+
+!Algebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:30:03'!
+fromModuleElement: anElement
+	^ AlgebraElement parent: self moduleElement: anElement! !
 
 !Algebra methodsFor: 'elements' stamp: 'len 6/11/2020 15:33:15'!
 newFrom: anObject
@@ -23255,6 +23356,13 @@ to: anAlgebra moduleMap: aModuleMap
 	This is the coproduct in the category of R-algebras."
 	^ self notYetImplemented! !
 
+!Algebra methodsFor: 'operations' stamp: 'len 7/15/2020 10:29:18'!
+/\ aSubalgebra
+	"Answer the intersection of the receiver and the argument."
+	(aSubalgebra isAlgebra and: [self ambient = aSubalgebra ambient])
+		ifFalse: [^ super /\ aSubalgebra].
+	^ self ambient span: self asModule /\ aSubalgebra asModule! !
+
 !Algebra methodsFor: 'operations' stamp: 'len 6/10/2020 16:17:16'!
 × anAssociativeAlgebra
 	"Answer the direct product of the receiver with the argument."
@@ -23296,10 +23404,16 @@ derivation
 	"Answer the derivation algebra of the receiver as a Lie subalgebra of the algebra of endomorphisms."
 	^ self notYetImplemented! !
 
-!Algebra methodsFor: 'operations' stamp: 'len 7/7/2020 06:42:09'!
+!Algebra methodsFor: 'operations' stamp: 'len 7/16/2020 13:47:50'!
+opposite
+	^ self species multiplication: (BilinearMap on: self asModule evaluatingWithArguments: [:x :y| self multiplication value: y value: x])! !
+
+!Algebra methodsFor: 'operations' stamp: 'len 7/15/2020 10:31:44'!
 span: aCollection
 	"Answer the subalgebra spanned by the elements in aCollection."
 	self isAmbient ifFalse: [^ self ambient span: aCollection].
+	((aCollection isKindOf: Module) and: [aCollection ambient = self asModule])
+		ifTrue: [^ self species new ambient: self; module: aCollection].
 	^ self species new ambient: self; module: (self asModule span: aCollection)! !
 
 !Algebra methodsFor: 'operations' stamp: 'len 7/8/2020 07:59:12'!
@@ -23325,6 +23439,10 @@ contains: anElement
 includes: anObject
 	self isAmbient ifTrue: [^ anObject parent = self].
 	^ (self ambient includes: anObject) and: [self contains: anObject]! !
+
+!Algebra methodsFor: 'testing' stamp: 'len 7/15/2020 10:29:26'!
+isAlgebra
+	^ true! !
 
 !Algebra methodsFor: 'testing' stamp: 'len 7/15/2020 08:28:28'!
 isAlternative
@@ -23392,6 +23510,25 @@ isDivisionAlgebra
 	"Answer true if the receiver is a division algebra, i.e. if every nonzero element is invertible."
 	^ self notYetImplemented! !
 
+!Algebra methodsFor: 'testing' stamp: 'len 7/16/2020 20:50:35'!
+isField
+	self flag: #fix. "this only works for finite rings"
+	^ self propertyAt: #isField
+		ifAbsentPut:
+		[self isCommutative and: [self characteristic isPrime and: [(self to: self evaluating: [:x| x^self characteristic]) isInjective]]]! !
+
+!Algebra methodsFor: 'testing' stamp: 'len 7/16/2020 19:16:51'!
+isJordan
+	"Answer true if the receiver satisfies the Jordan identity."
+	(self isAmbient not and: [self ambient isJordan]) ifTrue: [^ true].
+	self propertyAt: #isJordan ifPresent: [:aBoolean| ^ aBoolean].
+	self basis do: [:x|
+		| xx |
+		xx _ x * x.
+		self basis do: [:y|
+				x*y*xx = (x*(y*xx)) ifFalse: [^ self propertyAt: #isJordan put: false]]].
+	^ self propertyAt: #isJordan put: true! !
+
 !Algebra methodsFor: 'testing' stamp: 'len 7/15/2020 08:31:57'!
 isLieAlgebra
 	"Answer true if the receiver satisfies the axioms of a Lie algebra."
@@ -23427,14 +23564,6 @@ isTrivial
 isUnital
 	^ false! !
 
-!Algebra methodsFor: 'private' stamp: 'len 6/11/2020 14:36:43'!
-elementClass
-	^ AlgebraElement! !
-
-!Algebra methodsFor: 'private' stamp: 'len 7/14/2020 16:59:03'!
-multiply: aModuleElement with: anotherModuleElement
-	^ self multiplication value: aModuleElement value: anotherModuleElement! !
-
 !Algebra methodsFor: 'private' stamp: 'len 6/11/2020 14:28:19'!
 species
 	^ Algebra! !
@@ -23447,17 +23576,22 @@ multiplication: aBilinearMap
 over: aRing table: anArray
 	^ self multiplication: (BilinearMap on: aRing^anArray size table: anArray)! !
 
-!AssociativeAlgebra methodsFor: 'converting' stamp: 'len 7/14/2020 20:50:10'!
+!AssociativeAlgebra methodsFor: 'converting' stamp: 'len 7/16/2020 10:48:20'!
 asJordanAlgebra
 	"Answer the associated special Jordan algebra, with multiplication defined as the symmetrized product."
 	| half |
 	half _ (self scalars !! 2) inverse.
-	^ Algebra multiplication: (BilinearMap on: self asModule evaluatingWithArguments: [:x :y| (self multiply: x with: y) + (self multiply: y with: x) * half])! !
+	^ Algebra multiplication: (BilinearMap on: self asModule evaluatingWithArguments: [:x0 :y0| | x y| x _ self !! x0. y _ self !! y0. (x*y + (y*x) * half) asModuleElement])! !
 
 !AssociativeAlgebra methodsFor: 'converting' stamp: 'len 7/14/2020 20:39:53'!
 asLieAlgebra
 	"Answer the associated Lie algebra, with multiplication defined as the Lie bracket."
 	^ LieAlgebra multiplication: (BilinearMap on: self asModule evaluatingWithArguments: [:x :y| (self !! x commutator: self !! y) asModuleElement])! !
+
+!AssociativeAlgebra methodsFor: 'morphisms' stamp: 'len 7/17/2020 13:50:57'!
+to: aCodomain
+	aCodomain = self asModule endomorphisms ifTrue: [^ self addMap: (self to: aCodomain evaluating: [:x| x representation])].
+	^ super to: aCodomain! !
 
 !AssociativeAlgebra methodsFor: 'operations' stamp: 'len 6/21/2020 14:02:58'!
 commutatorIdealWith: anAssociativeAlgebra
@@ -23479,6 +23613,11 @@ commutatorModuleWith: anAssociativeAlgebra
 			commutators add: (x, y)]].
 	^ self ambient asModule span: commutators! !
 
+!AssociativeAlgebra methodsFor: 'operations' stamp: 'len 7/17/2020 10:32:09'!
+decomposition
+	"Answer a list of idecomposable two-sided ideals whose direct sum is isomorphic to the receiver, together with projection maps."
+	^ self notYetImplemented! !
+
 !AssociativeAlgebra methodsFor: 'operations' stamp: 'len 6/21/2020 13:56:22'!
 idealizerOf: aSubalgebra
 	self notYetImplemented! !
@@ -23496,6 +23635,14 @@ isAlternative
 !AssociativeAlgebra methodsFor: 'testing' stamp: 'len 6/11/2020 11:44:25'!
 isAssociative
 	^ true! !
+
+!AssociativeAlgebra methodsFor: 'testing' stamp: 'len 7/17/2020 10:32:27'!
+isDecomposable
+	^self decomposition size > 1! !
+
+!AssociativeAlgebra methodsFor: 'testing' stamp: 'len 7/17/2020 10:32:43'!
+isIdecomposable
+	^self isDecomposable not! !
 
 !AssociativeAlgebra methodsFor: 'private' stamp: 'len 7/15/2020 06:57:00'!
 species
@@ -23538,6 +23685,10 @@ adapt: anElement
 	(self space includes: anElement) ifTrue: [^ self elementAt: (self asModule coordinatesOf: self asModule !! anElement)].
 	^ super adapt: anElement! !
 
+!CliffordAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:30:59'!
+fromModuleElement: anElement
+	^ Multivector parent: self moduleElement: anElement! !
+
 !CliffordAlgebra methodsFor: 'initialization' stamp: 'len 7/13/2020 18:11:13'!
 form: aQuadraticForm
 	| V C |
@@ -23569,13 +23720,86 @@ isExteriorAlgebra
 isUnital
 	^ true! !
 
-!CliffordAlgebra methodsFor: 'private' stamp: 'len 7/5/2020 08:50:48'!
-elementClass
-	^ Multivector! !
-
 !CliffordAlgebra class methodsFor: 'instance creation' stamp: 'len 7/10/2020 11:34:59'!
 on: aQuadraticForm
 	^ self new form: aQuadraticForm! !
+
+!EndomorphismAlgebra methodsFor: 'accessing' stamp: 'len 7/16/2020 09:14:47'!
+codomain
+	^ self domain! !
+
+!EndomorphismAlgebra methodsFor: 'accessing' stamp: 'len 7/16/2020 09:14:39'!
+domain
+	^ self asModule domain! !
+
+!EndomorphismAlgebra methodsFor: 'accessing' stamp: 'len 7/17/2020 13:44:11'!
+one
+	^ self identity! !
+
+!EndomorphismAlgebra methodsFor: 'accessing' stamp: 'len 7/17/2020 13:46:35'!
+space
+	"Answer the space this endomorphism algebra acts on."
+	^ self domain! !
+
+!EndomorphismAlgebra methodsFor: 'comparing' stamp: 'len 7/17/2020 13:52:05'!
+= anObject
+	^ self class = anObject class and: [self asModule = anObject asModule]! !
+
+!EndomorphismAlgebra methodsFor: 'comparing' stamp: 'len 7/17/2020 13:52:15'!
+hash
+	^ self asModule hash! !
+
+!EndomorphismAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 10:40:48'!
+diagonal: anArray
+	^ self asModule diagonal: anArray! !
+
+!EndomorphismAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:42:01'!
+evaluating: aBlock
+	^ self asModule evaluating: aBlock! !
+
+!EndomorphismAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:42:13'!
+evaluatingWithArguments: aBlock
+	^ self asModule evaluatingWithArguments: aBlock! !
+
+!EndomorphismAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:32:41'!
+fromModuleElement: aModuleMap
+	^ aModuleMap! !
+
+!EndomorphismAlgebra methodsFor: 'elements' stamp: 'len 7/17/2020 13:44:04'!
+identity
+	^ self asModule identity! !
+
+!EndomorphismAlgebra methodsFor: 'testing' stamp: 'len 7/16/2020 09:15:45'!
+includes: anObject
+	^ self asModule includes: anObject! !
+
+!EndomorphismAlgebra methodsFor: 'testing' stamp: 'len 7/17/2020 13:43:34'!
+isUnital
+	^ true! !
+
+!EndomorphismAlgebra class methodsFor: 'instance creation' stamp: 'len 7/16/2020 09:44:40'!
+on: aHomModule
+	^ self new module: aHomModule! !
+
+!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 7/17/2020 13:46:49'!
+degree
+	^ self space rank! !
+
+!MatrixAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:41:20'!
+filling: aBlock
+	^ self asModule filling: aBlock! !
+
+!MatrixAlgebra methodsFor: 'testing' stamp: 'len 10/3/2018 03:05:18'!
+isCommutative
+	^ self degree = 1 and: [self scalars isCommutative]! !
+
+!MatrixAlgebra class methodsFor: 'instance creation' stamp: 'len 7/16/2020 09:45:40'!
+new: anInteger over: aRing
+	^ (aRing ^ anInteger) endomorphisms! !
+
+!MatrixAlgebra class methodsFor: 'instance creation' stamp: 'len 7/16/2020 09:45:11'!
+on: aMatrixModule
+	^ self new module: aMatrixModule! !
 
 !GroupAlgebra methodsFor: 'accessing' stamp: 'len 1/10/2018 22:36:35'!
 augmentationIdeal
@@ -23606,6 +23830,10 @@ adapt: anElement
 	(self scalars includes: anElement)
 		ifTrue: [^ self one * anElement].
 	^ super adapt: anElement! !
+
+!GroupAlgebra methodsFor: 'elements' stamp: 'len 7/17/2020 07:21:29'!
+fromModuleElement: anElement
+	^ GroupSum parent: self moduleElement: anElement! !
 
 !GroupAlgebra methodsFor: 'initialization' stamp: 'len 7/14/2020 18:30:35'!
 group: aGroup scalars: aRing
@@ -23641,61 +23869,9 @@ isCommutative
 isUnital
 	^ true! !
 
-!GroupAlgebra methodsFor: 'private' stamp: 'len 7/14/2020 18:28:22'!
-multiply: aTuple with: anotherTuple
-	| answer groupElementToIndex indexToGroupElement |
-	indexToGroupElement _ self propertyAt: #indexToGroupElement.
-	groupElementToIndex _ self propertyAt: #groupElementToIndex.
-	answer _ self asModule zero.
-	aTuple withIndexDo: [:a :i|
-		a isZero ifFalse:
-			[| gi |
-			gi _ indexToGroupElement at: i.
-			anotherTuple withIndexDo: [:b :j|
-				b isZero ifFalse:
-					[| gj |
-					gj _ indexToGroupElement at: j.
-					answer at: (groupElementToIndex at: gi * gj) add: a*b]]]].
-	^ answer! !
-
 !GroupAlgebra class methodsFor: 'instance creation' stamp: 'len 7/14/2020 11:43:10'!
 on: aGroup over: aRing
 	^ self new group: aGroup scalars: aRing! !
-
-!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 6/27/2020 09:11:44'!
-degree
-	^ self asModule domain rank! !
-
-!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 7/15/2020 10:13:55'!
-one
-	^ self !! self asModule identity! !
-
-!MatrixAlgebra methodsFor: 'accessing' stamp: 'len 7/4/2020 13:33:17'!
-space
-	"Answer the space this matrix algebra acts on."
-	^ self asModule domain! !
-
-!MatrixAlgebra methodsFor: 'testing' stamp: 'len 10/3/2018 03:05:18'!
-isCommutative
-	^ self degree = 1 and: [self scalars isCommutative]! !
-
-!MatrixAlgebra methodsFor: 'testing' stamp: 'len 7/6/2020 07:26:11'!
-isUnital
-	^ true! !
-
-!MatrixAlgebra methodsFor: 'private' stamp: 'len 7/15/2020 06:44:47'!
-multiply: aMatrix with: anotherMatrix
-	^ aMatrix * anotherMatrix! !
-
-!MatrixAlgebra class methodsFor: 'instance creation' stamp: 'len 6/27/2020 09:14:35'!
-new: anInteger over: aRing
-	^ self on: (aRing ^ anInteger) endomorphisms! !
-
-!MatrixAlgebra class methodsFor: 'instance creation' stamp: 'len 7/15/2020 06:56:19'!
-on: aHomModule
-	aHomModule isEndomorphisms ifFalse: [^ self error: 'not an endomorphisms module'].
-	(aHomModule identity isKindOf: Matrix) ifFalse: [^ self error: 'not a matrix module'].
-	^ self new module: aHomModule! !
 
 !QuaternionAlgebra methodsFor: 'accessing' stamp: 'len 7/2/2020 13:06:25'!
 generators
@@ -23722,6 +23898,10 @@ k
 one
 	^ self basis first! !
 
+!QuaternionAlgebra methodsFor: 'elements' stamp: 'len 7/16/2020 09:31:53'!
+fromModuleElement: anElement
+	^ Quaternion parent: self moduleElement: anElement! !
+
 !QuaternionAlgebra methodsFor: 'testing' stamp: 'len 6/11/2020 19:36:38'!
 isCentral
 	^ true! !
@@ -23745,10 +23925,6 @@ isSimple
 !QuaternionAlgebra methodsFor: 'testing' stamp: 'len 7/6/2020 07:26:03'!
 isUnital
 	^ true! !
-
-!QuaternionAlgebra methodsFor: 'private' stamp: 'len 6/11/2020 14:36:32'!
-elementClass
-	^ Quaternion! !
 
 !QuaternionAlgebra class methodsFor: 'instance creation' stamp: 'len 7/14/2020 07:34:57'!
 over: aField invariants: anArray
@@ -27170,24 +27346,21 @@ hash
 	See #hom: for the external Hom functor."
 	^ self codomain => aCodomain to: self domain => aCodomain evaluating: [:f| f · self]! !
 
-!Morphism methodsFor: 'operations' stamp: 'len 3/13/2020 06:12:39'!
-^ anObject
-	anObject isInteger ifFalse: [^ self conjugatedBy: anObject].
-	^ self ·· anObject! !
+!Morphism methodsFor: 'operations' stamp: 'len 7/16/2020 12:46:27'!
+^ anInteger
+	"Answer the receiver composed with itself anInteger times.
+	If the argument is another morphism, answer the conjugation."
+	anInteger isInteger ifFalse: [^ self conjugatedBy: anInteger].
+	anInteger = 1 ifTrue: [^ self].
+	anInteger = 0 ifTrue: [^ self identity].
+	anInteger < 0 ifTrue: [^ self inverse ^ anInteger negated].
+	^ anInteger even ifTrue: [self · self ^ (anInteger // 2)] ifFalse: [self · self ^ (anInteger // 2) · self]! !
 
 !Morphism methodsFor: 'operations' stamp: 'len 3/13/2020 06:12:50'!
 · aMorphism
 	"Answer the composition of the receiver with the argument.
 	Given the argument f:X -> Y and the receiver g:Y -> Z, answer g·f:X -> Z."
 	^ self subclassResponsibility! !
-
-!Morphism methodsFor: 'operations' stamp: 'len 3/13/2020 06:12:21'!
-·· anInteger
-	"Answer the receiver composed with itself anInteger times."
-	anInteger = 1 ifTrue: [^ self].
-	anInteger = 0 ifTrue: [^ self identity].
-	anInteger < 0 ifTrue: [^ self inverse ·· anInteger negated].
-	^ anInteger even ifTrue: [self · self ·· (anInteger // 2)] ifFalse: [self · self ·· (anInteger // 2) · self]! !
 
 !Morphism methodsFor: 'operations' stamp: 'len 8/8/2016 06:42'!
 coimage
@@ -28935,6 +29108,10 @@ asAbelianGroupMap
 	B _ self codomain asAbelianGroup.
 	^ A to: B evaluating: [:x| B !! (self value: self domain !! x)]! !
 
+!ModuleMap methodsFor: 'converting' stamp: 'len 7/16/2020 10:39:14'!
+asModuleElement
+	^ self! !
+
 !ModuleMap methodsFor: 'converting' stamp: 'len 5/29/2020 15:26:34'!
 asPolynomial
 	"If the receiver is a linear form, answer the receiver as a polynomial in the coordinate ring of the domain."
@@ -28943,8 +29120,9 @@ asPolynomial
 	P _ self domain coordinateRing.
 	^ (P^P rank filling: [:i| P x: i]) · (self matrix asTuple over: P)! !
 
-!ModuleMap methodsFor: 'operations' stamp: 'len 5/29/2020 10:48:40'!
+!ModuleMap methodsFor: 'operations' stamp: 'len 7/16/2020 10:36:02'!
 * anObject
+	anObject class = self class ifTrue: [^ self · anObject].
 	^ domain to: codomain matrix: self matrix * anObject! !
 
 !ModuleMap methodsFor: 'operations' stamp: 'len 5/29/2020 10:48:56'!
@@ -29135,6 +29313,10 @@ isLinearForm
 !ModuleMap methodsFor: 'testing' stamp: 'len 5/10/2019 07:41:27'!
 isModuleHomomorphism
 	^ true! !
+
+!ModuleMap methodsFor: 'testing' stamp: 'len 7/16/2020 10:36:53'!
+isOne
+	^ self isIdentity! !
 
 !ModuleMap methodsFor: 'testing' stamp: 'len 1/13/2018 21:54:27'!
 isProjection
@@ -30329,7 +30511,7 @@ coimageMap
 	This is perpendicular to the kernel or nullspace, and it's also called coimage."
 	^ self transposed imageMap! !
 
-!Matrix methodsFor: 'subobjects' stamp: 'len 5/31/2020 20:08:20'!
+!Matrix methodsFor: 'subobjects' stamp: 'len 7/17/2020 14:58:13'!
 cokernelMap
 	"Answer a matrix whose rows span the cokernel (or left kernel) of the receiver.
 	If the receiver is A, the output is X such that X*A = 0."
@@ -30339,10 +30521,10 @@ cokernelMap
 	kernel _ OrderedCollection new.
 	reduction reduced rows withIndexDo: [:row :i|
 		row isZero ifTrue: [kernel add: (reduction extension rowAt: i)]].
-	^ Matrix rows: kernel
+	^ Matrix from: self codomain to: self scalars^kernel size rows: kernel
 
 "alternatively:
-	^ self transposed kernel
+	^ self transposed kernelMap
 "! !
 
 !Matrix methodsFor: 'subobjects' stamp: 'len 6/8/2020 14:52:31'!
@@ -31345,6 +31527,10 @@ asModuleMap
 !AlgebraMap methodsFor: 'initialization' stamp: 'len 7/14/2020 10:07:31'!
 moduleMap: aModuleMap
 	self propertyAt: #moduleMap put: aModuleMap! !
+
+!AlgebraMap methodsFor: 'operations' stamp: 'len 7/17/2020 13:54:01'!
+image
+	^ self codomain span: (self asModuleMap image generators collect: [:each| self codomain !! each])! !
 
 !AlgebraMap methodsFor: 'operations' stamp: 'len 7/14/2020 09:57:21'!
 kernel
@@ -33948,22 +34134,19 @@ order
 / anElement
 	^ self · anElement inverse! !
 
-!GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:16:32'!
-^ anObject
-	anObject isInteger ifFalse: [^ self conjugatedBy: anObject].
-	^ self ·· anObject! !
+!GroupElement methodsFor: 'operations' stamp: 'len 7/16/2020 12:45:26'!
+^ anInteger
+	"Answer the receiver composed with itself anInteger times.
+	If the argument is another group element, answer the conjugation."
+	anInteger isInteger ifFalse: [^ self conjugatedBy: anInteger].
+	anInteger = 1 ifTrue: [^ self].
+	anInteger = 0 ifTrue: [^ self identity].
+	anInteger < 0 ifTrue: [^ self inverse ^ anInteger negated].
+	^ anInteger even ifTrue: [self · self ^ (anInteger // 2)] ifFalse: [self · self ^ (anInteger // 2) · self]! !
 
 !GroupElement methodsFor: 'operations' stamp: 'len 5/6/2019 02:50:01'!
 · anElement
 	^ self subclassResponsibility! !
-
-!GroupElement methodsFor: 'operations' stamp: 'len 6/8/2019 02:34:06'!
-·· anInteger
-	"Answer the receiver composed with itself anInteger times."
-	anInteger = 1 ifTrue: [^ self].
-	anInteger = 0 ifTrue: [^ self identity].
-	anInteger < 0 ifTrue: [^ self inverse ·· anInteger negated].
-	^ anInteger even ifTrue: [self · self ·· (anInteger // 2)] ifFalse: [self · self ·· (anInteger // 2) · self]! !
 
 !GroupElement methodsFor: 'operations' stamp: 'len 5/10/2019 10:57:13'!
 commutator: anElement
@@ -42904,12 +43087,12 @@ parent: anAlgebra moduleElement: anElement
 	parent _ anAlgebra.
 	moduleElement _ anElement! !
 
-!AlgebraElement methodsFor: 'operations' stamp: 'len 7/14/2020 16:56:43'!
+!AlgebraElement methodsFor: 'operations' stamp: 'len 7/16/2020 10:53:31'!
 * anElement
 	(anElement isInteger or: [self parent scalars includes: anElement])
 		ifTrue: [^ self class parent: parent moduleElement: moduleElement * anElement].
 	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
-	^ self class parent: parent moduleElement: (parent multiply: moduleElement with: anElement asModuleElement)! !
+	^ self · anElement! !
 
 !AlgebraElement methodsFor: 'operations' stamp: 'len 7/14/2020 09:53:21'!
 + anElement
@@ -42920,17 +43103,22 @@ parent: anAlgebra moduleElement: anElement
 - anElement
 	^ self + anElement negated! !
 
-!AlgebraElement methodsFor: 'operations' stamp: 'len 6/11/2020 12:28:18'!
+!AlgebraElement methodsFor: 'operations' stamp: 'len 7/17/2020 05:44:12'!
 ^ anInteger
 	"Answer the receiver raised to the power anInteger."
 	anInteger = 1 ifTrue: [^ self].
 	anInteger = 0 ifTrue: [^ self one].
-	anInteger < 0 ifTrue: [^ (self ^ anInteger negated) inverse].
+	anInteger < 0 ifTrue: [^ self  inverse ^ anInteger negated].
+	self parent isAssociative ifFalse:
+		[| answer |
+		answer _ self.
+		anInteger - 1 timesRepeat: [answer _ answer * self].
+		^ answer].
 	^ anInteger even ifTrue: [self squared ^ (anInteger // 2)] ifFalse: [self squared ^ (anInteger // 2) * self]! !
 
-!AlgebraElement methodsFor: 'operations' stamp: 'len 6/11/2020 12:28:34'!
+!AlgebraElement methodsFor: 'operations' stamp: 'len 7/16/2020 10:53:38'!
 · anElement
-	^ self * anElement! !
+	^ self class parent: parent moduleElement: (parent multiplication value: moduleElement value: anElement asModuleElement)! !
 
 !AlgebraElement methodsFor: 'operations' stamp: 'len 7/8/2020 05:20:25'!
 centralizer
@@ -42942,10 +43130,10 @@ commutator: anElement
 	"Answer the Lie bracket between the receiver and the argument."
 	^ self * anElement - (anElement * self)! !
 
-!AlgebraElement methodsFor: 'operations' stamp: 'len 7/14/2020 09:22:54'!
+!AlgebraElement methodsFor: 'operations' stamp: 'len 7/16/2020 17:40:02'!
 inverse
 	self parent isUnital ifFalse: [^ self error: 'not unital algebra'].
-	^ self parent !! self representation inverse! !
+	^ self parent !! ((self representation preimage: self one asModuleElement) ifNil: [^ nil])! !
 
 !AlgebraElement methodsFor: 'operations' stamp: 'len 7/14/2020 09:54:04'!
 negated
@@ -42968,11 +43156,12 @@ isIdempotent
 isIdentity
 	^ self isOne! !
 
-!AlgebraElement methodsFor: 'testing' stamp: 'len 7/14/2020 09:21:37'!
+!AlgebraElement methodsFor: 'testing' stamp: 'len 7/16/2020 09:07:55'!
 isNilpotent
 	"Answer true if self^n = 0 for some integer n >= 1."
 	self parent isAssociative ifFalse: [^ self error: 'not associative algebra'].
 	^ (self representation ^ self parent degree) isZero
+
 "alternative:
 	^ self parent nilradical contains: self"! !
 
@@ -43010,6 +43199,23 @@ isZeroDivisor
 !AlgebraElement class methodsFor: 'instance creation' stamp: 'len 7/14/2020 10:06:42'!
 parent: anAlgebra moduleElement: anElement
 	^ self new parent: anAlgebra moduleElement: anElement! !
+
+!GroupSum methodsFor: 'operations' stamp: 'len 7/16/2020 10:53:46'!
+· anElement
+	| groupElementToIndex indexToGroupElement result |
+	indexToGroupElement _ parent propertyAt: #indexToGroupElement.
+	groupElementToIndex _ parent propertyAt: #groupElementToIndex.
+	result _ parent asModule zero.
+	moduleElement withIndexDo: [:a :i|
+		a isZero ifFalse:
+			[| gi |
+			gi _ indexToGroupElement at: i.
+			anElement asModuleElement withIndexDo: [:b :j|
+				b isZero ifFalse:
+					[| gj |
+					gj _ indexToGroupElement at: j.
+					result at: (groupElementToIndex at: gi * gj) add: a*b]]]].
+	^ self class parent: parent moduleElement: result! !
 
 !Multivector methodsFor: 'accessing' stamp: 'len 7/5/2020 08:54:00'!
 homogeneousComponentAt: anInteger
@@ -43051,11 +43257,11 @@ asScalar
 	This is the dual of the exterior product."
 	^ self dual /\ aMultivector dual! !
 
-!Multivector methodsFor: 'operations' stamp: 'len 7/13/2020 18:03:30'!
+!Multivector methodsFor: 'operations' stamp: 'len 7/16/2020 10:55:48'!
 · aMultivector
-	"Answer the dot product of the receiver with the argument."
-	(self isVector and: [aMultivector isVector]) ifFalse: [^ DomainError signal: 'not vectors'].
-	self ! !
+	self flag: #fix.
+	"Shouldn't this answer the dot product of the receiver with the argument?"
+! !
 
 !Multivector methodsFor: 'operations' stamp: 'len 7/7/2020 10:39:11'!
 conjugate
@@ -43120,9 +43326,9 @@ conjugate
 	^ self negated + self trace
 "! !
 
-!Quaternion methodsFor: 'operations' stamp: 'len 7/14/2020 10:16:34'!
+!Quaternion methodsFor: 'operations' stamp: 'len 7/16/2020 19:02:30'!
 inverse
-	^ self conjugate * self norm! !
+	^ self conjugate * self norm inverse! !
 
 !Quaternion methodsFor: 'operations' stamp: 'len 7/14/2020 10:05:46'!
 norm
