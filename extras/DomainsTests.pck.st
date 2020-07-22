@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 22 July 2020 at 8:14:07 am'!
+'From Cuis 5.0 [latest update: #4190] on 22 July 2020 at 1:05:03 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 173!
+!provides: 'DomainsTests' 1 174!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -1385,6 +1385,14 @@ testCliffordAlgebraDualProperties
 	self assert: x <· y dual = (x /\ y) dual.
 	self assert: x /\ y dual = (x <· y) dual! !
 
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 12:02:57'!
+testCliffordAlgebraEvenSubalgebra
+	| C E x |
+	C _ self newCliffordAlgebra.
+	E _ C evenSubalgebra.
+	x _ E atRandomBits: 10.
+	self assert: x = x reflection! !
+
 !AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:05'!
 testCliffordAlgebraGradeInvolution
 	| C x y v |
@@ -1407,6 +1415,17 @@ testCliffordAlgebraGradeProjection
 	x _ (C grade: k) atRandomBits: 10.
 	self assert: (x grade: k) = x.
 	self assert: (x grade: j) isZero! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 12:56:33'!
+testCliffordAlgebraHomogeneousElements
+	| C x |
+	C _ self newCliffordAlgebra.
+	x _ (C grade: 0) atRandomBits: 10.
+	self assert: x isScalar.
+	x _ (C grade: 1) atRandomBits: 10.
+	self assert: x isVector.
+	x _ (C grade: 2) atRandomBits: 10.
+	self assert: x isBivector! !
 
 !AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:53:22'!
 testCliffordAlgebraInverse
@@ -1474,6 +1493,45 @@ testCliffordAlgebraReversion
 	v _ C !! (C space atRandomBits: 10).
 	self assert: (x*y) transpose = (y transpose * x transpose).
 	self assert: v transpose = v! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 12:58:59'!
+testCliffordAlgebraScalarEmbedding
+	| C F a x |
+	C _ self newCliffordAlgebra.
+	F _ C scalars.
+	a _ F atRandomBits: 10.
+	x _ C !! a.
+	self assert: x isScalar.
+	self assert: ((C grade: 0) includes: x).
+	self assert: C one * a = x.
+	self assert: x asScalar = a! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 13:03:06'!
+testCliffordAlgebraScalarEmbedding2
+	| C i |
+	C _ self newCliffordAlgebra.
+	i _ C scalars asScalarModule -> C asVectorSpace.
+	self assert: i isInjective.
+	self assert: i image = (C grade: 0) asVectorSpace! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 12:59:50'!
+testCliffordAlgebraSpaceEmbedding
+	| C V v x |
+	C _ self newCliffordAlgebra.
+	V _ C space.
+	v _ V atRandomBits: 10.
+	x _ C !! v.
+	self assert: x isVector.
+	self assert: ((C grade: 1) includes: x).
+	self assert: x asVector = v! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 13:03:18'!
+testCliffordAlgebraSpaceEmbedding2
+	| C i |
+	C _ self newCliffordAlgebra.
+	i _ C space -> C asVectorSpace.
+	self assert: i isInjective.
+	self assert: i image = (C grade: 1) asVectorSpace! !
 
 !AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:55'!
 testCliffordAlgebraUniversalProperty
