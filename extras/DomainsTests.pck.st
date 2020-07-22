@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 17 July 2020 at 3:00:51 pm'!
+'From Cuis 5.0 [latest update: #4190] on 22 July 2020 at 8:14:07 am'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 172!
+!provides: 'DomainsTests' 1 173!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -1218,35 +1218,6 @@ testTorsionAbelianGroup
 	self assert: G isMixed not.
 	self assert: G torsionFree isTrivial! !
 
-!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/14/2020 18:31:46'!
-testGroupAlgebra1
-	| G A |
-	G _ SymmetricGroup new: 5.
-	A _ G groupAlgebraOver: „.
-	self testAlgebra: A! !
-
-!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/17/2020 14:47:57'!
-testGroupAlgebraInverse
-	| G A a |
-	G _ SymmetricGroup new: 3.
-	A _ G groupAlgebraOver: „.
-	[a _ A atRandomBits: 10.
-	a isUnit] whileFalse.
-	self assert: a * a inverse = A one.
-	self assert: a inverse * a = A one! !
-
-!AlgebraTest methodsFor: 'quaternions' stamp: 'len 7/15/2020 10:12:53'!
-testMatrixAlgebra
-	| R A |
-	R _ 2 atRandom = 1 ifTrue: [„] ifFalse: [ƒ/64 atRandom nextPrime].
-	A _ MatrixAlgebra new: 5 atRandom over: R.
-	self testAlgebra: A.
-	self assert: A scalars = R.
-	self assert: A dimension = A degree squared.
-	self assert: A zero isZero.
-	self assert: A one isOne.
-	self assert: A id isIdentity! !
-
 !AlgebraTest methodsFor: 'quaternions' stamp: 'len 6/20/2020 12:57:57'!
 testQuaternionAlgebra1
 	| A |
@@ -1361,6 +1332,185 @@ testRingHomomorphism: phi
 	self assert: (phi value: R one) = S one.
 	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b)).
 	self assert: (phi value: a * b) = ((phi value: a) * (phi value: b)) "this sometimes fails because f and -f are not equal regular functions, for example"! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/21/2020 12:15:36'!
+newCliffordAlgebra
+	| Q |
+	Q _ QuadraticForm from: „^3 coefficients: #(1 0 0 1 0 1) "(1 to: 6)".
+	^ CliffordAlgebra on: Q! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:54:11'!
+testCliffordAlgebra1
+	| C |
+	C _ self newCliffordAlgebra.
+	self testAlgebra: C! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:54:31'!
+testCliffordAlgebra2
+	| C |
+	C _ self newCliffordAlgebra.
+	self assert: C isAssociative.
+	self assert: C isCommutative not.
+	self assert: C isUnital.
+	self assert: C dimension = (2^C space rank).
+	self assert: C scalars = „.
+	self assert: C zero isZero.
+	self assert: C one isOne.
+	self assert: C id isIdentity! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:54:42'!
+testCliffordAlgebraConjugate
+	| C x y v |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	v _ C !! (C space atRandomBits: 10).
+	self assert: (x*y) conjugate = (y conjugate * x conjugate).
+	self assert: v conjugate = v negated! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:54:52'!
+testCliffordAlgebraDualGrade
+	| C x k |
+	C _ self newCliffordAlgebra.
+	k _ (0 to: C degree) atRandom.
+	x _ (C grade: k) atRandomBits: 10.
+	self assert: ((C grade: C degree - k) includes: x dual)! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:54:58'!
+testCliffordAlgebraDualProperties
+	| C x y |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	self assert: x <· y dual = (x /\ y) dual.
+	self assert: x /\ y dual = (x <· y) dual! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:05'!
+testCliffordAlgebraGradeInvolution
+	| C x y v |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	v _ C !! (C space atRandomBits: 10).
+	self assert: (x*y) reflection = (x reflection * y reflection).
+	self assert: v reflection = v negated! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:11'!
+testCliffordAlgebraGradeProjection
+	| C x k j |
+	C _ self newCliffordAlgebra.
+	k _ (0 to: C degree) atRandom.
+	[j _ (0 to: C degree) atRandom. j = k] whileTrue.
+	x _ C atRandomBits: 20.
+	self assert: ((C grade: k) includes: (x grade: k)).
+	self assert: (((C grade: j) includes: (x grade: k)) not or: [(x grade: k) isZero]).
+	x _ (C grade: k) atRandomBits: 10.
+	self assert: (x grade: k) = x.
+	self assert: (x grade: j) isZero! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:53:22'!
+testCliffordAlgebraInverse
+	| C a |
+	C _ self newCliffordAlgebra.
+	[a _ C atRandomBits: 10.
+	a isUnit] whileFalse.
+	self assert: a * a inverse = C one.
+	self assert: a inverse * a = C one! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/22/2020 08:12:09'!
+testCliffordAlgebraMultiplication
+	| Q V C x y z |
+	V _ „^3.
+	Q _ QuadraticForm from: V coefficients: (1 to: 6).
+	C _ CliffordAlgebra on: Q.
+	x _ C !! (V x: 1).
+	y _ C !! (V x: 2).
+	z _ C !! (V x: 3).
+	self assert: y*x = ((x*y) negated + 2).
+	self assert: z*x = ((x*z) negated + 3).
+	self assert: z*z = (C !! 6).
+	self assert: (x*0) isZero.
+	self assert: (0*x) isZero! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:31'!
+testCliffordAlgebraProductsProperties
+	| C x y z one |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	z _ C atRandomBits: 10.
+	"Associativity of wedge product:"
+	self assert: x /\ (y /\ z) = (x /\ y /\ z).
+	"Associativity of left and right interior products:"
+	self assert: x <· (y ·> z) = (x <· y ·> z).
+	self assert: x <· (y <· z) = (x /\ y <· z).
+	self assert: x · (y <· z) = (x /\ y · z).
+	one _ C one.
+	self assert: one /\ x = x.
+	self assert: x /\ one = x.
+	self assert: one <· x = x.
+	self assert: x ·> one = x! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/21/2020 13:38:51'!
+testCliffordAlgebraProductsPropertiesWithVectors
+	| C x y v |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	v _ C !! (C space atRandomBits: 10).
+	self assert: v*x = (v <· x + (v /\ x)).
+	self assert: v <· x = (v*x - (x reflection * v) / 2).
+	self assert: v <· x = (x reflection negated ·> v).
+	self assert: v /\ x = (v*x + (x reflection * v) / 2).
+	self assert: v /\ x = (x reflection /\ v).
+	self assert: v <· (x*y) = ((v <· x)*y + (x reflection * (v <· y)))! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:44'!
+testCliffordAlgebraReversion
+	| C x y v |
+	C _ self newCliffordAlgebra.
+	x _ C atRandomBits: 10.
+	y _ C atRandomBits: 10.
+	v _ C !! (C space atRandomBits: 10).
+	self assert: (x*y) transpose = (y transpose * x transpose).
+	self assert: v transpose = v! !
+
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:55'!
+testCliffordAlgebraUniversalProperty
+	| Q C v |
+	C _ self newCliffordAlgebra.
+	Q _ C form.
+	v _ C space atRandomBits: 10.
+	self assert: (C !! v) squared = (C one * (Q value: v))! !
+
+!AlgebraTest methodsFor: 'group algebra' stamp: 'len 7/14/2020 18:31:46'!
+testGroupAlgebra1
+	| G A |
+	G _ SymmetricGroup new: 5.
+	A _ G groupAlgebraOver: „.
+	self testAlgebra: A! !
+
+!AlgebraTest methodsFor: 'group algebra' stamp: 'len 7/17/2020 14:47:57'!
+testGroupAlgebraInverse
+	| G A a |
+	G _ SymmetricGroup new: 3.
+	A _ G groupAlgebraOver: „.
+	[a _ A atRandomBits: 10.
+	a isUnit] whileFalse.
+	self assert: a * a inverse = A one.
+	self assert: a inverse * a = A one! !
+
+!AlgebraTest methodsFor: 'matrix algebra' stamp: 'len 7/15/2020 10:12:53'!
+testMatrixAlgebra
+	| R A |
+	R _ 2 atRandom = 1 ifTrue: [„] ifFalse: [ƒ/64 atRandom nextPrime].
+	A _ MatrixAlgebra new: 5 atRandom over: R.
+	self testAlgebra: A.
+	self assert: A scalars = R.
+	self assert: A dimension = A degree squared.
+	self assert: A zero isZero.
+	self assert: A one isOne.
+	self assert: A id isIdentity! !
 
 !AlgebraicGeometryTest methodsFor: 'affine' stamp: 'len 5/23/2020 09:33:01'!
 testAffinePlaneCurveMultiplicity
@@ -5655,6 +5805,14 @@ testGrassmannian
 	self assert: S rank = 2.
 	self assert: (G includes: S).
 	self assert: (G dual includes: S complement)! !
+
+!ModuleTest methodsFor: 'other' stamp: 'len 7/18/2020 10:01:37'!
+testIsSemisimple
+	| V |
+	V _ self newVectorSpace.
+	self assert: V isSemisimple.
+	V _ ƒ asScalarModule. "because Z is not artinian"
+	self assert: V isSemisimple not! !
 
 !ModuleTest methodsFor: 'other' stamp: 'len 5/14/2019 18:51:08'!
 testSubmoduleInclusionOver: aRing
