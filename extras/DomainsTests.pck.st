@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 22 July 2020 at 1:05:03 pm'!
+'From Cuis 5.0 [latest update: #4190] on 2 August 2020 at 7:13:52 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 174!
+!provides: 'DomainsTests' 1 175!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -45,6 +45,16 @@ TestCase subclass: #AlgebraicNumbersTest
 AlgebraicNumbersTest class
 	instanceVariableNames: ''!
 
+!classDefinition: #BilinearFormTest category: #DomainsTests!
+TestCase subclass: #BilinearFormTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'DomainsTests'!
+!classDefinition: 'BilinearFormTest class' category: #DomainsTests!
+BilinearFormTest class
+	instanceVariableNames: ''!
+
 !classDefinition: #ChainComplexTest category: #DomainsTests!
 TestCase subclass: #ChainComplexTest
 	instanceVariableNames: ''
@@ -53,6 +63,16 @@ TestCase subclass: #ChainComplexTest
 	category: 'DomainsTests'!
 !classDefinition: 'ChainComplexTest class' category: #DomainsTests!
 ChainComplexTest class
+	instanceVariableNames: ''!
+
+!classDefinition: #CodesTest category: #DomainsTests!
+TestCase subclass: #CodesTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'DomainsTests'!
+!classDefinition: 'CodesTest class' category: #DomainsTests!
+CodesTest class
 	instanceVariableNames: ''!
 
 !classDefinition: #CommutativeAlgebraTest category: #DomainsTests!
@@ -1533,11 +1553,11 @@ testCliffordAlgebraSpaceEmbedding2
 	self assert: i isInjective.
 	self assert: i image = (C grade: 1) asVectorSpace! !
 
-!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/20/2020 11:55:55'!
+!AlgebraTest methodsFor: 'clifford algebra' stamp: 'len 7/28/2020 11:01:13'!
 testCliffordAlgebraUniversalProperty
 	| Q C v |
 	C _ self newCliffordAlgebra.
-	Q _ C form.
+	Q _ C quadraticForm.
 	v _ C space atRandomBits: 10.
 	self assert: (C !! v) squared = (C one * (Q value: v))! !
 
@@ -2400,6 +2420,52 @@ testTrace
 	a _ ComplexAlgebraicNumber phi.
 	self assert: a trace = a conjugates sum! !
 
+!BilinearFormTest methodsFor: 'as yet unclassified' stamp: 'len 7/27/2020 19:19:26'!
+testBilinearFormDecomposition
+	| V A B |
+	V _ „^5 atRandom.
+	A _ V endomorphisms atRandomBits: 50.
+	B _ BilinearForm on: V matrix: A.
+	self assert: B symmetricPart isSymmetric.
+	self assert: B skewSymmetricPart isSkewSymmetric.
+	self assert: B symmetricPart + B skewSymmetricPart = B! !
+
+!BilinearFormTest methodsFor: 'as yet unclassified' stamp: 'len 7/27/2020 19:24:54'!
+testDotCrossAlternating
+	"This is an example of an alternating bilinear form."
+	| V u B |
+	V _ ƒ^3.
+	u _ V atRandomBits: 10.
+	B _ BilinearForm on: V evaluatingWithArguments: [:x :y| u · (x × y)].
+	self assert: B isAlternating! !
+
+!BilinearFormTest methodsFor: 'as yet unclassified' stamp: 'len 7/27/2020 19:10:08'!
+testDotProductIsSymmetric
+	| V B |
+	V _ ƒ^5 atRandom.
+	B _ BilinearForm on: V evaluatingWithArguments: [:x :y| x · y].
+	self assert: B isSymmetric! !
+
+!BilinearFormTest methodsFor: 'as yet unclassified' stamp: 'len 7/27/2020 19:42:37'!
+testMatrixAndLeft
+	"The matrix of the bilinear form matches the matrix of the left part because the convention we follow when defining B(v,w) := v · (A * w)."
+	| V A B |
+	V _ „^5 atRandom.
+	A _ V endomorphisms atRandomBits: 50.
+	B _ BilinearForm on: V matrix: A.
+	self assert: A = B left matrix! !
+
+!BilinearFormTest methodsFor: 'as yet unclassified' stamp: 'len 7/27/2020 19:13:03'!
+testScalarSpaceMultiplication
+	| V B |
+	V _ ƒ asScalarModule.
+	B _ BilinearForm on: V evaluatingWithArguments: [:x :y| x*y].
+	self assert: B isSymmetric.
+	self assert: B isAlternating not.
+	V _ (ƒ/2) asScalarModule.
+	B _ BilinearForm on: V evaluatingWithArguments: [:x :y| x*y].
+	self assert: B isSkewSymmetric! !
+
 !ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:39'!
 newChainComplex
 	^ self newChainComplexOver: {ƒ. ƒ/64 atRandom nextPrime. „} atRandom! !
@@ -2455,6 +2521,161 @@ testShift
 	self assert: (C >> k) degree = (C degree + k).
 	i _ (-5 to: 5) atRandom.
 	self assert: (C >> k at: i+k) = ((C at: i) * ((-1)^k))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testDual
+	| C |
+	C _ Code on: (ƒ/2^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
+	self assert: C dual size = (C space size / C size).
+	C dual do: [:v|
+		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
+		self assert: (v count: [:each| each = (1 % 2)]) even]
+! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:45:14'!
+testGolay11
+	| C |
+	C _ Code G11.
+	self assert: C length = 11.
+	self assert: C rank = 6.
+	self assert: C minimumDistance = 5! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:45:37'!
+testGolay12
+	| C |
+	C _ Code G12.
+	self assert: C length = 12.
+	self assert: C rank = 6.
+	self assert: C minimumDistance = 6! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:47:05'!
+testGolay23
+	| C |
+	C _ Code G23.
+	self assert: C length = 23.
+	self assert: C rank = 12.
+	self assert: C minimumDistance = 7.
+"	self assert: C isPerfect"! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:48:00'!
+testGolay24
+	| C W x y |
+	C _ Code G24.
+	self assert: C length = 24.
+	self assert: C rank = 12.
+	self assert: C minimumDistance = 8.
+	self assert: C isSelfDual.
+	W _ C weightEnumerator.
+	x _ W parent x.
+	y _ W parent y.
+	self assert: W = (x^24 + (x^16*(y^8)*759) + (x^12*(y^12)*2576) + (x^8*(y^16)*759) + (y^24)) "typo in neil's video 22:20"! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:59:37'!
+testHamming743
+	| H7 |
+	H7 _ Code H7.
+	self assert: H7 isCyclic.
+	self assert: H7 length = 7.
+	self assert: H7 rank = 4.
+	self assert: H7 minimumDistance = 3.
+	self assert: H7 weightDistribution = #(0 3 3 3 3 3 3 3 4 4 4 4 4 4 4 7) asBag.
+	self assert: H7 dual minimumDistance = 4! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:59:24'!
+testHamming743p
+	| H7 |
+	H7 _ Code H7p.
+	self assert: H7 isCyclic.
+	self assert: H7 length = 7.
+	self assert: H7 rank = 4.
+	self assert: H7 minimumDistance = 3.
+	self assert: H7 weightDistribution = #(0 3 3 3 3 3 3 3 4 4 4 4 4 4 4 7) asBag.
+	self assert: H7 dual minimumDistance = 4! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 19:00:05'!
+testHamming844
+	| C P x y |
+	C _ Code H8.
+	self assert: C isSelfDual.
+	self assert: C isSelfOrthogonal.
+	self assert: C length = 8.
+	self assert: C rank = 4.
+	self assert: C minimumDistance = 4.
+	self assert: C dual minimumDistance = 4.
+	P _ ƒ polynomialsIn: 2.
+	x _ P x. y _ P y.
+	self assert: C weightEnumerator = (x^8 + (x*y^4*14) + (y^8))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testMacWilliamsTheorem
+	"(MacWilliams, 1962) the theorem relates the weight enumerator of a linear code to the weight enumerator of its dual."
+	"From youtube, Neil Sloane 'Error Correcting Codes, Group Theory and Invariant Theory, Part 1' 20:30."
+	| C W Wperp x y |
+	C _ Code H7.
+	W _ C weightEnumerator.
+	Wperp _ C dual weightEnumerator.
+	x _ Wperp parent x.
+	y _ Wperp parent y.
+	self assert: Wperp = ((W value: {x+y. x-y}) / C size)! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testParityCheckMatrix
+	| H7 M |
+	H7 _ Code H7.
+	M _ H7 parityCheckMatrix.
+	self assert: (M * H7 atRandom) isZero! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testSelfDual
+	| F C |
+	F _ ƒ/2.
+	"{00,11} is the smallest self-dual code"
+	C _ Code on: (F^2 span: {(0,0) % 2. (1,1) % 2}).
+	self assert: C isSelfDual.
+	self assert: C isSelfOrthogonal.
+	"TODO: test other examples of self-dual codes: H8, G24"! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 5/12/2016 07:28'!
+testSingletonBound: C
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	| n k d |
+	n _ C length.
+	k _ C rank.
+	d _ C minimumDistance.
+	self assert: k + d <= (n + 1).! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testSingletonBoundH7
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	self testSingletonBound: Code H7! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testSingletonBoundTetracode
+	"Any linear [n,k,d] code satisfies k + d <= n + 1."
+	self testSingletonBound: Code tetracode! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testTetracode
+	| C P x y |
+	C _ Code on: (ƒ/3 ^ 4 span: {(1,1,1,0) % 3. (0,1,2,1) % 3}).
+	self assert: C isSelfDual.
+	self assert: C minimumDistance = 3.
+	P _ ƒ polynomialsIn: #(x y).
+	x _ P x.
+	y _ P y.
+	self assert: C weightEnumerator = (x^4 + (x*(y^3)*8))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+testWeightEnumerator
+	"From youtube, Neil Sloane 'error correcting codes, group theory and invariant theory part 1' 19:30."
+	| F C w x y |
+	F _ ƒ/2.
+	C _ Code on: (F^5 span: {(0,0,0,0,0) % 2. (1,1,1,1,1) % 2}).
+	w _ C weightEnumerator.
+	x _ w parent x.
+	y _ w parent y.
+	self assert: w = (x^5 + (y^5)).
+	self assert: C dual weightEnumerator = (x^5 + (x^3*(y^2)*10) + (y^4*x*5))! !
 
 !CommutativeAlgebraTest methodsFor: 'affine ring' stamp: 'len 5/23/2020 09:33:01'!
 testAffineRingElementOperations
@@ -3217,13 +3438,16 @@ testCyclic7Correctness
 	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
 	self assert: txt = 'x1x2x3x4x5x6x7-1,x1x2x3x4x5x6+x1x2x3x4x5x7+x1x2x3x4x6x7+x1x2x3x5x6x7+x1x2x4x5x6x7+x1x3x4x5x6x7+x2x3x4x5x6x7,x1x2x3x4x5+x2x3x4x5x6+x1x2x3x4x7+x1x2x3x6x7+x1x2x5x6x7+x1x4x5x6x7+x3x4x5x6x7,x1x2x3x4+x2x3x4x5+x3x4x5x6+x1x2x3x7+x1x2x6x7+x1x5x6x7+x4x5x6x7,x1x2x3+x2x3x4+x3x4x5+x4x5x6+x1x2x7+x1x6x7+x5x6x7,x1x2+x2x3+x3x4+x4x5+x5x6+x1x7+x6x7,x1+x2+x3+x4+x5+x6+x7'! !
 
-!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 5/23/2020 09:33:01'!
+!CommutativeAlgebraTest methodsFor: 'testing examples' stamp: 'len 7/31/2020 20:18:16'!
 testKatsura7Correctness
 	"Test correctness of Katsura-7 ideal checking against one generated by Singular."
 	| txt |
 	txt _ ((„ polynomialsIn: 7) katsuraIdeal generators sorted: [:a :b| a leadingMonomial >= b leadingMonomial]) printString.
 	#('(' ')' '{' '}' ' ') do: [:each| txt _ txt copyReplaceAll: each with: ''].
-	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'! !
+	self assert: txt = 'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,x1x2+x2x3+x3x4+x4x5+x5x6+x6x7-1/2x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,x2x3+x1x4+x2x5+x3x6+x4x7-1/2x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,x3x4+x2x5+x1x6+x2x7-1/2x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1' 
+	
+"the string was changed to account to automatic normalization of the ideal generators, the original string was:
+	'x1^2+2x2^2+2x3^2+2x4^2+2x5^2+2x6^2+2x7^2-x1,2x1x2+2x2x3+2x3x4+2x4x5+2x5x6+2x6x7-x2,x2^2+2x1x3+2x2x4+2x3x5+2x4x6+2x5x7-x3,2x2x3+2x1x4+2x2x5+2x3x6+2x4x7-x4,x3^2+2x2x4+2x1x5+2x2x6+2x3x7-x5,2x3x4+2x2x5+2x1x6+2x2x7-x6,x1+2x2+2x3+2x4+2x5+2x6+2x7-1'"! !
 
 !EllipticCurvesTest methodsFor: 'as yet unclassified' stamp: 'len 11/11/2016 10:14'!
 testBInvariants
@@ -3772,13 +3996,17 @@ testTrivial
 	self assert: G size = 1.
 	self assert: G isTrivial! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2020 08:37:08'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/31/2020 18:22:45'!
+newLattice
+	^ {[Lattice A: 5 atRandom]. [Lattice Z: 5 atRandom]. [Lattice D: (2 to: 5) atRandom]. [Lattice bcc]. [Lattice fcc]} atRandom value! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/31/2020 18:09:03'!
 testE8
-	| E8 a |
+	| E8 v |
 	E8 _ Lattice E8.
-	a _ E8 atRandomBits: 100.
-	self assert: ((a allSatisfy: [:x| x isIntegral]) or: [a allSatisfy: [:x| x isIntegral not and: [(x*2) isIntegral]]]).
-	self assert: (a sum isIntegral and: [a sum asInteger even]).
+	v _ (E8 atRandomBits: 100) asVector.
+	self assert: ((v allSatisfy: [:x| x isIntegral]) or: [v allSatisfy: [:x| x isIntegral not and: [(x*2) isIntegral]]]).
+	self assert: (v sum isIntegral and: [v sum asInteger even]).
 	self assert: E8 isIntegral.
 	self assert: E8 isUnimodular.
 	self assert: E8 isEven.
@@ -3794,61 +4022,91 @@ testLLL
 	reducer _ LLL basis: { b1. b2. b3 } innerProduct: V innerProduct.
 	self assert: reducer reducedBasis = {V !! (0,1,0). V !! (1,0,1). V !! (-1,0,2)}! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:59:01'!
-testLatticeAnDual
-	| A3 D |
-	A3 _ Lattice A: 3.
-	D _ Lattice Adual: 3.
-	self assert: A3 reciprocal = D.
-	self assert: A3 = D reciprocal! !
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/28/2020 19:46:17'!
+testLLL2
+	"Example from Magma handbook (H30E1)."
+	| V b1 b2 reducer |
+	V _ „^3.
+	b1 _ V !! (1, 2, 3).
+	b2 _ V !! (3, 2, 1).
+	reducer _ LLL basis: { b1. b2 } innerProduct: V innerProduct.
+	self assert: reducer reducedBasis = {V !! (2,0,-2). V !! (1,2,3)}! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:52'!
-testLatticeD4SelfDual
-	| D4 |
-	D4 _ Lattice D4.
-	self assert: D4 isSelfDual! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:35'!
-testLatticeDnDual
-	| D R |
-	D _ Lattice D: 5.
-	R _ Lattice Ddual: 5.
-	self assert: D reciprocal = R.
-	self assert: D = R reciprocal! !
-
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/20/2018 15:58:46'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:09:30'!
 testLatticeDual
-	| L R I |
-	L _ Lattice basis: {(-1,0,0). (0,1,2). (0,1,1)}.
+	| V L R |
+	V _ „^3.
+	L _ Lattice basis: {V !! (-1,0,0). V !! (0,1,2). V !! (0,1,1)}.
 	R _ L reciprocal.
-	I _ L matrix identity.
-	self assert: (L ambient span: L basis) = (R ambient span: R basis).
+	self assert: (L space span: L basis) = (R space span: R basis).
 	self assert: L determinant = (1 / R determinant).
-	self assert: R matrix * L matrix transposed = I! !
+	self assert: (R matrix * L matrix transposed) isIdentity.
+	self assert: L gramian = R gramian inverse! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2020 09:13:51'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 19:07:17'!
 testLatticeDual2
 	| V L R |
 	V _ „^3.
 	L _ Lattice basis: {V !! (-1,0,0). V !! (0,1,2)}. "not full rank"
 	R _ L reciprocal.
-	self assert: (L ambient span: L basis) = (R ambient span: R basis).
+	self assert: (L space span: L basis) = (R space span: R basis).
 	self assert: L determinant = (1 / R determinant).
-	self assert: (R matrix * L matrix transposed) isIdentity! !
+	self assert: (R matrix transposed * L matrix) isIdentity.
+	self assert: L gramian = R gramian inverse! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 14:58:30'!
-testLeech
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:55'!
+testLatticeDual3
 	| L |
+	L _ Lattice Z: 3.
+	self assert: L reciprocal = L.
+	self assert: (L*3) reciprocal = (L*(1/3))! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/31/2020 18:19:24'!
+testLatticeDualDeterminant
+	| L R |
+	L _ self newLattice.
+	R _ L reciprocal.
+	self assert: L determinant = (1 / R determinant)! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:42'!
+testLatticeDualDual
+	| L |
+	L _ self newLattice.
+	self assert: L reciprocal reciprocal = L! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:28'!
+testLatticeDualGramian
+	| L R |
+	L _ self newLattice.
+	R _ L reciprocal.
+	self assert: L gramian = R gramian inverse! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/30/2020 18:15:32'!
+testLatticeElements
+	| V L v w |
+	V _ „^3.
+	L _ Lattice basis: {V !! (1,0,0). V !! (1,2,3). V !! (3,6,2)}.
+	v _ L elementAt: #(1 2 1).
+	self assert: v asVector = (V !! (6,10,8)).
+	v _ L x: 2.
+	self assert: v asVector = (V !! (1,2,3)).
+	w _ v*2.
+	self assert: w asVector = (V !! (2,4,6)).
+	self assert: v norm = 14.
+	self assert: (v | w) = 28! !
+
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 19:16:10'!
+testLeech
+	| L v |
 	L _ Lattice leech.
-"	a _ L atRandomBits: 100.
-	self assert: ((a allSatisfy: [:x| x isInteger]) or: [a allSatisfy: [:x| x isInteger not and: [(x*2) isInteger]]]).
-	self assert: (a sum isInteger and: [a sum even])."
+	v _ (L atRandomBits: 100) asVector.
 	self assert: L determinant = 1.
 "	self assert: L kissingNumber = 196560."
 "	self assert: L minimalNorm = 4."
 	self assert: L isIntegral.
 	self assert: L isUnimodular.
-	self assert: L isEven! !
+	self assert: L isEven.
+	self assert: L isSelfDual! !
 
 !LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
 testGeneralLinearAtRandom
@@ -3858,13 +4116,13 @@ testGeneralLinearAtRandom
 	self assert: (G atRandomBits: 100) isAutomorphism.
 	self assert: (G includes: (G atRandomBits: 100))! !
 
-!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+!LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 7/28/2020 09:37:01'!
 testOrthogonalAtRandom
-	| V G |
+	| V O |
 	V _ „ ^ 3.
-	G _ V automorphisms orthogonal.
-	self assert: (G atRandomBits: 100) isOrthogonal.
-	self assert: (G includes: (G atRandomBits: 100))! !
+	O _ V innerProduct automorphisms.
+	self assert: (O atRandomBits: 100) isOrthogonal.
+	self assert: (O includes: (O atRandomBits: 100))! !
 
 !LinearGroupsTest methodsFor: 'as yet unclassified' stamp: 'len 6/11/2020 05:50:57'!
 testRotationsBy90Degrees
@@ -4895,6 +5153,12 @@ testMinors
 	| A |
 	A _ ƒ^3 => (ƒ^2) !! (1 to: 6).
 	self assert: (A minors: 2) asArray = #(-3 -6 -3)! !
+
+!MatrixTest methodsFor: 'other' stamp: 'len 7/28/2020 19:50:08'!
+testPositiveDefinite
+	| M |
+	M _ (ƒ^3) endomorphisms !! #(3 -1 1 -1 3 1 1 1 3).
+	self assert: M isPositiveDefinite! !
 
 !MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:11:34'!
 testQRDecomposition
@@ -6380,6 +6644,15 @@ newSmallVectorSpace
 !ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:57:02'!
 newVectorSpace
 	^ self newFreeModuleOver: self newScalarsField! !
+
+!ModuleTest methodsFor: 'as yet unclassified' stamp: 'len 7/24/2020 07:16:43'!
+testFreeModuleEquality
+	| M N |
+	M _ „ ^ #(a b c) asSet.
+	N _ „ ^ #(a c b) asSet.
+	self assert: M = N.
+	N _ „ ^ #(x y z) asSet.
+	self assert: M ~= N! !
 
 !MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/26/2017 09:25:17'!
 testAntigradedLexOrdering
@@ -9638,7 +9911,7 @@ testTorus
 	self assert: X dimension = 2.
 	self assert: X fVector = (1,7,21,14)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 11:35'!
+!TupleTest methodsFor: 'bit tuples' stamp: 'len 11/6/2016 11:35'!
 testBitTupleBug
 	| Z2 |
 	Z2 _ PrimeField new: 2.
@@ -9647,7 +9920,7 @@ testBitTupleBug
 	self assert: ((1,1,0) % 2 :: sum = Z2 zero).
 	self assert: ((1,1,1) % 2 :: sum = Z2 one)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:38:19'!
+!TupleTest methodsFor: 'bit tuples' stamp: 'len 6/1/2020 13:38:19'!
 testBitTupleOperations
 	| n a b |
 	n _ 120 atRandom.
@@ -9658,7 +9931,7 @@ testBitTupleOperations
 	#(negated reversed copy sum product) do: [:op|
 		self testTuple: a operation: op modulo: 2]! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:30:24'!
+!TupleTest methodsFor: 'bit tuples' stamp: 'len 6/1/2020 13:30:24'!
 testBitTupleReversed
 	| v i |
 	v _ (ƒ/2^100 atRandom) atRandom.
@@ -9666,12 +9939,34 @@ testBitTupleReversed
 	self assert: (v reversed at: i) = (v at: v size - i + 1).
 	self assert: v reversed reversed = v! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/8/2019 04:24:02'!
+!TupleTest methodsFor: 'bit tuples' stamp: 'len 5/8/2019 04:24:02'!
 testBitTupleSum
 	self assert: (BitTuple newFrom: 2r1011101) sum representative = 1.
 	self assert: (BitTuple newFrom: 2r10000100100010) sum representative = 0! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 7/4/2020 11:34:03'!
+!TupleTest methodsFor: 'bit tuples' stamp: 'len 7/27/2020 08:51:53'!
+testBitTuplesOfDifferentSize
+	self testTuplesOfDifferentSizeOver: ƒ/2! !
+
+!TupleTest methodsFor: 'integer tuples' stamp: 'len 7/27/2020 08:20:55'!
+testIntegerTupleOperations
+	| a b |
+	a _ (1,2,3).
+	b _ (2,3,4).
+	self assert: a + b = (3,5,7).
+	self assert: a * 2 = (2,4,6).
+	self assert: a + b + b - (b * 2) = a.
+	self assert: a · b = (2 + 6 + 12)! !
+
+!TupleTest methodsFor: 'integer tuples' stamp: 'len 7/27/2020 08:59:41'!
+testIntegerTupleSum
+	self assert: (1,2,3) sum = (1 + 2 + 3)! !
+
+!TupleTest methodsFor: 'integer tuples' stamp: 'len 7/27/2020 08:51:24'!
+testIntegerTuplesOfDifferentSize
+	self testTuplesOfDifferentSizeOver: ƒ! !
+
+!TupleTest methodsFor: 'misc' stamp: 'len 7/4/2020 11:34:03'!
 testCrossProduct
 	| V a b c r |
 	V _ ƒ^3.
@@ -9686,7 +9981,7 @@ testCrossProduct
 	self assert: (a*r) × b = (a × b * r).
 	self assert: (a × (b × c) + (b × (c × a)) + (c × (a × b))) isZero! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 7/9/2020 07:17:27'!
+!TupleTest methodsFor: 'misc' stamp: 'len 7/9/2020 07:17:27'!
 testCrossProductAndDotProduct
 	| V a b c d |
 	V _ ƒ^3.
@@ -9701,12 +9996,12 @@ testCrossProductAndDotProduct
 	"Binet-Chauchy identity:"
 	self assert: a × b · (c × d) = (a · c *(b · d) - (a · d * (b · c)))! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 4/11/2018 15:54:46'!
+!TupleTest methodsFor: 'misc' stamp: 'len 4/11/2018 15:54:46'!
 testHomogeneousTuples
 	self assert: (1,2,3) ~ (2,4,6).
 	self deny: (1,2,3) ~ (-2,4,6)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'misc' stamp: 'len 5/23/2020 09:34:55'!
 testHomogeneousTuples2
 	| P Q |
 	P _ (1,2) over: ƒ.
@@ -9716,7 +10011,7 @@ testHomogeneousTuples2
 	Q _ (1,0) over: ƒ.
 	self deny: P ~ Q! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:33:01'!
+!TupleTest methodsFor: 'misc' stamp: 'len 5/23/2020 09:33:01'!
 testHomogeneousTuples3
 	| R x P Q |
 	R _ „ polynomials.
@@ -9725,32 +10020,32 @@ testHomogeneousTuples3
 	Q _ R tuple: {x^2. x^3 + x}.
 	self assert: P ~ Q! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 4/11/2018 17:27:20'!
+!TupleTest methodsFor: 'misc' stamp: 'len 4/11/2018 17:27:20'!
 testHomogeneousTuples4
 	| P Q |
 	P _ (2,4,1) % 6.
 	Q _ (0,1,3) % 6.
 	self deny: P ~ Q! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 11:31'!
+!TupleTest methodsFor: 'misc' stamp: 'len 11/6/2016 11:31'!
 testMakeZero: aTuple
 	self assert: (aTuple * 0) isZero.
 	self assert: (0 * aTuple) isZero.
 	self assert: (aTuple + aTuple negated) isZero.
 	self assert: (aTuple - aTuple) isZero! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 11:39'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 11/6/2016 11:39'!
 testModTupleConcatenation
 	self assert: (1,2,3) % 7, ((2,3,4) % 7) = ((1,2,3,2,3,4) % 7)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 13:49'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 11/6/2016 13:49'!
 testModTupleConvolution
 	| a b |
 	a _ (1,2,3).
 	b _ (2,3,4).
 	self assert: (a % 7 convolution: b % 7) = ((a convolution: b) % 7)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:39:06'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 6/1/2020 13:39:06'!
 testModTupleOperations
 	| n a b modulus |
 	modulus _ 10 atRandom + 1.
@@ -9762,14 +10057,14 @@ testModTupleOperations
 	#(negated reversed copy sum product) do: [:op|
 		self testTuple: a operation: op modulo: modulus].! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModTupleSum
 	| a b |
 	a _ ƒ tuple: ((1 to: 10) collect: [:i| 100 atRandom]).
 	b _ a % 7.
 	self assert: b sum = (a sum % 7)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersTupleAssociateBug
 	| R t |
 	R _ ƒ/8.
@@ -9777,7 +10072,7 @@ testModularIntegersTupleAssociateBug
 	self assert: t*5*5 = t.
 	self assert: (t*5) normalized = t normalized! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersTupleAssociateBug1
 	| R t |
 	R _ ƒ/6.
@@ -9785,7 +10080,7 @@ testModularIntegersTupleAssociateBug1
 	self assert: t*5*5 = t.
 	self assert: (t*5) normalized = t normalized! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersTupleAssociateBug2
 	| R t |
 	R _ ƒ/6.
@@ -9793,7 +10088,7 @@ testModularIntegersTupleAssociateBug2
 	self assert: t*5*5 = t.
 	self assert: (t*5) normalized = t normalized! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 6/1/2020 13:30:48'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 6/1/2020 13:30:48'!
 testModularIntegersTupleUnitsAndAssociates
 	| R t tt |
 	100 timesRepeat:
@@ -9803,7 +10098,7 @@ testModularIntegersTupleUnitsAndAssociates
 		self assert: t * t unit inverse = tt.
 		R unitsDo: [:u| self assert: (t*u) normalized = tt]]! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersTupleUnitsAndAssociates2
 	"Examples from Magma."
 	| R |
@@ -9818,7 +10113,7 @@ testModularIntegersTupleUnitsAndAssociates2
 	self assert: (R tuple: #(2 3)) normalized = (R tuple: #(2 3)).
 	self assert: (R tuple: #(2 7)) normalized = (R tuple: #(2 3))! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersTupleUnitsAndAssociates3
 	"Examples from Magma."
 	| R |
@@ -9830,17 +10125,33 @@ testModularIntegersTupleUnitsAndAssociates3
 	self assert: (R tuple: #(7 2)) ~ (R tuple: #(1 6)).
 	self assert: (R tuple: #(2 7)) ~ (R tuple: #(2 3))! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 14:24'!
+!TupleTest methodsFor: 'modular integer tuples' stamp: 'len 7/27/2020 08:52:29'!
+testModularIntegersTuplesOfDifferentSize
+	self testTuplesOfDifferentSizeOver: ƒ/64 atRandom! !
+
+!TupleTest methodsFor: 'private' stamp: 'len 11/6/2016 14:24'!
 testTuple: a operation: aSymbol modulo: modulus
 	self assert: (a perform: aSymbol) % modulus = (a % modulus perform: aSymbol)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 14:12'!
+!TupleTest methodsFor: 'private' stamp: 'len 11/6/2016 14:12'!
 testTuple: a with: b operation: aSymbol modulo: modulus
 	self assert: (a perform: aSymbol with: b) % modulus = (a % modulus perform: aSymbol with: b % modulus)! !
 
-!TupleTest methodsFor: 'as yet unclassified' stamp: 'len 11/6/2016 11:36'!
-testTupleSum
-	self assert: (1,2,3) sum = (1 + 2 + 3)! !
+!TupleTest methodsFor: 'private' stamp: 'len 7/27/2020 08:50:46'!
+testTuplesOfDifferentSizeOver: aRing
+	| a b zeros |
+	a _ aRing^5 atRandom atRandomBits: 10.
+	b _ aRing^5 atRandom atRandomBits: 10.
+	zeros _ (aRing^5 atRandom) zero.
+	self assert: a + (b,zeros) = (a + b).
+	self assert: (a,zeros) + b = (a + b).
+	self assert: a - (b,zeros) = (a - b).
+	self assert: (a,zeros) - b = (a - b).
+	self assert: a = (a,zeros).
+	self assert: a,zeros = a.
+	self assert: a hash = (a,zeros) hash.
+	self assert: a · (b,zeros) = (a · b).
+	self assert: a,zeros · b = (a · b)! !
 
 !Benchmark methodsFor: 'as yet unclassified' stamp: 'len 3/1/2016 04:20'!
 run
