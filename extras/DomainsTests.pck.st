@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 2 August 2020 at 7:13:52 pm'!
+'From Cuis 5.0 [latest update: #4190] on 11 August 2020 at 3:22:06 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 175!
+!provides: 'DomainsTests' 1 176!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -2522,6 +2522,53 @@ testShift
 	i _ (-5 to: 5) atRandom.
 	self assert: (C >> k at: i+k) = ((C at: i) * ((-1)^k))! !
 
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:24:05'!
+newBinaryCode
+	3 atRandom = 1 ifTrue: [| r m | m _ (1 to: 4) atRandom. r _ (0 to: m) atRandom. ^ Code RM: {r. m}].
+	^ Code perform: #(H7 H8 G23 G24 hadamard8 simplex) atRandom! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:39:35'!
+newCode
+	^ 3 atRandom = 1 ifTrue: [self newTernaryCode] ifFalse: [self newBinaryCode]! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:24:54'!
+newTernaryCode
+	^ Code perform: #(G11 G12 tetracode) atRandom! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:54:45'!
+testAugmentedCode
+	| C A |
+	C _ self newCode.
+	A _ C augmented.
+	self assert: (A includes: (A space filling: [:i| 1])).
+	(C includes: (C space filling: [:i| 1])) ifTrue: [self assert: C = A]! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:39:56'!
+testConstructionADeterminant
+	| C L |
+	C _ self newCode.
+	L _ C asLattice.
+	self assert: L determinant = (C scalars characteristic ^ (C length - C rank))! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:39:45'!
+testConstructionADual
+	| C |
+	C _ self newCode.
+	self assert: C asLattice dual = C dual asLattice! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:28:39'!
+testDirectSumCode
+	| C1 C2 C x y z |
+	C1 _ self newBinaryCode.
+	C2 _ self newBinaryCode.
+	C _ C1 ê C2.
+	x _ C1 atRandom.
+	y _ C2 atRandom.
+	self assert: (C includes: x, y).
+	z _ C atRandom.
+	self assert: (C1 includes: (z copyFrom: 1 to: C1 length)).
+	self assert: (C2 includes: (z copyFrom: C1 length + 1 to: C length))! !
+
 !CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
 testDual
 	| C |
@@ -2531,6 +2578,13 @@ testDual
 		"check each codeword of the dual has an even number of 1's, because it must be perpendicular to 11111 (and 00000 of course)."
 		self assert: (v count: [:each| each = (1 % 2)]) even]
 ! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:55:28'!
+testExtendedCode
+	| C E |
+	C _ self newCode.
+	E _ C extended.
+	self assert: (E asModule generators allSatisfy: [:each| each sum isZero])! !
 
 !CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:45:14'!
 testGolay11
@@ -2618,12 +2672,67 @@ testMacWilliamsTheorem
 	y _ Wperp parent y.
 	self assert: Wperp = ((W value: {x+y. x-y}) / C size)! !
 
-!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/10/2020 06:35:48'!
 testParityCheckMatrix
+	| C G P |
+	C _ self newCode.
+	G _ C generatorMatrix.
+	P _ C parityCheckMatrix.
+	self assert: (P * G) isZero.
+	self assert: (P * C atRandom) isZero! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/10/2020 06:34:49'!
+testParityCheckMatrix2
 	| H7 M |
 	H7 _ Code H7.
 	M _ H7 parityCheckMatrix.
 	self assert: (M * H7 atRandom) isZero! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 09:25:14'!
+testProductCode
+	| C1 C2 C |
+	C1 _ self newBinaryCode.
+	C2 _ self newBinaryCode.
+	C _ C1 ◊ C2.
+	self assert: C length = (C1 length * C2 length).
+	self assert: C dimension = (C1 dimension * C2 dimension)! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 07:02:46'!
+testReedMuller
+	| m r C |
+	m _ (1 to: 4) atRandom.
+	r _ (0 to: m) atRandom.
+	C _ Code RM: {r. m}.
+	C isTrivial ifTrue: [^ self].
+	self assert: C length = (2^m).
+	self assert: C minimumDistance = (2^(m-r)).
+	self assert: C dimension = ((0 to: r) sum: [:k| m choose: k])! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 06:34:39'!
+testReedMuller2
+	| m i j Ci Cj |
+	m _ (0 to: 4) atRandom.
+	j _ (0 to: m) atRandom.
+	i _ (0 to: j) atRandom.
+	Ci _ Code RM: {i. m}.
+	Cj _ Code RM: {j. m}.
+	self assert: Ci <= Cj! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 06:49:54'!
+testReedMuller3
+	| m C |
+	m _ (0 to: 4) atRandom.
+	C _ Code RM: {m. m}.
+	self assert: C dual isTrivial! !
+
+!CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 06:51:28'!
+testReedMuller4
+	| m r C D |
+	m _ (1 to: 4) atRandom.
+	r _ (0 to: m-1) atRandom.
+	C _ Code RM: {r. m}.
+	D _ Code RM: {m-r-1. m}.
+	self assert: C dual = D! !
 
 !CodesTest methodsFor: 'as yet unclassified' stamp: 'len 8/2/2020 18:35:34'!
 testSelfDual
@@ -3684,11 +3793,11 @@ testShortestPath
 	G addEdge: #c -> #b.
 	self assert: (G shortestPathFrom: #c to: #b) asArray = #(b)! !
 
-!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2016 03:39'!
-testTransposed
+!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:51:20'!
+testTranspose
 	| G T |
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e}; yourself.
-	T _ G transposed.
+	T _ G transpose.
 	self assert: (G hasEdge: #b -> #c).
 	self assert: (G hasEdge: #c -> #b) not.
 	self assert: (T hasEdge: #b -> #c) not.
@@ -3742,11 +3851,11 @@ testUndirectedEdgeContraction
 	self assert: (G / (1->2)) edges size = 4.
 	self assert: (G / (1->2) / ((1->2)->3)) edges size = 3! !
 
-!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2019 04:36:25'!
+!GraphTest methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:51:30'!
 testUnion
 	| G |
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
-	self assert: (G \/ G transposed) = G symmetric! !
+	self assert: (G \/ G transpose) = G symmetric! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 7/14/2020 18:30:54'!
 smallGroupAtRandom
@@ -4032,53 +4141,53 @@ testLLL2
 	reducer _ LLL basis: { b1. b2 } innerProduct: V innerProduct.
 	self assert: reducer reducedBasis = {V !! (2,0,-2). V !! (1,2,3)}! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:09:30'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/11/2020 08:02:37'!
 testLatticeDual
 	| V L R |
 	V _ Ñ^3.
 	L _ Lattice basis: {V !! (-1,0,0). V !! (0,1,2). V !! (0,1,1)}.
-	R _ L reciprocal.
+	R _ L dual.
 	self assert: (L space span: L basis) = (R space span: R basis).
 	self assert: L determinant = (1 / R determinant).
-	self assert: (R matrix * L matrix transposed) isIdentity.
+	self assert: (R generatorMatrix * L generatorMatrix transpose) isIdentity.
 	self assert: L gramian = R gramian inverse! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 19:07:17'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/11/2020 08:02:45'!
 testLatticeDual2
 	| V L R |
 	V _ Ñ^3.
 	L _ Lattice basis: {V !! (-1,0,0). V !! (0,1,2)}. "not full rank"
-	R _ L reciprocal.
+	R _ L dual.
 	self assert: (L space span: L basis) = (R space span: R basis).
 	self assert: L determinant = (1 / R determinant).
-	self assert: (R matrix transposed * L matrix) isIdentity.
+	self assert: (R generatorMatrix transpose * L generatorMatrix) isIdentity.
 	self assert: L gramian = R gramian inverse! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:55'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 07:59:09'!
 testLatticeDual3
 	| L |
 	L _ Lattice Z: 3.
-	self assert: L reciprocal = L.
-	self assert: (L*3) reciprocal = (L*(1/3))! !
+	self assert: L dual = L.
+	self assert: (L*3) dual = (L*(1/3))! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/31/2020 18:19:24'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 07:59:14'!
 testLatticeDualDeterminant
 	| L R |
 	L _ self newLattice.
-	R _ L reciprocal.
+	R _ L dual.
 	self assert: L determinant = (1 / R determinant)! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:42'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 07:59:20'!
 testLatticeDualDual
 	| L |
 	L _ self newLattice.
-	self assert: L reciprocal reciprocal = L! !
+	self assert: L dual dual = L! !
 
-!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/1/2020 08:10:28'!
+!LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 07:59:24'!
 testLatticeDualGramian
 	| L R |
 	L _ self newLattice.
-	R _ L reciprocal.
+	R _ L dual.
 	self assert: L gramian = R gramian inverse! !
 
 !LatticeTest methodsFor: 'as yet unclassified' stamp: 'len 7/30/2020 18:15:32'!
@@ -4523,11 +4632,11 @@ testEchelonOverFiniteField
 	A _ K^3 => (K^4) !! {1. w. w^5. 0. w^3. w^4. w. 1. w^6. w^3. 1. w^4}.
 	self assert: A echelon = (A parent !! {1. 0. 0. 0. 1. 0. 0. 0. 1. 0. 0. 0})! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 6/1/2020 14:09:35'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 8/10/2020 05:34:33'!
 testHNFvsCHNF
 	| A |
 	A _ (É^4 atRandom) endomorphisms atRandomBits: 50.
-	self assert: A HNF = A antitransposed CHNF antitransposed! !
+	self assert: A HNF = A antitranspose CHNF antitranspose! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
 testHermiteNormalForm
@@ -4681,12 +4790,12 @@ testIsHermiteNormalForm
 	self assert: A isHermiteNormalForm not.
 	self assert: H isHermiteNormalForm! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 8/9/2020 07:55:14'!
 testIsHermiteNormalForm2
 	| M |
 	M _ É matrix: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33)}.
 	self assert: M isHermiteNormalForm.
-	self assert: M transposed isHermiteNormalForm not.
+	self assert: M transpose isHermiteNormalForm not.
 	M _ É matrix: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33). (0,0,0,0)}.
 	self assert: M isHermiteNormalForm.
 	M _ É matrix: {(2,0,1,11). (0,1,5,12). (0,0,6,12). (0,0,0,33). (0,0,0,1)}.
@@ -4915,7 +5024,7 @@ testCharacteristicPolynomialExample4x4
 	x _ É polynomials x.
 	self assert: A characteristicPolynomial = (x^4 - (x^3*34) - (x^2*80))! !
 
-!MatrixTest methodsFor: 'invariants' stamp: 'len 6/1/2020 14:09:00'!
+!MatrixTest methodsFor: 'invariants' stamp: 'len 8/9/2020 07:55:02'!
 testCharacteristicPolynomialOver: R
 	| n A p B |
 	n _ 5 atRandom.
@@ -4924,7 +5033,7 @@ testCharacteristicPolynomialOver: R
 	self assert: (p value: A) isZero.
 	self assert: p degree = n.
 	self assert: p isMonic.
-	self assert: A transposed characteristicPolynomial = p.
+	self assert: A transpose characteristicPolynomial = p.
 	B _ A parent atRandomBits: 100.
 	self assert: (A*B) characteristicPolynomial = (B*A) characteristicPolynomial! !
 
@@ -5032,7 +5141,7 @@ testAdjugateCramerRule
 	I _ A identity.
 	self assert: A * A adjugate = (I * A determinant)! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 5/31/2020 20:10:14'!
+!MatrixTest methodsFor: 'other' stamp: 'len 8/9/2020 07:54:44'!
 testAdjugateProperties
 	| A B I c |
 	A _ Ñ matrix: { (-3,2,-5). (-1,0,-2). (3,-4,1) }.
@@ -5043,7 +5152,7 @@ testAdjugateProperties
 	self assert: (A * B) adjugate = (B adjugate * A adjugate).
 	self assert: (A*c) adjugate = (A adjugate * (c^2)).
 	self assert: (A^5) adjugate = (A adjugate ^ 5).
-	self assert: A transposed adjugate = A adjugate transposed! !
+	self assert: A transpose adjugate = A adjugate transpose! !
 
 !MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:06:39'!
 testCayleyHamiltorTheoremInQ
@@ -5066,16 +5175,16 @@ testDomainError
 	self should: [A + B] raise: DomainError.
 	self should: [A * B] raise: DomainError! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 6/8/2020 14:53:58'!
+!MatrixTest methodsFor: 'other' stamp: 'len 8/9/2020 16:37:53'!
 testFundamentalSubspacesDefinitions
 	| m n A |
 	m _ 6 atRandom.
 	n _ 6 atRandom.
 	A _ self newRandomMatrix: m@n over: Ñ.
-"	self assert: A coimage = (Ñ^n span: A rows)." "definition"
-"	self assert: A image = (Ñ^m span: A columns)." "definition"
-	self assert: A coimageMap = A transposed imageMap. "definition"
-	self assert: A cokernelMap = A transposed kernelMap. "definition"! !
+	self assert: A coimage = (Ñ^n span: A rows). "definition"
+	self assert: A image = (Ñ^m span: A columns). "definition"
+"	self assert: A coimageMap = A transpose imageMap." "definition"
+"	self assert: A cokernelMap = A transpose kernelMap." "definition"! !
 
 !MatrixTest methodsFor: 'other' stamp: 'len 5/23/2020 09:33:01'!
 testFundamentalSubspacesDimensions
@@ -5160,28 +5269,6 @@ testPositiveDefinite
 	M _ (É^3) endomorphisms !! #(3 -1 1 -1 3 1 1 1 3).
 	self assert: M isPositiveDefinite! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:11:34'!
-testQRDecomposition
-	| n A QR Q R |
-	n _ 3.
-	[A _ (Ñ^n) endomorphisms atRandomBits: n*n. A isFullRank] whileFalse.
-	A _ A over: Ö.
-	QR _ A QR.
-	Q _ QR first.
-	R _ QR second.
-	self assert: Q * R = A.
-	self assert: Q isOrthogonal.
-	self assert: R isUpperTriangular! !
-
-!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 13:02:16'!
-testQRDecomposition2
-	"Example from wikipedia:"
-	| A Q R |
-	A _ (Ö^3) endomorphisms !! #(12 -51 4 6 167 -68 -4 24 -41).
-	Q _ A parent !! {6/7. -69/175. -58/175. 3/7. 158/175. 6/175. -2/7. 6/35. -33/35}.
-	R _ A parent !! #(14 21 -14 0 175 -70 0 0 35).
-	self assert: A QR = {Q. R}! !
-
 !MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:11:54'!
 testRightInverse
 	| A |
@@ -5208,12 +5295,12 @@ testSimilarity2
 	self assert: A ~ (P inverse * A * P).
 	self deny: A ~ B! !
 
-!MatrixTest methodsFor: 'other' stamp: 'len 6/1/2020 14:13:11'!
+!MatrixTest methodsFor: 'other' stamp: 'len 8/9/2020 07:55:35'!
 testTransposed
 	| A |
 	A _ É^6 atRandom => (É^6 atRandom) atRandomBits: 1000.
-	self assert: A columns = A transposed rows.
-	self assert: A transposed transposed = A! !
+	self assert: A columns = A transpose rows.
+	self assert: A transpose transpose = A! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:39:49'!
 testBacklash
@@ -5243,21 +5330,21 @@ testBacklashIntegerTuple
 "	self assert: x = (-1, 0, 0)."
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 07:54:49'!
 testBacklashIntegerTuple2
 	"Example from GAP manual."
 	| A b |
 	A _ É matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
+	A _ A transpose.
 	b _ É tuple: #(95 115 182).
 "	x _ É tuple: #(2285 -5854 4888 -1299 0)." "<- GAP comes up with this solution, but this is not very small"
 	self assert: A * (A \ b) = b! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 07:54:54'!
 testBacklashIntegerTuple3
 	| A b |
 	A _ É matrix: #((-8 1 -7 -9 -2 -1) (5 -2 3 -3 1 1) (7 0 6 4 -5 -8) (-7 -10 5 9 -4 4) (3 -4 1 -2 3 -8) (-7 3 2 6 7 -1) (4 8 5 1 -8 -9) (9 5 0 -10 -8 8) (-6 2 -6 -9 -5 6)).
-	A _ A transposed.
+	A _ A transpose.
 	b _ É tuple: #(3 -1 -1 -7 9 8).
 	"x _ É tuple: #(38 25 -6 1 -34 -12 3 -3 -44)." "shortest solution"
 	self assert: A * (A \ b) = b! !
@@ -5371,14 +5458,14 @@ testBacklashRationalTuple
 	self assert: x = (-13/12, (23/12), (-7/12)).
 	self assert: A * x = v! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 07:54:58'!
 testBacklashRationalTuple2
 	"Example from GAP manual."
 	| A b x |
 	A _ Ñ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
 	b _ Ñ tuple: #(95 115 182).
 	x _ Ñ tuple: {47/4. -17/2. 67/4. 0. 0}.
-	self assert: A transposed \ b = x! !
+	self assert: A transpose \ b = x! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:33:01'!
 testBacklashRationalTupleRandom
@@ -5419,13 +5506,33 @@ testBacklashTupleRandomOver: R
 testBacklashZnMatrixRandom
 	self testBacklashMatrixRandomOver: É/(64 atRandom + 1)! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:33'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:37:28'!
+testCoimageMatrix
+	| n m A J |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ (Ñ^n => (Ñ^m)) atRandomBits: 100 atRandom.
+	J _ A coimageMap.
+	self assert: A coimage = J image.
+	self assert: J isEpimorphism! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 16:50:13'!
 testCokernelMatrix
+	| n m A K |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ (Ñ^n => (Ñ^m)) atRandomBits: 100 atRandom.
+	K _ A cokernelMap.
+	self assert: (K ∑ A) isZero.
+	self assert: A cokernel = K coimage! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/10/2020 05:22:18'!
+testCokernelMatrix2
 	"From Sage."
 	| A B |
 	A _ Ñ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
 	B _ Ñ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernelMap echelon = B "we have to perform an addition echelonization"! !
+	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:44'!
 testCokernelMatrixInteger
@@ -5435,6 +5542,25 @@ testCokernelMatrixInteger
 	B _ É matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
 	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
 
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:41:22'!
+testImageAndCoimageMatrix
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ (Ñ^n => (Ñ^m)) atRandomBits: 100 atRandom.
+	self assert: A cokernelMap kernelMap = A imageMap.
+	self assert: A kernelMap cokernelMap  = A coimageMap! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:36:15'!
+testImageMatrix
+	| n m A J |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ (Ñ^n => (Ñ^m)) atRandomBits: 100 atRandom.
+	J _ A imageMap.
+	self assert: A image = J image.
+	self assert: J isMonomorphism! !
+
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/29/2020 19:55:05'!
 testKernel
 	| A K |
@@ -5442,21 +5568,32 @@ testKernel
 	K _ Ñ^6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
 	self assert: A kernel = K! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:21'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 16:47:42'!
 testKernelInteger
 	"Example from GAP manual."
 	| A K |
 	A _ É matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
+	A _ A transpose. "because if GAP matrices act on rows"
 	K _ É matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
-	self assert: A kernelMap echelon = K "we have to perform an additional echelonization"! !
+	self assert: A kernelMap transpose echelon = K "we have to perform an additional echelonization"! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/29/2020 19:55:34'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:56:06'!
+testKernelMatrix
+	| n m A K |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ (Ñ^n => (Ñ^m)) atRandomBits: 100 atRandom.
+	K _ A kernelMap.
+	self assert: (A ∑ K) isZero.
+	self assert: K isMonomorphism.
+	self assert: A kernel = K image! !
+
+!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 07:55:25'!
 testKernelRational
 	"Example from GAP manual."
 	| A K |
 	A _ Ñ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transposed.
+	A _ A transpose.
 	K _ Ñ^5 span: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
 	self assert: A kernel = K! !
 
@@ -5582,9 +5719,9 @@ testFirstIsomorphismTheoremOver: aRing
 testFirstIsomorphismTheoremOverCyclotomicField
 	self testFirstIsomorphismTheoremOver: (CyclotomicField new: 7)! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:42:05'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:32:12'!
 testFirstIsomorphismTheoremOverGaloisField
-	self testFirstIsomorphismTheoremOver: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1)! !
+	self testFirstIsomorphismTheoremOver: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom)! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/23/2020 09:33:01'!
 testFirstIsomorphismTheoremOverPolynomials
@@ -5615,9 +5752,9 @@ testSecondIsomorphismTheorem: M
 testSecondIsomorphismTheoremOverCyclotomicField
 	self testSecondIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:03'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:31:53'!
 testSecondIsomorphismTheoremOverGaloisField
-	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+	self testSecondIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom) ^ 5 atRandom! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/23/2020 09:33:01'!
 testSecondIsomorphismTheoremOverPolynomials
@@ -5643,25 +5780,25 @@ testThirdIsomorphismTheorem: M
 	self assert: S/T <= (M/T).
 	self assert: (M/T)/(S/T) ~ (M/S)! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:44'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:32:37'!
 testThirdIsomorphismTheoremOverCyclotomicField
-	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5! !
+	self testThirdIsomorphismTheorem: (CyclotomicField new: 7) ^ 5 atRandom! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:43:16'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:32:32'!
 testThirdIsomorphismTheoremOverGaloisField
-	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom + 1) ^ 5! !
+	self testThirdIsomorphismTheorem: (GaloisField new: 10 atRandom nextPrime to: 3 atRandom) ^ 5 atRandom! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/23/2020 09:33:01'!
 testThirdIsomorphismTheoremOverPolynomials
 	self testThirdIsomorphismTheorem: Ñ polynomials ^ 2! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:32:46'!
 testThirdIsomorphismTheoremOverQ
-	self testThirdIsomorphismTheorem: Ñ ^ 5! !
+	self testThirdIsomorphismTheorem: Ñ ^ 5 atRandom! !
 
-!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/2/2018 17:42:52'!
+!ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/4/2020 14:32:50'!
 testThirdIsomorphismTheoremOverQuadraticField
-	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5! !
+	self testThirdIsomorphismTheorem: (QuadraticField sqrt: -5) ^ 5 atRandom! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 5/23/2020 09:34:55'!
 testThirdIsomorphismTheoremOverZ
@@ -5909,7 +6046,7 @@ testMapToSmallerDimensionIsNotInjective
 	f _ (V => W) atRandomBits: 100.
 	self assert: f isInjective not! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 6/1/2020 13:06:03'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/9/2020 07:56:02'!
 testMapsInducedByHom
 	"Example from 'A Singular Introduction to Commutative Algebra', Example 2.1.7 (Maps Induced by Hom)."
 	| X Y Z f g h yz zx |
@@ -5920,7 +6057,7 @@ testMapsInducedByHom
 	g _ f => Z. "Hom(-,Z)"
 	self assert: g domain = (Y => Z). "it is contravariant"
 	self assert: g codomain = (X => Z).
-	self assert: g matrix = ((Ñ^2) id ë f matrix transposed).
+	self assert: g matrix = ((Ñ^2) id ë f matrix transpose).
 	yz _ Y => Z atRandomBits: 100.
 	self assert: (g value: yz) = (yz ∑ f).
 	h _ Z => f. "Hom(Z,-)"
@@ -5948,31 +6085,29 @@ testProjection: f
 	self assert: (f image apply: f) = f image.
 	self assert: (f codomain apply: f) = f image! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:44'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/11/2020 13:00:50'!
 testPullback
-	| X Y Z f g P p1 p2 |
+	| X Y Z f g P projections |
 	Z _ self newFreeModule.
 	X _ self newFreeModuleOver: Z scalars.
 	Y _ self newFreeModuleOver: Z scalars.
 	f _ (X => Z) atRandomBits: 20.
 	g _ (Y => Z) atRandomBits: 20.
 	P _ f /\ g.
-	p1 _ P -> X.
-	p2 _ P -> Y.
-	self assert: p1 -> f = (p2 -> g)! !
+	projections _ P -< (X, Y).
+	self assert: projections first -> f = (projections second -> g)! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:03:53'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/11/2020 12:59:58'!
 testPushout
-	| X Y Z f g P i1 i2 |
+	| X Y Z f g P coprojections |
 	Z _ self newFreeModule.
 	X _ self newFreeModuleOver: Z scalars.
 	Y _ self newFreeModuleOver: Z scalars.
 	f _ (Z => X) atRandomBits: 20.
 	g _ (Z => Y) atRandomBits: 20.
 	P _ f \/ g.
-	i1 _ X -> P.
-	i2 _ Y -> P.
-	self assert: f -> i1 = (g -> i2)! !
+	coprojections _ (X, Y) >- P.
+	self assert: f -> coprojections first = (g -> coprojections second)! !
 
 !ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
 testRetraction
@@ -6629,9 +6764,9 @@ newMatrix: shape over: aRing
 newScalarsField
 	^ {Ñ. É/10 atRandom nextPrime. Ñ polynomials fractions. (É/10 atRandom nextPrime) polynomials fractions. GaloisField new: 2 to: 2} atRandom! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 5/23/2020 09:34:55'!
+!ModuleTest methodsFor: 'private' stamp: 'len 8/4/2020 14:29:17'!
 newScalarsPID
-	^ {Ñ. É/2. É. Ñ polynomials} atRandom! !
+	^ {Ñ. É/10 atRandom nextPrime. É. Ñ polynomials. (É/10 atRandom nextPrime) polynomials} atRandom! !
 
 !ModuleTest methodsFor: 'private' stamp: 'len 5/23/2020 09:34:55'!
 newScalarsRing
@@ -6644,15 +6779,6 @@ newSmallVectorSpace
 !ModuleTest methodsFor: 'private' stamp: 'len 4/21/2020 05:57:02'!
 newVectorSpace
 	^ self newFreeModuleOver: self newScalarsField! !
-
-!ModuleTest methodsFor: 'as yet unclassified' stamp: 'len 7/24/2020 07:16:43'!
-testFreeModuleEquality
-	| M N |
-	M _ Ñ ^ #(a b c) asSet.
-	N _ Ñ ^ #(a c b) asSet.
-	self assert: M = N.
-	N _ Ñ ^ #(x y z) asSet.
-	self assert: M ~= N! !
 
 !MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 2/26/2017 09:25:17'!
 testAntigradedLexOrdering
@@ -6780,17 +6906,17 @@ testMonomialOrderings3
 	self assert: (f orderedBy: #glex) leadingTerm = (x2*x4).
 	self assert: (f orderedBy: #grevlex) leadingTerm = (x3^2)! !
 
-!MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 5/10/2018 19:38:00'!
+!MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 8/3/2020 11:17:06'!
 testMonomialOrderings4
 	"Examples from en.wikipedia.org/wiki/Monomial_order to illustrate the difference between graded lexicographic and graded reverse lexicographic."
 	| M S |
 	M _ FreeAbelianMonoid new: 3 ordering: #glex.
 	S _ Set new.
 	1 to: 3 do: [:i| i to: 3 do: [:j| S add: (M x: i) * (M x: j)]].
-	self assert: (S sorted: [:a :b| a > b]) printString = '({x1}^2, {x1}{x2}, {x1}{x3}, {x2}^2, {x2}{x3}, {x3}^2)'.
+	self assert: (S sorted: [:a :b| a > b]) printString = '(x1^2, x1x2, x1x3, x2^2, x2x3, x3^2)'.
 	M _ M orderedBy: #grevlex.
 	S _ S collect: [:each| M !! each].
-	self assert: (S sorted: [:a :b| a > b]) printString = '({x1}^2, {x1}{x2}, {x2}^2, {x1}{x3}, {x2}{x3}, {x3}^2)'! !
+	self assert: (S sorted: [:a :b| a > b]) printString = '(x1^2, x1x2, x2^2, x1x3, x2x3, x3^2)'! !
 
 !MonomialTest methodsFor: 'as yet unclassified' stamp: 'len 4/22/2020 06:30:07'!
 testMonomialOrderingsExample
@@ -10331,9 +10457,9 @@ testKernel
 testSquared
 	matrix squared! !
 
-!ModularMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 11/22/2016 11:55:03'!
+!ModularMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:55:46'!
 testTransposition
-	matrix transposed! !
+	matrix transpose! !
 
 !PolynomialBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
 testAdditionOverZ
@@ -10551,17 +10677,17 @@ testMultiplicationZ2
 testMultiplicationZp
 	modularMatrix * modularMatrix! !
 
-!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 7/8/2016 02:49'!
+!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:56:33'!
 testTranspositionZ
-	integerMatrix transposed! !
+	integerMatrix transpose! !
 
-!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 7/8/2016 02:58'!
+!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:56:36'!
 testTranspositionZ2
-	binaryMatrix transposed! !
+	binaryMatrix transpose! !
 
-!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 12/2/2016 09:24:25'!
+!SmallMatrixBenchmark methodsFor: 'as yet unclassified' stamp: 'len 8/9/2020 07:56:39'!
 testTranspositionZp
-	modularMatrix transposed! !
+	modularMatrix transpose! !
 
 !SparsePolynomialMultiplicationBenchmark methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
 setUp
