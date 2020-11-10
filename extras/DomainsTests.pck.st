@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 11 August 2020 at 3:22:06 pm'!
+'From Cuis 5.0 [latest update: #4190] on 10 November 2020 at 1:53:20 pm'!
 'Description Please enter a description for this package'!
-!provides: 'DomainsTests' 1 176!
+!provides: 'DomainsTests' 1 177!
 !requires: 'Domains' 1 587 nil!
 SystemOrganization addCategory: #DomainsTests!
 
@@ -1053,19 +1053,20 @@ testPermutationCompositionArray	69,100 per second.
 testPermutationCompositionWords	51,900 per second.
 !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/13/2019 20:38:26'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:29:17'!
 testAbelianGroup: G
-	| one a b c |
-	one _ G identity.
+	| zero a b c |
+	zero _ G identity.
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	c _ G atRandomBits: 100.
-	self assert: one · a = a.
-	self assert: a · one = a.
-	self assert: a · b = (b · a). "commutativity"
-	self assert: (a · b · c) = (a · (b · c)). "associativity"! !
+	self assert: zero + a = a.
+	self assert: a + zero = a.
+	self assert: a + b = (b + a). "commutativity"
+	self assert: (a + b + c) = (a + (b + c)). "associativity"
+	self assert: a + a negated = zero! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/15/2019 00:06:32'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/25/2020 08:10:13'!
 testAbelianGroupHomomorphism: phi
 	| G H a b |
 	G _ phi domain.
@@ -1073,12 +1074,12 @@ testAbelianGroupHomomorphism: phi
 	a _ G atRandomBits: 100.
 	b _ G atRandomBits: 100.
 	self assert: (phi value: G identity) = H identity.
-	self assert: (phi value: a·b) = ((phi value: a)·(phi value: b))! !
+	self assert: (phi value: a + b) = ((phi value: a) + (phi value: b))! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:47:47'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:14:44'!
 testAsPermutationGroup
 	| A |
-	A _ AbelianGroup orders: #(2 5 4 2).
+	A _ (ƒ/2 × (ƒ/5) × (ƒ/4) × (ƒ/2)) asAbelianGroup.
 	self assert: A asPermutationGroup asAbelianGroup invariants = A invariants! !
 
 !AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 7/8/2020 11:54:27'!
@@ -1091,18 +1092,18 @@ testDirectSum
 	C -< (A, B) do: [:each| self testAbelianGroupHomomorphism: each].
 	(A, B) >- C do: [:each| self testAbelianGroupHomomorphism: each]! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:15:41'!
 testExponent
 	| G |
-	G _ AbelianGroup orders: #(2 3 7).
+	G _ (ƒ/2 × (ƒ/3) × (ƒ/7)) asAbelianGroup.
 	self assert: G exponent = 42.
-	G _ AbelianGroup orders: #(2 4 6).
+	G _ (ƒ/2 × (ƒ/4) × (ƒ/6)) asAbelianGroup.
 	self assert: G exponent = 12! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:10:30'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:16:12'!
 testFreeAbelianGroup
 	| G |
-	G _ AbelianGroup orders: #(0 0).
+	G _ ƒ^2.
 	self assert: G rank = 2.
 	self assert: G invariants = #(0 0).
 	self assert: G torsion invariants = #().
@@ -1119,7 +1120,7 @@ testIntegerTuples
 	self testAbelianGroup: M asAbelianGroup.
 	self testAbelianGroupHomomorphism: (M projection: (1 to: M rank) atRandom) asAbelianGroupMap! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:55:20'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/25/2020 08:16:40'!
 testIntegers
 	| G x1 x2 g1 g2 |
 	G _ ƒ asAbelianGroup.
@@ -1130,70 +1131,71 @@ testIntegers
 	g2 _ G !! x2.
 	self assert: ƒ !! g1 = x1.
 	self assert: ƒ !! G identity = 0.
-	self assert: ƒ !! (g1 · g2) = (x1 + x2).
-	self assert: ƒ !! g1 inverse = x1 negated.! !
+	self assert: ƒ !! (g1 + g2) = (x1 + x2).
+	self assert: ƒ !! g1 negated = x1 negated.! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/28/2019 09:10:45'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/22/2020 06:50:23'!
 testInvariants
-	self assert: (AbelianGroup orders: #(1 3 5 12)) invariants = #(3 60).
-	self assert: (AbelianGroup orders: #(2 3)) invariants = #(6).
-	self assert: (AbelianGroup orders: #(6)) invariants = #(6).
-	self assert: (AbelianGroup orders: #(2 6)) invariants = #(2 6).
-	self assert: (AbelianGroup orders: #(3 4 5)) invariants = #(60).
-	self assert: (AbelianGroup orders: #(0 6)) invariants = #(0 6).
-! !
+	self assert: (ƒ/1 × (ƒ/3) × (ƒ/5) × (ƒ/12)) asAbelianGroup invariants = #(3 60).
+	self assert: (ƒ/2 × (ƒ/3)) asAbelianGroup invariants = #(6).
+	self assert: (ƒ/6) asAbelianGroup invariants = #(6).
+	self assert: (ƒ/2 × (ƒ/6)) asAbelianGroup invariants = #(2 6).
+	self assert: (ƒ/3 × (ƒ/4) × (ƒ/5)) asAbelianGroup invariants = #(60).
+	self assert: (ƒ × (ƒ/6)) asAbelianGroup invariants = #(0 6)! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:36:50'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/25/2020 09:02:52'!
 testInvariantsAndPrimaryInvariants
 	| invariants primaryInvariants A |
 	invariants _ {2^2*3*(5^2). 2^5*(3^3)*(5^2)}.
 	primaryInvariants _ {2^2. 2^5. 3. 3^3. 5^2. 5^2} asBag.
-	A _ AbelianGroup orders: invariants shuffled.
+	A _ ƒ^0.
+	A _ invariants shuffled inject: ƒ^0 into: [:sum :each| sum  (ƒ/each) asAbelianGroup].
 	self assert: A invariants = invariants.
 	self assert: A primaryInvariants = primaryInvariants.
-	A _ AbelianGroup orders: primaryInvariants asArray shuffled.
+	A _ primaryInvariants asArray shuffled inject: ƒ^0 into: [:sum :each| sum  (ƒ/each) asAbelianGroup].
 	self assert: A invariants = invariants.
 	self assert: A primaryInvariants = primaryInvariants! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/22/2020 06:47:24'!
 testIsCyclic
 	| G |
-	G _ AbelianGroup orders: #(2 3).
+	G _ (ƒ/2 × (ƒ/3)) asAbelianGroup.
 	self assert: G isCyclic.
-	G _ AbelianGroup orders: #(6).
+	G _ (ƒ/6) asAbelianGroup.
 	self assert: G isCyclic.
-	G _ AbelianGroup orders: #(2 2).
+	G _ (ƒ/2 × (ƒ/2)) asAbelianGroup.
 	self assert: G isCyclic not.
-	G _ AbelianGroup orders: #(2 4).
+	G _ (ƒ/2 × (ƒ/4)) asAbelianGroup.
 	self assert: G isCyclic not.
-	G _ AbelianGroup orders: #().
+	G _ ƒ^0.
 	self assert: G isCyclic.
-	G _ AbelianGroup orders: #(0).
+	G _ (ƒ/1) asAbelianGroup.
 	self assert: G isCyclic.
-	G _ AbelianGroup orders: #(3 4 5).
+	G _ (ƒ/3 × (ƒ/4) × (ƒ/5)) asAbelianGroup.
 	self assert: G isCyclic! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/22/2020 18:56:59'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/22/2020 06:45:43'!
 testIsTrivial
 	| G |
-	G _ AbelianGroup orders: #().
+	G _ ƒ^0.
 	self assert: G isTrivial.
-	G _ AbelianGroup orders: #(1 1).
+	G _ (ƒ/1) asAbelianGroup.
 	self assert: G isTrivial.
-	G _ AbelianGroup orders: #(1 1 2).
+	G _ (ƒ/1 × (ƒ/1)) asAbelianGroup.
+	self assert: G isTrivial.
+	G _ (ƒ/1 × (ƒ/1) × (ƒ/2)) asAbelianGroup.
 	self assert: G isTrivial not.
-	G _ AbelianGroup orders: #(1 1 0).
+	G _ (ƒ/1 × (ƒ/1) × ƒ) asAbelianGroup.
 	self assert: G isTrivial not.
-	G _ AbelianGroup orders: #(2).
+	G _ (ƒ/2) asAbelianGroup.
 	self assert: G isTrivial not.
-	G _ AbelianGroup orders: #(0).
-	self assert: G isTrivial not.
-! !
+	G _ ƒ asAbelianGroup.
+	self assert: G isTrivial not! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:37:05'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:24:31'!
 testMixedAbelianGroup
 	| G |
-	G _ AbelianGroup orders: #(0 0 2 3).
+	G _ (ƒ × ƒ × (ƒ/2) × (ƒ/3)) asAbelianGroup.
 	self assert: G rank = 2.
 	self assert: G primaryInvariants = #(0 0 2 3) asBag.
 	self assert: G torsion primaryInvariants = #(2 3) asBag.
@@ -1212,24 +1214,24 @@ testModularIntegers
 	self testAbelianGroup: R asAbelianGroup.
 	self testAbelianGroupHomomorphism: R projection asAbelianGroupMap! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:39:42'!
 testOrder
-	self assert: (AbelianGroup orders: #(2 3)) size = 6.
-	self assert: (AbelianGroup orders: #(0 2 3)) size isInfinite! !
+	self assert: (ƒ/2 × (ƒ/3)) asAbelianGroup size = 6.
+	self assert: (ƒ × (ƒ/2) × (ƒ/3)) asAbelianGroup size isInfinite! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/26/2019 12:18:23'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/25/2020 09:10:40'!
 testOrderOfElements
 	| G g |
-	G _ AbelianGroup orders: #(2 3 4 5 0).
-	g _ G !! [:a :b :c :d :e| a*(b^2)*(d^4)].
+	G _ (ƒ × (ƒ/2) × (ƒ/3) × (ƒ/4) × (ƒ/5)) asAbelianGroup.
+	g _ G !! [:a :b :c :d :e| a + (b*2) + (d*4)].
 	self assert: g order = 30.
-	g _ G !! [:a :b :c :d :e| a*e].
+	g _ G !! [:a :b :c :d :e| a + e].
 	self assert: g order = 0! !
 
-!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/29/2019 12:37:13'!
+!AbelianGroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 19:26:02'!
 testTorsionAbelianGroup
 	| G |
-	G _ AbelianGroup orders: #(2 3).
+	G _ (ƒ/2 × (ƒ/3)) asAbelianGroup.
 	self assert: G rank = 0.
 	self assert: G primaryInvariants = #(2 3) asBag.
 	self assert: G = G torsion.
@@ -1991,14 +1993,12 @@ testSmoothnessOverQQ
 	C _ P subscheme: P coordinateRing !! [:x :y :z| x^3 - (y^2*z)].
 	self assert: C isSingular! !
 
-!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 08:57:40'!
+!AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 10/26/2020 14:31:04'!
 testSpecZ
 	self assert: ƒ spec dimension = 1.
 	self assert: ƒ spec isNoetherian.
 	self assert: (ƒ spec includes: ƒ*5).
-	self deny: (ƒ spec includes: ƒ*6).
-	self assert: ƒ spec isInitial not.
-	self assert: ƒ spec isTerminal! !
+	self deny: (ƒ spec includes: ƒ*6)! !
 
 !AlgebraicGeometryTest methodsFor: 'general' stamp: 'len 5/23/2020 08:57:54'!
 testSpecZSubschemes
@@ -2501,15 +2501,7 @@ testIdentityKernel
 	id _ C id.
 	self assert: id kernel isTrivial! !
 
-!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 08:59:45'!
-testModulePresentationExample
-	| M C |
-	M _ ƒ^2 / {(1,2)}.
-	C _ M presentation.
-	self assert: C verify.
-	self assert: C isExact! !
-
-!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 4/26/2020 00:06:38'!
+!ChainComplexTest methodsFor: 'as yet unclassified' stamp: 'len 11/4/2020 12:29:06'!
 testShift
 	| C k i |
 	C _ self newChainComplex.
@@ -2518,7 +2510,8 @@ testShift
 	self assert: (C >> k) verify.
 	self assert: C >> k << k = C.
 	self assert: C >> k = (C << k negated).
-	self assert: (C >> k) degree = (C degree + k).
+	self assert: (C >> k) minDegree = (C minDegree + k).
+	self assert: (C >> k) maxDegree = (C maxDegree + k).
 	i _ (-5 to: 5) atRandom.
 	self assert: (C >> k at: i+k) = ((C at: i) * ((-1)^k))! !
 
@@ -3857,13 +3850,12 @@ testUnion
 	G _ Digraph unordered addEdges: {#a -> #b. #b -> #c. #d -> #e. #x -> #b}; yourself.
 	self assert: (G \/ G transpose) = G symmetric! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 7/14/2020 18:30:54'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/25/2020 09:08:51'!
 smallGroupAtRandom
 	^ {[SymmetricGroup new: 3].
 	[AlternatingGroup new: 3].
 	[PermutationGroup klein].
-	[MatrixGroup klein].
-	[AbelianGroup orders: ((1 to: 3 atRandom) collect: [:i| (1 to: 5) atRandom])]} atRandom value! !
+	[MatrixGroup klein]} atRandom value! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 2/1/2018 23:02:45'!
 testActionOrbitOf
@@ -3893,27 +3885,27 @@ testAlternatingIsSymmetricCommutator
 	self assert: A = S commutator.
 	self assert: (S indexOf: A) = 2! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:49'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:40:39'!
 testAlternatingOrder
 	| A |
 	A _ AlternatingGroup new: 3.
-	self assert: A order = (3 factorial / 2)! !
+	self assert: A size = (3 factorial / 2)! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 2/1/2018 23:07:09'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:40:46'!
 testBigOrder1
 	"Test fast computation of group order with Schreier-Sims algorithm.
 	This is Sym(10), with order 10!!."
 	| G |
 	G _ PermutationGroup new: 10 generators: {#((1 2)). #(10 1 2 3 4 5 6 7 8 9)}.
-	self assert: G order = 10 factorial! !
+	self assert: G size = 10 factorial! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/30/2018 21:25:14'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:40:52'!
 testBigOrder2
 	"Test fast computation of group order with Schreier-Sims algorithm.
 	This is the Mathieu group on 12 points, the second smallest of the 26 sporadic simple groups, with order 95040."
-	self assert: PermutationGroup M12 order = 95040! !
+	self assert: PermutationGroup M12 size = 95040! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:52:42'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:41:00'!
 testCauchyFrobeniusLemma
 	"Also called Brunside's lemma, Burnside counting theorem, or orbit-counting theorem."
 	| X G phi sum |
@@ -3921,7 +3913,7 @@ testCauchyFrobeniusLemma
 	G _ AlternatingGroup on: X.
 	phi _ GroupAction from: (G, X) to: X evaluatingWithArguments: [:f :x| f value: x].
 	sum _ G elements sum: [:g| (phi fixedPointsOf: g) size].
-	self assert: phi orbits size * G order = sum! !
+	self assert: phi orbits size * G size = sum! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/28/2018 08:37:03'!
 testConjugacyClasses
@@ -4050,13 +4042,13 @@ testKleinFour
 	A _ S commutator.
 	self assert: (V isNormalIn: A)! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/25/2019 04:46:36'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:41:07'!
 testLagrangeTheorem
 	"G finite group, H subgroup of G, then |H| divides |G|."
 	| G H |
 	G _ self smallGroupAtRandom.
 	H _ G span: ((1 to: 3 atRandom) collect: [:i| G atRandom]) asSet.
-	self assert: H order | G order! !
+	self assert: H size | G size! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 5/23/2020 09:34:55'!
 testModularIntegersUnits
@@ -4067,23 +4059,36 @@ testModularIntegersUnits
 	self assert: U size = (Sequence phi value: m).
 	self testGroup: U! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:53:11'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:41:16'!
 testOrbitStabilizerTheorem
 	| X G phi p |
 	X _ 1 to: 4.
 	G _ AlternatingGroup on: X.
 	phi _ GroupAction from: (G, X) to: X evaluatingWithArguments: [:f :x| f value: x].
 	p _ X atRandom.
-	self assert: (phi stabilizerOf: p) order * (phi orbitOf: p) size = G order! !
+	self assert: (phi stabilizerOf: p) size * (phi orbitOf: p) size = G size! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 1/30/2018 21:34:39'!
 testPermutationGroupAction
 	self testGroupAction: (SymmetricGroup new: 10) action.
 	self testGroupAction: (PermutationGroup cyclic: 15) action! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 12/22/2016 21:40:10'!
-testPermutationGroupHomomorphism
-	"Magma Handbook, Example H57E2."
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 8/19/2020 15:35:15'!
+testPermutationGroupHomomorphism1
+	"Magma Handbook, Example H62E2."
+	| C15 A15 f |
+	C15 _ PermutationGroup cyclic: 15.
+	A15 _ (ƒ/15) asAbelianGroup.
+	f _ C15 to: A15 evaluating: [:x| x^11].
+	self assert: A15 = f image.
+	self assert: A15 = (C15 apply: f).
+	C15 do: [:c|
+		C15 do: [:d|
+			self assert: (f value: c) * (f value: d) = (f value: c*d)]]! !
+
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 8/19/2020 15:30:31'!
+testPermutationGroupHomomorphism2
+	"Magma Handbook, Example H62E2."
 	| C15 h im |
 	C15 _ PermutationGroup cyclic: 15.
 	h _ C15 to: C15 evaluating: [:g| g ^ 3].
@@ -4092,11 +4097,11 @@ testPermutationGroupHomomorphism
 	self assert: im size = 5. "of order 5"
 	self assert: im isCyclic! !
 
-!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 4/30/2019 11:51:29'!
+!GroupTest methodsFor: 'as yet unclassified' stamp: 'len 10/20/2020 15:41:22'!
 testSymmetricOrder
 	| G |
 	G _ SymmetricGroup new: 4.
-	self assert: G order = 4 factorial! !
+	self assert: G size = 4 factorial! !
 
 !GroupTest methodsFor: 'as yet unclassified' stamp: 'len 11/14/2016 08:35'!
 testTrivial
@@ -4686,7 +4691,7 @@ testHermiteNormalForm5
 	H _ ƒ matrix: #((1 1 1 6 -164) (0 3 0 16 -348) (0 0 2 13 -200) (0 0 0 19 -316)).
 	self assert: A HNF = H! !
 
-!MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
+!MatrixTest methodsFor: 'canonical forms' stamp: 'len 8/15/2020 13:52:25'!
 testHermiteNormalForm6
 	"From MuPAD documentation."
 	| A H |
@@ -4697,12 +4702,20 @@ testHermiteNormalForm6
 		(-1400 26880 -117600 179200 -88200)
 		(630 -12600 56700 -88200 44100)).
 	H _ ƒ matrix: #(
+		(5 0 210 560 630)
+		(0 60 0 0 0)
+		(0 0 420 0 0)
+		(0 0 0 840 0)
+		(0 0 0 0 2520)).
+	"The original from MuPAD documentation is:
+	H _ ƒ matrix: #(
 		(5 0 -210 -280 630)
 		(0 60 0 0 0)
 		(0 0 420 0 0)
 		(0 0 0 840 0)
 		(0 0 0 0 2520)).
-	self assert: A HNF = H "this fails, but it seems to be a bug in MuPAD, because 'H isHermiteNormalForm' answers false"! !
+	but this is wrong, this is a bug in MuPAD"
+	self assert: A HNF = H! !
 
 !MatrixTest methodsFor: 'canonical forms' stamp: 'len 5/23/2020 09:34:55'!
 testHermiteNormalForm7
@@ -5471,14 +5484,14 @@ testBacklashRationalTuple2
 testBacklashRationalTupleRandom
 	self testBacklashTupleRandomOver: „! !
 
-!MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:58:33'!
+!MatrixTest methodsFor: 'solving' stamp: 'len 10/25/2020 08:40:42'!
 testBacklashSingular
 	"Example from Sage documentation."
 	| A B X |
 	A _ „^3 => („^2) !! #(1 2 3 2 4 6).
 	B _ „^2 => („^2) !! #(6 -6 12 -12).
 	X _ A \ B.
-	self assert: X = („^2 => („^3) !! (6, -6, 0, 0, 0, 0)).
+	self assert: X = („^2 => („^3) !! #(6 -6 0 0 0 0)).
 	self assert: A * X = B! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 12:58:50'!
@@ -5505,97 +5518,6 @@ testBacklashTupleRandomOver: R
 !MatrixTest methodsFor: 'solving' stamp: 'len 5/23/2020 09:34:55'!
 testBacklashZnMatrixRandom
 	self testBacklashMatrixRandomOver: ƒ/(64 atRandom + 1)! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:37:28'!
-testCoimageMatrix
-	| n m A J |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ („^n => („^m)) atRandomBits: 100 atRandom.
-	J _ A coimageMap.
-	self assert: A coimage = J image.
-	self assert: J isEpimorphism! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 16:50:13'!
-testCokernelMatrix
-	| n m A K |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ („^n => („^m)) atRandomBits: 100 atRandom.
-	K _ A cokernelMap.
-	self assert: (K · A) isZero.
-	self assert: A cokernel = K coimage! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/10/2020 05:22:18'!
-testCokernelMatrix2
-	"From Sage."
-	| A B |
-	A _ „ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
-	B _ „ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/30/2020 05:09:44'!
-testCokernelMatrixInteger
-	"From Sage."
-	| A B |
-	A _ ƒ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
-	B _ ƒ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
-	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:41:22'!
-testImageAndCoimageMatrix
-	| n m A |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ („^n => („^m)) atRandomBits: 100 atRandom.
-	self assert: A cokernelMap kernelMap = A imageMap.
-	self assert: A kernelMap cokernelMap  = A coimageMap! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:36:15'!
-testImageMatrix
-	| n m A J |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ („^n => („^m)) atRandomBits: 100 atRandom.
-	J _ A imageMap.
-	self assert: A image = J image.
-	self assert: J isMonomorphism! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 5/29/2020 19:55:05'!
-testKernel
-	| A K |
-	A _ „ matrix: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
-	K _ „^6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
-	self assert: A kernel = K! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 16:47:42'!
-testKernelInteger
-	"Example from GAP manual."
-	| A K |
-	A _ ƒ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transpose. "because if GAP matrices act on rows"
-	K _ ƒ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
-	self assert: A kernelMap transpose echelon = K "we have to perform an additional echelonization"! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 19:56:06'!
-testKernelMatrix
-	| n m A K |
-	n _ 5 atRandom.
-	m _ 5 atRandom.
-	A _ („^n => („^m)) atRandomBits: 100 atRandom.
-	K _ A kernelMap.
-	self assert: (A · K) isZero.
-	self assert: K isMonomorphism.
-	self assert: A kernel = K image! !
-
-!MatrixTest methodsFor: 'solving' stamp: 'len 8/9/2020 07:55:25'!
-testKernelRational
-	"Example from GAP manual."
-	| A K |
-	A _ „ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
-	A _ A transpose.
-	K _ „^5 span: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
-	self assert: A kernel = K! !
 
 !MatrixTest methodsFor: 'solving' stamp: 'len 6/1/2020 13:04:24'!
 testSlashWithMatrix
@@ -5644,6 +5566,132 @@ testSolveRandomOver: aRing
 testSolveRational
 	self testSolveRandomOver: „! !
 
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/12/2020 07:33:05'!
+testAbstractRankNullity
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	self assert: A kernel = A coimage complement.
+	self assert: A image = A cokernel complement! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/12/2020 06:53:20'!
+testCoimageAndCokernelAreTransposeImageAndKernel
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	self assert: A coimage = A transpose image.
+	self assert: A cokernel = A transpose kernel! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/12/2020 08:02:50'!
+testCoimageMatrix
+	| n m A J |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	J _ A coimageMap.
+	self assert: A coimage = J coimage.
+	self assert: J isEpimorphism! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/11/2020 20:02:40'!
+testCokernelAndCoequalizer
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	self assert: A cokernel = (A coequalizer: A zero)! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/11/2020 20:00:30'!
+testCokernelMatrix
+	| n m A Q |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	Q _ A cokernelMap.
+	self assert: (Q · A) isZero.
+	self assert: Q isEpimorphism.
+	self assert: A cokernel = Q coimage "what?"! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/10/2020 05:22:18'!
+testCokernelMatrix2
+	"From Sage."
+	| A B |
+	A _ „ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
+	B _ „ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
+	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 5/30/2020 05:09:44'!
+testCokernelMatrixInteger
+	"From Sage."
+	| A B |
+	A _ ƒ matrix: {(1,2,4,-7,4). (1,1,0,2,-1). (1,0,3,-3,1). (0,-1,-1,3,-2). (0,0,-1,2,-1)}.
+	B _ ƒ matrix: {(1,0,-1,2,-1). (0,1,-1,1,-4)}.
+	self assert: A cokernelMap echelon = B "we have to perform an additional echelonization"! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/11/2020 19:56:56'!
+testImageAndCoimageMatrix
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	self assert: A cokernelMap kernelMap echelon = A imageMap echelon.
+	self assert: A kernelMap cokernelMap echelon = A coimageMap echelon! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/9/2020 19:36:15'!
+testImageMatrix
+	| n m A J |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	J _ A imageMap.
+	self assert: A image = J image.
+	self assert: J isMonomorphism! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 5/29/2020 19:55:05'!
+testKernel
+	| A K |
+	A _ „ matrix: {(1, 0, -3, 0, 2, -8). (0, 1, 5, 0, -1, 4). (0, 0, 0, 1, 7, -9). (0, 0, 0, 0, 0, 0)}.
+	K _ „^6 span: {(3,-5,1,0,0,0). (-2,1,0,-7,1,0). (8,-4,0,9,0,1)}.
+	self assert: A kernel = K! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/12/2020 07:45:02'!
+testKernelAndEqualizer
+	| n m A |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	self assert: A kernel = (A equalizer: A zero)! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/9/2020 16:47:42'!
+testKernelInteger
+	"Example from GAP manual."
+	| A K |
+	A _ ƒ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transpose. "because if GAP matrices act on rows"
+	K _ ƒ matrix: #((1 18 -9 2 -6) (0 24 -13 3 -7)).
+	self assert: A kernelMap transpose echelon = K "we have to perform an additional echelonization"! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/9/2020 19:56:06'!
+testKernelMatrix
+	| n m A K |
+	n _ 5 atRandom.
+	m _ 5 atRandom.
+	A _ („^n => („^m)) atRandomBits: 100 atRandom.
+	K _ A kernelMap.
+	self assert: (A · K) isZero.
+	self assert: K isMonomorphism.
+	self assert: A kernel = K image! !
+
+!MatrixTest methodsFor: 'subobjects' stamp: 'len 8/9/2020 07:55:25'!
+testKernelRational
+	"Example from GAP manual."
+	| A K |
+	A _ „ matrix: #((1 2 7) (4 5 6) (7 8 9) (10 11 19) (5 7 12)).
+	A _ A transpose.
+	K _ „^5 span: {{-7/4. 9/2. -15/4. 1. 0}. {-3/4. -3/2. 1/4. 0. 1}}.
+	self assert: A kernel = K! !
+
 !MatrixTest methodsFor: 'private' stamp: 'len 6/1/2020 14:04:41'!
 newRandomMatrix: shape over: aRing
 	| samples hom |
@@ -5652,11 +5700,12 @@ newRandomMatrix: shape over: aRing
 	samples _ {aRing zero. aRing one. aRing one negated}.
 	^ hom filling: [:i :j| 2 atRandom > 1 ifTrue: [aRing zero] ifFalse: [samples atRandom]]! !
 
-!ModuleTest methodsFor: 'bugs' stamp: 'len 5/23/2020 09:34:55'!
+!ModuleTest methodsFor: 'bugs' stamp: 'len 10/8/2020 16:25:47'!
 testHomRelationsBug
 	| V |
 	V _ ƒ^1 / {5}.
-	self assert: V dual invariants = #(5)! !
+	self assert: V isTrivial.
+	self assert: V dual invariants isEmpty! !
 
 !ModuleTest methodsFor: 'bugs' stamp: 'len 5/28/2020 18:22:25'!
 testHomRelationsBug2
@@ -5699,6 +5748,13 @@ testPIDCoordinatesOfBug
 	M _ self newFreeModuleOver: self newScalarsPID.
 	S _ M grassmannian: (1 to: M rank) atRandom :: atRandomBits: 50.
 	self assert: (S generators allSatisfy: [:each| (S coordinatesOf: each) notNil])! !
+
+!ModuleTest methodsFor: 'bugs' stamp: 'len 10/25/2020 08:36:42'!
+testQuotientModuleSpanBug
+	"The span is the original module, but it answers a submodule."
+	| M |
+	M _ ƒ^2 / {(1,2)}.
+	self assert: M = (M span: M generators)! !
 
 !ModuleTest methodsFor: 'isomorphisms' stamp: 'len 8/17/2019 16:39:14'!
 testFirstIsomorphismTheorem: f
@@ -5824,24 +5880,33 @@ testAdjointAndHomFunctor
 	f _ „^3 => („^4) :: atRandomBits: 100.
 	self assert: (f => „ asScalarModule) = f adjoint! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/17/2020 07:34:53'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/12/2020 08:12:17'!
 testCoequalizer
-	| A B f g coeq |
+	| A B f g Q |
 	A _ self newFreeModule.
 	B _ self newFreeModuleOver: A scalars.
 	f _ (A => B) atRandomBits: 50 atRandom.
 	g _ (A => B) atRandomBits: 50 atRandom.
-	coeq _ f coequalizer: g.
-	self assert: (f -> coeq) notNil.
-	self assert: f -> coeq = (g -> coeq)! !
+	Q _ f coequalizer: g.
+	self assert: (f -> Q) notNil.
+	self assert: f -> Q = (g -> Q)! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/12/2020 08:13:35'!
+testCokernelAndCoequalizer
+	| A B f |
+	A _ self newFreeModule.
+	B _ self newFreeModuleOver: A scalars.
+	f _ (A => B) atRandomBits: 100 atRandom.
+	self assert: f cokernel = (f coequalizer: f zero)! !
+
+!ModuleTest methodsFor: 'maps' stamp: 'len 10/26/2020 14:27:25'!
 testColift
 	| M X A i Y f g |
 	M _ „^3.
 	X _ „^4.
 	A _ (X => M atRandomBits: 20) kernel.
-	i _ A >-> X.
+	i _ A -> X.
+	self assert: i isInjective.
 	Y _ „^5.
 	f _ A => Y atRandomBits: 20.
 	g _ f / i.
@@ -5883,16 +5948,16 @@ testCompositionError
 	g _ Y => Z atRandomBits: 1000.
 	self should: [f · g] raise: DomainError! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 4/18/2020 15:31:09'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/12/2020 08:12:29'!
 testEqualizer
-	| A B f g eq |
+	| A B f g Q |
 	A _ self newFreeModule.
 	B _ self newFreeModuleOver: A scalars.
 	f _ (A => B) atRandomBits: 100 atRandom.
 	g _ (A => B) atRandomBits: 100 atRandom.
-	eq _ f equalizer: g.
-	self assert: (eq -> f) notNil.
-	self assert: eq -> f = (eq -> g)! !
+	Q _ f equalizer: g.
+	self assert: (Q -> f) notNil.
+	self assert: Q -> f = (Q -> g)! !
 
 !ModuleTest methodsFor: 'maps' stamp: 'len 4/19/2020 08:01:52'!
 testImage
@@ -5919,6 +5984,14 @@ testKernel
 	v _ kernel atRandomBits: 100.
 	self assert: (f value: v) isZero! !
 
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/12/2020 08:13:11'!
+testKernelAndEqualizer
+	| A B f |
+	A _ self newFreeModule.
+	B _ self newFreeModuleOver: A scalars.
+	f _ (A => B) atRandomBits: 100 atRandom.
+	self assert: f kernel = (f equalizer: f zero)! !
+
 !ModuleTest methodsFor: 'maps' stamp: 'len 5/28/2020 18:22:37'!
 testKernelZ2
 	| V f kernel |
@@ -5929,13 +6002,14 @@ testKernelZ2
 	self assert: kernel rank = 2.
 	self assert: (kernel includes: V !! (0,1,1))! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 10/26/2020 14:27:48'!
 testLift
 	| M X B Y p f g |
 	M _ „^3.
 	X _ „^4.
 	B _ (M => X atRandomBits: 20) cokernel.
-	p _ X ->> B.
+	p _ X -> B.
+	self assert: p isSurjective.
 	Y _ „^5.
 	f _ Y => B atRandomBits: 20.
 	g _ p \ f.
@@ -6109,22 +6183,22 @@ testPushout
 	coprojections _ (X, Y) >- P.
 	self assert: f -> coprojections first = (g -> coprojections second)! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/14/2020 06:48:59'!
 testRetraction
 	| V W f r |
-	V _ „^3.
-	W _ „^4.
-	[f _ V => W atRandomBits: 100. f isInjective] whileFalse.
+	[V _ self newVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	f _ V => W atRandomBits: 100. f isInjective] whileFalse.
 	r _ f retraction.
 	self assert: r isSurjective.
 	self assert: r · f = V id! !
 
-!ModuleTest methodsFor: 'maps' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'maps' stamp: 'len 8/14/2020 06:49:12'!
 testSection
 	| V W f s |
-	V _ „^4.
-	W _ „^3.
-	[f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
+	[V _ self newVectorSpace.
+	W _ self newFreeModuleOver: V scalars.
+	f _ V => W atRandomBits: 100. f isSurjective] whileFalse.
 	s _ f section.
 	self assert: s isInjective.
 	self assert: f · s = W id! !
@@ -6615,11 +6689,11 @@ testQuotientSpace
 	self assert: (V / V null) rank = V rank.
 	self assert: (V / V) rank = 0! !
 
-!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 5/23/2020 09:33:01'!
+!ModuleTest methodsFor: 'quotient and complement' stamp: 'len 10/8/2020 17:08:15'!
 testQuotientSpace2
 	| V M x |
 	V _ „^3.
-	M _ V / (V !! (1,2,3)).
+	M _ V / {V !! (1,2,3)}.
 	x _ V -> M value: (1,2,3).
 	self assert: x isZero.
 "	self assert: (M lifting value: x) = (0,0,0)"! !
@@ -6732,12 +6806,12 @@ testTensorProductRelations
 newFreeModule
 	^ self newFreeModuleOver: self newScalarsRing! !
 
-!ModuleTest methodsFor: 'private' stamp: 'len 7/16/2020 10:42:06'!
-newFreeModuleOver: scalars
+!ModuleTest methodsFor: 'private' stamp: 'len 8/13/2020 08:15:29'!
+newFreeModuleOver: aRing
 	| M N |
-	M _ 3 atRandom = 1 ifTrue: [scalars asScalarModule] ifFalse: [scalars ^ 3 atRandom].
+	M _ 3 atRandom = 1 ifTrue: [aRing asScalarModule] ifFalse: [aRing ^ 3 atRandom].
 	4 atRandom = 1 ifTrue:
-		[N _ self newFreeModuleOver: scalars.
+		[N _ self newFreeModuleOver: aRing.
 		2 atRandom = 1 ifTrue: [^ M => N].
 		^ M ‘ N].
 	4 atRandom = 1 ifTrue: [^ M endomorphisms asModule].
