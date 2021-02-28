@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 28 February 2021 at 2:31:55 pm'!
+'From Cuis 5.0 [latest update: #4190] on 28 February 2021 at 6:44:49 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 603!
+!provides: 'Domains' 1 604!
 !requires: 'RayTracer' 1 2 nil!
 !requires: 'Complex' 1 7 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
@@ -925,16 +925,6 @@ FractionRing subclass: #LaurentSeriesRing
 	category: 'Domains-Fields-Local'!
 !classDefinition: 'LaurentSeriesRing class' category: #'Domains-Fields-Local'!
 LaurentSeriesRing class
-	instanceVariableNames: ''!
-
-!classDefinition: #AffineFractionRing category: #'Domains-Polynomials'!
-FractionRing subclass: #AffineFractionRing
-	instanceVariableNames: 'quotient'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Polynomials'!
-!classDefinition: 'AffineFractionRing class' category: #'Domains-Polynomials'!
-AffineFractionRing class
 	instanceVariableNames: ''!
 
 !classDefinition: #RationalFunctionField category: #'Domains-Polynomials'!
@@ -2627,16 +2617,6 @@ RingElement subclass: #LaurentSeries
 LaurentSeries class
 	instanceVariableNames: ''!
 
-!classDefinition: #AffineRationalFunction category: #'Domains-Polynomials'!
-RingElement subclass: #AffineRationalFunction
-	instanceVariableNames: 'parent residue'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Domains-Polynomials'!
-!classDefinition: 'AffineRationalFunction class' category: #'Domains-Polynomials'!
-AffineRationalFunction class
-	instanceVariableNames: ''!
-
 !classDefinition: #Polynomial category: #'Domains-Polynomials'!
 RingElement subclass: #Polynomial
 	instanceVariableNames: 'parent'
@@ -3853,11 +3833,6 @@ Field of p-adic numbers Qp. This is the fraction field of the ring of p-adic int
 !LaurentSeriesRing commentStamp: 'len 6/7/2020 17:52:33' prior: 0!
 Ring R((x)) of formal Laurent series over a commutative ring R in an indetermiate x. See LaurentSeries.!
 
-!AffineFractionRing commentStamp: '<historical>' prior: 0!
-Total ring of fractions of an affine ring R = K[x1,...,xn]/I over a field K. The elements are fractions a / b where a and b are in R, and b is invertible in R. See AffineRationalFunction.
-
-Internally, the ring of fractions is constructed as an affine ring over the rational function field whose indeterminates correspond to maximally independent indeterminates of R.!
-
 !RationalFunctionField commentStamp: '<historical>' prior: 0!
 The field of fractions of a polynomial ring with coefficients over a field.!
 
@@ -4646,9 +4621,6 @@ Elements of product rings, i.e. tuples of ring elements. See ProductRing.!
 
 !LaurentSeries commentStamp: 'len 6/7/2020 17:51:33' prior: 0!
 Formal Laurent series with coefficients over a commutative ring. See LaurentSeriesRing.!
-
-!AffineRationalFunction commentStamp: '<historical>' prior: 0!
-Elements of the total ring of fractions of an affine ring. See AffineRing and AffineFractionRing.!
 
 !Polynomial commentStamp: 'len 5/11/2019 08:20:21' prior: 0!
 Polynomials in one or many indeterminates, with coefficients in a commutative ring. These are elements of a PolynomialRing.
@@ -6027,10 +5999,6 @@ printOn: aStream
 !LaurentSeries methodsFor: 'printing' stamp: 'len 5/8/2020 17:47:59'!
 printOn: aStream
 	unitPart printOn: aStream shifted: valuation! !
-
-!AffineRationalFunction methodsFor: 'printing' stamp: 'len 8/12/2019 10:10:57'!
-printOn: aStream
-	aStream print: residue! !
 
 !Polynomial methodsFor: 'printing' stamp: 'len 7/21/2019 12:47:30'!
 printOn: aStream
@@ -16913,28 +16881,6 @@ isApproximate
 isLocalField
 	^ self scalars isGaloisField! !
 
-!AffineFractionRing methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 10:19:01'!
-asAffineRing
-	^ quotient! !
-
-!AffineFractionRing methodsFor: 'as yet unclassified' stamp: 'len 8/12/2019 10:09:44'!
-integers: anAffineRing
-	| K independentIndeterminates dependentIndeterminates F E images k |
-	super integers: anAffineRing.
-	K _ anAffineRing scalars.
-	independentIndeterminates _ anAffineRing relations maximallyIndependentIndeterminates.
-	dependentIndeterminates _ (1 to: anAffineRing rank) reject: [:i| independentIndeterminates includes: i].
-	F _ (K polynomialsIn: (independentIndeterminates collect: [:i| anAffineRing base names at: i])) fractions.
-	E _ F polynomialsIn: (dependentIndeterminates collect: [:i| anAffineRing base names at: i]).
-	images _ Array new: anAffineRing rank.
-	k _ 0.
-	independentIndeterminates do: [:i| images at: i put: (E constant: (F x: (k _ k + 1)))].
-	k _ 0.
-	dependentIndeterminates do: [:i| images at: i put: (E x: (k _ k + 1))].
-	E addMap: (anAffineRing base to: E evaluating: [:f| f value: images]).
-	quotient _ E / (anAffineRing relations apply: anAffineRing base -> E).
-	self generators: (images collect: [:each| AffineRationalFunction new parent: self; residue: (quotient project: each)])! !
-
 !RationalFunctionField methodsFor: 'accessing' stamp: 'len 10/14/2016 22:59'!
 indeterminates
 	^ self integers indeterminates! !
@@ -18166,9 +18112,22 @@ embed: anObject
 	"Answer the embedding of an element of the coefficients ring into the receiver."
 	^ self project: (self base embed: anObject)! !
 
-!AffineRing methodsFor: 'morphisms' stamp: 'len 4/22/2020 01:34:33'!
+!AffineRing methodsFor: 'morphisms' stamp: 'len 2/28/2021 18:43:36'!
 fractions
-	^ AffineFractionRing on: self! !
+	"Answer the total ring of fractions of the receiver, with the receiver an affine ring R = K[x1,...,xn]/I over a field K. The ring of fractions is constructed as an affine ring over the rational function field whose indeterminates correspond to maximally independent indeterminates of R."
+	| K independentIndeterminates dependentIndeterminates F E images k localizationMap |
+	K _ self scalars.
+	independentIndeterminates _ self relations maximallyIndependentIndeterminates.
+	dependentIndeterminates _ (1 to: self rank) reject: [:i| independentIndeterminates includes: i].
+	F _ (K polynomialsIn: (independentIndeterminates collect: [:i| self base names at: i])) fractions.
+	E _ F polynomialsIn: (dependentIndeterminates collect: [:i| self base names at: i]).
+	images _ Array new: self rank.
+	k _ 0.
+	independentIndeterminates do: [:i| images at: i put: (E constant: (F x: (k _ k + 1)))].
+	k _ 0.
+	dependentIndeterminates do: [:i| images at: i put: (E x: (k _ k + 1))].
+	E addMap: (localizationMap _ self base to: E evaluating: [:f| f value: images]).
+	^ E / (self relations apply: localizationMap)! !
 
 !AffineRing methodsFor: 'morphisms' stamp: 'len 4/15/2020 08:16:43'!
 from: aDomain
@@ -37817,41 +37776,6 @@ valuation: anInteger unit: aPowerSeries
 !LaurentSeries class methodsFor: 'instance creation' stamp: 'len 6/3/2019 18:40:45'!
 valuation: anInteger unit: anAdicInteger
 	^ self new valuation: anInteger unit: anAdicInteger! !
-
-!AffineRationalFunction methodsFor: 'accessing' stamp: 'len 8/12/2019 09:40:19'!
-parent
-	^ parent! !
-
-!AffineRationalFunction methodsFor: 'operations' stamp: 'len 9/7/2019 10:17:37'!
-* anElement
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #*].
-	^ self class new parent: parent; residue: residue * anElement residue! !
-
-!AffineRationalFunction methodsFor: 'operations' stamp: 'len 9/7/2019 10:17:45'!
-+ anElement
-	(parent includes: anElement) ifFalse: [^ self adapt: anElement andSend: #+].
-	^ self class new parent: parent; residue: residue + anElement residue! !
-
-!AffineRationalFunction methodsFor: 'operations' stamp: 'len 8/14/2019 11:42:32'!
-inverse
-	residue isConstant ifFalse: [^ DomainError signal: 'not invertible'].
-	^ self class new parent: parent; residue: residue inverse! !
-
-!AffineRationalFunction methodsFor: 'operations' stamp: 'len 8/14/2019 11:41:06'!
-negated
-	^ self class new parent: parent; residue: residue negated! !
-
-!AffineRationalFunction methodsFor: 'private' stamp: 'len 8/12/2019 09:40:33'!
-parent: anAffineRationalFunctionRing
-	parent _ anAffineRationalFunctionRing! !
-
-!AffineRationalFunction methodsFor: 'private' stamp: 'len 8/12/2019 09:40:42'!
-residue
-	^ residue! !
-
-!AffineRationalFunction methodsFor: 'private' stamp: 'len 8/12/2019 09:40:52'!
-residue: aPolynomialResidue
-	residue _ aPolynomialResidue! !
 
 !Polynomial methodsFor: 'accessing' stamp: 'len 4/23/2018 20:34:46'!
 lift
