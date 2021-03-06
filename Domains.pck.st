@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4190] on 6 March 2021 at 6:44:24 am'!
+'From Cuis 5.0 [latest update: #4190] on 6 March 2021 at 3:35:00 pm'!
 'Description A computational algebra system in Smalltalk'!
-!provides: 'Domains' 1 605!
+!provides: 'Domains' 1 606!
 !requires: 'RayTracer' 1 2 nil!
 !requires: 'Complex' 1 7 nil!
 SystemOrganization addCategory: #'Domains-Kernel'!
@@ -2297,6 +2297,16 @@ MonomialOrdering subclass: #LocalLexicographicOrdering
 LocalLexicographicOrdering class
 	instanceVariableNames: ''!
 
+!classDefinition: #WeightedMonomialOrdering category: #'Domains-Monoids-Orderings'!
+MonomialOrdering subclass: #WeightedMonomialOrdering
+	instanceVariableNames: 'weights'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Domains-Monoids-Orderings'!
+!classDefinition: 'WeightedMonomialOrdering class' category: #'Domains-Monoids-Orderings'!
+WeightedMonomialOrdering class
+	instanceVariableNames: ''!
+
 !classDefinition: #GroupElement category: #'Domains-Groups'!
 Object subclass: #GroupElement
 	instanceVariableNames: ''
@@ -4453,6 +4463,25 @@ The local lexicographic order (llex) is the negation of the global lexicographic
 
 This is the order called 'llex' in Magma. What Singular calls 'ls', on the other hand, is like this but with the indeterminates reversed.!
 
+!WeightedMonomialOrdering commentStamp: '<historical>' prior: 0!
+Monomial orderings defined by weight tuples.
+
+For monomials in n variables, there are n!! (n factorial) orderings. In certain applications such as Groebner bases it's desirable to easily construct new monomial orderings.
+
+ideterminates 		an array with the indeterminates (variables) in order;
+weights 				n-tuples with real coefficients.
+
+Suppose you have two monomials:
+	a = x1^a1 x2^a2 ... xn^an
+	b = x1^b1 x2^b2 ... xn^bn
+where some of the ai or bi may be 0. And suppose the variables are ordered x1 < x2 < ... < xn. If we are asked for the truth of a < b, we enumerate the weights and for each one, (w1, w2, ..., wn) we do:
+	aSum = a1 w1 + a2 w2 + ... + an wn,
+	bSum = b1 w1 + b2 w2 + ... + bn wn;
+if aSum < bSum, then a < b; if aSum > bSum, then a > b; if aSum = bSum, we continue with the next weight, until there are no more weights (then, a should equal b...).
+
+Theorem: For any monomial ordering in a finite number of variables, there is a collection of weights that models the ordering. So, with this idea we can contruct any ordering.
+!
+
 !GroupElement commentStamp: '<historical>' prior: 0!
 Elements of a Group.!
 
@@ -5741,7 +5770,7 @@ printOn: aStream
 		print: self right;
 		nextPut: (self isRightOpen ifTrue: [ $) ] ifFalse: [ $] ])! !
 
-!MonomialOrdering methodsFor: 'printing' stamp: 'len 2/26/2017 09:25:36'!
+!MonomialOrdering methodsFor: 'printing' stamp: 'len 3/6/2021 12:54:01'!
 printOn: aStream
 	| M |
 	self type isNil
@@ -5749,12 +5778,18 @@ printOn: aStream
 		ifFalse: [aStream nextPutAll: self type].
 	M _ FreeAbelianMonoid new: indeterminates max.
 	aStream nextPut: $[.
-	self indeterminates do: [:i| aStream print: (M x: i)] separatedBy: [aStream nextPut: $,].
+	indeterminates do: [:i| aStream print: (M x: i)] separatedBy: [aStream nextPut: $,].
 	aStream nextPut: $]! !
 
 !BlockMonomialOrdering methodsFor: 'printing' stamp: 'len 3/4/2021 15:58:54'!
 printOn: aStream
 	blocks do: [:each| aStream print: each] separatedBy: [aStream nextPutAll: ' × ']! !
+
+!WeightedMonomialOrdering methodsFor: 'printing' stamp: 'len 7/4/2016 06:26'!
+printOn: aStream
+	super printOn: aStream.
+	aStream space.
+	self weights do: [:each| aStream print: each] separatedBy: [aStream space]! !
 
 !Monomial methodsFor: 'copying' stamp: 'len 11/21/2016 11:07:43'!
 postCopy
@@ -13143,21 +13178,6 @@ size
 hash
 	^ self rank hash + self ordering hash! !
 
-!FreeAbelianMonoid methodsFor: 'converting' stamp: 'len 5/13/2019 22:15:42'!
-orderedBy: aMonomialOrdering
-	| answer |
-	answer _ self class new: self rank ordering: aMonomialOrdering.
-	self names ifNotNil: [:aCollection| answer names: aCollection].
-	^ answer! !
-
-!FreeAbelianMonoid methodsFor: 'converting' stamp: 'len 3/5/2021 12:57:44'!
-slice: anArray
-	"Answer the submonoid corresponding to a subset of the indeterminates."
-	| answer |
-	answer _ self class new: anArray size ordering: (self ordering slice: anArray).
-	answer addMap: (answer to: self mapping: [:i| self x: (anArray at: i)]).
-	^ answer! !
-
 !FreeAbelianMonoid methodsFor: 'elements' stamp: 'len 4/9/2020 18:09:17'!
 adapt: anElement
 	anElement class == Monomial ifTrue: [^ self newFrom: anElement exponents].
@@ -13240,6 +13260,21 @@ do: aBlock
 			{answer onto: self evaluating: [:x| self exponents: (x exponents copyFrom: 1 to: n)].
 			answer onto: aMonoid evaluating: [:x| aMonoid exponents: (x exponents copyFrom: n+1 to: x exponents size)]};
 		yourself! !
+
+!FreeAbelianMonoid methodsFor: 'operations' stamp: 'len 5/13/2019 22:15:42'!
+orderedBy: aMonomialOrdering
+	| answer |
+	answer _ self class new: self rank ordering: aMonomialOrdering.
+	self names ifNotNil: [:aCollection| answer names: aCollection].
+	^ answer! !
+
+!FreeAbelianMonoid methodsFor: 'operations' stamp: 'len 3/6/2021 13:59:01'!
+slice: anArray
+	"Answer the submonoid corresponding to a subset of the indeterminates."
+	| answer |
+	answer _ self class new: (self names ifNil: [anArray size] ifNotNil: [:names| anArray collect: [:i| names at: i]]) ordering: (self ordering slice: anArray).
+	answer addMap: (answer to: self mapping: [:i| self x: (anArray at: i)]).
+	^ answer! !
 
 !FreeAbelianMonoid methodsFor: 'random' stamp: 'len 5/23/2020 09:05:01'!
 atRandom: aRandom bits: bitSize
@@ -17967,10 +18002,6 @@ inverseOfRepresentative: anInteger
 characteristic
 	^ self base characteristic! !
 
-!AffineRing methodsFor: 'accessing' stamp: 'len 9/22/2018 18:46:29'!
-degree
-	^ self relations degree "conflicts with AlgebraicExtension>>degree?"! !
-
 !AffineRing methodsFor: 'accessing' stamp: 'len 6/6/2019 19:06:52'!
 dimension
 	"Answer the Krull dimension of the receiver. Seen as a field extension, this is its transcendence degree."
@@ -18017,10 +18048,6 @@ asModule
 asVectorSpace
 	self scalars isField ifFalse: [^ DomainError signal].
 	^ self asModule! !
-
-!AffineRing methodsFor: 'converting' stamp: 'len 7/31/2019 08:21:30'!
-orderedBy: aMonomialOrdering
-	^ self class relations: (self relations orderedBy: aMonomialOrdering)! !
 
 !AffineRing methodsFor: 'elements' stamp: 'len 4/9/2020 18:03:30'!
 adapt: anElement
@@ -18112,6 +18139,10 @@ localization
 	Objects defined in this localization contain geometric information (usually only) about a Zariski neighbourhood of 0 in K^n, while objects in the global ring contain geometric information whish is valid in the whole affine space K^n."
 	self isGlobal ifFalse: [DomainError signal: 'the ring is not global'].
 	^ self orderedBy: #lglex! !
+
+!AffineRing methodsFor: 'operations' stamp: 'len 7/31/2019 08:21:30'!
+orderedBy: aMonomialOrdering
+	^ self class relations: (self relations orderedBy: aMonomialOrdering)! !
 
 !AffineRing methodsFor: 'operations' stamp: 'len 2/27/2017 20:57:49'!
 proj
@@ -19627,79 +19658,29 @@ zero
 hash
 	^ self scalars hash + self rank! !
 
-!PolynomialRing methodsFor: 'converting' stamp: 'len 8/9/2019 04:32:46'!
+!PolynomialRing methodsFor: 'converting' stamp: 'len 3/6/2021 15:32:03'!
 asMultivariate
 	"If the receiver is a univariate polynomial ring with coefficients in a polynomial ring R[x1..xn][y], answer a new multivariate polynomial ring R[x1,...,xn,y]."
 	| answer |
 	self isUnivariate ifFalse: [^ self].
 	(self scalars isKindOf: PolynomialRing) ifFalse: [^ self].
 	self propertyAt: #asMultivariate ifPresent: [:aPolynomialRing| ^ aPolynomialRing].
-	answer _ self scalars scalars polynomialsIn: self scalars rank + 1.
-	(self names notNil and: [self scalars names notNil])
-		ifTrue: [answer names: self scalars names, self names].
-"	answer addMap: (self to: answer evaluating: [:f|
-		| g |
-		g _ answer zero.
-		f coefficients withIndexDo: [:each :i| each isZero ifFalse: [g _ (answer !! each) * (answer x: answer rank to: i)
-		g]]])."
+	answer _ self class monomials: self scalars monomials × self monomials over: self scalars scalars.
 	answer propertyAt: #asUnivariate put: self.
 	^ self propertyAt: #asMultivariate put: answer! !
 
-!PolynomialRing methodsFor: 'converting' stamp: 'len 8/8/2019 10:27:08'!
+!PolynomialRing methodsFor: 'converting' stamp: 'len 3/6/2021 15:24:13'!
 asUnivariate
-	| answer |
 	self isUnivariate ifTrue: [^ self].
-	self propertyAt: #asUnivariate ifPresent: [:aPolynomialRing| ^ aPolynomialRing].
-	answer _ (self scalars polynomialsIn: self rank - 1) polynomialsIn: 1.
-	self names notNil ifTrue:
-		[answer scalars names: self names allButLast.
-		answer names: {self names last}].
-	answer propertyAt: #asMultivariate put: self.
-	^ self propertyAt: #asUnivariate put: answer! !
+	^ self propertyAt: #asUnivariate ifAbsentPut: [self asUnivariateIn: self rank]! !
 
-!PolynomialRing methodsFor: 'converting' stamp: 'len 11/21/2016 19:31:43'!
+!PolynomialRing methodsFor: 'converting' stamp: 'len 3/6/2021 15:23:33'!
 asUnivariateIn: anIndeterminate
-	anIndeterminate = self rank ifFalse: [^ self error: 'bad indeterminate'].
-	^ self asUnivariate! !
-
-!PolynomialRing methodsFor: 'converting' stamp: 'len 2/27/2017 07:42:07'!
-copyWithout: anIndeterminate
-	"Answer a polynomial ring like the receiver but with one less indeterminate.
-	Keep monomial ordering. Also keep indeterminate names if present."
-	^ self names
-		ifNil: [self scalars polynomialsIn: self rank - 1 ordering: (self ordering copyWithout: anIndeterminate)]
-		ifNotNil: [:indeterminates|
-			self scalars
-				polynomialsIn: (indeterminates copyWithoutIndex: anIndeterminate)
-				ordering: (self ordering copyWithout: anIndeterminate)]! !
-
-!PolynomialRing methodsFor: 'converting' stamp: 'len 5/13/2019 22:13:37'!
-orderedBy: aMonomialOrdering
-	^ self class monomials: (self monomials orderedBy: aMonomialOrdering) over: self scalars! !
-
-!PolynomialRing methodsFor: 'converting' stamp: 'len 5/13/2019 22:13:23'!
-over: aRing
-	^ self class monomials: self monomials over: aRing! !
-
-!PolynomialRing methodsFor: 'converting' stamp: 'len 3/5/2021 17:58:04'!
-slice: anArray
-	"Given a subset Y of the indeterminates of the receiver R[X], answer the subring R[Y] equipped with the embedding map."
-	^ self class monomials: (monomials slice: anArray) over: self scalars! !
-
-!PolynomialRing methodsFor: 'converting' stamp: 'len 3/5/2021 18:30:29'!
-split: anArray
-	"Given a subset Y of the indeterminates of the receiver R[X], answer R[Y][X\Y] equipped with coercion maps."
-	| F E others |
-	F _ self class monomials: (monomials slice: anArray) over: self scalars.
-"	F addMap: (F to: self mapping: [:i| self x: (anArray at: i)])."
-	others _ self indeterminates reject: [:i| anArray includes: i].
-	E _ self class monomials: (monomials slice: others) over: F.
-	E addMap: (E to: self mapping: [:i| self x: (others at: i)]).
-	E addMap: (self to: E mapping: [:i|
-		| k |
-		(k _ anArray indexOf: i) > 0
-			ifTrue: [E constant: (F x: k)] ifFalse: [E x: (others indexOf: i)]]).
-	^ E! !
+	| answer |
+	(anIndeterminate > 0 and: [anIndeterminate <= self rank]) ifFalse: [DomainError signal: 'undefined undeterminate'].
+	answer _ self split: (self indeterminates select: [:i| i ~= anIndeterminate]).
+	answer propertyAt: #asMultivariate put: self.
+	^ answer! !
 
 !PolynomialRing methodsFor: 'elements' stamp: 'len 5/10/2020 09:39:19'!
 adapt: anElement
@@ -20068,6 +20049,14 @@ localization
 	self isGlobal ifFalse: [DomainError signal: 'the ring is not global'].
 	^ self orderedBy: #lglex! !
 
+!PolynomialRing methodsFor: 'operations' stamp: 'len 5/13/2019 22:13:37'!
+orderedBy: aMonomialOrdering
+	^ self class monomials: (self monomials orderedBy: aMonomialOrdering) over: self scalars! !
+
+!PolynomialRing methodsFor: 'operations' stamp: 'len 5/13/2019 22:13:23'!
+over: aRing
+	^ self class monomials: self monomials over: aRing! !
+
 !PolynomialRing methodsFor: 'operations' stamp: 'len 9/26/2016 06:46'!
 proj
 	"Answer the projective space associated to the receiver, Proj(R)."
@@ -20077,6 +20066,11 @@ proj
 radical
 	"Answer the Jacobson radical J(R) of the receiver R. This is the ideal consisting of all elements that annihilate all simple R-modules. It is the intersection of all maximal ideals. In a polynomial ring, it is the same as the nilradical."
 	^ self nilradical! !
+
+!PolynomialRing methodsFor: 'operations' stamp: 'len 3/5/2021 17:58:04'!
+slice: anArray
+	"Given a subset Y of the indeterminates of the receiver R[X], answer the subring R[Y] equipped with the embedding map."
+	^ self class monomials: (monomials slice: anArray) over: self scalars! !
 
 !PolynomialRing methodsFor: 'operations' stamp: 'len 6/9/2019 15:22:18'!
 span: aCollection
@@ -20089,6 +20083,21 @@ span: aCollection
 spec
 	"Answer the spectrum of the receiver, Spec(R)."
 	^ self propertyAt: #spec ifAbsentPut: [AffineSpace coordinateRing: self]! !
+
+!PolynomialRing methodsFor: 'operations' stamp: 'len 3/5/2021 18:30:29'!
+split: anArray
+	"Given a subset Y of the indeterminates of the receiver R[X], answer R[Y][X\Y] equipped with coercion maps."
+	| F E others |
+	F _ self class monomials: (monomials slice: anArray) over: self scalars.
+"	F addMap: (F to: self mapping: [:i| self x: (anArray at: i)])."
+	others _ self indeterminates reject: [:i| anArray includes: i].
+	E _ self class monomials: (monomials slice: others) over: F.
+	E addMap: (E to: self mapping: [:i| self x: (others at: i)]).
+	E addMap: (self to: E mapping: [:i|
+		| k |
+		(k _ anArray indexOf: i) > 0
+			ifTrue: [E constant: (F x: k)] ifFalse: [E x: (others indexOf: i)]]).
+	^ E! !
 
 !PolynomialRing methodsFor: 'printing' stamp: 'len 1/2/2017 10:23:51'!
 printIndeterminatesOn: aStream
@@ -21676,10 +21685,6 @@ variety
 	"Answer the algebraic variety that is the set of zeroes of all polynomials in the receiver."
 	^ self isHomogeneous ifTrue: [(self scalars / self radical) proj] ifFalse: [(self scalars / self radical) spec]! !
 
-!PolynomialIdeal methodsFor: 'converting' stamp: 'len 5/23/2018 22:51:15'!
-orderedBy: aMonomialOrdering
-	^ (self scalars orderedBy: aMonomialOrdering) !! self! !
-
 !PolynomialIdeal methodsFor: 'elements-operations' stamp: 'len 6/18/2019 09:12:24'!
 invert: aPolynomial
 	aPolynomial = self scalars one ifTrue: [^ aPolynomial].
@@ -21720,12 +21725,12 @@ reduce: aPolynomial
 		answer _ answer /\ (R * ((R * g /\ self) basis apply: [:h| h ÷ g]))].
 	^ answer! !
 
-!PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/23/2018 22:50:08'!
+!PolynomialIdeal methodsFor: 'operations' stamp: 'len 3/6/2021 14:04:35'!
 dehomogenizedIn: anIndeterminate
 	"Answer the dehomogenization of the receiver removing the given indeterminate."
 	| R S |
 	R _ self scalars.
-	S _ R copyWithout: anIndeterminate.
+	S _ R slice: (R indeterminates select: [:i| i ~= anIndeterminate]).
 	^ S * (self generators collect: [:each| S !! (each dehomogenizedIn: anIndeterminate)])! !
 
 !PolynomialIdeal methodsFor: 'operations' stamp: 'len 10/31/2016 03:27'!
@@ -21743,13 +21748,13 @@ output: univariate eliminant g(xi) or there's no eliminant
 where n is minimal, then output eliminant g(xi) = sum akxi^k
 "! !
 
-!PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/23/2018 22:50:50'!
+!PolynomialIdeal methodsFor: 'operations' stamp: 'len 3/6/2021 13:03:38'!
 eliminateAll: aCollection
 	"Answer the elimination ideal for the indeterminates in aCollection = {xi}, i.e. the subideal of polynomials without indeterminates {xi}."
 	| freeIndeterminates ordering G newGenerators |
 	freeIndeterminates _ self ordering indeterminates reject: [:each| aCollection includes: each].
 	self ordering isGlobal ifFalse: [self notYetImplemented].
-	ordering _ (MonomialOrdering lex: aCollection), (MonomialOrdering grevlex: freeIndeterminates). "if the ideal is homogeneous, should we use use tlex?"
+	ordering _ (MonomialOrdering lex: aCollection), (MonomialOrdering grevlex: freeIndeterminates). "if the ideal is homogeneous, should we use use glex?"
 	G _ (self groebnerBasisWithOrdering: ordering) minimal.
 	newGenerators _ G asArray select: [:each| (aCollection noneSatisfy: [:none| each has: none])].
 	^ self scalars * (newGenerators collect: [:each| self scalars !! each])! !
@@ -21803,6 +21808,10 @@ localization
 	Objects defined in this localization contain geometric information (usually only) about a Zariski neighbourhood of 0 in K^n, while objects in the global ring contain geometric information whish is valid in the whole affine space K^n."
 	self scalars isGlobal ifFalse: [DomainError signal: 'the ring is not global'].
 	^ self orderedBy: #lglex! !
+
+!PolynomialIdeal methodsFor: 'operations' stamp: 'len 5/23/2018 22:51:15'!
+orderedBy: aMonomialOrdering
+	^ (self scalars orderedBy: aMonomialOrdering) !! self! !
 
 !PolynomialIdeal methodsFor: 'operations' stamp: 'len 1/15/2018 18:56:08'!
 predecomposition
@@ -26406,9 +26415,9 @@ isPlane
 satisfies: aTuple
 	^ true! !
 
-!ProjectiveSpace methodsFor: 'private' stamp: 'len 1/12/2017 14:47:56'!
+!ProjectiveSpace methodsFor: 'private' stamp: 'len 3/6/2021 14:05:36'!
 newPatch: i
-	^ (self coordinateRing copyWithout: i) spec! !
+	^ (self coordinateRing slice: (self coordinateRing indeterminates select: [:each| each ~= i])) spec! !
 
 !ProjectiveSpace methodsFor: 'private' stamp: 'len 1/13/2017 17:23:38'!
 saturated
@@ -33742,27 +33751,29 @@ type
 hash
 	^ self type hash! !
 
-!MonomialOrdering methodsFor: 'copying' stamp: 'len 10/31/2016 12:37'!
-copyWithout: anIndeterminate
-	^ self copy indeterminates: (indeterminates copyWithout: indeterminates size)! !
-
-!MonomialOrdering methodsFor: 'operations' stamp: 'len 1/28/2017 10:12:58'!
+!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/6/2021 14:57:57'!
 , aMonomialOrdering
+	(self type notNil and: [aMonomialOrdering type notNil]) ifFalse: [^ self notYetImplemented].
 	^ BlockMonomialOrdering blocks: {self. aMonomialOrdering}! !
 
-!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/4/2021 16:01:04'!
+!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/6/2021 14:53:04'!
 × aMonomialOrdering
 	"Answer the product of the monomial ordering, shifting indeterminates to correct for the new rank."
+	(self type notNil and: [self type = aMonomialOrdering type])
+		ifTrue: [^ self class indeterminates: self indeterminates, (aMonomialOrdering indeterminates collect: [:i| i + self rank])].
 	^ self, (aMonomialOrdering substitute: [:i| i + self rank])! !
 
-!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/5/2021 13:01:19'!
+!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/6/2021 15:00:56'!
 slice: anArray
 	"Answer the ordering corresponding to a subset of the indeterminates."
+	self type notNil ifFalse: [^ self subclassResponsibility].
 	^ self class new: anArray size! !
 
-!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/4/2021 16:03:22'!
+!MonomialOrdering methodsFor: 'operations' stamp: 'len 3/6/2021 15:00:14'!
 substitute: aBlock
-	^ self class indeterminates: (indeterminates collect: aBlock)! !
+	"Answer a new ordering like the receiver but substituting indeterminates by aBlock."
+	self type notNil ifFalse: [^ self subclassResponsibility].
+	^ self class indeterminates: (self indeterminates collect: aBlock)! !
 
 !MonomialOrdering methodsFor: 'ordering' stamp: 'len 1/28/2017 09:51:49'!
 blockCompare: aMonomial with: anotherMonomial
@@ -33789,7 +33800,7 @@ isLocal
 	Local orderings satisfy 1 > m for all nontrivial monomials m."
 	^ false! !
 
-!MonomialOrdering methodsFor: 'private' stamp: 'len 1/28/2017 10:00:49'!
+!MonomialOrdering methodsFor: 'private' stamp: 'len 3/6/2021 14:47:17'!
 indeterminates: anArray
 	indeterminates _ anArray asArray! !
 
@@ -33835,13 +33846,9 @@ new: anInteger
 hash
 	^ blocks hash! !
 
-!BlockMonomialOrdering methodsFor: 'operations' stamp: 'len 1/28/2017 10:13:17'!
+!BlockMonomialOrdering methodsFor: 'operations' stamp: 'len 3/6/2021 14:53:47'!
 , aMonomialOrdering
-	^ self species blocks: blocks, aMonomialOrdering! !
-
-!BlockMonomialOrdering methodsFor: 'operations' stamp: 'len 3/4/2021 16:04:33'!
-substitute: aBlock
-	^ self class blocks: (blocks collect: [:each| each substitute: aBlock])! !
+	^ self class blocks: blocks, aMonomialOrdering! !
 
 !BlockMonomialOrdering methodsFor: 'ordering' stamp: 'len 1/28/2017 09:57:40'!
 compare: aMonomial with: anotherMonomial
@@ -34216,6 +34223,114 @@ compare: aMonomial with: anotherMonomial
 !LocalLexicographicOrdering methodsFor: 'testing' stamp: 'len 10/28/2016 10:44'!
 isLocal
 	^ true! !
+
+!WeightedMonomialOrdering methodsFor: 'accessing' stamp: 'len 7/2/2016 23:18'!
+weights
+	^ weights! !
+
+!WeightedMonomialOrdering methodsFor: 'arithmetic' stamp: 'len 7/3/2016 02:24'!
+* aMonomialOrdering
+	| newWeights zero |
+	newWeights _ OrderedCollection new.
+	zero _ aMonomialOrdering weights first zero.
+	weights do: [:each| newWeights add: each, zero].
+	zero _ weights first zero.
+	aMonomialOrdering weights do: [:each| newWeights add: zero, each].
+	^ self class
+		new: self rank + aMonomialOrdering rank
+		weights: newWeights! !
+
+!WeightedMonomialOrdering methodsFor: 'arithmetic' stamp: 'len 7/3/2016 02:50'!
+, aMonomialOrdering
+	"Answer the concatenation of the recever and the argument."
+
+	self rank = aMonomialOrdering rank ifFalse: [^ self error: 'cannot concatenate monomial orderings of different rank'].
+	^ self class
+		new: self rank
+		weights: (self weights copy addAll: aMonomialOrdering weights; yourself)! !
+
+!WeightedMonomialOrdering methodsFor: 'arithmetic' stamp: 'len 3/6/2021 13:48:28'!
+inverse
+	^ self class
+		indeterminates: self indeterminates
+		weights: (self weights collect: [:each| each reversed])! !
+
+!WeightedMonomialOrdering methodsFor: 'arithmetic' stamp: 'len 3/6/2021 13:47:11'!
+reverse
+	^ self class
+		indeterminates: self indeterminates
+		weights: (self weights reversed collect: [:each| each negated])! !
+
+!WeightedMonomialOrdering methodsFor: 'ordering' stamp: 'len 4/29/2019 10:22:56'!
+compare: aMonomial with: anotherMonomial
+	| t1 t2 |
+	t1 _ FloatArray new: indeterminates size.
+	t2 _ t1 copy.
+	1 to: indeterminates size do: [:i| | xi |
+		t1 at: i put: (aMonomial at: (xi _ indeterminates at: i)).
+		t2 at: i put: (anotherMonomial at: xi)].
+	self weights do: [:w|
+		| a b |
+		a _ w · t1.
+		b _ w · t2.
+		a = b ifFalse: [^ a > b ifTrue: [1] ifFalse: [-1]]].
+	^ 0! !
+
+!WeightedMonomialOrdering methodsFor: 'ordering' stamp: 'len 5/15/2019 01:52:53'!
+leadingMonomialOf: aPolynomial
+	"Answer the head monomial of aPolynomial according to this ordering."
+	| head headTuple |
+	headTuple _ FloatArray new: indeterminates size.
+	aPolynomial monomialsDo: [:each|
+		| t a b |
+		t _ FloatArray new: indeterminates size.
+		1 to: indeterminates size do: [:i| t at: i put: (each at: (indeterminates at: i))].
+		head isNil
+			ifTrue: [head _ each. headTuple _ t]
+			ifFalse: [(self weights anySatisfy: [:w|
+				a _ w · t.
+				b _ w · headTuple. "could be precomputed up to some extent"
+				a ~= b]) ifTrue: [a > b ifTrue: [head _ each. headTuple _ t]]]].
+	^ head! !
+
+!WeightedMonomialOrdering methodsFor: 'private' stamp: 'len 7/2/2016 23:18'!
+weights: aCollectionOfTuples
+	weights _ aCollectionOfTuples collect: [:each| each as: FloatArray]! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 3/6/2021 13:46:16'!
+glex: anArray
+	| weights |
+	weights _ OrderedCollection new.
+	weights add: (Array new: anArray size withAll: 1).
+	weights addAll: (self lex: anArray) weights.
+	^ self indeterminates: anArray weights: weights asArray! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 3/6/2021 13:46:43'!
+grevlex: anArray
+	| weights |
+	weights _ OrderedCollection new.
+	weights add: (Array new: anArray size withAll: 1).
+	weights addAll: (self lex: anArray) reverse weights.
+	^ self indeterminates: anArray weights: weights asArray! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 7/3/2016 02:27'!
+indeterminates: indeterminates weights: weights
+	weights isSequenceable ifFalse: [self error: 'the indeterminates are unordered'].
+	^ self new: indeterminates size weights: (weights collect: [:each| each withIndexCollect: [:x :i| each at: (indeterminates indexOf: i)]])! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 3/6/2021 13:46:24'!
+lex: anArray
+	| weighs |
+	weighs _ (1 to: anArray size) collect: [:i| (1 to: anArray size) collect: [:j| i=j ifTrue: [1] ifFalse: [0]]].
+	^ self indeterminates: anArray weights: weighs! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 7/3/2016 02:44'!
+new: anInteger weights: anArray
+	^ (self new: anInteger) weights: anArray! !
+
+!WeightedMonomialOrdering class methodsFor: 'instance creation' stamp: 'len 3/6/2021 13:46:28'!
+revlex: anArray
+	^ (self lex: anArray) reverse! !
 
 !GroupElement methodsFor: 'accessing' stamp: 'len 5/10/2019 10:11:51'!
 identity
@@ -37956,17 +38071,12 @@ asBilinearForm
 	self parent rank even ifFalse: [^ self error: 'not even rank'].
 	^ BilinearForm on: self scalars ^ (self parent rank / 2) evaluatingWithArguments: [:x :y| self value: (x, y)]! !
 
-!Polynomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:21:02'!
+!Polynomial methodsFor: 'converting' stamp: 'len 3/6/2021 15:28:51'!
 asMultivariate
 	"Convert a polynomial in R[x][y][z] to a polynomial in R[x,y,z]."
-	| R S answer |
-	((R _ self scalars) isKindOf: PolynomialRing) ifFalse: [^ self].
+	(self scalars isKindOf: PolynomialRing) ifFalse: [^ self].
 	self parent isUnivariate ifFalse: [^ self].
-	S _ self parent asMultivariate.
-	answer _ S zero.
-	self partsDo: [:each|
-		answer _ answer + (S !! each value * (S x: R rank + 1 to: each key degree))].
-	^ answer! !
+	^ self parent asMultivariate !! self! !
 
 !Polynomial methodsFor: 'converting' stamp: 'len 7/6/2020 10:59:19'!
 asQuadraticForm
@@ -37987,10 +38097,13 @@ asScalar
 	self isConstant ifFalse: [^ self error: 'not a constant polynomial'].
 	^ self leadingCoefficient! !
 
-!Polynomial methodsFor: 'converting' stamp: 'len 5/23/2018 22:28:42'!
+!Polynomial methodsFor: 'converting' stamp: 'len 3/6/2021 15:19:31'!
 asUnivariate
 	"Answer the receiver as univariate in the last indeterminate, e.g. go from R[x,y,z] to R[x,y][z]."
-	| S term n d coefficients |
+	self parent isUnivariate ifTrue: [^ self].
+	^ self parent asUnivariate !! self
+
+"	| S term n d coefficients |
 	self parent isUnivariate ifTrue: [^ self].
 	n _ self parent rank.
 	S _ self parent asUnivariate.
@@ -38001,14 +38114,13 @@ asUnivariate
 	self partsDo: [:each|
 		term _ S scalars coefficient: each value monomial: S scalars monomials !! (each key without: n).
 		coefficients at: (each key degreeIn: n)+1 add: term].
-	^ S coefficients: coefficients! !
+	^ S coefficients: coefficients"! !
 
-!Polynomial methodsFor: 'converting' stamp: 'len 1/23/2017 11:40:38'!
+!Polynomial methodsFor: 'converting' stamp: 'len 3/6/2021 15:20:06'!
 asUnivariateIn: anIndeterminate
 	"Answer the receiver as univariate in the given indeterminate, e.g. go from R[x,y,z] to R[x,y][z]."
 	(self parent isUnivariate and: [self parent indeterminate = anIndeterminate]) ifTrue: [^ self].
-	anIndeterminate = self parent rank ifFalse: [self error: 'bad indeterminate'].
-	^ self asUnivariate! !
+	^ (self parent asUnivariateIn: anIndeterminate) !! self! !
 
 !Polynomial methodsFor: 'converting' stamp: 'len 11/17/2016 19:02:41'!
 monic
@@ -38279,9 +38391,11 @@ pseudoDivisionBy: aPolynomial
 "	self scalars isUFD ifFalse: [^ DomainError signal: 'polynomial not over a UFD']."
 	^ PseudoDivision divide: self by: aPolynomial! !
 
-!Polynomial methodsFor: 'operations' stamp: 'len 4/24/2018 19:39:55'!
+!Polynomial methodsFor: 'operations' stamp: 'len 3/6/2021 15:22:47'!
 pseudoDivisionBy: aPolynomial in: anIndeterminate
-	^ (self asUnivariateIn: anIndeterminate) pseudoDivisionBy: (aPolynomial asUnivariateIn: anIndeterminate)! !
+	| U |
+	U _ self parent asUnivariateIn: anIndeterminate.
+	^ U !! self pseudoDivisionBy: U !! aPolynomial ! !
 
 !Polynomial methodsFor: 'operations' stamp: 'len 4/24/2018 19:40:35'!
 pseudoQuo: aPolynomial
@@ -38289,17 +38403,17 @@ pseudoQuo: aPolynomial
 	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) quotient asMultivariate].
 	^ (self pseudoDivisionBy: aPolynomial) quotient! !
 
-!Polynomial methodsFor: 'operations' stamp: 'len 4/24/2018 19:40:44'!
+!Polynomial methodsFor: 'operations' stamp: 'len 3/6/2021 15:17:53'!
 pseudoRem2: aPolynomial
 	"Answer the remainder of the pseudo-division of the receiver by the argument."
-	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate].
+"	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate]."
 	^ (self pseudoDivisionBy: aPolynomial) remainder! !
 
-!Polynomial methodsFor: 'operations' stamp: 'len 4/24/2018 19:41:29'!
+!Polynomial methodsFor: 'operations' stamp: 'len 3/6/2021 15:17:45'!
 pseudoRem3: aPolynomial
 	"Answer the remainder of the pseudo-division of the receiver by the argument."
 	| n d b w k |
-	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate].
+"	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate]."
 	"^ (self pseudoDivisionBy: aPolynomial) remainder"
 	self degree < (n _ aPolynomial degree) ifTrue: [^ self].
 	w _ self.
@@ -38311,11 +38425,11 @@ pseudoRem3: aPolynomial
 	w degree < n ifTrue: [^ w * (b ^ k)].
 	k > d ifTrue: [w _ w * (b ^ (k - d))]] repeat! !
 
-!Polynomial methodsFor: 'operations' stamp: 'len 4/24/2018 19:41:35'!
+!Polynomial methodsFor: 'operations' stamp: 'len 3/6/2021 15:17:40'!
 pseudoRem4: aPolynomial
 	"Answer the remainder of the pseudo-division of the receiver by the argument."
 	| n b w e k |
-	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate].
+"	self isUnivariate ifFalse: [^ (self pseudoDivisionBy: aPolynomial in: self leadingIndeterminate) remainder asMultivariate]."
 	"^ (self pseudoDivisionBy: aPolynomial) remainder"
 	self degree < (n _ aPolynomial degree) ifTrue: [^ self].
 	w _ self.
@@ -39739,7 +39853,7 @@ signature
 			h _ h ^ (1 - d) * (g ^ d)].
 	^ {r1. n - r1 / 2}! !
 
-!UnivariatePolynomial methodsFor: 'roots' stamp: 'len 7/10/2019 15:40:05'!
+!UnivariatePolynomial methodsFor: 'roots' stamp: 'len 3/6/2021 15:12:17'!
 zeroAddition: aPolynomial
 	"Answer a polynomial whose zeros are the addition of the receiver zeros with the zeros of the argument."
 	| f g R S X Y C |
@@ -39752,7 +39866,7 @@ zeroAddition: aPolynomial
 	Y _ S x: 2.
 	f isMonic ifFalse: [f _ f monic]. "otherwise the companion matrix is undefined"
 	C _ f companion apply: R scalars -> R.
-	^ (((g value: X - Y) asUnivariateIn: 2) value: C) determinant! !
+	^ ((g value: X - Y) asUnivariate value: C) determinant! !
 
 !UnivariatePolynomial methodsFor: 'roots' stamp: 'len 4/30/2018 05:17:16'!
 zeroNegation
